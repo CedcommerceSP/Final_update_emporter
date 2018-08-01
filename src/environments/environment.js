@@ -1,0 +1,6 @@
+export const environment = {
+    production: false,
+    API_ENDPOINT: 'http://192.168.0.222/phalcon/engine/public/',
+    AppName: 'Importer',
+    Bearer: 'eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJ1c2VyX2lkIjoiMSIsInJvbGUiOiJhcHAiLCJpYXQiOjE1MjMzMzQxOTksImlzcyI6Imh0dHBzOlwvXC9hcHBzLmNlZGNvbW1lcmNlLmNvbSIsImF1ZCI6ImV4YW1wbGUuY29tIiwibmJmIjoxNTIzMzM0MTk5LCJ0b2tlbl9pZCI6MTUyMzMzNDE5OX0.g1YVKtaRQAULO9b5Da_M61pRZxU3R5oKqg24OOQZt6o_VRbHR0PB5qw3x2ELChULmnb-Q33hdHOYdwnYMdJ9VZqCrZnVwKIpfaZ6TO1SU8-alJqTRo3LG3CXtplqMF1H0NTV7w2WaA1it5ziYfmBenYOLst6R4mqOb5UYLJ3YXmAgR01gQPGYKatBos71ReCvYKUgGFd9wHGmPQNDBcdKtSlHr4P5C_hmBYm34T-zK4KsF68S-NPaz608BFRNO6e-GZir3YXcNKjxnffwt-9D9EbxypfV-xlbY_kvKfPeXeaJ5eO_hpi5nsRFtwEwew4Y7vbhWlHRW3L-Wl2jWIfaA'
+};
