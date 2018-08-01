@@ -210,7 +210,7 @@ class SmartDataTablePlain extends React.Component {
                   </span>
                 </th>
           }
-        {headers}
+          {headers}
       </tr>
     )
   }
