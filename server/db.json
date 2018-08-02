@@ -49,6 +49,29 @@
       "sales": "$14,240.00"
     }
   ],
+  "profiles": [
+    {
+      "id": 1,
+      "name": "Profile 1",
+      "source": "Amazon",
+      "target": "Shopify",
+      "total_products": 25
+    },
+    {
+      "id": 2,
+      "name": "Profile 2",
+      "source": "Ebay",
+      "target": "Shopify",
+      "total_products": 41
+    },
+    {
+      "id": 3,
+      "name": "Profile 3",
+      "source": "Ebay",
+      "target": "Magento",
+      "total_products": 32
+    }
+  ],
   "forms": [
     {
       "key": "title",

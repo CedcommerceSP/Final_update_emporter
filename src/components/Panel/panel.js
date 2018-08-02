@@ -12,6 +12,8 @@ import { CreateProduct } from './Components/products-component/create-product';
 import { EditProduct } from './Components/products-component/edit-product';
 import { Apps } from './Components/apps';
 import { InstallApp } from './Components/apps-component/install-app';
+import { Profiling } from './Components/profiling';
+import { CreateProfile } from './Components/profile-component/create-profile';
 import { Header } from './Layout/header';
 
 import { globalState } from '../../services/globalstate';
@@ -35,6 +37,13 @@ export class Panel extends Component {
             accessibilityLabel: 'Products',
             link: '/panel/products',
             panelID: 'products'
+        },
+        {
+            id: 'import',
+            content: 'Import',
+            accessibilityLabel: 'Import',
+            link: '/panel/profiling',
+            panelID: 'import'
         }
     ];
     render() {
@@ -60,6 +69,8 @@ export class Panel extends Component {
                                 <Route path='/panel/products/edit/:id' component={EditProduct}/>
                                 <Route exact path='/panel/apps' component={Apps}/>
                                 <Route path='/panel/apps/install' component={InstallApp}/>
+                                <Route exact path='/panel/profiling' component={Profiling}/>
+                                <Route exact path='/panel/profiling/create' component={CreateProfile}/>
                                 <Route exact path="**" render={() => (
                                     <Redirect to="/panel/products"/>
                                 )}/>
