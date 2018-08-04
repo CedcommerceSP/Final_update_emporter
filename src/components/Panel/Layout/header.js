@@ -16,7 +16,6 @@ export class Header extends Component {
             menu: props.menu,
             selected: props.selected
         };
-        this.setActiveTab(props);
     }
 
     componentDidMount(){

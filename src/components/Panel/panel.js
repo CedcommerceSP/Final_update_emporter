@@ -14,7 +14,10 @@ import { Apps } from './Components/apps';
 import { InstallApp } from './Components/apps-component/install-app';
 import { Profiling } from './Components/profiling';
 import { CreateProfile } from './Components/profile-component/create-profile';
+import { Configuration } from './Components/configuration';
 import { Header } from './Layout/header';
+
+import { PageLoader } from '../../shared/loader';
 
 import { globalState } from '../../services/globalstate';
 import history from '../../shared/history';
@@ -23,6 +26,9 @@ import './panel.css';
 
 export class Panel extends Component {
 
+    state = {
+      showLoader: false
+    };
     menu = [
         {
             id: 'apps',
@@ -44,13 +50,20 @@ export class Panel extends Component {
             accessibilityLabel: 'Import',
             link: '/panel/profiling',
             panelID: 'import'
+        },
+        {
+            id: 'configuration',
+            content: 'Configuration',
+            accessibilityLabel: 'Configuration',
+            link: '/panel/configuration',
+            panelID: 'configuration'
         }
     ];
     render() {
         // globalState.removeLocalStorage('user_authenticated');
         return (
             <Router history={history}>
-                <div className="container-fluid">
+                <div className="container-fluid app-panel-container">
                     <div className="row">
                         <div className="col-12">
                             <div className="app-header">
@@ -58,8 +71,8 @@ export class Panel extends Component {
                             </div>
                         </div>
                     </div>
-                    <div className="row">
-                        <div className="col-12 app-panel">
+                    <div className="row h-100 app-panel">
+                        <div className="col-12">
                             <Switch>
                                 <Route exact path="/panel/" render={() => (
                                     <Redirect to="/panel/products"/>
@@ -71,6 +84,7 @@ export class Panel extends Component {
                                 <Route path='/panel/apps/install' component={InstallApp}/>
                                 <Route exact path='/panel/profiling' component={Profiling}/>
                                 <Route exact path='/panel/profiling/create' component={CreateProfile}/>
+                                <Route exact path='/panel/configuration' component={Configuration}/>
                                 <Route exact path="**" render={() => (
                                     <Redirect to="/panel/products"/>
                                 )}/>
@@ -82,3 +96,7 @@ export class Panel extends Component {
         );
     }
 }
+
+const PanelComponent = new Panel;
+
+

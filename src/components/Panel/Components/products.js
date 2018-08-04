@@ -123,9 +123,7 @@ export class Products extends Component {
                 }}}
                 title="Products List">
                 <ResourceList
-                    resourceName={{singular: 'product', plural: 'products'}}
                     items={this.state.products}
-                    showHeader="true"
                     renderItem={item => {}}
                     filterControl={
                         <ResourceList.FilterControl
@@ -150,7 +148,7 @@ export class Products extends Component {
                     multiSelect={true}
                     selected={this.state.selectedProducts}
                     className='ui compact selectable table'
-                    withLinks="true"
+                    withLinks={true}
                     visibleColumns={this.visibleColumns}
                     actions={this.massActions}
                     showColumnFilters={true}

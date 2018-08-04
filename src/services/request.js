@@ -5,6 +5,7 @@ import { isUndefined } from 'util';
 
 export const requests = {
     getRequest: (endpoint, params, fullUrl) => {
+        window.showLoader = true;
         let paramsString = '';
         if (!isUndefined(params)) {
             paramsString += '?';
@@ -20,7 +21,10 @@ export const requests = {
                     'Authorization': globalState.getBearerToken()
                 }
             })
-                .then(res => res.json());
+                .then((res) => {
+                    window.showLoader = false;
+                    return res.json();
+                });
         } else {
             return fetch(endpoint + paramsString, {
                 method: 'GET',
@@ -28,10 +32,14 @@ export const requests = {
                     'Authorization': globalState.getBearerToken()
                 }
             })
-                .then(res => res.json());
+                .then((res) => {
+                    window.showLoader = false;
+                    return res.json();
+                });
         }
     },
     postRequest: (endpoint, data) => {
+        window.showLoader = true;
         return fetch(environment.API_ENDPOINT + endpoint, {
             method: 'POST',
             headers: {
@@ -41,6 +49,9 @@ export const requests = {
             },
             body: JSON.stringify(data)
         })
-            .then(res => res.json());
+            .then((res) => {
+                window.showLoader = false;
+                return res.json();
+            });
     }
 };

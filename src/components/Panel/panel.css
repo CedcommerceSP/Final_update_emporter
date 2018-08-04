@@ -1,6 +1,13 @@
 .app-panel {
-    background-color: #f4f4f8;
-    margin-top: 60px;
+    margin-top: 52px;
+}
+
+.app-panel-container {
+    background-color: #F4F6F8;
+    height: auto !important;
+    background-image: url("../../assets/background/background.png");
+    background-repeat: no-repeat;
+    background-position: right;
 }
 
 .app-header {

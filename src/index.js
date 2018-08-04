@@ -11,7 +11,7 @@ import { ToastContainer } from 'react-toastify';
 import registerServiceWorker from './registerServiceWorker';
 
 ReactDOM.render((
-    <div>
+    <div style={{height: '100%'}}>
         <BrowserRouter>
             <App />
         </BrowserRouter>

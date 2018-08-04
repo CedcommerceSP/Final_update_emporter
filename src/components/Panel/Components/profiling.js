@@ -60,14 +60,12 @@ export class Profiling extends Component {
         return (
             <Page
                 breadcrumbs={[{content: 'Import Profiles'}]}
-                primaryAction={{content: 'Create Import Profile', onClick: () => {
+                primaryAction={{content: 'Import Products', onClick: () => {
                     this.redirect('/panel/profiling/create');
                 }}}
                 title="Import Profiles">
                 <ResourceList
-                    resourceName={{singular: 'profile', plural: 'profiles'}}
                     items={this.state.profiles}
-                    showHeader="true"
                     renderItem={item => {}}
                     filterControl={
                         <ResourceList.FilterControl
@@ -89,7 +87,7 @@ export class Profiling extends Component {
                     multiSelect={true}
                     selected={this.state.selectedProfiles}
                     className='ui compact selectable table'
-                    withLinks="true"
+                    withLinks={true}
                     visibleColumns={this.visibleColumns}
                     actions={this.massActions}
                     showColumnFilters={true}

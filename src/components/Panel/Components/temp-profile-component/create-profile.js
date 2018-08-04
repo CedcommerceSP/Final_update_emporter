@@ -24,21 +24,17 @@ export class CreateProfile extends Component {
 
     statusColor = {
       completed: '#7FFF00',
-      ready: '#3f4eae',
+      ready: '#195BFF',
       disabled: '#696969'
     };
-    profilesList = [
-        {
-            label: 'Default Profile',
-            value: 'default_profile'
-        }
-    ];
     constructor() {
         super();
         this.state = {
           showImportProducts: false,
+          showAttributeMapping: false,
           showUploadProducts: false,
           showImportProductsStatus: 'ready',
+          showAttributeMappingStatus: 'disabled',
           showUploadProductsStatus: 'disabled',
           importProductsDetails: {
             source: '',
@@ -47,8 +43,8 @@ export class CreateProfile extends Component {
             products_imported: false,
             products_importing: false
           },
-          uploadProductDetails: {
-              selected_profile: ''
+          attributeMappingDetails: {
+            mapping_saved: false
           }
         };
     }
@@ -58,16 +54,14 @@ export class CreateProfile extends Component {
             <div>
                 <Modal
                     open={this.state.showImportProducts}
-                    onClose={() => {
-                        this.state.showImportProducts = false;
-                        this.updateState();
-                    }}
+                    onClose={this.handleChange}
                     title="Pull Products"
                     primaryAction={{
                         content: 'Next',
                         onAction: () => {
                             this.state.showImportProducts = false;
-                            this.updateState();
+                            const state = this.state;
+                            this.setState(state);
                         },
                         disabled: !this.state.importProductsDetails.products_imported
                     }}
@@ -153,72 +147,63 @@ export class CreateProfile extends Component {
 
     handleImportChange(key, value) {
         this.state.importProductsDetails[key] = value;
-        this.updateState();
+        const state = this.state;
+        this.setState(state);
     }
 
     importProducts() {
         this.state.importProductsDetails.products_importing = true;
-        this.updateState();
+        const state = this.state;
+        this.setState(state);
         setTimeout(() => {
             this.state.importProductsDetails.products_importing = false;
             this.state.importProductsDetails.products_imported = true;
             this.state.showImportProductsStatus = 'completed';
-            this.state.showUploadProductsStatus = 'ready';
-            this.updateState();
+            this.state.showAttributeMappingStatus = 'ready';
+            const state = this.state;
+            this.setState(state);
         }, 2000);
     }
 
-    renderUploadProductsModal() {
+    renderAttributeMappingModal() {
         return (
             <Modal
-                open={this.state.showUploadProducts}
-                onClose={() => {
-                    this.state.showUploadProducts = false;
-                    this.updateState();
+                open={this.state.showAttributeMapping}
+                onClose={this.handleChange}
+                title="Attribute Mapping"
+                primaryAction={{
+                    content: 'Next',
+                    onAction: () => {
+                        this.state.showAttributeMapping = false;
+                        this.state.showAttributeMappingStatus = 'completed';
+                        this.state.showUploadProductsStatus = 'ready';
+                        const state = this.state;
+                        this.setState(state);
+                    },
+                    disabled: !this.state.attributeMappingDetails.mapping_saved
                 }}
-                title="Upload Products"
             >
                 <Modal.Section>
                     <div className="row">
                         <div className="col-12">
-                            <Select
-                                label="Select Profile"
-                                options={this.profilesList}
-                                placeholder="Select Profile For Upload"
-                                onChange={this.uploadProductsChange.bind(this, 'selected_profile')}
-                                value={this.state.uploadProductDetails.selected_profile}
-                            />
+                            <span className="h1"><strong>Mapping Section</strong></span>
                         </div>
-                        {
-                            this.state.uploadProductDetails.selected_profile === 'default_profile' &&
-                            this.state.importProductsDetails.source === 'shopify' &&
-                            <div className="col-12">
-                                <div className="row">
-                                    <div className="col-md-4 col-12 text-center">
-                                        <span>Map collection with?</span>
-                                    </div>
-                                    <div className="col-md-4 col-12 text-center">
-
-                                    </div>
-                                    <div className="col-md-4 col-12 text-center">
-
-                                    </div>
+                        <div className="col-12 pt-1 pb-1 text-center">
+                            {
+                                !this.state.attributeMappingDetails.mapping_saved &&
+                                <Button
+                                    onClick={() => {
+                                        this.saveAttributeMapping();
+                                    }}
+                                    primary>Save Mapping</Button>
+                            }
+                            {
+                                this.state.attributeMappingDetails.mapping_saved &&
+                                <div className="col-12 pt-1 pb-1 text-center">
+                                    <h4>Mapping Saved</h4>
+                                    <FontAwesomeIcon icon={faCheckCircle} color={this.statusColor.completed} size="10x"/>
                                 </div>
-                            </div>
-                        }
-                        <div className="col-md-6 col-sm-6 col-12 text-center pt-3 pb-3">
-                            <Button onClick={() => {
-                                this.saveProfile(true);
-                            }} primary>
-                                Upload Products Now
-                            </Button>
-                        </div>
-                        <div className="col-md-6 col-sm-6 col-12 text-center pt-3 pb-3">
-                            <Button onClick={() => {
-                                this.saveProfile(false);
-                            }} primary>
-                                Upload Products Later
-                            </Button>
+                            }
                         </div>
                     </div>
                 </Modal.Section>
@@ -226,9 +211,39 @@ export class CreateProfile extends Component {
         );
     }
 
-    uploadProductsChange(key, value) {
-        this.state.uploadProductDetails[key] = value;
-        this.updateState();
+    saveAttributeMapping() {
+        this.state.attributeMappingDetails.mapping_saved = true;
+        const state = this.state;
+        this.setState(state);
+    }
+
+    renderUploadProductsModal() {
+        return (
+            <Modal
+                open={this.state.showUploadProducts}
+                onClose={this.handleChange}
+                title="Upload Products"
+            >
+                <Modal.Section>
+                    <div className="row">
+                        <div className="col-md-6 col-sm-6 col-12 text-center pt-3 pb-3">
+                            <Button onClick={() => {
+                                this.saveProfile(true);
+                            }} primary>
+                                Save Profile And Upload Now
+                            </Button>
+                        </div>
+                        <div className="col-md-6 col-sm-6 col-12 text-center pt-3 pb-3">
+                            <Button onClick={() => {
+                                this.saveProfile(false);
+                            }} primary>
+                                Save Profile And Upload Later
+                            </Button>
+                        </div>
+                    </div>
+                </Modal.Section>
+            </Modal>
+        );
     }
 
     saveProfile(upload) {
@@ -251,7 +266,7 @@ export class CreateProfile extends Component {
                 }}}
                 title="Create Profile">
                 <div className="row">
-                    <div className="col-md-6 col-sm-6 col-12">
+                    <div className="col-4">
                         <Card>
                             <div>
                                 <div className="text-center pt-3 pb-3" style={{cursor: 'pointer'}}>
@@ -259,7 +274,8 @@ export class CreateProfile extends Component {
                                     <FontAwesomeIcon onClick={() => {
                                         if (this.state.showImportProductsStatus === 'ready') {
                                             this.state.showImportProducts = true;
-                                            this.updateState();
+                                            const state = this.state;
+                                            this.setState(state);
                                         }
                                     }} icon={faArrowAltCircleDown} color={this.statusColor[this.state.showImportProductsStatus]} size="10x" />
                                 </div>
@@ -272,15 +288,38 @@ export class CreateProfile extends Component {
                             </div>
                         </Card>
                     </div>
-                    <div className="col-md-6 col-sm-6 col-12">
+                    <div className="col-4">
                         <Card>
                             <div style={{cursor: 'pointer'}}>
                                 <div className="text-center pt-3 pb-3">
                                     <h1 className="mt-2 mb-4"><strong>Step 2</strong></h1>
                                     <FontAwesomeIcon onClick={() => {
+                                        if (this.state.showAttributeMappingStatus === 'ready') {
+                                            this.state.showAttributeMapping = true;
+                                            const state = this.state;
+                                            this.setState(state);
+                                        }
+                                    }} icon={faMapSigns} color={this.statusColor[this.state.showAttributeMappingStatus]} size="10x" />
+                                </div>
+                                <div className="text-center pt-4 pb-2">
+                                    <FontAwesomeIcon icon={faCheckCircle} color={this.statusColor[this.state.showAttributeMappingStatus]} size="5x"/>
+                                </div>
+                                <div className="text-center pt-2 pb-4">
+                                    <span className="h2">Attribute Mapping</span>
+                                </div>
+                            </div>
+                        </Card>
+                    </div>
+                    <div className="col-4">
+                        <Card>
+                            <div style={{cursor: 'pointer'}}>
+                                <div className="text-center pt-3 pb-3">
+                                    <h1 className="mt-2 mb-4"><strong>Step 3</strong></h1>
+                                    <FontAwesomeIcon onClick={() => {
                                         if (this.state.showUploadProductsStatus === 'ready') {
                                             this.state.showUploadProducts = true;
-                                            this.updateState();
+                                            const state = this.state;
+                                            this.setState(state);
                                         }
                                     }} icon={faArrowAltCircleUp} color={this.statusColor[this.state.showUploadProductsStatus]} size="10x" />
                                 </div>
@@ -295,14 +334,10 @@ export class CreateProfile extends Component {
                     </div>
                 </div>
                 {this.renderImportProductsModal()}
+                {this.renderAttributeMappingModal()}
                 {this.renderUploadProductsModal()}
             </Page>
         );
-    }
-
-    updateState() {
-        const state = this.state;
-        this.setState(state);
     }
 
     redirect(url) {
