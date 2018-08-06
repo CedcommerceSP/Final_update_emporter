@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 // import { Link } from 'react-router-dom';
 
 import { Page,
-         DataTable,
+         Card,
          Select,
          Pagination,
          TextStyle,
@@ -122,104 +122,106 @@ export class Products extends Component {
                     this.redirect('/panel/products/create');
                 }}}
                 title="Products List">
-                <ResourceList
-                    items={this.state.products}
-                    renderItem={item => {}}
-                    filterControl={
-                        <ResourceList.FilterControl
-                            filters={[]}
-                            appliedFilters={this.state.appliedFilters}
-                            onFiltersChange={(appliedFilters) => {
-                                this.applyFilters(appliedFilters);
-                            }}
-                            searchValue={this.state.searchValue}
-                            onSearchChange={(searchValue) => {
-                                this.addSearchFilter(searchValue);
-                            }}
-                            additionalAction={{
-                                content: 'Filter',
-                                onAction: () => this.getProducts(),
-                            }}
-                        />
-                    }
-                />
-                <SmartDataTable
-                    data={this.state.products}
-                    multiSelect={true}
-                    selected={this.state.selectedProducts}
-                    className='ui compact selectable table'
-                    withLinks={true}
-                    visibleColumns={this.visibleColumns}
-                    actions={this.massActions}
-                    showColumnFilters={true}
-                    rowActions={{
-                        edit: true,
-                        delete: true
-                    }}
-                    userRowSelect={(event) => {
-                        const itemIndex = this.state.selectedProducts.indexOf(event.data.id);
-                        if (event.isSelected) {
-                            if (itemIndex === -1) {
-                                this.state.selectedProducts.push(event.data.id);
-                            }
-                        } else {
-                            if (itemIndex !== -1) {
-                                this.state.selectedProducts.splice(itemIndex, 1);
-                            }
+                <Card>
+                    <ResourceList
+                        items={this.state.products}
+                        renderItem={item => {}}
+                        filterControl={
+                            <ResourceList.FilterControl
+                                filters={[]}
+                                appliedFilters={this.state.appliedFilters}
+                                onFiltersChange={(appliedFilters) => {
+                                    this.applyFilters(appliedFilters);
+                                }}
+                                searchValue={this.state.searchValue}
+                                onSearchChange={(searchValue) => {
+                                    this.addSearchFilter(searchValue);
+                                }}
+                                additionalAction={{
+                                    content: 'Filter',
+                                    onAction: () => this.getProducts(),
+                                }}
+                            />
                         }
-                        const state = this.state;
-                        this.setState(state);
-                    }}
-                    allRowSelected={(event, rows) => {
-                        this.state.selectedProducts = [];
-                        if (event) {
-                            for (let i = 0; i < rows.length; i++) {
-                                this.state.selectedProducts.push(rows[i].id);
+                    />
+                    <SmartDataTable
+                        data={this.state.products}
+                        multiSelect={true}
+                        selected={this.state.selectedProducts}
+                        className='ui compact selectable table'
+                        withLinks={true}
+                        visibleColumns={this.visibleColumns}
+                        actions={this.massActions}
+                        showColumnFilters={true}
+                        rowActions={{
+                            edit: true,
+                            delete: true
+                        }}
+                        userRowSelect={(event) => {
+                            const itemIndex = this.state.selectedProducts.indexOf(event.data.id);
+                            if (event.isSelected) {
+                                if (itemIndex === -1) {
+                                    this.state.selectedProducts.push(event.data.id);
+                                }
+                            } else {
+                                if (itemIndex !== -1) {
+                                    this.state.selectedProducts.splice(itemIndex, 1);
+                                }
                             }
-                        }
-                        const state = this.state;
-                        this.setState(state);
-                    }}
-                    massAction={(event) => {
-                        console.log(event);
-                    }}
-                    editRow={(row) => {
-                        this.redirect("/panel/products/edit/" + row.id);
-                    }}
-                    deleteRow={(row) => {
-                        this.state.toDeleteRow = row;
-                        this.state.deleteProductData = true;
-                        const state = this.state;
-                        this.setState(state);
-                    }}
-                    columnFilters={(filters) => {
-                        console.log(filters);
-                    }}
-                    sortable
-                />
-                <div className="row mt-3">
-                    <div className="col-6 text-right">
-                        <Pagination
-                            hasPrevious
-                            onPrevious={() => {
-                                this.gridSettings._page--;
-                                this.getProducts();
-                            }}
-                            hasNext
-                            onNext={() => {
-                                this.gridSettings._page++;
-                                this.getProducts();
-                            }}
-                        />
+                            const state = this.state;
+                            this.setState(state);
+                        }}
+                        allRowSelected={(event, rows) => {
+                            this.state.selectedProducts = [];
+                            if (event) {
+                                for (let i = 0; i < rows.length; i++) {
+                                    this.state.selectedProducts.push(rows[i].id);
+                                }
+                            }
+                            const state = this.state;
+                            this.setState(state);
+                        }}
+                        massAction={(event) => {
+                            console.log(event);
+                        }}
+                        editRow={(row) => {
+                            this.redirect("/panel/products/edit/" + row.id);
+                        }}
+                        deleteRow={(row) => {
+                            this.state.toDeleteRow = row;
+                            this.state.deleteProductData = true;
+                            const state = this.state;
+                            this.setState(state);
+                        }}
+                        columnFilters={(filters) => {
+                            console.log(filters);
+                        }}
+                        sortable
+                    />
+                    <div className="row mt-3">
+                        <div className="col-6 text-right">
+                            <Pagination
+                                hasPrevious
+                                onPrevious={() => {
+                                    this.gridSettings._page--;
+                                    this.getProducts();
+                                }}
+                                hasNext
+                                onNext={() => {
+                                    this.gridSettings._page++;
+                                    this.getProducts();
+                                }}
+                            />
+                        </div>
+                        <div className="col-md-2 col-sm-2 col-6">
+                            <Select
+                                options={this.pageLimits}
+                                value={this.gridSettings._limit}
+                                onChange={this.pageSettingsChange.bind(this)}>
+                            </Select>
+                        </div>
                     </div>
-                    <div className="col-md-2 col-sm-2 col-6">
-                        <Select
-                            options={this.pageLimits}
-                            value={this.gridSettings._limit}
-                            onChange={this.pageSettingsChange.bind(this)}>
-                        </Select>
-                    </div>
-                </div>
+                </Card>
                 {this.state.deleteProductData && this.deleteProductModal()}
             </Page>
         );

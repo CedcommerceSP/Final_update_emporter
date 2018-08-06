@@ -21,7 +21,7 @@ export class Header extends Component {
     componentDidMount(){
         setInterval(() => {
             this.setActiveTab(this.props);
-        }, 1000);
+        }, 10);
     }
 
     setActiveTab(props) {
@@ -43,7 +43,7 @@ export class Header extends Component {
         } else {
             return (
                 <Card>
-                    <Tabs tabs={this.state.menu} selected={this.state.selected} onSelect={this.handleTabChange.bind(this)} />
+                    <Tabs tabs={this.state.menu} fitted={true} selected={this.state.selected} onSelect={this.handleTabChange.bind(this)} />
                 </Card>
             );
         }

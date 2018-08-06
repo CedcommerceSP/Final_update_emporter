@@ -12,9 +12,12 @@ import { CreateProduct } from './Components/products-component/create-product';
 import { EditProduct } from './Components/products-component/edit-product';
 import { Apps } from './Components/apps';
 import { InstallApp } from './Components/apps-component/install-app';
+import { AppInstalled } from './Components/apps-component/app-installed';
+import { Import } from './Components/import';
 import { Profiling } from './Components/profiling';
 import { CreateProfile } from './Components/profile-component/create-profile';
 import { Configuration } from './Components/configuration';
+import { QueuedTask } from './Components/queued_task';
 import { Header } from './Layout/header';
 
 import { PageLoader } from '../../shared/loader';
@@ -48,8 +51,15 @@ export class Panel extends Component {
             id: 'import',
             content: 'Import',
             accessibilityLabel: 'Import',
-            link: '/panel/profiling',
+            link: '/panel/import',
             panelID: 'import'
+        },
+        {
+            id: 'profiling',
+            content: 'Profiling',
+            accessibilityLabel: 'Profiling',
+            link: '/panel/profiling',
+            panelID: 'profiling'
         },
         {
             id: 'configuration',
@@ -57,6 +67,13 @@ export class Panel extends Component {
             accessibilityLabel: 'Configuration',
             link: '/panel/configuration',
             panelID: 'configuration'
+        },
+        {
+            id: 'queuedtasks',
+            content: 'Queues',
+            accessibilityLabel: 'Queues',
+            link: '/panel/queuedtasks',
+            panelID: 'queuedtasks'
         }
     ];
     render() {
@@ -82,9 +99,12 @@ export class Panel extends Component {
                                 <Route path='/panel/products/edit/:id' component={EditProduct}/>
                                 <Route exact path='/panel/apps' component={Apps}/>
                                 <Route path='/panel/apps/install' component={InstallApp}/>
+                                <Route path='/panel/apps/success' component={AppInstalled}/>
+                                <Route exact path='/panel/import' component={Import}/>
                                 <Route exact path='/panel/profiling' component={Profiling}/>
                                 <Route exact path='/panel/profiling/create' component={CreateProfile}/>
                                 <Route exact path='/panel/configuration' component={Configuration}/>
+                                <Route exact path='/panel/queuedtasks' component={QueuedTask}/>
                                 <Route exact path="**" render={() => (
                                     <Redirect to="/panel/products"/>
                                 )}/>

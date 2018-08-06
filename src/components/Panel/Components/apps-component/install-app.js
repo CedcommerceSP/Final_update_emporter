@@ -93,7 +93,7 @@ export class InstallApp extends Component {
     }
 
     getAppInstallationForm() {
-        let win = window.open('', '_blank', 'location=yes,height=570,width=520,scrollbars=yes,status=yes');
+        let win = window.open('', '_blank', 'location=yes,height=600,width=550,scrollbars=yes,status=yes');
         requests.getRequest('connector/get/installationForm', {code: this.state.code })
             .then(data => {
                 if (data.success === true) {

@@ -6,7 +6,7 @@ import { Page,
          Pagination,
          TextStyle,
          ResourceList,
-         Modal,
+         Card,
          TextContainer,
          FilterType } from '@shopify/polaris';
 
@@ -59,97 +59,99 @@ export class Profiling extends Component {
     render() {
         return (
             <Page
-                breadcrumbs={[{content: 'Import Profiles'}]}
-                primaryAction={{content: 'Import Products', onClick: () => {
+                breadcrumbs={[{content: 'Profiles'}]}
+                primaryAction={{content: 'Create Profile', onClick: () => {
                     this.redirect('/panel/profiling/create');
                 }}}
                 title="Import Profiles">
-                <ResourceList
-                    items={this.state.profiles}
-                    renderItem={item => {}}
-                    filterControl={
-                        <ResourceList.FilterControl
-                            filters={[]}
-                            appliedFilters={this.state.appliedFilters}
-                            searchValue={this.state.searchValue}
-                            onSearchChange={(searchValue) => {
-                                this.addSearchFilter(searchValue);
-                            }}
-                            additionalAction={{
-                                content: 'Filter',
-                                onAction: () => this.getProfiles(),
-                            }}
-                        />
-                    }
-                />
-                <SmartDataTable
-                    data={this.state.profiles}
-                    multiSelect={true}
-                    selected={this.state.selectedProfiles}
-                    className='ui compact selectable table'
-                    withLinks={true}
-                    visibleColumns={this.visibleColumns}
-                    actions={this.massActions}
-                    showColumnFilters={true}
-                    rowActions={{
-                        edit: false,
-                        delete: false
-                    }}
-                    userRowSelect={(event) => {
-                        const itemIndex = this.state.selectedProfiles.indexOf(event.data.id);
-                        if (event.isSelected) {
-                            if (itemIndex === -1) {
-                                this.state.selectedProfiles.push(event.data.id);
-                            }
-                        } else {
-                            if (itemIndex !== -1) {
-                                this.state.selectedProfiles.splice(itemIndex, 1);
-                            }
+                <Card>
+                    <ResourceList
+                        items={this.state.profiles}
+                        renderItem={item => {}}
+                        filterControl={
+                            <ResourceList.FilterControl
+                                filters={[]}
+                                appliedFilters={this.state.appliedFilters}
+                                searchValue={this.state.searchValue}
+                                onSearchChange={(searchValue) => {
+                                    this.addSearchFilter(searchValue);
+                                }}
+                                additionalAction={{
+                                    content: 'Filter',
+                                    onAction: () => this.getProfiles(),
+                                }}
+                            />
                         }
-                        const state = this.state;
-                        this.setState(state);
-                    }}
-                    allRowSelected={(event, rows) => {
-                        this.state.selectedProfiles = [];
-                        if (event) {
-                            for (let i = 0; i < rows.length; i++) {
-                                this.state.selectedProfiles.push(rows[i].id);
+                    />
+                    <SmartDataTable
+                        data={this.state.profiles}
+                        multiSelect={true}
+                        selected={this.state.selectedProfiles}
+                        className='ui compact selectable table'
+                        withLinks={true}
+                        visibleColumns={this.visibleColumns}
+                        actions={this.massActions}
+                        showColumnFilters={true}
+                        rowActions={{
+                            edit: false,
+                            delete: false
+                        }}
+                        userRowSelect={(event) => {
+                            const itemIndex = this.state.selectedProfiles.indexOf(event.data.id);
+                            if (event.isSelected) {
+                                if (itemIndex === -1) {
+                                    this.state.selectedProfiles.push(event.data.id);
+                                }
+                            } else {
+                                if (itemIndex !== -1) {
+                                    this.state.selectedProfiles.splice(itemIndex, 1);
+                                }
                             }
-                        }
-                        const state = this.state;
-                        this.setState(state);
-                    }}
-                    massAction={(event) => {
-                        console.log(event);
-                    }}
-                    columnFilters={(filters) => {
-                        console.log(filters);
-                    }}
-                    sortable
-                />
-                <div className="row mt-3">
-                    <div className="col-6 text-right">
-                        <Pagination
-                            hasPrevious
-                            onPrevious={() => {
-                                this.gridSettings._page--;
-                                this.getProfiles();
-                            }}
-                            hasNext
-                            onNext={() => {
-                                this.gridSettings._page++;
-                                this.getProfiles();
-                            }}
-                        />
+                            const state = this.state;
+                            this.setState(state);
+                        }}
+                        allRowSelected={(event, rows) => {
+                            this.state.selectedProfiles = [];
+                            if (event) {
+                                for (let i = 0; i < rows.length; i++) {
+                                    this.state.selectedProfiles.push(rows[i].id);
+                                }
+                            }
+                            const state = this.state;
+                            this.setState(state);
+                        }}
+                        massAction={(event) => {
+                            console.log(event);
+                        }}
+                        columnFilters={(filters) => {
+                            console.log(filters);
+                        }}
+                        sortable
+                    />
+                    <div className="row mt-3">
+                        <div className="col-6 text-right">
+                            <Pagination
+                                hasPrevious
+                                onPrevious={() => {
+                                    this.gridSettings._page--;
+                                    this.getProfiles();
+                                }}
+                                hasNext
+                                onNext={() => {
+                                    this.gridSettings._page++;
+                                    this.getProfiles();
+                                }}
+                            />
+                        </div>
+                        <div className="col-md-2 col-sm-2 col-6">
+                            <Select
+                                options={this.pageLimits}
+                                value={this.gridSettings._limit}
+                                onChange={this.pageSettingsChange.bind(this)}>
+                            </Select>
+                        </div>
                     </div>
-                    <div className="col-md-2 col-sm-2 col-6">
-                        <Select
-                            options={this.pageLimits}
-                            value={this.gridSettings._limit}
-                            onChange={this.pageSettingsChange.bind(this)}>
-                        </Select>
-                    </div>
-                </div>
+                </Card>
             </Page>
         );
     }
