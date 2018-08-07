@@ -90,6 +90,15 @@ export class InstallApp extends Component {
 
     onSubmit() {
         console.log(this.state);
+        if (this.state.postType === 'external') {
+            let url = this.state.action;
+            let end = url.indexOf('?') === -1 ? '?' : '&';
+            for (let i = 0; i < this.state.schema.length; i++) {
+                url += end + this.state.schema[i].key + '=' + this.state.schema[i].value;
+                end = '&';
+            }
+            window.open(url, '_blank', 'location=yes,height=600,width=550,scrollbars=yes,status=yes');
+        }
     }
 
     getAppInstallationForm() {
@@ -104,21 +113,11 @@ export class InstallApp extends Component {
                         if (win !== null) {
                             win.close();
                         }
-                        let schema = [
-                            {
-                                key: 'consumer_id',
-                                title: 'Consumer ID',
-                                type: 'text',
-                                value: ''
-                            },
-                            {
-                                key: 'secret_key',
-                                title: 'Consumer Secret Key',
-                                type: 'text',
-                                value: ''
-                            }
-                        ];
-                        this.setInstallationForm(schema);
+                        const state = this.state;
+                        this.state['schema'] = data.data.schema;
+                        this.state['action'] = data.data.action;
+                        this.state['postType'] = data.data.post_type;
+                        this.updateState();
                     }
                 } else {
                     notify.error(data.message);
@@ -127,9 +126,8 @@ export class InstallApp extends Component {
             });
     }
 
-    setInstallationForm(formSchema) {
+    updateState() {
         const state = this.state;
-        state['schema'] = formSchema;
         this.setState(state);
     }
 

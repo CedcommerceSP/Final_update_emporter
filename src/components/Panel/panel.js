@@ -3,8 +3,7 @@ import {
     Route,
     Switch,
     Redirect,
-    Router,
-    withRouter
+    Router
 } from 'react-router-dom';
 
 import { Products } from './Components/products';
@@ -18,11 +17,9 @@ import { Profiling } from './Components/profiling';
 import { CreateProfile } from './Components/profile-component/create-profile';
 import { Configuration } from './Components/configuration';
 import { QueuedTask } from './Components/queued_task';
+import { Plans } from './Components/plans';
 import { Header } from './Layout/header';
 
-import { PageLoader } from '../../shared/loader';
-
-import { globalState } from '../../services/globalstate';
 import history from '../../shared/history';
 
 import './panel.css';
@@ -69,6 +66,13 @@ export class Panel extends Component {
             panelID: 'configuration'
         },
         {
+            id: 'plans',
+            content: 'Plans',
+            accessibilityLabel: 'Plans',
+            link: '/panel/plans',
+            panelID: 'plans'
+        },
+        {
             id: 'queuedtasks',
             content: 'Queues',
             accessibilityLabel: 'Queues',
@@ -105,6 +109,7 @@ export class Panel extends Component {
                                 <Route exact path='/panel/profiling/create' component={CreateProfile}/>
                                 <Route exact path='/panel/configuration' component={Configuration}/>
                                 <Route exact path='/panel/queuedtasks' component={QueuedTask}/>
+                                <Route exact path='/panel/plans' component={Plans}/>
                                 <Route exact path="**" render={() => (
                                     <Redirect to="/panel/products"/>
                                 )}/>

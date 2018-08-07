@@ -1,14 +1,10 @@
 import React, { Component } from 'react';
 
 import { Page,
-         DataTable,
          Select,
          Pagination,
-         TextStyle,
          ResourceList,
-         Card,
-         TextContainer,
-         FilterType } from '@shopify/polaris';
+         Card } from '@shopify/polaris';
 
 import { requests } from '../../../services/request';
 import { notify } from '../../../services/notify';

@@ -13,7 +13,6 @@ import { Page,
 
 import { requests } from '../../../services/request';
 import { notify } from '../../../services/notify';
-import { globalState } from '../../../services/globalstate';
 import SmartDataTable from '../../../shared/smart-table';
 
 export class Products extends Component {

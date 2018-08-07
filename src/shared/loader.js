@@ -1,8 +1,6 @@
 import React, { Component } from 'react';
 import Loader from 'react-loader-spinner';
 
-import { isUndefined } from 'util';
-
 import './loader.css';
 
 export class PageLoader extends Component {

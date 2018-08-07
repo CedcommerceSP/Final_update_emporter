@@ -5,20 +5,14 @@ import { Page,
     Select,
     Button,
     Label,
-    ResourceList,
-    Modal,
-    TextContainer,
-    FilterType } from '@shopify/polaris';
+    Modal } from '@shopify/polaris';
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faCheckCircle,
-    faArrowAltCircleDown,
-    faArrowAltCircleUp,
-    faMapSigns,
-    faSpinner,
-    faCircleNotch} from '@fortawesome/free-solid-svg-icons';
+import { faArrowAltCircleDown,
+    faArrowAltCircleUp } from '@fortawesome/free-solid-svg-icons';
 
 import { notify } from '../../../services/notify';
+import { requests } from '../../../services/request';
 
 export class Import extends Component {
 
@@ -46,6 +40,7 @@ export class Import extends Component {
     constructor() {
         super();
         this.state = {
+            services: [],
             showImportProducts: false,
             showUploadProducts: false,
             importProductsDetails: {
@@ -58,6 +53,28 @@ export class Import extends Component {
                 profile_type: ''
             }
         };
+        this.getAllServices();
+    }
+
+    getAllServices() {
+        requests.getRequest('connector/get/services', { 'filters[type]': 'importer' })
+            .then(data => {
+               if (data.success === true) {
+                   this.state.services = [];
+                   for (let i = 0; i < Object.keys(data.data).length; i++) {
+                       let key = Object.keys(data.data)[i];
+                       if (!data.data[key].usable) {
+                           this.state.services.push({
+                               label: data.data[key].title,
+                               value: data.data[key].marketplace
+                           });
+                       }
+                   }
+                   this.updateState();
+               } else {
+                   notify.error('You have no available services');
+               }
+            });
     }
 
     renderImportProductsModal() {
@@ -77,11 +94,7 @@ export class Import extends Component {
                                 <Select
                                     label="Import From"
                                     placeholder="Source"
-                                    options={[
-                                        {label: 'Amazon', value: 'amazon'},
-                                        {label: 'Ebay', value: 'ebay'},
-                                        {label: 'Walmart', value: 'walmart'},
-                                    ]}
+                                    options={this.state.services}
                                     onChange={this.handleImportChange.bind(this, 'source')}
                                     value={this.state.importProductsDetails.source}
                                 />
@@ -108,6 +121,10 @@ export class Import extends Component {
     }
 
     importProducts() {
+        requests.getRequest('connector/product/import', { marketplace: this.state.importProductsDetails.source })
+            .then(data => {
+                console.log(data);
+            });
         this.state.showImportProducts = false;
         this.updateState();
         notify.info('Products import process in progress');

@@ -6,7 +6,6 @@ import { Button,
 
 import { requests } from '../../../services/request';
 import { notify } from '../../../services/notify';
-import { globalState } from '../../../services/globalstate';
 
 export class Apps extends Component {
 
