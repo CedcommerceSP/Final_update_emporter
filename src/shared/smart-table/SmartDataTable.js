@@ -55,6 +55,7 @@ class SmartDataTablePlain extends React.Component {
       isLoading: false,
       multiSelect: isUndefined(props.multiSelect) ? false : props.multiSelect,
       selected: isUndefined(props.selected) ? [] : props.selected,
+      imageColumns: isUndefined(props.imageColumns) ? [] : props.imageColumns,
       uniqueKey: isUndefined(props.uniqueKey) ? 'id' : props.uniqueKey,
       actions: isUndefined(props.actions) ? [] : props.actions,
       visibleColumns: isUndefined(props.visibleColumns) ? false : props.visibleColumns,
@@ -216,31 +217,36 @@ class SmartDataTablePlain extends React.Component {
   }
 
   renderRow(columns, row, i) {
-    const { colProperties } = this.state
-    const { withLinks, filterValue } = this.props
-    return columns.map((column, j) => {
-      const thisColProps = colProperties[column.key]
-      // const showCol = !thisColProps || !thisColProps.invisible
-      const showCol = column.visible;
-      if (showCol) {
-        return (
-          <td key={`row-${i}-column-${j}`}>
-            <ErrorBoundary>
-              <TableCell withLinks={withLinks} filterValue={filterValue}>
-                {row[column.key]}
-              </TableCell>
-            </ErrorBoundary>
-          </td>
-        )
-      }
-      return null
-    })
+    const { colProperties } = this.state;
+    const { withLinks, filterValue } = this.props;
+    const columnWithoutColumns = columns.map((column, j) => {
+        const thisColProps = colProperties[column.key]
+        const showCol = column.visible;
+        if (showCol) {
+            return (
+                <td key={`row-${i}-column-${j}`}>
+                    {
+                      this.state.imageColumns.indexOf(column.key) !== -1 &&
+                      <img src={row[column.key]} style={{width: '100px', height: '100px'}} />
+                    }
+                    {
+                      this.state.imageColumns.indexOf(column.key) === -1 &&
+                      <ErrorBoundary>
+                        <TableCell withLinks={withLinks} filterValue={filterValue}>
+                            {row[column.key]}
+                        </TableCell>
+                      </ErrorBoundary>
+                    }
+                </td>
+            )
+        }
+        return null
+    });
+    console.log(columnWithoutColumns);
+    return columnWithoutColumns;
   }
 
   renderBody(columns, rows) {
-    const { perPage } = this.props
-    const { currentPage } = this.state
-    // const visibleRows = sliceRowsPerPage(rows, currentPage, perPage);
     const visibleRows = rows;
     const tableRows = visibleRows.map((row, i) => (
       <tr key={`row-${i}`}>

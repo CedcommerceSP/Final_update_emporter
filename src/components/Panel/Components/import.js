@@ -36,15 +36,19 @@ export class Import extends Component {
             code: 'profile_3'
         }
     ];
+    shopsList = [];
     profilesList = [];
     constructor() {
         super();
         this.state = {
             services: [],
+            allServices: {},
             showImportProducts: false,
             showUploadProducts: false,
             importProductsDetails: {
-                source: ''
+                source: '',
+                shop: '',
+                shop_id: ''
             },
             uploadProductDetails: {
                 source: '',
@@ -61,12 +65,14 @@ export class Import extends Component {
             .then(data => {
                if (data.success === true) {
                    this.state.services = [];
+                   this.state.allServices = data.data;
                    for (let i = 0; i < Object.keys(data.data).length; i++) {
                        let key = Object.keys(data.data)[i];
                        if (!data.data[key].usable) {
                            this.state.services.push({
                                label: data.data[key].title,
-                               value: data.data[key].marketplace
+                               value: data.data[key].marketplace,
+                               shops: data.data[key].shops
                            });
                        }
                    }
@@ -99,8 +105,21 @@ export class Import extends Component {
                                     value={this.state.importProductsDetails.source}
                                 />
                             </div>
+                            <div className="col-12 pt-1 pb-1">
+                                {
+                                    this.state.importProductsDetails.source !== '' &&
+                                    <Select
+                                        label="Shop"
+                                        placeholder="Source Shop"
+                                        options={this.shopsList}
+                                        onChange={this.handleImportChange.bind(this, 'shop')}
+                                        value={this.state.importProductsDetails.shop}
+                                    />
+                                }
+                            </div>
                             <div className="col-12 pt-1 pb-1 text-center">
-                                <Button disabled={this.state.importProductsDetails.source === ''}
+                                <Button disabled={this.state.importProductsDetails.source === '' ||
+                                                  this.state.importProductsDetails.shop === ''}
                                         onClick={() => {
                                             this.importProducts();
                                         }}
@@ -117,17 +136,49 @@ export class Import extends Component {
 
     handleImportChange(key, value) {
         this.state.importProductsDetails[key] = value;
+        if (key === 'source') {
+            this.shopsList = [];
+            this.state.importProductsDetails.shop = '';
+            this.state.importProductsDetails.shop_id = '';
+            for (let i = 0; i < this.state.services.length; i++) {
+                if (this.state.services[i].value === value) {
+                    for (let j = 0; j < this.state.services[i].shops.length; j++) {
+                        this.shopsList.push({
+                            label: this.state.services[i].shops[j].shop_url,
+                            value: this.state.services[i].shops[j].shop_url,
+                            shop_id: this.state.services[i].shops[j].id
+                        });
+                    }
+                    break;
+                }
+            }
+        } else if (key === 'shop') {
+            for (let i = 0; i < this.shopsList.length; i++) {
+                if (this.shopsList[i].value === value) {
+                    this.state.importProductsDetails.shop_id = this.shopsList[i].shop_id;
+                    break;
+                }
+            }
+        }
         this.updateState();
     }
 
     importProducts() {
-        requests.getRequest('connector/product/import', { marketplace: this.state.importProductsDetails.source })
+        requests.getRequest('connector/product/import',
+            {
+                marketplace: this.state.importProductsDetails.source,
+                shop: this.state.importProductsDetails.shop,
+                shop_id: this.state.importProductsDetails.shop_id
+            })
             .then(data => {
-                console.log(data);
+                this.state.showImportProducts = false;
+                this.updateState();
+                if (data.success === true) {
+                    notify.success(data.message);
+                } else {
+                    notify.error(data.message);
+                }
             });
-        this.state.showImportProducts = false;
-        this.updateState();
-        notify.info('Products import process in progress');
     }
 
     renderUploadProductsModal() {
@@ -293,6 +344,9 @@ export class Import extends Component {
                             <div style={{cursor: 'pointer'}}>
                                 <div className="text-center pt-5 pb-5">
                                     <FontAwesomeIcon onClick={() => {
+                                        this.state.importProductsDetails.source = '';
+                                        this.state.importProductsDetails.shop = '';
+                                        this.state.importProductsDetails.shop_id = '';
                                         this.state.showImportProducts = true;
                                         this.updateState();
                                     }} icon={faArrowAltCircleDown} color="#3f4eae" size="10x" />
@@ -308,6 +362,10 @@ export class Import extends Component {
                             <div style={{cursor: 'pointer'}}>
                                 <div className="text-center pt-5 pb-5">
                                     <FontAwesomeIcon onClick={() => {
+                                        this.state.uploadProductDetails.source = '';
+                                        this.state.uploadProductDetails.target = '';
+                                        this.state.uploadProductDetails.selected_profile = '';
+                                        this.state.uploadProductDetails.profile_type = '';
                                         this.state.showUploadProducts = true;
                                         this.updateState();
                                     }} icon={faArrowAltCircleUp} color="#3f4eae" size="10x" />

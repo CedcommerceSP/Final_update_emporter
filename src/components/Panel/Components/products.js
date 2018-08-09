@@ -20,8 +20,8 @@ export class Products extends Component {
     productsEndpoint = 'http://192.168.0.48:4500/products';
     filters = {};
     gridSettings = {
-      _page: 1,
-      _limit: 5
+      count: 5,
+      activePage: 1
     };
     pageLimits = [
         {label: 5, value: 5},
@@ -34,7 +34,8 @@ export class Products extends Component {
         {label: 'Delete', value: 'delete'},
         {label: 'Upload', value: 'upload'}
     ];
-    visibleColumns = ['id', 'title', 'price', 'sku', 'quantity', 'sales'];
+    visibleColumns = ['container_id', 'title', 'price', 'sku', 'quantity', 'description', 'image'];
+    imageColumns = ['image'];
     constructor() {
         super();
         this.state = {
@@ -49,25 +50,44 @@ export class Products extends Component {
     }
 
     getProducts() {
-        requests.getRequest(this.productsEndpoint, this.gridSettings, true)
+        requests.getRequest('connector/product/getProducts', this.gridSettings)
             .then(data => {
-                const state = this.state;
-                // data = this.modifyProductsData(data);
-                state['products'] = data;
-                this.setState(state);
+                if (data.success) {
+                    const products = this.modifyProductsData(data.data.rows);
+                    this.state['products'] = products;
+                    this.updateState();
+                } else {
+                    notify.error('No products found');
+                }
+
             });
     }
 
     modifyProductsData(data) {
         let products = [];
-        data.map((prod) => {
-            let prodArr = [];
-            for (let i = 0; i < Object.keys(prod).length; i++) {
-                prodArr.push(prod[Object.keys(prod)[i]]);
+        for (let i = 0; i < data.length; i++) {
+            let rowData = {};
+            rowData['container_id'] = data[i].details.source_product_id;
+            rowData['description'] = data[i].details.long_description;
+            rowData['title'] = data[i].details.title;
+            rowData['type'] = data[i].details.type;
+            for (let j = 0; j < Object.keys(data[i].variants).length; j++) {
+                const key = Object.keys(data[i].variants)[j];
+                rowData['quantity'] = data[i].variants[key]['inventory_quantity'];
+                rowData['sku'] = data[i].variants[key]['sku'];
+                rowData['price'] = data[i].variants[key]['price'];
+                rowData['weight'] = data[i].variants[key]['weight'];
+                rowData['weight_unit'] = data[i].variants[key]['weight_unit'];
+                rowData['image'] = data[i].variants[key]['main_image'];
+                products.push(rowData);
             }
-            products.push(prodArr);
-        });
+        }
         return products;
+    }
+
+    updateState() {
+        const state = this.state;
+        this.setState(state);
     }
 
     closeDeleteProductModal() {
@@ -145,6 +165,7 @@ export class Products extends Component {
                     />
                     <SmartDataTable
                         data={this.state.products}
+                        uniqueKey="container_id"
                         multiSelect={true}
                         selected={this.state.selectedProducts}
                         className='ui compact selectable table'
@@ -152,6 +173,7 @@ export class Products extends Component {
                         visibleColumns={this.visibleColumns}
                         actions={this.massActions}
                         showColumnFilters={true}
+                        imageColumns={this.imageColumns}
                         rowActions={{
                             edit: true,
                             delete: true

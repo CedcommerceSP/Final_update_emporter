@@ -38,20 +38,36 @@ export const requests = {
                 });
         }
     },
-    postRequest: (endpoint, data) => {
+    postRequest: (endpoint, data, fullUrl) => {
         window.showLoader = true;
-        return fetch(environment.API_ENDPOINT + endpoint, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-                'Accept': 'application/json',
-                'Authorization': globalState.getBearerToken()
-            },
-            body: JSON.stringify(data)
-        })
-            .then((res) => {
-                window.showLoader = false;
-                return res.json();
-            });
+        if (isUndefined(fullUrl)) {
+            return fetch(environment.API_ENDPOINT + endpoint, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Accept': 'application/json',
+                    'Authorization': globalState.getBearerToken()
+                },
+                body: JSON.stringify(data)
+            })
+                .then((res) => {
+                    window.showLoader = false;
+                    return res.json();
+                });
+        } else {
+            return fetch(endpoint, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Accept': 'application/json',
+                    'Authorization': globalState.getBearerToken()
+                },
+                body: JSON.stringify(data)
+            })
+                .then((res) => {
+                    window.showLoader = false;
+                    return res.json();
+                });
+        }
     }
 };
