@@ -11,7 +11,7 @@ import {
     fetchData,
     parseDataForColumns,
     parseDataForRows,
-    sliceRowsPerPage,
+    parseHeader,
     sortData,
     updateColumnVisibility,
     getColumnFilters
@@ -41,6 +41,7 @@ class SmartDataTablePlain extends React.Component {
       {label: 'starts with', value: 5},
       {label: 'ends with', value: 6}
   ];
+  defaultColumns = [];
   constructor(props) {
     super(props)
 
@@ -66,8 +67,22 @@ class SmartDataTablePlain extends React.Component {
       columnFilters: {},
       showColumnFilters: isUndefined(props.showColumnFilters) ? false : props.showColumnFilters
     };
-    this.handleColumnToggle = this.handleColumnToggle.bind(this)
-    this.handleOnPageClick = this.handleOnPageClick.bind(this)
+    this.prepareDefaultColumns();
+    this.handleColumnToggle = this.handleColumnToggle.bind(this);
+    this.handleOnPageClick = this.handleOnPageClick.bind(this);
+  }
+
+  prepareDefaultColumns() {
+      this.defaultColumns = [];
+      for (let i = 0; i < this.state.visibleColumns.length; i++) {
+          this.defaultColumns.push({
+              key: this.state.visibleColumns[i],
+              title: parseHeader(this.state.visibleColumns[i]),
+              visible: true,
+              sortable: true,
+              filterable: true,
+          });
+      }
   }
 
   componentDidMount() {
@@ -168,9 +183,12 @@ class SmartDataTablePlain extends React.Component {
   renderHeader(columns) {
     const { colProperties } = this.state
     const { sortable } = this.props;
+    if (columns.length === 0) {
+        columns = this.defaultColumns.slice(0);
+    }
+    console.log(columns);
+    console.log(this.defaultColumns);
     const headers = columns.map((column) => {
-      const thisColProps = colProperties[column.key]
-      // const showCol = !thisColProps || !thisColProps.invisible
       const showCol = column.visible;
       if (showCol) {
         return (
@@ -181,7 +199,8 @@ class SmartDataTablePlain extends React.Component {
             <span className='rsdt rsdt-sortable'>
               {sortable && column.sortable ? this.renderSorting(column) : null}
             </span>
-              {this.state.showColumnFilters && this.renderColumnFilters(column)}
+              {this.state.showColumnFilters && Object.keys(this.state.columnFilters).length > 0 &&
+              this.renderColumnFilters(column)}
           </th>
         )
       }
@@ -242,7 +261,6 @@ class SmartDataTablePlain extends React.Component {
         }
         return null
     });
-    console.log(columnWithoutColumns);
     return columnWithoutColumns;
   }
 
@@ -301,6 +319,7 @@ class SmartDataTablePlain extends React.Component {
   }
 
   renderColumnFilters(column) {
+    console.log(this.state.columnFilters);
     return (
         <div>
           <div className="mt-1">
@@ -470,11 +489,12 @@ class SmartDataTablePlain extends React.Component {
           </div>
           <div className="offset-md-6 col-md-2 col-sm-4 col-4">
             <Button onClick={() => {
-                for (let i = 0; i < columns.length; i++) {
-                  this.state.columnFilters[columns[i].key] = {
-                      operator: 1,
-                      value: ''
-                  };
+                for (let i = 0; i < Object.keys(this.state.columnFilters).length; i++) {
+                    const key = Object.keys(this.state.columnFilters)[i];
+                    this.state.columnFilters[key] = {
+                        operator: 1,
+                        value: ''
+                    };
                 }
                 const state = this.state;
                 this.setState(state);

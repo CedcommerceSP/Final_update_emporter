@@ -108,6 +108,7 @@ export class Import extends Component {
                             <div className="col-12 pt-1 pb-1">
                                 {
                                     this.state.importProductsDetails.source !== '' &&
+                                    this.shopsList.length > 1 &&
                                     <Select
                                         label="Shop"
                                         placeholder="Source Shop"
@@ -152,6 +153,8 @@ export class Import extends Component {
                     break;
                 }
             }
+            this.state.importProductsDetails.shop = this.shopsList[0].value;
+            this.state.importProductsDetails.shop_id = this.shopsList[0].shop_id;
         } else if (key === 'shop') {
             for (let i = 0; i < this.shopsList.length; i++) {
                 if (this.shopsList[i].value === value) {

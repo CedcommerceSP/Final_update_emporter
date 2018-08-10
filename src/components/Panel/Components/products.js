@@ -9,7 +9,7 @@ import { Page,
          ResourceList,
          Modal,
          TextContainer,
-         FilterType } from '@shopify/polaris';
+         Tabs } from '@shopify/polaris';
 
 import { requests } from '../../../services/request';
 import { notify } from '../../../services/notify';
@@ -17,8 +17,11 @@ import SmartDataTable from '../../../shared/smart-table';
 
 export class Products extends Component {
 
-    productsEndpoint = 'http://192.168.0.48:4500/products';
-    filters = {};
+    filters = {
+        full_text_search: '',
+        marketplace: 'all',
+        column_filters: {}
+    };
     gridSettings = {
       count: 5,
       activePage: 1
@@ -34,23 +37,56 @@ export class Products extends Component {
         {label: 'Delete', value: 'delete'},
         {label: 'Upload', value: 'upload'}
     ];
-    visibleColumns = ['container_id', 'title', 'price', 'sku', 'quantity', 'description', 'image'];
+    visibleColumns = ['source_product_id', 'description', 'title', 'sku', 'quantity', 'price', 'image'];
     imageColumns = ['image'];
+
     constructor() {
         super();
         this.state = {
             products: [],
-            appliedFilters: [],
+            appliedFilters: {},
+            installedApps: [],
+            selectedApp: 0,
             searchValue: '',
             selectedProducts: [],
             deleteProductData: false,
             toDeleteRow: {}
         };
         this.getProducts();
+        this.getInstalledApps();
+    }
+
+    getInstalledApps() {
+        requests.getRequest('connector/get/getInstalledApps')
+            .then(data => {
+                this.state.installedApps = [
+                    {
+                        id: 'all',
+                        content: 'All',
+                        accessibilityLabel: 'All',
+                        panelID: 'all'
+                    }
+                ];
+                if (data.success) {
+                    for (let i = 0; i < data.data.length; i++) {
+                        this.state.installedApps.push({
+                            id: data.data[i].code,
+                            content: data.data[i].title,
+                            accessibilityLabel: data.data[i].title,
+                            panelID: data.data[i].code
+                        });
+                    }
+                } else {
+                    notify.error(data.message);
+                }
+                this.updateState();
+            });
     }
 
     getProducts() {
-        requests.getRequest('connector/product/getProducts', this.gridSettings)
+        this.prepareFilterObject();
+        const pageSettings = Object.assign({}, this.gridSettings);
+        requests.getRequest('connector/product/getProducts', Object.assign( pageSettings, this.state.appliedFilters))
             .then(data => {
                 if (data.success) {
                     const products = this.modifyProductsData(data.data.rows);
@@ -63,11 +99,27 @@ export class Products extends Component {
             });
     }
 
+    prepareFilterObject() {
+        this.state.appliedFilters = {
+            marketplace: this.filters.marketplace
+        };
+        if (this.filters.full_text_search !== '') {
+            this.state.appliedFilters['search'] = this.filters.full_text_search;
+        }
+        for (let i = 0; i < Object.keys(this.filters.column_filters).length; i++) {
+            const key = Object.keys(this.filters.column_filters)[i];
+            if (this.filters.column_filters[key].value !== '') {
+                this.state.appliedFilters['filter[' + key + '][' + this.filters.column_filters[key].operator + ']'] = this.filters.column_filters[key].value;
+            }
+        }
+        this.updateState();
+    }
+
     modifyProductsData(data) {
         let products = [];
         for (let i = 0; i < data.length; i++) {
             let rowData = {};
-            rowData['container_id'] = data[i].details.source_product_id;
+            rowData['source_product_id'] = data[i].details.source_product_id;
             rowData['description'] = data[i].details.long_description;
             rowData['title'] = data[i].details.title;
             rowData['type'] = data[i].details.type;
@@ -142,104 +194,110 @@ export class Products extends Component {
                 }}}
                 title="Products List">
                 <Card>
-                    <ResourceList
-                        items={this.state.products}
-                        renderItem={item => {}}
-                        filterControl={
-                            <ResourceList.FilterControl
-                                filters={[]}
-                                appliedFilters={this.state.appliedFilters}
-                                onFiltersChange={(appliedFilters) => {
-                                    this.applyFilters(appliedFilters);
-                                }}
-                                searchValue={this.state.searchValue}
-                                onSearchChange={(searchValue) => {
-                                    this.addSearchFilter(searchValue);
-                                }}
-                                additionalAction={{
-                                    content: 'Filter',
-                                    onAction: () => this.getProducts(),
-                                }}
-                            />
-                        }
-                    />
-                    <SmartDataTable
-                        data={this.state.products}
-                        uniqueKey="container_id"
-                        multiSelect={true}
-                        selected={this.state.selectedProducts}
-                        className='ui compact selectable table'
-                        withLinks={true}
-                        visibleColumns={this.visibleColumns}
-                        actions={this.massActions}
-                        showColumnFilters={true}
-                        imageColumns={this.imageColumns}
-                        rowActions={{
-                            edit: true,
-                            delete: true
-                        }}
-                        userRowSelect={(event) => {
-                            const itemIndex = this.state.selectedProducts.indexOf(event.data.id);
-                            if (event.isSelected) {
-                                if (itemIndex === -1) {
-                                    this.state.selectedProducts.push(event.data.id);
-                                }
-                            } else {
-                                if (itemIndex !== -1) {
-                                    this.state.selectedProducts.splice(itemIndex, 1);
-                                }
+                    <div className="p-5">
+                        <ResourceList
+                            items={this.state.products}
+                            renderItem={item => {}}
+                            filterControl={
+                                <ResourceList.FilterControl
+                                    searchValue={this.filters.full_text_search}
+                                    onSearchChange={(searchValue) => {
+                                        this.filters.full_text_search = searchValue;
+                                        this.updateState();
+                                    }}
+                                    additionalAction={{
+                                        content: 'Filter',
+                                        onAction: () => this.getProducts()
+                                    }}
+                                />
                             }
-                            const state = this.state;
-                            this.setState(state);
-                        }}
-                        allRowSelected={(event, rows) => {
-                            this.state.selectedProducts = [];
-                            if (event) {
-                                for (let i = 0; i < rows.length; i++) {
-                                    this.state.selectedProducts.push(rows[i].id);
-                                }
-                            }
-                            const state = this.state;
-                            this.setState(state);
-                        }}
-                        massAction={(event) => {
-                            console.log(event);
-                        }}
-                        editRow={(row) => {
-                            this.redirect("/panel/products/edit/" + row.id);
-                        }}
-                        deleteRow={(row) => {
-                            this.state.toDeleteRow = row;
-                            this.state.deleteProductData = true;
-                            const state = this.state;
-                            this.setState(state);
-                        }}
-                        columnFilters={(filters) => {
-                            console.log(filters);
-                        }}
-                        sortable
-                    />
-                    <div className="row mt-3">
-                        <div className="col-6 text-right">
-                            <Pagination
-                                hasPrevious
-                                onPrevious={() => {
-                                    this.gridSettings._page--;
-                                    this.getProducts();
-                                }}
-                                hasNext
-                                onNext={() => {
-                                    this.gridSettings._page++;
-                                    this.getProducts();
-                                }}
-                            />
+                        />
+                        <div className="row">
+                            <div className="col-12">
+                                <Tabs tabs={this.state.installedApps} selected={this.state.selectedApp} onSelect={this.handleMarketplaceChange.bind(this)}/>
+                            </div>
+                            <div className="col-12">
+                                <SmartDataTable
+                                    data={this.state.products}
+                                    uniqueKey="container_id"
+                                    multiSelect={true}
+                                    selected={this.state.selectedProducts}
+                                    className='ui compact selectable table'
+                                    withLinks={true}
+                                    visibleColumns={this.visibleColumns}
+                                    actions={this.massActions}
+                                    showColumnFilters={true}
+                                    imageColumns={this.imageColumns}
+                                    rowActions={{
+                                        edit: true,
+                                        delete: true
+                                    }}
+                                    userRowSelect={(event) => {
+                                        const itemIndex = this.state.selectedProducts.indexOf(event.data.id);
+                                        if (event.isSelected) {
+                                            if (itemIndex === -1) {
+                                                this.state.selectedProducts.push(event.data.id);
+                                            }
+                                        } else {
+                                            if (itemIndex !== -1) {
+                                                this.state.selectedProducts.splice(itemIndex, 1);
+                                            }
+                                        }
+                                        const state = this.state;
+                                        this.setState(state);
+                                    }}
+                                    allRowSelected={(event, rows) => {
+                                        this.state.selectedProducts = [];
+                                        if (event) {
+                                            for (let i = 0; i < rows.length; i++) {
+                                                this.state.selectedProducts.push(rows[i].id);
+                                            }
+                                        }
+                                        const state = this.state;
+                                        this.setState(state);
+                                    }}
+                                    massAction={(event) => {
+                                        console.log(event);
+                                    }}
+                                    editRow={(row) => {
+                                        this.redirect("/panel/products/edit/" + row.id);
+                                    }}
+                                    deleteRow={(row) => {
+                                        this.state.toDeleteRow = row;
+                                        this.state.deleteProductData = true;
+                                        const state = this.state;
+                                        this.setState(state);
+                                    }}
+                                    columnFilters={(filters) => {
+                                        this.filters.column_filters = filters;
+                                        this.getProducts();
+                                    }}
+                                    sortable
+                                />
+                            </div>
                         </div>
-                        <div className="col-md-2 col-sm-2 col-6">
-                            <Select
-                                options={this.pageLimits}
-                                value={this.gridSettings._limit}
-                                onChange={this.pageSettingsChange.bind(this)}>
-                            </Select>
+                        <div className="row mt-3">
+                            <div className="col-6 text-right">
+                                <Pagination
+                                    hasPrevious
+                                    onPrevious={() => {
+                                        this.gridSettings.activePage--;
+                                        this.getProducts();
+                                    }}
+                                    hasNext
+                                    onNext={() => {
+                                        this.gridSettings.activePage++;
+                                        this.getProducts();
+                                    }}
+                                />
+                            </div>
+                            <div className="col-md-2 col-sm-2 col-6">
+                                <Select
+                                    options={this.pageLimits}
+                                    value={this.gridSettings._limit}
+                                    onChange={this.pageSettingsChange.bind(this)}>
+                                </Select>
+                            </div>
                         </div>
                     </div>
                 </Card>
@@ -248,38 +306,17 @@ export class Products extends Component {
         );
     }
 
-    pageSettingsChange(event) {
-        this.gridSettings._limit = event;
-        this.gridSettings._page = 1;
+    handleMarketplaceChange(event) {
+        this.filters.marketplace = this.state.installedApps[event].id;
+        this.state.selectedApp = event;
+        this.updateState();
         this.getProducts();
     }
 
-    addSearchFilter(searchValue) {
-        const state = this.state;
-        state.searchValue = searchValue;
-        this.setState(state);
-        if (searchValue !== null &&
-            searchValue !== '') {
-            this.filters['title'] = searchValue;
-            this.getProducts();
-        }
-    }
-
-    applyFilters(allFilters) {
-        const state = this.state;
-        for (let i = 0; i < allFilters.length; i++) {
-            switch (allFilters[i].key) {
-                case 'quantity':
-                    if (allFilters[i].value > 0) {
-                        allFilters[i]['label'] = 'In stock';
-                    } else {
-                        allFilters[i]['label'] = 'Out of stock';
-                    }
-                    break;
-            }
-        }
-        state.appliedFilters = allFilters;
-        this.setState(state);
+    pageSettingsChange(event) {
+        this.gridSettings.count = event;
+        this.gridSettings.activePage = 1;
+        this.getProducts();
     }
 
     redirect(url) {
