@@ -45,25 +45,25 @@ export function parseHeader(val) {
   return ''
 }
 
-export function columnObject(key) {
+export function columnObject(key, columnTitles) {
   return {
     key,
-    title: parseHeader(key),
+    title: isUndefined(columnTitles[key]) ? parseHeader(key) : columnTitles[key].title,
     visible: true,
-    sortable: true,
+    sortable: isUndefined(columnTitles[key]) ? true : columnTitles[key].sortable,
     filterable: true,
   }
 }
 
-export function parseDataForColumns(_data) {
+export function parseDataForColumns(_data, columnTitles) {
   const columns = []
   if (_data && isArray(_data) && !isEmpty(_data)) {
     const data = _data.filter(row => !!row)
     const firstElemnt = flatten(data[0])
     if (isPlainObject(firstElemnt)) {
-      const keys = Object.keys(firstElemnt)
+      const keys = Object.keys(firstElemnt);
       keys.forEach((key) => {
-        columns.push(columnObject(key))
+        columns.push(columnObject(key, columnTitles))
       })
     }
   }

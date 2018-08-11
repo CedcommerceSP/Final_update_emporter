@@ -56,6 +56,7 @@ class SmartDataTablePlain extends React.Component {
       isLoading: false,
       multiSelect: isUndefined(props.multiSelect) ? false : props.multiSelect,
       selected: isUndefined(props.selected) ? [] : props.selected,
+      columnTitles: isUndefined(props.columnTitles) ? {} : props.columnTitles,
       imageColumns: isUndefined(props.imageColumns) ? [] : props.imageColumns,
       uniqueKey: isUndefined(props.uniqueKey) ? 'id' : props.uniqueKey,
       actions: isUndefined(props.actions) ? [] : props.actions,
@@ -77,9 +78,9 @@ class SmartDataTablePlain extends React.Component {
       for (let i = 0; i < this.state.visibleColumns.length; i++) {
           this.defaultColumns.push({
               key: this.state.visibleColumns[i],
-              title: parseHeader(this.state.visibleColumns[i]),
+              title: isUndefined(this.state.columnTitles[this.state.visibleColumns[i]]) ? parseHeader(this.state.visibleColumns[i]) : this.state.columnTitles[this.state.visibleColumns[i]].title,
               visible: true,
-              sortable: true,
+              sortable: isUndefined(this.state.columnTitles[this.state.visibleColumns[i]]) ? true : this.state.columnTitles[this.state.visibleColumns[i]].sortable,
               filterable: true,
           });
       }
@@ -186,8 +187,6 @@ class SmartDataTablePlain extends React.Component {
     if (columns.length === 0) {
         columns = this.defaultColumns.slice(0);
     }
-    console.log(columns);
-    console.log(this.defaultColumns);
     const headers = columns.map((column) => {
       const showCol = column.visible;
       if (showCol) {
@@ -319,7 +318,6 @@ class SmartDataTablePlain extends React.Component {
   }
 
   renderColumnFilters(column) {
-    console.log(this.state.columnFilters);
     return (
         <div>
           <div className="mt-1">
@@ -440,17 +438,17 @@ class SmartDataTablePlain extends React.Component {
   }
 
   getColumns() {
-    const { asyncData } = this.state
-    const { data } = this.props
+    const { asyncData } = this.state;
+    const { data } = this.props;
     if (typeof data === 'string') {
-      let columns = parseDataForColumns(asyncData);
+      let columns = parseDataForColumns(asyncData, this.state.columnTitles);
       if (this.state.visibleColumns) {
           columns = updateColumnVisibility(columns, this.state.visibleColumns);
       }
       this.state.columnFilters = getColumnFilters(columns, this.state.columnFilters);
       return columns;
     }
-    let columns = parseDataForColumns(data);
+    let columns = parseDataForColumns(data, this.state.columnTitles);
     if (this.state.visibleColumns) {
         columns = updateColumnVisibility(columns, this.state.visibleColumns);
     }

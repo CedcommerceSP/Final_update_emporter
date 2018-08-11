@@ -23,7 +23,7 @@ export class Products extends Component {
         column_filters: {}
     };
     gridSettings = {
-      count: 5,
+      variantsCount: 5,
       activePage: 1
     };
     pageLimits = [
@@ -37,8 +37,50 @@ export class Products extends Component {
         {label: 'Delete', value: 'delete'},
         {label: 'Upload', value: 'upload'}
     ];
-    visibleColumns = ['source_product_id', 'description', 'title', 'sku', 'quantity', 'price', 'image'];
-    imageColumns = ['image'];
+    visibleColumns = ['source_product_id', 'long_description', 'title', 'sku', 'inventory_quantity', 'price', 'main_image'];
+    imageColumns = ['main_image'];
+    columnTitles = {
+        source_product_id: {
+            title: 'ID',
+            sortable: true
+        },
+        long_description: {
+            title: 'Description',
+            sortable: true
+        },
+        title: {
+            title: 'Title',
+            sortable: true
+        },
+        type: {
+            title: 'Type',
+            sortable: true
+        },
+        inventory_quantity: {
+            title: 'Quantity',
+            sortable: true
+        },
+        sku: {
+            title: 'Sku',
+            sortable: true
+        },
+        price: {
+            title: 'Price',
+            sortable: true
+        },
+        weight: {
+            title: 'Weight',
+            sortable: true
+        },
+        weight_unit: {
+            title: 'Weight Unit',
+            sortable: true
+        },
+        main_image: {
+            title: 'Image',
+            sortable: false
+        }
+    };
 
     constructor() {
         super();
@@ -100,16 +142,32 @@ export class Products extends Component {
     }
 
     prepareFilterObject() {
-        this.state.appliedFilters = {
-            marketplace: this.filters.marketplace
-        };
+        this.state.appliedFilters = {};
+        if (this.filters.marketplace !== 'all') {
+            this.state.appliedFilters['marketplace'] = this.filters.marketplace;
+        }
         if (this.filters.full_text_search !== '') {
             this.state.appliedFilters['search'] = this.filters.full_text_search;
         }
         for (let i = 0; i < Object.keys(this.filters.column_filters).length; i++) {
             const key = Object.keys(this.filters.column_filters)[i];
             if (this.filters.column_filters[key].value !== '') {
-                this.state.appliedFilters['filter[' + key + '][' + this.filters.column_filters[key].operator + ']'] = this.filters.column_filters[key].value;
+                switch (key) {
+                    case 'type':
+                    case 'title':
+                    case 'long_description':
+                    case 'source_product_id':
+                        this.state.appliedFilters['filter[details.' + key + '][' + this.filters.column_filters[key].operator + ']'] = this.filters.column_filters[key].value;
+                        break;
+                    case 'sku':
+                    case 'price':
+                    case 'weight':
+                    case 'weight_unit':
+                    case 'main_image':
+                    case 'inventory_quantity':
+                        this.state.appliedFilters['filter[variants.' + key + '][' + this.filters.column_filters[key].operator + ']'] = this.filters.column_filters[key].value;
+                        break;
+                }
             }
         }
         this.updateState();
@@ -120,19 +178,16 @@ export class Products extends Component {
         for (let i = 0; i < data.length; i++) {
             let rowData = {};
             rowData['source_product_id'] = data[i].details.source_product_id;
-            rowData['description'] = data[i].details.long_description;
+            rowData['long_description'] = data[i].details.long_description;
             rowData['title'] = data[i].details.title;
             rowData['type'] = data[i].details.type;
-            for (let j = 0; j < Object.keys(data[i].variants).length; j++) {
-                const key = Object.keys(data[i].variants)[j];
-                rowData['quantity'] = data[i].variants[key]['inventory_quantity'];
-                rowData['sku'] = data[i].variants[key]['sku'];
-                rowData['price'] = data[i].variants[key]['price'];
-                rowData['weight'] = data[i].variants[key]['weight'];
-                rowData['weight_unit'] = data[i].variants[key]['weight_unit'];
-                rowData['image'] = data[i].variants[key]['main_image'];
-                products.push(rowData);
-            }
+            rowData['inventory_quantity'] = data[i].variants['inventory_quantity'];
+            rowData['sku'] = data[i].variants['sku'];
+            rowData['price'] = data[i].variants['price'];
+            rowData['weight'] = data[i].variants['weight'];
+            rowData['weight_unit'] = data[i].variants['weight_unit'];
+            rowData['main_image'] = data[i].variants['main_image'];
+            products.push(rowData);
         }
         return products;
     }
@@ -196,7 +251,7 @@ export class Products extends Component {
                 <Card>
                     <div className="p-5">
                         <ResourceList
-                            items={this.state.products}
+                            items={['test']}
                             renderItem={item => {}}
                             filterControl={
                                 <ResourceList.FilterControl
@@ -206,7 +261,7 @@ export class Products extends Component {
                                         this.updateState();
                                     }}
                                     additionalAction={{
-                                        content: 'Filter',
+                                        content: 'Search',
                                         onAction: () => this.getProducts()
                                     }}
                                 />
@@ -220,6 +275,7 @@ export class Products extends Component {
                                 <SmartDataTable
                                     data={this.state.products}
                                     uniqueKey="container_id"
+                                    columnTitles={this.columnTitles}
                                     multiSelect={true}
                                     selected={this.state.selectedProducts}
                                     className='ui compact selectable table'
@@ -314,7 +370,7 @@ export class Products extends Component {
     }
 
     pageSettingsChange(event) {
-        this.gridSettings.count = event;
+        this.gridSettings.variantsCount = event;
         this.gridSettings.activePage = 1;
         this.getProducts();
     }
