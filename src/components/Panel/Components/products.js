@@ -37,7 +37,7 @@ export class Products extends Component {
         {label: 'Delete', value: 'delete'},
         {label: 'Upload', value: 'upload'}
     ];
-    visibleColumns = ['source_product_id', 'long_description', 'title', 'sku', 'inventory_quantity', 'price', 'main_image'];
+    visibleColumns = ['source_product_id', 'long_description', 'title', 'sku', 'quantity', 'price', 'main_image'];
     imageColumns = ['main_image'];
     columnTitles = {
         source_product_id: {
@@ -56,7 +56,7 @@ export class Products extends Component {
             title: 'Type',
             sortable: true
         },
-        inventory_quantity: {
+        quantity: {
             title: 'Quantity',
             sortable: true
         },
@@ -164,7 +164,7 @@ export class Products extends Component {
                     case 'weight':
                     case 'weight_unit':
                     case 'main_image':
-                    case 'inventory_quantity':
+                    case 'quantity':
                         this.state.appliedFilters['filter[variants.' + key + '][' + this.filters.column_filters[key].operator + ']'] = this.filters.column_filters[key].value;
                         break;
                 }
@@ -181,7 +181,7 @@ export class Products extends Component {
             rowData['long_description'] = data[i].details.long_description;
             rowData['title'] = data[i].details.title;
             rowData['type'] = data[i].details.type;
-            rowData['inventory_quantity'] = data[i].variants['inventory_quantity'];
+            rowData['quantity'] = data[i].variants['quantity'];
             rowData['sku'] = data[i].variants['sku'];
             rowData['price'] = data[i].variants['price'];
             rowData['weight'] = data[i].variants['weight'];
@@ -350,7 +350,7 @@ export class Products extends Component {
                             <div className="col-md-2 col-sm-2 col-6">
                                 <Select
                                     options={this.pageLimits}
-                                    value={this.gridSettings._limit}
+                                    value={this.gridSettings.variantsCount}
                                     onChange={this.pageSettingsChange.bind(this)}>
                                 </Select>
                             </div>
