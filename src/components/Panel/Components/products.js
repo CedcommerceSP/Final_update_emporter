@@ -251,7 +251,7 @@ export class Products extends Component {
                 <Card>
                     <div className="p-5">
                         <ResourceList
-                            items={['test']}
+                            items={['products']}
                             renderItem={item => {}}
                             filterControl={
                                 <ResourceList.FilterControl

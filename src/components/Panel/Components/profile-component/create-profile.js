@@ -19,24 +19,16 @@ import { isUndefined } from 'util';
 
 export class CreateProfile extends Component {
 
-    sourceAttributes = [
-        { label: 'Title', value: 'title' },
-        { label: 'Price', value: 'price' },
-        { label: 'Sku', value: 'sku' },
-        { label: 'Description', value: 'description' }
-    ];
+    sourceAttributes = [];
     filteredProducts = {
       runQuery: false,
       totalProducts: 0
     };
-    productCategories = [
-        { label: 'Apparels & Accessories', value: 'Apparels & Accessories' },
-        { label: 'Product Handlooms', value: 'Product Handlooms' },
-        { label: 'Food Products', value: 'Food Products' }
-    ];
     filterConditions = [
         { label: 'Equals', value: '==' },
         { label: 'Not Equals', value: '!=' },
+        { label: 'Contains', value: '%LIKE%' },
+        { label: 'Does Not Contains', value: '!%LIKE%' },
         { label: 'Greater Then', value: '>' },
         { label: 'Less Then', value: '<' },
         { label: 'Greater Then Equal To', value: '>=' },
@@ -46,28 +38,6 @@ export class CreateProfile extends Component {
     showOptionMapping = false;
     optionMappingIndex = -1;
     categoryList = [];
-
-    tempCatg = [
-        {
-            category_id: 4,
-            title: 'Apparel & Accessories \ Clothes',
-            code: 'Apparel & Accessories \ Clothes',
-            path: 'Apparel & Accessories \ Clothes',
-            label: 'Apparel & Accessories \ Clothes',
-            value: 'Apparel & Accessories \ Clothes',
-            child_exists: true,
-            children: []
-        },
-        {
-            category_id: 5,
-            title: 'Arts & Entertainment \ Music',
-            code: 'Arts & Entertainment \ Music',
-            path: 'Arts & Entertainment \ Music',
-            label: 'Arts & Entertainment \ Music',
-            value: 'Arts & Entertainment \ Music',
-            child_exists: false
-        }
-    ];
 
     importServices = [];
     uploadServices = [];
@@ -91,6 +61,7 @@ export class CreateProfile extends Component {
                 secondaryQuery: {}
             },
             basicDetails: {
+                name: '',
                 source: '',
                 sourceShop: '',
                 targetShop: '',
@@ -100,99 +71,8 @@ export class CreateProfile extends Component {
                 query: '',
                 targetCategory: ''
             },
-            targetAttributes: [
-                {
-                    code: 'title',
-                    mappedTo: '',
-                    description: 'Title of the product',
-                    defaultValue: '',
-                    required: true
-                },
-                {
-                    code: 'sku',
-                    mappedTo: '',
-                    description: 'Sku of the product',
-                    defaultValue: '',
-                    required: true
-                },
-                {
-                    code: 'price',
-                    mappedTo: '',
-                    description: 'Price of the product',
-                    defaultValue: '',
-                    required: true
-                },
-                {
-                    code: 'size',
-                    mappedTo: '',
-                    options: [
-                        {
-                            code: 'small',
-                            mappedTo: '',
-                            label: 'small',
-                            value: 'small'
-                        },
-                        {
-                            code: 'medium',
-                            mappedTo: '',
-                            label: 'medium',
-                            value: 'medium'
-                        },
-                        {
-                            code: 'large',
-                            mappedTo: '',
-                            label: 'large',
-                            value: 'large'
-                        },
-                        {
-                            code: 'x-large',
-                            mappedTo: '',
-                            label: 'x-large',
-                            value: 'x-large'
-                        }
-                    ],
-                    description: 'Size of the product',
-                    sourceOptions: [],
-                    defaultValue: '',
-                    required: false
-                }
-            ],
-            sourceAttributes: [
-                {
-                    label: 'Title',
-                    value: 'Title'
-                },
-                {
-                    label: 'Sku',
-                    value: 'Sku'
-                },
-                {
-                    label: 'Price',
-                    value: 'Price'
-                },
-                {
-                    label: 'Size',
-                    value: 'Size',
-                    options: [
-                        {
-                            label: 's',
-                            value: 's'
-                        },
-                        {
-                            label: 'm',
-                            value: 'm'
-                        },
-                        {
-                            label: 'l',
-                            value: 'l'
-                        },
-                        {
-                            label: 'xl',
-                            value: 'xl'
-                        }
-                    ]
-                }
-            ]
+            targetAttributes: [],
+            sourceAttributes: []
         };
         this.getProfile();
     }
@@ -201,22 +81,22 @@ export class CreateProfile extends Component {
         requests.getRequest('connector/profile/get')
             .then(data => {
                 if (data.success) {
-                    if (!isUndefined(data.data.step)) {
-                        switch (data.data.step) {
+                    console.log(data);
+                    if (!isUndefined(data.data.state)) {
+                        this.state.basicDetails.source = data.data.source;
+                        this.state.basicDetails.target = data.data.target;
+                        this.state.basicDetails.sourceShop = data.data.sourceShop;
+                        this.state.basicDetails.targetShop = data.data.targetShop;
+                        switch (data.data.state) {
                             case 1:
-                                this.state.basicDetails.source = data.data.source;
-                                this.state.basicDetails.target = data.data.target;
-                                this.state.basicDetails.sourceShop = data.data.sourceShop;
-                                this.state.basicDetails.targetShop = data.data.targetShop;
+                                this.state.activeStep = 1;
                                 this.fetchDataForStepOne();
                                 break;
                             case 2:
-                                this.state.basicDetails.source = data.data.source;
-                                this.state.basicDetails.target = data.data.target;
-                                this.state.basicDetails.sourceShop = data.data.sourceShop;
-                                this.state.basicDetails.targetShop = data.data.targetShop;
+                                this.state.activeStep = 2;
                                 this.state.products_select.query = data.data.query;
                                 this.state.products_select.targetCategory = data.data.targetCategory;
+                                this.fetchDataForSteptwo();
                                 break;
                             case 3:
                                 break;
@@ -236,8 +116,98 @@ export class CreateProfile extends Component {
     }
 
     fetchDataForSteptwo() {
-        console.log('step two active');
         this.getProductCategories();
+        this.getSourceAttributes();
+    }
+
+    fetchDataForStepThree() {
+        this.getTargetAttributes();
+        this.getAttributesForSelectedProducts();
+    }
+
+    getTargetAttributes() {
+        requests.getRequest('connector/get/getAttributes', { marketplace: this.state.basicDetails.target, category: this.state.products_select.targetCategory })
+            .then(data => {
+                if (data.success) {
+                    this.state.targetAttributes = this.modifyAttributesData(data.data);
+                    this.updateState();
+                } else {
+                    notify.error(data.message);
+                }
+            });
+    }
+
+    getAttributesForSelectedProducts() {
+        requests.getRequest('connector/product/getAttributesByProductQuery', { marketplace: this.state.basicDetails.source, query: this.state.products_select.query })
+            .then(data => {
+                if (data.success) {
+                    this.state.sourceAttributes = this.modifyAttributesForSelect(data.data);
+                    this.updateState();
+                } else {
+                    notify.error(data.message);
+                }
+            });
+    }
+
+    modifyAttributesForSelect(attributes) {
+        let toReturnAttributes = [];
+        for (let i = 0; i < attributes.length; i++) {
+            let attributeData = {
+                value: attributes[i].code,
+                label: attributes[i].title
+            };
+            if (!isUndefined(attributes[i].values)) {
+                attributeData['options'] = this.modifyAttributeOptions(attributes[i].values);
+            }
+            toReturnAttributes.push(attributeData);
+        }
+        return toReturnAttributes;
+    }
+
+    modifyAttributesData(attributes) {
+        let toReturnAttributes = [];
+        let requiredAttributes = [];
+        let optionalAttributes = [];
+        for (let i = 0; i < attributes.length; i++) {
+            let attributeData = {
+                code: attributes[i].code,
+                required: attributes[i].required == 1,
+                title: attributes[i].title,
+                mappedTo: '',
+                defaultValue: ''
+            };
+            if (!isUndefined(attributes[i].values)) {
+                attributeData['options'] = this.modifyAttributeOptions(attributes[i].values);
+            }
+            if (!isUndefined(attributes[i].mapped)) {
+                attributeData['mappedTo'] = attributes[i].mapped;
+            }
+            if (!isUndefined(attributes[i].system)) {
+                attributeData['system'] = (attributeData['system'] == 1);
+            }
+            if (!isUndefined(attributes[i].visible)) {
+                attributeData['visible'] = (attributeData['visible'] == 1);
+            }
+            if (attributeData.required) {
+                requiredAttributes.push(attributeData);
+            } else {
+                optionalAttributes.push(attributeData);
+            }
+        }
+        toReturnAttributes = [...requiredAttributes, ...optionalAttributes];
+        return toReturnAttributes;
+    }
+
+    modifyAttributeOptions(options) {
+        let toReturnOptions = [];
+        for (let i = 0; i < options.length; i++) {
+            toReturnOptions.push({
+                mappedTo: '',
+                label: options[i].title,
+                value: options[i].value
+            });
+        }
+        return toReturnOptions;
     }
 
     getProductCategories() {
@@ -251,6 +221,24 @@ export class CreateProfile extends Component {
                             categories: this.addLabelInCategories(data.data)
                         }
                     ];
+                    this.updateState();
+                } else {
+                    notify.error(data.message);
+                }
+            });
+    }
+
+    getSourceAttributes() {
+        requests.getRequest('connector/get/getAttributes', { marketplace: this.state.basicDetails.source })
+            .then(data => {
+                if (data.success) {
+                    this.sourceAttributes = [];
+                    for (let i = 0; i < data.data.length; i++) {
+                        this.sourceAttributes.push({
+                            label: data.data[i].title,
+                            value: data.data[i].code
+                        });
+                    }
                     this.updateState();
                 } else {
                     notify.error(data.message);
@@ -285,11 +273,11 @@ export class CreateProfile extends Component {
     }
 
     saveProfileData() {
+        let data;
         switch (this.state.activeStep) {
             case 1:
-                const data = Object.assign({}, this.state.basicDetails);
-                data['step'] = 1;
-                requests.postRequest('connector/profile/set', {data: data})
+                data = Object.assign({}, this.state.basicDetails);
+                requests.postRequest('connector/profile/set', {data: data, step: this.state.activeStep })
                     .then(data => {
                         if (data.success) {
                             notify.success('Step ' + this.state.activeStep + ' completed succesfully.');
@@ -302,6 +290,30 @@ export class CreateProfile extends Component {
                     });
                 break;
             case 2:
+                data = Object.assign({}, this.state.basicDetails, this.state.products_select);
+                requests.postRequest('connector/profile/set', {data: data, step: this.state.activeStep})
+                    .then(data => {
+                        if (data.success) {
+                            notify.success('Step ' + this.state.activeStep + ' completed succesfully.');
+                            this.state.activeStep = 3;
+                            this.updateState();
+                            this.fetchDataForStepThree();
+                        } else {
+                            notify.error(data.message);
+                        }
+                    });
+                break;
+            case 3:
+                data = Object.assign({}, this.state.basicDetails, this.state.products_select, { attributeMapping: this.state.targetAttributes });
+                requests.postRequest('connector/profile/set', {data: data, saveInTable: true})
+                    .then(data => {
+                        if (data.success) {
+                            notify.success('Profile created succesfully');
+                            this.redirect('/panel/profiling');
+                        } else {
+                            notify.error(data.message);
+                        }
+                    });
                 break;
         }
     }
@@ -366,14 +378,10 @@ export class CreateProfile extends Component {
                 {
                     querySet.position === 1 &&
                     this.state.products_select.query !== '' &&
-                    <div className="col-12 p-4">
-                        <Card>
-                            <div className="p-4">
-                                <Label>
-                                    {this.state.products_select.query}
-                                </Label>
-                            </div>
-                        </Card>
+                    <div className="col-12 p-3">
+                        <Banner title="Prepared Query">
+                            <Label>{this.state.products_select.query}</Label>
+                        </Banner>
                     </div>
                 }
                 <div className="col-12 p-4">
@@ -607,6 +615,14 @@ export class CreateProfile extends Component {
         return (
             <div className="row">
                 <div className="col-12 pt-1 pb-1">
+                    <TextField
+                        label="Profile Name"
+                        placeholder="Enter Profile Name"
+                        onChange={this.handleBasicDetailsChange.bind(this, 'name')}
+                        value={this.state.basicDetails.name}
+                    />
+                </div>
+                <div className="col-12 pt-1 pb-1">
                     <Select
                         label="Products Imported From"
                         options={this.importServices}
@@ -727,6 +743,14 @@ export class CreateProfile extends Component {
         return (
             <div className="row">
                 {
+                    this.state.products_select.targetCategory !== '' &&
+                    <div className="col-12 p-3">
+                        <Banner title={"Selected " + this.capitalizeWord(this.state.basicDetails.target) + " category"}>
+                            <Label>{this.state.products_select.targetCategory}</Label>
+                        </Banner>
+                    </div>
+                }
+                {
                     this.categoryList.map(category => {
                         return (
                             <div className="col-6 p-3" key={this.categoryList.indexOf(category)}>
@@ -746,11 +770,19 @@ export class CreateProfile extends Component {
 
     runFilterQuery() {
         if (this.state.products_select.query !== '') {
-            this.filteredProducts = {
-                runQuery: true,
-                totalProducts: 1417
-            };
-            this.updateState();
+            requests.postRequest('connector/product/getProductsByQuery', { marketplace: this.state.basicDetails.source, query: this.state.products_select.query, sendCount: true })
+                .then(data => {
+                    console.log(data);
+                    if (data.success) {
+                        this.filteredProducts = {
+                            runQuery: true,
+                            totalProducts: data.data
+                        };
+                    } else {
+                        notify.error(data.message);
+                    }
+                    this.updateState();
+                });
         } else {
             notify.info('Please prepare a custom query to select products');
         }
@@ -795,64 +827,69 @@ export class CreateProfile extends Component {
                         <div className="col-12 p-4">
                             {
                                 this.state.targetAttributes.map(attribute => {
-                                    return (
-                                        <div className="row" key={this.state.targetAttributes.indexOf(attribute)}>
-                                            <div className="col-6 p-3">
-                                                <DisplayText size="small" className="mt-2 mb-2">{attribute.code}</DisplayText>
-                                                <Label>Description: {attribute.description}</Label>
-                                            </div>
-                                            <div className="col-6 p-3">
-                                                <Card>
-                                                    {
-                                                        attribute.required &&
-                                                        <div className="w-100 text-right">
-                                                            <strong>*</strong>
-                                                        </div>
-                                                    }
-                                                    <div className="p-3 w-100">
-                                                        <Select
-                                                            options={this.state.sourceAttributes}
-                                                            placeholder="Target Attribute"
-                                                            onChange={this.handleMapAttributes.bind(this, this.state.targetAttributes.indexOf(attribute))}
-                                                            value={attribute.mappedTo}
-                                                        />
-                                                    </div>
-                                                    {
-                                                        !isUndefined(attribute.sourceOptions) &&
-                                                        attribute.sourceOptions.length > 0 &&
-                                                        <div className="w-100 p-4 text-right">
-                                                            <Button onClick={() => {
-                                                                this.showOptionMappingModal(this.state.targetAttributes.indexOf(attribute));
-                                                            }} primary>Map Options</Button>
-                                                        </div>
-                                                    }
-                                                    {
-                                                        isUndefined(attribute.options) &&
-                                                        <div className="p-3 w-100">
-                                                            <TextField
-                                                                label="Set Default Value"
-                                                                placeholder={"Default Value For " + attribute.code}
-                                                                value={attribute.defaultValue}
-                                                                onChange={this.handleDefaultValueChange.bind(this, this.state.targetAttributes.indexOf(attribute))}
-                                                            />
-                                                        </div>
-                                                    }
-                                                    {
-                                                        !isUndefined(attribute.options) &&
+                                    if (isUndefined(attribute.visible) ||
+                                        attribute.visible) {
+                                        return (
+                                            <div className="row" key={this.state.targetAttributes.indexOf(attribute)}>
+                                                <div className="col-6 p-3">
+                                                    <DisplayText size="small" className="mt-2 mb-2">{attribute.title}</DisplayText>
+                                                    <Label>{attribute.code}</Label>
+                                                </div>
+                                                <div className="col-6 p-3">
+                                                    <Card>
+                                                        {
+                                                            attribute.required &&
+                                                            <div className="w-100 text-right">
+                                                                <strong>*</strong>
+                                                            </div>
+                                                        }
                                                         <div className="p-3 w-100">
                                                             <Select
-                                                                label="Set Default Value"
-                                                                options={attribute.options}
-                                                                placeholder={"Default Value For " + attribute.code}
-                                                                value={attribute.defaultValue}
-                                                                onChange={this.handleDefaultValueChange.bind(this, this.state.targetAttributes.indexOf(attribute))}
+                                                                options={this.state.sourceAttributes}
+                                                                placeholder={this.capitalizeWord(this.state.basicDetails.source) + " Attributes"}
+                                                                onChange={this.handleMapAttributes.bind(this, this.state.targetAttributes.indexOf(attribute))}
+                                                                value={attribute.mappedTo}
+                                                                disabled={attribute.system}
                                                             />
                                                         </div>
-                                                    }
-                                                </Card>
+                                                        {
+                                                            !isUndefined(attribute.sourceOptions) &&
+                                                            attribute.sourceOptions.length > 0 &&
+                                                            <div className="w-100 p-4 text-right">
+                                                                <Button onClick={() => {
+                                                                    this.showOptionMappingModal(this.state.targetAttributes.indexOf(attribute));
+                                                                }} primary>Map Options</Button>
+                                                            </div>
+                                                        }
+                                                        {
+                                                            isUndefined(attribute.options) &&
+                                                            <div className="p-3 w-100">
+                                                                <TextField
+                                                                    label="Set Default Value"
+                                                                    placeholder={"Default Value For " + attribute.code}
+                                                                    value={attribute.defaultValue}
+                                                                    onChange={this.handleDefaultValueChange.bind(this, this.state.targetAttributes.indexOf(attribute))}
+                                                                />
+                                                            </div>
+                                                        }
+                                                        {
+                                                            !isUndefined(attribute.options) &&
+                                                            attribute.options.length > 0 &&
+                                                            <div className="p-3 w-100">
+                                                                <Select
+                                                                    label="Set Default Value"
+                                                                    options={attribute.options}
+                                                                    placeholder={"Default Value For " + attribute.code}
+                                                                    value={attribute.defaultValue}
+                                                                    onChange={this.handleDefaultValueChange.bind(this, this.state.targetAttributes.indexOf(attribute))}
+                                                                />
+                                                            </div>
+                                                        }
+                                                    </Card>
+                                                </div>
                                             </div>
-                                        </div>
-                                    );
+                                        );
+                                    }
                                 })
                             }
                         </div>
@@ -1085,17 +1122,14 @@ export class CreateProfile extends Component {
                 break;
             case 2:
                 if (this.validateStepTwo()) {
-                    notify.success('Step ' + this.state.activeStep + ' completed succesfully.');
-                    this.state.activeStep = 3;
+                    this.saveProfileData();
                 } else {
                     notify.error('Please choose product target category, and add query to select products to upload.');
                 }
                 break;
             case 3:
                 if (this.validateStepThree()) {
-                    console.log(this.state);
-                    notify.success('Profile created succesfully.');
-                    this.redirect('/panel/profiling')
+                    this.saveProfileData();
                 } else {
                     notify.error('Please map all required attributes first.');
                 }
@@ -1106,6 +1140,7 @@ export class CreateProfile extends Component {
 
     validateStepOne() {
         if (this.state.basicDetails.source === '' ||
+            this.state.basicDetails.name === '' ||
             this.state.basicDetails.target === '') {
             return false;
         } else {
@@ -1126,7 +1161,9 @@ export class CreateProfile extends Component {
         for (let i = 0; i < this.state.targetAttributes.length; i++) {
             if (this.state.targetAttributes[i].required &&
                 this.state.targetAttributes[i].mappedTo === '' &&
-                this.state.targetAttributes[i].defaultValue === '') {
+                this.state.targetAttributes[i].defaultValue === '' &&
+                !isUndefined(this.state.targetAttributes[i].visible) &&
+                this.state.targetAttributes[i].visible) {
                 return false;
             }
         }

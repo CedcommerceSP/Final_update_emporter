@@ -11,7 +11,7 @@ export const requests = {
             paramsString += '?';
             for (let i = 0; i < Object.keys(params).length; i++) {
                 const end = (i < (Object.keys(params).length - 1)) ? '&' : '';
-                paramsString += Object.keys(params)[i] + '=' + params[Object.keys(params)[i]] + end;
+                paramsString += Object.keys(params)[i] + '=' + encodeURIComponent(params[Object.keys(params)[i]]) + end;
             }
         }
         if (isUndefined(fullUrl)) {

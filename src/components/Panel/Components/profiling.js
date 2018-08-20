@@ -13,11 +13,12 @@ import SmartDataTable from '../../../shared/smart-table';
 
 export class Profiling extends Component {
 
-    productsEndpoint = 'http://192.168.0.48:4500/profiles';
-    filters = {};
+    filters = {
+        column_filters: {}
+    };
     gridSettings = {
-        _page: 1,
-        _limit: 5
+        activePage: 1,
+        count: 5
     };
     pageLimits = [
         {label: 5, value: 5},
@@ -26,30 +27,73 @@ export class Profiling extends Component {
         {label: 20, value: 20},
         {label: 25, value: 25}
     ];
-    massActions = [
-        {label: 'Upload', value: 'upload'}
-    ];
-    visibleColumns = ['id', 'name', 'source', 'target', 'total_products'];
+    visibleColumns = ['name', 'source', 'target', 'targetCategory', 'query'];
+    columnTitles = {
+        name: {
+            title: 'Profile Name',
+            sortable: true
+        },
+        source: {
+            title: 'Product Import Source',
+            sortable: true
+        },
+        target: {
+            title: 'Product Upload Target',
+            sortable: true
+        },
+        targetCategory: {
+            title: 'Category',
+            sortable: true
+        },
+        query: {
+            title: 'Product Query',
+            sortable: true
+        }
+    };
 
     constructor() {
         super();
         this.state = {
-            profiles: [],
-            appliedFilters: [],
-            searchValue: '',
-            selectedProfiles: []
+            profiles: []
         };
         this.getProfiles();
     }
 
     getProfiles() {
-        requests.getRequest(this.productsEndpoint, this.gridSettings, true)
+        requests.getRequest('connector/profile/getAllProfiles', Object.assign(this.gridSettings, this.prepareFilterObject()))
             .then(data => {
-                const state = this.state;
-                // data = this.modifyProductsData(data);
-                state['profiles'] = data;
-                this.setState(state);
+                if (data.success) {
+                    this.state['profiles'] = this.modifyProfilesData(data.data.rows);
+                    this.updateState();
+                } else {
+                    notify.error(data.message);
+                }
             });
+    }
+
+    modifyProfilesData(profiles) {
+        let profilesList = [];
+        for (let i = 0; i < profiles.length; i++) {
+            profilesList.push({
+                name: profiles[i].name,
+                source: profiles[i].source,
+                target: profiles[i].target,
+                targetCategory: profiles[i].targetCategory,
+                query: profiles[i].query
+            });
+        }
+        return profilesList;
+    }
+
+    prepareFilterObject() {
+        const filters = {};
+        for (let i = 0; i < Object.keys(this.filters.column_filters).length; i++) {
+            const key = Object.keys(this.filters.column_filters)[i];
+            if (this.filters.column_filters[key].value !== '') {
+                filters['filter[' + key + '][' + this.filters.column_filters[key].operator + ']'] = this.filters.column_filters[key].value;
+            }
+        }
+        return filters;
     }
 
     render() {
@@ -61,66 +105,21 @@ export class Profiling extends Component {
                 }}}
                 title="Import Profiles">
                 <Card>
-                    <ResourceList
-                        items={this.state.profiles}
-                        renderItem={item => {}}
-                        filterControl={
-                            <ResourceList.FilterControl
-                                filters={[]}
-                                appliedFilters={this.state.appliedFilters}
-                                searchValue={this.state.searchValue}
-                                onSearchChange={(searchValue) => {
-                                    this.addSearchFilter(searchValue);
-                                }}
-                                additionalAction={{
-                                    content: 'Filter',
-                                    onAction: () => this.getProfiles(),
-                                }}
-                            />
-                        }
-                    />
                     <SmartDataTable
                         data={this.state.profiles}
-                        multiSelect={true}
-                        selected={this.state.selectedProfiles}
+                        multiSelect={false}
                         className='ui compact selectable table'
-                        withLinks={true}
                         visibleColumns={this.visibleColumns}
-                        actions={this.massActions}
+                        columnTitles={this.columnTitles}
                         showColumnFilters={true}
                         rowActions={{
                             edit: false,
                             delete: false
                         }}
-                        userRowSelect={(event) => {
-                            const itemIndex = this.state.selectedProfiles.indexOf(event.data.id);
-                            if (event.isSelected) {
-                                if (itemIndex === -1) {
-                                    this.state.selectedProfiles.push(event.data.id);
-                                }
-                            } else {
-                                if (itemIndex !== -1) {
-                                    this.state.selectedProfiles.splice(itemIndex, 1);
-                                }
-                            }
-                            const state = this.state;
-                            this.setState(state);
-                        }}
-                        allRowSelected={(event, rows) => {
-                            this.state.selectedProfiles = [];
-                            if (event) {
-                                for (let i = 0; i < rows.length; i++) {
-                                    this.state.selectedProfiles.push(rows[i].id);
-                                }
-                            }
-                            const state = this.state;
-                            this.setState(state);
-                        }}
-                        massAction={(event) => {
-                            console.log(event);
-                        }}
                         columnFilters={(filters) => {
-                            console.log(filters);
+                            this.filters.column_filters = filters;
+                            console.log(this.filters);
+                            this.getProfiles();
                         }}
                         sortable
                     />
@@ -129,12 +128,12 @@ export class Profiling extends Component {
                             <Pagination
                                 hasPrevious
                                 onPrevious={() => {
-                                    this.gridSettings._page--;
+                                    this.gridSettings.activePage--;
                                     this.getProfiles();
                                 }}
                                 hasNext
                                 onNext={() => {
-                                    this.gridSettings._page++;
+                                    this.gridSettings.activePage++;
                                     this.getProfiles();
                                 }}
                             />
@@ -142,7 +141,7 @@ export class Profiling extends Component {
                         <div className="col-md-2 col-sm-2 col-6">
                             <Select
                                 options={this.pageLimits}
-                                value={this.gridSettings._limit}
+                                value={this.gridSettings.count}
                                 onChange={this.pageSettingsChange.bind(this)}>
                             </Select>
                         </div>
@@ -153,8 +152,8 @@ export class Profiling extends Component {
     }
 
     pageSettingsChange(event) {
-        this.gridSettings._limit = event;
-        this.gridSettings._page = 1;
+        this.gridSettings.count = event;
+        this.gridSettings.activePage = 1;
         this.getProfiles();
     }
 
@@ -167,6 +166,11 @@ export class Profiling extends Component {
             this.filters['title'] = searchValue;
             this.getProfiles();
         }
+    }
+
+    updateState() {
+        const state = this.state;
+        this.setState(state);
     }
 
     redirect(url) {
