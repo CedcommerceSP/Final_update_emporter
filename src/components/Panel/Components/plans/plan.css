@@ -1,0 +1,20 @@
+.price-tag_small {
+    font-size: 16px;
+    vertical-align: middle;
+    margin: 0px 5px;
+}
+.price-tag {
+    font-size: 60px;
+}
+.price-tag_discount {
+    font-size: 18px;
+    vertical-align: text-top;
+}
+.service-body{
+    font-size: 30px;
+}
+.service-description {
+    font-size: 18px;
+    vertical-align: middle;
+    margin: 0px 5px;
+}

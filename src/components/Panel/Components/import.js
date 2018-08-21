@@ -5,7 +5,8 @@ import { Page,
     Select,
     Button,
     Label,
-    Modal } from '@shopify/polaris';
+    Modal,
+    Banner } from '@shopify/polaris';
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faArrowAltCircleDown,
@@ -36,13 +37,14 @@ export class Import extends Component {
             code: 'profile_3'
         }
     ];
-    shopsList = [];
     profilesList = [];
     constructor() {
         super();
         this.state = {
-            services: [],
-            allServices: {},
+            importServicesList: [],
+            importerShopLists: [],
+            uploadServicesList: [],
+            uploaderShopLists: [],
             showImportProducts: false,
             showUploadProducts: false,
             importProductsDetails: {
@@ -52,24 +54,50 @@ export class Import extends Component {
             },
             uploadProductDetails: {
                 source: '',
+                source_shop: '',
+                source_shop_id: '',
                 target: '',
+                target_shop: '',
+                target_shop_id: '',
                 selected_profile: '',
                 profile_type: ''
             }
         };
-        this.getAllServices();
+        this.getAllImporterServices();
+        this.getAllUploaderServices();
     }
 
-    getAllServices() {
+    getAllImporterServices() {
         requests.getRequest('connector/get/services', { 'filters[type]': 'importer' })
             .then(data => {
                if (data.success === true) {
-                   this.state.services = [];
-                   this.state.allServices = data.data;
+                   this.state.importServicesList = [];
                    for (let i = 0; i < Object.keys(data.data).length; i++) {
                        let key = Object.keys(data.data)[i];
                        if (!data.data[key].usable) {
-                           this.state.services.push({
+                           this.state.importServicesList.push({
+                               label: data.data[key].title,
+                               value: data.data[key].marketplace,
+                               shops: data.data[key].shops
+                           });
+                       }
+                   }
+                   this.updateState();
+               } else {
+                   notify.error('You have no available services');
+               }
+            });
+    }
+
+    getAllUploaderServices() {
+        requests.getRequest('connector/get/services', { 'filters[type]': 'uploader' })
+            .then(data => {
+               if (data.success === true) {
+                   this.state.uploadServicesList = [];
+                   for (let i = 0; i < Object.keys(data.data).length; i++) {
+                       let key = Object.keys(data.data)[i];
+                       if (!data.data[key].usable) {
+                           this.state.uploadServicesList.push({
                                label: data.data[key].title,
                                value: data.data[key].marketplace,
                                shops: data.data[key].shops
@@ -100,7 +128,7 @@ export class Import extends Component {
                                 <Select
                                     label="Import From"
                                     placeholder="Source"
-                                    options={this.state.services}
+                                    options={this.state.importServicesList}
                                     onChange={this.handleImportChange.bind(this, 'source')}
                                     value={this.state.importProductsDetails.source}
                                 />
@@ -108,19 +136,18 @@ export class Import extends Component {
                             <div className="col-12 pt-1 pb-1">
                                 {
                                     this.state.importProductsDetails.source !== '' &&
-                                    this.shopsList.length > 1 &&
+                                    this.state.importerShopLists.length > 1 &&
                                     <Select
                                         label="Shop"
                                         placeholder="Source Shop"
-                                        options={this.shopsList}
+                                        options={this.state.importerShopLists}
                                         onChange={this.handleImportChange.bind(this, 'shop')}
                                         value={this.state.importProductsDetails.shop}
                                     />
                                 }
                             </div>
                             <div className="col-12 pt-1 pb-1 text-center">
-                                <Button disabled={this.state.importProductsDetails.source === '' ||
-                                                  this.state.importProductsDetails.shop === ''}
+                                <Button disabled={this.state.importProductsDetails.source === ''}
                                         onClick={() => {
                                             this.importProducts();
                                         }}
@@ -138,27 +165,29 @@ export class Import extends Component {
     handleImportChange(key, value) {
         this.state.importProductsDetails[key] = value;
         if (key === 'source') {
-            this.shopsList = [];
+            this.state.importerShopLists = [];
             this.state.importProductsDetails.shop = '';
             this.state.importProductsDetails.shop_id = '';
-            for (let i = 0; i < this.state.services.length; i++) {
-                if (this.state.services[i].value === value) {
-                    for (let j = 0; j < this.state.services[i].shops.length; j++) {
-                        this.shopsList.push({
-                            label: this.state.services[i].shops[j].shop_url,
-                            value: this.state.services[i].shops[j].shop_url,
-                            shop_id: this.state.services[i].shops[j].id
+            for (let i = 0; i < this.state.importServicesList.length; i++) {
+                if (this.state.importServicesList[i].value === value) {
+                    for (let j = 0; j < this.state.importServicesList[i].shops.length; j++) {
+                        this.state.importerShopLists.push({
+                            label: this.state.importServicesList[i].shops[j].shop_url,
+                            value: this.state.importServicesList[i].shops[j].shop_url,
+                            shop_id: this.state.importServicesList[i].shops[j].id
                         });
                     }
                     break;
                 }
             }
-            this.state.importProductsDetails.shop = this.shopsList[0].value;
-            this.state.importProductsDetails.shop_id = this.shopsList[0].shop_id;
+            if (this.state.importerShopLists.length > 0) {
+                this.state.importProductsDetails.shop = this.state.importerShopLists[0].value;
+                this.state.importProductsDetails.shop_id = this.state.importerShopLists[0].shop_id;
+            }
         } else if (key === 'shop') {
-            for (let i = 0; i < this.shopsList.length; i++) {
-                if (this.shopsList[i].value === value) {
-                    this.state.importProductsDetails.shop_id = this.shopsList[i].shop_id;
+            for (let i = 0; i < this.state.importerShopLists.length; i++) {
+                if (this.state.importerShopLists[i].value === value) {
+                    this.state.importProductsDetails.shop_id = this.state.importerShopLists[i].shop_id;
                     break;
                 }
             }
@@ -184,6 +213,11 @@ export class Import extends Component {
             });
     }
 
+    capitalizeWord(string) {
+        string = string.toLowerCase();
+        return string.charAt(0).toUpperCase() + string.slice(1);
+    }
+
     renderUploadProductsModal() {
         return (
             <Modal
@@ -199,28 +233,43 @@ export class Import extends Component {
                         <div className="col-12 pt-1 pb-1 mt-2 mb-2">
                             <Select
                                 label="Upload Products Of"
-                                placeholder="Source"
-                                options={[
-                                    {label: 'Amazon', value: 'amazon'},
-                                    {label: 'Ebay', value: 'ebay'},
-                                    {label: 'Walmart', value: 'walmart'},
-                                ]}
+                                placeholder="Product Source"
+                                options={this.state.importServicesList}
                                 onChange={this.handleUploadChange.bind(this, 'source')}
                                 value={this.state.uploadProductDetails.source}
                             />
                         </div>
+                        {
+                            this.state.uploadProductDetails.source !== '' &&
+                            this.state.importerShopLists.length > 1 &&
+                            <Select
+                                label={this.capitalizeWord(this.state.uploadProductDetails.source) + " Shop"}
+                                placeholder="Source Shop"
+                                options={this.state.importerShopLists}
+                                onChange={this.handleImportChange.bind(this, 'shop')}
+                                value={this.state.uploadProductDetails.source_shop}
+                            />
+                        }
                         <div className="col-12 pt-1 pb-1 mt-2 mb-2">
                             <Select
                                 label="Upload Products To"
                                 placeholder="Target"
-                                options={[
-                                    {label: 'Shopify', value: 'shopify'},
-                                    {label: 'Magento', value: 'magento'}
-                                ]}
+                                options={this.state.uploadServicesList}
                                 onChange={this.handleUploadChange.bind(this, 'target')}
                                 value={this.state.uploadProductDetails.target}
                             />
                         </div>
+                        {
+                            this.state.uploadProductDetails.target !== '' &&
+                            this.state.uploaderShopLists.length > 1 &&
+                            <Select
+                                label={this.capitalizeWord(this.state.uploadProductDetails.target) + " Shop"}
+                                placeholder="Target Shop"
+                                options={this.state.uploaderShopLists}
+                                onChange={this.handleImportChange.bind(this, 'target_shop')}
+                                value={this.state.uploadProductDetails.target_shop}
+                            />
+                        }
                         <div className="col-12 pt-1 pb-1">
                             {
                                 this.state.uploadProductDetails.profile_type !== 'custom' &&
@@ -242,7 +291,7 @@ export class Import extends Component {
                                 {
                                     this.profilesList.length > 0 &&
                                     <Select
-                                        label="Select Profile"
+                                        label="Select Custom Profile"
                                         options={this.profilesList}
                                         placeholder="Custom Profile"
                                         onChange={this.handleProfileSelect.bind(this)}
@@ -252,7 +301,9 @@ export class Import extends Component {
                                 {
                                     this.profilesList.length === 0 &&
                                         <div className="text-center">
-                                            <Label>No profiles for selected import source and upload target</Label>
+                                            <Banner status="warning">
+                                                <Label>No profiles for {this.capitalizeWord(this.state.uploadProductDetails.source)} and {this.capitalizeWord(this.state.uploadProductDetails.target)} integration</Label>
+                                            </Banner>
                                             <div className="text-center mt-2 mb-2">
                                                 <Button onClick={() => {
                                                     this.redirect('/panel/profiling/create');
@@ -300,18 +351,78 @@ export class Import extends Component {
         switch (key) {
             case 'selected_profile':
                 if (value === 'custom_profile') {
-                    this.getMatchingProfiles();
-                    this.state.uploadProductDetails.profile_type = 'custom';
-                    this.state.uploadProductDetails[key] = '';
+                    if (this.state.uploadProductDetails.source === '' ||
+                        this.state.uploadProductDetails.target === '') {
+                        notify.info('Please choose product import source and product upload target first');
+                    } else {
+                        this.getMatchingProfiles();
+                        this.state.uploadProductDetails.profile_type = 'custom';
+                        this.state.uploadProductDetails[key] = '';
+                    }
                 } else {
                     this.state.uploadProductDetails.profile_type = '';
                     this.state.uploadProductDetails[key] = value;
                 }
                 break;
-            default:
-                this.state.uploadProductDetails[key] = value;
-                this.state.uploadProductDetails.profile_type = '';
-                this.state.uploadProductDetails.selected_profile = '';
+            case 'source':
+                this.state.importerShopLists = [];
+                this.state.uploadProductDetails.source = value;
+                this.state.uploadProductDetails.source_shop = '';
+                this.state.uploadProductDetails.source_shop_id = '';
+                for (let i = 0; i < this.state.importServicesList.length; i++) {
+                    if (this.state.importServicesList[i].value === value) {
+                        for (let j = 0; j < this.state.importServicesList[i].shops.length; j++) {
+                            this.state.importerShopLists.push({
+                                label: this.state.importServicesList[i].shops[j].shop_url,
+                                value: this.state.importServicesList[i].shops[j].shop_url,
+                                shop_id: this.state.importServicesList[i].shops[j].id
+                            });
+                        }
+                        break;
+                    }
+                }
+                if (this.state.importerShopLists.length > 0) {
+                    this.state.uploadProductDetails.source_shop = this.state.importerShopLists[0].value;
+                    this.state.uploadProductDetails.source_shop_id = this.state.importerShopLists[0].shop_id;
+                }
+                break;
+            case 'target':
+                this.state.uploaderShopLists = [];
+                this.state.uploadProductDetails.target = value;
+                this.state.uploadProductDetails.target_shop = '';
+                this.state.uploadProductDetails.target_shop_id = '';
+                for (let i = 0; i < this.state.uploadServicesList.length; i++) {
+                    if (this.state.uploadServicesList[i].value === value) {
+                        for (let j = 0; j < this.state.uploadServicesList[i].shops.length; j++) {
+                            this.state.uploaderShopLists.push({
+                                label: this.state.uploadServicesList[i].shops[j].shop_url,
+                                value: this.state.uploadServicesList[i].shops[j].shop_url,
+                                shop_id: this.state.uploadServicesList[i].shops[j].id
+                            });
+                        }
+                        break;
+                    }
+                }
+                if (this.state.uploaderShopLists.length > 0) {
+                    this.state.uploadProductDetails.target_shop = this.state.uploaderShopLists[0].value;
+                    this.state.uploadProductDetails.target_shop_id = this.state.uploaderShopLists[0].shop_id;
+                }
+                break;
+            case 'source_shop':
+                for (let i = 0; i < this.state.importerShopLists.length; i++) {
+                    if (this.state.importerShopLists[i].value === value) {
+                        this.state.uploadProductDetails.source_shop_id = this.state.importerShopLists[i].shop_id;
+                        break;
+                    }
+                }
+                break;
+            case 'target_shop':
+                for (let i = 0; i < this.state.uploaderShopLists.length; i++) {
+                    if (this.state.uploaderShopLists[i].value === value) {
+                        this.state.uploadProductDetails.target_shop_id = this.state.uploaderShopLists[i].shop_id;
+                        break;
+                    }
+                }
                 break;
         }
         this.updateState();
@@ -319,18 +430,24 @@ export class Import extends Component {
 
     getMatchingProfiles() {
         this.profilesList = [];
-        for (let i = 0; i < this.allProfiles.length; i++) {
-            if (this.state.uploadProductDetails.source === this.allProfiles[i].source &&
-                this.state.uploadProductDetails.target === this.allProfiles[i].target) {
-                this.profilesList.push({
-                    label: this.allProfiles[i].title,
-                    value: this.allProfiles[i].code
-                });
-            }
-        }
+        requests.getRequest('connector/profile/getMatchingProfiles', this.state.uploadProductDetails)
+            .then(data => {
+                if (data.success) {
+                    for (let i = 0; i < data.data.length; i++) {
+                        this.profilesList.push({
+                            label: data.data[i].name,
+                            value: data.data[i].id
+                        });
+                    }
+                    this.updateState();
+                } else {
+                    notify.error(data.message);
+                }
+            });
     }
 
     uploadProducts() {
+        console.log(this.state.uploadProductDetails);
         this.state.showUploadProducts = false;
         this.updateState();
         notify.info('Product upload process in progress');
@@ -339,10 +456,15 @@ export class Import extends Component {
     render() {
         return (
             <Page
-                breadcrumbs={[{content: 'Import Products'}]}
-                title="Import Products">
+                breadcrumbs={[{content: 'Upload Products'}]}
+                title="Upload Products">
                 <div className="row">
-                    <div className="col-md-6 col-sm-6 col-12">
+                    <div className="col-12 p-3">
+                        <Banner title="Please Read" status="info">
+                            <Label>In order to upload your products from source marketplace to the marketplace on which you want to upload, kindly pull your products from the source by clicking on 'Pull Products', and then upload your products by clicking on 'Upload Products'.</Label>
+                        </Banner>
+                    </div>
+                    <div className="col-md-6 col-sm-6 col-12 p-3">
                         <Card>
                             <div style={{cursor: 'pointer'}}>
                                 <div className="text-center pt-5 pb-5">
@@ -360,7 +482,7 @@ export class Import extends Component {
                             </div>
                         </Card>
                     </div>
-                    <div className="col-md-6 col-sm-6 col-12">
+                    <div className="col-md-6 col-sm-6 col-12 p-3">
                         <Card>
                             <div style={{cursor: 'pointer'}}>
                                 <div className="text-center pt-5 pb-5">

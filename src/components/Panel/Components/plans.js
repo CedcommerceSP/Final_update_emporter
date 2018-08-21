@@ -1,24 +1,98 @@
 import React, { Component } from 'react';
+import './plans/plan.css';
+import { requests } from '../../../services/request';
+import { dataGrids } from './plans/plansFuctions';
 
 import { Page,
     Card,
     Select,
     Button,
     Label,
-    Modal } from '@shopify/polaris';
+    Checkbox, Tooltip, Link, Icon } from '@shopify/polaris';
 
 export class Plans extends Component {
 
-    constructor() {
-        super();
+    constructor(props) {
+        super(props);
+        this.state = {
+            data: [],
+        }
     }
-
+    componentWillMount() {
+        requests.getRequest('plan/plan/get').then(data => {
+            console.log(data);
+            data = dataGrids(data.data);
+            this.setState({data : data});
+            console.log(this.state.data, 4);
+        });
+    }
+    onSelectPlan(arg) {
+        console.log(arg);
+    }
     render() {
+        // console.log(this.state.data);
         return (
             <Page
                 breadcrumbs={[{content: 'Plans'}]}
                 title="Plans">
-
+                    <div className="row">
+                        <div className="col-12 text-center mb-5"> {/*tittle*/}
+                            <span style={{'fontSize':'40px'}}><b>Lorem Ipsum</b></span>
+                            <h3>Lorem Ipsum is simply dummy text of the printing and typesetting industry.</h3>
+                        </div>
+                        {this.state.data.map((data, index) => {
+                                return (
+                                    <div className="col-sm-4 col-12" key={index}>{/* Staring Of Plan Card */}
+                                        <Card>
+                                            <div className="d-flex justify-content-center">
+                                                <div className="p-5" >
+                                                    <div className="mb-5 text-center" > {/* Plan Numeric Price */}
+                                                        <p className="price-tag">
+                                                            <span className="price-tag_small">$</span>
+                                                            <span className="price-tag_discount"><strike>{data.originalValue}</strike></span>
+                                                            {data.main_price}
+                                                            <span className="price-tag_small">{data.validity}</span>
+                                                        </p>
+                                                    </div>
+                                                    <div className="mb-5"> {/* Button To choose Plan */}
+                                                        <Button primary={true} fullWidth={true} size="large" onClick={this.onSelectPlan.bind(this, data.id)}>
+                                                            Choose this Plan
+                                                        </Button>
+                                                    </div>
+                                                    <div className="mb-5 text-center"> {/* Descriptions For Particular deatails */}
+                                                        <h1 className="mb-4"><b>{data.title}</b></h1>
+                                                        <h4>{data.description}</h4>
+                                                    </div>
+                                                    <hr/>
+                                                    <div className="text-center mt-5"> {/* Services Data */}
+                                                        {data.services?Object.keys(data.services).map(keys => {
+                                                            return (<React.Fragment key={keys}>
+                                                                <p className="service-body">
+                                                                    -<span className="service-description mb-3" style={{fontWeight:'bold'}}><b>{data.services[keys].title}</b></span>
+                                                                    <span>
+                                                                        <Tooltip content={data.services[keys].description} preferredPosition="above">
+                                                                            <Link><Icon source="help" color="indigo" backdrop={true} /></Link>
+                                                                        </Tooltip>
+                                                                    </span>-
+                                                                </p>
+                                                                    {Object.keys(data.services[keys].services).map(key1 => {
+                                                                        return (<div key={key1} className="text-left">
+                                                                            <Checkbox
+                                                                                checked={true}
+                                                                                label={data.services[keys].services[key1].title}
+                                                                                disabled={false} />
+                                                                        </div>);
+                                                                    })}
+                                                            </React.Fragment>);
+                                                        }):null}
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </Card>
+                                    </div>
+                                );
+                        })}
+                    </div>
             </Page>
         );
     }

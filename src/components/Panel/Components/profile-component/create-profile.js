@@ -8,7 +8,7 @@ import { Page,
     Label,
     Modal,
     Banner,
-    TextContainer,
+    Link,
     DisplayText } from '@shopify/polaris';
 
 import './create-profile.css';
@@ -83,6 +83,7 @@ export class CreateProfile extends Component {
                 if (data.success) {
                     console.log(data);
                     if (!isUndefined(data.data.state)) {
+                        this.state.basicDetails.name = data.data.name;
                         this.state.basicDetails.source = data.data.source;
                         this.state.basicDetails.target = data.data.target;
                         this.state.basicDetails.sourceShop = data.data.sourceShop;
@@ -379,7 +380,7 @@ export class CreateProfile extends Component {
                     querySet.position === 1 &&
                     this.state.products_select.query !== '' &&
                     <div className="col-12 p-3">
-                        <Banner title="Prepared Query">
+                        <Banner title="Prepared Query" status="info">
                             <Label>{this.state.products_select.query}</Label>
                         </Banner>
                     </div>
@@ -569,6 +570,7 @@ export class CreateProfile extends Component {
     }
 
     handleQueryBuilderChange(position, index, field, value) {
+        this.filteredProducts.runQuery = false;
         this.state.filterQuery = this.updateQueryFilter(this.state.filterQuery, position, index, field, value);
         this.handleFilterQueryChange(this.state.filterQuery);
         this.updateState();
@@ -614,6 +616,13 @@ export class CreateProfile extends Component {
     renderStepOne() {
         return (
             <div className="row">
+                <div className="col-12 pt-1 pb-1">
+                    <Banner title="General Info" status="info">
+                        <Label>Before creating a profile please make sure that you have imported products from the source first. To import product goto <Link onClick={() => {
+                            this.redirect("/panel/import");
+                        }}>Upload Products</Link></Label>
+                    </Banner>
+                </div>
                 <div className="col-12 pt-1 pb-1">
                     <TextField
                         label="Profile Name"
@@ -723,14 +732,17 @@ export class CreateProfile extends Component {
                     {this.renderQueryBuilder(this.state.filterQuery)}
                 </div>
                 <div className="col-12 pt-1 pb-1 text-center">
-                    <Button onClick={() => {
-                        this.runFilterQuery();
-                    }} primary>Run Query</Button>
+                    {
+                        this.state.products_select.query !== '' &&
+                        <Button onClick={() => {
+                            this.runFilterQuery();
+                        }} primary>Run Query</Button>
+                    }
                 </div>
                 {
                     this.filteredProducts.runQuery &&
                     <div className="col-12 pt-2 pb-2">
-                        <Banner title="Selected Products Count">
+                        <Banner title="Selected Products Count" status="success">
                             <Label>Total {this.filteredProducts.totalProducts} products selected under this query : {this.state.products_select.query}</Label>
                         </Banner>
                     </div>
@@ -745,7 +757,7 @@ export class CreateProfile extends Component {
                 {
                     this.state.products_select.targetCategory !== '' &&
                     <div className="col-12 p-3">
-                        <Banner title={"Selected " + this.capitalizeWord(this.state.basicDetails.target) + " category"}>
+                        <Banner title={"Selected " + this.capitalizeWord(this.state.basicDetails.target) + " category"} status="info">
                             <Label>{this.state.products_select.targetCategory}</Label>
                         </Banner>
                     </div>

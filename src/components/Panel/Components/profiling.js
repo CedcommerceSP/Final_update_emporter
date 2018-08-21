@@ -60,7 +60,7 @@ export class Profiling extends Component {
     }
 
     getProfiles() {
-        requests.getRequest('connector/profile/getAllProfiles', Object.assign(this.gridSettings, this.prepareFilterObject()))
+        requests.getRequest('connector/profile/getAllProfiles', Object.assign({}, this.gridSettings, this.prepareFilterObject()))
             .then(data => {
                 if (data.success) {
                     this.state['profiles'] = this.modifyProfilesData(data.data.rows);

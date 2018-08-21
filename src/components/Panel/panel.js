@@ -46,7 +46,7 @@ export class Panel extends Component {
         },
         {
             id: 'import',
-            content: 'Import',
+            content: 'Upload Products',
             accessibilityLabel: 'Import',
             link: '/panel/import',
             panelID: 'import'
