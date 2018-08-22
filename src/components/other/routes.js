@@ -12,11 +12,9 @@ import React, {Component} from 'react';
 class OthersRoutes extends Component {
     render() {
         return (
-            <AppProvider>
                 <Switch>
                     <Route path="/show/message" component={MessageShow} />
                 </Switch>
-            </AppProvider>
         );
     }
 }
