@@ -11,6 +11,7 @@ import { AppProvider } from '@shopify/polaris';
 import { Auth } from './components/Auth/auth';
 import { Panel } from './components/Panel/panel';
 import { PageLoader } from './shared/loader';
+import  OthersRoutes  from './components/other/routes';
 import { globalState } from './services/globalstate';
 import history from './shared/history';
 
@@ -53,6 +54,10 @@ export class App extends Component {
                     <Route path='/panel' render={() => {
                         // return globalState.getLocalStorage('user_authenticated') === 'true' ? <Panel/> : <Redirect to="/auth"/>
                         return true ? <Panel history={history}/> : <Redirect to="/auth"/>
+                    }}/>
+                    <Route path='/show' render={() => {
+                        // return globalState.getLocalStorage('user_authenticated') === 'true' ? <Panel/> : <Redirect to="/auth"/>
+                        return true ? <OthersRoutes history={history}/> : <Redirect to="/auth"/>
                     }}/>
                     <Route path="*" render={() => (
                         <Redirect to="/auth"/>
