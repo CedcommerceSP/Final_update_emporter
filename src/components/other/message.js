@@ -25,7 +25,6 @@ class MessageShow extends Component {
        });
     }
     render() {
-        console.log(this.state);
         return (
             <Page title="">
                 <div className="row" style={{margin: '20% 0% 0%'}}>
