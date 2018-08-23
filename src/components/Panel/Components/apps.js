@@ -54,10 +54,10 @@ export class Apps extends Component {
                                         connected={false}
                                         title={app.title}
                                         action={{
-                                            content:'Connect',
+                                            content:app['installed']==0?'Connect':'ReConnect',
                                             onClick: this.installApp.bind(this,app.code)
                                         }}
-                                        details={app['installed']==0?'Connect Now':'Reconnect'}
+                                        details={app['installed']==0?'Connect Now':'Already Connected'}
                                         termsOfService={<img src={app.image} alt={app.title}/>}
                                     />
 
