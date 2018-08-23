@@ -104,7 +104,7 @@ export class Panel extends Component {
                         <div className="col-12">
                             <Switch>
                                 <Route exact path="/panel/" render={() => (
-                                    <Redirect to="/panel/products"/>
+                                    <Redirect to="/panel/dashboard"/>
                                 )}/>
                                 <Route exact path='/panel/products' component={Products}/>
                                 <Route exact path='/panel/products/create' component={CreateProduct}/>

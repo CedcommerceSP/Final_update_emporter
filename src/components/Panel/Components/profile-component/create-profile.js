@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import { NavLink } from 'react-router-dom';
 
 import { Page,
     Card,
@@ -8,7 +9,6 @@ import { Page,
     Label,
     Modal,
     Banner,
-    Link,
     DisplayText } from '@shopify/polaris';
 
 import './create-profile.css';
@@ -647,9 +647,7 @@ export class CreateProfile extends Component {
             <div className="row">
                 <div className="col-12 pt-1 pb-1">
                     <Banner title="General Info" status="info">
-                        <Label>Before creating a profile please make sure that you have imported products from the source first. To import product goto <Link onClick={() => {
-                            this.redirect("/panel/import");
-                        }}>Upload Products</Link></Label>
+                        <Label>Before creating a profile please make sure that you have imported products from the source first. To import product goto <NavLink to="/panel/import">Upload Products</NavLink></Label>
                     </Banner>
                 </div>
                 <div className="col-12 pt-1 pb-1">

@@ -37,12 +37,12 @@ export class Plans extends Component {
                 title="Plans">
                     <div className="row">
                         <div className="col-12 text-center mb-5"> {/*tittle*/}
-                            <span style={{'fontSize':'40px'}}><b>Lorem Ipsum</b></span>
-                            <h3>Lorem Ipsum is simply dummy text of the printing and typesetting industry.</h3>
+                            <span style={{'fontSize':'40px'}}><b>Choose the best offer</b></span>
+                            <h3>If you already have an existing plan you can upgrade or downgrade your plan</h3>
                         </div>
                         {this.state.data.map((data, index) => {
                                 return (
-                                    <div className="col-sm-4 col-12" key={index}>{/* Staring Of Plan Card */}
+                                    <div className="col-sm-4 col-12 pt-3 pb-3" key={index}>{/* Starting Of Plan Card */}
                                         <Card>
                                             <div className="d-flex justify-content-center">
                                                 <div className="p-5" >

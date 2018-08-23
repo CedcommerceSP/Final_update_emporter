@@ -72,9 +72,18 @@ class Dashboard extends Component {
                                     <div className="col-sm-10 col-7 pt-sm-5">
                                         <h4>{this.state.stepData[keys].message} {this.state.stepData[keys].link} {!this.state.stepData[keys].optional?'':'(Optional)'}</h4>
                                     </div>
-                                    <div className="col-sm-2 col-3 pt-sm-3">
-                                        <FontAwesomeIcon icon={!this.state.stepData[keys].optional?faCheckCircle:faExclamation} size="5x" color={!this.state.stepData[keys].optional?'#0f0':'#FFFF66'}/>
-                                    </div>
+                                    {
+                                        !this.state.stepData[keys].optional &&
+                                        <div className="col-sm-2 col-3 pt-sm-3">
+                                            <FontAwesomeIcon icon={faCheckCircle} size="5x" color="#0f0"/>
+                                        </div>
+                                    }
+                                    {
+                                        this.state.stepData[keys].optional &&
+                                        <div className="col-sm-2 col-3 pt-sm-3 pl-5">
+                                            <FontAwesomeIcon icon={faExclamation} size="5x" color="#FFFF66"/>
+                                        </div>
+                                    }
                                 </div>
                             </div>
                         </Card>
