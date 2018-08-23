@@ -31,11 +31,11 @@ export class Panel extends Component {
     };
     menu = [
         {
-            id: 'apps',
-            content: 'Apps',
-            accessibilityLabel: 'Apps',
-            link: '/panel/apps',
-            panelID: 'apps'
+            id: 'accounts',
+            content: 'Accounts',
+            accessibilityLabel: 'Accounts',
+            link: '/panel/accounts',
+            panelID: 'accounts'
         },
         {
             id: 'products',
@@ -101,7 +101,7 @@ export class Panel extends Component {
                                 <Route exact path='/panel/products' component={Products}/>
                                 <Route exact path='/panel/products/create' component={CreateProduct}/>
                                 <Route path='/panel/products/edit/:id' component={EditProduct}/>
-                                <Route exact path='/panel/apps' component={Apps}/>
+                                <Route exact path='/panel/accounts' component={Apps}/>
                                 <Route path='/panel/apps/install' component={InstallApp}/>
                                 <Route path='/panel/apps/success' component={AppInstalled}/>
                                 <Route exact path='/panel/import' component={Import}/>
