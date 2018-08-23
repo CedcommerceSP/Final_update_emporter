@@ -32,18 +32,18 @@ export class Panel extends Component {
     };
     menu = [
         {
-            id: 'accounts',
-            content: 'Accounts',
-            accessibilityLabel: 'Accounts',
-            link: '/panel/accounts',
-            panelID: 'accounts',
-        },
-        {
             id: 'dashboard',
             content: 'Dashboard',
             accessibilityLabel: 'Dashboard',
             link: '/panel/dashboard',
             panelID: 'dashboard'
+        },
+        {
+            id: 'accounts',
+            content: 'Accounts',
+            accessibilityLabel: 'Accounts',
+            link: '/panel/accounts',
+            panelID: 'accounts',
         },
         {
             id: 'products',

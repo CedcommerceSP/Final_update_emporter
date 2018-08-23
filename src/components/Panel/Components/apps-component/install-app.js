@@ -72,7 +72,7 @@ export class InstallApp extends Component {
             );
         } else {
             return (
-                <Redirect to="/panel"></Redirect>
+                <Redirect to="/panel/accounts"></Redirect>
             );
         }
     }
@@ -89,7 +89,6 @@ export class InstallApp extends Component {
     }
 
     onSubmit() {
-        console.log(this.state);
         if (this.state.postType === 'external') {
             let url = this.state.action;
             let end = url.indexOf('?') === -1 ? '?' : '&';
