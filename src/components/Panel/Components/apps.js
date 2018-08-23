@@ -57,7 +57,7 @@ export class Apps extends Component {
                                             content:'Connect',
                                             onClick: this.installApp.bind(this,app.code)
                                         }}
-                                        details={app['installed']==0?'Connect Now':'Already Connected'}
+                                        details={app['installed']==0?'Connect Now':'Reconnect'}
                                         termsOfService={<img src={app.image} alt={app.title}/>}
                                     />
 
