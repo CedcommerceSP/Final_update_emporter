@@ -367,6 +367,8 @@ export class Import extends Component {
             case 'source':
                 this.state.importerShopLists = [];
                 this.state.uploadProductDetails.source = value;
+                this.state.uploadProductDetails.profile_type = '';
+                this.state.uploadProductDetails.selected_profile = '';
                 this.state.uploadProductDetails.source_shop = '';
                 this.state.uploadProductDetails.source_shop_id = '';
                 for (let i = 0; i < this.state.importServicesList.length; i++) {
@@ -389,6 +391,8 @@ export class Import extends Component {
             case 'target':
                 this.state.uploaderShopLists = [];
                 this.state.uploadProductDetails.target = value;
+                this.state.uploadProductDetails.profile_type = '';
+                this.state.uploadProductDetails.selected_profile = '';
                 this.state.uploadProductDetails.target_shop = '';
                 this.state.uploadProductDetails.target_shop_id = '';
                 for (let i = 0; i < this.state.uploadServicesList.length; i++) {
@@ -409,6 +413,8 @@ export class Import extends Component {
                 }
                 break;
             case 'source_shop':
+                this.state.uploadProductDetails.profile_type = '';
+                this.state.uploadProductDetails.selected_profile = '';
                 for (let i = 0; i < this.state.importerShopLists.length; i++) {
                     if (this.state.importerShopLists[i].value === value) {
                         this.state.uploadProductDetails.source_shop_id = this.state.importerShopLists[i].shop_id;
@@ -417,6 +423,8 @@ export class Import extends Component {
                 }
                 break;
             case 'target_shop':
+                this.state.uploadProductDetails.profile_type = '';
+                this.state.uploadProductDetails.selected_profile = '';
                 for (let i = 0; i < this.state.uploaderShopLists.length; i++) {
                     if (this.state.uploaderShopLists[i].value === value) {
                         this.state.uploadProductDetails.target_shop_id = this.state.uploaderShopLists[i].shop_id;
@@ -448,9 +456,15 @@ export class Import extends Component {
 
     uploadProducts() {
         console.log(this.state.uploadProductDetails);
-        this.state.showUploadProducts = false;
+        const data = Object.assign({}, this.state.uploadProductDetails);
+        data['marketplace'] = data['target'];
+        requests.postRequest('connector/product/upload', data)
+            .then(data => {
+               console.log(data);
+            });
+        /*this.state.showUploadProducts = false;
         this.updateState();
-        notify.info('Product upload process in progress');
+        notify.info('Product upload process in progress');*/
     }
 
     render() {

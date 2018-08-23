@@ -69,7 +69,8 @@ export class CreateProfile extends Component {
             },
             products_select: {
                 query: '',
-                targetCategory: ''
+                targetCategory: '',
+                marketplaceAttributes: []
             },
             targetAttributes: [],
             sourceAttributes: []
@@ -81,7 +82,6 @@ export class CreateProfile extends Component {
         requests.getRequest('connector/profile/get')
             .then(data => {
                 if (data.success) {
-                    console.log(data);
                     if (!isUndefined(data.data.state)) {
                         this.state.basicDetails.name = data.data.name;
                         this.state.basicDetails.source = data.data.source;
@@ -97,9 +97,8 @@ export class CreateProfile extends Component {
                                 this.state.activeStep = 2;
                                 this.state.products_select.query = data.data.query;
                                 this.state.products_select.targetCategory = data.data.targetCategory;
+                                this.state.products_select.marketplaceAttributes = data.data.marketplaceAttributes;
                                 this.fetchDataForSteptwo();
-                                break;
-                            case 3:
                                 break;
                         }
                     } else {
@@ -119,6 +118,7 @@ export class CreateProfile extends Component {
     fetchDataForSteptwo() {
         this.getProductCategories();
         this.getSourceAttributes();
+        this.getMarketplaceAttributes();
     }
 
     fetchDataForStepThree() {
@@ -136,6 +136,35 @@ export class CreateProfile extends Component {
                     notify.error(data.message);
                 }
             });
+    }
+
+    getMarketplaceAttributes() {
+        requests.getRequest('connector/get/configForm', { marketplace: this.state.basicDetails.target })
+            .then(data => {
+                if (data.success) {
+                    this.state.products_select.marketplaceAttributes = this.modifyConfigFormData(data.data);
+                    this.updateState();
+                } else {
+                    notify.error(data.message);
+                }
+            });
+    }
+
+    modifyConfigFormData(data) {
+        for (let i = 0; i < data.length; i++) {
+            if (!isUndefined(data[i].options)) {
+                let options = [];
+                for (let j = 0; j < Object.keys(data[i].options).length; j++) {
+                    const key = Object.keys(data[i].options)[j];
+                    options.push({
+                       label: data[i].options[key],
+                       value: key
+                    });
+                }
+                data[i].options = options;
+            }
+        }
+        return data;
     }
 
     getAttributesForSelectedProducts() {
@@ -719,6 +748,34 @@ export class CreateProfile extends Component {
     renderStepTwo() {
         return (
             <div className="row">
+                {
+                    this.state.products_select.marketplaceAttributes.map(attribute => {
+                        return (
+                            <div className="col-12 pt-1 pb-1">
+                                {
+                                    isUndefined(attribute.options) &&
+                                    <TextField
+                                        placeholder={attribute.title}
+                                        label={attribute.title}
+                                        onChange={this.handleMarketplaceAttributesChange.bind(this, this.state.products_select.marketplaceAttributes.indexOf(attribute))}
+                                        value={attribute.value}
+                                    />
+                                }
+                                {
+                                    !isUndefined(attribute.options) &&
+                                    <Select
+                                        options={attribute.options}
+                                        placeholder={attribute.title}
+                                        label={attribute.title}
+                                        onChange={this.handleMarketplaceAttributesChange.bind(this, this.state.products_select.marketplaceAttributes.indexOf(attribute))}
+                                        value={attribute.value}
+                                    />
+                                }
+                            </div>
+                        );
+                    })
+
+                }
                 <div className="col-12 pt-1 pb-1">
                     <Label>Select Category In Which You Want To Upload Products</Label>
                 </div>
@@ -749,6 +806,11 @@ export class CreateProfile extends Component {
                 }
             </div>
         );
+    }
+
+    handleMarketplaceAttributesChange(index, value) {
+        this.state.products_select.marketplaceAttributes[index].value = value;
+        this.updateState();
     }
 
     renderCategoryTree() {
@@ -1165,6 +1227,12 @@ export class CreateProfile extends Component {
             this.state.products_select.query === '') {
             return false;
         } else {
+            for (let i = 0; i < this.state.products_select.marketplaceAttributes.length; i++) {
+                if (this.state.products_select.marketplaceAttributes[i].required &&
+                    this.state.products_select.marketplaceAttributes[i].value === '') {
+                    return false;
+                }
+            }
             return true;
         }
     }
