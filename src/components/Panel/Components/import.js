@@ -438,7 +438,19 @@ export class Import extends Component {
 
     getMatchingProfiles() {
         this.profilesList = [];
-        requests.getRequest('connector/profile/getMatchingProfiles', this.state.uploadProductDetails)
+        const data = {
+            source: this.state.uploadProductDetails.source,
+            target: this.state.uploadProductDetails.target
+        };
+        if (this.state.uploadProductDetails.source_shop !== '' &&
+            this.state.uploadProductDetails.source_shop !== null) {
+            data['source_shop'] = this.state.uploadProductDetails.source_shop;
+        }
+        if (this.state.uploadProductDetails.target_shop !== '' &&
+            this.state.uploadProductDetails.target_shop !== null) {
+            data['target_shop'] = this.state.uploadProductDetails.target_shop;
+        }
+        requests.getRequest('connector/profile/getMatchingProfiles', data)
             .then(data => {
                 if (data.success) {
                     for (let i = 0; i < data.data.length; i++) {
@@ -455,16 +467,19 @@ export class Import extends Component {
     }
 
     uploadProducts() {
-        console.log(this.state.uploadProductDetails);
         const data = Object.assign({}, this.state.uploadProductDetails);
         data['marketplace'] = data['target'];
         requests.postRequest('connector/product/upload', data)
             .then(data => {
                console.log(data);
+                this.state.showUploadProducts = false;
+               if (data.success) {
+                   notify.success(data.message);
+               } else {
+                   notify.error(data.message);
+               }
+               this.updateState();
             });
-        /*this.state.showUploadProducts = false;
-        this.updateState();
-        notify.info('Product upload process in progress');*/
     }
 
     render() {

@@ -749,7 +749,7 @@ export class CreateProfile extends Component {
                 {
                     this.state.products_select.marketplaceAttributes.map(attribute => {
                         return (
-                            <div className="col-12 pt-1 pb-1">
+                            <div className="col-12 pt-1 pb-1" key={this.state.products_select.marketplaceAttributes.indexOf(attribute)}>
                                 {
                                     isUndefined(attribute.options) &&
                                     <TextField
@@ -863,7 +863,7 @@ export class CreateProfile extends Component {
     handleProductsSelectChange(categoryIndex, value) {
         this.categoryList[categoryIndex].selected_category = value;
         this.state.products_select.targetCategory = value;
-        this.categoryList.slice(0, categoryIndex + 1);
+        this.categoryList = this.categoryList.splice(0, categoryIndex + 1);
         const parentCatgId = this.checkHasChildCategories(this.categoryList[categoryIndex].categories, value);
         if (parentCatgId) {
             this.getChildCategories(value, parentCatgId);
