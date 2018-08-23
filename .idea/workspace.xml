@@ -3,6 +3,7 @@
   <component name="ChangeListManager">
     <list default="true" id="2e099004-80b0-4101-b90f-7275c6e6533a" name="Default" comment="">
       <change beforePath="$PROJECT_DIR$/src/components/Panel/Components/dashboard.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/Panel/Components/dashboard.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/Panel/Components/dashboard/dashboard.css" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/Panel/Components/dashboard/dashboard.css" afterDir="false" />
     </list>
     <ignored path="$PROJECT_DIR$/.tmp/" />
     <ignored path="$PROJECT_DIR$/temp/" />
@@ -29,7 +30,7 @@
           <entry key="css" value="3" />
           <entry key="gif" value="6" />
           <entry key="html" value="22" />
-          <entry key="js" value="20" />
+          <entry key="js" value="21" />
           <entry key="json" value="1" />
           <entry key="png" value="1" />
           <entry key="scss" value="1" />
@@ -42,7 +43,7 @@
           <entry key="HTML" value="22" />
           <entry key="Image" value="7" />
           <entry key="JSON" value="1" />
-          <entry key="JavaScript" value="20" />
+          <entry key="JavaScript" value="21" />
           <entry key="SCSS" value="1" />
           <entry key="TypeScript" value="21" />
         </counts>
@@ -51,7 +52,7 @@
         <counts>
           <entry key="css" value="46" />
           <entry key="html" value="354" />
-          <entry key="js" value="2384" />
+          <entry key="js" value="2404" />
           <entry key="ts" value="454" />
         </counts>
       </usages-collector>
@@ -59,7 +60,7 @@
         <counts>
           <entry key="CSS" value="46" />
           <entry key="HTML" value="354" />
-          <entry key="JavaScript" value="2384" />
+          <entry key="JavaScript" value="2404" />
           <entry key="TypeScript" value="454" />
         </counts>
       </usages-collector>
@@ -75,38 +76,11 @@
       <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/components/Panel/Components/dashboard.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="138">
-              <caret line="75" column="196" selection-start-line="75" selection-start-column="196" selection-end-line="75" selection-end-column="196" />
+            <state relative-caret-position="-639">
+              <caret line="27" column="156" selection-start-line="27" selection-start-column="156" selection-end-line="27" selection-end-column="156" />
               <folding>
                 <element signature="e#0#39#0" expanded="true" />
               </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/components/Panel/Components/dashboard/dashboard.css">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="161">
-              <caret line="7" column="1" lean-forward="true" selection-start-line="7" selection-start-column="1" selection-end-line="7" selection-end-column="1" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/components/Panel/Components/plans/plan.css">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="138">
-              <caret line="6" column="20" lean-forward="true" selection-start-line="6" selection-start-column="20" selection-end-line="6" selection-end-column="20" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/index.js">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="138">
-              <caret line="6" column="60" lean-forward="true" selection-start-line="6" selection-start-column="60" selection-end-line="6" selection-end-column="60" />
             </state>
           </provider>
         </entry>
@@ -263,12 +237,12 @@
       <workItem from="1530702279153" duration="768000" />
       <workItem from="1534862358235" duration="1060000" />
       <workItem from="1534912528592" duration="14584000" />
-      <workItem from="1534997426580" duration="7651000" />
+      <workItem from="1534997426580" duration="8610000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="35216000" />
+    <option name="totallyTimeSpent" value="36175000" />
   </component>
   <component name="TodoView">
     <todo-panel id="selected-file">
@@ -283,7 +257,7 @@
     <frame x="0" y="-1" width="1366" height="741" extended-state="6" />
     <editor active="true" />
     <layout>
-      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.2530303" />
+      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.2530303" />
       <window_info id="Structure" order="1" weight="0.25" />
       <window_info id="npm" order="2" side_tool="true" />
       <window_info id="Favorites" order="3" side_tool="true" />
@@ -296,7 +270,7 @@
       <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
       <window_info anchor="bottom" id="TODO" order="6" weight="0.3284553" />
       <window_info anchor="bottom" id="Version Control" order="7" weight="0.3284553" />
-      <window_info active="true" anchor="bottom" id="Terminal" order="8" visible="true" weight="0.26666668" />
+      <window_info anchor="bottom" id="Terminal" order="8" weight="0.6195122" />
       <window_info anchor="bottom" id="Event Log" order="9" side_tool="true" />
       <window_info anchor="bottom" id="Docker" order="10" show_stripe_button="false" />
       <window_info anchor="bottom" id="File Transfer" order="11" weight="0.3284553" />
@@ -377,13 +351,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/index.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="138">
-          <caret line="6" column="60" lean-forward="true" selection-start-line="6" selection-start-column="60" selection-end-line="6" selection-end-column="60" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/node_modules/@fortawesome/react-fontawesome/index.d.ts">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="69">
@@ -408,6 +375,9 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/src/components/Panel/Components/dashboard/dashboard.css">
+      <provider selected="true" editor-type-id="text-editor" />
+    </entry>
     <entry file="file://$PROJECT_DIR$/src/components/Panel/Components/plans/plan.css">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="138">
@@ -415,17 +385,17 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/components/Panel/Components/dashboard/dashboard.css">
+    <entry file="file://$PROJECT_DIR$/src/index.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="161">
-          <caret line="7" column="1" lean-forward="true" selection-start-line="7" selection-start-column="1" selection-end-line="7" selection-end-column="1" />
+        <state relative-caret-position="138">
+          <caret line="6" column="60" lean-forward="true" selection-start-line="6" selection-start-column="60" selection-end-line="6" selection-end-column="60" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/components/Panel/Components/dashboard.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="138">
-          <caret line="75" column="196" selection-start-line="75" selection-start-column="196" selection-end-line="75" selection-end-column="196" />
+        <state relative-caret-position="-639">
+          <caret line="27" column="156" selection-start-line="27" selection-start-column="156" selection-end-line="27" selection-end-column="156" />
           <folding>
             <element signature="e#0#39#0" expanded="true" />
           </folding>

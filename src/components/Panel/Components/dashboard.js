@@ -16,16 +16,16 @@ class Dashboard extends Component {
             stepData: [],
             data: {
                 Shopify_Google : [
-                    {message: ' Choose a plan for Shopify-Google Express ',link: <NavLink  to="/panel/plans">Integration.</NavLink>,optional: false},
-                    {message:  `Link your google merchant center`,link: <NavLink  to="/panel/accounts">account.</NavLink>,optional: false},
-                    {message: `Enter default`,link: <NavLink  to="/panel/configuration">configurations.</NavLink>,optional: true},
-                    {message: `Upload your products on ` ,link: <NavLink  to="/panel/import">Google Merchant Center.</NavLink>,optional: false},
+                    {message: ' Choose a plan for Shopify-Google Express ',link: <NavLink  to="/panel/plans">Integration.</NavLink>,optional: false,API_endpoint: ''},
+                    {message:  `Link your google merchant center`,link: <NavLink  to="/panel/accounts">account.</NavLink>,optional: false,API_endpoint: ''},
+                    {message: `Enter default`,link: <NavLink  to="/panel/configuration">configurations.</NavLink>,optional: true,API_endpoint: ''},
+                    {message: `Upload your products on ` ,link: <NavLink  to="/panel/import">Google Merchant Center.</NavLink>,optional: false,API_endpoint: ''},
                 ],
                 Amazon_Shopify: [
-                    {message: ' Choose a plan for Amazon-Shopify ',link: <NavLink  to="/panel/plans">Integration.</NavLink>,optional: false},
-                    {message:  `Link your AWS/MWS`,link: <NavLink  to="/panel/accounts">account.</NavLink>,optional: false},
-                    {message: `Enter default`,link: <NavLink  to="/panel/configuration">configurations.</NavLink>,optional: true},
-                    {message: `Import your products from amazon to ` ,link: <NavLink  to="/panel/import">shopify.</NavLink>,optional: false},
+                    {message: ' Choose a plan for Amazon-Shopify ',link: <NavLink  to="/panel/plans">Integration.</NavLink>,optional: false,API_endpoint: ''},
+                    {message:  `Link your AWS/MWS`,link: <NavLink  to="/panel/accounts">account.</NavLink>,optional: false,API_endpoint: ''},
+                    {message: `Enter default`,link: <NavLink  to="/panel/configuration">configurations.</NavLink>,optional: true,API_endpoint: ''},
+                    {message: `Import your products from amazon to ` ,link: <NavLink  to="/panel/import">shopify.</NavLink>,optional: false,API_endpoint: ''},
                 ],
             },
         }
