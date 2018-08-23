@@ -5,7 +5,6 @@ import { Button,
          Card ,
     AccountConnection,
     AppProvider} from '@shopify/polaris';
-
 import { requests } from '../../../services/request';
 import { notify } from '../../../services/notify';
 
