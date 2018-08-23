@@ -31,11 +31,11 @@ export class Panel extends Component {
     };
     menu = [
         {
-            id: 'apps',
-            content: 'Apps',
-            accessibilityLabel: 'Apps',
-            link: '/panel/apps',
-            panelID: 'apps'
+            id: 'accounts',
+            content: 'Accounts',
+            accessibilityLabel: 'Accounts',
+            link: '/panel/accounts',
+            panelID: 'accounts'
         },
         {
             id: 'products',

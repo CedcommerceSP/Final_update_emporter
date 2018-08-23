@@ -42,8 +42,8 @@ export class Apps extends Component {
     render() {
         return (
             <Page
-                breadcrumbs={[{content: 'Apps'}]}
-                title="Apps List">
+                breadcrumbs={[{content: 'Accounts'}]}
+                title="Accounts">
                 <div className="row">
                     {
                         this.state.apps.map(app => {
