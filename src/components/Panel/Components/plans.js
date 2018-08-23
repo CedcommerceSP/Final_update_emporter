@@ -21,7 +21,7 @@ export class Plans extends Component {
     componentWillMount() {
         requests.getRequest('plan/plan/get').then(data => {
             console.log(data);
-            data = dataGrids(data.data);
+            data = dataGrids(data.data.data.rows);
             this.setState({data : data});
             console.log(this.state.data, 4);
         });
