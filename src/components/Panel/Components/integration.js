@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 import { requests } from '../../../services/request';
-import {Avatar, Button, Card, Page, Thumbnail} from '@shopify/polaris'
+import {Avatar, Button, Card, Page, Thumbnail,Banner, Label} from '@shopify/polaris'
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import { environment } from '../../../environments/environment';
 import {
@@ -55,7 +55,7 @@ class IntegrationPage extends Component {
         {
             Object.keys(this.state.importer).map(importerkey=>{
                 Object.keys(this.state.uploader).map(uploaderkey=>{
-                    if(importerkey.substr(0,importerkey.indexOf('_'))!=uploaderkey.substr(0,uploaderkey.indexOf('_')))
+                    if(this.state.importer[importerkey]['title']!=this.state.uploader[uploaderkey]['title'])
                     {
                         arr.push(
                             <Card key={importerkey+uploaderkey}>
@@ -70,13 +70,13 @@ class IntegrationPage extends Component {
                                             <div className="col-12 col-sm-4 col-4 mt-5">
                                                 <div className="row">
                                                     <div className="col-12 d-block text-center font-weight-bold">
-                                                        <h3>{importerkey.substr(0,importerkey.indexOf('_')).toUpperCase()}</h3>
+                                                        <h3>{this.state.importer[importerkey]['title'].toUpperCase()}</h3>
                                                     </div>
                                                 <div className="col-12 d-block text-center">
                                                     <FontAwesomeIcon  icon={faSyncAlt} size="5x" color=" #5563c1 "/>
                                                 </div>
                                                     <div className="col-12  mt-3 d-block text-center font-weight-bold">
-                                                        <h3>{uploaderkey.substr(0,uploaderkey.indexOf('_')).toUpperCase()}</h3>
+                                                        <h3>{this.state.uploader[uploaderkey]['title'].toUpperCase()}</h3>
                                                     </div>
                                                 </div>
                                             </div>
@@ -91,23 +91,20 @@ class IntegrationPage extends Component {
                                 <Card.Section className="text-center">
                                     <div className="w-100 text-center">
                                     {
-                                        this.state.importer[importerkey]['usable']==0 || this.state.uploader[uploaderkey]['usable']==0?
-                                            <Button className="d-block" primary onClick={this.redirect.bind(this)}>Buy Plan For {importerkey.substr(0,importerkey.indexOf('_')).toUpperCase()}-{uploaderkey.substr(0,uploaderkey.indexOf('_')).toUpperCase()} Integration </Button>:'Integration is Active under your Plan'
+                                        this.state.importer[importerkey]['usable']!=0 || this.state.uploader[uploaderkey]['usable']!=0?
+                                            <Button className="d-block" primary onClick={this.redirect.bind(this)}>Buy Plan For {this.state.importer[importerkey]['title'].toUpperCase()}-{this.state.uploader[uploaderkey]['title'].toUpperCase()} Integration </Button>
+                                            :
+                                            <div className="w-md-75 w-sm-75 w-100 m-auto">
+                                                <Banner status="success">
+                                                    <Label>{this.state.importer[importerkey]['title'].toUpperCase()}-{this.state.uploader[uploaderkey]['title'].toUpperCase()} Integration is Active under your Plan</Label>
+                                                </Banner>
+                                            </div>
                                     }
                                     </div>
                                 </Card.Section>
                             </Card>
                         )
 
-                        // arr.push(<div className="row mb-3">
-                        //         <div className="col-4 col-md-5 text-center">{importerkey.toUpperCase()}</div>
-                        //         <div className="col-8 col-md-2">{
-                        //             this.state.importer[importerkey]['usable']==0 || this.state.uploader[uploaderkey]['usable']==0?
-                        //                 <button className="btn btn-primary" onClick={this.redirect.bind(this)}>Buy Plan</button>:'Integration is Active under your Plan'
-                        //         }</div>
-                        //         <div className="col-4 col-md-5 text-center">{uploaderkey.toUpperCase()}</div>
-                        //     </div>
-                        //                   )
                     }
                 })
             })
@@ -122,8 +119,7 @@ class IntegrationPage extends Component {
     }
     componentDidUpdate()
     {
-        console.log(this.state.importer);
-        console.log(this.state.uploader);
+
     }
     render() {
         return (
