@@ -52,7 +52,6 @@ class Dashboard extends Component {
         ];
         return (
             <Page
-                breadcrumbs={[{content: 'Dashboard'}]}
                 title="Dashboard">
                 <Card >
                     <div className="p-5">

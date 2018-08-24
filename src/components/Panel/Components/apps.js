@@ -41,7 +41,6 @@ export class Apps extends Component {
     render() {
         return (
             <Page
-                breadcrumbs={[{content: 'Accounts'}]}
                 title="Accounts">
                 <div className="row">
                     {

@@ -33,7 +33,6 @@ export class Plans extends Component {
         // console.log(this.state.data);
         return (
             <Page
-                breadcrumbs={[{content: 'Plans'}]}
                 title="Plans">
                     <div className="row">
                         <div className="col-12 text-center mb-5"> {/*tittle*/}

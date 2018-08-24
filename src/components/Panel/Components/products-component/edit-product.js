@@ -40,7 +40,6 @@ export class EditProduct extends Component {
     render() {
         return (
             <Page
-                breadcrumbs={[{content: 'Edit Product'}]}
                 primaryAction={{content: 'Back', onClick: () => {
                     this.redirect('/panel/products');
                 }}}

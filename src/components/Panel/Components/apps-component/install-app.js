@@ -37,7 +37,6 @@ export class InstallApp extends Component {
         if (this.state.code) {
             return (
                 <Page
-                    breadcrumbs={[{content: 'Install App'}]}
                     title="Install App">
                     <div className="row">
                         <div className="col-12 mt-4 mb-4">

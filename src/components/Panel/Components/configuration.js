@@ -37,7 +37,6 @@ export class Configuration extends Component {
     render() {
         return (
             <Page
-                breadcrumbs={[{content: 'Configuration'}]}
                 title="Configuration">
                 <Layout>
                     <Layout.Section>

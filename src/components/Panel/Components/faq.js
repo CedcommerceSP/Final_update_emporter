@@ -48,7 +48,6 @@ class FAQPage extends Component {
     render() {
         return (
             <Page
-                breadcrumbs={[{content: 'FAQ'}]}
                 title="FAQ">
                 <div className="row">
                     {this.state.faq.map(data => {

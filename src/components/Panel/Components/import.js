@@ -495,7 +495,6 @@ export class Import extends Component {
     render() {
         return (
             <Page
-                breadcrumbs={[{content: 'Upload Products'}]}
                 title="Upload Products">
                 <div className="row">
                     <div className="col-12 p-3">

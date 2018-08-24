@@ -7,6 +7,7 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import 'jquery/dist/jquery.slim.min';
 import 'popper.js/dist/umd/popper.min';
 import 'bootstrap/dist/js/bootstrap.min';
+import 'react-dom/cjs/react-dom.production.min';
 
 import { App } from './App';
 import { ToastContainer } from 'react-toastify';

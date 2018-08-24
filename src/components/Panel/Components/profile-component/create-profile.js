@@ -1113,7 +1113,6 @@ export class CreateProfile extends Component {
     render() {
         return (
             <Page
-                breadcrumbs={[{content: 'Create Profile'}]}
                 primaryAction={{content: 'Back', onClick: () => {
                     this.redirect('/panel/profiling');
                 }}}

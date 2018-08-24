@@ -123,9 +123,7 @@ class IntegrationPage extends Component {
     }
     render() {
         return (
-            <Page
-                breadcrumbs={[{content: 'Intergrations'}]}
-            title="Integrations">
+            <Page title="Integrations">
                 {
                     this.renderimporteruploader()
                 }

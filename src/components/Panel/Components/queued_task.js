@@ -39,7 +39,6 @@ export class QueuedTask extends Component {
     render() {
         return (
             <Page
-                breadcrumbs={[{content: 'Queued Tasks'}]}
                 title="Queued Tasks">
                 <Card>
                     {
