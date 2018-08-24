@@ -75,8 +75,8 @@ class FAQPage extends Component {
                 </div>
                 <Modal
                     open={this.state.modal}
-                    onClose={this.modalOpen}
                     title="Default Profile Example"
+                    onClose={this.modalOpen}
                 >
                     <Modal.Section>
                         <TextContainer>
