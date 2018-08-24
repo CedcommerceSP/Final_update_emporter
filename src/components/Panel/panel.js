@@ -132,7 +132,7 @@ export class Panel extends Component {
                                 <Route exact path='/panel/profiling' component={Profiling}/>
                                 <Route exact path='/panel/profiling/create' component={CreateProfile}/>
                                 <Route exact path='/panel/configuration' component={Configuration}/>
-                                <Route exact path='/panel/queuedtasks' component={QueuedTask}/>
+                                <Route exact path='/panel/plans' component={Plans}/>
                                 <Route exact path='/panel/queuedtasks' component={QueuedTask}/>
                                 <Route exact path='/panel/faq' component={FAQPage}/>
                                 <Route exact path='/panel/integration' component={IntegrationPage}/>
