@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import { NavLink } from 'react-router-dom';
 
 import { Page,
     Card,
@@ -271,6 +272,11 @@ export class Import extends Component {
                             />
                         }
                         <div className="col-12 pt-1 pb-1">
+                            <Banner status="info">
+                                <Label>You can upload products from the source to target either through our default profile or you can create an <NavLink to="/panel/profiling/create">custom profile</NavLink> for products upload. To know more about profiling and default profile visit our <NavLink to="/panel/faq">FAQ</NavLink> section.</Label>
+                            </Banner>
+                        </div>
+                        <div className="col-12 pt-1 pb-1">
                             {
                                 this.state.uploadProductDetails.profile_type !== 'custom' &&
                                 <Select
@@ -471,12 +477,16 @@ export class Import extends Component {
         data['marketplace'] = data['target'];
         requests.postRequest('connector/product/upload', data)
             .then(data => {
-               console.log(data);
                 this.state.showUploadProducts = false;
                if (data.success) {
                    notify.success(data.message);
                } else {
                    notify.error(data.message);
+                   if (data.code === 'link_your_account') {
+                       setTimeout(() => {
+                           this.redirect('/panel/accounts');
+                       }, 1200);
+                   }
                }
                this.updateState();
             });
@@ -490,7 +500,12 @@ export class Import extends Component {
                 <div className="row">
                     <div className="col-12 p-3">
                         <Banner title="Please Read" status="info">
-                            <Label>In order to upload your products from source marketplace to the marketplace on which you want to upload, kindly pull your products from the source by clicking on 'Pull Products', and then upload your products by clicking on 'Upload Products'.</Label>
+                            <Label>In order to upload your products from source marketplace to the marketplace on which you want to upload, kindly import your products from the source by clicking on 'Import Products', and then upload your products by clicking on 'Upload Products'.</Label>
+                        </Banner>
+                    </div>
+                    <div className="col-12 p-3">
+                        <Banner status="warning">
+                            <Label>Please make sure that you have bought the desired plan before uploading your products to the marketplace you want. You can check your active integrations <NavLink to="/panel/integration">here</NavLink>. You can choose a plan for your requirement from <NavLink to="/panel/plans">here</NavLink>.</Label>
                         </Banner>
                     </div>
                     <div className="col-md-6 col-sm-6 col-12 p-3">
@@ -506,7 +521,7 @@ export class Import extends Component {
                                     }} icon={faArrowAltCircleDown} color="#3f4eae" size="10x" />
                                 </div>
                                 <div className="text-center pt-2 pb-4">
-                                    <span className="h2" style={{color: '#3f4eae'}}>Pull Products</span>
+                                    <span className="h2" style={{color: '#3f4eae'}}>Import Products</span>
                                 </div>
                             </div>
                         </Card>

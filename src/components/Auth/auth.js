@@ -10,6 +10,16 @@ import { Login } from './Components/login';
 
 export class Auth extends Component {
 
+    constructor() {
+        super();
+        this.removeLocalStorage();
+    }
+
+    removeLocalStorage() {
+        localStorage.removeItem('user_authenticated');
+        localStorage.removeItem('auth_token');
+    }
+
     render() {
         return (
             <div className="container-fluid">

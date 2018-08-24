@@ -98,7 +98,7 @@ export class CreateProfile extends Component {
                                 this.state.products_select.query = data.data.query;
                                 this.state.products_select.targetCategory = data.data.targetCategory;
                                 this.state.products_select.marketplaceAttributes = data.data.marketplaceAttributes;
-                                this.fetchDataForSteptwo();
+                                this.fetchDataForSteptwo(true);
                                 break;
                         }
                     } else {
@@ -115,10 +115,12 @@ export class CreateProfile extends Component {
         this.getUploadServices();
     }
 
-    fetchDataForSteptwo() {
+    fetchDataForSteptwo(fetchMarketplaceAttributes) {
         this.getProductCategories();
         this.getSourceAttributes();
-        this.getMarketplaceAttributes();
+        if (isUndefined(fetchMarketplaceAttributes)) {
+            this.getMarketplaceAttributes();
+        }
     }
 
     fetchDataForStepThree() {
@@ -1180,7 +1182,14 @@ export class CreateProfile extends Component {
     }
 
     moveToPreviousStep() {
-
+        switch (this.state.activeStep) {
+            case 3:
+                break;
+            case 2:
+                this.state.activeStep = 1;
+                this.fetchDataForStepOne();
+                break;
+        }
     }
 
     saveDataAndMoveToNextStep() {

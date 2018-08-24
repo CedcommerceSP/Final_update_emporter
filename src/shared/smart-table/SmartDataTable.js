@@ -26,7 +26,9 @@ import { isUndefined } from 'util';
 import { Checkbox,
          Select,
          TextField,
-         Button } from '@shopify/polaris';
+         Button,
+         CalloutCard,
+         EmptyState } from '@shopify/polaris';
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faEdit, faTrash } from '@fortawesome/free-solid-svg-icons';
@@ -42,6 +44,7 @@ class SmartDataTablePlain extends React.Component {
       {label: 'ends with', value: 6}
   ];
   defaultColumns = [];
+  defaultFilters = {};
   constructor(props) {
     super(props)
 
@@ -114,6 +117,7 @@ class SmartDataTablePlain extends React.Component {
     this.state.columnFilters[key][field] = value;
     const state = this.state;
     this.setState(state);
+    this.defaultFilters = Object.assign({}, this.state.columnFilters);
     this.props.columnFilters(this.state.columnFilters);
   }
 
@@ -186,6 +190,7 @@ class SmartDataTablePlain extends React.Component {
     const { sortable } = this.props;
     if (columns.length === 0) {
         columns = this.defaultColumns.slice(0);
+        this.state.columnFilters = Object.assign({}, this.defaultFilters);
     }
     const headers = columns.map((column) => {
       const showCol = column.visible;
@@ -288,9 +293,9 @@ class SmartDataTablePlain extends React.Component {
       </tr>
     ))
     return (
-      <tbody>
-        {tableRows}
-      </tbody>
+        <tbody>
+            {tableRows}
+        </tbody>
     )
   }
 
@@ -493,6 +498,10 @@ class SmartDataTablePlain extends React.Component {
                         operator: 1,
                         value: ''
                     };
+                    this.defaultFilters[key] = {
+                        operator: 1,
+                        value: ''
+                    };
                 }
                 const state = this.state;
                 this.setState(state);
@@ -530,6 +539,32 @@ class SmartDataTablePlain extends React.Component {
             {this.renderFooter(columns)}
             </tfoot>
           </table>
+            <div className="w-75 m-auto">
+                {
+                    rows.length === 0 &&
+                    <EmptyState
+                        heading="No Data Found"
+                        action={{content: 'Reset Filters', onAction: () => {
+                            for (let i = 0; i < Object.keys(this.state.columnFilters).length; i++) {
+                                const key = Object.keys(this.state.columnFilters)[i];
+                                this.state.columnFilters[key] = {
+                                    operator: 1,
+                                    value: ''
+                                };
+                                this.defaultFilters[key] = {
+                                    operator: 1,
+                                    value: ''
+                                };
+                            }
+                            const state = this.state;
+                            this.setState(state);
+                            this.props.columnFilters(this.state.columnFilters);
+                        }}}
+                        image="https://cdn.shopify.com/s/files/1/0757/9955/files/empty-state.svg"
+                    >
+                    </EmptyState>
+                }
+            </div>
             {this.renderPagination(rows)}
         </div>
       </div>
