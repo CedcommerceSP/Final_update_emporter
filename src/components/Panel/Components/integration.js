@@ -46,7 +46,7 @@ class IntegrationPage extends Component {
     }
     redirect()
     {
-        this.props.history.push('panel/plans');
+        this.props.history.push('/panel/plans');
     }
     renderimporteruploader()
     {
@@ -91,7 +91,7 @@ class IntegrationPage extends Component {
                                 <Card.Section className="text-center">
                                     <div className="w-100 text-center">
                                     {
-                                        this.state.importer[importerkey]['usable']!=0 || this.state.uploader[uploaderkey]['usable']!=0?
+                                        this.state.importer[importerkey]['usable']==0 || this.state.uploader[uploaderkey]['usable']==0?
                                             <Button className="d-block" primary onClick={this.redirect.bind(this)}>Buy Plan For {this.state.importer[importerkey]['title'].toUpperCase()}-{this.state.uploader[uploaderkey]['title'].toUpperCase()} Integration </Button>
                                             :
                                             <div className="w-md-75 w-sm-75 w-100 m-auto">
