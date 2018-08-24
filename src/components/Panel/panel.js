@@ -20,6 +20,8 @@ import { QueuedTask } from './Components/queued_task';
 import { Plans } from './Components/plans';
 import { Header } from './Layout/header';
 import Dashboard from './Components/dashboard';
+import FAQPage from './Components/faq';
+import IntegrationPage from './Components/integration';
 
 import history from '../../shared/history';
 
@@ -81,11 +83,25 @@ export class Panel extends Component {
             panelID: 'plans'
         },
         {
+            id: 'integration',
+            content: 'Integration',
+            accessibilityLabel: 'Integration',
+            link: '/panel/integration',
+            panelID: 'integration'
+        },
+        {
             id: 'queuedtasks',
             content: 'Queues',
             accessibilityLabel: 'Queues',
             link: '/panel/queuedtasks',
             panelID: 'queuedtasks'
+        },
+        {
+            id: 'faq',
+            content: 'FAQ',
+            accessibilityLabel: 'FAQ',
+            link: '/panel/faq',
+            panelID: 'fag'
         }
     ];
     render() {
@@ -117,7 +133,9 @@ export class Panel extends Component {
                                 <Route exact path='/panel/profiling/create' component={CreateProfile}/>
                                 <Route exact path='/panel/configuration' component={Configuration}/>
                                 <Route exact path='/panel/queuedtasks' component={QueuedTask}/>
-                                <Route exact path='/panel/plans' component={Plans}/>
+                                <Route exact path='/panel/queuedtasks' component={QueuedTask}/>
+                                <Route exact path='/panel/faq' component={FAQPage}/>
+                                <Route exact path='/panel/integration' component={IntegrationPage}/>
                                 <Route exact path='/panel/dashboard' component={Dashboard}/>
                                 <Route exact path="**" render={() => (
                                     <Redirect to="/panel/products"/>
