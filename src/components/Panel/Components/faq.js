@@ -1,19 +1,22 @@
 import React, {Component} from 'react';
 import { NavLink } from 'react-router-dom';
-import { Page, Stack, Collapsible, Banner, Modal, TextContainer} from '@shopify/polaris';
-import {faArrowsAltH, faExclamation} from '@fortawesome/free-solid-svg-icons';
+import { Page, Stack, Button,Card,Collapsible, Banner, ResourceList, Modal, TextContainer} from '@shopify/polaris';
+import {faArrowsAltH} from '@fortawesome/free-solid-svg-icons';
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 
 class FAQPage extends Component {
     constructor(props) {
         super(props);
-        this.modalOpen = this.modalOpen.bind(this);
+        this.modalOpen = this.modalOpen.bind(this); // modal function
         this.state = {
-            modal: false,
+            modal: false, // modal show/hide
+            search: '',// search
+            noSearchFound: [1],
             faq: [
                 {
                     id:1,
-                    show: false,
+                    show: false, // for collapse div
+                    search: true, // for search
                     ques: 'How To Upload My Products on Google Merchant Center?',
                     ans: <ol>
                         <li className="mb-2">Go To Upload Product <NavLink to="/panel/import"> Section </NavLink> </li>
@@ -24,6 +27,7 @@ class FAQPage extends Component {
                 {
                     id:2,
                     show: false,
+                    search: true,
                     ques: 'How To Register On Google Express?',
                     ans: <ol>
                         <li className="mb-2">Create Your Google Merchant <a href='https://support.google.com/merchants/answer/188924?hl=en' target="_blank">Account</a> (If you Don't Have any)</li>
@@ -34,6 +38,7 @@ class FAQPage extends Component {
                 {
                     id:3,
                     show: false,
+                    search: true,
                     ques: 'What Is Profiling And what is default Profile?',
                     ans: <React.Fragment>
                         <p><b>Profiling</b> is a medium to upload products from one market place to Another market place in desire format.</p>
@@ -45,15 +50,62 @@ class FAQPage extends Component {
             ]
         }
     }
+    handleSearch() {
+        try {
+            let value = this.state.faq;
+            let flag = 0;
+            if ( this.state.search.length >= 2 ) {
+                value.forEach(data => {
+                    const text = data.ques.toLowerCase();
+                    if ( text.search(this.state.search) === -1 ) {
+                        data.search = false;
+                    } else {
+                        data.search = true;
+                        flag = 1;
+                    }
+                });
+            } else {
+                value.forEach(data => {
+                    data.search = true;
+                    flag = 1;
+                });
+            }
+            if (flag === 0) {
+                this.setState({noSearchFound: []});
+            } else {
+                this.setState({noSearchFound: [1]});
+            }
+            this.setState({faq: value});
+        } catch (e) {
+            console.log(e);
+        }
+    }
     render() {
         return (
             <Page
                 title="FAQ">
                 <div className="row">
+                    <div className="col-12 mb-4">
+                        <Card>
+                            <ResourceList
+                                items={this.state.noSearchFound}
+                                renderItem={item => {}}
+                                filterControl={
+                                    <ResourceList.FilterControl
+                                        searchValue={this.state.search}
+                                        onSearchChange={(searchValue) => {
+                                            this.setState({search : searchValue.toLowerCase()});
+                                            this.handleSearch();
+                                        }}
+                                    />
+                                }
+                            />
+                        </Card>
+                    </div>
                     {this.state.faq.map(data => {
                         return (<React.Fragment key={data.id}>
-                            <div className="col-sm-6 col-12 mb-3">
-                                <div  onClick={this.handleToggleClick.bind(this, data)}>
+                                {data.search?<div className="col-sm-6 col-12 mb-3">
+                                <div style={{cursor:'pointer'}} onClick={this.handleToggleClick.bind(this, data)}>
                                     <Banner title="Query"  icon="view">
                                         <div className="pt-5">
                                             <Stack vertical>
@@ -69,14 +121,14 @@ class FAQPage extends Component {
                                         <h4>{data.ans}</h4>
                                     </Banner>
                                 </Collapsible>
-                            </div>
+                            </div>:null}
                         </React.Fragment>);
                     })}
                 </div>
                 <Modal
                     open={this.state.modal}
-                    onClose={this.modalOpen}
                     title="Default Profile Example"
+                    onClose={this.modalOpen}
                 >
                     <Modal.Section>
                         <TextContainer>
