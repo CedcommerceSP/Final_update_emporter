@@ -2,6 +2,8 @@ import React, { Component } from 'react';
 import './plans/plan.css';
 import { requests } from '../../../services/request';
 import { dataGrids } from './plans/plansFuctions';
+import { isUndefined } from 'util';
+import { notify } from '../../../services/notify';
 
 import { Page,
     Card,
@@ -21,9 +23,14 @@ export class Plans extends Component {
     componentWillMount() {
         requests.getRequest('plan/plan/get').then(data => {
             console.log(data);
-            data = dataGrids(data.data.data.rows);
-            this.setState({data : data});
-            console.log(this.state.data, 4);
+            if ( data.success ) {
+                if ( data.data !== null && !isUndefined(data.data) ) {
+                    data = dataGrids(data.data.data.rows);
+                    this.setState({data : data});
+                }
+            } else {
+                notify.error(data.message);
+            }
         });
     }
     onSelectPlan(arg) {
@@ -54,7 +61,7 @@ export class Plans extends Component {
                                                         </p>
                                                     </div>
                                                     <div className="mb-5"> {/* Button To choose Plan */}
-                                                        <Button primary={true} fullWidth={true} size="large" onClick={this.onSelectPlan.bind(this, data.id)}>
+                                                        <Button primary={true} fullWidth={true} size="large" onClick={this.onSelectPlan.bind(this, data)}>
                                                             Choose this Plan
                                                         </Button>
                                                     </div>

@@ -4,6 +4,8 @@ import { Page, Card, Select,} from '@shopify/polaris';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {faExclamation, faCheckCircle} from '@fortawesome/free-solid-svg-icons';
 import { requests } from '../../../services/request';
+import {isUndefined} from "util";
+import {notify} from "../../../services/notify";
 
 class Dashboard extends Component {
     constructor(props) {
@@ -103,14 +105,20 @@ class Dashboard extends Component {
         if (event.API_endpoint !== '' ) {
             requests.getRequest(event.API_endpoint).then(data => {
                 console.log(data);
-                if ( data.data[event.data].usable === 1 ) {
-                  let temp = this.state.data;
-                  temp[key].forEach(keys => {
-                     if ( keys.API_endpoint === event.API_endpoint ) {
-                         keys.show = true;
-                     }
-                  });
-                  this.setState({data: temp});
+                if ( data.success ) {
+                    if ( data.data !== null && !isUndefined(data.data)  ) {
+                        if ( data.data[event.data].usable === 1 ) {
+                            let temp = this.state.data;
+                            temp[key].forEach(keys => {
+                                if ( keys.API_endpoint === event.API_endpoint ) {
+                                    keys.show = true;
+                                }
+                            });
+                            this.setState({data: temp});
+                        }
+                    }
+                } else {
+                    notify.error(data.message);
                 }
             })
         }
