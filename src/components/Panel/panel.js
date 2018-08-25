@@ -17,6 +17,7 @@ import { Profiling } from './Components/profiling';
 import { CreateProfile } from './Components/profile-component/create-profile';
 import { Configuration } from './Components/configuration';
 import { QueuedTask } from './Components/queued_task';
+import { Activities } from './Components/queued-tasks-component/activities';
 import { Plans } from './Components/plans';
 import { Header } from './Layout/header';
 import Dashboard from './Components/dashboard';
@@ -24,6 +25,7 @@ import FAQPage from './Components/faq';
 import IntegrationPage from './Components/integration';
 
 import history from '../../shared/history';
+import { panelFunctions } from './functions';
 
 import './panel.css';
 
@@ -32,80 +34,8 @@ export class Panel extends Component {
     state = {
       showLoader: false
     };
-    menu = [
-        {
-            id: 'dashboard',
-            content: 'Dashboard',
-            accessibilityLabel: 'Dashboard',
-            link: '/panel/dashboard',
-            panelID: 'dashboard'
-        },
-        {
-            id: 'accounts',
-            content: 'Accounts',
-            accessibilityLabel: 'Accounts',
-            link: '/panel/accounts',
-            panelID: 'accounts',
-        },
-        {
-            id: 'products',
-            content: 'Products',
-            accessibilityLabel: 'Products',
-            link: '/panel/products',
-            panelID: 'products'
-        },
-        {
-            id: 'import',
-            content: 'Upload Products',
-            accessibilityLabel: 'Import',
-            link: '/panel/import',
-            panelID: 'import'
-        },
-        {
-            id: 'profiling',
-            content: 'Profiling',
-            accessibilityLabel: 'Profiling',
-            link: '/panel/profiling',
-            panelID: 'profiling'
-        },
-        {
-            id: 'configuration',
-            content: 'Configuration',
-            accessibilityLabel: 'Configuration',
-            link: '/panel/configuration',
-            panelID: 'configuration'
-        },
-        {
-            id: 'plans',
-            content: 'Plans',
-            accessibilityLabel: 'Plans',
-            link: '/panel/plans',
-            panelID: 'plans'
-        },
-        {
-            id: 'integration',
-            content: 'Integration',
-            accessibilityLabel: 'Integration',
-            link: '/panel/integration',
-            panelID: 'integration'
-        },
-        {
-            id: 'queuedtasks',
-            content: 'Queues',
-            accessibilityLabel: 'Queues',
-            link: '/panel/queuedtasks',
-            panelID: 'queuedtasks'
-        },
-        {
-            id: 'faq',
-            content: 'FAQ',
-            accessibilityLabel: 'FAQ',
-            link: '/panel/faq',
-            panelID: 'fag'
-        }
-    ];
+    menu = panelFunctions.getMenu();
     render() {
-        // globalState.removeLocalStorage('user_authenticated');
         return (
             <Router history={history}>
                 <div className="container-fluid app-panel-container">
@@ -135,6 +65,7 @@ export class Panel extends Component {
                                 <Route exact path='/panel/configuration' component={Configuration}/>
                                 <Route exact path='/panel/plans' component={Plans}/>
                                 <Route exact path='/panel/queuedtasks' component={QueuedTask}/>
+                                <Route exact path='/panel/queuedtasks/activities' component={Activities}/>
                                 <Route exact path='/panel/faq' component={FAQPage}/>
                                 <Route exact path='/panel/integration' component={IntegrationPage}/>
                                 <Route exact path='/panel/dashboard' component={Dashboard}/>

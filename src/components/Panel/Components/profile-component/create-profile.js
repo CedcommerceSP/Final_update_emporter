@@ -380,7 +380,7 @@ export class CreateProfile extends Component {
     getUploadServices() {
         requests.getRequest('connector/get/services', { 'filters[type]': 'uploader' })
             .then(data => {
-                if (data.success === true) {
+                if (data.success) {
                     let hasService = false;
                     for (let i = 0; i < Object.keys(data.data).length; i++) {
                         let key = Object.keys(data.data)[i];
@@ -473,7 +473,7 @@ export class CreateProfile extends Component {
                     querySet.position !== 1 &&
                     <div className="col-12 p-2 text-right">
                         <Button onClick={() => {
-                            this.handleAddGroup(querySet.position, 'OR');
+                            this.handleDeleteGroup(querySet.position);
                         }}>Delete Rule Group</Button>
                     </div>
                 }
@@ -1183,8 +1183,12 @@ export class CreateProfile extends Component {
     moveToPreviousStep() {
         switch (this.state.activeStep) {
             case 3:
+                this.state.activeStep = 2;
+                this.fetchDataForSteptwo(true);
                 break;
             case 2:
+                this.state.products_select.query = '';
+                this.state.products_select.targetCategory = '';
                 this.state.activeStep = 1;
                 this.fetchDataForStepOne();
                 break;
