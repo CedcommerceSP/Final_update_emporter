@@ -16,15 +16,15 @@ class Dashboard extends Component {
             data: {
                 Shopify_Google : [
                     {
-                        message: <p> Choose a plan for Shopify-Google Express <NavLink  to="/panel/plans">Integration.</NavLink></p>,
+                        message: <p> Choose a plan for Shopify-Google Express <NavLink  to="/panel/plans">Integration.</NavLink> If you are <b>buying plan for the first time</b> then, once you buy the plan your <b>7 days trial</b> will be active for first week, and your <b>payment cycle will start after 7 days</b>.</p>,
                         optional: false,
                         API_endpoint: 'connector/get/services',
                         data: 'shopify_importer',
                         show: false
                     },
                     {
-                        message: <p> Link your google merchant center <NavLink  to="/panel/accounts">account.</NavLink>
-                        Please Make sure that you have verified & claimed Store URL in your Merchant Center, that should be same as your Shop URL
+                        message: <p> Link your <b>google merchant center</b> <NavLink  to="/panel/accounts">account.</NavLink>
+                            Please make sure that you have <b>verified & claimed</b> website URL in your Merchant Center, that should be <b>same as your Shopify store URL</b>
                         </p>,
                         optional: false,
                         API_endpoint: '',
@@ -104,7 +104,6 @@ class Dashboard extends Component {
     API_CHECK(event, key) {
         if (event.API_endpoint !== '' ) {
             requests.getRequest(event.API_endpoint).then(data => {
-                console.log(data);
                 if ( data.success ) {
                     if ( data.data !== null && !isUndefined(data.data)  ) {
                         if ( data.data[event.data].usable === 1 ) {

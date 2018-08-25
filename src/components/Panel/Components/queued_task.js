@@ -26,10 +26,18 @@ export class QueuedTask extends Component {
         };
         this.getAllNotifications();
         this.getAllQueuedTasks();
+        setInterval(() => {
+            const activeUrl = this.props.history.location.pathname;
+            if (activeUrl === '/panel/queuedtasks' ||
+                activeUrl === '/panel/queuedtasks/activities') {
+                this.getAllNotifications();
+                this.getAllQueuedTasks();
+            }
+        }, 3000);
     }
 
     getAllQueuedTasks() {
-        requests.getRequest('connector/get/allQueuedTasks')
+        requests.getRequest('connector/get/allQueuedTasks', {}, false, true)
             .then(data => {
                 if (data.success) {
                     this.state.queuedTasks = this.modifyQueuedTaskData(data.data.rows);
@@ -49,7 +57,7 @@ export class QueuedTask extends Component {
     }
 
     getAllNotifications() {
-        requests.getRequest('connector/get/allNotifications', { count: 3, activePage: 0 })
+        requests.getRequest('connector/get/allNotifications', { count: 3, activePage: 0 }, false, true)
             .then(data => {
                 if (data.success) {
                     this.state.recentActivities = data.data.rows;

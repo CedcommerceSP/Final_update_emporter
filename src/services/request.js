@@ -4,8 +4,10 @@ import { globalState } from './globalstate';
 import { isUndefined } from 'util';
 
 export const requests = {
-    getRequest: (endpoint, params, fullUrl) => {
-        window.showLoader = true;
+    getRequest: (endpoint, params, fullUrl, hideLoader) => {
+        if (isUndefined(hideLoader) || !hideLoader) {
+            window.showLoader = true;
+        }
         let paramsString = '';
         if (!isUndefined(params)) {
             paramsString += '?';
@@ -14,7 +16,7 @@ export const requests = {
                 paramsString += Object.keys(params)[i] + '=' + encodeURIComponent(params[Object.keys(params)[i]]) + end;
             }
         }
-        if (isUndefined(fullUrl)) {
+        if (isUndefined(fullUrl) || !fullUrl) {
             return fetch(environment.API_ENDPOINT + endpoint + paramsString, {
                 method: 'GET',
                 headers: {
@@ -22,7 +24,9 @@ export const requests = {
                 }
             })
                 .then((res) => {
-                    window.showLoader = false;
+                    if (isUndefined(hideLoader) || !hideLoader) {
+                        window.showLoader = false;
+                    }
                     return res.json();
                 });
         } else {
@@ -33,14 +37,18 @@ export const requests = {
                 }
             })
                 .then((res) => {
-                    window.showLoader = false;
+                    if (isUndefined(hideLoader) || !hideLoader) {
+                        window.showLoader = false;
+                    }
                     return res.json();
                 });
         }
     },
-    postRequest: (endpoint, data, fullUrl) => {
-        window.showLoader = true;
-        if (isUndefined(fullUrl)) {
+    postRequest: (endpoint, data, fullUrl, hideLoader) => {
+        if (isUndefined(hideLoader) || !hideLoader) {
+            window.showLoader = true;
+        }
+        if (isUndefined(fullUrl) || fullUrl) {
             return fetch(environment.API_ENDPOINT + endpoint, {
                 method: 'POST',
                 headers: {
@@ -51,7 +59,9 @@ export const requests = {
                 body: JSON.stringify(data)
             })
                 .then((res) => {
-                    window.showLoader = false;
+                    if (isUndefined(hideLoader) || !hideLoader) {
+                        window.showLoader = false;
+                    }
                     return res.json();
                 });
         } else {
@@ -65,7 +75,9 @@ export const requests = {
                 body: JSON.stringify(data)
             })
                 .then((res) => {
-                    window.showLoader = false;
+                    if (isUndefined(hideLoader) || !hideLoader) {
+                        window.showLoader = false;
+                    }
                     return res.json();
                 });
         }
