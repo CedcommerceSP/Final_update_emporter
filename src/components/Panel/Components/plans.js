@@ -36,6 +36,9 @@ export class Plans extends Component {
     onSelectPlan(arg) {
         console.log(arg);
     }
+    onCheckBox(event) {
+        console.log(event);
+    }
     render() {
         // console.log(this.state.data);
         return (
@@ -45,6 +48,11 @@ export class Plans extends Component {
                         <div className="col-12 text-center mb-5"> {/*tittle*/}
                             <span style={{'fontSize':'40px'}}><b>Choose the best offer</b></span>
                             <h3>If you already have an existing plan you can upgrade or downgrade your plan</h3>
+                        </div>
+                        <div className="col-12 mb-4">
+                            <div className="d-flex justify-content-center">
+                                <Button primary={true} onClick={() => this.redirect('/panel/plans/current')}>Show Active Plan</Button>
+                            </div>
                         </div>
                         {this.state.data.map((data, index) => {
                                 return (
@@ -82,12 +90,24 @@ export class Plans extends Component {
                                                                     </span>-
                                                                 </p>
                                                                     {Object.keys(data.services[keys].services).map(key1 => {
-                                                                        return (<div key={key1} className="text-left">
-                                                                            <Checkbox
-                                                                                checked={true}
-                                                                                label={data.services[keys].services[key1].title}
-                                                                                disabled={false} />
-                                                                        </div>);
+                                                                        if ( data.services[keys].services[key1].required === 'yes' ) {
+                                                                            return (<div key={key1} className="text-left">
+                                                                                <Checkbox
+                                                                                    checked={true}
+                                                                                    label={data.services[keys].services[key1].title}
+                                                                                    disabled={false} />
+                                                                            </div>);
+                                                                        } else {
+                                                                            return (<div key={key1} className="text-left form-inline">
+                                                                                <h5>
+                                                                                    <input type="checkbox" className="form-control" onClick={this.onCheckBox.bind(this,data.services[keys].services[key1])}/>
+                                                                                    <span className="ml-3">
+                                                                                        {data.services[keys].services[key1].title}
+                                                                                    </span>
+                                                                                </h5>
+
+                                                                            </div>);
+                                                                        }
                                                                     })}
                                                             </React.Fragment>);
                                                         }):null}
@@ -101,5 +121,8 @@ export class Plans extends Component {
                     </div>
             </Page>
         );
+    }
+    redirect(url) {
+        this.props.history.push(url);
     }
 }
