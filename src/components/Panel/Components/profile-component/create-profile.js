@@ -8,6 +8,7 @@ import { Page,
     TextField,
     Label,
     Modal,
+    Checkbox,
     Banner,
     DisplayText } from '@shopify/polaris';
 
@@ -763,6 +764,7 @@ export class CreateProfile extends Component {
                                 }
                                 {
                                     !isUndefined(attribute.options) &&
+                                    attribute.type === 'select' &&
                                     <Select
                                         options={attribute.options}
                                         placeholder={attribute.title}
@@ -770,6 +772,28 @@ export class CreateProfile extends Component {
                                         onChange={this.handleMarketplaceAttributesChange.bind(this, this.state.products_select.marketplaceAttributes.indexOf(attribute))}
                                         value={attribute.value}
                                     />
+                                }
+                                {
+                                    !isUndefined(attribute.options) &&
+                                    attribute.type === 'checkbox' &&
+                                    <div className="row p-3">
+                                        <div className="col-12 p-1">
+                                            <Label>{attribute.title}</Label>
+                                        </div>
+                                        {
+                                            attribute.options.map(option => {
+                                                return (
+                                                    <div className="col-md-6 col-sm-6 col-12 p-1" key={attribute.options.indexOf(option)}>
+                                                        <Checkbox
+                                                            checked={attribute.value.indexOf(option.value) !== -1}
+                                                            label={option.value}
+                                                            onChange={this.handleMarketplaceAttributesCheckboxChange.bind(this, this.state.products_select.marketplaceAttributes.indexOf(attribute), attribute.options.indexOf(option))}
+                                                        />
+                                                    </div>
+                                                );
+                                            })
+                                        }
+                                    </div>
                                 }
                             </div>
                         );
@@ -806,6 +830,21 @@ export class CreateProfile extends Component {
                 }
             </div>
         );
+    }
+
+    handleMarketplaceAttributesCheckboxChange(index, optionIndex, value) {
+        let option = this.state.products_select.marketplaceAttributes[index].options[optionIndex].value;
+        let optIndex = this.state.products_select.marketplaceAttributes[index].value.indexOf(option);
+        if (value) {
+            if (optIndex === -1) {
+                this.state.products_select.marketplaceAttributes[index].value.push(option);
+            }
+        } else {
+            if (optIndex !== -1) {
+                this.state.products_select.marketplaceAttributes[index].value.splice(optIndex, 1);
+            }
+        }
+        this.updateState();
     }
 
     handleMarketplaceAttributesChange(index, value) {

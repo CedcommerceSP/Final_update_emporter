@@ -59,8 +59,8 @@ export const panelFunctions = {
             },
             {
                 id: 'queuedtasks',
-                content: 'Queues',
-                accessibilityLabel: 'Queues',
+                content: 'Activities',
+                accessibilityLabel: 'Activities',
                 link: '/panel/queuedtasks',
                 panelID: 'queuedtasks'
             },

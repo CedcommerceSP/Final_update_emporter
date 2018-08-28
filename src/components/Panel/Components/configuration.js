@@ -10,28 +10,78 @@ import { Page,
         Checkbox,
         Layout } from '@shopify/polaris';
 
+import { notify } from '../../../services/notify';
+import { requests } from '../../../services/request';
+
+import { isUndefined } from 'util';
+
 export class Configuration extends Component {
 
-    importFrequencyOptions = [
-        { label: 'Onetime import', value: 'onetime_import' },
-        { label: 'Auto sync products', value: 'auto_sync' }
-    ];
+    googleConfigurationData = [];
 
     constructor() {
         super();
         this.state = {
-          importer_configuration: {
-              import_frequency: '',
-              default_profile_settings: []
-          },
           account_information: {
-              shop_name: 'satyaprakashcedcoss.myshopify.com',
-              username: 'importer-satya',
-              phone: '9876543210'
+              username: '',
+              email: ''
           },
-          importer_configuration_updated: false,
+          google_configuration: {},
+          google_configuration_updated: false,
           account_information_updated: false
         };
+        this.getUserDetails();
+        this.getGoogleConfigurations();
+    }
+
+    getUserDetails() {
+        requests.getRequest('/user/getDetails')
+            .then(data => {
+                if (data.success) {
+                    this.state.account_information = {
+                        username: data.data.username,
+                        email: data.data.email
+                    };
+                    if (!isUndefined(data.data.phone)) {
+                        this.state.account_information['phone'] = data.data.phone;
+                    }
+                    this.updateState();
+                } else {
+                    notify.error(data.message);
+                }
+            });
+    }
+
+    getGoogleConfigurations() {
+        requests.getRequest('/connector/get/config', { marketplace: 'google' })
+            .then(data => {
+                if (data.success) {
+                    this.googleConfigurationData = this.modifyGoogleConfigData(data.data);
+                    this.updateState();
+                } else {
+                    notify.error(data.message);
+                }
+            });
+    }
+
+    modifyGoogleConfigData(data) {
+        for (let i = 0; i < data.length; i++) {
+            this.state.google_configuration[data[i].code] = data[i].value;
+            data[i].options = this.modifyOptionsData(data[i].options);
+        }
+        return data;
+    }
+
+    modifyOptionsData(data) {
+        let options = [];
+        for (let i = 0; i < Object.keys(data).length; i++) {
+            let key = Object.keys(data)[i];
+            options.push({
+                label: data[key],
+                value: key
+            });
+        }
+        return options;
     }
 
     render() {
@@ -42,57 +92,38 @@ export class Configuration extends Component {
                     <Layout.Section>
                         <div className="row">
                             <div className="col-md-6 col-sm-6 col-12 text-md-left text-sm-left text-center">
-                                <Heading>Importer Configuration</Heading>
-                                <p className="pt-3">
-                                    Manage default settings for your imports and default profile
-                                </p>
+                                <Heading>Account Information</Heading>
                             </div>
                             <div className="col-md-6 col-sm-6 col-12">
                                 <Card>
                                     <div className="row p-5">
                                         <div className="col-12 pt-2 pb-2">
-                                            <Select
-                                                options={this.importFrequencyOptions}
-                                                label="Product Import Settings"
-                                                placeholder="Import Frequency"
-                                                value={this.state.importer_configuration.import_frequency}
-                                                onChange={this.importConfigurationChange.bind(this, 'import_frequency')}>
-                                            </Select>
+                                            <Label>Username</Label>
+                                            <Label>{this.state.account_information.username}</Label>
                                         </div>
                                         <div className="col-12 pt-2 pb-2">
-                                            <Label>
-                                                Default Profile Settings
-                                            </Label>
-                                            <div className="row">
-                                                <div className="col-6 pt-1 pb-1">
-                                                    <Checkbox
-                                                        label="Map shopify collection and product_type with source category"
-                                                        checked={this.state.importer_configuration.default_profile_settings.indexOf('map_collection_with_category') !== -1}
-                                                        id="map_collection_with_category"
-                                                        name="map_collection_with_category"
-                                                        onChange={this.defaultProfileChange.bind(this, 'map_collection_with_category')}></Checkbox>
-                                                </div>
-                                                <div className="col-6 pt-1 pb-1">
-                                                    <Checkbox
-                                                        label="Give inventory variation"
-                                                        checked={this.state.importer_configuration.default_profile_settings.indexOf('give_inventory_variation') !== -1}
-                                                        id="give_inventory_variation"
-                                                        name="give_inventory_variation"
-                                                        onChange={this.defaultProfileChange.bind(this, 'give_inventory_variation')}></Checkbox>
-                                                </div>
-                                                <div className="col-6 pt-1 pb-1">
-                                                    <Checkbox
-                                                        label="Give inventory variation"
-                                                        checked={this.state.importer_configuration.default_profile_settings.indexOf('give_price_variation') !== -1}
-                                                        id="give_price_variation"
-                                                        name="give_price_variation"
-                                                        onChange={this.defaultProfileChange.bind(this, 'give_price_variation')}></Checkbox>
-                                                </div>
-                                            </div>
+                                            <TextField
+                                                label="Email"
+                                                onChange={this.accountInfoChange.bind(this, 'email')}
+                                                value={this.state.account_information.email}
+                                            />
                                         </div>
-                                        <div className="col-12 text-right pt-2 pb-1">
+                                        {
+                                            !isUndefined(this.state.account_information.phone) &&
+                                            <div className="col-12 pt-2 pb-2">
+                                                <TextField
+                                                    label="Phone no."
+                                                    onChange={this.accountInfoChange.bind(this, 'phone')}
+                                                    value={this.state.account_information.phone}
+                                                />
+                                            </div>
+                                        }
+                                        <div className="col-12 text-right pt-2 pb-2">
                                             <Button
-                                                disabled={!this.state.importer_configuration_updated}
+                                                disabled={!this.state.account_information_updated}
+                                                onClick={() => {
+                                                    this.saveProfileData();
+                                                }}
                                                 primary>Save</Button>
                                         </div>
                                     </div>
@@ -103,32 +134,71 @@ export class Configuration extends Component {
                     <Layout.Section>
                         <div className="row">
                             <div className="col-md-6 col-sm-6 col-12 text-md-left text-sm-left text-center">
-                                <Heading>Account Information</Heading>
+                                <Heading>Google Configuration</Heading>
                             </div>
                             <div className="col-md-6 col-sm-6 col-12">
                                 <Card>
                                     <div className="row p-5">
-                                        <div className="col-12 pt-2 pb-2">
-                                            <Label>Shop Name</Label>
-                                            <Label>{this.state.account_information.shop_name}</Label>
-                                        </div>
-                                        <div className="col-12 pt-2 pb-2">
-                                            <TextField
-                                                label="Username"
-                                                onChange={this.accountInfoChange.bind(this, 'username')}
-                                                value={this.state.account_information.username}
-                                            />
-                                        </div>
-                                        <div className="col-12 pt-2 pb-2">
-                                            <TextField
-                                                label="Phone no."
-                                                onChange={this.accountInfoChange.bind(this, 'phone')}
-                                                value={this.state.account_information.phone}
-                                            />
-                                        </div>
-                                        <div className="col-12 text-right pt-2 pb-2">
+                                        {
+                                            this.googleConfigurationData.map(config => {
+                                                switch(config.type) {
+                                                    case 'select':
+                                                        return (
+                                                            <div className="col-12 pt-2 pb-2" key={this.googleConfigurationData.indexOf(config)}>
+                                                                <Select
+                                                                    options={config.options}
+                                                                    label={config.title}
+                                                                    placeholder={config.title}
+                                                                    value={this.state.google_configuration[config.code]}
+                                                                    onChange={this.googleConfigurationChange.bind(this, this.googleConfigurationData.indexOf(config))}>
+                                                                </Select>
+                                                            </div>
+                                                        );
+                                                        break;
+                                                    case 'checkbox':
+                                                        return (
+                                                            <div className="col-12 pt-2 pb-2" key={this.googleConfigurationData.indexOf(config)}>
+                                                                <Label>{config.title}</Label>
+                                                                <div className="row">
+                                                                    {
+                                                                        config.options.map(option => {
+                                                                            return (
+                                                                                <div className="col-md-6 col-sm-6 col-12 p-1" key={config.options.indexOf(option)}>
+                                                                                    <Checkbox
+                                                                                        checked={this.state.google_configuration[config.code].indexOf(option.value) !== -1}
+                                                                                        label={option.value}
+                                                                                        onChange={this.googleConfigurationCheckboxChange.bind(this, this.googleConfigurationData.indexOf(config), config.options.indexOf(option))}
+                                                                                    />
+                                                                                </div>
+                                                                            );
+                                                                        })
+                                                                    }
+                                                                </div>
+                                                            </div>
+                                                        );
+                                                        break;
+                                                    default:
+                                                        return (
+                                                            <div className="col-12 pt-2 pb-2" key={this.googleConfigurationData.indexOf(config)}>
+                                                                <TextField
+                                                                    label={config.title}
+                                                                    placeholder={config.title}
+                                                                    value={this.state.google_configuration[config.code]}
+                                                                    onChange={this.googleConfigurationChange.bind(this, this.googleConfigurationData.indexOf(config))}>
+                                                                </TextField>
+                                                            </div>
+                                                        );
+                                                        break;
+                                                }
+
+                                            })
+                                        }
+                                        <div className="col-12 text-right pt-2 pb-1">
                                             <Button
-                                                disabled={!this.state.account_information_updated}
+                                                disabled={!this.state.google_configuration_updated}
+                                                onClick={() => {
+                                                    this.saveGoogleConfigData();
+                                                }}
                                                 primary>Save</Button>
                                         </div>
                                     </div>
@@ -139,6 +209,52 @@ export class Configuration extends Component {
                 </Layout>
             </Page>
         );
+    }
+
+    googleConfigurationChange(index, value) {
+        this.state.google_configuration_updated = true;
+        this.state.google_configuration[this.googleConfigurationData[index].code] = value;
+        this.updateState();
+    }
+
+    googleConfigurationCheckboxChange(index, optionIndex, value) {
+        this.state.google_configuration_updated = true;
+        const option = this.googleConfigurationData[index].options[optionIndex].value;
+        const valueIndex = this.state.google_configuration[this.googleConfigurationData[index].code].indexOf(option);
+        if (value) {
+            if (valueIndex === -1) {
+                this.state.google_configuration[this.googleConfigurationData[index].code].push(option);
+            }
+        } else {
+            if (valueIndex !== -1) {
+                this.state.google_configuration[this.googleConfigurationData[index].code].splice(valueIndex, 1);
+            }
+        }
+        this.updateState();
+    }
+
+    saveGoogleConfigData() {
+        requests.postRequest('connector/get/saveConfig', { marketplace: 'google', data: this.state.google_configuration })
+            .then(data => {
+                if (data.success) {
+                    notify.success(data.message);
+                } else {
+                    notify.error(data.message);
+                }
+                this.getGoogleConfigurations();
+            });
+    }
+
+    saveProfileData() {
+        requests.getRequest('core/user/updateuser', this.state.account_information)
+            .then(data => {
+                if (data.success) {
+                    notify.success(data.message);
+                } else {
+                    notify.error(data.message);
+                }
+                this.getUserDetails();
+            });
     }
 
     importConfigurationChange(key, value) {

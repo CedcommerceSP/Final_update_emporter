@@ -28,8 +28,7 @@ export class QueuedTask extends Component {
         this.getAllQueuedTasks();
         setInterval(() => {
             const activeUrl = this.props.history.location.pathname;
-            if (activeUrl === '/panel/queuedtasks' ||
-                activeUrl === '/panel/queuedtasks/activities') {
+            if (activeUrl === '/panel/queuedtasks') {
                 this.getAllNotifications();
                 this.getAllQueuedTasks();
             }

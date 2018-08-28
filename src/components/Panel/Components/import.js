@@ -207,7 +207,14 @@ export class Import extends Component {
                 this.state.showImportProducts = false;
                 this.updateState();
                 if (data.success === true) {
-                    notify.success(data.message);
+                    if (data.code === 'product_import_started') {
+                        notify.info('Import process started. Check progress in activities section.');
+                        setTimeout(() => {
+                            this.redirect('/panel/queuedtasks');
+                        }, 1000);
+                    } else {
+                        notify.success(data.message);
+                    }
                 } else {
                     notify.error(data.message);
                 }
@@ -479,7 +486,14 @@ export class Import extends Component {
             .then(data => {
                 this.state.showUploadProducts = false;
                if (data.success) {
-                   notify.success(data.message);
+                   if (data.code === 'product_upload_started') {
+                       notify.info('Upload process started. Check progress in activities section.');
+                       setTimeout(() => {
+                           this.redirect('/panel/queuedtasks');
+                       }, 1000);
+                   } else {
+                       notify.success(data.message);
+                   }
                } else {
                    notify.error(data.message);
                    if (data.code === 'link_your_account') {

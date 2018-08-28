@@ -32,14 +32,14 @@ class Dashboard extends Component {
                         show: false
                     },
                     {
-                        message: <span>Enter default <NavLink  to="/panel/configuration">configurations.</NavLink></span>,
-                        optional: true,
+                        message: <span>Enter default <NavLink  to="/panel/configuration">configurations</NavLink> for Google.</span>,
+                        optional: false,
                         API_endpoint: '',
                         data: '',
                         show: false
                     },
                     {
-                        message: <p>Upload your products on  <NavLink  to="/panel/import">Google Merchant Center.</NavLink></p>,
+                        message: <p><NavLink  to="/panel/import">Import</NavLink> your products <b>from shopify</b> and then <b>upload products</b> on <NavLink  to="/panel/import">Google Merchant Center.</NavLink></p>,
                         optional: false,
                         API_endpoint: '',
                         hideStatus: true,
@@ -49,7 +49,7 @@ class Dashboard extends Component {
                 ],
                 Amazon_Shopify: [
                     {
-                        message: <p> Choose a plan for Amazon-Shopify  <NavLink  to="/panel/plans">Integration.</NavLink></p>,
+                        message: <p> Choose a plan for Amazon-Shopify  <NavLink  to="/panel/plans">Integration.</NavLink>If you are <b>buying plan for the first time</b> then, once you buy the plan your <b>7 days trial</b> will be active for first week, and your <b>payment cycle will start after 7 days</b>.</p>,
                         optional: false,
                         API_endpoint: 'connector/get/services',
                         data: 'shopify_uploader',
@@ -63,14 +63,14 @@ class Dashboard extends Component {
                         show: false
                     },
                     {
-                        message: <span>Enter default <NavLink  to="/panel/configuration">configurations.</NavLink></span>,
-                        optional: true,
+                        message: <span>Enter default <NavLink  to="/panel/configuration">configurations</NavLink> for Amazon.</span>,
+                        optional: false,
                         API_endpoint: '',
                         data: '',
                         show: false
                     },
                     {
-                        message: <p> Import your products from amazon to <NavLink  to="/panel/import">shopify.</NavLink></p>,
+                        message: <p><NavLink  to="/panel/import">Import</NavLink> your products <b>from amazon</b>, and then <NavLink  to="/panel/import">upload to shopify.</NavLink></p>,
                         optional: false,
                         API_endpoint: '',
                         hideStatus: true,
