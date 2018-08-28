@@ -29,6 +29,7 @@ import { panelFunctions } from './functions';
 
 import './panel.css';
 import CurrentPlan from "./Components/current-plan/current-plan";
+import Analyticsreporting from "./Components/products-component/analytics-reporting";
 
 export class Panel extends Component {
 
@@ -56,6 +57,7 @@ export class Panel extends Component {
                                 <Route exact path='/panel/products' component={Products}/>
                                 <Route exact path='/panel/products/create' component={CreateProduct}/>
                                 <Route path='/panel/products/edit/:id' component={EditProduct}/>
+                                <Route exact path='/panel/products/analysis' component={Analyticsreporting}/>
                                 <Route exact path='/panel/accounts' component={Apps}/>
                                 <Route exact path='/panel/plans' component={Plans}/>
                                 <Route path='/panel/apps/install' component={InstallApp}/>
