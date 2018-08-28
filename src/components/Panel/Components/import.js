@@ -18,26 +18,6 @@ import { requests } from '../../../services/request';
 
 export class Import extends Component {
 
-    allProfiles = [
-        {
-            source: 'amazon',
-            target: 'shopify',
-            title: 'Profile 1',
-            code: 'profile_1'
-        },
-        {
-            source: 'ebay',
-            target: 'shopify',
-            title: 'Profile 2',
-            code: 'profile_2'
-        },
-        {
-            source: 'walmart',
-            target: 'shopify',
-            title: 'Profile 3',
-            code: 'profile_3'
-        }
-    ];
     profilesList = [];
     constructor() {
         super();
