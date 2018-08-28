@@ -30,6 +30,7 @@ import { panelFunctions } from './functions';
 import './panel.css';
 import CurrentPlan from "./Components/plans-component/current-plan";
 import Analyticsreporting from "./Components/products-component/analytics-reporting";
+import BillingHistory from "./Components/plans-component/billing-history";
 
 export class Panel extends Component {
 
@@ -68,6 +69,7 @@ export class Panel extends Component {
                                 <Route exact path='/panel/configuration' component={Configuration}/>
                                 <Route exact path='/panel/plans' component={Plans}/>
                                 <Route exact path='/panel/plans/current' component={CurrentPlan}/>
+                                <Route exact path='/panel/plans/history' component={BillingHistory}/>
                                 <Route exact path='/panel/queuedtasks' component={QueuedTask}/>
                                 <Route exact path='/panel/queuedtasks/activities' component={Activities}/>
                                 <Route exact path='/panel/faq' component={FAQPage}/>

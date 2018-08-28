@@ -43,7 +43,10 @@ export class Plans extends Component {
         // console.log(this.state.data);
         return (
             <Page
-                title="Plans">
+                title="Plans"
+                primaryAction={{content: 'Billing History', onClick: () => {
+                        this.redirect('/panel/plans/history');
+                    }}}>
                     <div className="row">
                         <div className="col-12 text-center mb-5"> {/*tittle*/}
                             <span style={{'fontSize':'40px'}}><b>Choose the best offer</b></span>
