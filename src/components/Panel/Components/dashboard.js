@@ -6,41 +6,45 @@ import {faExclamation, faCheckCircle} from '@fortawesome/free-solid-svg-icons';
 import { requests } from '../../../services/request';
 import {isUndefined} from "util";
 import {notify} from "../../../services/notify";
+import './dashboard/dashboard.css';
 
 class Dashboard extends Component {
     constructor(props) {
         super(props);
         this.API_CHECK = this.API_CHECK.bind(this);
         this.state = {
-            stepData: [],
+            stepData: [], // this will store the current showing step, which is selected from data object
             data: {
                 Shopify_Google : [
                     {
-                        message: <p> Choose a plan for Shopify-Google Express <NavLink  to="/panel/plans">Integration.</NavLink> If you are <b>buying plan for the first time</b> then, once you buy the plan your <b>7 days trial</b> will be active for first week, and your <b>payment cycle will start after 7 days</b>.</p>,
-                        optional: false,
-                        API_endpoint: 'connector/get/services',
-                        data: 'shopify_importer',
-                        show: false
+                        message: <p> Choose a plan for Shopify-Google Express <NavLink  to="/panel/plans">Integration.</NavLink>
+                            If you are <b> buying plan for the first time</b> then, once you buy the plan your
+                            <b> 7 days trial</b> will be active for first week, and your <b> payment cycle will start after 7 days</b>.</p>,
+                        stepperMessage: 'Choose a plan for Shopify-Google Express', // stepper Small Message
+                        API_endpoint: 'connector/get/services', // Api End Point
+                        data: 'shopify_importer', // Data Used In API end Point for finding particular step we need to check
+                        show: false // used in stepper Check either Completed or not
                     },
                     {
-                        message: <p> Link your <b>google merchant center</b> <NavLink  to="/panel/accounts">account.</NavLink>
-                            Please make sure that you have <b>verified & claimed</b> website URL in your Merchant Center, that should be <b>same as your Shopify store URL</b>
+                        message: <p> Link your <b> google merchant center</b> <NavLink  to="/panel/accounts">account.</NavLink>
+                            Please make sure that you have <b> verified & claimed</b> website URL in your Merchant Center, that should be
+                            <b> same as your Shopify store URL</b>
                         </p>,
-                        optional: false,
+                        stepperMessage: 'Google Merchant Center linked',
                         API_endpoint: '',
                         data: '',
                         show: false
                     },
                     {
-                        message: <span>Enter default <NavLink  to="/panel/configuration">configurations</NavLink> for Google.</span>,
-                        optional: false,
+                        message: <span>Enter default <NavLink  to="/panel/configuration">configurations.</NavLink></span>,
+                        stepperMessage: 'Configurations',
                         API_endpoint: '',
                         data: '',
                         show: false
                     },
                     {
-                        message: <p><NavLink  to="/panel/import">Import</NavLink> your products <b>from shopify</b> and then <b>upload products</b> on <NavLink  to="/panel/import">Google Merchant Center.</NavLink></p>,
-                        optional: false,
+                        message: <p>Upload your products on  <NavLink  to="/panel/import">Google Merchant Center.</NavLink></p>,
+                        stepperMessage: 'Products Uploaded On Google Merchant Center',
                         API_endpoint: '',
                         hideStatus: true,
                         data: '',
@@ -49,29 +53,29 @@ class Dashboard extends Component {
                 ],
                 Amazon_Shopify: [
                     {
-                        message: <p> Choose a plan for Amazon-Shopify  <NavLink  to="/panel/plans">Integration.</NavLink>If you are <b>buying plan for the first time</b> then, once you buy the plan your <b>7 days trial</b> will be active for first week, and your <b>payment cycle will start after 7 days</b>.</p>,
-                        optional: false,
+                        message: <p> Choose a plan for Amazon-Shopify  <NavLink  to="/panel/plans">Integration.</NavLink></p>,
+                        stepperMessage: 'Amazon-Shopify Plan Chosen',
                         API_endpoint: 'connector/get/services',
                         data: 'shopify_uploader',
                         show: false
                     },
                     {
                         message:  <p> Link your AWS/MWS <NavLink  to="/panel/accounts">account.</NavLink></p>,
-                        optional: false,
+                        stepperMessage: 'AWS/MWS Account Linked',
                         API_endpoint: '',
                         data: '',
                         show: false
                     },
                     {
-                        message: <span>Enter default <NavLink  to="/panel/configuration">configurations</NavLink> for Amazon.</span>,
-                        optional: false,
+                        message: <span>Enter default <NavLink  to="/panel/configuration">configurations.</NavLink></span>,
+                        stepperMessage: 'Configurations',
                         API_endpoint: '',
                         data: '',
                         show: false
                     },
                     {
-                        message: <p><NavLink  to="/panel/import">Import</NavLink> your products <b>from amazon</b>, and then <NavLink  to="/panel/import">upload to shopify.</NavLink></p>,
-                        optional: false,
+                        message: <p> Import your products from amazon to <NavLink  to="/panel/import">shopify.</NavLink></p>,
+                        stepperMessage: 'Products Imported From Amazon-Shopify',
                         API_endpoint: '',
                         hideStatus: true,
                         data: '',
@@ -122,6 +126,62 @@ class Dashboard extends Component {
             })
         }
     }
+    renderStepper() {
+        let flag = 1;
+        return (
+            <div className="container">
+                <div className="row bs-wizard" style={{borderBottom:"0"}}>
+                    {this.state.stepData.map((data, index) => {
+                        let css = 'disabled ';
+                        if (data.show) {
+                            css = 'complete';
+                        } else if (flag === 1) {
+                            css = 'active';
+                            flag++;
+                        }
+                        return(<React.Fragment key={index}>
+                            <div className={`col-3 bs-wizard-step ${css}`}>
+                                <div className="text-center bs-wizard-stepnum">Step {index + 1}</div>
+                                <div className="progress">
+                                    <div className="progress-bar"/>
+                                </div>
+                                <a href="javascript:void(0)" className="bs-wizard-dot"/>
+                                <div className="bs-wizard-info text-center">{data.stepperMessage}</div>
+                            </div>
+                        </React.Fragment>);
+                    })}
+                </div>
+            </div>
+        );
+    }
+    renderBody() {
+        let flag = 1;
+        return(
+            Object.keys(this.state.stepData).map(keys => {
+                let css = 'divDisabled';
+                if ( this.state.stepData[keys].show ) {
+                    css = 'divCompleted';
+                } else if (flag === 1) {
+                    css = 'divActive';
+                    flag++;
+                }
+                return (
+                    <div className={`mt-5 ${css}`} key={keys}>
+                            <div className="p-5">
+                                <div className="row">
+                                    <div className="col-12">
+                                        <h2>Step {parseInt(keys) +1} :</h2>
+                                    </div>
+                                    <div className="col-12 p-3 pl-5">
+                                        <h4>{this.state.stepData[keys].message}</h4>
+                                    </div>
+                                </div>
+                            </div>
+                    </div>
+                );
+            })
+        );
+    }
     render() {
         const options = [
             {label: 'Shopify-Google Integration', value: 'Shopify_Google'},
@@ -140,25 +200,10 @@ class Dashboard extends Component {
                         />
                     </div>
                 </Card>
-                {Object.keys(this.state.stepData).map(keys => {
-                    return (
-                        <Card key={keys} title={`Step ${parseInt(keys) +1}:`} subdued={this.state.stepData[keys].optional}>
-                            <div className="pb-5 pl-5 pr-5 pt-5 pt-sm-1">
-                                <div className="row">
-                                    <div className="col-sm-10 col-7 pt-sm-5">
-                                        <h4>{this.state.stepData[keys].message} {!this.state.stepData[keys].optional?'':'(Optional)'}</h4>
-                                    </div>
-                                    {/*{this.API_CHECK(this.state.stepData[keys],keys)}*/}
-                                    {this.state.stepData[keys].show?<div className="col-sm-2 col-3 pt-sm-3">
-                                        <FontAwesomeIcon icon={faCheckCircle} size="5x" color="#0f0"/>
-                                    </div>:<div className="col-sm-2 col-3 pt-sm-3 pl-5">
-                                        {!this.state.stepData[keys].hideStatus?<FontAwesomeIcon icon={faExclamation} size="5x" color="#FFFF66"/>:null}
-                                    </div>}
-                                </div>
-                            </div>
-                        </Card>
-                    );
-                })}
+                <Card>
+                    {this.renderStepper()}
+                </Card>
+                    {this.renderBody()}
             </Page>
         );
     }

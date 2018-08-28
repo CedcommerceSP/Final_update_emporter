@@ -7,6 +7,7 @@ import {
 
 import { Signup } from './Components/signup';
 import { Login } from './Components/login';
+import ForgetPasswordPage from "./Components/forget-password";
 
 export class Auth extends Component {
 
@@ -29,6 +30,7 @@ export class Auth extends Component {
                     )}/>
                     <Route path='/auth/login' component={Login}/>
                     <Route path='/auth/signup' component={Signup}/>
+                    <Route path='/auth/forget' component={ForgetPasswordPage}/>
                 </Switch>
             </div>
         );

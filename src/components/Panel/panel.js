@@ -28,7 +28,7 @@ import history from '../../shared/history';
 import { panelFunctions } from './functions';
 
 import './panel.css';
-import CurrentPlan from "./Components/current-plan/current-plan";
+import CurrentPlan from "./Components/plans-component/current-plan";
 
 export class Panel extends Component {
 
