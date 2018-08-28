@@ -1,14 +1,11 @@
-import React, { Component } from 'react';
-import { Link, NavLink } from 'react-router-dom';
+import React, {Component} from 'react';
+import {Button, Card, TextField} from "@shopify/polaris";
+import {NavLink} from "react-router-dom";
+import {requests} from "../../../services/request";
+import {notify} from "../../../services/notify";
+import {globalState} from "../../../services/globalstate";
 
-import { TextField, Button, Card } from '@shopify/polaris';
-
-import { requests } from '../../../services/request';
-import { notify } from '../../../services/notify';
-import { globalState } from '../../../services/globalstate';
-
-export class Login extends Component {
-
+class ForgetPasswordPage extends Component {
     fieldErrors = {
         username: false,
         password: false
@@ -21,17 +18,15 @@ export class Login extends Component {
         super();
         this.state = {
             username: '',
-            password: ''
         };
     }
-
     render() {
         return (
             <div className="row pt-5">
                 <div className="offset-md-4 offset-sm-2 col-md-4 col-sm-8 col-12 mt-5">
                     <Card>
                         <div className="col-12 mt-5 text-center">
-                            <h1 className="d-inline-block">Login</h1>
+                            <h1 className="d-inline-block">Forget Password</h1>
                         </div>
                         <div className="col-12 mt-1 mb-1">
                             <TextField
@@ -44,23 +39,13 @@ export class Login extends Component {
                                 onChange={this.handleChange.bind(this, 'username')}
                             />
                         </div>
-                        <div className="col-12 mt-1 mb-1">
-                            <TextField
-                                label="Password"
-                                type="password"
-                                error={this.fieldErrors.password ? 'Enter valid password' : ''}
-                                value={this.state.password}
-                                placeholder="Enter password"
-                                onChange={this.handleChange.bind(this, 'password')}
-                            />
-                        </div>
                         <div className="col-12 text-center mt-2 mb-4">
                             <Button onClick={() => {
                                 this.submitLogin();
-                            }}>Login</Button>
+                            }}>Submit</Button>
                         </div>
                         <div className="col-12 text-left" style={{fontSize:'15px'}}>
-                            <NavLink className="" to="/auth/forget">Forget Password?</NavLink>
+                            <NavLink className="" to="/auth/login">Go Back</NavLink>
                             <NavLink className="float-right mb-3" to="/auth/signup">New User?</NavLink>
                         </div>
                     </Card>
@@ -68,7 +53,6 @@ export class Login extends Component {
             </div>
         );
     }
-
     handleChange(key, event) {
         const state = Object.assign({}, this.state);
         state[key] = event;
@@ -92,13 +76,12 @@ export class Login extends Component {
 
     submitLogin() {
         if (this.isFormValid()) {
-            requests.getRequest('user/login', this.state)
+            requests.getRequest('core/user/forgot', this.state)
                 .then(data => {
+                    console.log(data);
                     if (data.success === true) {
                         notify.success(data.message);
-                        globalState.setLocalStorage('user_authenticated', 'true');
-                        globalState.setLocalStorage('auth_token', data.data.token);
-                        this.redirect('/panel');
+                        this.redirect('/auth');
                     } else {
                         notify.error(data.message);
                     }
@@ -112,3 +95,5 @@ export class Login extends Component {
         this.props.history.push(url);
     }
 }
+
+export default ForgetPasswordPage;

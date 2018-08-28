@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
-import './plans/plan.css';
+import './plans-component/plan.css';
 import { requests } from '../../../services/request';
-import { dataGrids } from './plans/plansFuctions';
+import { dataGrids } from './plans-component/plansFuctions';
 import { isUndefined } from 'util';
 import { notify } from '../../../services/notify';
 

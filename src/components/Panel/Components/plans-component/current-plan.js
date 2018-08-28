@@ -28,7 +28,7 @@ class CurrentPlan extends Component {
                             <div className="row p-5">
                                 <div className="col-12 text-center mb-5">
                                     <h1>Active Plan</h1>{/*Tittle*/}
-                                    <span style={{fontSize:'40px', color: '#999999'}}><b>Starter Plan</b></span>
+                                    <span style={{fontSize:'40px', color: '#000'}}><b>Starter Plan</b></span>
                                 </div>
                                 {this.state.card.map((keys, index) => { {/*LVL1*/}
                                     let col = 'col-6 col-sm-4 mb-4';
