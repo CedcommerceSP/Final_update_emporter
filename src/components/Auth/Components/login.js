@@ -98,7 +98,7 @@ export class Login extends Component {
                         notify.success(data.message);
                         globalState.setLocalStorage('user_authenticated', 'true');
                         globalState.setLocalStorage('auth_token', data.data.token);
-                        this.redirect('/panel');
+                        this.redirect('/panel/');
                     } else {
                         notify.error(data.message);
                     }

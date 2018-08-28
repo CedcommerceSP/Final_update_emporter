@@ -74,7 +74,7 @@ export class Panel extends Component {
                                 <Route exact path='/panel/integration' component={IntegrationPage}/>
                                 <Route exact path='/panel/dashboard' component={Dashboard}/>
                                 <Route exact path="**" render={() => (
-                                    <Redirect to="/panel/products"/>
+                                    <Redirect to="/panel/dashboard"/>
                                 )}/>
                             </Switch>
                         </div>

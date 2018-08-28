@@ -20,7 +20,7 @@ export const requests = {
             return fetch(environment.API_ENDPOINT + endpoint + paramsString, {
                 method: 'GET',
                 headers: {
-                    'Authorization': globalState.getBearerToken()
+                    'Authorization': 'Bearer ' + globalState.getBearerToken()
                 }
             })
                 .then((res) => {
@@ -33,7 +33,7 @@ export const requests = {
             return fetch(endpoint + paramsString, {
                 method: 'GET',
                 headers: {
-                    'Authorization': globalState.getBearerToken()
+                    'Authorization': 'Bearer ' + globalState.getBearerToken()
                 }
             })
                 .then((res) => {
@@ -54,7 +54,7 @@ export const requests = {
                 headers: {
                     'Content-Type': 'application/json',
                     'Accept': 'application/json',
-                    'Authorization': globalState.getBearerToken()
+                    'Authorization': 'Bearer ' + globalState.getBearerToken()
                 },
                 body: JSON.stringify(data)
             })
@@ -70,7 +70,7 @@ export const requests = {
                 headers: {
                     'Content-Type': 'application/json',
                     'Accept': 'application/json',
-                    'Authorization': globalState.getBearerToken()
+                    'Authorization': 'Bearer ' + globalState.getBearerToken()
                 },
                 body: JSON.stringify(data)
             })
