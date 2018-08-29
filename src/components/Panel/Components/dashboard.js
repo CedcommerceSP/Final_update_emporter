@@ -38,6 +38,17 @@ class Dashboard extends Component {
                 how_u_know_about_us: '',
 
             }, // Step 1
+            info_error: {
+                full_name: false,
+                mobile: '',
+                email: false,
+                skype_id:'',
+                primary_time_zone:'Pacific Time',
+                best_time_to_contact: '8-12',
+                term_and_conditon: true,
+                how_u_know_about_us: '',
+
+            }, // Step 1
             plans:[], // step 2
             /****** step 3 ********/
                 API_code: ['google'], // connector/get/installationForm, method -> get, eg: { code : 'google' }
@@ -308,10 +319,11 @@ class Dashboard extends Component {
                 default : console.log('This Is default');
             }
         }
-    }
+    } // decide where to go when step is active
     /****************** step 1 User Information Body Start Here *************************/
     handleSubmit = (event) => { // this function is used to submit user basic info
-        if (this.state.info.term_and_conditon)
+        if (this.state.info.term_and_conditon && this.state.info.full_name !== '' && this.state.info.email !== '' && this.state.info.mobile !== '')
+        {
             requests.getRequest('core/user/updateuser', this.state.info).then(data => {
                 if (data.success) {
                     notify.success(data.message);
@@ -320,11 +332,27 @@ class Dashboard extends Component {
                     notify.error(data.message);
                 }
             });
+        } else {
+            let tempData = this.state.info_error;
+            if ( this.state.info.full_name === '' )
+                tempData.full_name = true;
+            if ( this.state.info.email === '' )
+                tempData.email = true;
+            if (this.state.info.mobile === '')
+                tempData.mobile = true;
+            this.setState({info_error: tempData});
+        }
     };
     handleFormChange = (field, value) => { // this function is used to submit user basic info
         let data  = this.state.info;
         data[field] = value;
-        this.setState({info:data});
+        let tempData = this.state.info_error;
+        if ( this.state.info[field] !== '' )
+            tempData[field] = false;
+        this.setState({
+            info:data,
+            info_error:tempData
+        });
     };
     renderGetUserInfo() {
         return (
@@ -339,18 +367,24 @@ class Dashboard extends Component {
                         <FormLayout>
                             <TextField
                                 value={this.state.info.full_name}
+                                minLength={5}
                                 onChange={this.handleFormChange.bind(this,'full_name')}
+                                error={this.state.info_error.full_name?'Field Is Empty':null}
                                 label="Full Name:"
                                 type="text"
                             />
                             <TextField
                                 value={this.state.info.mobile}
+                                minLength={5}
+                                error={this.state.info_error.mobile?'Field Is Empty':null}
                                 onChange={this.handleFormChange.bind(this,'mobile')}
                                 label="Phone Number:"
                                 type="tel"
                             />
                             <TextField
                                 value={this.state.info.email}
+                                minLength={5}
+                                error={this.state.info_error.email?'Field Is Empty':null}
                                 onChange={this.handleFormChange.bind(this,'email')}
                                 label="Email:"
                                 type="email"
