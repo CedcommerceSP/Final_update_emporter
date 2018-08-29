@@ -1,110 +1,208 @@
 import React, {Component} from 'react';
 import { NavLink } from 'react-router-dom';
-import { Page, Card, Select,} from '@shopify/polaris';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import {faExclamation, faCheckCircle} from '@fortawesome/free-solid-svg-icons';
+import {
+    Page,
+    Card,
+    Select,
+    Form,
+    FormLayout,
+    Checkbox,
+    TextField,
+    Button,
+    Tooltip,
+    Link,
+    Icon,
+    Label,TextContainer,Modal
+} from '@shopify/polaris';
 import { requests } from '../../../services/request';
 import {isUndefined} from "util";
 import {notify} from "../../../services/notify";
 import './dashboard/dashboard.css';
+import { term_and_conditon } from './dashboard/term&condition';
+import {dataGrids} from "./plans-component/plansFuctions";
 
 class Dashboard extends Component {
+    googleConfigurationData = [];
     constructor(props) {
         super(props);
         this.API_CHECK = this.API_CHECK.bind(this);
         this.state = {
-            stepData: [], // this will store the current showing step, which is selected from data object
+            info: {
+                full_name: '',
+                mobile: '',
+                email: '',
+                skype_id:'',
+                primary_time_zone:'Pacific Time',
+                best_time_to_contact: '8-12',
+                term_and_conditon: true,
+                how_u_know_about_us: '',
+
+            }, // Step 1
+            plans:[], // step 2
+            /****** step 3 ********/
+                API_code: ['google'], // connector/get/installationForm, method -> get, eg: { code : 'google' }
+                account_linked: [], // merchant center account. linked type
+                modalOpen: false,
+            /********* Step 3 ends **********/
+            /********* Step 4 **********/
+                config_API: ['google'],
+                config: false,
+                google_configuration: {},
+                google_configuration_updated: false,
+                account_information_updated: false,
+            /********* Step 4 Ends **********/
+            stepData: [], // this will store the current showing step, which is selected from data object e.g Shopify_Google []
+            selected: 'Shopify_Google',
             data: {
                 Shopify_Google : [
+                    {
+                        message:<p>Enter Your Basic Information</p>, // step data
+                        stepperMessage: 'Registration', // stepper Small Message
+                        API_endpoint: '', // Api End Point is used to check to send data or get data
+                        data: '', // Data additional Field
+                        method: 'GET', // Method Type
+                        redirectTo: '/panel/configuration', // After Completion Where To Redirect
+                        anchor: 'U-INFO', // Which Function to call e.g : 'U-INFO' then call div which take User basic Information
+                        stepperActive: false, // used in stepper Check either Completed or not and also help in deciding with step to go
+                    }, // step 1
                     {
                         message: <p> Choose a plan for Shopify-Google Express <NavLink  to="/panel/plans">Integration.</NavLink>
                             If you are <b> buying plan for the first time</b> then, once you buy the plan your
                             <b> 7 days trial</b> will be active for first week, and your <b> payment cycle will start after 7 days</b>.</p>,
                         stepperMessage: 'Choose a plan for Shopify-Google Express', // stepper Small Message
-                        API_endpoint: 'connector/get/services', // Api End Point
-                        data: 'shopify_importer', // Data Used In API end Point for finding particular step we need to check
-                        show: false // used in stepper Check either Completed or not
-                    },
+                        API_endpoint: '', // Api End Point is used to check to send data or get data
+                        data: '', // Data additional Field
+                        method: 'GET', // Method Type
+                        redirectTo: '/panel/plans', // After Completion Where To Redirect
+                        anchor: 'PLANS', // Which Function to call e.g : 'U-INFO' then call div which take User basic Information
+                        stepperActive: false, // used in stepper Check either Completed or not
+                    }, // step 2
                     {
                         message: <p> Link your <b> google merchant center</b> <NavLink  to="/panel/accounts">account.</NavLink>
                             Please make sure that you have <b> verified & claimed</b> website URL in your Merchant Center, that should be
                             <b> same as your Shopify store URL</b>
                         </p>,
                         stepperMessage: 'Google Merchant Center linked',
-                        API_endpoint: '',
-                        data: '',
-                        show: false
-                    },
+                        API_endpoint: '', // Api End Point is used to check to send data or get data
+                        data: '', // Data additional Field
+                        method: 'GET', // Method Type
+                        redirectTo: '/panel/configuration', // After Completion Where To Redirect
+                        anchor: 'LINKED', // Which Function to call e.g : 'U-INFO' then call div which take User basic Information
+                        stepperActive: false, // used in stepper Check either Completed or not
+                    }, // step 3
                     {
                         message: <span>Enter default <NavLink  to="/panel/configuration">configurations.</NavLink></span>,
                         stepperMessage: 'Configurations',
-                        API_endpoint: '',
-                        data: '',
-                        show: false
-                    },
-                    {
-                        message: <p>Upload your products on  <NavLink  to="/panel/import">Google Merchant Center.</NavLink></p>,
-                        stepperMessage: 'Products Uploaded On Google Merchant Center',
-                        API_endpoint: '',
-                        hideStatus: true,
-                        data: '',
-                        show: false
-                    },
+                        API_endpoint: '', // Api End Point is used to check to send data or get data
+                        data: <p>After All the Step Completed You can Upload your <br/> products on  <NavLink  to="/panel/import">Google Merchant Center.</NavLink></p>, // Data additional Field
+                        method: 'GET', // Method Type
+                        redirectTo: '/panel/configuration', // After Completion Where To Redirect
+                        anchor: 'CONFIG', // Which Function to call e.g : 'U-INFO' then call div which take User basic Information
+                        stepperActive: false, // used in stepper Check either Completed or not
+                    }, // step 4
                 ],
                 Amazon_Shopify: [
                     {
-                        message: <p> Choose a plan for Amazon-Shopify  <NavLink  to="/panel/plans">Integration.</NavLink></p>,
+                        message:<p>Enter Your Basic Detail</p>,
+                        stepperMessage: 'User Details', // stepper Small Message
+                        API_endpoint: '', // Api End Point is used to check to send data or get data
+                        data: '', // Data additional Field
+                        method: 'GET', // Method Type
+                        redirectTo: '/panel/configuration', // After Completion Where To Redirect
+                        anchor: 'U-INFO', // Which Function to call e.g : 'U-INFO' then call div which take User basic Information
+                        stepperActive: false, // used in stepper Check either Completed or not
+                    }, // step 1
+                    {
+                        message: <p> Choose a plan for Amazon-Shopify  <NavLink  to="/panel/plans">Integration.</NavLink> If you are <b> buying plan for the first time</b> then, once you buy the plan your
+                            <b> 7 days trial</b> will be active for first week, and your <b> payment cycle will start after 7 days</b></p>,
                         stepperMessage: 'Amazon-Shopify Plan Chosen',
-                        API_endpoint: 'connector/get/services',
-                        data: 'shopify_uploader',
-                        show: false
-                    },
+                        API_endpoint: '', // Api End Point is used to check to send data or get data
+                        data: '', // Data additional Field
+                        method: 'GET', // Method Type
+                        redirectTo: '/panel/configuration', // After Completion Where To Redirect
+                        anchor: 'PLANS', // Which Function to call e.g : 'U-INFO' then call div which take User basic Information
+                        stepperActive: false, // used in stepper Check either Completed or not
+                    }, // step 2
                     {
                         message:  <p> Link your AWS/MWS <NavLink  to="/panel/accounts">account.</NavLink></p>,
                         stepperMessage: 'AWS/MWS Account Linked',
-                        API_endpoint: '',
-                        data: '',
-                        show: false
-                    },
+                        API_endpoint: '', // Api End Point is used to check to send data or get data
+                        data: '', // Data additional Field
+                        method: 'GET', // Method Type
+                        redirectTo: '/panel/configuration', // After Completion Where To Redirect
+                        anchor: 'LINKED', // Which Function to call e.g : 'U-INFO' then call div which take User basic Information
+                        stepperActive: false, // used in stepper Check either Completed or not
+                    }, // step 3
                     {
                         message: <span>Enter default <NavLink  to="/panel/configuration">configurations.</NavLink></span>,
                         stepperMessage: 'Configurations',
-                        API_endpoint: '',
-                        data: '',
-                        show: false
-                    },
-                    {
-                        message: <p> Import your products from amazon to <NavLink  to="/panel/import">shopify.</NavLink></p>,
-                        stepperMessage: 'Products Imported From Amazon-Shopify',
-                        API_endpoint: '',
-                        hideStatus: true,
-                        data: '',
-                        show: false
-                    },
+                        API_endpoint: '', // Api End Point is used to check to send data or get data
+                        data: <p>After All the step Complted You can Import your products from amazon to <NavLink  to="/panel/import">shopify.</NavLink></p>, // Data additional Field
+                        method: 'GET', // Method Type
+                        redirectTo: '/panel/configuration', // After Completion Where To Redirect
+                        anchor: 'CONFIG', // Which Function to call e.g : 'U-INFO' then call div which take User basic Information
+                        stepperActive: false, // used in stepper Check either Completed or not
+                    }, // step 4
                 ],
             },
-        }
+        };
+        this.getGoogleConfigurations();
+        this.handleModalChange = this.handleModalChange.bind(this);
     }
-    state = {
-        selected: 'Shopify_Google',
-    };
-    componentWillMount() {
+    componentDidMount() {
         this.setState({
             stepData: this.state.data.Shopify_Google,
         });
-        Object.keys(this.state.data).map(data => {
+        this.mainAPICheck();
+        Object.keys(this.state.data).forEach(data => {
             this.state.data[data].forEach(keys => {
                 this.API_CHECK(keys,data);
             })
-        })
+        });
     }
-
     handleChange = (newValue) => {
         this.setState({
             selected: newValue,
             stepData: this.state.data[newValue]
         });
-    };
+    };// This Function Used for dropdown Selection
+    mainAPICheck() {
+        /****** for Plans ******/
+        requests.getRequest('plan/plan/get').then(data => {
+            if ( data.success ) {
+                if ( data.data !== null && !isUndefined(data.data) ) {
+                    data = dataGrids(data.data.data.rows); // change the data into desire format
+                    this.setState({plans : data});
+                }
+            } else {
+                notify.error(data.message);
+            }
+        });
+        /*************  for step 3 (Link your google merchant center acc)   *****************/
+        // API to get installation form - connector/get/installationForm, method -> get, { code : 'marketplace' }
+        this.state.API_code.forEach(value => {
+            requests.getRequest('connector/get/installationForm', {code:value}).then(data => {
+                if ( data.success ) {
+                    if ( data.data !== null && !isUndefined(data.data) ) {
+                        let newData = [];
+                        newData.push(data.data);
+                        this.setState({account_linked: newData});
+                    }
+                } else {
+                    notify.error(data.message);
+                }
+            });
+        });
+        /*************  for step 4 (Config)   *****************/
+        // API to get default configuration -> /connector/get/config , method -> get, { marketplace : 'marketplace' }
+        this.state.API_code.forEach(value => {
+            requests.getRequest('/connector/get/config', {marketplace:value}).then(data => {
+                this.setState({config: data.success});
+            });
+        }) // only used to check status for right data got to getGoogleConfigurations()
+
+    }
+    // API_check is used for get information about how many step are completed
     API_CHECK(event, key) {
         if (event.API_endpoint !== '' ) {
             requests.getRequest(event.API_endpoint).then(data => {
@@ -114,7 +212,7 @@ class Dashboard extends Component {
                             let temp = this.state.data;
                             temp[key].forEach(keys => {
                                 if ( keys.API_endpoint === event.API_endpoint ) {
-                                    keys.show = true;
+                                    keys.stepperActive = true;
                                 }
                             });
                             this.setState({data: temp});
@@ -126,17 +224,26 @@ class Dashboard extends Component {
             })
         }
     }
+    changeStep(arg) { // arg means step number
+        let data = this.state.data[this.state.selected];
+        data.forEach((keys, index) => {
+            if ( index === arg - 1 ) {
+                keys.stepperActive = true;
+            }
+        });
+        this.setState({stepData: data});
+    } // change stage just pass the completed step here in arg
     renderStepper() {
         let flag = 1;
         return (
             <div className="container">
                 <div className="row bs-wizard" style={{borderBottom:"0"}}>
                     {this.state.stepData.map((data, index) => {
-                        let css = 'disabled ';
-                        if (data.show) {
-                            css = 'complete';
+                        let css = 'disabled '; // when Previous Step is not Completed
+                        if (data.stepperActive) {
+                            css = 'complete'; // When Step Is completed
                         } else if (flag === 1) {
-                            css = 'active';
+                            css = 'active'; // which Step Is Active
                             flag++;
                         }
                         return(<React.Fragment key={index}>
@@ -154,34 +261,441 @@ class Dashboard extends Component {
             </div>
         );
     }
+    /******************* MAIN BODY **********************/
     renderBody() {
         let flag = 1;
         return(
             Object.keys(this.state.stepData).map(keys => {
-                let css = 'divDisabled';
-                if ( this.state.stepData[keys].show ) {
-                    css = 'divCompleted';
+                let css = 'divDisabled'; // Previous step Not Completed
+                let status = false; // Used To decide if step is active then show its function body
+                if ( this.state.stepData[keys].stepperActive ) {
+                    css = 'divCompleted'; // Completed
                 } else if (flag === 1) {
-                    css = 'divActive';
+                    css = 'divActive'; // Active
+                    status = true;
                     flag++;
                 }
                 return (
-                    <div className={`mt-5 ${css}`} key={keys}>
+                    <div className={`mt-5 ${css}`} key={keys} onClick={this.state.stepData[keys].stepperActive?this.redirect.bind(this,this.state.stepData[keys].redirectTo):null}>
                             <div className="p-5">
                                 <div className="row">
                                     <div className="col-12">
-                                        <h2>Step {parseInt(keys) +1} :</h2>
+                                        <h2>Step {parseInt(keys) + 1} :</h2>
                                     </div>
                                     <div className="col-12 p-3 pl-5">
                                         <h4>{this.state.stepData[keys].message}</h4>
                                     </div>
                                 </div>
+                                <div>
+                                    {this.checkAnchor(this.state.stepData[keys],status)} {/* switch case for deciding the anchor */}
+                                </div>
+                                { this.state.stepData[keys].data !== ''? <div className="col-12 text-center">
+                                    <h4>{this.state.stepData[keys].data}</h4>
+                                </div> :null } {/* TODO Change this.state.stepData[keys].data !== '' if data meaning change */}
                             </div>
                     </div>
                 );
             })
         );
     }
+    checkAnchor(data, status) {
+        if ( status ) {
+            switch (data.anchor) {
+                case 'U-INFO': return this.renderGetUserInfo();
+                case 'PLANS': return this.renderPlan();
+                case 'LINKED': return this.renderLinkedAccount();
+                case 'CONFIG': return this.renderConfig();
+                default : console.log('This Is default');
+            }
+        }
+    }
+    /****************** step 1 User Information Body Start Here *************************/
+    handleSubmit = (event) => { // this function is used to submit user basic info
+        if (this.state.info.term_and_conditon)
+            requests.getRequest('core/user/updateuser', this.state.info).then(data => {
+                if (data.success) {
+                    notify.success(data.message);
+                    this.changeStep(1); // pass the step number
+                } else {
+                    notify.error(data.message);
+                }
+            });
+    };
+    handleFormChange = (field, value) => { // this function is used to submit user basic info
+        let data  = this.state.info;
+        data[field] = value;
+        this.setState({info:data});
+    };
+    renderGetUserInfo() {
+        return (
+            <div className="row">
+                <div className="col-12 text-center">
+                    <hr/>
+                    {/*<h1>Fill Up The Form</h1>*/}
+                    {/*<h4>Some Other Text Here</h4>*/}
+                </div>
+                <div className="col-12">
+                    <Form onSubmit={this.handleSubmit} target="_blank">
+                        <FormLayout>
+                            <TextField
+                                value={this.state.info.full_name}
+                                onChange={this.handleFormChange.bind(this,'full_name')}
+                                label="Full Name:"
+                                type="text"
+                            />
+                            <TextField
+                                value={this.state.info.mobile}
+                                onChange={this.handleFormChange.bind(this,'mobile')}
+                                label="Phone Number:"
+                                type="tel"
+                            />
+                            <TextField
+                                value={this.state.info.email}
+                                onChange={this.handleFormChange.bind(this,'email')}
+                                label="Email:"
+                                type="email"
+                            />
+                            <TextField
+                                value={this.state.info.skype_id}
+                                onChange={this.handleFormChange.bind(this,'skype_id')}
+                                label="Skype ID:"
+                                type="text"
+                            />
+                            <Select
+                                label="Your Primary Time Zone"
+                                options={[
+                                    {label: 'Pacific Time', value: 'Pacific Time'},
+                                    {label: 'Mountain Time', value: 'Mountain Time'},
+                                    {label: 'Central Time', value: 'Central Time'},
+                                    {label: 'Eastern Time', value: 'Eastern Time'},
+                                    {label: 'Hawaii Standard Time', value: 'Hawaii Standard Time'},
+                                    {label: 'Alaska Daylight Time', value: 'Alaska Daylight Time'},
+                                    {label: 'other', value: 'other'},
+                                ]}
+                                onChange={this.handleFormChange.bind(this,'primary_time_zone')}
+                                value={this.state.info.primary_time_zone}
+                            />
+                            <Select
+                                label="Preferable Time For Calling"
+                                options={[
+                                    {label: '0-4', value: '0-4'},
+                                    {label: '4-8', value: '4-8'},
+                                    {label: '8-12', value: '8-12'},
+                                    {label: '12-16', value: '12-16'},
+                                    {label: '16-20', value: '16-20'},
+                                    {label: '20-24', value: '20-24'},
+                                ]}
+                                onChange={this.handleFormChange.bind(this,'best_time_to_contact')}
+                                value={this.state.info.best_time_to_contact}
+                            />
+                            <Select
+                                label="How Do you Know About us"
+                                options={[
+                                    {label: '', value: ''},
+                                    {label: 'Shopify App Store', value: 'Shopify App Store'},
+                                    {label: 'Google Ads', value: 'Google Ads'},
+                                    {label: 'FaceBook Ads', value: 'FaceBook Ads'},
+                                    {label: 'Twitter', value: 'Twitter'},
+                                    {label: 'Yahoo', value: 'Yahoo'},
+                                    {label: 'Youtube', value: 'Youtube'},
+                                    {label: 'Other', value: 'Other'},
+                                ]}
+                                onChange={this.handleFormChange.bind(this,'how_u_know_about_us')}
+                                value={this.state.info.how_u_know_about_us}
+                            />
+                            <div className="form-control" style={{height:'180px', width:'100%',overflow:'auto'}}>
+                                <h3>CedCommerce Terms & Condition and Privacy Policy</h3><br/><br/><br/>
+                                    {term_and_conditon()}
+                            </div>
+                            <Checkbox
+                                checked={this.state.info.term_and_conditon}
+                                label="Accept Term & Conditions"
+                                error={this.state.info.term_and_conditon?'':'*please Check The Term And Conditons'}
+                                onChange={this.handleFormChange.bind(this,'term_and_conditon')}
+                            />
+                            <Button submit primary={true}>Submit</Button>
+                        </FormLayout>
+                    </Form>
+                </div>
+            </div>
+        );
+    }
+    /****************************************** step 2 Plans Start Here ******************************/
+    onSelectPlan(arg) {
+        console.log(arg);
+        this.changeStep(2);
+        notify.success('Plan Purchased');
+    }
+    onCheckBox(event) {
+        console.log(event);
+    }
+    renderPlan() {
+       if (this.state.plans.length > 0 ) {
+           const tempData = this.state.plans.slice(0,3);
+           return (
+                <div className="row">
+                    <div className="col-12">
+                        <hr/>
+                    </div>
+                    {tempData.map((data,index) => {
+                        return (
+                            <div className="col-sm-4 col-12 pt-3 pb-3" key={index}>{/* Starting Of Plan Card */}
+                                <Card>
+                                    <div className="d-flex justify-content-center">
+                                        <div className="p-5" >
+                                            <div className="mb-5 text-center" > {/* Plan Numeric Price */}
+                                                <p className="price-tag">
+                                                    <span className="price-tag_small">$</span>
+                                                    <span className="price-tag_discount"><strike>{data.originalValue}</strike></span>
+                                                    {data.main_price}
+                                                    <span className="price-tag_small">{data.validity}</span>
+                                                </p>
+                                            </div>
+                                            <div className="mb-5"> {/* Button To choose Plan */}
+                                                <Button primary={true} fullWidth={true} size="large" onClick={this.onSelectPlan.bind(this, data)}>
+                                                    Choose this Plan
+                                                </Button>
+                                            </div>
+                                            <div className="mb-5 text-center"> {/* Descriptions For Particular deatails */}
+                                                <h1 className="mb-4"><b>{data.title}</b></h1>
+                                                <h4>{data.description}</h4>
+                                            </div>
+                                            <hr/>
+                                            <div className="text-center mt-5"> {/* Services Data */}
+                                                {data.services?Object.keys(data.services).map(keys => {
+                                                    return (<React.Fragment key={keys}>
+                                                        <p className="service-body">
+                                                            -<span className="service-description mb-3" style={{fontWeight:'bold'}}><b>{data.services[keys].title}</b></span>
+                                                            <span>
+                                                                        <Tooltip content={data.services[keys].description} preferredPosition="above">
+                                                                            <Link><Icon source="help" color="indigo" backdrop={true} /></Link>
+                                                                        </Tooltip>
+                                                                    </span>-
+                                                        </p>
+                                                        {Object.keys(data.services[keys].services).map(key1 => {
+                                                            if ( data.services[keys].services[key1].required === 'yes' ) {
+                                                                return (<div key={key1} className="text-left">
+                                                                    <Checkbox
+                                                                        checked={true}
+                                                                        label={data.services[keys].services[key1].title}
+                                                                        disabled={false} />
+                                                                </div>);
+                                                            } else {
+                                                                return (<div key={key1} className="text-left form-inline">
+                                                                    <h5>
+                                                                        <input type="checkbox" className="form-control" onClick={this.onCheckBox.bind(this,data.services[keys].services[key1])}/>
+                                                                        <span className="ml-3">
+                                                                                        {data.services[keys].services[key1].title}
+                                                                                    </span>
+                                                                    </h5>
+
+                                                                </div>);
+                                                            }
+                                                        })}
+                                                    </React.Fragment>);
+                                                }):null}
+                                            </div>
+                                        </div>
+                                    </div>
+                                </Card>
+                            </div>
+                        );
+                    })}
+                </div>
+            );
+       }
+    }
+    /*****************************************  Step 3 linked you account start Here  ***********************************/
+    handleModalChange(event) {
+        if ( event === 'yes' ) {
+            setTimeout(() => {
+                this.setState({modalOpen: !this.state.modalOpen});
+                this.changeStep(3);
+                notify.success('Successfully Linked');
+            },1000); // TODO need A logic to Work On
+        } // id user say he/she completed then run this function
+        else {
+            this.setState({modalOpen: !this.state.modalOpen});
+        } // if he/she cancel or close the modal
+    } // all operation perform on modal of step 3 comes here
+    openNewWindow(action) {
+        this.setState({modalOpen: !this.state.modalOpen});
+        window.open(action,  '_blank', 'location=yes,height=600,width=550,scrollbars=yes,status=yes');
+    } // Open Modal And A new Small Window For User
+    renderLinkedAccount() {
+        /***     {post_type: "redirect", action: "https://connector.com/google/app/auth?bearer=e...."}      **/
+        let value = this.state.account_linked;
+        let html = <span/>;
+        if ( value.length > 0 ) {
+            value.forEach(data => {
+                if ( data.post_type === 'redirect' ) {
+                    html = <div className="text-center">
+                        <Button primary={true} onClick={() => this.openNewWindow(data.action)}>
+                            Connect
+                        </Button>
+                        <Modal
+                            open={this.state.modalOpen}
+                            onClose={this.handleModalChange}
+                             title="Reach more shoppers with Instagram product tags"
+                            primaryAction={{
+                                content: 'Yes',
+                                onAction: this.handleModalChange.bind(this,'yes'),
+                            }}
+                            secondaryActions={[
+                                {
+                                    content: 'Cancel',
+                                    onAction: this.handleModalChange,
+                                },
+                            ]}
+                        >
+                            <Modal.Section>
+                                <TextContainer>
+                                    <h4>
+                                        Ask Question Here // TODO Change The Text
+                                    </h4>
+                                </TextContainer>
+                            </Modal.Section>
+                        </Modal>
+                    </div>
+                }
+            })
+        }
+         return html;
+    }
+    /***************************************** step 4 Configurations start here *******************************/
+    getGoogleConfigurations() {
+        requests.getRequest('/connector/get/config', { marketplace: 'google' })
+            .then(data => {
+                if (data.success) {
+                    this.googleConfigurationData = this.modifyGoogleConfigData(data.data);
+                    this.updateState();
+                } else {
+                    notify.error(data.message);
+                }
+            });
+    }
+    modifyGoogleConfigData(data) {
+        for (let i = 0; i < data.length; i++) {
+            this.state.google_configuration[data[i].code] = data[i].value;
+            data[i].options = this.modifyOptionsData(data[i].options);
+        }
+        return data;
+    }
+    modifyOptionsData(data) {
+        let options = [];
+        for (let i = 0; i < Object.keys(data).length; i++) {
+            let key = Object.keys(data)[i];
+            options.push({
+                label: data[key],
+                value: key
+            });
+        }
+        return options;
+    }
+    googleConfigurationChange(index, value) {
+        this.state.google_configuration_updated = true;
+        this.state.google_configuration[this.googleConfigurationData[index].code] = value;
+        this.updateState();
+    }
+    googleConfigurationCheckboxChange(index, optionIndex, value) {
+        this.state.google_configuration_updated = true;
+        const option = this.googleConfigurationData[index].options[optionIndex].value;
+        const valueIndex = this.state.google_configuration[this.googleConfigurationData[index].code].indexOf(option);
+        if (value) {
+            if (valueIndex === -1) {
+                this.state.google_configuration[this.googleConfigurationData[index].code].push(option);
+            }
+        } else {
+            if (valueIndex !== -1) {
+                this.state.google_configuration[this.googleConfigurationData[index].code].splice(valueIndex, 1);
+            }
+        }
+        this.updateState();
+    }
+    saveGoogleConfigData() {
+        requests.postRequest('connector/get/saveConfig', { marketplace: 'google', data: this.state.google_configuration })
+            .then(data => {
+                if (data.success) {
+                    notify.success(data.message);
+                    this.changeStep(4);
+                } else {
+                    notify.error(data.message);
+                }
+                this.getGoogleConfigurations();
+            });
+    }
+    renderConfig() {
+        if (this.state.config)
+        {
+            return (
+                <div className="row p-5">
+                    {
+                        this.googleConfigurationData.map(config => {
+                            switch(config.type) {
+                                case 'select':
+                                    return (
+                                        <div className="col-12 pt-2 pb-2" key={this.googleConfigurationData.indexOf(config)}>
+                                            <Select
+                                                options={config.options}
+                                                label={config.title}
+                                                placeholder={config.title}
+                                                value={this.state.google_configuration[config.code]}
+                                                onChange={this.googleConfigurationChange.bind(this, this.googleConfigurationData.indexOf(config))}>
+                                            </Select>
+                                        </div>
+                                    );
+                                    break;
+                                case 'checkbox':
+                                    return (
+                                        <div className="col-12 pt-2 pb-2" key={this.googleConfigurationData.indexOf(config)}>
+                                            <Label>{config.title}</Label>
+                                            <div className="row">
+                                                {
+                                                    config.options.map(option => {
+                                                        return (
+                                                            <div className="col-md-6 col-sm-6 col-12 p-1" key={config.options.indexOf(option)}>
+                                                                <Checkbox
+                                                                    checked={this.state.google_configuration[config.code].indexOf(option.value) !== -1}
+                                                                    label={option.value}
+                                                                    onChange={this.googleConfigurationCheckboxChange.bind(this, this.googleConfigurationData.indexOf(config), config.options.indexOf(option))}
+                                                                />
+                                                            </div>
+                                                        );
+                                                    })
+                                                }
+                                            </div>
+                                        </div>
+                                    );
+                                    break;
+                                default:
+                                    return (
+                                        <div className="col-12 pt-2 pb-2" key={this.googleConfigurationData.indexOf(config)}>
+                                            <TextField
+                                                label={config.title}
+                                                placeholder={config.title}
+                                                value={this.state.google_configuration[config.code]}
+                                                onChange={this.googleConfigurationChange.bind(this, this.googleConfigurationData.indexOf(config))}>
+                                            </TextField>
+                                        </div>
+                                    );
+                                    break;
+                            }
+
+                        })
+                    }
+                    <div className="col-12 text-right pt-2 pb-1">
+                        <Button
+                            disabled={!this.state.google_configuration_updated}
+                            onClick={() => {
+                                this.saveGoogleConfigData();
+                            }}
+                            primary>Save</Button>
+                    </div>
+                </div>
+            );
+        }
+    }
+    /************************************  Render()   **********************************************************/
     render() {
         const options = [
             {label: 'Shopify-Google Integration', value: 'Shopify_Google'},
@@ -206,6 +720,13 @@ class Dashboard extends Component {
                     {this.renderBody()}
             </Page>
         );
+    }
+    redirect(url) {
+        this.props.history.push(url);
+    }
+    updateState() {
+        const state = this.state;
+        this.setState(state);
     }
 }
 

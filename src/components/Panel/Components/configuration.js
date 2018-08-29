@@ -72,6 +72,7 @@ export class Configuration extends Component {
         return data;
     }
 
+
     modifyOptionsData(data) {
         let options = [];
         for (let i = 0; i < Object.keys(data).length; i++) {

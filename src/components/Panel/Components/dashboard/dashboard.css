@@ -44,17 +44,19 @@
 .divActive {
     background-color: #fff;
     /*box-shadow: 3px 3px 3px 3px #fbbd19;*/
-    border: 2px solid #fbbd19;
+    border: 1px solid #bfbab5;
     /*-webkit-animation: body 1s 98765432;*/
     /*-moz-animation: myfirst 1s 98765432;*/
-    animation: border 1s 98765432;
+    /*animation: border 1s 98765432;*/
 }
 .divCompleted {
     background-color: #cbffc0;
+    /*color: #fff;*/
+    cursor: pointer;
     border: 1px solid #cccccc;
 }
 .divDisabled {
-    background-color: #fff;
+    background-color: #fcfff6;
     /*box-shadow: 1px 1px 1px 1px #777777;*/
     border: 1px solid #cccccc;
 }
