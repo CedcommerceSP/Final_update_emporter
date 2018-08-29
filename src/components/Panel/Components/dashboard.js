@@ -105,7 +105,7 @@ class Dashboard extends Component {
                         message: <span>Enter default configurations.</span>,
                         stepperMessage: 'Configurations',
                         API_endpoint: '', // Api End Point is used to check to send data or get data
-                        data: <p>After All the Step Completed You can Upload your <br/> products on  <NavLink  to="/panel/import">Google Merchant Center.</NavLink></p>, // Data additional Field
+                        data: <p>Now goto <NavLink  to="/panel/import">Upload Products</NavLink> section, first import products from shopify.  <br/>When import completed upload your products on google. </p>, // Data additional Field
                         method: 'GET', // Method Type
                         redirectTo: '/panel/configuration', // After Completion Where To Redirect
                         anchor: 'CONFIG', // Which Function to call e.g : 'U-INFO' then call div which take User basic Information
@@ -287,7 +287,8 @@ class Dashboard extends Component {
                     flag++;
                 }
                 return (
-                    <div className={`mt-5 ${css}`} key={keys} onClick={this.state.stepData[keys].stepperActive?this.redirect.bind(this,this.state.stepData[keys].redirectTo):null}>
+                    <React.Fragment>
+                        <div className={`mt-5 ${css}`} key={keys} onClick={this.state.stepData[keys].stepperActive?this.redirect.bind(this,this.state.stepData[keys].redirectTo):null}>
                             <div className="p-5">
                                 <div className="row">
                                     <div className="col-12">
@@ -300,11 +301,12 @@ class Dashboard extends Component {
                                 <div>
                                     {this.checkAnchor(this.state.stepData[keys],status)} {/* switch case for deciding the anchor */}
                                 </div>
-                                { this.state.stepData[keys].data !== ''? <div className="col-12 text-center">
-                                    <h4>{this.state.stepData[keys].data}</h4>
-                                </div> :null } {/* TODO Change this.state.stepData[keys].data !== '' if data meaning change */}
                             </div>
-                    </div>
+                        </div>
+                        { this.state.stepData[keys].data !== '' && this.state.stepData[keys].stepperActive? <div className="col-12 mt-5 p-5 text-center">
+                            <h4>{this.state.stepData[keys].data}</h4>
+                        </div> :null } {/* TODO Change this.state.stepData[keys].data !== '' if data meaning change */}
+                    </React.Fragment>
                 );
             })
         );
