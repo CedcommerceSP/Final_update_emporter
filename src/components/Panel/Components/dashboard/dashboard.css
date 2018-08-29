@@ -50,8 +50,8 @@
     /*animation: border 1s 98765432;*/
 }
 .divCompleted {
-    background-color: #cbffc0;
-    /*color: #fff;*/
+    background-color: #00dd21;
+    color: #fff;
     cursor: pointer;
     border: 1px solid #cccccc;
 }

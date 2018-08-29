@@ -77,7 +77,7 @@ class Dashboard extends Component {
                         stepperActive: false, // used in stepper Check either Completed or not and also help in deciding with step to go
                     }, // step 1
                     {
-                        message: <p> Choose a plan for Shopify-Google Express <NavLink  to="/panel/plans">Integration.</NavLink>
+                        message: <p> Choose a plan for Shopify-Google Express Integration.
                             If you are <b> buying plan for the first time</b> then, once you buy the plan your
                             <b> 7 days trial</b> will be active for first week, and your <b> payment cycle will start after 7 days</b>.</p>,
                         stepperMessage: 'Choose a plan for Shopify-Google Express', // stepper Small Message
@@ -89,7 +89,7 @@ class Dashboard extends Component {
                         stepperActive: false, // used in stepper Check either Completed or not
                     }, // step 2
                     {
-                        message: <p> Link your <b> google merchant center</b> <NavLink  to="/panel/accounts">account.</NavLink>
+                        message: <p> Link your <b> google merchant center account.</b>
                             Please make sure that you have <b> verified & claimed</b> website URL in your Merchant Center, that should be
                             <b> same as your Shopify store URL</b>
                         </p>,
@@ -97,12 +97,12 @@ class Dashboard extends Component {
                         API_endpoint: '', // Api End Point is used to check to send data or get data
                         data: '', // Data additional Field
                         method: 'GET', // Method Type
-                        redirectTo: '/panel/configuration', // After Completion Where To Redirect
+                        redirectTo: '/panel/accounts', // After Completion Where To Redirect
                         anchor: 'LINKED', // Which Function to call e.g : 'U-INFO' then call div which take User basic Information
                         stepperActive: false, // used in stepper Check either Completed or not
                     }, // step 3
                     {
-                        message: <span>Enter default <NavLink  to="/panel/configuration">configurations.</NavLink></span>,
+                        message: <span>Enter default configurations.</span>,
                         stepperMessage: 'Configurations',
                         API_endpoint: '', // Api End Point is used to check to send data or get data
                         data: <p>After All the Step Completed You can Upload your <br/> products on  <NavLink  to="/panel/import">Google Merchant Center.</NavLink></p>, // Data additional Field
@@ -124,7 +124,7 @@ class Dashboard extends Component {
                         stepperActive: false, // used in stepper Check either Completed or not
                     }, // step 1
                     {
-                        message: <p> Choose a plan for Amazon-Shopify  <NavLink  to="/panel/plans">Integration.</NavLink> If you are <b> buying plan for the first time</b> then, once you buy the plan your
+                        message: <p> Choose a plan for Amazon-Shopify  Integration. If you are <b> buying plan for the first time</b> then, once you buy the plan your
                             <b> 7 days trial</b> will be active for first week, and your <b> payment cycle will start after 7 days</b></p>,
                         stepperMessage: 'Amazon-Shopify Plan Chosen',
                         API_endpoint: '', // Api End Point is used to check to send data or get data
@@ -135,17 +135,17 @@ class Dashboard extends Component {
                         stepperActive: false, // used in stepper Check either Completed or not
                     }, // step 2
                     {
-                        message:  <p> Link your AWS/MWS <NavLink  to="/panel/accounts">account.</NavLink></p>,
+                        message:  <p> Link your AWS/MWS account.</p>,
                         stepperMessage: 'AWS/MWS Account Linked',
                         API_endpoint: '', // Api End Point is used to check to send data or get data
                         data: '', // Data additional Field
                         method: 'GET', // Method Type
-                        redirectTo: '/panel/configuration', // After Completion Where To Redirect
+                        redirectTo: '/panel/accounts', // After Completion Where To Redirect
                         anchor: 'LINKED', // Which Function to call e.g : 'U-INFO' then call div which take User basic Information
                         stepperActive: false, // used in stepper Check either Completed or not
                     }, // step 3
                     {
-                        message: <span>Enter default <NavLink  to="/panel/configuration">configurations.</NavLink></span>,
+                        message: <span>Enter default configurations.</span>,
                         stepperMessage: 'Configurations',
                         API_endpoint: '', // Api End Point is used to check to send data or get data
                         data: <p>After All the step Complted You can Import your products from amazon to <NavLink  to="/panel/import">shopify.</NavLink></p>, // Data additional Field
@@ -719,7 +719,6 @@ class Dashboard extends Component {
                     }
                     <div className="col-12 text-right pt-2 pb-1">
                         <Button
-                            disabled={!this.state.google_configuration_updated}
                             onClick={() => {
                                 this.saveGoogleConfigData();
                             }}
