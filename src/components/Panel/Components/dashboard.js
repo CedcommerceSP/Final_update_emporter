@@ -577,7 +577,7 @@ class Dashboard extends Component {
                         <Modal
                             open={this.state.modalOpen}
                             onClose={this.handleModalChange}
-                             title="Reach more shoppers with Instagram product tags"
+                             title="Continue To Next Step?"
                             primaryAction={{
                                 content: 'Yes',
                                 onAction: this.handleModalChange.bind(this,'yes'),
@@ -589,13 +589,13 @@ class Dashboard extends Component {
                                 },
                             ]}
                         >
-                            <Modal.Section>
-                                <TextContainer>
-                                    <h4>
-                                        Ask Question Here // TODO Change The Text
-                                    </h4>
-                                </TextContainer>
-                            </Modal.Section>
+                            {/*<Modal.Section>*/}
+                                {/*<TextContainer>*/}
+                                    {/*<h4>*/}
+                                        {/*Ask Question Here // TODO Change The Text*/}
+                                    {/*</h4>*/}
+                                {/*</TextContainer>*/}
+                            {/*</Modal.Section>*/}
                         </Modal>
                     </div>
                 }
