@@ -34,7 +34,7 @@ class Dashboard extends Component {
                 skype_id:'',
                 primary_time_zone:'Pacific Time',
                 best_time_to_contact: '8-12',
-                term_and_conditon: true,
+                term_and_conditon: false,
                 how_u_know_about_us: '',
 
             }, // Step 1
@@ -45,7 +45,7 @@ class Dashboard extends Component {
                 skype_id:'',
                 primary_time_zone:'Pacific Time',
                 best_time_to_contact: '8-12',
-                term_and_conditon: true,
+                term_and_conditon: false,
                 how_u_know_about_us: '',
 
             }, // Step 1
@@ -234,7 +234,7 @@ class Dashboard extends Component {
                 }
             })
         }
-    }
+    } // initially run this to check which step is completed
     changeStep(arg) { // arg means step number
         let data = this.state.data[this.state.selected];
         data.forEach((keys, index) => {
@@ -287,8 +287,8 @@ class Dashboard extends Component {
                     flag++;
                 }
                 return (
-                    <React.Fragment>
-                        <div className={`mt-5 ${css}`} key={keys} onClick={this.state.stepData[keys].stepperActive?this.redirect.bind(this,this.state.stepData[keys].redirectTo):null}>
+                    <React.Fragment key={keys}>
+                        <div className={`mt-5 ${css}`}  onClick={this.state.stepData[keys].stepperActive?this.redirect.bind(this,this.state.stepData[keys].redirectTo):null}>
                             <div className="p-5">
                                 <div className="row">
                                     <div className="col-12">
@@ -324,7 +324,10 @@ class Dashboard extends Component {
     } // decide where to go when step is active
     /****************** step 1 User Information Body Start Here *************************/
     handleSubmit = (event) => { // this function is used to submit user basic info
-        if (this.state.info.term_and_conditon && this.state.info.full_name !== '' && this.state.info.email !== '' && this.state.info.mobile !== '')
+        if (this.state.info.term_and_conditon &&
+            this.state.info.full_name !== '' &&
+            this.state.info.email !== '' &&
+            this.state.info.mobile !== '')
         {
             requests.getRequest('core/user/updateuser', this.state.info).then(data => {
                 if (data.success) {
@@ -342,6 +345,8 @@ class Dashboard extends Component {
                 tempData.email = true;
             if (this.state.info.mobile === '')
                 tempData.mobile = true;
+            if ( !this.state.info.term_and_conditon )
+                tempData.term_and_conditon = true;
             this.setState({info_error: tempData});
         }
     };
@@ -349,7 +354,7 @@ class Dashboard extends Component {
         let data  = this.state.info;
         data[field] = value;
         let tempData = this.state.info_error;
-        if ( this.state.info[field] !== '' )
+        if ( this.state.info[field] !== '' || this.state.info[field] )
             tempData[field] = false;
         this.setState({
             info:data,
@@ -446,7 +451,7 @@ class Dashboard extends Component {
                             <Checkbox
                                 checked={this.state.info.term_and_conditon}
                                 label="Accept Term & Conditions"
-                                error={this.state.info.term_and_conditon?'':'*please Check The Term And Conditons'}
+                                error={this.state.info_error.term_and_conditon?'please Check The Term And Conditons':''}
                                 onChange={this.handleFormChange.bind(this,'term_and_conditon')}
                             />
                             <Button submit primary={true}>Submit</Button>
