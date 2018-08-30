@@ -791,9 +791,9 @@ class Dashboard extends Component {
                         <Card>
                             <div className="p-5">
                                 <Select
-                                    label="Select Integration From Here :-"
+                                    label="Show Steps To Follow For :-"
                                     options={ [
-                                        {label: 'Select from here', value: 'Shopify_Google'},
+                                        {label: 'Select Integration From Here', value: 'Shopify_Google'},
                                         {label: 'Shopify-Google Integration', value: 'Shopify_Google_main'},
                                         {label: 'Amazon-Shopify Integration', value: 'Amazon_Shopify'},
                                     ]}
