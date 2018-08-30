@@ -162,15 +162,13 @@ class Dashboard extends Component {
         this.handleModalChange = this.handleModalChange.bind(this);
     }
     componentDidMount() {
-        this.setState({
-            stepData: this.state.data.Shopify_Google,
-        });
+        // this.setState({
+        //     stepData: this.state.data.Shopify_Google,
+        // });
         this.mainAPICheck();
-        Object.keys(this.state.data).forEach(data => {
-            this.state.data[data].forEach(keys => {
-                this.checkStepCompleted(keys,data);
-            })
-        });
+        // Object.keys(this.state.data).forEach(data => {
+        //         this.checkStepCompleted(data);
+        // });
     }
     handleChange = (newValue) => {
         if ( newValue === 'Shopify_Google_main' )
@@ -180,6 +178,7 @@ class Dashboard extends Component {
             stepData: this.state.data[newValue],
             open_init_modal: false,
         });
+        this.checkStepCompleted(newValue);
     };// This Function Used for dropdown Selection
     mainAPICheck() {
         /****** for Plans ******/
@@ -218,35 +217,53 @@ class Dashboard extends Component {
 
     }
     // API_check is used for get information about how many step are completed
-    checkStepCompleted(event, key) {
-        if (event.API_endpoint !== '' ) {
-            requests.getRequest(event.API_endpoint).then(data => {
-                if ( data.success ) {
-                    if ( data.data !== null && !isUndefined(data.data)  ) {
-                        if ( data.data[event.data].usable === 1 ) {
-                            let temp = this.state.data;
-                            temp[key].forEach(keys => {
-                                if ( keys.API_endpoint === event.API_endpoint ) {
-                                    keys.stepperActive = true;
-                                }
-                            });
-                            this.setState({data: temp});
-                        }
-                    }
-                } else {
-                    notify.error(data.message);
-                }
-            })
+    checkStepCompleted(key) {
+        let path = '/Shopify/Google';
+        if ( key === 'Amazon_Shopify' ) {
+            path = '/Amazon/Shopify';
         }
+        requests.getRequest('frontend/app/getStepCompleted', {path: path}).then(data => {
+            if ( data.success ) {
+                if ( data.data !== null && !isUndefined(data.data)  ) {
+                        let temp = this.state.data;
+                        temp[key].forEach((keys, index) => {
+                            if ( index < parseInt(data.data) ) { // if  ( step here < no of step completed )
+                                keys.stepperActive = true;
+                            }
+                        });
+                        this.setState({data: temp});
+                }
+            } else {
+                notify.error(data.message);
+            }
+        })
     } // initially run this to check which step is completed
     changeStep(arg) { // arg means step number
         let data = this.state.data[this.state.selected];
-        data.forEach((keys, index) => {
-            if ( index === arg - 1 ) {
-                keys.stepperActive = true;
+        let path = [];
+        if ( arg === 1 || arg === 2 ) { // step 1 and 2 are common in both so send as one
+            path.push('/Shopify/Google');
+            path.push('/Amazon/Shopify');
+        } else if ( this.state.selected === 'Amazon_Shopify' ) {
+            path.push('/Amazon/Shopify');
+        } else {
+            path.push('/Shopify/Google');
+        }
+        requests.postRequest('frontend/app/stepCompleted', { paths: path, step: arg }).then(value => {
+            if ( value.success ) {
+                data.forEach((keys, index) => {
+                    if ( index === arg - 1 ) {
+                        keys.stepperActive = true;
+                    }
+                });
+                this.setState({stepData: data});
+                if ( arg < 4 ) {
+                    notify.success('Follow The Next Step');
+                } else {
+                    notify.success('Now You Can Upload Your Products');
+                }
             }
         });
-        this.setState({stepData: data});
     } // change stage just pass the completed step here in arg
     renderStepper() {
         let flag = 1;
@@ -510,12 +527,12 @@ class Dashboard extends Component {
                                                 {data.services?Object.keys(data.services).map(keys => {
                                                     return (<React.Fragment key={keys}>
                                                         <p className="service-body">
-                                                            -<span className="service-description mb-3" style={{fontWeight:'bold'}}><b>{data.services[keys].title}</b></span>
+                                                            <span className="service-description mb-3" style={{fontWeight:'bold'}}><b>{data.services[keys].title}</b></span>
                                                             <span>
                                                                         <Tooltip content={data.services[keys].description} preferredPosition="above">
                                                                             <Link><Icon source="help" color="indigo" backdrop={true} /></Link>
                                                                         </Tooltip>
-                                                                    </span>-
+                                                                    </span>
                                                         </p>
                                                         {Object.keys(data.services[keys].services).map(key1 => {
                                                             if ( data.services[keys].services[key1].required === 'yes' ) {
@@ -776,7 +793,7 @@ class Dashboard extends Component {
                                 <Select
                                     label="Show Steps To Follow For :-"
                                     options={ [
-                                        {label: '', value: 'Shopify_Google'},
+                                        {label: 'Select from here', value: 'Shopify_Google'},
                                         {label: 'Shopify-Google Integration', value: 'Shopify_Google_main'},
                                         {label: 'Amazon-Shopify Integration', value: 'Amazon_Shopify'},
                                     ]}
