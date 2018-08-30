@@ -88,7 +88,7 @@ export class Plans extends Component {
                                                                     -<span className="service-description mb-3" style={{fontWeight:'bold'}}><b>{data.services[keys].title}</b></span>
                                                                     <span>
                                                                         <Tooltip content={data.services[keys].description} preferredPosition="above">
-                                                                            <Link><Icon source="help" color="indigo" backdrop={true} /></Link>
+                                                                            <Link><Icon source="help" color="inkLighter" backdrop={true} /></Link>
                                                                         </Tooltip>
                                                                     </span>-
                                                                 </p>

@@ -25,7 +25,6 @@ class Dashboard extends Component {
     googleConfigurationData = [];
     constructor(props) {
         super(props);
-        this.API_CHECK = this.API_CHECK.bind(this);
         this.state = {
             info: {
                 full_name: '',
@@ -64,6 +63,7 @@ class Dashboard extends Component {
             /********* Step 4 Ends **********/
             stepData: [], // this will store the current showing step, which is selected from data object e.g Shopify_Google []
             selected: 'Shopify_Google',
+            open_init_modal: true, // this is used to open modal one time when user visit dashboard
             data: {
                 Shopify_Google : [
                     {
@@ -148,7 +148,7 @@ class Dashboard extends Component {
                         message: <span>Enter default configurations.</span>,
                         stepperMessage: 'Configurations',
                         API_endpoint: '', // Api End Point is used to check to send data or get data
-                        data: <p>After All the step Complted You can Import your products from amazon to <NavLink  to="/panel/import">shopify.</NavLink></p>, // Data additional Field
+                        data: <p>After All the step Completed You can Import your products from amazon to <NavLink  to="/panel/import">shopify.</NavLink></p>, // Data additional Field
                         method: 'GET', // Method Type
                         redirectTo: '/panel/configuration', // After Completion Where To Redirect
                         anchor: 'CONFIG', // Which Function to call e.g : 'U-INFO' then call div which take User basic Information
@@ -158,6 +158,7 @@ class Dashboard extends Component {
             },
         };
         this.getGoogleConfigurations();
+        this.checkStepCompleted = this.checkStepCompleted.bind(this);
         this.handleModalChange = this.handleModalChange.bind(this);
     }
     componentDidMount() {
@@ -167,14 +168,17 @@ class Dashboard extends Component {
         this.mainAPICheck();
         Object.keys(this.state.data).forEach(data => {
             this.state.data[data].forEach(keys => {
-                this.API_CHECK(keys,data);
+                this.checkStepCompleted(keys,data);
             })
         });
     }
     handleChange = (newValue) => {
+        if ( newValue === 'Shopify_Google_main' )
+            newValue = 'Shopify_Google';
         this.setState({
             selected: newValue,
-            stepData: this.state.data[newValue]
+            stepData: this.state.data[newValue],
+            open_init_modal: false,
         });
     };// This Function Used for dropdown Selection
     mainAPICheck() {
@@ -214,7 +218,7 @@ class Dashboard extends Component {
 
     }
     // API_check is used for get information about how many step are completed
-    API_CHECK(event, key) {
+    checkStepCompleted(event, key) {
         if (event.API_endpoint !== '' ) {
             requests.getRequest(event.API_endpoint).then(data => {
                 if ( data.success ) {
@@ -555,7 +559,10 @@ class Dashboard extends Component {
                 notify.success('Successfully Linked');
             },1000); // TODO need A logic to Work On
         } // id user say he/she completed then run this function
-        else {
+        else if ( event === 'init_modal' ) {
+            // this.setState({open_init_modal: false});
+            notify.info("Please Select A Integration First")
+        } else {
             this.setState({modalOpen: !this.state.modalOpen});
         } // if he/she cancel or close the modal
     } // all operation perform on modal of step 3 comes here
@@ -740,7 +747,7 @@ class Dashboard extends Component {
         const options = [
             {label: 'Shopify-Google Integration', value: 'Shopify_Google'},
             {label: 'Amazon-Shopify Integration', value: 'Amazon_Shopify'},
-        ];
+        ]; {/* Integration Dropdown Options */}
         return (
             <Page
                 title="Dashboard">
@@ -753,11 +760,33 @@ class Dashboard extends Component {
                             value={this.state.selected}
                         />
                     </div>
-                </Card>
+                </Card> {/* Dropdown */}
                 <Card>
                     {this.renderStepper()}
-                </Card>
-                    {this.renderBody()}
+                </Card> {/* Stepper */}
+                    {this.renderBody()} {/* Main Body Function Call Here */}
+                <Modal
+                    open={this.state.open_init_modal}
+                    onClose={this.handleModalChange.bind(this,'init_modal')}
+                    title="Select Integration"
+                >
+                    <Modal.Section>
+                        <Card>
+                            <div className="p-5">
+                                <Select
+                                    label="Show Steps To Follow For :-"
+                                    options={ [
+                                        {label: '', value: 'Shopify_Google'},
+                                        {label: 'Shopify-Google Integration', value: 'Shopify_Google_main'},
+                                        {label: 'Amazon-Shopify Integration', value: 'Amazon_Shopify'},
+                                    ]}
+                                    onChange={this.handleChange}
+                                    value={this.state.selected}
+                                />
+                            </div>
+                        </Card>
+                    </Modal.Section>
+                    </Modal> {/* Open The Init DropDown */}
             </Page>
         );
     }
