@@ -20,7 +20,9 @@ class Analyticsreporting extends Component {
             selectedimporter: "line",
             selecteduploader: "line",
             importer:[],
-            uploader:[]
+            uploader:[],
+            yaxisuploader:[],
+            yaxisimporter:[]
         };
 
         this.preparedata();
@@ -30,6 +32,86 @@ class Analyticsreporting extends Component {
     {
 
     }
+    getallimporter()
+    {
+        let importertitlearray=[];
+        let importer={};
+        let importer_marketplacearray=[];
+        requests.getRequest('connector/get/services?filters[type]=importer').then(data=> {
+            if (data.success == true) {
+                importer = data.data;
+                Object.keys(importer).map(importerkey => {
+                    importertitlearray.push(importer[importerkey]['title']);
+                    importer_marketplacearray.push(importer[importerkey]['marketplace']);
+                });
+                this.get_y_axis_importer(importer_marketplacearray,importertitlearray,importer);
+                this.setState({importer:importertitlearray})
+
+            }
+            else {
+                notify.error(data.message);
+
+            }
+
+
+        })
+    }
+    get_y_axis_importer(importer_marketplace_array,importer_title_array,entiredata_importer)
+    {
+        let total_products_importer=[];
+        let importer_data_recieved={};
+        requests.postRequest('frontend/app/getProductsImportedData',{importers:importer_marketplace_array}).then(data=> {
+            if (data.success == true) {
+                importer_data_recieved = data.data;
+                Object.keys(importer_data_recieved).map(importer_recieved_mp=>{
+                for (let i = 0; i < importer_marketplace_array.length; i++) {
+                    Object.keys(entiredata_importer).map(master_key => {
+                        if (importer_marketplace_array[i] == entiredata_importer[master_key]['marketplace']
+                            && importer_title_array[i] == entiredata_importer[master_key]['title'] && importer_marketplace_array[i] ==importer_recieved_mp) {
+                            total_products_importer.push(importer_data_recieved[importer_recieved_mp]);
+                        }
+                    })
+                }
+            })
+                this.setState({
+                    yaxisimporter:total_products_importer
+                });
+            }
+
+
+            else {
+                notify.error(data.message);
+
+            }
+
+
+        })
+    }
+    get_y_axis_uploader()
+    {
+        let uploaderarray=[];
+        let uploader={};
+        requests.postRequest('connector/get/services?filters[type]=uploader').then(data1 => {
+            console.log(data1);
+            if (data1.success == true) {
+                uploader = data1.data;
+
+                Object.keys(uploader).map(uploaderkey => {
+
+                        uploaderarray.push(uploader[uploaderkey]['title'])
+                    }
+                )
+                this.setState({yaxisuploader:uploaderarray})
+            }
+            else {
+                notify.error(data1.message);
+            }
+
+        })
+
+    }
+
+
     getalluploader()
     {
         let uploaderarray=[];
@@ -43,6 +125,7 @@ class Analyticsreporting extends Component {
                         uploaderarray.push(uploader[uploaderkey]['title'])
                     }
                 )
+
                 this.setState({uploader:uploaderarray})
             }
             else {
@@ -52,30 +135,12 @@ class Analyticsreporting extends Component {
         })
     }
 
-    getallimporter()
-    {
-        let importerarray=[];
-        let importer={};
-        requests.getRequest('connector/get/services?filters[type]=importer').then(data=> {
-            if (data.success == true) {
-                importer = data.data;
-                Object.keys(importer).map(importerkey => {
-                    importerarray.push(importer[importerkey]['title']);
-                });
-                this.setState({importer:importerarray})
 
-            }
-            else {
-                notify.error(data.message);
-
-            }
-
-
-        })
-    }
     preparedata(){
-      this.getallimporter();
-      this.getalluploader();
+        this.getallimporter();
+        // this.get_y_axis_importer();
+        this.getalluploader();
+        // this.get_y_axis_uploader();
     }
 
     handleChangeimporter = (newValue) => {
@@ -94,7 +159,7 @@ class Analyticsreporting extends Component {
             labels: this.state.importer,
             datasets: [
                 {
-                    label: '',
+                    label: 'Importers',
                     fill: false,
                     lineTension: 0.1,
                     backgroundColor: 'rgba(75,192,192,0.4)',
@@ -112,38 +177,124 @@ class Analyticsreporting extends Component {
                     pointHoverBorderWidth: 2,
                     pointRadius: 1,
                     pointHitRadius: 10,
-                    data: [10, 50, 80, 81, 56, 55, 40]
+                    data: this.state.yaxisimporter
                 },
             ]
         };
         const pie = {
             labels:  this.state.importer,
             datasets: [{
-                data: [300, 50],
+                data: this.state.yaxisimporter,
                 backgroundColor: [
                     '#FF6384',
                     '#36A2EB',
-                    '#FFCE56'
+                    '#FFCE56',
+                    '#00cc66',
+                    '#ff0000',
+                    '#ff99ff',
+                    '#000066',
+                    '#990033',
+                    '#9900cc',
+                    '#a3c2c2'
+
                 ],
                 hoverBackgroundColor: [
                     '#FF6384',
                     '#36A2EB',
-                    '#FFCE56'
+                    '#FFCE56',
+                    '#00cc66',
+                    '#ff0000',
+                    '#ff99ff',
+                    '#000066',
+                    '#990033',
+                    '#9900cc',
+                    '#a3c2c2'
+
+
+
                 ]
             }]
         };
 
+        // const bar = {
+        //     labels:  this.state.importer,
+        //     datasets: [
+        //         {
+        //             label: '',
+        //             backgroundColor: 'rgba(255,99,132,0.2)',
+        //             borderColor: 'rgba(255,99,132,1)',
+        //             borderWidth: 1,
+        //             hoverBackgroundColor: 'rgba(255,99,132,0.4)',
+        //             hoverBorderColor: 'rgba(255,99,132,1)',
+        //             data: [65, 59, 80, 81, 56, 55, 40]
+        //         }
+        //     ]
+        // };
         const bar = {
             labels:  this.state.importer,
             datasets: [
                 {
-                    label: '',
-                    backgroundColor: 'rgba(255,99,132,0.2)',
-                    borderColor: 'rgba(255,99,132,1)',
+                    label:'Importers',
+                    backgroundColor: [
+                        '#FF6384',
+                        '#36A2EB',
+                        '#FFCE56',
+                        '#00cc66',
+                        '#ff0000',
+                        '#ff99ff',
+                        '#000066',
+                        '#990033',
+                        '#9900cc',
+                        '#a3c2c2'
+
+                    ],
+                    borderColor: [
+                        '#FF6384',
+                        '#36A2EB',
+                        '#FFCE56',
+                        '#00cc66',
+                        '#ff0000',
+                        '#ff99ff',
+                        '#000066',
+                        '#990033',
+                        '#9900cc',
+                        '#a3c2c2'
+
+
+
+                    ],
                     borderWidth: 1,
-                    hoverBackgroundColor: 'rgba(255,99,132,0.4)',
-                    hoverBorderColor: 'rgba(255,99,132,1)',
-                    data: [65, 59, 80, 81, 56, 55, 40]
+                    hoverBackgroundColor: [
+                        '#FF6384',
+                        '#36A2EB',
+                        '#FFCE56',
+                        '#00cc66',
+                        '#ff0000',
+                        '#ff99ff',
+                        '#000066',
+                        '#990033',
+                        '#9900cc',
+                        '#a3c2c2'
+
+
+
+                    ],
+                    hoverBorderColor: [
+                        '#FF6384',
+                        '#36A2EB',
+                        '#FFCE56',
+                        '#00cc66',
+                        '#ff0000',
+                        '#ff99ff',
+                        '#000066',
+                        '#990033',
+                        '#9900cc',
+                        '#a3c2c2'
+
+
+
+                    ],
+                    data:this.state.yaxisimporter
                 }
             ]
         };
@@ -151,22 +302,22 @@ class Analyticsreporting extends Component {
         switch (this.state.selectedimporter)
         {
             case 'line':
-                return <Line height={200} data={line}
+                return <Line height={300} data={line}
                              options=
                                  {{
-                                 maintainAspectRatio: false
+                                     maintainAspectRatio: false
                                  }}
                 />
                 break;
             case 'bar':
-                return   <Bar height={200} data={bar}
+                return   <Bar height={300} data={bar}
                               options={{
                                   maintainAspectRatio: false
                               }}
                 />
                 break;
             case 'pie':
-                return <Pie height={100} data={pie}/>
+                return <Pie height={150} data={pie}/>
                 break;
         }
     }
@@ -176,7 +327,7 @@ class Analyticsreporting extends Component {
             labels: this.state.uploader,
             datasets: [
                 {
-                    label: '',
+                    label: 'Uploaders',
                     fill: false,
                     lineTension: 0.1,
                     backgroundColor: 'rgba(75,192,192,0.4)',
@@ -205,12 +356,28 @@ class Analyticsreporting extends Component {
                 backgroundColor: [
                     '#FF6384',
                     '#36A2EB',
-                    '#FFCE56'
+                    '#FFCE56',
+                    '#00cc66',
+                    '#ff0000',
+                    '#ff99ff',
+                    '#000066',
+                    '#990033',
+                    '#9900cc',
+                    '#a3c2c2'
+
                 ],
                 hoverBackgroundColor: [
                     '#FF6384',
                     '#36A2EB',
-                    '#FFCE56'
+                    '#FFCE56',
+                    '#00cc66',
+                    '#ff0000',
+                    '#ff99ff',
+                    '#000066',
+                    '#990033',
+                    '#9900cc',
+                    '#a3c2c2'
+
                 ]
             }]
         };
@@ -220,11 +387,59 @@ class Analyticsreporting extends Component {
             datasets: [
                 {
                     label: 'Uploaders',
-                    backgroundColor: 'rgba(255,99,132,0.2)',
-                    borderColor: 'rgba(255,99,132,1)',
+                    backgroundColor: [
+                        '#FF6384',
+                        '#36A2EB',
+                        '#FFCE56',
+                        '#00cc66',
+                        '#ff0000',
+                        '#ff99ff',
+                        '#000066',
+                        '#990033',
+                        '#9900cc',
+                        '#a3c2c2'
+
+                    ],
+                    borderColor: [
+                        '#FF6384',
+                        '#36A2EB',
+                        '#FFCE56',
+                        '#00cc66',
+                        '#ff0000',
+                        '#ff99ff',
+                        '#000066',
+                        '#990033',
+                        '#9900cc',
+                        '#a3c2c2'
+
+                    ],
                     borderWidth: 1,
-                    hoverBackgroundColor: 'rgba(255,99,132,0.4)',
-                    hoverBorderColor: 'rgba(255,99,132,1)',
+                    hoverBackgroundColor: [
+                        '#FF6384',
+                        '#36A2EB',
+                        '#FFCE56',
+                        '#00cc66',
+                        '#ff0000',
+                        '#ff99ff',
+                        '#000066',
+                        '#990033',
+                        '#9900cc',
+                        '#a3c2c2'
+
+                    ],
+                    hoverBorderColor: [
+                        '#FF6384',
+                        '#36A2EB',
+                        '#FFCE56',
+                        '#00cc66',
+                        '#ff0000',
+                        '#ff99ff',
+                        '#000066',
+                        '#990033',
+                        '#9900cc',
+                        '#a3c2c2'
+
+                    ],
                     data: [65, 59, 80, 81, 56, 55, 40]
                 }
             ]
@@ -264,44 +479,44 @@ class Analyticsreporting extends Component {
                     <div className="p-4">
                         <div className="row">
                             <div className="col-md-8"></div>
-                    <div className="col-12 col-md-4">
-                    <Select
-                        label=""
-                        options={options}
-                        onChange={this.handleChangeimporter}
-                        value={this.state.selectedimporter}
-                    />
-                    </div>
-                        </div>
-                <div>{
-                    this.importerreports()
-                }
-                </div>
-                    </div>
-                </Card>
-                <Card title="Products Uploaded">
-                    <div className="p-4">
-                        <div className="row">
-                            <div className="col-md-8"></div>
                             <div className="col-12 col-md-4">
-                        <Select
-                            label=""
-                            options={options}
-                            onChange={this.handleChangeuploader}
-                            value={this.state.selecteduploader}
-                        />
+                                <Select
+                                    label=""
+                                    options={options}
+                                    onChange={this.handleChangeimporter}
+                                    value={this.state.selectedimporter}
+                                />
                             </div>
                         </div>
-
-                    <div className="row">
-                        <div className="col-md-12">
-                        {
-                            this.uploaderreports()
+                        <div>{
+                            this.importerreports()
                         }
                         </div>
                     </div>
-                    </div>
                 </Card>
+                {/*<Card title="Products Uploaded">*/}
+                    {/*<div className="p-4">*/}
+                        {/*<div className="row">*/}
+                            {/*<div className="col-md-8"></div>*/}
+                            {/*<div className="col-12 col-md-4">*/}
+                                {/*<Select*/}
+                                    {/*label=""*/}
+                                    {/*options={options}*/}
+                                    {/*onChange={this.handleChangeuploader}*/}
+                                    {/*value={this.state.selecteduploader}*/}
+                                {/*/>*/}
+                            {/*</div>*/}
+                        {/*</div>*/}
+
+                        {/*<div className="row">*/}
+                            {/*<div className="col-md-12">*/}
+                                {/*{*/}
+                                    {/*this.uploaderreports()*/}
+                                {/*}*/}
+                            {/*</div>*/}
+                        {/*</div>*/}
+                    {/*</div>*/}
+                {/*</Card>*/}
             </Page>
         );
     }

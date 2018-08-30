@@ -246,7 +246,7 @@ export class Products extends Component {
                 // primaryAction={{content: 'Add Product', onClick: () => {
                 //     this.redirect('/panel/products/create');
                 // }}}
-                primaryAction={{content: 'Analysis Report', onClick: () => {
+                primaryAction={{content: 'Analytics', onClick: () => {
                         this.redirect('/panel/products/analysis');
                     }}}
                 title="Products List">
