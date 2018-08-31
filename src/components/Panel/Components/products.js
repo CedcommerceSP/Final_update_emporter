@@ -276,7 +276,7 @@ export class Products extends Component {
                             <div className="col-12">
                                 <SmartDataTable
                                     data={this.state.products}
-                                    uniqueKey="container_id"
+                                    uniqueKey="sku"
                                     columnTitles={this.columnTitles}
                                     multiSelect={true}
                                     selected={this.state.selectedProducts}
@@ -287,14 +287,14 @@ export class Products extends Component {
                                     showColumnFilters={true}
                                     imageColumns={this.imageColumns}
                                     rowActions={{
-                                        edit: true,
-                                        delete: true
+                                        edit: false,
+                                        delete: false
                                     }}
                                     userRowSelect={(event) => {
-                                        const itemIndex = this.state.selectedProducts.indexOf(event.data.id);
+                                        const itemIndex = this.state.selectedProducts.indexOf(event.data.sku);
                                         if (event.isSelected) {
                                             if (itemIndex === -1) {
-                                                this.state.selectedProducts.push(event.data.id);
+                                                this.state.selectedProducts.push(event.data.sku);
                                             }
                                         } else {
                                             if (itemIndex !== -1) {
@@ -308,7 +308,7 @@ export class Products extends Component {
                                         this.state.selectedProducts = [];
                                         if (event) {
                                             for (let i = 0; i < rows.length; i++) {
-                                                this.state.selectedProducts.push(rows[i].id);
+                                                this.state.selectedProducts.push(rows[i].sku);
                                             }
                                         }
                                         const state = this.state;

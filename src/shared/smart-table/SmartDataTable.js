@@ -394,10 +394,10 @@ class SmartDataTablePlain extends React.Component {
       data: row
     };
     this.allSelected = false;
-    const itemIndex = this.state.selected.indexOf(row.id);
+    const itemIndex = this.state.selected.indexOf(row[this.state.uniqueKey]);
     if (event) {
         if (itemIndex === -1) {
-            this.state.selected.push(row.id);
+            this.state.selected.push(row[this.state.uniqueKey]);
         }
     } else {
         if (itemIndex !== -1) {
@@ -415,7 +415,7 @@ class SmartDataTablePlain extends React.Component {
       this.state.selected = [];
       if (event) {
           for (let i = 0; i < rows.length; i++) {
-              this.state.selected.push(rows[i].id);
+              this.state.selected.push(rows[i][this.state.uniqueKey]);
           }
       }
       const state = this.state;
