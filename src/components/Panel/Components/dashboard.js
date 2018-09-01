@@ -69,7 +69,7 @@ class Dashboard extends Component {
                     {
                         message:<p>Enter Your Basic Information</p>, // step data
                         stepperMessage: 'Registration', // stepper Small Message
-                        API_endpoint: '', // Api End Point is used to check to send data or get data
+                        API_endpoint: '', // Api End Point is used to check to send data or get data (no use Right Now)
                         data: '', // Data additional Field
                         method: 'GET', // Method Type
                         redirectTo: '/panel/configuration', // After Completion Where To Redirect
@@ -213,7 +213,7 @@ class Dashboard extends Component {
             requests.getRequest('/connector/get/config', {marketplace:value}).then(data => {
                 this.setState({config: data.success});
             });
-        }) // only used to check status for right data got to getGoogleConfigurations()
+        }) // only used to check status that we get right data for getGoogleConfigurations()
 
     }
     // API_check is used for get information about how many step are completed
@@ -225,13 +225,13 @@ class Dashboard extends Component {
         requests.getRequest('frontend/app/getStepCompleted', {path: path}).then(data => {
             if ( data.success ) {
                 if ( data.data !== null && !isUndefined(data.data)  ) {
-                        let temp = this.state.data;
-                        temp[key].forEach((keys, index) => {
-                            if ( index < parseInt(data.data) ) { // if  ( step here < no of step completed )
-                                keys.stepperActive = true;
-                            }
-                        });
-                        this.setState({data: temp});
+                    let temp = this.state.data;
+                    temp[key].forEach((keys, index) => {
+                        if ( index < parseInt(data.data) ) { // if  ( step here < no of step completed )
+                            keys.stepperActive = true;
+                        }
+                    });
+                    this.setState({data: temp});
                 }
             } else {
                 notify.error(data.message);
@@ -326,7 +326,7 @@ class Dashboard extends Component {
                         </div>
                         { this.state.stepData[keys].data !== '' && this.state.stepData[keys].stepperActive? <div className="col-12 mt-5 p-5 text-center">
                             <h4>{this.state.stepData[keys].data}</h4>
-                        </div> :null } {/* TODO Change this.state.stepData[keys].data !== '' if data meaning change */}
+                        </div> :null } {/* TODO Change condition this.state.stepData[keys].data !== '' if data meaning change */}
                     </React.Fragment>
                 );
             })
