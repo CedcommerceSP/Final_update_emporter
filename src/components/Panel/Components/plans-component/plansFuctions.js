@@ -1,5 +1,5 @@
 
-
+/********************************  Array Is prepared Here  *************************************************/
 export function dataGrids(result) {
     let data = [];
     result.forEach(value => {
@@ -63,4 +63,26 @@ function checkIfNull(service) {
         });
     });
     return price;
+}
+/*************************  Remove unselected Services  *******************************************/
+export function RemoveService(arg, service) {
+    // console.log(arg.services);
+    // console.log(service);
+    arg.services.forEach(value => {
+        value.services.forEach((data, index) => {
+            let flag = 0;
+           service.forEach(serv => {
+               // console.log(data, serv.title);
+               if ( data.title === serv.title ) {
+                   if ( !serv.isSelected ) {
+                       flag = 1;
+                   }
+               }
+           });
+           if ( flag !== 0 ) {
+               console.log(value.services.splice(value.services.indexOf(value.services[index]),1));
+           }
+        });
+    });
+    return arg;
 }

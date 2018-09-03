@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import './plans-component/plan.css';
 import { requests } from '../../../services/request';
-import { dataGrids } from './plans-component/plansFuctions';
+import { dataGrids, RemoveService } from './plans-component/plansFuctions';
 import { isUndefined } from 'util';
 import { notify } from '../../../services/notify';
 
@@ -35,7 +35,20 @@ export class Plans extends Component {
         });
     }
     onSelectPlan(arg) {
-        console.log(arg);
+        requests.postRequest('/plan/plan/choose',arg).then(data => console.log(data));
+        // let value = [];
+        // let flag = 0;
+        // let newArg = Object.assign({}, arg);
+        // let data ;
+        // this.state.checkBox.forEach(data => {
+        //     if (data.key === newArg.id) {
+        //         value.push(Object.assign({}, data));
+        //         flag = 1;
+        //     }
+        // });
+        // if ( flag === 1 )
+        //     data = Object.assign({},RemoveService(Object.assign({},newArg), value));
+        // console.log(data, arg);
     }
     onCheckBox(event) {
         let data = this.state.checkBox;
@@ -116,7 +129,7 @@ export class Plans extends Component {
                                                                                 flag = 1;
                                                                         });
                                                                         if ( flag === 0 ) {
-                                                                            ddd.push({title:data.services[keys].services[key1].title, isSelected: true});
+                                                                            ddd.push({title:data.services[keys].services[key1].title, isSelected: true, key: data.id, id: key1});
                                                                             this.state.checkBox = ddd;
                                                                         }
                                                                         return (<div key={key1} className="text-left form-inline">
