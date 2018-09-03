@@ -18,6 +18,7 @@ export class Plans extends Component {
         super(props);
         this.state = {
             data: [],
+            checkBox: [],
         }
     }
     componentWillMount() {
@@ -37,7 +38,14 @@ export class Plans extends Component {
         console.log(arg);
     }
     onCheckBox(event) {
-        console.log(event);
+        let data = this.state.checkBox;
+        data.forEach(Data => {
+            if ( Data.title === event ) {
+                Data.isSelected = !Data.isSelected;
+                console.log(Data);
+            }
+        });
+        this.setState({checkBox: data});
     }
     render() {
         // console.log(this.state.data);
@@ -58,68 +66,83 @@ export class Plans extends Component {
                             </div>
                         </div>
                         {this.state.data.map((data, index) => {
-                                return (
-                                    <div className="col-sm-4 col-12 pt-3 pb-3" key={index}>{/* Starting Of Plan Card */}
-                                        <Card>
-                                            <div className="d-flex justify-content-center">
-                                                <div className="p-5" >
-                                                    <div className="mb-5 text-center" > {/* Plan Numeric Price */}
-                                                        <p className="price-tag">
-                                                            <span className="price-tag_small">$</span>
-                                                            <span className="price-tag_discount"><strike>{data.originalValue}</strike></span>
-                                                            {data.main_price}
-                                                            <span className="price-tag_small">{data.validity}</span>
-                                                        </p>
-                                                    </div>
-                                                    <div className="mb-5"> {/* Button To choose Plan */}
-                                                        <Button primary={true} fullWidth={true} size="large" onClick={this.onSelectPlan.bind(this, data)}>
-                                                            Choose this Plan
-                                                        </Button>
-                                                    </div>
-                                                    <div className="mb-5 text-center"> {/* Descriptions For Particular deatails */}
-                                                        <h1 className="mb-4"><b>{data.title}</b></h1>
-                                                        <h4>{data.description}</h4>
-                                                    </div>
-                                                    <hr/>
-                                                    <div className="text-center mt-5"> {/* Services Data */}
-                                                        {data.services?Object.keys(data.services).map(keys => {
-                                                            return (<React.Fragment key={keys}>
-                                                                <p className="service-body">
-                                                                    -<span className="service-description mb-3" style={{fontWeight:'bold'}}><b>{data.services[keys].title}</b></span>
-                                                                    <span>
-                                                                        <Tooltip content={data.services[keys].description} preferredPosition="above">
-                                                                            <Link><Icon source="help" color="inkLighter" backdrop={true} /></Link>
-                                                                        </Tooltip>
-                                                                    </span>-
-                                                                </p>
-                                                                    {Object.keys(data.services[keys].services).map(key1 => {
-                                                                        if ( data.services[keys].services[key1].required === 'yes' ) {
-                                                                            return (<div key={key1} className="text-left">
-                                                                                <Checkbox
-                                                                                    checked={true}
-                                                                                    label={data.services[keys].services[key1].title}
-                                                                                    disabled={false} />
-                                                                            </div>);
-                                                                        } else {
-                                                                            return (<div key={key1} className="text-left form-inline">
-                                                                                <h5>
-                                                                                    <input type="checkbox" className="form-control" onClick={this.onCheckBox.bind(this,data.services[keys].services[key1])}/>
-                                                                                    <span className="ml-3">
-                                                                                        {data.services[keys].services[key1].title}
-                                                                                    </span>
-                                                                                </h5>
-
-                                                                            </div>);
+                            return (
+                                <div className="col-sm-4 col-12 pt-3 pb-3" key={index}>{/* Starting Of Plan Card */}
+                                    <Card>
+                                        <div className="d-flex justify-content-center">
+                                            <div className="p-5" >
+                                                <div className="mb-5 text-center" > {/* Plan Numeric Price */}
+                                                    <p className="price-tag">
+                                                        <span className="price-tag_small">$</span>
+                                                        <span className="price-tag_discount"><strike>{data.originalValue}</strike></span>
+                                                        {data.main_price}
+                                                        <span className="price-tag_small">{data.validity}</span>
+                                                    </p>
+                                                </div>
+                                                <div className="mb-5"> {/* Button To choose Plan */}
+                                                    <Button primary={true} fullWidth={true} size="large" onClick={this.onSelectPlan.bind(this, data)}>
+                                                        Choose this Plan
+                                                    </Button>
+                                                </div>
+                                                <div className="mb-5 text-center"> {/* Descriptions For Particular deatails */}
+                                                    <h1 className="mb-4"><b>{data.title}</b></h1>
+                                                    <h4>{data.description}</h4>
+                                                </div>
+                                                <hr/>
+                                                <div className="text-center mt-5"> {/* Services Data */}
+                                                    {data.services?Object.keys(data.services).map(keys => {
+                                                        return (<React.Fragment key={keys}>
+                                                            <p className="service-body">
+                                                                -<span className="service-description mb-3" style={{fontWeight:'bold'}}><b>{data.services[keys].title}</b></span>
+                                                                <span>
+                                                                    <Tooltip content={data.services[keys].description} preferredPosition="above">
+                                                                        <Link><Icon source="help" color="inkLighter" backdrop={true} /></Link>
+                                                                    </Tooltip>
+                                                                </span>-
+                                                            </p>
+                                                                {Object.keys(data.services[keys].services).map(key1 => {
+                                                                    if ( data.services[keys].services[key1].required === 'yes' ) {
+                                                                        return (<div key={key1} className="text-left">
+                                                                            <Checkbox
+                                                                                checked={true}
+                                                                                label={data.services[keys].services[key1].title}
+                                                                                disabled={true} />
+                                                                        </div>);
+                                                                    } else {
+                                                                        let ddd = this.state.checkBox;
+                                                                        let flag = 0;
+                                                                        ddd.forEach( valueData => {
+                                                                            if ( valueData.title === data.services[keys].services[key1].title )
+                                                                                flag = 1;
+                                                                        });
+                                                                        if ( flag === 0 ) {
+                                                                            ddd.push({title:data.services[keys].services[key1].title, isSelected: true});
+                                                                            this.state.checkBox = ddd;
                                                                         }
-                                                                    })}
-                                                            </React.Fragment>);
-                                                        }):null}
-                                                    </div>
+                                                                        return (<div key={key1} className="text-left form-inline">
+                                                                            {this.state.checkBox.map(kk => {
+                                                                                if ( kk.title === data.services[keys].services[key1].title ) {
+                                                                                    return (
+                                                                                        <Checkbox
+                                                                                            key = { kk.title }
+                                                                                            checked={kk.isSelected}
+                                                                                            label={data.services[keys].services[key1].title}
+                                                                                            onChange={this.onCheckBox.bind(this,data.services[keys].services[key1].title)}
+                                                                                        />
+                                                                                    );
+                                                                                }
+                                                                            })}
+                                                                        </div>);
+                                                                    }
+                                                                })}
+                                                        </React.Fragment>);
+                                                    }):null}
                                                 </div>
                                             </div>
-                                        </Card>
-                                    </div>
-                                );
+                                        </div>
+                                    </Card>
+                                </div>
+                            );
                         })}
                     </div>
             </Page>
