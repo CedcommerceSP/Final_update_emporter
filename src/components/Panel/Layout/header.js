@@ -19,9 +19,9 @@ export class Header extends Component {
     }
 
     componentDidMount(){
-        setInterval(() => {
-            this.setActiveTab(this.props);
-        }, 10);
+        // setInterval(() => {
+        //     this.setActiveTab(this.props);
+        // }, 10);
     }
 
     setActiveTab(props) {
