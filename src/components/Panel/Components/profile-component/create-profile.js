@@ -16,6 +16,7 @@ import './create-profile.css';
 
 import { notify } from '../../../../services/notify';
 import { requests } from '../../../../services/request';
+import { capitalizeWord } from '../static-functions';
 import { isUndefined } from 'util';
 
 export class CreateProfile extends Component {
@@ -858,7 +859,7 @@ export class CreateProfile extends Component {
                 {
                     this.state.products_select.targetCategory !== '' &&
                     <div className="col-12 p-3">
-                        <Banner title={"Selected " + this.capitalizeWord(this.state.basicDetails.target) + " category"} status="info">
+                        <Banner title={"Selected " + capitalizeWord(this.state.basicDetails.target) + " category"} status="info">
                             <Label>{this.state.products_select.targetCategory}</Label>
                         </Banner>
                     </div>
@@ -932,10 +933,10 @@ export class CreateProfile extends Component {
                 <div className="col-12 pt-1 pb-1">
                     <div className="row">
                         <div className="col-6 p-3 text-center">
-                            <Label>{this.capitalizeWord(this.state.basicDetails.target)} Atrributes</Label>
+                            <Label>{capitalizeWord(this.state.basicDetails.target)} Atrributes</Label>
                         </div>
                         <div className="col-6 p-3 text-center">
-                            <Label>{this.capitalizeWord(this.state.basicDetails.source)} Atrributes</Label>
+                            <Label>{capitalizeWord(this.state.basicDetails.source)} Atrributes</Label>
                         </div>
                         <div className="col-12 p-4">
                             {
@@ -959,7 +960,7 @@ export class CreateProfile extends Component {
                                                         <div className="p-3 w-100">
                                                             <Select
                                                                 options={this.state.sourceAttributes}
-                                                                placeholder={this.capitalizeWord(this.state.basicDetails.source) + " Attributes"}
+                                                                placeholder={capitalizeWord(this.state.basicDetails.source) + " Attributes"}
                                                                 onChange={this.handleMapAttributes.bind(this, this.state.targetAttributes.indexOf(attribute))}
                                                                 value={attribute.mappedTo}
                                                                 disabled={attribute.system}
@@ -1102,11 +1103,6 @@ export class CreateProfile extends Component {
                 return this.state.sourceAttributes[i];
             }
         }
-    }
-
-    capitalizeWord(string) {
-        string = string.toLowerCase();
-        return string.charAt(0).toUpperCase() + string.slice(1);
     }
 
     showOptionMappingModal(index) {

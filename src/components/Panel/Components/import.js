@@ -15,6 +15,7 @@ import { faArrowAltCircleDown,
 
 import { notify } from '../../../services/notify';
 import { requests } from '../../../services/request';
+import { capitalizeWord } from './static-functions';
 
 export class Import extends Component {
 
@@ -201,11 +202,6 @@ export class Import extends Component {
             });
     }
 
-    capitalizeWord(string) {
-        string = string.toLowerCase();
-        return string.charAt(0).toUpperCase() + string.slice(1);
-    }
-
     renderUploadProductsModal() {
         return (
             <Modal
@@ -231,7 +227,7 @@ export class Import extends Component {
                             this.state.uploadProductDetails.source !== '' &&
                             this.state.importerShopLists.length > 1 &&
                             <Select
-                                label={this.capitalizeWord(this.state.uploadProductDetails.source) + " Shop"}
+                                label={capitalizeWord(this.state.uploadProductDetails.source) + " Shop"}
                                 placeholder="Source Shop"
                                 options={this.state.importerShopLists}
                                 onChange={this.handleImportChange.bind(this, 'shop')}
@@ -251,7 +247,7 @@ export class Import extends Component {
                             this.state.uploadProductDetails.target !== '' &&
                             this.state.uploaderShopLists.length > 1 &&
                             <Select
-                                label={this.capitalizeWord(this.state.uploadProductDetails.target) + " Shop"}
+                                label={capitalizeWord(this.state.uploadProductDetails.target) + " Shop"}
                                 placeholder="Target Shop"
                                 options={this.state.uploaderShopLists}
                                 onChange={this.handleImportChange.bind(this, 'target_shop')}
@@ -295,7 +291,7 @@ export class Import extends Component {
                                     this.profilesList.length === 0 &&
                                         <div className="text-center">
                                             <Banner status="warning">
-                                                <Label>No profiles for {this.capitalizeWord(this.state.uploadProductDetails.source)} and {this.capitalizeWord(this.state.uploadProductDetails.target)} integration</Label>
+                                                <Label>No profiles for {capitalizeWord(this.state.uploadProductDetails.source)} and {capitalizeWord(this.state.uploadProductDetails.target)} integration</Label>
                                             </Banner>
                                             <div className="text-center mt-2 mb-2">
                                                 <Button onClick={() => {

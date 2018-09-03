@@ -11,6 +11,7 @@ import { isUndefined } from 'util';
 
 import { requests } from '../../../../services/request';
 import { notify } from '../../../../services/notify';
+import { capitalizeWord } from '../static-functions';
 
 export class InstallApp extends Component {
     queryParams;
@@ -40,7 +41,7 @@ export class InstallApp extends Component {
                     title="Install App">
                     <div className="row">
                         <div className="col-12 mt-4 mb-4">
-                            <Banner title={this.state.code.toUpperCase() + ' INSTALLATION'}>
+                            <Banner title={capitalizeWord(this.state.code) + ' Installation'}>
                             </Banner>
                         </div>
                         <div className="col-12 mt-1">
