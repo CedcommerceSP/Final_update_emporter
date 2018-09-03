@@ -104,45 +104,47 @@ export class Profiling extends Component {
                 }}}
                 title="Import Profiles">
                 <Card>
-                    <SmartDataTable
-                        data={this.state.profiles}
-                        multiSelect={false}
-                        className='ui compact selectable table'
-                        visibleColumns={this.visibleColumns}
-                        columnTitles={this.columnTitles}
-                        showColumnFilters={true}
-                        rowActions={{
-                            edit: false,
-                            delete: false
-                        }}
-                        columnFilters={(filters) => {
-                            this.filters.column_filters = filters;
-                            console.log(this.filters);
-                            this.getProfiles();
-                        }}
-                        sortable
-                    />
-                    <div className="row mt-3">
-                        <div className="col-6 text-right">
-                            <Pagination
-                                hasPrevious
-                                onPrevious={() => {
-                                    this.gridSettings.activePage--;
-                                    this.getProfiles();
-                                }}
-                                hasNext
-                                onNext={() => {
-                                    this.gridSettings.activePage++;
-                                    this.getProfiles();
-                                }}
-                            />
-                        </div>
-                        <div className="col-md-2 col-sm-2 col-6">
-                            <Select
-                                options={this.pageLimits}
-                                value={this.gridSettings.count}
-                                onChange={this.pageSettingsChange.bind(this)}>
-                            </Select>
+                    <div className="p-5">
+                        <SmartDataTable
+                            data={this.state.profiles}
+                            multiSelect={false}
+                            className='ui compact selectable table'
+                            visibleColumns={this.visibleColumns}
+                            columnTitles={this.columnTitles}
+                            showColumnFilters={true}
+                            rowActions={{
+                                edit: false,
+                                delete: false
+                            }}
+                            columnFilters={(filters) => {
+                                this.filters.column_filters = filters;
+                                console.log(this.filters);
+                                this.getProfiles();
+                            }}
+                            sortable
+                        />
+                        <div className="row mt-3">
+                            <div className="col-6 text-right">
+                                <Pagination
+                                    hasPrevious
+                                    onPrevious={() => {
+                                        this.gridSettings.activePage--;
+                                        this.getProfiles();
+                                    }}
+                                    hasNext
+                                    onNext={() => {
+                                        this.gridSettings.activePage++;
+                                        this.getProfiles();
+                                    }}
+                                />
+                            </div>
+                            <div className="col-md-2 col-sm-2 col-6">
+                                <Select
+                                    options={this.pageLimits}
+                                    value={this.gridSettings.count}
+                                    onChange={this.pageSettingsChange.bind(this)}>
+                                </Select>
+                            </div>
                         </div>
                     </div>
                 </Card>

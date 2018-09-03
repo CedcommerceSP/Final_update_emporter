@@ -196,7 +196,7 @@ class SmartDataTablePlain extends React.Component {
       const showCol = column.visible;
       if (showCol) {
         return (
-          <th key={column.key}>
+          <td key={column.key} style={{verticalAlign:'bottom'}}>
             <span>
               {column.title}
             </span>
@@ -205,16 +205,16 @@ class SmartDataTablePlain extends React.Component {
             </span>
               {this.state.showColumnFilters && Object.keys(this.state.columnFilters).length > 0 &&
               this.renderColumnFilters(column)}
-          </th>
+          </td>
         )
       }
       return null
     })
     return (
-      <tr>
+      <tr >
           {
               columns.length > 0 && this.state.multiSelect &&
-              <th>
+              <td style={{verticalAlign:'bottom'}}>
                 <span>
                   <Checkbox
                       checked={this.allSelected}
@@ -224,7 +224,7 @@ class SmartDataTablePlain extends React.Component {
                       {this.state.selected.length} {this.state.selected.length > 1 ? 'rows' : 'row'} selected
                   </span>
                 </span>
-              </th>
+              </td>
           }
           {
               (this.state.rowActions.edit || this.state.rowActions.delete) &&
