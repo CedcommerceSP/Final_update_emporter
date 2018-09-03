@@ -45,7 +45,7 @@ export class Panel extends Component {
                     <div className="row">
                         <div className="col-12">
                             <div className="app-header">
-                                <Header menu={this.menu} selected={1} history={history}></Header>
+                                <Header menu={this.menu} history={history}></Header>
                             </div>
                         </div>
                     </div>

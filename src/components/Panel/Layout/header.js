@@ -14,25 +14,26 @@ export class Header extends Component {
             appName: environment.AppName,
             loggedIn: true,
             menu: props.menu,
-            selected: props.selected
+            selected: -1
         };
-    }
-
-    componentDidMount(){
-        // setInterval(() => {
-        //     this.setActiveTab(this.props);
-        // }, 10);
+        this.setActiveTab(props);
     }
 
     setActiveTab(props) {
         const activeUrl = props.history.location.pathname;
-        for (let i = 0; i < this.state.menu.length; i++) {
-            if (activeUrl.indexOf(this.state.menu[i].link) !== -1) {
-                this.state.selected = i;
+        if (activeUrl.indexOf('/auth') === -1) {
+            for (let i = 0; i < this.state.menu.length; i++) {
+                if (activeUrl.indexOf(this.state.menu[i].link) !== -1) {
+                    this.state.selected = i;
+                }
             }
+            const state = this.state;
+            this.setState(state);
+        } else {
+            setTimeout(() => {
+                this.setActiveTab(props);
+            }, 250);
         }
-        const state = this.state;
-        this.setState(state);
     }
 
     render() {
