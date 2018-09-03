@@ -10,6 +10,8 @@ const options = [
     {label: 'Pie Chart', value: 'pie'},
 ];
 
+let uploaderoptions=[];
+
 
 
 class Analyticsreporting extends Component {
@@ -17,11 +19,18 @@ class Analyticsreporting extends Component {
     {
         super(props);
         this.state = {
-            selectedimporter: "line",
-            selecteduploader: "line",
+            selectedimporter: "bar",
+            selecteduploader: "bar",
+            selecteduploadermarketplace:'',
             importer:[],
-            uploader:[],
+            uploader:['Pending','Approved','Uploaded'],
+            uploadermarketplace:[],
             yaxisuploader:[],
+            uploaderstatus:{
+              uploaded:0,
+              approved:0,
+              pending:0
+            },
             yaxisimporter:[]
         };
 
@@ -87,30 +96,6 @@ class Analyticsreporting extends Component {
 
         })
     }
-    get_y_axis_uploader()
-    {
-        let uploaderarray=[];
-        let uploader={};
-        requests.postRequest('connector/get/services?filters[type]=uploader').then(data1 => {
-            console.log(data1);
-            if (data1.success == true) {
-                uploader = data1.data;
-
-                Object.keys(uploader).map(uploaderkey => {
-
-                        uploaderarray.push(uploader[uploaderkey]['title'])
-                    }
-                )
-                this.setState({yaxisuploader:uploaderarray})
-            }
-            else {
-                notify.error(data1.message);
-            }
-
-        })
-
-    }
-
 
     getalluploader()
     {
@@ -122,11 +107,14 @@ class Analyticsreporting extends Component {
 
                 Object.keys(uploader).map(uploaderkey => {
 
-                        uploaderarray.push(uploader[uploaderkey]['title'])
+                        uploaderarray.push(uploader[uploaderkey]['marketplace']);
+                        uploaderoptions.push({label:uploader[uploaderkey]['title'],value:uploader[uploaderkey]['marketplace']})
                     }
                 )
-
-                this.setState({uploader:uploaderarray})
+                this.setState({
+                    selecteduploadermarketplace:uploaderarray[0]
+                });
+                this.get_y_axis_uploader(uploaderarray[0]);
             }
             else {
                 notify.error(data1.message);
@@ -134,6 +122,53 @@ class Analyticsreporting extends Component {
 
         })
     }
+
+    get_y_axis_uploader(uploader_marketplce) {
+        let uploaderarray = [];
+        let uploader = [];
+        let uploaded=0;
+        let approved=0;
+        let pending=0;
+            requests.getRequest('frontend/app/getProductsUploadedData', {marketplace: uploader_marketplce}).then(data1 => {
+                console.log(data1);
+                if (data1.success == true) {
+                    uploader = data1.data;
+
+                   for(let j=0;j<uploader.length;j++)
+                   {
+                       let status=uploader[j].status
+                           if(status=='approved'){
+                               approved+=1;
+                           }
+                           else if(status=='uploaded'){
+                               uploaded+=1;
+                           }
+                           else if(status=='pending')
+                           {
+                               pending+=1;
+                           }
+                        }
+
+
+                }
+                else {
+                    notify.error(data1.message);
+                }
+                uploaderarray=[];
+                uploaderarray.push(pending);
+                uploaderarray.push(approved);
+                uploaderarray.push(uploaded);
+
+                this.setState({yaxisuploader:uploaderarray})
+            })
+
+
+
+
+    }
+
+
+
 
 
     preparedata(){
@@ -148,6 +183,13 @@ class Analyticsreporting extends Component {
     };
     handleChangeuploader = (newValue) => {
         this.setState({selecteduploader: newValue});
+    };
+
+    handleChangeuploadermarketplace = (newValue) => {
+        console.log(newValue);
+        this.get_y_axis_uploader(newValue);
+        this.setState({selecteduploadermarketplace: newValue});
+
     };
 
 
@@ -327,7 +369,7 @@ class Analyticsreporting extends Component {
             labels: this.state.uploader,
             datasets: [
                 {
-                    label: 'Uploaders',
+                    label: 'Status',
                     fill: false,
                     lineTension: 0.1,
                     backgroundColor: 'rgba(75,192,192,0.4)',
@@ -345,14 +387,14 @@ class Analyticsreporting extends Component {
                     pointHoverBorderWidth: 2,
                     pointRadius: 1,
                     pointHitRadius: 10,
-                    data: [20,50, 10, 81, 56, 55, 40]
+                    data: this.state.yaxisuploader
                 },
             ]
         };
         const pie = {
             labels: this.state.uploader,
             datasets: [{
-                data: [300, 50],
+                data: this.state.yaxisuploader,
                 backgroundColor: [
                     '#FF6384',
                     '#36A2EB',
@@ -386,7 +428,7 @@ class Analyticsreporting extends Component {
             labels: this.state.uploader,
             datasets: [
                 {
-                    label: 'Uploaders',
+                    label:'Status',
                     backgroundColor: [
                         '#FF6384',
                         '#36A2EB',
@@ -440,14 +482,14 @@ class Analyticsreporting extends Component {
                         '#a3c2c2'
 
                     ],
-                    data: [65, 59, 80, 81, 56, 55, 40]
+                    data: this.state.yaxisuploader
                 }
             ]
         };
         switch (this.state.selecteduploader)
         {
             case 'line':
-                return <Line height={200} data={line}
+                return <Line height={300} data={line}
                              options=
                                  {{
                                      maintainAspectRatio: false
@@ -455,14 +497,14 @@ class Analyticsreporting extends Component {
                 />
                 break;
             case 'bar':
-                return   <Bar height={200} data={bar}
+                return   <Bar height={300} data={bar}
                               options={{
                                   maintainAspectRatio: false
                               }}
                 />
                 break;
             case 'pie':
-                return <Pie height={100} data={pie}/>
+                return <Pie height={150} data={pie}/>
                 break;
         }
     }
@@ -494,29 +536,37 @@ class Analyticsreporting extends Component {
                         </div>
                     </div>
                 </Card>
-                {/*<Card title="Products Uploaded">*/}
-                    {/*<div className="p-4">*/}
-                        {/*<div className="row">*/}
-                            {/*<div className="col-md-8"></div>*/}
-                            {/*<div className="col-12 col-md-4">*/}
-                                {/*<Select*/}
-                                    {/*label=""*/}
-                                    {/*options={options}*/}
-                                    {/*onChange={this.handleChangeuploader}*/}
-                                    {/*value={this.state.selecteduploader}*/}
-                                {/*/>*/}
-                            {/*</div>*/}
-                        {/*</div>*/}
+                <Card title="Products Upload Status">
+                    <div className="p-4">
+                        <div className="row">
+                            <div className="col-12 col-md-4 pt-1 pb-1">
+                                <Select
+                                    label=""
+                                    options={uploaderoptions}
+                                    onChange={this.handleChangeuploadermarketplace}
+                                    value={this.state.selecteduploadermarketplace}
+                                />
+                            </div>
+                            <div className="col-md-4 pt-1 pb-1"></div>
+                            <div className="col-12 col-md-4 pt-1 pb-1">
+                                <Select
+                                    label=""
+                                    options={options}
+                                    onChange={this.handleChangeuploader}
+                                    value={this.state.selecteduploader}
+                                />
+                            </div>
+                        </div>
 
-                        {/*<div className="row">*/}
-                            {/*<div className="col-md-12">*/}
-                                {/*{*/}
-                                    {/*this.uploaderreports()*/}
-                                {/*}*/}
-                            {/*</div>*/}
-                        {/*</div>*/}
-                    {/*</div>*/}
-                {/*</Card>*/}
+                        <div className="row">
+                            <div className="col-md-12">
+                                {
+                                    this.uploaderreports()
+                                }
+                            </div>
+                        </div>
+                    </div>
+                </Card>
             </Page>
         );
     }
