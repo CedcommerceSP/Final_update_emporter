@@ -516,7 +516,7 @@ class Analyticsreporting extends Component {
                 primaryAction={{content: 'Back', onClick: () => {
                         this.redirect('/panel/products');
                     }}}
-                title="Analysis & Reports">
+                title="Product Analytics">
                 <Card title="Products Imported">
                     <div className="p-4">
                         <div className="row">
