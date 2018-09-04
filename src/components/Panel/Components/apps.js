@@ -58,26 +58,6 @@ export class Apps extends Component {
                                         details={app['installed']==0?'Connect Now':'Already Connected'}
                                         termsOfService={<img src={app.image} alt={app.title}/>}
                                     />
-
-                                    {/*<Card title={app.title} sectioned>*/}
-                                        {/*<img src={app.image} alt={app.title} />*/}
-                                        {/*{*/}
-                                            {/*app.title === 'Shopify' &&*/}
-                                            {/*<div className="text-center">*/}
-                                                {/*<Button onClick={() => {*/}
-                                                        {/*this.installApp(app.code);*/}
-                                                    {/*}}>Get App</Button>*/}
-                                            {/*</div>*/}
-                                        {/*}*/}
-                                        {/*{*/}
-                                            {/*app.title !== 'Shopify' &&*/}
-                                            {/*<div className="text-center">*/}
-                                                {/*<Button onClick={() => {*/}
-                                                    {/*this.installApp(app.code);*/}
-                                                {/*}}>Link Your Account</Button>*/}
-                                            {/*</div>*/}
-                                        {/*}*/}
-                                    {/*</Card>*/}
                                 </div>
                             );
                         })
@@ -88,7 +68,7 @@ export class Apps extends Component {
     }
 
     installApp(code) {
-        this.redirect('/panel/apps/install?code=' + code);
+        this.redirect('/panel/accounts/install?code=' + code);
     }
 
     redirect(url) {

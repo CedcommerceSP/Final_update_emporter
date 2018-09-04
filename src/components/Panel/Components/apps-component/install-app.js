@@ -4,6 +4,10 @@ import { Redirect } from 'react-router-dom';
 import { Banner,
          TextField,
          Button,
+         Heading,
+         Checkbox,
+         Label,
+         Select,
          Page } from '@shopify/polaris';
 
 import * as queryString  from 'query-string';
@@ -38,27 +42,70 @@ export class InstallApp extends Component {
         if (this.state.code) {
             return (
                 <Page
+                    primaryAction={{content: 'Back', onClick: () => {
+                        this.redirect('/panel/accounts');
+                    }}}
                     title="Install App">
                     <div className="row">
                         <div className="col-12 mt-4 mb-4">
-                            <Banner title={capitalizeWord(this.state.code) + ' Installation'}>
+                            <Banner status="info">
+                                <Heading>{capitalizeWord(this.state.code) + ' Installation'}</Heading>
                             </Banner>
                         </div>
                         <div className="col-12 mt-1">
                             <div className="row">
                                 {   !isUndefined(this.state.schema) &&
-                                this.state.schema.map((field) => {
-                                    return (
-                                        <div className="col-12" key={this.state.schema.indexOf(field)}>
-                                            <TextField
-                                                label={field.title}
-                                                type={field.type}
-                                                value={field.value}
-                                                onChange={this.handleChange.bind(this, field.key)}
-                                            />
-                                        </div>
-                                    );
-                                })
+                                    this.state.schema.map((field) => {
+                                        switch(field.type) {
+                                            case 'select':
+                                                return (
+                                                    <div className="col-12 pt-2 pb-2" key={this.state.schema.indexOf(field)}>
+                                                        <Select
+                                                            options={field.options}
+                                                            label={field.title}
+                                                            placeholder={field.title}
+                                                            value={field.value}
+                                                            onChange={this.handleChange.bind(this, field.key)}>
+                                                        </Select>
+                                                    </div>
+                                                );
+                                                break;
+                                            case 'checkbox':
+                                                return (
+                                                    <div className="col-12 pt-2 pb-2" key={this.state.schema.indexOf(field)}>
+                                                        <Label>{field.title}</Label>
+                                                        <div className="row">
+                                                            {
+                                                                field.options.map(option => {
+                                                                    return (
+                                                                        <div className="col-md-6 col-sm-6 col-12 p-1" key={field.options.indexOf(option)}>
+                                                                            <Checkbox
+                                                                                checked={field.value.indexOf(option.value) !== -1}
+                                                                                label={option.value}
+                                                                                onChange={this.handleMultiselectChange.bind(this, this.state.schema.indexOf(field), field.options.indexOf(option))}
+                                                                            />
+                                                                        </div>
+                                                                    );
+                                                                })
+                                                            }
+                                                        </div>
+                                                    </div>
+                                                );
+                                                break;
+                                            default:
+                                                return (
+                                                    <div className="col-12 pt-2 pb-2" key={this.state.schema.indexOf(field)}>
+                                                        <TextField
+                                                            label={field.title}
+                                                            placeholder={field.title}
+                                                            value={field.value}
+                                                            onChange={this.handleChange.bind(this, field.key)}>
+                                                        </TextField>
+                                                    </div>
+                                                );
+                                                break;
+                                        }
+                                    })
                                 }
                                 <div className="col-12 text-center mt-3">
                                     <Button onClick={() => {
@@ -86,6 +133,21 @@ export class InstallApp extends Component {
                 break;
             }
         }
+    }
+
+    handleMultiselectChange(index, optionIndex, event) {
+        const checkboxValue = this.state.schema[index].options[optionIndex].value;
+        const optIndex = this.state.schema[index].value.indexOf(checkboxValue);
+        if (event) {
+            if (optIndex === -1) {
+                this.state.schema[index].value.push(checkboxValue);
+            }
+        } else {
+            if (optIndex !== -1) {
+                this.state.schema[index].value.splice(optIndex, 1);
+            }
+        }
+        this.updateState();
     }
 
     onSubmit() {

@@ -226,13 +226,15 @@ export class Import extends Component {
                         {
                             this.state.uploadProductDetails.source !== '' &&
                             this.state.importerShopLists.length > 1 &&
-                            <Select
-                                label={capitalizeWord(this.state.uploadProductDetails.source) + " Shop"}
-                                placeholder="Source Shop"
-                                options={this.state.importerShopLists}
-                                onChange={this.handleImportChange.bind(this, 'shop')}
-                                value={this.state.uploadProductDetails.source_shop}
-                            />
+                            <div className="col-12 pt-1 pb-1 mt-2 mb-2">
+                                <Select
+                                    label={capitalizeWord(this.state.uploadProductDetails.source) + " Shop"}
+                                    placeholder="Source Shop"
+                                    options={this.state.importerShopLists}
+                                    onChange={this.handleImportChange.bind(this, 'shop')}
+                                    value={this.state.uploadProductDetails.source_shop}
+                                />
+                            </div>
                         }
                         <div className="col-12 pt-1 pb-1 mt-2 mb-2">
                             <Select
@@ -246,13 +248,15 @@ export class Import extends Component {
                         {
                             this.state.uploadProductDetails.target !== '' &&
                             this.state.uploaderShopLists.length > 1 &&
-                            <Select
-                                label={capitalizeWord(this.state.uploadProductDetails.target) + " Shop"}
-                                placeholder="Target Shop"
-                                options={this.state.uploaderShopLists}
-                                onChange={this.handleImportChange.bind(this, 'target_shop')}
-                                value={this.state.uploadProductDetails.target_shop}
-                            />
+                            <div className="col-12 pt-1 pb-1 mt-2 mb-2">
+                                <Select
+                                    label={capitalizeWord(this.state.uploadProductDetails.target) + " Shop"}
+                                    placeholder="Target Shop"
+                                    options={this.state.uploaderShopLists}
+                                    onChange={this.handleImportChange.bind(this, 'target_shop')}
+                                    value={this.state.uploadProductDetails.target_shop}
+                                />
+                            </div>
                         }
                         <div className="col-12 pt-1 pb-1">
                             <Banner status="info">
