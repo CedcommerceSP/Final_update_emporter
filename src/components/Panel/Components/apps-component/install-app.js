@@ -45,11 +45,11 @@ export class InstallApp extends Component {
                     primaryAction={{content: 'Back', onClick: () => {
                         this.redirect('/panel/accounts');
                     }}}
-                    title="Install App">
+                    title="Connect Account">
                     <div className="row">
                         <div className="col-12 mt-4 mb-4">
                             <Banner status="info">
-                                <Heading>{capitalizeWord(this.state.code) + ' Installation'}</Heading>
+                                <Heading>{'Connect ' + capitalizeWord(this.state.code)}</Heading>
                             </Banner>
                         </div>
                         <div className="col-12 mt-1">
