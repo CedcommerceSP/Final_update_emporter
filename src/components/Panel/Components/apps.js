@@ -41,7 +41,10 @@ export class Apps extends Component {
     render() {
         return (
             <Page
-                title="Accounts">
+                title="Accounts"
+            primaryAction={{content:'Connected Accounts', onClick:() => {
+                   this.redirect('/panel/accounts/connect');
+                }}}>
                 <div className="row">
                     {
                         this.state.apps.map(app => {
