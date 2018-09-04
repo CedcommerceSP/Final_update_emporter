@@ -31,6 +31,7 @@ import './panel.css';
 import CurrentPlan from "./Components/plans-component/current-plan";
 import Analyticsreporting from "./Components/products-component/analytics-reporting";
 import BillingHistory from "./Components/plans-component/billing-history";
+import ConnectedAccounts from "./Components/apps-component/connected-accounts";
 
 export class Panel extends Component {
 
@@ -60,9 +61,10 @@ export class Panel extends Component {
                                 <Route path='/panel/products/edit/:id' component={EditProduct}/>
                                 <Route exact path='/panel/products/analysis' component={Analyticsreporting}/>
                                 <Route exact path='/panel/accounts' component={Apps}/>
+                                <Route exact path='/panel/accounts/connect' component={ConnectedAccounts}/>
                                 <Route exact path='/panel/plans' component={Plans}/>
-                                <Route path='/panel/apps/install' component={InstallApp}/>
-                                <Route path='/panel/apps/success' component={AppInstalled}/>
+                                <Route path='/panel/accounts/install' component={InstallApp}/>
+                                <Route path='/panel/accounts/success' component={AppInstalled}/>
                                 <Route exact path='/panel/import' component={Import}/>
                                 <Route exact path='/panel/profiling' component={Profiling}/>
                                 <Route exact path='/panel/profiling/create' component={CreateProfile}/>

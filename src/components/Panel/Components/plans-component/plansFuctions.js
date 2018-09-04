@@ -10,7 +10,7 @@ export function dataGrids(result) {
            description: value.description,
            main_price: checkValue(value.custom_price, value.discount_type, value.discount, value.services_groups ),
            discount: value.discount,
-           originalValue: value.custom_price !== 0?value.custom_price:checkIfNull(value.services_groups),
+           originalValue: value.custom_price !== ""?value.custom_price:checkIfNull(value.services_groups),
            services: createServices(value.services_groups),
        });
     });
@@ -48,7 +48,7 @@ function createServices(result) {
   return result;
 }
 function checkValidity(data) {
-    if ( data === '30' ) {
+    if ( data <= '30' && data >= '28' ) {
         return '/month';
     } else if ( data === '365' || data === '366' ) {
         return '/annual';
@@ -66,23 +66,29 @@ function checkIfNull(service) {
 }
 /*************************  Remove unselected Services  *******************************************/
 export function RemoveService(arg, service) {
-    // console.log(arg.services);
-    // console.log(service);
-    arg.services.forEach(value => {
+let val = [];
+let arg2 = JSON.stringify(arg);
+arg2 = JSON.parse(arg2);
+    arg2.services.forEach(value => {
         value.services.forEach((data, index) => {
-            let flag = 0;
            service.forEach(serv => {
-               // console.log(data, serv.title);
-               if ( data.title === serv.title ) {
-                   if ( !serv.isSelected ) {
-                       flag = 1;
+               if ( data.title === serv.title || data.required === 'yes') {
+                   if ( serv.isSelected || data.required === 'yes' ) {
+                       let flag = 0;
+                       val.forEach(val => {
+                           if ( val.title === serv.title || val.title === data.title ) {
+                               flag = 1;
+                           }
+                       });
+                       if ( flag === 0 ) {
+                           val.push(data);
+                       }
                    }
                }
            });
-           if ( flag !== 0 ) {
-               console.log(value.services.splice(value.services.indexOf(value.services[index]),1));
-           }
         });
+        value.services = val.slice(0);
+        val = [];
     });
-    return arg;
+    return arg2;
 }

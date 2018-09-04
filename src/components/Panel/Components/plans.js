@@ -23,7 +23,7 @@ export class Plans extends Component {
     }
     componentWillMount() {
         requests.getRequest('plan/plan/get').then(data => {
-            console.log(data);
+            // console.log(data);
             if ( data.success ) {
                 if ( data.data !== null && !isUndefined(data.data) ) {
                     data = dataGrids(data.data.data.rows);
@@ -35,27 +35,28 @@ export class Plans extends Component {
         });
     }
     onSelectPlan(arg) {
-        requests.postRequest('/plan/plan/choose',arg).then(data => console.log(data));
-        // let value = [];
-        // let flag = 0;
-        // let newArg = Object.assign({}, arg);
-        // let data ;
-        // this.state.checkBox.forEach(data => {
-        //     if (data.key === newArg.id) {
-        //         value.push(Object.assign({}, data));
-        //         flag = 1;
-        //     }
-        // });
-        // if ( flag === 1 )
-        //     data = Object.assign({},RemoveService(Object.assign({},newArg), value));
-        // console.log(data, arg);
+        let value = [];
+        let flag = 0;
+        let newArg = Object.assign({}, arg);
+        let data1 ;
+        this.state.checkBox.forEach(data => {
+            if (data.key === newArg.id) {
+                value.push(Object.assign({}, data));
+                flag = 1;
+            }
+        });
+        if ( flag === 1 )
+            data1 = Object.assign({},RemoveService(Object.assign({},newArg), value.slice(0)));
+        else data1 = arg;
+        console.log(data1);
+        requests.postRequest('/plan/plan/choose',data1).then(data => console.log(data));
+
     }
     onCheckBox(event) {
         let data = this.state.checkBox;
         data.forEach(Data => {
             if ( Data.title === event ) {
                 Data.isSelected = !Data.isSelected;
-                console.log(Data);
             }
         });
         this.setState({checkBox: data});
