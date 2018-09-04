@@ -23,7 +23,7 @@ export class Plans extends Component {
     }
     componentWillMount() {
         requests.getRequest('plan/plan/get').then(data => {
-            // console.log(data);
+            console.log(data);
             if ( data.success ) {
                 if ( data.data !== null && !isUndefined(data.data) ) {
                     data = dataGrids(data.data.data.rows);
@@ -45,12 +45,9 @@ export class Plans extends Component {
                 flag = 1;
             }
         });
-        if ( flag === 1 )
-            data1 = Object.assign({},RemoveService(Object.assign({},newArg), value.slice(0)));
-        else data1 = arg;
+        data1 = Object.assign({},RemoveService(Object.assign({},newArg), value.slice(0)));
         console.log(data1);
-        requests.postRequest('/plan/plan/choose',data1).then(data => console.log(data));
-
+        // requests.postRequest('/plan/plan/choose',data1).then(data => console.log(data));
     }
     onCheckBox(event) {
         let data = this.state.checkBox;
@@ -90,7 +87,7 @@ export class Plans extends Component {
                                                         <span className="price-tag_small">$</span>
                                                         <span className="price-tag_discount"><strike>{data.originalValue}</strike></span>
                                                         {data.main_price}
-                                                        <span className="price-tag_small">{data.validity}</span>
+                                                        <span className="price-tag_small">{data.validity_display}</span>
                                                     </p>
                                                 </div>
                                                 <div className="mb-5"> {/* Button To choose Plan */}
@@ -115,7 +112,7 @@ export class Plans extends Component {
                                                                 </span>-
                                                             </p>
                                                                 {Object.keys(data.services[keys].services).map(key1 => {
-                                                                    if ( data.services[keys].services[key1].required === 'yes' ) {
+                                                                    if ( data.services[keys].services[key1].required === 1 ) {
                                                                         return (<div key={key1} className="text-left">
                                                                             <Checkbox
                                                                                 checked={true}
