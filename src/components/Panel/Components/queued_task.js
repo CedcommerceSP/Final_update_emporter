@@ -42,8 +42,6 @@ export class QueuedTask extends Component {
                     this.state.queuedTasks = this.modifyQueuedTaskData(data.data.rows);
                     this.state.totalQueuedTasks = data.data.count;
                     this.updateState();
-                } else {
-                    notify.error(data.message);
                 }
             });
     }
@@ -62,8 +60,6 @@ export class QueuedTask extends Component {
                     this.state.recentActivities = data.data.rows;
                     this.state.totalRecentActivities = data.data.count;
                     this.updateState();
-                } else {
-                    notify.error(data.message);
                 }
             });
     }

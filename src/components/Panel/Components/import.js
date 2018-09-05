@@ -231,7 +231,7 @@ export class Import extends Component {
                                     label={capitalizeWord(this.state.uploadProductDetails.source) + " Shop"}
                                     placeholder="Source Shop"
                                     options={this.state.importerShopLists}
-                                    onChange={this.handleImportChange.bind(this, 'shop')}
+                                    onChange={this.handleUploadChange.bind(this, 'source_shop')}
                                     value={this.state.uploadProductDetails.source_shop}
                                 />
                             </div>
@@ -253,7 +253,7 @@ export class Import extends Component {
                                     label={capitalizeWord(this.state.uploadProductDetails.target) + " Shop"}
                                     placeholder="Target Shop"
                                     options={this.state.uploaderShopLists}
-                                    onChange={this.handleImportChange.bind(this, 'target_shop')}
+                                    onChange={this.handleUploadChange.bind(this, 'target_shop')}
                                     value={this.state.uploadProductDetails.target_shop}
                                 />
                             </div>
@@ -411,6 +411,7 @@ export class Import extends Component {
                 for (let i = 0; i < this.state.importerShopLists.length; i++) {
                     if (this.state.importerShopLists[i].value === value) {
                         this.state.uploadProductDetails.source_shop_id = this.state.importerShopLists[i].shop_id;
+                        this.state.uploadProductDetails.source_shop = this.state.importerShopLists[i].value;
                         break;
                     }
                 }
@@ -421,6 +422,7 @@ export class Import extends Component {
                 for (let i = 0; i < this.state.uploaderShopLists.length; i++) {
                     if (this.state.uploaderShopLists[i].value === value) {
                         this.state.uploadProductDetails.target_shop_id = this.state.uploaderShopLists[i].shop_id;
+                        this.state.uploadProductDetails.target_shop = this.state.uploaderShopLists[i].value;
                         break;
                     }
                 }
