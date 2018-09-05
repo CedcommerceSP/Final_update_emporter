@@ -66,7 +66,7 @@ export const panelFunctions = {
             },
             {
                 id: 'help',
-                content: 'HELP',
+                content: 'Help',
                 accessibilityLabel: 'HELP',
                 link: '/panel/help',
                 panelID: 'help'

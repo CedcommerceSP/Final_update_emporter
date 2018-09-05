@@ -83,7 +83,7 @@ class FAQPage extends Component {
     render() {
         return (
             <Page
-                title="HELP"
+                title="Help"
             primaryAction={{content:'Report An Issue', onClick:() => {
                     this.redirect('/panel/help/report');
                 }}}>

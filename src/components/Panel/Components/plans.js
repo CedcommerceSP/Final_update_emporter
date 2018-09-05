@@ -4,13 +4,12 @@ import { requests } from '../../../services/request';
 import { dataGrids, RemoveService } from './plans-component/plansFuctions';
 import { isUndefined } from 'util';
 import { notify } from '../../../services/notify';
-
 import { Page,
     Card,
     Select,
     Button,
     Label,
-    Checkbox, Tooltip, Link, Icon } from '@shopify/polaris';
+    Checkbox, Tooltip, Link, Icon, Modal, RadioButton, Stack } from '@shopify/polaris';
 
 export class Plans extends Component {
 
@@ -19,7 +18,19 @@ export class Plans extends Component {
         this.state = {
             data: [],
             checkBox: [],
-        }
+            schemaModal: {
+                show: false,
+                title: '',
+                body: '',
+            }, // for show/Hide Modal
+            schemaData: {
+                method: '',
+                data: []
+            }
+        };
+        this.toggleSchemaModal = this.toggleSchemaModal.bind(this);
+        this.createSchema = this.createSchema.bind(this);
+        this.handleSchemaModalChange = this.handleSchemaModalChange.bind(this);
     }
     componentWillMount() {
         requests.getRequest('plan/plan/get').then(data => {
@@ -47,7 +58,13 @@ export class Plans extends Component {
         });
         data1 = Object.assign({},RemoveService(Object.assign({},newArg), value.slice(0)));
         console.log(data1);
-        // requests.postRequest('/plan/plan/choose',data1).then(data => console.log(data));
+        requests.postRequest('plan/plan/choose',data1).then(data => {
+            if (data.success) {
+                this.getSchema(data.data);
+            } else {
+                notify.error(data.message);
+            }
+        });
     }
     onCheckBox(event) {
         let data = this.state.checkBox;
@@ -111,41 +128,41 @@ export class Plans extends Component {
                                                                     </Tooltip>
                                                                 </span>-
                                                             </p>
-                                                                {Object.keys(data.services[keys].services).map(key1 => {
-                                                                    if ( data.services[keys].services[key1].required === 1 ) {
-                                                                        return (<div key={key1} className="text-left">
-                                                                            <Checkbox
-                                                                                checked={true}
-                                                                                label={data.services[keys].services[key1].title}
-                                                                                disabled={true} />
-                                                                        </div>);
-                                                                    } else {
-                                                                        let ddd = this.state.checkBox;
-                                                                        let flag = 0;
-                                                                        ddd.forEach( valueData => {
-                                                                            if ( valueData.code === data.services[keys].services[key1].code )
-                                                                                flag = 1;
-                                                                        });
-                                                                        if ( flag === 0 ) {
-                                                                            ddd.push({code:data.services[keys].services[key1].code, isSelected: true, key: data.id, id: key1});
-                                                                            this.state.checkBox = ddd;
-                                                                        }
-                                                                        return (<div key={key1} className="text-left form-inline">
-                                                                            {this.state.checkBox.map(kk => {
-                                                                                if ( kk.code === data.services[keys].services[key1].code ) {
-                                                                                    return (
-                                                                                        <Checkbox
-                                                                                            key = { kk.code }
-                                                                                            checked={kk.isSelected}
-                                                                                            label={data.services[keys].services[key1].title}
-                                                                                            onChange={this.onCheckBox.bind(this,data.services[keys].services[key1].code)}
-                                                                                        />
-                                                                                    );
-                                                                                }
-                                                                            })}
-                                                                        </div>);
+                                                            {Object.keys(data.services[keys].services).map(key1 => {
+                                                                if ( data.services[keys].services[key1].required === 1 ) {
+                                                                    return (<div key={key1} className="text-left">
+                                                                        <Checkbox
+                                                                            checked={true}
+                                                                            label={data.services[keys].services[key1].title}
+                                                                            disabled={true} />
+                                                                    </div>);
+                                                                } else {
+                                                                    let ddd = this.state.checkBox;
+                                                                    let flag = 0;
+                                                                    ddd.forEach( valueData => {
+                                                                        if ( valueData.code === data.services[keys].services[key1].code )
+                                                                            flag = 1;
+                                                                    });
+                                                                    if ( flag === 0 ) {
+                                                                        ddd.push({code:data.services[keys].services[key1].code, isSelected: true, key: data.id, id: key1});
+                                                                        this.state.checkBox = ddd;
                                                                     }
-                                                                })}
+                                                                    return (<div key={key1} className="text-left form-inline">
+                                                                        {this.state.checkBox.map(kk => {
+                                                                            if ( kk.code === data.services[keys].services[key1].code ) {
+                                                                                return (
+                                                                                    <Checkbox
+                                                                                        key = { kk.code }
+                                                                                        checked={kk.isSelected}
+                                                                                        label={data.services[keys].services[key1].title}
+                                                                                        onChange={this.onCheckBox.bind(this,data.services[keys].services[key1].code)}
+                                                                                    />
+                                                                                );
+                                                                            }
+                                                                        })}
+                                                                    </div>);
+                                                                }
+                                                            })}
                                                         </React.Fragment>);
                                                     }):null}
                                                 </div>
@@ -156,10 +173,111 @@ export class Plans extends Component {
                             );
                         })}
                     </div>
+                <Modal
+                    title={this.state.schemaModal.title}
+                    open={this.state.schemaModal.show}
+                    primaryAction={{content:'Submit', onClick:() => {this.submit()}}}
+                    onClose={this.toggleSchemaModal}
+                >
+                    <Modal.Section>
+                        {this.state.schemaModal.body}
+                    </Modal.Section>
+                </Modal>
             </Page>
         );
     }
+    getSchema(arg) {
+        console.log(arg.schema);
+        if ( !isUndefined(arg.show_payment_methods) ) {
+            this.setSchema(1, null);
+        } else {
+            this.setSchema(2, arg.schema)
+        }
+    }
+    setSchema(event,arg) {
+        let data = this.state.schemaModal;
+        data.show = true;
+        data.title = 'PAYMENT';
+        switch(event) {
+            case 1 : data.body = this.paymentMethod(arg);break;
+            case 2 : data.body = this.createSchema(arg);break;
+        }
+        this.setState({
+            schemaModal: data
+        });
+    }
+    paymentMethod(arg) {
+        return (
+            <Stack vertical>
+                {arg.map(data => {
+                    return (<RadioButton key={data} label={data.title} helpText={data.description} id={data.title} name="payment" onChange={this.handleSchemaModalChange}/>
+                    );
+                })}
+            </Stack>
+        );
+    }
+    createSchema(arg) {
+        let data = this.state.schemaData;
+        data.data = arg;
+        this.setState({
+            schemaData: data,
+        });
+        console.log(arg);
+        return (
+            arg.map((key, index) => {
+                switch(key.type) {
+                    case 'select' :
+                        let options = [];
+                        arg.forEach(keys => {
+                            keys.options.forEach(key => {
+                                    options.push({label: Object.keys(key)[0],value:Object.keys(key)[0]});
+                            });
+                        });
+                        return (
+                        <div key = {index}>
+                            <Select
+                                options={options}
+                                label={key.title}
+                                onChange={this.schemaConfigurationChange.bind(this, index)}
+                                value={this.state.schemaData.data[index].value}/>
+                        </div>
+                    );
+                    case 'checkbox' : return (
+                        <div className="col-12 pt-2 pb-2" key={index}>
+                        <Label>{arg.title}</Label>
+                    </div>);
+                }
+            })
+        );
+    }
+    schemaConfigurationChange(index,value) {
+        let data = this.state.schemaData;
+        data.data[index].value = value;
+        this.setState({
+            schemaData: data,
+        });
+        this.setSchema(2, this.state.schemaData.data);
+    }
+    handleSchemaModalChange(status, event) {
+        let data = this.state.schemaData;
+        data.method = event;
+        this.setState({
+            schemaData: data,
+        });
+    }
+    submit() {
+        console.log(this.state.schemaData);
+    }
+    toggleSchemaModal() {
+        let data = this.state.schemaModal;
+        data.show = !data.show;
+        this.setState({schemaModal: data});
+    }
     redirect(url) {
         this.props.history.push(url);
+    }
+    updateState() {
+        const state = this.state;
+        this.setState(state);
     }
 }
