@@ -52,7 +52,7 @@ export class Plans extends Component {
     onCheckBox(event) {
         let data = this.state.checkBox;
         data.forEach(Data => {
-            if ( Data.title === event ) {
+            if ( Data.code === event ) {
                 Data.isSelected = !Data.isSelected;
             }
         });
@@ -123,22 +123,22 @@ export class Plans extends Component {
                                                                         let ddd = this.state.checkBox;
                                                                         let flag = 0;
                                                                         ddd.forEach( valueData => {
-                                                                            if ( valueData.title === data.services[keys].services[key1].title )
+                                                                            if ( valueData.code === data.services[keys].services[key1].code )
                                                                                 flag = 1;
                                                                         });
                                                                         if ( flag === 0 ) {
-                                                                            ddd.push({title:data.services[keys].services[key1].title, isSelected: true, key: data.id, id: key1});
+                                                                            ddd.push({code:data.services[keys].services[key1].code, isSelected: true, key: data.id, id: key1});
                                                                             this.state.checkBox = ddd;
                                                                         }
                                                                         return (<div key={key1} className="text-left form-inline">
                                                                             {this.state.checkBox.map(kk => {
-                                                                                if ( kk.title === data.services[keys].services[key1].title ) {
+                                                                                if ( kk.code === data.services[keys].services[key1].code ) {
                                                                                     return (
                                                                                         <Checkbox
-                                                                                            key = { kk.title }
+                                                                                            key = { kk.code }
                                                                                             checked={kk.isSelected}
                                                                                             label={data.services[keys].services[key1].title}
-                                                                                            onChange={this.onCheckBox.bind(this,data.services[keys].services[key1].title)}
+                                                                                            onChange={this.onCheckBox.bind(this,data.services[keys].services[key1].code)}
                                                                                         />
                                                                                     );
                                                                                 }

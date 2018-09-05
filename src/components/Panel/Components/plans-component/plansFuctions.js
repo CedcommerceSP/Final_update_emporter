@@ -74,11 +74,11 @@ arg2 = JSON.parse(arg2);
     arg2.services.forEach(value => {
         value.services.forEach((data, index) => {
            service.forEach(serv => {
-               if ( data.title === serv.title) {
+               if ( data.code === serv.code) {
                    if ( serv.isSelected ) {
                        let flag = 0;
                        val.forEach(val => {
-                           if ( val.title === serv.title ) {
+                           if ( val.code === serv.code ) {
                                flag = 1;
                            }
                        });
@@ -92,7 +92,7 @@ arg2 = JSON.parse(arg2);
                 if ( data.required === 1 ) {
                     let flag = 0;
                     val.forEach(val => {
-                        if ( val.title === data.title ) {
+                        if ( val.code === data.code ) {
                             flag = 1;
                         }
                     });
