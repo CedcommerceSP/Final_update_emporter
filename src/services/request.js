@@ -28,6 +28,9 @@ export const requests = {
                         window.showLoader = false;
                     }
                     return res.json();
+                }).catch(e => {
+                    // window.showReportIssue = true;
+                    return { success: false, message: "Something Went Wrong",code: e }
                 });
         } else {
             return fetch(endpoint + paramsString, {
@@ -41,6 +44,8 @@ export const requests = {
                         window.showLoader = false;
                     }
                     return res.json();
+                }).catch(e => {
+                    return { success: false, message: "Something Went Wrong",code: e }
                 });
         }
     },
@@ -63,6 +68,8 @@ export const requests = {
                         window.showLoader = false;
                     }
                     return res.json();
+                }).catch(e => {
+                    return { success: false, message: "Something Went Wrong",code: e }
                 });
         } else {
             return fetch(endpoint, {
@@ -79,6 +86,8 @@ export const requests = {
                         window.showLoader = false;
                     }
                     return res.json();
+                }).catch(e => {
+                    return { success: false, message: "Something Went Wrong",code: e }
                 });
         }
     }

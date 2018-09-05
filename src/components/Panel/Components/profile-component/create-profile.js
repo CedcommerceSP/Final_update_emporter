@@ -423,7 +423,7 @@ export class CreateProfile extends Component {
                         {
                             querySet.primaryQuery.map((query) => {
                                 return (
-                                    <div key={querySet.primaryQuery.indexOf(query)} className="row">
+                                    <div key={querySet.primaryQuery.indexOf(query)} className="row p-5">
                                         <div className="col-md-4 col-sm-4 col-6 pt-3">
                                             <Select
                                                 label="Attribute"
@@ -567,7 +567,8 @@ export class CreateProfile extends Component {
                     {
                         key: '',
                         operator: '',
-                        value: ''
+                        value: '',
+                        options: '',
                     }
                 ],
                 condition: condition,
@@ -594,7 +595,8 @@ export class CreateProfile extends Component {
             query.primaryQuery.push({
                 key: '',
                 operator: '',
-                value: ''
+                value: '',
+                options:'',
             });
         } else {
             query.secondaryQuery = this.addRule(query.secondaryQuery, position);

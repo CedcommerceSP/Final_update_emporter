@@ -36,7 +36,8 @@ import ConnectedAccounts from "./Components/apps-component/connected-accounts";
 export class Panel extends Component {
 
     state = {
-      showLoader: false
+      showLoader: false,
+      showReportIssue: false,
     };
     menu = panelFunctions.getMenu();
     render() {
