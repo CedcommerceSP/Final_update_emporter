@@ -83,7 +83,10 @@ class FAQPage extends Component {
     render() {
         return (
             <Page
-                title="FAQ">
+                title="HELP"
+            primaryAction={{content:'Report An Issue', onClick:() => {
+                    this.redirect('/panel/help/report');
+                }}}>
                 <div className="row">
                     <div className="col-12 mb-4">
                         <Card>
@@ -167,6 +170,9 @@ class FAQPage extends Component {
         this.setState({
             modal: !this.state.modal
         });
+    }
+    redirect(url) {
+        this.props.history.push(url);
     }
 }
 

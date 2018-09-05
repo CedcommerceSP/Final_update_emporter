@@ -75,7 +75,7 @@ export class CreateProfile extends Component {
                 marketplaceAttributes: []
             },
             targetAttributes: [],
-            sourceAttributes: []
+            sourceAttributes: [],
         };
         this.getProfile();
     }
@@ -268,9 +268,13 @@ export class CreateProfile extends Component {
                 if (data.success) {
                     this.sourceAttributes = [];
                     for (let i = 0; i < data.data.length; i++) {
-                        this.sourceAttributes.push({
+                        !isUndefined(data.data[i].options)?this.sourceAttributes.push({
                             label: data.data[i].title,
-                            value: data.data[i].code
+                            value: data.data[i].code,
+                            options: data.data[i].options,
+                        }):this.sourceAttributes.push({
+                            label: data.data[i].title,
+                            value: data.data[i].code,
                         });
                     }
                     this.updateState();
@@ -423,13 +427,13 @@ export class CreateProfile extends Component {
                         {
                             querySet.primaryQuery.map((query) => {
                                 return (
-                                    <div key={querySet.primaryQuery.indexOf(query)} className="row">
+                                    <div key={querySet.primaryQuery.indexOf(query)} className="row p-5">
                                         <div className="col-md-4 col-sm-4 col-6 pt-3">
                                             <Select
                                                 label="Attribute"
                                                 options={this.sourceAttributes}
                                                 placeholder="Select Attribute"
-                                                onChange={this.handleQueryBuilderChange.bind(this, querySet.position, querySet.primaryQuery.indexOf(query), 'key')}
+                                                onChange={this.handleQueryBuilderChange.bind(this, querySet.position, querySet.primaryQuery.indexOf(query),'key')}
                                                 value={query.key}
                                             />
                                         </div>
@@ -443,12 +447,18 @@ export class CreateProfile extends Component {
                                             />
                                         </div>
                                         <div className="col-md-4 col-sm-4 col-6 pt-3">
-                                            <TextField
+                                            {isUndefined(query.options) || query.options.length <= 0?<TextField
                                                 label="Value"
                                                 value={query.value}
                                                 placeholder="Filter Value"
                                                 onChange={this.handleQueryBuilderChange.bind(this, querySet.position, querySet.primaryQuery.indexOf(query), 'value')}
-                                            />
+                                            />:<Select
+                                                label="Value"
+                                                options={query.options}
+                                                placeholder="Filter Value"
+                                                onChange={this.handleQueryBuilderChange.bind(this, querySet.position, querySet.primaryQuery.indexOf(query), 'value')}
+                                                value={query.value}
+                                            />}
                                         </div>
                                         <div className="col-12 text-right pt-3">
                                             {
@@ -555,7 +565,7 @@ export class CreateProfile extends Component {
         if (query.position === position) {
             query = {};
         } else {
-            query.secondaryQuery = this.addGroup(query.secondaryQuery, position);
+            query.secondaryQuery = this.deleteGroup(query.secondaryQuery, position);
         }
         return query;
     }
@@ -567,7 +577,7 @@ export class CreateProfile extends Component {
                     {
                         key: '',
                         operator: '',
-                        value: ''
+                        value: '',
                     }
                 ],
                 condition: condition,
@@ -594,7 +604,7 @@ export class CreateProfile extends Component {
             query.primaryQuery.push({
                 key: '',
                 operator: '',
-                value: ''
+                value: '',
             });
         } else {
             query.secondaryQuery = this.addRule(query.secondaryQuery, position);
@@ -603,17 +613,44 @@ export class CreateProfile extends Component {
     }
 
     handleQueryBuilderChange(position, index, field, value) {
+        console.log(position, index, field, value);
+        this.checkForOptions(value);
         this.filteredProducts.runQuery = false;
-        this.state.filterQuery = this.updateQueryFilter(this.state.filterQuery, position, index, field, value);
+        if (field === 'key') {
+            const options = this.checkForOptions(value);
+            if (options !== false) {
+                this.state.filterQuery = this.updateQueryFilter(this.state.filterQuery, position, index, field, value, options);
+            } else {
+                this.state.filterQuery = this.updateQueryFilter(this.state.filterQuery, position, index, field, value);
+            }
+        } else {
+            this.state.filterQuery = this.updateQueryFilter(this.state.filterQuery, position, index, field, value);
+        }
         this.handleFilterQueryChange(this.state.filterQuery);
         this.updateState();
     }
+    checkForOptions(value) {
+        let temp = false;
+        this.sourceAttributes.forEach(data => {
+            if (data.value === value) {
+                if ( !isUndefined(data.options) ) {
+                    temp = data.options;
+                }
+            }
+        });
+        return temp;
+    }
 
-    updateQueryFilter(query, position, index, field, value) {
+    updateQueryFilter(query, position, index, field, value, options) {
         if (query.position === position) {
-            query.primaryQuery[index][field] = value;
+            if ( !isUndefined(options) ) {
+                query.primaryQuery[index][field] = value;
+                query.primaryQuery[index].options = options;
+            } else {
+                query.primaryQuery[index][field] = value;
+            }
         } else {
-            query.secondaryQuery = this.updateQueryFilter(query.secondaryQuery, position, index, field, value);
+            query.secondaryQuery = this.updateQueryFilter(query.secondaryQuery, position, index, field, value, options);
         }
         return query;
     }
@@ -886,7 +923,6 @@ export class CreateProfile extends Component {
         if (this.state.products_select.query !== '') {
             requests.postRequest('connector/product/getProductsByQuery', { marketplace: this.state.basicDetails.source, query: this.state.products_select.query, sendCount: true })
                 .then(data => {
-                    console.log(data);
                     if (data.success) {
                         this.filteredProducts = {
                             runQuery: true,

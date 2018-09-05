@@ -2,7 +2,7 @@ import { environment } from '../environments/environment';
 import { globalState } from './globalstate';
 
 import { isUndefined } from 'util';
-
+const message = 'For Report Issue Go to HELP section';
 export const requests = {
     getRequest: (endpoint, params, fullUrl, hideLoader) => {
         if (isUndefined(hideLoader) || !hideLoader) {
@@ -27,7 +27,11 @@ export const requests = {
                     if (isUndefined(hideLoader) || !hideLoader) {
                         window.showLoader = false;
                     }
+                    // window.showReportIssue = true;
                     return res.json();
+                }).catch(e => {
+                    // window.showReportIssue = true;
+                    return { success: false, message: message,code: e }
                 });
         } else {
             return fetch(endpoint + paramsString, {
@@ -41,6 +45,8 @@ export const requests = {
                         window.showLoader = false;
                     }
                     return res.json();
+                }).catch(e => {
+                    return { success: false, message: message,code: e }
                 });
         }
     },
@@ -63,6 +69,8 @@ export const requests = {
                         window.showLoader = false;
                     }
                     return res.json();
+                }).catch(e => {
+                    return { success: false, message: message,code: e }
                 });
         } else {
             return fetch(endpoint, {
@@ -79,6 +87,8 @@ export const requests = {
                         window.showLoader = false;
                     }
                     return res.json();
+                }).catch(e => {
+                    return { success: false, message: message,code: e }
                 });
         }
     }

@@ -11,6 +11,7 @@ import { AppProvider } from '@shopify/polaris';
 import { Auth } from './components/Auth/auth';
 import { Panel } from './components/Panel/panel';
 import { PageLoader } from './shared/loader';
+import  ReportIssue from './shared/report-issue';
 import  OthersRoutes  from './components/other/routes';
 import { globalState } from './services/globalstate';
 import history from './shared/history';
@@ -20,7 +21,8 @@ import { isUndefined } from 'util';
 export class App extends Component {
 
   state = {
-      showLoader: false
+      showLoader: false,
+      showReportIssue: false,
   };
   constructor() {
       super();
@@ -35,6 +37,12 @@ export class App extends Component {
               const state = this.state;
               this.setState(state);
           }
+          if (this.state.showReportIssue !== window.showReportIssue &&
+              !isUndefined(window.showReportIssue)) {
+              this.state.showReportIssue = window.showReportIssue;
+              const state = this.state;
+              this.setState(state);
+          }
       }, 50);
   }
 
@@ -45,6 +53,10 @@ export class App extends Component {
                 {
                     this.state.showLoader &&
                     <PageLoader height="100" width="100" type="Bars" color="#3f4eae" ></PageLoader>
+                }
+                {
+                    this.state.showReportIssue &&
+                    <ReportIssue height="100" width="100" type="Bars" color="#3f4eae" ></ReportIssue>
                 }
                 <Switch>
                     <Route exact path="/" render={() => (

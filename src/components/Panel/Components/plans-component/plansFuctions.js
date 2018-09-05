@@ -5,9 +5,11 @@ export function dataGrids(result) {
     result.forEach(value => {
        data.push({
            id: value.plan_id,
-           validity: checkValidity(value.validity),
+           validity_display: checkValidity(value.validity),
+           validity: value.validity,
            title: value.title,
            description: value.description,
+           connectors:value.connectors,
            main_price: checkValue(value.custom_price, value.discount_type, value.discount, value.services_groups ),
            discount: value.discount,
            originalValue: value.custom_price !== ""?value.custom_price:checkIfNull(value.services_groups),
@@ -72,11 +74,11 @@ arg2 = JSON.parse(arg2);
     arg2.services.forEach(value => {
         value.services.forEach((data, index) => {
            service.forEach(serv => {
-               if ( data.title === serv.title || data.required === 'yes') {
-                   if ( serv.isSelected || data.required === 'yes' ) {
+               if ( data.code === serv.code) {
+                   if ( serv.isSelected ) {
                        let flag = 0;
                        val.forEach(val => {
-                           if ( val.title === serv.title || val.title === data.title ) {
+                           if ( val.code === serv.code ) {
                                flag = 1;
                            }
                        });
@@ -86,9 +88,21 @@ arg2 = JSON.parse(arg2);
                    }
                }
            });
+            if ( data.required === 1) {
+                if ( data.required === 1 ) {
+                    let flag = 0;
+                    val.forEach(val => {
+                        if ( val.code === data.code ) {
+                            flag = 1;
+                        }
+                    });
+                    if ( flag === 0 ) {
+                        val.push(data);
+                    }
+                }
+            }
         });
-        value.services = val.slice(0);
-        val = [];
     });
+    arg2.services = val;
     return arg2;
 }

@@ -18,6 +18,9 @@ export class Header extends Component {
         };
         this.setActiveTab(props);
     }
+    componentWillReceiveProps(nextProps) {
+        this.setActiveTab(nextProps);
+    }
 
     setActiveTab(props) {
         const activeUrl = props.history.location.pathname;
