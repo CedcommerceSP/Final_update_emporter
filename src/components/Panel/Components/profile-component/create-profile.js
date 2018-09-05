@@ -75,7 +75,7 @@ export class CreateProfile extends Component {
                 marketplaceAttributes: []
             },
             targetAttributes: [],
-            sourceAttributes: []
+            sourceAttributes: [],
         };
         this.getProfile();
     }
@@ -270,7 +270,12 @@ export class CreateProfile extends Component {
                     for (let i = 0; i < data.data.length; i++) {
                         this.sourceAttributes.push({
                             label: data.data[i].title,
-                            value: data.data[i].code
+                            value: data.data[i].code,
+                            options: data.data[i].code !== 'sku'?[]:[
+                                { label :'option 1',value: "option 1"},
+                                { label :'option 2',value: 'option 2'},
+                                { label :'option 3',value: 'option 3'}
+                            ]
                         });
                     }
                     this.updateState();
@@ -429,7 +434,7 @@ export class CreateProfile extends Component {
                                                 label="Attribute"
                                                 options={this.sourceAttributes}
                                                 placeholder="Select Attribute"
-                                                onChange={this.handleQueryBuilderChange.bind(this, querySet.position, querySet.primaryQuery.indexOf(query), 'key')}
+                                                onChange={this.handleQueryBuilderChange.bind(this, querySet.position, querySet.primaryQuery.indexOf(query),'key')}
                                                 value={query.key}
                                             />
                                         </div>
@@ -443,12 +448,18 @@ export class CreateProfile extends Component {
                                             />
                                         </div>
                                         <div className="col-md-4 col-sm-4 col-6 pt-3">
-                                            <TextField
+                                            {isUndefined(query.options) || query.options.length <= 0?<TextField
                                                 label="Value"
                                                 value={query.value}
                                                 placeholder="Filter Value"
                                                 onChange={this.handleQueryBuilderChange.bind(this, querySet.position, querySet.primaryQuery.indexOf(query), 'value')}
-                                            />
+                                            />:<Select
+                                                label="Value"
+                                                options={query.options}
+                                                placeholder="Filter Value"
+                                                onChange={this.handleQueryBuilderChange.bind(this, querySet.position, querySet.primaryQuery.indexOf(query), 'value')}
+                                                value={query.value}
+                                            />}
                                         </div>
                                         <div className="col-12 text-right pt-3">
                                             {
@@ -568,7 +579,6 @@ export class CreateProfile extends Component {
                         key: '',
                         operator: '',
                         value: '',
-                        options: '',
                     }
                 ],
                 condition: condition,
@@ -596,7 +606,6 @@ export class CreateProfile extends Component {
                 key: '',
                 operator: '',
                 value: '',
-                options:'',
             });
         } else {
             query.secondaryQuery = this.addRule(query.secondaryQuery, position);
@@ -605,17 +614,44 @@ export class CreateProfile extends Component {
     }
 
     handleQueryBuilderChange(position, index, field, value) {
+        console.log(position, index, field, value);
+        this.checkForOptions(value);
         this.filteredProducts.runQuery = false;
-        this.state.filterQuery = this.updateQueryFilter(this.state.filterQuery, position, index, field, value);
+        if (field === 'key') {
+            const options = this.checkForOptions(value);
+            if (options !== false) {
+                this.state.filterQuery = this.updateQueryFilter(this.state.filterQuery, position, index, field, value, options);
+            } else {
+                this.state.filterQuery = this.updateQueryFilter(this.state.filterQuery, position, index, field, value);
+            }
+        } else {
+            this.state.filterQuery = this.updateQueryFilter(this.state.filterQuery, position, index, field, value);
+        }
         this.handleFilterQueryChange(this.state.filterQuery);
         this.updateState();
     }
+    checkForOptions(value) {
+        let temp = false;
+        this.sourceAttributes.forEach(data => {
+            if (data.value === value) {
+                if ( !isUndefined(data.options) ) {
+                    temp = data.options;
+                }
+            }
+        });
+        return temp;
+    }
 
-    updateQueryFilter(query, position, index, field, value) {
+    updateQueryFilter(query, position, index, field, value, options) {
         if (query.position === position) {
-            query.primaryQuery[index][field] = value;
+            if ( !isUndefined(options) ) {
+                query.primaryQuery[index][field] = value;
+                query.primaryQuery[index].options = options;
+            } else {
+                query.primaryQuery[index][field] = value;
+            }
         } else {
-            query.secondaryQuery = this.updateQueryFilter(query.secondaryQuery, position, index, field, value);
+            query.secondaryQuery = this.updateQueryFilter(query.secondaryQuery, position, index, field, value, options);
         }
         return query;
     }
@@ -888,7 +924,6 @@ export class CreateProfile extends Component {
         if (this.state.products_select.query !== '') {
             requests.postRequest('connector/product/getProductsByQuery', { marketplace: this.state.basicDetails.source, query: this.state.products_select.query, sendCount: true })
                 .then(data => {
-                    console.log(data);
                     if (data.success) {
                         this.filteredProducts = {
                             runQuery: true,
