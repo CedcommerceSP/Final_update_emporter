@@ -32,6 +32,7 @@ import CurrentPlan from "./Components/plans-component/current-plan";
 import Analyticsreporting from "./Components/products-component/analytics-reporting";
 import BillingHistory from "./Components/plans-component/billing-history";
 import ConnectedAccounts from "./Components/apps-component/connected-accounts";
+import ReportAnIssue from "./Components/help-component/report-issue";
 
 export class Panel extends Component {
 
@@ -75,7 +76,8 @@ export class Panel extends Component {
                                 <Route exact path='/panel/plans/history' component={BillingHistory}/>
                                 <Route exact path='/panel/queuedtasks' component={QueuedTask}/>
                                 <Route exact path='/panel/queuedtasks/activities' component={Activities}/>
-                                <Route exact path='/panel/faq' component={FAQPage}/>
+                                <Route exact path='/panel/help' component={FAQPage}/>
+                                <Route exact path='/panel/help/report' component={ReportAnIssue}/>
                                 <Route exact path='/panel/integration' component={IntegrationPage}/>
                                 <Route exact path='/panel/dashboard' component={Dashboard}/>
                                 <Route exact path="**" render={() => (

@@ -118,7 +118,6 @@ export class Profiling extends Component {
                             }}
                             columnFilters={(filters) => {
                                 this.filters.column_filters = filters;
-                                console.log(this.filters);
                                 this.getProfiles();
                             }}
                             sortable

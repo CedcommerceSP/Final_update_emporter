@@ -65,11 +65,11 @@ export const panelFunctions = {
                 panelID: 'queuedtasks'
             },
             {
-                id: 'faq',
-                content: 'FAQ',
-                accessibilityLabel: 'FAQ',
-                link: '/panel/faq',
-                panelID: 'fag'
+                id: 'help',
+                content: 'HELP',
+                accessibilityLabel: 'HELP',
+                link: '/panel/help',
+                panelID: 'help'
             }
         ];
         return menu;

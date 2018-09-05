@@ -268,14 +268,13 @@ export class CreateProfile extends Component {
                 if (data.success) {
                     this.sourceAttributes = [];
                     for (let i = 0; i < data.data.length; i++) {
-                        this.sourceAttributes.push({
+                        !isUndefined(data.data[i].options)?this.sourceAttributes.push({
                             label: data.data[i].title,
                             value: data.data[i].code,
-                            options: data.data[i].code !== 'sku'?[]:[
-                                { label :'option 1',value: "option 1"},
-                                { label :'option 2',value: 'option 2'},
-                                { label :'option 3',value: 'option 3'}
-                            ]
+                            options: data.data[i].options,
+                        }):this.sourceAttributes.push({
+                            label: data.data[i].title,
+                            value: data.data[i].code,
                         });
                     }
                     this.updateState();
@@ -566,7 +565,7 @@ export class CreateProfile extends Component {
         if (query.position === position) {
             query = {};
         } else {
-            query.secondaryQuery = this.addGroup(query.secondaryQuery, position);
+            query.secondaryQuery = this.deleteGroup(query.secondaryQuery, position);
         }
         return query;
     }
