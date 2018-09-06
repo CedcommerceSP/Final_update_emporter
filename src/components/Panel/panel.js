@@ -38,7 +38,6 @@ export class Panel extends Component {
 
     state = {
       showLoader: false,
-      showReportIssue: false,
     };
     menu = panelFunctions.getMenu();
     render() {
