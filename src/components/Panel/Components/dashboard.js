@@ -35,6 +35,7 @@ class Dashboard extends Component {
                 best_time_to_contact: '8-12',
                 term_and_conditon: false,
                 how_u_know_about_us: '',
+                Other_text:'',
 
             }, // Step 1
             info_error: {
@@ -50,16 +51,16 @@ class Dashboard extends Component {
             }, // Step 1
             plans:[], // step 2
             /****** step 3 ********/
-                API_code: ['google'], // connector/get/installationForm, method -> get, eg: { code : 'google' }
-                account_linked: [], // merchant center account. linked type
-                modalOpen: false,
+            API_code: ['google'], // connector/get/installationForm, method -> get, eg: { code : 'google' }
+            account_linked: [], // merchant center account. linked type
+            modalOpen: false,
             /********* Step 3 ends **********/
             /********* Step 4 **********/
-                config_API: ['google'],
-                config: false,
-                google_configuration: {},
-                google_configuration_updated: false,
-                account_information_updated: false,
+            config_API: ['google'],
+            config: false,
+            google_configuration: {},
+            google_configuration_updated: false,
+            account_information_updated: false,
             /********* Step 4 Ends **********/
             stepData: [], // this will store the current showing step, which is selected from data object e.g Shopify_Google []
             selected: 'Shopify_Google',
@@ -393,67 +394,103 @@ class Dashboard extends Component {
                 <div className="col-12">
                     <Form onSubmit={this.handleSubmit} target="_blank">
                         <FormLayout>
-                            <TextField
-                                value={this.state.info.full_name}
-                                minLength={5}
-                                onChange={this.handleFormChange.bind(this,'full_name')}
-                                error={this.state.info_error.full_name?'Field Is Empty':null}
-                                label="Full Name:"
-                                type="text"
-                            />
-                            <TextField
-                                value={this.state.info.mobile}
-                                minLength={5}
-                                error={this.state.info_error.mobile?'Field Is Empty':null}
-                                onChange={this.handleFormChange.bind(this,'mobile')}
-                                label="Phone Number:"
-                                type="tel"
-                            />
-                            <TextField
-                                value={this.state.info.email}
-                                minLength={5}
-                                error={this.state.info_error.email?'Field Is Empty':null}
-                                onChange={this.handleFormChange.bind(this,'email')}
-                                label="Email:"
-                                type="email"
-                            />
+                            <div className='row'>
+                                <div className="col-12 col-md-12">
+                                    <TextField
+                                        value={this.state.info.full_name}
+                                        minLength={5}
+                                        onChange={this.handleFormChange.bind(this,'full_name')}
+                                        error={this.state.info_error.full_name?'Field Is Empty':null}
+                                        label="Full Name:"
+                                        type="text"
+                                    />
+                                </div>
+                                <div className="col-12 col-md-12 text-left">
+                                    {this.state.info.full_name=='' && this.state.info_error.full_name!=true?
+                                        <p className="mt-1" style={{color: 'green'}}>*required</p>
+                                        :null
+                                    }
+                                </div>
+                            </div>
+                            <div className='row'>
+                                <div className="col-12 col-md-12">
+                                    <TextField
+                                        value={this.state.info.mobile}
+                                        minLength={5}
+                                        error={this.state.info_error.mobile?'Field Is Empty':null}
+                                        onChange={this.handleFormChange.bind(this,'mobile')}
+                                        label="Phone Number:"
+                                        type="tel"
+                                    />
+                                </div>
+                                <div className="col-12 col-md-12 text-left">
+                                    {this.state.info.mobile=='' && this.state.info_error.mobile!=true?
+                                        <p className="mt-1" style={{color: 'green'}}>*required</p>
+                                        :null
+                                    }
+                                </div>
+                            </div>
+                            <div className='row'>
+                                <div className="col-12 col-md-12">
+                                    <TextField
+                                        value={this.state.info.email}
+                                        minLength={5}
+                                        error={this.state.info_error.email?'Field Is Empty':null}
+                                        onChange={this.handleFormChange.bind(this,'email')}
+                                        label="Email:"
+                                        type="email"
+                                    />
+                                </div>
+                                <div className="col-12 col-md-12 text-left">
+                                    {this.state.info.email=='' && this.state.info_error.email!=true?
+                                        <p className="mt-1" style={{color: 'green'}}>*required</p>
+                                        :null
+                                    }
+                                </div>
+                            </div>
                             <TextField
                                 value={this.state.info.skype_id}
                                 onChange={this.handleFormChange.bind(this,'skype_id')}
                                 label="Skype ID:"
                                 type="text"
                             />
-                            <Select
-                                label="Your Primary Time Zone"
-                                options={[
-                                    {label: 'Pacific Time', value: 'Pacific Time'},
-                                    {label: 'Mountain Time', value: 'Mountain Time'},
-                                    {label: 'Central Time', value: 'Central Time'},
-                                    {label: 'Eastern Time', value: 'Eastern Time'},
-                                    {label: 'Hawaii Standard Time', value: 'Hawaii Standard Time'},
-                                    {label: 'Alaska Daylight Time', value: 'Alaska Daylight Time'},
-                                    {label: 'other', value: 'other'},
-                                ]}
-                                onChange={this.handleFormChange.bind(this,'primary_time_zone')}
-                                value={this.state.info.primary_time_zone}
-                            />
-                            <Select
-                                label="Preferable Time For Calling"
-                                options={[
-                                    {label: '0-4', value: '0-4'},
-                                    {label: '4-8', value: '4-8'},
-                                    {label: '8-12', value: '8-12'},
-                                    {label: '12-16', value: '12-16'},
-                                    {label: '16-20', value: '16-20'},
-                                    {label: '20-24', value: '20-24'},
-                                ]}
-                                onChange={this.handleFormChange.bind(this,'best_time_to_contact')}
-                                value={this.state.info.best_time_to_contact}
-                            />
+                            <div className="row mt-3">
+                                <div className="col-12 col-md-6">
+                                    <Select
+                                        label="Your Primary Time Zone"
+                                        options={[
+                                            {label: 'Pacific Time', value: 'Pacific Time'},
+                                            {label: 'Mountain Time', value: 'Mountain Time'},
+                                            {label: 'Central Time', value: 'Central Time'},
+                                            {label: 'Eastern Time', value: 'Eastern Time'},
+                                            {label: 'Hawaii Standard Time', value: 'Hawaii Standard Time'},
+                                            {label: 'Alaska Daylight Time', value: 'Alaska Daylight Time'},
+                                            {label: 'other', value: 'other'},
+                                        ]}
+                                        onChange={this.handleFormChange.bind(this,'primary_time_zone')}
+                                        value={this.state.info.primary_time_zone}
+                                    />
+                                </div>
+                                <div className="col-12 col-md-6 mt-3 mt-md-0">
+                                    <Select
+                                        label="Preferable Time For Calling"
+                                        options={[
+                                            {label: '0-4', value: '0-4'},
+                                            {label: '4-8', value: '4-8'},
+                                            {label: '8-12', value: '8-12'},
+                                            {label: '12-16', value: '12-16'},
+                                            {label: '16-20', value: '16-20'},
+                                            {label: '20-24', value: '20-24'},
+                                        ]}
+                                        onChange={this.handleFormChange.bind(this,'best_time_to_contact')}
+                                        value={this.state.info.best_time_to_contact}
+                                    />
+                                </div>
+                            </div>
                             <Select
                                 label="How Do you Know About us"
+                                placeholder="Select"
                                 options={[
-                                    {label: '', value: ''},
                                     {label: 'Shopify App Store', value: 'Shopify App Store'},
                                     {label: 'Google Ads', value: 'Google Ads'},
                                     {label: 'FaceBook Ads', value: 'FaceBook Ads'},
@@ -465,9 +502,17 @@ class Dashboard extends Component {
                                 onChange={this.handleFormChange.bind(this,'how_u_know_about_us')}
                                 value={this.state.info.how_u_know_about_us}
                             />
+                            {this.state.info.how_u_know_about_us=='Other'?
+                                <TextField
+                                    value={this.state.info.Other_text}
+                                    onChange={this.handleFormChange.bind(this, 'Other_text')}
+                                    label="Kindly Mention your Source"
+                                    type="text"
+                                />:null
+                            }
                             <div className="form-control" style={{height:'180px', width:'100%',overflow:'auto'}}>
                                 <h3>CedCommerce Terms & Condition and Privacy Policy</h3><br/><br/><br/>
-                                    {term_and_conditon()}
+                                {term_and_conditon()}
                             </div>
                             <Checkbox
                                 checked={this.state.info.term_and_conditon}
@@ -492,9 +537,9 @@ class Dashboard extends Component {
         console.log(event);
     }
     renderPlan() {
-       if (this.state.plans.length > 0 ) {
-           const tempData = this.state.plans.slice(0,3);
-           return (
+        if (this.state.plans.length > 0 ) {
+            const tempData = this.state.plans.slice(0,3);
+            return (
                 <div className="row">
                     <div className="col-12">
                         <hr/>
@@ -565,7 +610,7 @@ class Dashboard extends Component {
                     })}
                 </div>
             );
-       }
+        }
     }
     /*****************************************  Step 3 linked you account start Here  ***********************************/
     handleModalChange(event) {
@@ -601,7 +646,7 @@ class Dashboard extends Component {
                         <Modal
                             open={this.state.modalOpen}
                             onClose={this.handleModalChange}
-                             title="Continue To Next Step?"
+                            title="Continue To Next Step?"
                             primaryAction={{
                                 content: 'Yes',
                                 onAction: this.handleModalChange.bind(this,'yes'),
@@ -614,18 +659,18 @@ class Dashboard extends Component {
                             ]}
                         >
                             {/*<Modal.Section>*/}
-                                {/*<TextContainer>*/}
-                                    {/*<h4>*/}
-                                        {/*Ask Question Here // TODO Change The Text*/}
-                                    {/*</h4>*/}
-                                {/*</TextContainer>*/}
+                            {/*<TextContainer>*/}
+                            {/*<h4>*/}
+                            {/*Ask Question Here // TODO Change The Text*/}
+                            {/*</h4>*/}
+                            {/*</TextContainer>*/}
                             {/*</Modal.Section>*/}
                         </Modal>
                     </div>
                 }
             })
         }
-         return html;
+        return html;
     }
     /***************************************** step 4 Configurations start here *******************************/
     getGoogleConfigurations() {
@@ -781,7 +826,7 @@ class Dashboard extends Component {
                 <Card>
                     {this.renderStepper()}
                 </Card> {/* Stepper */}
-                    {this.renderBody()} {/* Main Body Function Call Here */}
+                {this.renderBody()} {/* Main Body Function Call Here */}
                 <Modal
                     open={this.state.open_init_modal}
                     onClose={this.handleModalChange.bind(this,'init_modal')}
@@ -803,7 +848,7 @@ class Dashboard extends Component {
                             </div>
                         </Card>
                     </Modal.Section>
-                    </Modal> {/* Open The Init DropDown */}
+                </Modal> {/* Open The Init DropDown */}
             </Page>
         );
     }
