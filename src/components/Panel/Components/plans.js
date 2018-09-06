@@ -22,10 +22,12 @@ export class Plans extends Component {
                 show: false,
                 title: '',
                 body: '',
+                data: '',
             }, // for show/Hide Modal
             schemaData: {
-                method: '',
-                data: []
+                plan:{},
+                payment_method: '',
+                schema: []
             }
         };
         this.toggleSchemaModal = this.toggleSchemaModal.bind(this);
@@ -57,10 +59,9 @@ export class Plans extends Component {
             }
         });
         data1 = Object.assign({},RemoveService(Object.assign({},newArg), value.slice(0)));
-        console.log(data1);
         requests.postRequest('plan/plan/choose',data1).then(data => {
             if (data.success) {
-                this.getSchema(data.data);
+                this.getSchema(data.data, data1);
             } else {
                 notify.error(data.message);
             }
@@ -186,8 +187,13 @@ export class Plans extends Component {
             </Page>
         );
     }
-    getSchema(arg) {
+    getSchema(arg, plan) {
         console.log(arg.schema);
+        let data = this.state.schemaData;
+        data.plan = plan;
+        this.setState({
+            schemaData: data,
+        });
         if ( !isUndefined(arg.show_payment_methods) ) {
             this.setSchema(1, null);
         } else {
@@ -196,6 +202,7 @@ export class Plans extends Component {
     }
     setSchema(event,arg) {
         let data = this.state.schemaModal;
+        let DATA = this.state.schemaData;
         data.show = true;
         data.title = 'PAYMENT';
         switch(event) {
@@ -217,12 +224,11 @@ export class Plans extends Component {
         );
     }
     createSchema(arg) {
-        let data = this.state.schemaData;
+        let data = this.state.schemaModal;
         data.data = arg;
         this.setState({
-            schemaData: data,
+            schemaModal: data,
         });
-        console.log(arg);
         return (
             arg.map((key, index) => {
                 switch(key.type) {
@@ -238,8 +244,9 @@ export class Plans extends Component {
                             <Select
                                 options={options}
                                 label={key.title}
+                                placeholder={key.title}
                                 onChange={this.schemaConfigurationChange.bind(this, index)}
-                                value={this.state.schemaData.data[index].value}/>
+                                value={this.state.schemaModal.data[index].value}/>
                         </div>
                     );
                     case 'checkbox' : return (
@@ -251,12 +258,13 @@ export class Plans extends Component {
         );
     }
     schemaConfigurationChange(index,value) {
-        let data = this.state.schemaData;
+        let data = this.state.schemaModal;
+        let data2 = this.state.schemaData;
         data.data[index].value = value;
         this.setState({
-            schemaData: data,
+            schemaModal: data,
         });
-        this.setSchema(2, this.state.schemaData.data);
+        this.setSchema(2, this.state.schemaModal.data);
     }
     handleSchemaModalChange(status, event) {
         let data = this.state.schemaData;
