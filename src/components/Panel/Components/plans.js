@@ -192,6 +192,8 @@ export class Plans extends Component {
         if ( !isUndefined(arg.show_payment_methods) ) {
             this.setSchema(1, arg.payment_methods);
         } else if ( !isUndefined(arg.schema )) {
+            // arg.schema.push(JSON.parse('{"key":"included_destination","title":"Included Destination","value":["Shopping Actions"],"required":true,"type":"checkbox","options":{"Shopping":"Shopping","Shopping Actions":"Shopping Actions","Display Ads":"Display Ads"}}'));
+            // arg.schema.push(JSON.parse('{"key":"Name","title":"Your Name","value":"","required":true,"type":"textfield"}'));
             this.setSchema(2, arg.schema);
         } else if ( !isUndefined(arg.confirmation_url )) {
             this.setSchema(3, arg.confirmation_url);
@@ -249,7 +251,7 @@ export class Plans extends Component {
                         Object.keys(key.options).forEach(e => {
                            if ( this.state.schemaModal.data[index].value === '' ) {
                                let data2 = this.state.schemaData;
-                                   data2.schema = {};
+                               data2.schema = {};
                                data2.schema[this.state.schemaModal.data[index].key] = key.options[e];
                                this.state.schemaModal.data[index].value = key.options[e];
                            }
@@ -266,7 +268,7 @@ export class Plans extends Component {
                     );
                     case 'checkbox' : return (
                         <div className="col-12 pt-2 pb-2 mt-4" key={index}>
-                        <Label key={index}>{key.title}</Label>
+                        <Label key={index} id={index}>{key.title}</Label>
                             <div className="row">
                                 {
                                     Object.keys(key.options).map(option => {
@@ -289,7 +291,7 @@ export class Plans extends Component {
                                 label={key.title}
                                 value={this.state.schemaModal.data[index].value}
                                 onChange={this.schemaConfigurationChange.bind(this, index,'textbox')}
-                            />
+                             />
                         </div>
                     );
                 }
@@ -358,8 +360,42 @@ export class Plans extends Component {
             });
         }
     } // submit the data to server When clicked
-    validationCheck(){
-        return true;
+    validationCheck() {
+        const server = this.state.schemaData;
+        const frontEnd = this.state.schemaModal.data;
+        let validate = true;
+        if ( isUndefined(server.schema) && isUndefined(server.payment_method)) {
+            notify.info('Please Fill Up The Field');
+            return false;
+        } else {
+            Object.keys(frontEnd).forEach((data, index) => {
+                if ( frontEnd[data].required ) {
+                    let flag = 0;
+                    Object.keys(server.schema).forEach((keys) => {
+                        if ( frontEnd[data].key === keys ) {
+                            flag = 1;
+                            if ( frontEnd[data].type === 'checkbox' ) {
+                                if (server.schema[keys].length <= 0 ) {
+                                    validate = false;
+                                    notify.info(frontEnd[data].title + ": Please Select");
+                                }
+                            } else {
+                                if ( server.schema[keys] === '' ) {
+                                    validate = false;
+                                    notify.info(frontEnd[data].title + ": Empty Or Not Selected");
+                                }
+                            }
+                        }
+                    });
+                    if ( flag === 0 ) {
+                        validate = false;
+                        server.schema[frontEnd[index].key] = frontEnd[index].value;
+                        this.submit();
+                    }
+                }
+            });
+        }
+        return validate;
     } // this is for Validation check to make Sure User follow All Steps
     toggleSchemaModal() {
         const data  = {

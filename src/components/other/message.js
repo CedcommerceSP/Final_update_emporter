@@ -26,6 +26,9 @@ class MessageShow extends Component {
                title: queryParams.title,
                success: queryParams.success,
            });
+           setTimeout(() => {
+               window.close();
+           },4000)
        }
        else
        {
