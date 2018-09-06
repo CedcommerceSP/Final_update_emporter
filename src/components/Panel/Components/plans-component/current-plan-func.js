@@ -30,7 +30,7 @@ export function displayArray(data) {
                 icon: <FontAwesomeIcon icon={faCalendarCheck} size="5x" color={grayColor}/>,
             },
         ],
-        card_service_group_name: ['service Group 1','service Group 2'], // title of service 'card_service' lvl 3
+        card_service_group_name: [''], // title of service 'card_service' lvl 3
         card_service: [ // lvl 4
             [
                 {

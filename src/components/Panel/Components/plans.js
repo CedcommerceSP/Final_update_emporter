@@ -355,6 +355,7 @@ export class Plans extends Component {
                     }
                     this.getSchema(data.data, null);
                 } else {
+                    win.close();
                     notify.error(data.message);
                 }
             });

@@ -4,6 +4,7 @@ import {faDollarSign, faCalendarCheck, faCalendarTimes, faHeadphones, faCogs, fa
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {displayArray} from './current-plan-func';
 import { requests } from '../../../../services/request';
+import {notify} from "../../../../services/notify";
 
 const primaryColor = "#9c27b0";
 const warningColor = "#ff9800";
@@ -18,7 +19,15 @@ class CurrentPlan extends Component {
         this.state = displayArray(null);
     }
     componentWillMount() {
-        requests.getRequest('plan/plan/getActive').then(data => console.log(data));
+        requests.getRequest('plan/plan/getActive').then(data => {
+            console.log(data);
+            if ( data.success ) {
+                const state = displayArray(data);
+                this.setState(state);
+            } else {
+                notify.error(data.message);
+            }
+        });
     }
     render() {
         return (
