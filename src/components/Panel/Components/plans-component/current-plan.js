@@ -3,6 +3,7 @@ import {Page, Card} from "@shopify/polaris";
 import {faDollarSign, faCalendarCheck, faCalendarTimes, faHeadphones, faCogs, faQuoteLeft, faQuoteRight} from '@fortawesome/free-solid-svg-icons';
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {displayArray} from './current-plan-func';
+import { requests } from '../../../../services/request';
 
 const primaryColor = "#9c27b0";
 const warningColor = "#ff9800";
@@ -15,6 +16,9 @@ class CurrentPlan extends Component {
     constructor(props) {
         super(props);
         this.state = displayArray(null);
+    }
+    componentWillMount() {
+        requests.getRequest('plan/plan/getActive').then(data => console.log(data));
     }
     render() {
         return (
@@ -67,7 +71,7 @@ class CurrentPlan extends Component {
                                     </div>
                                 </div>
                                 {Object.keys(this.state.card_service).map((key, titleIndex) => {
-                                    return (<React.Fragment>
+                                    return (<React.Fragment key={titleIndex}>
                                         <div className="col-12 mt-5 mb-5">
                                             <hr/>
                                         </div>
