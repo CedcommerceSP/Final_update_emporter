@@ -68,12 +68,12 @@ export class QueuedTask extends Component {
         return (
             <Page
                 title="Queued Tasks">
-                <div className="row">
-                    <div className="col-12 p-4">
+                <div className="row p-5">
+                    <div className="col-12 p-5">
                         <Card>
                             <Banner title="Recent Activities">
                                 <div className="row">
-                                    <div className="col-12">
+                                    <div className="col-12 p-5">
                                         {
                                             this.state.recentActivities.map(activity => {
                                                 return (
@@ -99,7 +99,7 @@ export class QueuedTask extends Component {
                                     </div>
                                     {
                                         this.state.totalRecentActivities > 3 &&
-                                        <div className="col-12 p-3 text-right">
+                                        <div className="col-12 p-5 text-right">
                                             <Button onClick={() => {
                                                 this.redirect("/panel/queuedtasks/activities");
                                             }} primary>View All Activities</Button>
@@ -109,49 +109,51 @@ export class QueuedTask extends Component {
                             </Banner>
                         </Card>
                     </div>
-                    <div className="col-12 p-4">
+                    <div className="col-12 p-5">
                         <Card title="Currently Running Processes">
-                            {
-                                this.state.queuedTasks.length === 0 &&
-                                <Banner status="info">
-                                    <Label>No Processes Running Currently</Label>
-                                </Banner>
-                            }
-                            {
-                                this.state.queuedTasks.length > 0 &&
-                                <ResourceList
-                                    resourceName={{singular: 'customer', plural: 'customers'}}
-                                    items={this.state.queuedTasks}
-                                    renderItem={(item) => {
-                                        const {id, message, progress} = item;
-                                        const progressClass = "c100 p" + progress + " small polaris-green";
-                                        return (
-                                            <ResourceList.Item
-                                                id={id}
-                                                accessibilityLabel={message}
-                                            >
-                                                <div className="row">
-                                                    <div className="col-md-2 col-sm-2 col-12">
-                                                        <div className={progressClass}>
-                                                            <span>{progress}%</span>
-                                                            <div className="slice">
-                                                                <div className="bar"></div>
-                                                                <div className="fill"></div>
+                            <div className="p-5">
+                                {
+                                    this.state.queuedTasks.length === 0 &&
+                                    <Banner status="info">
+                                        <Label>No Processes Running Currently</Label>
+                                    </Banner>
+                                }
+                                {
+                                    this.state.queuedTasks.length > 0 &&
+                                    <ResourceList
+                                        resourceName={{singular: 'customer', plural: 'customers'}}
+                                        items={this.state.queuedTasks}
+                                        renderItem={(item) => {
+                                            const {id, message, progress} = item;
+                                            const progressClass = "c100 p" + progress + " small polaris-green";
+                                            return (
+                                                <ResourceList.Item
+                                                    id={id}
+                                                    accessibilityLabel={message}
+                                                >
+                                                    <div className="row">
+                                                        <div className="col-md-2 col-sm-2 col-12">
+                                                            <div className={progressClass}>
+                                                                <span>{progress}%</span>
+                                                                <div className="slice">
+                                                                    <div className="bar"></div>
+                                                                    <div className="fill"></div>
+                                                                </div>
                                                             </div>
                                                         </div>
+                                                        <div className="col-md-10 col-sm-10 col-12">
+                                                            <h5>
+                                                                <TextStyle variation="strong">{message}</TextStyle>
+                                                            </h5>
+                                                            <div><ProgressBar progress={progress} /></div>
+                                                        </div>
                                                     </div>
-                                                    <div className="col-md-10 col-sm-10 col-12">
-                                                        <h5>
-                                                            <TextStyle variation="strong">{message}</TextStyle>
-                                                        </h5>
-                                                        <div><ProgressBar progress={progress} /></div>
-                                                    </div>
-                                                </div>
-                                            </ResourceList.Item>
-                                        );
-                                    }}
-                                />
-                            }
+                                                </ResourceList.Item>
+                                            );
+                                        }}
+                                    />
+                                }
+                            </div>
                         </Card>
                     </div>
                 </div>

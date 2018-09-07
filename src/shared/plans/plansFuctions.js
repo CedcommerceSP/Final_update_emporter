@@ -1,6 +1,6 @@
-
+import {isUndefined} from "util";
 /********************************  Array Is prepared Here  *************************************************/
-export function dataGrids(result) {
+export function dataGrids(result, manageService) {
     let data = [];
     result.forEach(value => {
        data.push({
@@ -10,7 +10,7 @@ export function dataGrids(result) {
            title: value.title,
            description: value.description,
            connectors:value.connectors,
-           main_price: checkValue(value.custom_price, value.discount_type, value.discount, value.services_groups ),
+           main_price: checkValue(value.custom_price, value.discount_type, value.discount, value.services_groups,manageService,value.plan_id ),
            discount: value.discount,
            originalValue: value.custom_price !== ""?value.custom_price:checkIfNull(value.services_groups),
            services: createServices(value.services_groups),
@@ -18,7 +18,7 @@ export function dataGrids(result) {
     });
     return data;
 }
-function checkValue(main, type, disc, service) {
+function checkValue(main, type, disc, service, manageService, id) {
     if ( main !== 0 && main !== '' && main !== undefined ) {
         if ( type === 'Fixed' ) {
             return main - disc;
@@ -27,10 +27,21 @@ function checkValue(main, type, disc, service) {
         }
     } else {
         let price = 0;
+        let temp = [];
         Object.keys(service).map(keys => {
             Object.keys(service[keys].services).map(key1 => {
-                if (service[keys].services[key1].charge_type.toLowerCase() === 'prepaid')
-                   price = price + parseInt(service[keys].services[key1].prepaid.fixed_price) + parseInt(service[keys].services[key1].service_charge);
+                if (service[keys].services[key1].charge_type.toLowerCase() === 'prepaid') {
+                    if (manageService !== null) {
+                        manageService.forEach(e => {
+                            if (e.code === service[keys].services[key1].code && e.isSelected && temp.indexOf(e.code) === -1 && id === e.key) {
+                                temp.push(e.code);
+                                price = price + parseInt(service[keys].services[key1].prepaid.fixed_price) + parseInt(service[keys].services[key1].service_charge);
+                            }
+                        });
+                    } else {
+                        price = price + parseInt(service[keys].services[key1].prepaid.fixed_price) + parseInt(service[keys].services[key1].service_charge);
+                    }
+                }
             });
         });
         if ( type === 'Fixed' ) {
@@ -78,7 +89,7 @@ arg2 = JSON.parse(arg2);
                    if ( serv.isSelected ) {
                        let flag = 0;
                        val.forEach(val => {
-                           if ( val.code === serv.code ) {
+                           if ( val.code === serv.code  ) {
                                flag = 1;
                            }
                        });

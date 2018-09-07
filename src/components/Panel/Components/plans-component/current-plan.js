@@ -109,7 +109,7 @@ class CurrentPlan extends Component {
                                     return (<React.Fragment key={titleIndex}>
                                                 <div className="col-12 mb-5" >
                                                     <div className="CARD mt-5">
-                                                        <div className="CARD-title-small text-center BG-warn">
+                                                        <div className="CARD-title-small common text-center BG-warn">
                                                             {key.icon}
                                                         </div>
                                                         <div className="CARD-body p-5">

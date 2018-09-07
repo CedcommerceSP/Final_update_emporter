@@ -19,6 +19,12 @@ export class Header extends Component {
         this.setActiveTab(props);
     }
     componentWillReceiveProps(nextProps) {
+        let data = setInterval(() => {
+            this.setActiveTab(this.props);
+        });
+        setTimeout(() => {
+            clearInterval(data);
+        },3000);
         this.setActiveTab(nextProps);
     }
 

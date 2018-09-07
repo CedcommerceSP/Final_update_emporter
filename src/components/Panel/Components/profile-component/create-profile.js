@@ -613,7 +613,6 @@ export class CreateProfile extends Component {
     }
 
     handleQueryBuilderChange(position, index, field, value) {
-        console.log(position, index, field, value);
         this.checkForOptions(value);
         this.filteredProducts.runQuery = false;
         if (field === 'key') {
@@ -1191,14 +1190,14 @@ export class CreateProfile extends Component {
                 <div className="row">
                     <div className="col-12">
                         <Card>
-                            <div className="p-4">
+                            <div className="p-5">
                                 {this.renderProgressBar()}
                             </div>
                         </Card>
                     </div>
                     <div className="col-12 p-2">
                         <Card>
-                            <div className="row p-4">
+                            <div className="row p-5">
                                 <div className="col-12 text-center pt-3 pb-3">
                                     <div className="row">
                                         <div className="col-md-6 col-sm-6 col-12 text-md-left text-sm-left text-center pt-3 pb-3">

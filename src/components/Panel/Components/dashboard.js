@@ -23,7 +23,9 @@ import {
 } from '@fortawesome/free-solid-svg-icons';
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import { term_and_conditon } from './dashboard/term&condition';
-import {dataGrids} from "./plans-component/plansFuctions";
+import {dataGrids} from "../../../shared/plans/plansFuctions";
+import {Plans} from "./plans";
+import PlanBody from "../../../shared/plans/plan-body";
 
 const primaryColor = "#9c27b0";
 const warningColor = "#ff9800";
@@ -73,8 +75,12 @@ class Dashboard extends Component {
             google_configuration_updated: false,
             account_information_updated: false,
             /********* Step 4 Ends **********/
+            active_step: {
+                name: '', // anchor name
+                step : 0 // step number
+            },
             stepData: [], // this will store the current showing step, which is selected from data object e.g Shopify_Google []
-            selected: 'Shopify_Google',
+            selected: '',
             open_init_modal: true, // this is used to open modal one time when user visit dashboard
             data: {
                 Shopify_Google : [
@@ -172,6 +178,7 @@ class Dashboard extends Component {
         this.getGoogleConfigurations();
         this.checkStepCompleted = this.checkStepCompleted.bind(this);
         this.handleModalChange = this.handleModalChange.bind(this);
+        this.paymentStatus = this.paymentStatus.bind(this);
     }
     componentDidMount() {
         // this.setState({
@@ -183,8 +190,6 @@ class Dashboard extends Component {
         // });
     }
     handleChange = (newValue) => {
-        if ( newValue === 'Shopify_Google_main' )
-            newValue = 'Shopify_Google';
         this.setState({
             selected: newValue,
             stepData: this.state.data[newValue],
@@ -194,16 +199,16 @@ class Dashboard extends Component {
     };// This Function Used for dropdown Selection
     mainAPICheck() {
         /****** for Plans ******/
-        requests.getRequest('plan/plan/get').then(data => {
-            if ( data.success ) {
-                if ( data.data !== null && !isUndefined(data.data) ) {
-                    data = dataGrids(data.data.data.rows); // change the data into desire format
-                    this.setState({plans : data});
-                }
-            } else {
-                notify.error(data.message);
-            }
-        });
+        // requests.getRequest('plan/plan/get').then(data => {
+        //     if ( data.success ) {
+        //         if ( data.data !== null && !isUndefined(data.data) ) {
+        //             data = dataGrids(data.data.data.rows); // change the data into desire format
+        //             this.setState({plans : data});
+        //         }
+        //     } else {
+        //         notify.error(data.message);
+        //     }
+        // });
         /*************  for step 3 (Link your google merchant center acc)   *****************/
         // API to get installation form - connector/get/installationForm, method -> get, { code : 'marketplace' }
         this.state.API_code.forEach(value => {
@@ -238,12 +243,23 @@ class Dashboard extends Component {
             if ( data.success ) {
                 if ( data.data !== null && !isUndefined(data.data)  ) {
                     let temp = this.state.data;
+                    let anchor = '';
+                    let flag = 0;
                     temp[key].forEach((keys, index) => {
                         if ( index < parseInt(data.data) ) { // if  ( step here < no of step completed )
                             keys.stepperActive = true;
+                        } else if ( flag === 0 ) {
+                            anchor = keys.anchor;
+                            flag = 1;
                         }
                     });
-                    this.setState({data: temp});
+                    this.setState({
+                        data: temp,
+                        active_step: {
+                            name: anchor,
+                            step: parseInt(data.data) + 1
+                        }
+                    });
                 }
             } else {
                 notify.error(data.message);
@@ -263,12 +279,23 @@ class Dashboard extends Component {
         }
         requests.postRequest('frontend/app/stepCompleted', { paths: path, step: arg }).then(value => {
             if ( value.success ) {
+                let anchor = '';
+                let flag = 0;
                 data.forEach((keys, index) => {
-                    if ( index === arg - 1 ) {
+                    if ( index < arg ) {
                         keys.stepperActive = true;
+                    } else if ( flag === 0 ) {
+                        anchor = keys.anchor;
+                        flag = 1;
                     }
                 });
-                this.setState({stepData: data});
+                this.setState({
+                    stepData: data,
+                    active_step : {
+                        name: anchor,
+                        step: arg + 1,
+                    }
+                });
                 if ( arg < 4 ) {
                     notify.success('Follow The Next Step');
                 } else {
@@ -305,51 +332,63 @@ class Dashboard extends Component {
             </div>
         );
     }
+    handleModalChange(event, stepActive) {
+        // console.log(stepActive);
+        if ( event === 'yes' || event === 'no' ) {
+            if ( stepActive.name === 'PLANS' ) { // for anchor
+                this.checkPayment(); // if step completed
+            } else if ( stepActive.name === 'LINKED' ) {
+                this.checkLinkedAccount();
+            }
+            this.setState({modalOpen: !this.state.modalOpen});
+        } // id user say he/she completed then run this function
+        else if ( event === 'init_modal' ) {
+            // this.setState({open_init_modal: false});
+            notify.info("Please Select A Integration First")
+        } else {
+            this.setState({modalOpen: !this.state.modalOpen});
+        } // if he/she cancel or close the modal
+    } // all operation perform on modal of step 3 and step 2 (plan) and also responsible for not closing the init modal comes here
     /******************* MAIN BODY **********************/
     renderBody() {
         let flag = 1;
         return(
             Object.keys(this.state.stepData).map(keys => {
-                let css = 'BG-warn'; // Previous step Not Completed
+                let css = 'BG-info'; // Previous step Not Completed
                 let status = false; // Used To decide if step is active then show its function body
                 if ( this.state.stepData[keys].stepperActive ) {
                     css = 'BG-success'; // Completed
                 } else if (flag === 1) {
-                    css = 'BG-info'; // Active
+                    css = 'BG-warn'; // Active
                     status = true;
                     flag++;
                 }
                 return (
                     <React.Fragment key={keys}>
-                        <div className={`mt-5`}  onClick={this.state.stepData[keys].stepperActive?this.redirect.bind(this,this.state.stepData[keys].redirectTo):null}>
-                            <div className="p-5">
-                                <div className="row">
-                                    {/*<div className="col-12">*/}
-                                        {/*<h2>Step {parseInt(keys) + 1} :</h2>*/}
-                                    {/*</div>*/}
-                                    <div className="CARD mt-5 w-100">
-                                        <div className={`CARD-title-small text-center ${css}`}>
-                                            {this.state.stepData[keys].stepperActive ?
-                                                <FontAwesomeIcon icon={faCheck} size="5x"/>
-                                                : <h1 className="mt-2 font-weight-bold" style={{fontSize:50}}>{parseInt(keys) + 1} </h1>
-                                            }
+                        <div style={this.state.stepData[keys].stepperActive?{cursor:'pointer'}:null}  onClick={this.state.stepData[keys].stepperActive?this.redirect.bind(this,this.state.stepData[keys].redirectTo):null}>
+                            <div className="row p-4 mt-sm-0 mt-5">
+                                <div className="CARD col-12" style={{border: `1px solid ${css}`,backgroundColor:'#fff'}}>
+                                    <div className={`CARD-title-small common text-center ${css}`}>
+                                        {this.state.stepData[keys].stepperActive ?
+                                            <FontAwesomeIcon icon={faCheck} size="5x"/>
+                                            : <h1 className="mt-2 font-weight-bold" style={{fontSize:50}}>{parseInt(keys) + 1} </h1>
+                                        }
+                                    </div>
+                                    <div className="CARD-body p-5">
+                                        <div className="col-12 p-3 pl-5">
+                                            <h4>{this.state.stepData[keys].message}</h4>
                                         </div>
-                                        <div className="CARD-body p-5">
-                                    <div className="col-12 p-3 pl-5">
-                                        <h4>{this.state.stepData[keys].message}</h4>
+                                        {this.checkAnchor(this.state.stepData[keys],status)} {/* switch case for deciding the anchor */}
                                     </div>
                                 </div>
-                                <div>
-                                    {this.checkAnchor(this.state.stepData[keys],status)} {/* switch case for deciding the anchor */}
-                                </div>
                             </div>
+                            { this.state.stepData[keys].data !== '' && this.state.stepData[keys].stepperActive?
+                                <div className="col-12 mt-5 p-5 text-center">
+                                    <h4>{this.state.stepData[keys].data}</h4>
+                                </div> :null
+                            } {/* TODO Change condition this.state.stepData[keys].data !== '' if data meaning change */}
                         </div>
-                        { this.state.stepData[keys].data !== '' && this.state.stepData[keys].stepperActive? <div className="col-12 mt-5 p-5 text-center">
-                            <h4>{this.state.stepData[keys].data}</h4>
-                        </div> :null } {/* TODO Change condition this.state.stepData[keys].data !== '' if data meaning change */}
-                            </div>
-                        </div>
-                        </React.Fragment>
+                    </React.Fragment>
                 );
             })
         );
@@ -549,106 +588,35 @@ class Dashboard extends Component {
         );
     }
     /****************************************** step 2 Plans Start Here ******************************/
-    onSelectPlan(arg) {
-        console.log(arg);
-        this.changeStep(2);
-        notify.success('Plan Purchased');
+    checkPayment() {
+        requests.getRequest('plan/plan/getActive').then(status => {
+            if ( status.success ) {
+                notify.success('plan Active');
+                this.changeStep(2);
+            } else {
+                notify.error(status.message);
+            }
+        });
     }
-    onCheckBox(event) {
-        console.log(event);
-    }
-    renderPlan() {
-        if (this.state.plans.length > 0 ) {
-            const tempData = this.state.plans.slice(0,3);
-            return (
-                <div className="row">
-                    <div className="col-12">
-                        <hr/>
-                    </div>
-                    {tempData.map((data,index) => {
-                        return (
-                            <div className="col-sm-4 col-12 pt-3 pb-3" key={index}>{/* Starting Of Plan Card */}
-                                <Card>
-                                    <div className="d-flex justify-content-center">
-                                        <div className="p-5" >
-                                            <div className="mb-5 text-center" > {/* Plan Numeric Price */}
-                                                <p className="price-tag">
-                                                    <span className="price-tag_small">$</span>
-                                                    <span className="price-tag_discount"><strike>{data.originalValue}</strike></span>
-                                                    {data.main_price}
-                                                    <span className="price-tag_small">{data.validity}</span>
-                                                </p>
-                                            </div>
-                                            <div className="mb-5"> {/* Button To choose Plan */}
-                                                <Button primary={true} fullWidth={true} size="large" onClick={this.onSelectPlan.bind(this, data)}>
-                                                    Choose this Plan
-                                                </Button>
-                                            </div>
-                                            <div className="mb-5 text-center"> {/* Descriptions For Particular deatails */}
-                                                <h1 className="mb-4"><b>{data.title}</b></h1>
-                                                <h4>{data.description}</h4>
-                                            </div>
-                                            <hr/>
-                                            <div className="text-center mt-5"> {/* Services Data */}
-                                                {data.services?Object.keys(data.services).map(keys => {
-                                                    return (<React.Fragment key={keys}>
-                                                        <p className="service-body">
-                                                            <span className="service-description mb-3" style={{fontWeight:'bold'}}><b>{data.services[keys].title}</b></span>
-                                                            <span>
-                                                                        <Tooltip content={data.services[keys].description} preferredPosition="above">
-                                                                            <Link><Icon source="help" color="indigo" backdrop={true} /></Link>
-                                                                        </Tooltip>
-                                                                    </span>
-                                                        </p>
-                                                        {Object.keys(data.services[keys].services).map(key1 => {
-                                                            if ( data.services[keys].services[key1].required === 'yes' ) {
-                                                                return (<div key={key1} className="text-left">
-                                                                    <Checkbox
-                                                                        checked={true}
-                                                                        label={data.services[keys].services[key1].title}
-                                                                        disabled={false} />
-                                                                </div>);
-                                                            } else {
-                                                                return (<div key={key1} className="text-left form-inline">
-                                                                    <h5>
-                                                                        <input type="checkbox" className="form-control" onClick={this.onCheckBox.bind(this,data.services[keys].services[key1])}/>
-                                                                        <span className="ml-3">
-                                                                                        {data.services[keys].services[key1].title}
-                                                                                    </span>
-                                                                    </h5>
-
-                                                                </div>);
-                                                            }
-                                                        })}
-                                                    </React.Fragment>);
-                                                }):null}
-                                            </div>
-                                        </div>
-                                    </div>
-                                </Card>
-                            </div>
-                        );
-                    })}
-                </div>
-            );
+    paymentStatus(event) {
+        if ( event === 'Confirmation' ) {
+            this.setState({modalOpen: !this.state.modalOpen});
+        } else {
+            notify.info(event);
         }
     }
+    renderPlan() {
+        return (
+            <React.Fragment>
+                <PlanBody paymentStatus={this.paymentStatus}/>;
+            </React.Fragment>
+        );
+    }
     /*****************************************  Step 3 linked you account start Here  ***********************************/
-    handleModalChange(event) {
-        if ( event === 'yes' ) {
-            setTimeout(() => {
-                this.setState({modalOpen: !this.state.modalOpen});
-                this.changeStep(3);
-                notify.success('Successfully Linked');
-            },1000); // TODO need A logic to Work On
-        } // id user say he/she completed then run this function
-        else if ( event === 'init_modal' ) {
-            // this.setState({open_init_modal: false});
-            notify.info("Please Select A Integration First")
-        } else {
-            this.setState({modalOpen: !this.state.modalOpen});
-        } // if he/she cancel or close the modal
-    } // all operation perform on modal of step 3 comes here
+    checkLinkedAccount() {
+        notify.info('Need to Implement API to Check');
+        this.changeStep(3);
+    }
     openNewWindow(action) {
         this.setState({modalOpen: !this.state.modalOpen});
         window.open(action,  '_blank', 'location=yes,height=600,width=550,scrollbars=yes,status=yes');
@@ -664,29 +632,6 @@ class Dashboard extends Component {
                         <Button primary={true} onClick={() => this.openNewWindow(data.action)}>
                             Connect
                         </Button>
-                        <Modal
-                            open={this.state.modalOpen}
-                            onClose={this.handleModalChange}
-                            title="Continue To Next Step?"
-                            primaryAction={{
-                                content: 'Yes',
-                                onAction: this.handleModalChange.bind(this,'yes'),
-                            }}
-                            secondaryActions={[
-                                {
-                                    content: 'Cancel',
-                                    onAction: this.handleModalChange,
-                                },
-                            ]}
-                        >
-                            {/*<Modal.Section>*/}
-                            {/*<TextContainer>*/}
-                            {/*<h4>*/}
-                            {/*Ask Question Here // TODO Change The Text*/}
-                            {/*</h4>*/}
-                            {/*</TextContainer>*/}
-                            {/*</Modal.Section>*/}
-                        </Modal>
                     </div>
                 }
             })
@@ -859,9 +804,9 @@ class Dashboard extends Component {
                             <div className="p-5">
                                 <Select
                                     label="Show Steps To Follow For :-"
+                                    placeholder="Select Integration From Here"
                                     options={ [
-                                        {label: 'Select Integration From Here', value: 'Shopify_Google'},
-                                        {label: 'Shopify-Google Integration', value: 'Shopify_Google_main'},
+                                        {label: 'Shopify-Google Integration', value: 'Shopify_Google'},
                                         {label: 'Amazon-Shopify Integration', value: 'Amazon_Shopify'},
                                     ]}
                                     onChange={this.handleChange}
@@ -871,6 +816,19 @@ class Dashboard extends Component {
                         </Card>
                     </Modal.Section>
                 </Modal> {/* Open The Init DropDown */}
+                <Modal
+                    open={this.state.modalOpen}
+                    onClose={this.handleModalChange.bind(this,'no',this.state.active_step)}
+                    title=""
+                >
+                    <Modal.Section>
+                        <div className="text-center p-5">
+                            <Button primary onClick={this.handleModalChange.bind(this,'yes',this.state.active_step)}>
+                                Continue To Next Step
+                            </Button>
+                        </div>
+                    </Modal.Section>
+                </Modal> {/* Open When The New Window Is open (it is a medium to ask user if he completed its step or not) */}
             </Page>
         );
     }
