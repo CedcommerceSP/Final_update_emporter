@@ -1,10 +1,11 @@
 import React, {Component} from 'react';
-import {Page, Card} from "@shopify/polaris";
+import {Page, Card, Button} from "@shopify/polaris";
 import {faDollarSign, faCalendarCheck, faCalendarTimes, faHeadphones, faCogs, faQuoteLeft, faQuoteRight} from '@fortawesome/free-solid-svg-icons';
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {displayArray} from './current-plan-func';
 import { requests } from '../../../../services/request';
 import {notify} from "../../../../services/notify";
+import './plan.css';
 
 const primaryColor = "#9c27b0";
 const warningColor = "#ff9800";
@@ -16,13 +17,16 @@ const grayColor = "#999999";
 class CurrentPlan extends Component {
     constructor(props) {
         super(props);
-        this.state = displayArray(null);
+        this.state = {
+            description: '',
+            card: [],
+            card_service:[]
+        };
     }
     componentWillMount() {
         requests.getRequest('plan/plan/getActive').then(data => {
-            console.log(data);
             if ( data.success ) {
-                const state = displayArray(data);
+                const state = displayArray(data.data);
                 this.setState(state);
             } else {
                 notify.error(data.message);
@@ -36,13 +40,22 @@ class CurrentPlan extends Component {
                         this.redirect('/panel/plans');
                     }}}
                 title="Current Plan">
-                    <Card>
+                    <Card >
                         <div className="container">
-                            <div className="row p-5">
-                                <div className="col-12 text-center mb-5">
+                            <div className="row p-4 p-sm-5">
+                                <div className="col-12 mb-5 pb-5 pt-0">
                                     <h1>Active Plan</h1>{/*Tittle*/}
-                                    <span style={{fontSize:'40px', color: '#000'}}><b>Starter Plan</b></span>
+                                    {/*<span style={{fontSize:'40px', color: '#000'}}><b>Starter Plan</b></span>*/}
                                 </div>
+                                {/*<div className="col-12 mb-5 p-5 text-right">*/}
+                                    {/*<div className="progress mb-5" style={{height:'30px'}}>*/}
+                                        {/*<div className="progress-bar BG-primary"*/}
+                                             {/*role={'progressbar'}*/}
+                                             {/*style={{width:'10%'}}/>*/}
+                                    {/*</div>*/}
+                                    {/*<h2>Total Feed Used</h2>*/}
+                                    {/*<h4>999/10000</h4>*/}
+                                {/*</div>*/}
                                 {this.state.card.map((keys, index) => { {/*LVL1*/}
                                     let col = 'col-12 col-sm-6 mb-5';
                                     if ( this.state.card.length % 2 === 1 ) {
@@ -65,6 +78,11 @@ class CurrentPlan extends Component {
                                         </div>
                                     );
                                 })}
+                                <div className="col-12 p-5 text-center">
+                                    <Button className="d-block" onClick={this.redirect.bind(this,'/panel/plans')}>
+                                        Upgrade Plan
+                                    </Button>
+                                </div>
                                 <div className="col-12 mt-5">
                                     <div className="row">
                                         <div className="col-12 col-sm-2 text-center text-sm-left">
@@ -83,28 +101,22 @@ class CurrentPlan extends Component {
                                 <div className="col-12 mt-5 mb-5">
                                     <hr/>
                                 </div>
-                                {Object.keys(this.state.card_service).map((key, titleIndex) => {
+                                <div className="col-12 mb-5 pb-5 pt-0">
+                                    <h2>My Services</h2>{/*Tittle*/}
+                                    {/*<span style={{fontSize:'40px', color: '#000'}}><b>Starter Plan</b></span>*/}
+                                </div>
+                                {this.state.card_service.map((key, titleIndex) => {
                                     return (<React.Fragment key={titleIndex}>
-                                        {this.state.card_service[key].map((keys, index) => { {/*LVL 2*/}
-                                            let col = 'col-6 mb-5';
-                                            if ( this.state.card_service[key].length % 2 === 1 ) {
-                                                if ( index + 1 === this.state.card.length ) {
-                                                    col = 'col-12 mb-5';
-                                                }
-                                            }
-                                            return (
-                                                <div className={col} key={index}>
+                                                <div className="col-12 mb-5" >
                                                     <div className="CARD mt-5">
-                                                        <div className="CARD-title-small text-center BG-primary">
-                                                            {keys.icon}
+                                                        <div className="CARD-title-small text-center BG-warn">
+                                                            {key.icon}
                                                         </div>
                                                         <div className="CARD-body p-5">
-                                                            <h2>{keys.text}</h2>
-                                                            <h6>{keys.text_info}</h6></div>
+                                                            <h2>{key.text}</h2>
+                                                            <h6>{key.text_info}</h6></div>
                                                     </div>
                                                 </div>
-                                            );
-                                        })}
                                     </React.Fragment>)
                                 })}
                             </div>
