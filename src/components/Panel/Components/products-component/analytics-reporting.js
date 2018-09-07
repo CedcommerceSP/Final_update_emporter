@@ -3,7 +3,11 @@ import {Page,Card,Select} from "@shopify/polaris";
 import {Bar, Doughnut, Line, Pie, Polar, Radar} from 'react-chartjs-2';
 import {requests} from "../../../../services/request";
 import {notify} from "../../../../services/notify";
-
+import './analytics.css';
+import {
+    faCheck,faArrowAltCircleDown,faArrowAltCircleUp
+} from '@fortawesome/free-solid-svg-icons';
+import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 const options = [
     {label: 'Line Chart', value: 'line'},
     {label: 'Bar Chart', value: 'bar'},
@@ -12,7 +16,13 @@ const options = [
 
 let uploaderoptions=[];
 
-
+const primaryColor = "#9c27b0";
+const warningColor = "#ff9800";
+const dangerColor = "#f44336";
+const successColor = "#4caf50";
+const infoColor = "#00acc1";
+const roseColor = "#e91e63";
+const grayColor = "#999999";
 
 class Analyticsreporting extends Component {
     constructor(props)
@@ -517,7 +527,17 @@ class Analyticsreporting extends Component {
                         this.redirect('/panel/products');
                     }}}
                 title="Product Analytics">
-                <Card title="Products Imported">
+                {/*<Card title="Products Imported">*/}
+                <div className="CARD w-100" style={{marginTop:65}}>
+                    <div className='CARD-title-small text-center BG-primary common'>
+                            <FontAwesomeIcon icon={faArrowAltCircleDown} size="5x"/>
+                    </div>
+                    <div className="col-12 mt-5" >
+                        <h3 className="font-weight-bold" style={{paddingTop:20}}>Products Imported</h3>
+                    </div>
+                    <div className="CARD-body">
+                        <div className="col-12 p-0">
+                            <Card>
                     <div className="p-4">
                         <div className="row">
                             <div className="col-md-8"></div>
@@ -535,8 +555,22 @@ class Analyticsreporting extends Component {
                         }
                         </div>
                     </div>
-                </Card>
-                <Card title="Products Upload Status">
+                        </Card>
+                        </div>
+                    </div>
+                </div>
+                {/*</Card>*/}
+                <div className="CARD w-100" style={{marginTop:75}}>
+                    <div className={`CARD-title-small text-center BG-primary common`}>
+                            <FontAwesomeIcon icon={faArrowAltCircleUp} size="5x"/>
+                            {/*// <h1 className="mt-2 font-weight-bold pt-2" style={{fontSize:20}}>Uploader</h1>*/}
+                    </div>
+                    <div className="col-12 mt-5" >
+                        <h3 className="font-weight-bold" style={{paddingTop:20}}>Products Upload Status</h3>
+                    </div>
+                    <div className="CARD-body">
+                        <div className="col-12 p-0">
+                <Card>
                     <div className="p-4">
                         <div className="row">
                             <div className="col-12 col-md-4 pt-1 pb-1">
@@ -567,6 +601,9 @@ class Analyticsreporting extends Component {
                         </div>
                     </div>
                 </Card>
+                        </div>
+                    </div>
+                </div>
             </Page>
         );
     }
