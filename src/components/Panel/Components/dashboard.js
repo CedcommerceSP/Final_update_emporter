@@ -23,7 +23,7 @@ import {
 } from '@fortawesome/free-solid-svg-icons';
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import { term_and_conditon } from './dashboard/term&condition';
-import {dataGrids} from "./plans-component/plansFuctions";
+import {dataGrids} from "../../../shared/plans/plansFuctions";
 import {Plans} from "./plans";
 import PlanBody from "../../../shared/plans/plan-body";
 

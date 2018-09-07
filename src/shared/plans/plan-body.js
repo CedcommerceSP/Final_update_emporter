@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
 import {requests} from "../../services/request";
 import {isUndefined} from "util";
-import {dataGrids, RemoveService} from "../../components/Panel/Components/plans-component/plansFuctions";
+import {dataGrids, RemoveService} from "./plansFuctions";
 import {notify} from "../../services/notify";
 import {
     Button,
@@ -22,7 +22,8 @@ class PlanBody extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            data: [],
+            originalData: [], // data came from server
+            data: [], // data modify to suit the frontend requirement
             checkBox: [],
             schemaModal: { // this object is used to maintain frontend data
                 show: false,// for show/Hide Modal
@@ -41,8 +42,12 @@ class PlanBody extends Component {
         requests.getRequest('plan/plan/get').then(data => { // get All the Plans Available
             if ( data.success ) {
                 if ( data.data !== null && !isUndefined(data.data) ) {
-                    data = dataGrids(data.data.data.rows);
-                    this.setState({data : data});
+                    const temp = JSON.parse(JSON.stringify(data.data.data.rows));
+                    data = dataGrids(data.data.data.rows, null);
+                    this.setState({
+                        data : data,
+                        originalData: temp,
+                    });
                 }
             } else {
                 notify.error(data.message);
@@ -61,6 +66,7 @@ class PlanBody extends Component {
             }
         });
         data1 = Object.assign({},RemoveService(Object.assign({},newArg), value.slice(0))); // Change the plan in Desire Format
+        console.log(data1);
         requests.postRequest('plan/plan/choose',data1).then(data => {
             if (data.success) {
                 this.getSchema(data.data, data1); // open Modal For Payment Procedure
@@ -69,14 +75,19 @@ class PlanBody extends Component {
             }
         });
     }
-    onCheckBox(event) { // this function is used to check unCheck Checkbox which is not Required by default
+    onCheckBox(event, key) { // this function is used to check unCheck Checkbox which is not Required by default
         let data = this.state.checkBox;
         data.forEach(Data => {
-            if ( Data.code === event ) {
+            if ( Data.code === event && key === Data.key ) {
                 Data.isSelected = !Data.isSelected;
             }
         });
-        this.setState({checkBox: data});
+        let data2 = JSON.parse(JSON.stringify(this.state.originalData));
+        let dataPrice = dataGrids(data2,data);
+        this.setState({
+            checkBox: data,
+            data : dataPrice
+        });
     }
     render() {
         return (
@@ -110,12 +121,12 @@ class PlanBody extends Component {
                                                 {data.services?Object.keys(data.services).map(keys => {
                                                     return (<React.Fragment key={keys}>
                                                         <p className="service-body">
-                                                            -<span className="service-description mb-3" style={{fontWeight:'bold'}}><b>{data.services[keys].title}</b></span>
+                                                            <span className="service-description mb-3" style={{fontWeight:'bold'}}><b>{data.services[keys].title}</b></span>
                                                             <span>
                                                                     <Tooltip content={data.services[keys].description} preferredPosition="above">
                                                                         <Link><Icon source="help" color="inkLighter" backdrop={true} /></Link>
                                                                     </Tooltip>
-                                                                </span>-
+                                                                </span>
                                                         </p>
                                                         {Object.keys(data.services[keys].services).map(key1 => {
                                                             if ( data.services[keys].services[key1].required === 1 ) {
@@ -126,25 +137,33 @@ class PlanBody extends Component {
                                                                         disabled={true} />
                                                                 </div>);
                                                             } else {
-                                                                let temp = this.state.checkBox;
+                                                                let temp = this.state.checkBox.slice(0);
                                                                 let flag = 0;
                                                                 temp.forEach( valueData => {
-                                                                    if ( valueData.code === data.services[keys].services[key1].code )
-                                                                        flag = 1;
+                                                                    if ( valueData.code === data.services[keys].services[key1].code) {
+                                                                        if ( valueData.key === data.id  ) {
+                                                                            flag = 1;
+                                                                        }
+                                                                    }
                                                                 });
                                                                 if ( flag === 0 ) {
-                                                                    temp.push({code:data.services[keys].services[key1].code, isSelected: true, key: data.id, id: key1});
+                                                                    temp.push({
+                                                                        code:data.services[keys].services[key1].code,
+                                                                        isSelected: true,
+                                                                        key: data.id,
+                                                                        id: key1
+                                                                    });
                                                                     this.state.checkBox = temp;
                                                                 }
                                                                 return (<div key={key1} className="text-left form-inline">
                                                                     {this.state.checkBox.map(KEYS => {
-                                                                        if ( KEYS.code === data.services[keys].services[key1].code ) {
+                                                                        if ( KEYS.code === data.services[keys].services[key1].code && KEYS.key === data.id ) {
                                                                             return (
                                                                                 <Checkbox
                                                                                     key = { KEYS.code }
                                                                                     checked={KEYS.isSelected}
                                                                                     label={data.services[keys].services[key1].title}
-                                                                                    onChange={this.onCheckBox.bind(this,data.services[keys].services[key1].code)}
+                                                                                    onChange={this.onCheckBox.bind(this,data.services[keys].services[key1].code, data.id)}
                                                                                 />
                                                                             );
                                                                         }
