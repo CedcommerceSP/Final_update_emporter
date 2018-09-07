@@ -12,6 +12,7 @@ import { Page,
 
 import { notify } from '../../../services/notify';
 import { requests } from '../../../services/request';
+import { modifyOptionsData } from './static-functions';
 
 import { isUndefined } from 'util';
 
@@ -32,10 +33,11 @@ export class Configuration extends Component {
         };
         this.getUserDetails();
         this.getGoogleConfigurations();
+        this.getShopifyConfigurations();
     }
 
     getUserDetails() {
-        requests.getRequest('/user/getDetails')
+        requests.getRequest('user/getDetails')
             .then(data => {
                 if (data.success) {
                     this.state.account_information = {
@@ -53,7 +55,7 @@ export class Configuration extends Component {
     }
 
     getGoogleConfigurations() {
-        requests.getRequest('/connector/get/config', { marketplace: 'google' })
+        requests.getRequest('connector/get/config', { marketplace: 'google' })
             .then(data => {
                 if (data.success) {
                     console.log(data);
@@ -65,25 +67,26 @@ export class Configuration extends Component {
             });
     }
 
+    getShopifyConfigurations() {
+        requests.getRequest('connector/get/config', { marketplace: 'shopify' })
+            .then(data => {
+                console.log(data);
+                if (data.success) {
+                    console.log(data);
+                    /*this.googleConfigurationData = this.modifyGoogleConfigData(data.data);
+                    this.updateState();*/
+                } else {
+                    notify.error(data.message);
+                }
+            });
+    }
+
     modifyGoogleConfigData(data) {
         for (let i = 0; i < data.length; i++) {
             this.state.google_configuration[data[i].code] = data[i].value;
-            data[i].options = this.modifyOptionsData(data[i].options);
+            data[i].options = modifyOptionsData(data[i].options);
         }
         return data;
-    }
-
-
-    modifyOptionsData(data) {
-        let options = [];
-        for (let i = 0; i < Object.keys(data).length; i++) {
-            let key = Object.keys(data)[i];
-            options.push({
-                label: data[key],
-                value: key
-            });
-        }
-        return options;
     }
 
     render() {

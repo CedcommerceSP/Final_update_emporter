@@ -54,7 +54,7 @@ export const requests = {
         if (isUndefined(hideLoader) || !hideLoader) {
             window.showLoader = true;
         }
-        if (isUndefined(fullUrl) || fullUrl) {
+        if (isUndefined(fullUrl) || !fullUrl) {
             return fetch(environment.API_ENDPOINT + endpoint, {
                 method: 'POST',
                 headers: {

@@ -15,7 +15,7 @@ import { isUndefined } from 'util';
 
 import { requests } from '../../../../services/request';
 import { notify } from '../../../../services/notify';
-import { capitalizeWord } from '../static-functions';
+import { capitalizeWord, modifyOptionsData } from '../static-functions';
 
 export class InstallApp extends Component {
     queryParams;
@@ -159,6 +159,21 @@ export class InstallApp extends Component {
                 end = '&';
             }
             window.open(url, '_blank', 'location=yes,height=600,width=550,scrollbars=yes,status=yes');
+        } else {
+            let url = this.state.action;
+            let data = {};
+            for (let i = 0; i < this.state.schema.length; i++) {
+                data[this.state.schema[i].key] = this.state.schema[i].value;
+            }
+            requests.postRequest(url, data, true)
+                .then(data => {
+                    if (data.success) {
+                        notify.success(data.message);
+                    } else {
+                        notify.error(data.message);
+                    }
+                    this.redirect();
+                });
         }
     }
 
@@ -175,7 +190,7 @@ export class InstallApp extends Component {
                             win.close();
                         }
                         const state = this.state;
-                        this.state['schema'] = data.data.schema;
+                        this.state['schema'] = this.modifySchemaData(data.data.schema);
                         this.state['action'] = data.data.action;
                         this.state['postType'] = data.data.post_type;
                         this.updateState();
@@ -185,6 +200,15 @@ export class InstallApp extends Component {
                     this.redirect();
                 }
             });
+    }
+
+    modifySchemaData(data) {
+        for (let i = 0; i < data.length; i++) {
+            if (!isUndefined(data[i].options)) {
+                data[i].options = modifyOptionsData(data[i].options);
+            }
+        }
+        return data;
     }
 
     updateState() {
