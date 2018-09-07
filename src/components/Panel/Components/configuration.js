@@ -56,7 +56,6 @@ export class Configuration extends Component {
         requests.getRequest('/connector/get/config', { marketplace: 'google' })
             .then(data => {
                 if (data.success) {
-                    console.log(data);
                     this.googleConfigurationData = this.modifyGoogleConfigData(data.data);
                     this.updateState();
                 } else {
