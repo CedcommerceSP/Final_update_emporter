@@ -528,7 +528,7 @@ class Analyticsreporting extends Component {
                     }}}
                 title="Product Analytics">
                 {/*<Card title="Products Imported">*/}
-                <div className="CARD w-100" style={{marginTop:65}}>
+                <div className="CARD w-100" style={{marginTop:75}}>
                     <div className='CARD-title-small text-center BG-primary common'>
                             <FontAwesomeIcon icon={faArrowAltCircleDown} size="5x"/>
                     </div>
