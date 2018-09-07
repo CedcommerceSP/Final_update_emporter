@@ -1,5 +1,5 @@
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
-import {faCalendarCheck, faCalendarTimes, faCogs, faDollarSign, faHeadphones} from "@fortawesome/free-solid-svg-icons";
+import {faCalendarCheck, faCalendarTimes, faCogs, faDollarSign, faHeadphones, faTasks} from "@fortawesome/free-solid-svg-icons";
 import React from "react";
 
 const primaryColor = "#9c27b0";
@@ -8,12 +8,17 @@ const dangerColor = "#f44336";
 const successColor = "#4caf50";
 const infoColor = "#00acc1";
 const roseColor = "#e91e63";
-const grayColor = "#5d6bc4";
+const grayColor = "#ffffff";
 
 export function displayArray(data) {
     return ({
         description: 'You Can Add Your Description Here', // lvl 2
         card: [// lvl 1
+            {
+                text: 'Advance Shopify',
+                text_info: 'Active Plan',
+                icon: <FontAwesomeIcon icon={faTasks} size="5x" color={grayColor}/>,
+            },
             {
                 text: '199$',
                 text_info: 'Price',
@@ -30,35 +35,12 @@ export function displayArray(data) {
                 icon: <FontAwesomeIcon icon={faCalendarCheck} size="5x" color={grayColor}/>,
             },
         ],
-        card_service_group_name: [''], // title of service 'card_service' lvl 3
-        card_service: [ // lvl 4
+        card_service: [ // lvl 3
             [
                 {
                     text: '24X7',
                     text_info: 'Service 1',
-                    icon: <FontAwesomeIcon icon={faHeadphones} size="5x" color={infoColor}/>,
-                },
-                {
-                    text: 'Technical Support',
-                    text_info: 'Service 2',
-                    icon: <FontAwesomeIcon icon={faCogs} size="5x" color={grayColor}/>,
-                },
-                {
-                    text: 'Technical Support',
-                    text_info: 'Service 2',
-                    icon: <FontAwesomeIcon icon={faCogs} size="5x" color={grayColor}/>,
-                },
-            ],
-            [
-                {
-                    text: '24X7',
-                    text_info: 'Service 1',
-                    icon: <FontAwesomeIcon icon={faHeadphones} size="5x" color={infoColor}/>,
-                },
-                {
-                    text: 'Technical Support',
-                    text_info: 'Service 2',
-                    icon: <FontAwesomeIcon icon={faCogs} size="5x" color={grayColor}/>,
+                    icon: <FontAwesomeIcon icon={faHeadphones} size="5x" />,
                 },
                 {
                     text: 'Technical Support',

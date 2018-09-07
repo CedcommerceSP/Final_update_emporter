@@ -44,21 +44,22 @@ class CurrentPlan extends Component {
                                     <span style={{fontSize:'40px', color: '#000'}}><b>Starter Plan</b></span>
                                 </div>
                                 {this.state.card.map((keys, index) => { {/*LVL1*/}
-                                    let col = 'col-6 col-sm-4 mb-4';
+                                    let col = 'col-12 col-sm-6 mb-5';
                                     if ( this.state.card.length % 2 === 1 ) {
                                         if ( index + 1 === this.state.card.length ) {
-                                            col = 'col-12 col-sm-4 mb-4';
+                                            col = 'col-12 col-sm-6 mb-5';
                                         }
                                     }
                                     return (
                                         <div className={col} key={index}>
                                             <div className="">
-                                                <div className=" text-center">
-                                                    {keys.icon}
-                                                </div>
-                                                <div className="mt-4 text-center">
-                                                    <h2>{keys.text}</h2>
-                                                    <h6>{keys.text_info}</h6>
+                                                <div className="CARD mt-5">
+                                                    <div className="CARD-title-small text-center BG-primary">
+                                                        {keys.icon}
+                                                    </div>
+                                                    <div className="CARD-body p-5">
+                                                        <h2>{keys.text}</h2>
+                                                        <h6>{keys.text_info}</h6></div>
                                                 </div>
                                             </div>
                                         </div>
@@ -79,29 +80,27 @@ class CurrentPlan extends Component {
                                         </div>
                                     </div>
                                 </div>
+                                <div className="col-12 mt-5 mb-5">
+                                    <hr/>
+                                </div>
                                 {Object.keys(this.state.card_service).map((key, titleIndex) => {
                                     return (<React.Fragment key={titleIndex}>
-                                        <div className="col-12 mt-5 mb-5">
-                                            <hr/>
-                                        </div>
-                                        <div className="col-12 text-center mb-5">
-                                            <h1>{this.state.card_service_group_name[titleIndex]}</h1>
-                                        </div>
                                         {this.state.card_service[key].map((keys, index) => { {/*LVL 2*/}
-                                            let col = 'col-6 mb-4';
+                                            let col = 'col-6 mb-5';
                                             if ( this.state.card_service[key].length % 2 === 1 ) {
                                                 if ( index + 1 === this.state.card.length ) {
-                                                    col = 'col-12 mb-4';
+                                                    col = 'col-12 mb-5';
                                                 }
                                             }
                                             return (
                                                 <div className={col} key={index}>
-                                                    <div className="text-center mb-4">
-                                                        {keys.icon}
-                                                    </div>
-                                                    <div className="text-center">
-                                                        <h2>{keys.text}</h2>
-                                                        <h6>{keys.text_info}</h6>
+                                                    <div className="CARD mt-5">
+                                                        <div className="CARD-title-small text-center BG-primary">
+                                                            {keys.icon}
+                                                        </div>
+                                                        <div className="CARD-body p-5">
+                                                            <h2>{keys.text}</h2>
+                                                            <h6>{keys.text_info}</h6></div>
                                                     </div>
                                                 </div>
                                             );
