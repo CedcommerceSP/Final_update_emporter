@@ -18,9 +18,20 @@ import { requests } from '../../../services/request';
 import {isUndefined} from "util";
 import {notify} from "../../../services/notify";
 import './dashboard/dashboard.css';
+import {
+    faCheck
+} from '@fortawesome/free-solid-svg-icons';
+import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import { term_and_conditon } from './dashboard/term&condition';
 import {dataGrids} from "./plans-component/plansFuctions";
 
+const primaryColor = "#9c27b0";
+const warningColor = "#ff9800";
+const dangerColor = "#f44336";
+const successColor = "#4caf50";
+const infoColor = "#00acc1";
+const roseColor = "#e91e63";
+const grayColor = "#999999";
 class Dashboard extends Component {
     googleConfigurationData = [];
     constructor(props) {
@@ -299,23 +310,31 @@ class Dashboard extends Component {
         let flag = 1;
         return(
             Object.keys(this.state.stepData).map(keys => {
-                let css = 'divDisabled'; // Previous step Not Completed
+                let css = 'BG-warn'; // Previous step Not Completed
                 let status = false; // Used To decide if step is active then show its function body
                 if ( this.state.stepData[keys].stepperActive ) {
-                    css = 'divCompleted'; // Completed
+                    css = 'BG-success'; // Completed
                 } else if (flag === 1) {
-                    css = 'divActive'; // Active
+                    css = 'BG-info'; // Active
                     status = true;
                     flag++;
                 }
                 return (
                     <React.Fragment key={keys}>
-                        <div className={`mt-5 ${css}`}  onClick={this.state.stepData[keys].stepperActive?this.redirect.bind(this,this.state.stepData[keys].redirectTo):null}>
+                        <div className={`mt-5`}  onClick={this.state.stepData[keys].stepperActive?this.redirect.bind(this,this.state.stepData[keys].redirectTo):null}>
                             <div className="p-5">
                                 <div className="row">
-                                    <div className="col-12">
-                                        <h2>Step {parseInt(keys) + 1} :</h2>
-                                    </div>
+                                    {/*<div className="col-12">*/}
+                                        {/*<h2>Step {parseInt(keys) + 1} :</h2>*/}
+                                    {/*</div>*/}
+                                    <div className="CARD mt-5 w-100">
+                                        <div className={`CARD-title-small text-center ${css}`}>
+                                            {this.state.stepData[keys].stepperActive ?
+                                                <FontAwesomeIcon icon={faCheck} size="5x"/>
+                                                : <h1 className="mt-2 font-weight-bold" style={{fontSize:50}}>{parseInt(keys) + 1} </h1>
+                                            }
+                                        </div>
+                                        <div className="CARD-body p-5">
                                     <div className="col-12 p-3 pl-5">
                                         <h4>{this.state.stepData[keys].message}</h4>
                                     </div>
@@ -328,7 +347,9 @@ class Dashboard extends Component {
                         { this.state.stepData[keys].data !== '' && this.state.stepData[keys].stepperActive? <div className="col-12 mt-5 p-5 text-center">
                             <h4>{this.state.stepData[keys].data}</h4>
                         </div> :null } {/* TODO Change condition this.state.stepData[keys].data !== '' if data meaning change */}
-                    </React.Fragment>
+                            </div>
+                        </div>
+                        </React.Fragment>
                 );
             })
         );
@@ -815,6 +836,7 @@ class Dashboard extends Component {
                 title="Dashboard">
                 <Card >
                     <div className="p-5">
+
                         <Select
                             label="Step To Follow :-"
                             options={options}
