@@ -107,49 +107,49 @@ class Dashboard extends Component {
                         stepperActive: false, // used in stepper Check either Completed or not
                     }, // step 4
                 ],
-                Amazon_Shopify: [
-                    {
-                        message:<p>Enter Your Basic Detail</p>,
-                        stepperMessage: 'User Details', // stepper Small Message
-                        API_endpoint: '', // Api End Point is used to check to send data or get data
-                        data: '', // Data additional Field
-                        method: 'GET', // Method Type
-                        redirectTo: '/panel/configuration', // After Completion Where To Redirect
-                        anchor: 'U-INFO', // Which Function to call e.g : 'U-INFO' then call div which take User basic Information
-                        stepperActive: false, // used in stepper Check either Completed or not
-                    }, // step 1
-                    {
-                        message: <p> Choose a plan for Amazon-Shopify  Integration. If you are <b> buying plan for the first time</b> then, once you buy the plan your
-                            <b> 7 days trial</b> will be active for first week, and your <b> payment cycle will start after 7 days</b></p>,
-                        stepperMessage: 'Amazon-Shopify Plan Chosen',
-                        API_endpoint: '', // Api End Point is used to check to send data or get data
-                        data: '', // Data additional Field
-                        method: 'GET', // Method Type
-                        redirectTo: '/panel/configuration', // After Completion Where To Redirect
-                        anchor: 'PLANS', // Which Function to call e.g : 'U-INFO' then call div which take User basic Information
-                        stepperActive: false, // used in stepper Check either Completed or not
-                    }, // step 2
-                    {
-                        message:  <p> Link your AWS/MWS account.</p>,
-                        stepperMessage: 'AWS/MWS Account Linked',
-                        API_endpoint: '', // Api End Point is used to check to send data or get data
-                        data: '', // Data additional Field
-                        method: 'GET', // Method Type
-                        redirectTo: '/panel/accounts', // After Completion Where To Redirect
-                        anchor: 'LINKED', // Which Function to call e.g : 'U-INFO' then call div which take User basic Information
-                        stepperActive: false, // used in stepper Check either Completed or not
-                    }, // step 3
-                    {
-                        message: <span>Enter default configurations.</span>,
-                        stepperMessage: 'Configurations',
-                        API_endpoint: '', // Api End Point is used to check to send data or get data
-                        data: <p>After All the step Completed You can Import your products from amazon to <NavLink  to="/panel/import">shopify.</NavLink></p>, // Data additional Field
-                        method: 'GET', // Method Type
-                        redirectTo: '/panel/configuration', // After Completion Where To Redirect
-                        anchor: 'CONFIG', // Which Function to call e.g : 'U-INFO' then call div which take User basic Information
-                        stepperActive: false, // used in stepper Check either Completed or not
-                    }, // step 4
-                ],
+                // Amazon_Shopify: [
+                //     {
+                //         message:<p>Enter Your Basic Detail</p>,
+                //         stepperMessage: 'User Details', // stepper Small Message
+                //         API_endpoint: '', // Api End Point is used to check to send data or get data
+                //         data: '', // Data additional Field
+                //         method: 'GET', // Method Type
+                //         redirectTo: '/panel/configuration', // After Completion Where To Redirect
+                //         anchor: 'U-INFO', // Which Function to call e.g : 'U-INFO' then call div which take User basic Information
+                //         stepperActive: false, // used in stepper Check either Completed or not
+                //     }, // step 1
+                //     {
+                //         message: <p> Choose a plan for Amazon-Shopify  Integration. If you are <b> buying plan for the first time</b> then, once you buy the plan your
+                //             <b> 7 days trial</b> will be active for first week, and your <b> payment cycle will start after 7 days</b></p>,
+                //         stepperMessage: 'Amazon-Shopify Plan Chosen',
+                //         API_endpoint: '', // Api End Point is used to check to send data or get data
+                //         data: '', // Data additional Field
+                //         method: 'GET', // Method Type
+                //         redirectTo: '/panel/configuration', // After Completion Where To Redirect
+                //         anchor: 'PLANS', // Which Function to call e.g : 'U-INFO' then call div which take User basic Information
+                //         stepperActive: false, // used in stepper Check either Completed or not
+                //     }, // step 2
+                //     {
+                //         message:  <p> Link your AWS/MWS account.</p>,
+                //         stepperMessage: 'AWS/MWS Account Linked',
+                //         API_endpoint: '', // Api End Point is used to check to send data or get data
+                //         data: '', // Data additional Field
+                //         method: 'GET', // Method Type
+                //         redirectTo: '/panel/accounts', // After Completion Where To Redirect
+                //         anchor: 'LINKED', // Which Function to call e.g : 'U-INFO' then call div which take User basic Information
+                //         stepperActive: false, // used in stepper Check either Completed or not
+                //     }, // step 3
+                //     {
+                //         message: <span>Enter default configurations.</span>,
+                //         stepperMessage: 'Configurations',
+                //         API_endpoint: '', // Api End Point is used to check to send data or get data
+                //         data: <p>After All the step Completed You can Import your products from amazon to <NavLink  to="/panel/import">shopify.</NavLink></p>, // Data additional Field
+                //         method: 'GET', // Method Type
+                //         redirectTo: '/panel/configuration', // After Completion Where To Redirect
+                //         anchor: 'CONFIG', // Which Function to call e.g : 'U-INFO' then call div which take User basic Information
+                //         stepperActive: false, // used in stepper Check either Completed or not
+                //     }, // step 4
+                // ],
             },
         };
         this.checkStepCompleted = this.checkStepCompleted.bind(this);
