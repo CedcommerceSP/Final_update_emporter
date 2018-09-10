@@ -680,7 +680,7 @@ class Dashboard extends Component {
                     <Modal.Section>
                         <InstallAppsShared history={history} redirect={this.redirectResult} code={this.state.code}/>
                     </Modal.Section>
-                </Modal> {/* Open When The New Window Is open (it is a medium to ask user if he completed its step or not) */}
+                </Modal> {/* Open For Step 3 to see Connected Account */}
             </Page>
         );
     }
