@@ -159,6 +159,7 @@ class Dashboard extends Component {
         this.checkLinkedAccount = this.checkLinkedAccount.bind(this);
         this.openNewWindow = this.openNewWindow.bind(this);
         this.redirectResult = this.redirectResult.bind(this);
+        this.checkConfig = this.checkConfig.bind(this);
     }
     componentDidMount() {
         // this.setState({
@@ -611,10 +612,17 @@ class Dashboard extends Component {
         </div>;
     }
     /***************************************** step 4 Configurations start here *******************************/
+    checkConfig() {
+        notify.info('Need To Implement API Check');
+        this.changeStep(4);
+    }
     renderConfig() {
         return (
             <React.Fragment>
                 <ConfigShared history={history}/>
+                <div className="p-5 text-center">
+                    <Button onClick={this.checkConfig} primary> Completed All The Steps</Button>
+                </div>
             </React.Fragment>
         );
     }
@@ -667,7 +675,7 @@ class Dashboard extends Component {
                 <Modal
                     open={this.state.modalOpen}
                     onClose={this.handleModalChange.bind(this,'no',this.state.active_step)}
-                    title=""
+                    title="Connected Account"
                 >
                     <Modal.Section>
                         <InstallAppsShared history={history} redirect={this.redirectResult} code={this.state.code}/>
