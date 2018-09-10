@@ -8,7 +8,7 @@ import { isUndefined } from 'util';
 export class AppInstalled extends Component {
     queryParams = {};
     constructor(props) {
-        super();
+        super(props);
         this.queryParams = queryString.parse(props.location.search);
         this.showInstallationMessage(props);
     }
