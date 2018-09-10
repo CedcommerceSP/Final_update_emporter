@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { NavLink } from 'react-router-dom';
+import './import-component/import.css';
 
 import { Page,
     Card,
@@ -43,10 +44,12 @@ export class Import extends Component {
                 target_shop_id: '',
                 selected_profile: '',
                 profile_type: ''
-            }
+            },
+            openModal: false,
         };
         this.getAllImporterServices();
         this.getAllUploaderServices();
+        this.handleModalChange = this.handleModalChange.bind(this);
     }
 
     getAllImporterServices() {
@@ -495,7 +498,7 @@ export class Import extends Component {
                 <div className="row">
                     <div className="col-12 p-3">
                         <Banner title="Please Read" status="info">
-                            <Label>In order to upload your products from source marketplace to the marketplace on which you want to upload, kindly import your products from the source by clicking on 'Import Products', and then upload your products by clicking on 'Upload Products'.</Label>
+                            <Label>In order to upload your products from source marketplace to the marketplace on which you want to upload, kindly import your products from the source by clicking on 'Import Products', and then upload your products by clicking on 'Upload Products'.<a href="javascript:void(0)" onClick={this.handleModalChange}>Click Here</a></Label>
                         </Banner>
                     </div>
                     <div className="col-12 p-3">
@@ -543,8 +546,119 @@ export class Import extends Component {
                 </div>
                 {this.renderImportProductsModal()}
                 {this.renderUploadProductsModal()}
+                {this.renderHelpModal()}
+                <input type="hidden" id="openHelpModal" className="btn btn-primary" data-toggle="modal"
+                        data-target="#exampleModalCenter"/>
             </Page>
         );
+    }
+    /*******************       *********************/
+    renderHelpModal() {
+        return (
+            <React.Fragment>
+                <div className="modal fade" id="exampleModalCenter" tabIndex="-1" role="dialog"
+                     aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+                    <div className="modal-dialog modal-dialog-centered" role="document">
+                        <div className="modal-content">
+                            <div className="modal-header">
+                                <h2 className="modal-title" id="exampleModalLongTitle">How to Import/Upload Products</h2>
+                                <button type="button" className="close" data-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true" style={{fontSize:'30px'}}>&times;</span>
+                                </button>
+                            </div>
+                            <div className="modal-body" >
+                                <div className="row">
+                                    <div className="col-12">
+                                        <div id="carouselExampleIndicators" className="carousel slide" data-ride="carousel">
+                                            <ol className="carousel-indicators">
+                                                <li data-target="#carouselExampleIndicators" data-slide-to="0" className="active"/>
+                                                <li data-target="#carouselExampleIndicators" data-slide-to="1"/>
+                                                <li data-target="#carouselExampleIndicators" data-slide-to="2"/>
+                                                <li data-target="#carouselExampleIndicators" data-slide-to="3"/>
+                                                <li data-target="#carouselExampleIndicators" data-slide-to="4"/>
+                                                <li data-target="#carouselExampleIndicators" data-slide-to="5"/>
+                                                <li data-target="#carouselExampleIndicators" data-slide-to="6"/>
+                                            </ol>
+                                            <div className="carousel-inner">
+                                                <div className="carousel-item active">
+                                                    <img className="d-block w-100" src={require("../../../assets/img/step_1.jpg")} alt="First slide" height={480}/>
+                                                    <div className="carousel-caption text-dark">
+                                                        <h2>Step 1</h2>
+                                                        <h3 className="bg-dark text-white">Choose Import To Start The Import Process</h3>
+                                                    </div>
+                                                </div>
+                                                <div className="carousel-item">
+                                                    <img className="d-block w-100" src={require("../../../assets/img/step_2.1.jpg")} alt="Second slide" height={480}/>
+                                                    <div className="carousel-caption d-none d-md-block text-dark">
+                                                        <h2>Step 2</h2>
+                                                        <h3>Follow The Step</h3>
+                                                    </div>
+                                                </div>
+                                                <div className="carousel-item">
+                                                    <img className="d-block w-100" src={require("../../../assets/img/step_2.2.jpg")} alt="Third slide" height={480}/>
+                                                    <div className="carousel-caption d-none d-md-block text-dark">
+                                                        <h2>Step 3</h2>
+                                                        <h3>Follow The Step</h3>
+                                                    </div>
+                                                </div>
+                                                <div className="carousel-item">
+                                                    <img className="d-block w-100" src={require("../../../assets/img/step_2.5.jpg")} alt="Third slide" height={480}/>
+                                                    <div className="carousel-caption d-none d-md-block text-dark">
+                                                        <h2>Step 4</h2>
+                                                        <h3>Follow The Step</h3>
+                                                    </div>
+                                                </div>
+                                                <div className="carousel-item">
+                                                    <img className="d-block w-100" src={require("../../../assets/img/step_3.1.jpg")} alt="Third slide" height={480}/>
+                                                    <div className="carousel-caption d-none d-md-block text-dark">
+                                                        <h2>Step 5</h2>
+                                                        <h3>Follow The Step</h3>
+                                                    </div>
+                                                </div>
+                                                <div className="carousel-item">
+                                                    <img className="d-block w-100" src={require("../../../assets/img/step_4.1.jpg")} alt="Third slide" height={480}/>
+                                                    <div className="carousel-caption d-none d-md-block text-dark">
+                                                        <h2>Step 6</h2>
+                                                        <h3>Follow The Step</h3>
+                                                    </div>
+                                                </div>
+                                                <div className="carousel-item">
+                                                    <img className="d-block w-100" src={require("../../../assets/img/step_4.2.jpg")} alt="Third slide" height={480}/>
+                                                    <div className="carousel-caption d-none d-md-block text-dark">
+                                                        <h2>Step 7</h2>
+                                                        <h3>Follow The Step</h3>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <a className="carousel-control-prev" href="#carouselExampleIndicators" role="button"
+                                               data-slide="prev">
+                                                <span className="carousel-control-prev-icon" aria-hidden="true"/>
+                                                <span className="sr-only">Previous</span>
+                                            </a>
+                                            <a className="carousel-control-next" href="#carouselExampleIndicators" role="button"
+                                               data-slide="next">
+                                                <span className="carousel-control-next-icon" aria-hidden="true"/>
+                                                <span className="sr-only">Next</span>
+                                            </a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            {/*<div className="pb-5">*/}
+                                {/*<div className="d-none text-center d-md-block text-dark">*/}
+                                    {/*<h2>Step 1</h2>*/}
+                                    {/*<h3>Choose Import To Start The Import Process</h3>*/}
+                                {/*</div>*/}
+                            {/*</div>*/}
+                        </div>
+                    </div>
+                </div>
+            </React.Fragment>
+        );
+    }
+    handleModalChange() {
+       // this.setState({openModal: !this.state.openModal});
+        document.getElementById('openHelpModal').click();
     }
 
     updateState() {
