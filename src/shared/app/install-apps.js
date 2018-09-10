@@ -10,7 +10,9 @@ class InstallAppsShared extends Component {
     queryParams;
     constructor(props) {
         super(props);
-        this.queryParams = queryString.parse(props.history.location.search);
+        this.queryParams = {
+            code : props.code,
+        };
         this.getInstallationForm();
         this.redirect = this.redirect.bind(this);
         this.getAppInstallationForm = this.getAppInstallationForm.bind(this);

@@ -54,10 +54,7 @@ class AppsShared extends Component {
         );
     }
     installApp(code) {
-        this.redirect('/panel/accounts/install?code=' + code);
-    }
-    redirect(url) {
-        this.props.history.push(url);
+        this.props.redirectResult(code);
     }
 }
 

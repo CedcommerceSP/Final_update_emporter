@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 import {NavLink} from 'react-router-dom';
-import {Button, Card, Checkbox, Form, FormLayout, Label, Page, Select, TextField} from '@shopify/polaris';
+import {Button, Card, Checkbox, Form, FormLayout, Label, Page, Select, TextField,Modal} from '@shopify/polaris';
 import {requests} from '../../../services/request';
 import {isUndefined} from "util";
 import {notify} from "../../../services/notify";
@@ -11,15 +11,9 @@ import {term_and_conditon} from './dashboard/term&condition';
 import PlanBody from "../../../shared/plans/plan-body";
 import AppsShared from "../../../shared/app/apps";
 import history from '../../../shared/history';
+import InstallAppsShared from "../../../shared/app/install-apps";
 
 
-const primaryColor = "#9c27b0";
-const warningColor = "#ff9800";
-const dangerColor = "#f44336";
-const successColor = "#4caf50";
-const infoColor = "#00acc1";
-const roseColor = "#e91e63";
-const grayColor = "#999999";
 class Dashboard extends Component {
     googleConfigurationData = [];
     constructor(props) {
@@ -164,6 +158,8 @@ class Dashboard extends Component {
         this.paymentStatus = this.paymentStatus.bind(this);
         this.checkPayment = this.checkPayment.bind(this);
         this.checkLinkedAccount = this.checkLinkedAccount.bind(this);
+        this.openNewWindow = this.openNewWindow.bind(this);
+        this.redirectResult = this.redirectResult.bind(this);
     }
     componentDidMount() {
         // this.setState({
@@ -314,15 +310,15 @@ class Dashboard extends Component {
     }
     handleModalChange(event, stepActive) {
         // console.log(stepActive);
-        if ( event === 'yes' || event === 'no' ) {
-            if ( stepActive.name === 'PLANS' ) { // for anchor
-                this.checkPayment(); // if step completed
-            } else if ( stepActive.name === 'LINKED' ) {
-                this.checkLinkedAccount();
-            }
-            this.setState({modalOpen: !this.state.modalOpen});
-        } // id user say he/she completed then run this function
-        else if ( event === 'init_modal' ) {
+        // if ( event === 'yes' || event === 'no' ) {
+        //     if ( stepActive.name === 'PLANS' ) { // for anchor
+        //         this.checkPayment(); // if step completed
+        //     } else if ( stepActive.name === 'LINKED' ) {
+        //         this.checkLinkedAccount();
+        //     }
+        //     this.setState({modalOpen: !this.state.modalOpen});
+        // } // id user say he/she completed then run this function
+         if ( event === 'init_modal' ) {
             // this.setState({open_init_modal: false});
             notify.info("Please Select A Integration First")
         } else {
@@ -603,12 +599,11 @@ class Dashboard extends Component {
         this.changeStep(3);
     }
     openNewWindow(action) {
-        this.setState({modalOpen: !this.state.modalOpen});
-        window.open(action,  '_blank', 'location=yes,height=600,width=550,scrollbars=yes,status=yes');
+        this.setState({modalOpen: !this.state.modalOpen, code: action});
     } // Open Modal And A new Small Window For User
     renderLinkedAccount() {
         return <div>
-            <AppsShared history={history}/>
+            <AppsShared history={history} redirectResult={this.redirectResult}/>
             <div className="p-5 text-center">
                 <Button onClick={this.checkLinkedAccount} primary>
                     Continue to next step
@@ -794,21 +789,20 @@ class Dashboard extends Component {
                     {this.renderStepper()}
                 </Card> {/* Stepper */}
                 {this.renderBody()} {/* Main Body Function Call Here */}
-                {/*<Modal*/}
-                    {/*open={this.state.modalOpen}*/}
-                    {/*onClose={this.handleModalChange.bind(this,'no',this.state.active_step)}*/}
-                    {/*title=""*/}
-                {/*>*/}
-                    {/*<Modal.Section>*/}
-                        {/*<div className="text-center p-5">*/}
-                            {/*<Button primary onClick={this.handleModalChange.bind(this,'yes',this.state.active_step)}>*/}
-                                {/*Continue To Next Step*/}
-                            {/*</Button>*/}
-                        {/*</div>*/}
-                    {/*</Modal.Section>*/}
-                {/*</Modal> /!* Open When The New Window Is open (it is a medium to ask user if he completed its step or not) *!/*/}
+                <Modal
+                    open={this.state.modalOpen}
+                    onClose={this.handleModalChange.bind(this,'no',this.state.active_step)}
+                    title=""
+                >
+                    <Modal.Section>
+                        <InstallAppsShared history={history} redirect={this.redirectResult} code={this.state.code}/>
+                    </Modal.Section>
+                </Modal> {/* Open When The New Window Is open (it is a medium to ask user if he completed its step or not) */}
             </Page>
         );
+    }
+    redirectResult(status) {
+        this.openNewWindow(status);
     }
     redirect(url) {
         this.props.history.push(url);
