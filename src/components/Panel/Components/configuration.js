@@ -20,6 +20,7 @@ export class Configuration extends Component {
 
     googleConfigurationData = [];
     shopifyConfigurationData = [];
+    amazonImporterConfigurationData = [];
 
     constructor() {
         super();
@@ -30,13 +31,16 @@ export class Configuration extends Component {
           },
           google_configuration: {},
           shopify_configuration: {},
+          amazon_importer_configuration: {},
           google_configuration_updated: false,
           shopify_configuration_updated: false,
+          amazon_importer_configuration_updated: false,
           account_information_updated: false
         };
         this.getUserDetails();
         this.getGoogleConfigurations();
         this.getShopifyConfigurations();
+        this.getAmazonImporterConfigurations();
     }
 
     getUserDetails() {
@@ -61,7 +65,20 @@ export class Configuration extends Component {
         requests.getRequest('connector/get/config', { marketplace: 'google' })
             .then(data => {
                 if (data.success) {
-                    this.googleConfigurationData = this.modifyGoogleConfigData(data.data);
+                    this.googleConfigurationData = this.modifyConfigData(data.data, 'google_configuration');
+                    this.updateState();
+                } else {
+                    notify.error(data.message);
+                }
+            });
+    }
+
+    getAmazonImporterConfigurations() {
+        requests.getRequest('connector/get/config', { marketplace: 'amazonimporter' })
+            .then(data => {
+                console.log(data);
+                if (data.success) {
+                    this.amazonImporterConfigurationData = this.modifyConfigData(data.data, 'amazon_importer_configuration');
                     this.updateState();
                 } else {
                     notify.error(data.message);
@@ -73,7 +90,7 @@ export class Configuration extends Component {
         requests.getRequest('connector/get/config', { marketplace: 'shopify' })
             .then(data => {
                 if (data.success) {
-                    this.shopifyConfigurationData = this.modifyShopifyConfigData(data.data);
+                    this.shopifyConfigurationData = this.modifyConfigData(data.data, 'shopify_configuration');
                     this.updateState();
                 } else {
                     notify.error(data.message);
@@ -81,19 +98,9 @@ export class Configuration extends Component {
             });
     }
 
-    modifyGoogleConfigData(data) {
+    modifyConfigData(data, configKey) {
         for (let i = 0; i < data.length; i++) {
-            this.state.google_configuration[data[i].code] = data[i].value;
-            if (!isUndefined(data[i].options)) {
-                data[i].options = modifyOptionsData(data[i].options);
-            }
-        }
-        return data;
-    }
-
-    modifyShopifyConfigData(data) {
-        for (let i = 0; i < data.length; i++) {
-            this.state.shopify_configuration[data[i].code] = data[i].value;
+            this.state[configKey][data[i].code] = data[i].value;
             if (!isUndefined(data[i].options)) {
                 data[i].options = modifyOptionsData(data[i].options);
             }
@@ -302,6 +309,84 @@ export class Configuration extends Component {
         )
     }
 
+    renderAmazonImporterConfigurationSection() {
+        return (
+            <div className="row">
+                <div className="col-md-6 col-sm-6 col-12 text-md-left text-sm-left text-center">
+                    <Heading>Amazon Importer Configuration</Heading>
+                </div>
+                <div className="col-md-6 col-sm-6 col-12">
+                    <Card>
+                        <div className="row p-5">
+                            {
+                                this.amazonImporterConfigurationData.map(config => {
+                                    switch(config.type) {
+                                        case 'select':
+                                            return (
+                                                <div className="col-12 pt-2 pb-2" key={this.amazonImporterConfigurationData.indexOf(config)}>
+                                                    <Select
+                                                        options={config.options}
+                                                        label={config.title}
+                                                        placeholder={config.title}
+                                                        value={this.state.amazon_importer_configuration[config.code]}
+                                                        onChange={this.amazonImporterConfigurationChange.bind(this, this.amazonImporterConfigurationData.indexOf(config))}>
+                                                    </Select>
+                                                </div>
+                                            );
+                                            break;
+                                        case 'checkbox':
+                                            return (
+                                                <div className="col-12 pt-2 pb-2" key={this.amazonImporterConfigurationData.indexOf(config)}>
+                                                    <Label>{config.title}</Label>
+                                                    <div className="row">
+                                                        {
+                                                            config.options.map(option => {
+                                                                return (
+                                                                    <div className="col-md-6 col-sm-6 col-12 p-1" key={config.options.indexOf(option)}>
+                                                                        <Checkbox
+                                                                            checked={this.state.amazon_importer_configuration[config.code].indexOf(option.value) !== -1}
+                                                                            label={option.label}
+                                                                            onChange={this.amazonImporterConfigurationCheckboxChange.bind(this, this.amazonImporterConfigurationData.indexOf(config), config.options.indexOf(option))}
+                                                                        />
+                                                                    </div>
+                                                                );
+                                                            })
+                                                        }
+                                                    </div>
+                                                </div>
+                                            );
+                                            break;
+                                        default:
+                                            return (
+                                                <div className="col-12 pt-2 pb-2" key={this.amazonImporterConfigurationData.indexOf(config)}>
+                                                    <TextField
+                                                        label={config.title}
+                                                        placeholder={config.title}
+                                                        value={this.state.amazon_importer_configuration[config.code]}
+                                                        onChange={this.amazonImporterConfigurationChange.bind(this, this.amazonImporterConfigurationData.indexOf(config))}>
+                                                    </TextField>
+                                                </div>
+                                            );
+                                            break;
+                                    }
+
+                                })
+                            }
+                            <div className="col-12 text-right pt-2 pb-1">
+                                <Button
+                                    disabled={!this.state.amazon_importer_configuration_updated}
+                                    onClick={() => {
+                                        this.saveAmazonImporterConfigData();
+                                    }}
+                                    primary>Save</Button>
+                            </div>
+                        </div>
+                    </Card>
+                </div>
+            </div>
+        )
+    }
+
     render() {
         return (
             <Page
@@ -315,6 +400,9 @@ export class Configuration extends Component {
                     </Layout.Section>
                     <Layout.Section>
                         {this.renderShopifyConfigurationSection()}
+                    </Layout.Section>
+                    <Layout.Section>
+                        {this.renderAmazonImporterConfigurationSection()}
                     </Layout.Section>
                 </Layout>
             </Page>
@@ -352,6 +440,40 @@ export class Configuration extends Component {
                     notify.error(data.message);
                 }
                 this.getGoogleConfigurations();
+            });
+    }
+
+    amazonImporterConfigurationChange(index, value) {
+        this.state.amazon_importer_configuration_updated = true;
+        this.state.amazon_importer_configuration[this.amazonImporterConfigurationData[index].code] = value;
+        this.updateState();
+    }
+
+    amazonImporterConfigurationCheckboxChange(index, optionIndex, value) {
+        this.state.amazon_importer_configuration_updated = true;
+        const option = this.amazonImporterConfigurationData[index].options[optionIndex].value;
+        const valueIndex = this.state.amazon_importer_configuration[this.amazonImporterConfigurationData[index].code].indexOf(option);
+        if (value) {
+            if (valueIndex === -1) {
+                this.state.amazon_importer_configuration[this.amazonImporterConfigurationData[index].code].push(option);
+            }
+        } else {
+            if (valueIndex !== -1) {
+                this.state.amazon_importer_configuration[this.amazonImporterConfigurationData[index].code].splice(valueIndex, 1);
+            }
+        }
+        this.updateState();
+    }
+
+    saveAmazonImporterConfigData() {
+        requests.postRequest('connector/get/saveConfig', { marketplace: 'amazonimporter', data: this.state.amazon_importer_configuration })
+            .then(data => {
+                if (data.success) {
+                    notify.success(data.message);
+                } else {
+                    notify.error(data.message);
+                }
+                this.getAmazonImporterConfigurations();
             });
     }
 
