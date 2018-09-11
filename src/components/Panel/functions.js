@@ -51,13 +51,6 @@ export const panelFunctions = {
                 panelID: 'plans'
             },
             {
-                id: 'integration',
-                content: 'Integration',
-                accessibilityLabel: 'Integration',
-                link: '/panel/integration',
-                panelID: 'integration'
-            },
-            {
                 id: 'queuedtasks',
                 content: 'Activities',
                 accessibilityLabel: 'Activities',

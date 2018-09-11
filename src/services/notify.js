@@ -42,4 +42,5 @@ export const notify = {
             position: toast.POSITION.BOTTOM_CENTER
         });
     }
+    /*This Is Toasty Notifation*/
 };

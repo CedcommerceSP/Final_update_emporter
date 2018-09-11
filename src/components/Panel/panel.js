@@ -22,7 +22,6 @@ import { Plans } from './Components/plans';
 import { Header } from './Layout/header';
 import Dashboard from './Components/dashboard';
 import FAQPage from './Components/faq';
-import IntegrationPage from './Components/integration';
 
 import history from '../../shared/history';
 import { panelFunctions } from './functions';
@@ -77,7 +76,6 @@ export class Panel extends Component {
                                 <Route exact path='/panel/queuedtasks/activities' component={Activities}/>
                                 <Route exact path='/panel/help' component={FAQPage}/>
                                 <Route exact path='/panel/help/report' component={ReportAnIssue}/>
-                                <Route exact path='/panel/integration' component={IntegrationPage}/>
                                 <Route exact path='/panel/dashboard' component={Dashboard}/>
                                 <Route exact path="**" render={() => (
                                     <Redirect to="/panel/dashboard"/>
