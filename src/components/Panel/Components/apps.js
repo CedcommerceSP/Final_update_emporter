@@ -28,7 +28,6 @@ export class Apps extends Component {
                     for (let i = 0; i < Object.keys(data.data).length; i++) {
                         installedApps.push(data.data[Object.keys(data.data)[i]]);
                     }
-                    console.log(installedApps);
                     this.setState({
                         apps: installedApps
                     });

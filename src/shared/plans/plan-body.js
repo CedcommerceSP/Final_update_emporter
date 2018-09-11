@@ -123,10 +123,10 @@ class PlanBody extends Component {
                                                         <p className="service-body">
                                                             <span className="service-description mb-3" style={{fontWeight:'bold'}}><b>{data.services[keys].title}</b></span>
                                                             <span>
-                                                                    <Tooltip content={data.services[keys].description} preferredPosition="above">
-                                                                        <Link><Icon source="help" color="inkLighter" backdrop={true} /></Link>
-                                                                    </Tooltip>
-                                                                </span>
+                                                                <Tooltip content={data.services[keys].description} preferredPosition="above">
+                                                                    <Link><Icon source="help" color="inkLighter" backdrop={true} /></Link>
+                                                                </Tooltip>
+                                                            </span>
                                                         </p>
                                                         {Object.keys(data.services[keys].services).map(key1 => {
                                                             if ( data.services[keys].services[key1].required === 1 ) {

@@ -1,41 +1,21 @@
 import React, {Component} from 'react';
-import { NavLink } from 'react-router-dom';
-import {
-    Page,
-    Card,
-    Select,
-    Form,
-    FormLayout,
-    Checkbox,
-    TextField,
-    Button,
-    Tooltip,
-    Link,
-    Icon,
-    Label,TextContainer,Modal
-} from '@shopify/polaris';
-import { requests } from '../../../services/request';
+import {NavLink} from 'react-router-dom';
+import {Button, Card, Checkbox, Form, FormLayout, Label, Page, Select, TextField,Modal} from '@shopify/polaris';
+import {requests} from '../../../services/request';
 import {isUndefined} from "util";
 import {notify} from "../../../services/notify";
 import './dashboard/dashboard.css';
-import {
-    faCheck
-} from '@fortawesome/free-solid-svg-icons';
+import {faCheck} from '@fortawesome/free-solid-svg-icons';
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
-import { term_and_conditon } from './dashboard/term&condition';
-import {dataGrids} from "../../../shared/plans/plansFuctions";
-import {Plans} from "./plans";
+import {term_and_conditon} from './dashboard/term&condition';
 import PlanBody from "../../../shared/plans/plan-body";
+import AppsShared from "../../../shared/app/apps";
+import history from '../../../shared/history';
+import InstallAppsShared from "../../../shared/app/install-apps";
+import ConfigShared from "../../../shared/config/config-shared";
 
-const primaryColor = "#9c27b0";
-const warningColor = "#ff9800";
-const dangerColor = "#f44336";
-const successColor = "#4caf50";
-const infoColor = "#00acc1";
-const roseColor = "#e91e63";
-const grayColor = "#999999";
+
 class Dashboard extends Component {
-    googleConfigurationData = [];
     constructor(props) {
         super(props);
         this.state = {
@@ -83,10 +63,10 @@ class Dashboard extends Component {
             selected: '',
             open_init_modal: true, // this is used to open modal one time when user visit dashboard
             data: {
-                Shopify_Google : [
+                data : [ //Shopify_Google old Name
                     {
                         message:<p>Enter Your Basic Information</p>, // step data
-                        stepperMessage: 'Registration', // stepper Small Message
+                        stepperMessage: 'Basic Information', // stepper Small Message
                         API_endpoint: '', // Api End Point is used to check to send data or get data (no use Right Now)
                         data: '', // Data additional Field
                         method: 'GET', // Method Type
@@ -95,10 +75,10 @@ class Dashboard extends Component {
                         stepperActive: false, // used in stepper Check either Completed or not and also help in deciding with step to go
                     }, // step 1
                     {
-                        message: <p> Choose a plan for Shopify-Google Express Integration.
+                        message: <p> Choose a plan.
                             If you are <b> buying plan for the first time</b> then, once you buy the plan your
                             <b> 7 days trial</b> will be active for first week, and your <b> payment cycle will start after 7 days</b>.</p>,
-                        stepperMessage: 'Choose a plan for Shopify-Google Express', // stepper Small Message
+                        stepperMessage: 'Choose a plan', // stepper Small Message
                         API_endpoint: '', // Api End Point is used to check to send data or get data
                         data: '', // Data additional Field
                         method: 'GET', // Method Type
@@ -107,11 +87,8 @@ class Dashboard extends Component {
                         stepperActive: false, // used in stepper Check either Completed or not
                     }, // step 2
                     {
-                        message: <p> Link your <b> google merchant center account.</b>
-                            Please make sure that you have <b> verified & claimed</b> website URL in your Merchant Center, that should be
-                            <b> same as your Shopify store URL</b>
-                        </p>,
-                        stepperMessage: 'Google Merchant Center linked',
+                        message: <p> Link your <b>account.</b></p>,
+                        stepperMessage: 'Account linked',
                         API_endpoint: '', // Api End Point is used to check to send data or get data
                         data: '', // Data additional Field
                         method: 'GET', // Method Type
@@ -121,7 +98,7 @@ class Dashboard extends Component {
                     }, // step 3
                     {
                         message: <span>Enter default configurations.</span>,
-                        stepperMessage: 'Configurations',
+                        stepperMessage: 'Default Configurations',
                         API_endpoint: '', // Api End Point is used to check to send data or get data
                         data: <p>Now goto <NavLink  to="/panel/import">Upload Products</NavLink> section, first import products from shopify.  <br/>When import completed upload your products on google. </p>, // Data additional Field
                         method: 'GET', // Method Type
@@ -130,61 +107,67 @@ class Dashboard extends Component {
                         stepperActive: false, // used in stepper Check either Completed or not
                     }, // step 4
                 ],
-                Amazon_Shopify: [
-                    {
-                        message:<p>Enter Your Basic Detail</p>,
-                        stepperMessage: 'User Details', // stepper Small Message
-                        API_endpoint: '', // Api End Point is used to check to send data or get data
-                        data: '', // Data additional Field
-                        method: 'GET', // Method Type
-                        redirectTo: '/panel/configuration', // After Completion Where To Redirect
-                        anchor: 'U-INFO', // Which Function to call e.g : 'U-INFO' then call div which take User basic Information
-                        stepperActive: false, // used in stepper Check either Completed or not
-                    }, // step 1
-                    {
-                        message: <p> Choose a plan for Amazon-Shopify  Integration. If you are <b> buying plan for the first time</b> then, once you buy the plan your
-                            <b> 7 days trial</b> will be active for first week, and your <b> payment cycle will start after 7 days</b></p>,
-                        stepperMessage: 'Amazon-Shopify Plan Chosen',
-                        API_endpoint: '', // Api End Point is used to check to send data or get data
-                        data: '', // Data additional Field
-                        method: 'GET', // Method Type
-                        redirectTo: '/panel/configuration', // After Completion Where To Redirect
-                        anchor: 'PLANS', // Which Function to call e.g : 'U-INFO' then call div which take User basic Information
-                        stepperActive: false, // used in stepper Check either Completed or not
-                    }, // step 2
-                    {
-                        message:  <p> Link your AWS/MWS account.</p>,
-                        stepperMessage: 'AWS/MWS Account Linked',
-                        API_endpoint: '', // Api End Point is used to check to send data or get data
-                        data: '', // Data additional Field
-                        method: 'GET', // Method Type
-                        redirectTo: '/panel/accounts', // After Completion Where To Redirect
-                        anchor: 'LINKED', // Which Function to call e.g : 'U-INFO' then call div which take User basic Information
-                        stepperActive: false, // used in stepper Check either Completed or not
-                    }, // step 3
-                    {
-                        message: <span>Enter default configurations.</span>,
-                        stepperMessage: 'Configurations',
-                        API_endpoint: '', // Api End Point is used to check to send data or get data
-                        data: <p>After All the step Completed You can Import your products from amazon to <NavLink  to="/panel/import">shopify.</NavLink></p>, // Data additional Field
-                        method: 'GET', // Method Type
-                        redirectTo: '/panel/configuration', // After Completion Where To Redirect
-                        anchor: 'CONFIG', // Which Function to call e.g : 'U-INFO' then call div which take User basic Information
-                        stepperActive: false, // used in stepper Check either Completed or not
-                    }, // step 4
-                ],
+                // Amazon_Shopify: [
+                //     {
+                //         message:<p>Enter Your Basic Detail</p>,
+                //         stepperMessage: 'User Details', // stepper Small Message
+                //         API_endpoint: '', // Api End Point is used to check to send data or get data
+                //         data: '', // Data additional Field
+                //         method: 'GET', // Method Type
+                //         redirectTo: '/panel/configuration', // After Completion Where To Redirect
+                //         anchor: 'U-INFO', // Which Function to call e.g : 'U-INFO' then call div which take User basic Information
+                //         stepperActive: false, // used in stepper Check either Completed or not
+                //     }, // step 1
+                //     {
+                //         message: <p> Choose a plan for Amazon-Shopify  Integration. If you are <b> buying plan for the first time</b> then, once you buy the plan your
+                //             <b> 7 days trial</b> will be active for first week, and your <b> payment cycle will start after 7 days</b></p>,
+                //         stepperMessage: 'Amazon-Shopify Plan Chosen',
+                //         API_endpoint: '', // Api End Point is used to check to send data or get data
+                //         data: '', // Data additional Field
+                //         method: 'GET', // Method Type
+                //         redirectTo: '/panel/configuration', // After Completion Where To Redirect
+                //         anchor: 'PLANS', // Which Function to call e.g : 'U-INFO' then call div which take User basic Information
+                //         stepperActive: false, // used in stepper Check either Completed or not
+                //     }, // step 2
+                //     {
+                //         message:  <p> Link your AWS/MWS account.</p>,
+                //         stepperMessage: 'AWS/MWS Account Linked',
+                //         API_endpoint: '', // Api End Point is used to check to send data or get data
+                //         data: '', // Data additional Field
+                //         method: 'GET', // Method Type
+                //         redirectTo: '/panel/accounts', // After Completion Where To Redirect
+                //         anchor: 'LINKED', // Which Function to call e.g : 'U-INFO' then call div which take User basic Information
+                //         stepperActive: false, // used in stepper Check either Completed or not
+                //     }, // step 3
+                //     {
+                //         message: <span>Enter default configurations.</span>,
+                //         stepperMessage: 'Configurations',
+                //         API_endpoint: '', // Api End Point is used to check to send data or get data
+                //         data: <p>After All the step Completed You can Import your products from amazon to <NavLink  to="/panel/import">shopify.</NavLink></p>, // Data additional Field
+                //         method: 'GET', // Method Type
+                //         redirectTo: '/panel/configuration', // After Completion Where To Redirect
+                //         anchor: 'CONFIG', // Which Function to call e.g : 'U-INFO' then call div which take User basic Information
+                //         stepperActive: false, // used in stepper Check either Completed or not
+                //     }, // step 4
+                // ],
             },
         };
-        this.getGoogleConfigurations();
         this.checkStepCompleted = this.checkStepCompleted.bind(this);
         this.handleModalChange = this.handleModalChange.bind(this);
         this.paymentStatus = this.paymentStatus.bind(this);
+        this.checkPayment = this.checkPayment.bind(this);
+        this.checkLinkedAccount = this.checkLinkedAccount.bind(this);
+        this.openNewWindow = this.openNewWindow.bind(this);
+        this.redirectResult = this.redirectResult.bind(this);
+        this.checkConfig = this.checkConfig.bind(this);
     }
     componentDidMount() {
         // this.setState({
         //     stepData: this.state.data.Shopify_Google,
         // });
         this.mainAPICheck();
+        this.setState({stepData:this.state.data.data});
+        this.checkStepCompleted();
         // Object.keys(this.state.data).forEach(data => {
         //         this.checkStepCompleted(data);
         // });
@@ -211,19 +194,19 @@ class Dashboard extends Component {
         // });
         /*************  for step 3 (Link your google merchant center acc)   *****************/
         // API to get installation form - connector/get/installationForm, method -> get, { code : 'marketplace' }
-        this.state.API_code.forEach(value => {
-            requests.getRequest('connector/get/installationForm', {code:value}).then(data => {
-                if ( data.success ) {
-                    if ( data.data !== null && !isUndefined(data.data) ) {
-                        let newData = [];
-                        newData.push(data.data);
-                        this.setState({account_linked: newData});
-                    }
-                } else {
-                    notify.error(data.message);
-                }
-            });
-        });
+        // this.state.API_code.forEach(value => {
+        //     requests.getRequest('connector/get/installationForm', {code:value}).then(data => {
+        //         if ( data.success ) {
+        //             if ( data.data !== null && !isUndefined(data.data) ) {
+        //                 let newData = [];
+        //                 newData.push(data.data);
+        //                 this.setState({account_linked: newData});
+        //             }
+        //         } else {
+        //             notify.error(data.message);
+        //         }
+        //     });
+        // });
         /*************  for step 4 (Config)   *****************/
         // API to get default configuration -> /connector/get/config , method -> get, { marketplace : 'marketplace' }
         this.state.API_code.forEach(value => {
@@ -235,17 +218,17 @@ class Dashboard extends Component {
     }
     // API_check is used for get information about how many step are completed
     checkStepCompleted(key) {
-        let path = '/Shopify/Google';
-        if ( key === 'Amazon_Shopify' ) {
-            path = '/Amazon/Shopify';
-        }
+        let path = '/App/User/Step';
+        // if ( key === 'Amazon_Shopify' ) {
+        //     path = '/Amazon/Shopify';
+        // }
         requests.getRequest('frontend/app/getStepCompleted', {path: path}).then(data => {
             if ( data.success ) {
                 if ( data.data !== null && !isUndefined(data.data)  ) {
-                    let temp = this.state.data;
+                    let temp = this.state.stepData;
                     let anchor = '';
                     let flag = 0;
-                    temp[key].forEach((keys, index) => {
+                    temp.forEach((keys, index) => {
                         if ( index < parseInt(data.data) ) { // if  ( step here < no of step completed )
                             keys.stepperActive = true;
                         } else if ( flag === 0 ) {
@@ -267,16 +250,9 @@ class Dashboard extends Component {
         })
     } // initially run this to check which step is completed
     changeStep(arg) { // arg means step number
-        let data = this.state.data[this.state.selected];
+        let data = this.state.stepData;
         let path = [];
-        if ( arg === 1 || arg === 2 ) { // step 1 and 2 are common in both so send as one
-            path.push('/Shopify/Google');
-            path.push('/Amazon/Shopify');
-        } else if ( this.state.selected === 'Amazon_Shopify' ) {
-            path.push('/Amazon/Shopify');
-        } else {
-            path.push('/Shopify/Google');
-        }
+        path.push('/App/User/Step');
         requests.postRequest('frontend/app/stepCompleted', { paths: path, step: arg }).then(value => {
             if ( value.success ) {
                 let anchor = '';
@@ -334,15 +310,15 @@ class Dashboard extends Component {
     }
     handleModalChange(event, stepActive) {
         // console.log(stepActive);
-        if ( event === 'yes' || event === 'no' ) {
-            if ( stepActive.name === 'PLANS' ) { // for anchor
-                this.checkPayment(); // if step completed
-            } else if ( stepActive.name === 'LINKED' ) {
-                this.checkLinkedAccount();
-            }
-            this.setState({modalOpen: !this.state.modalOpen});
-        } // id user say he/she completed then run this function
-        else if ( event === 'init_modal' ) {
+        // if ( event === 'yes' || event === 'no' ) {
+        //     if ( stepActive.name === 'PLANS' ) { // for anchor
+        //         this.checkPayment(); // if step completed
+        //     } else if ( stepActive.name === 'LINKED' ) {
+        //         this.checkLinkedAccount();
+        //     }
+        //     this.setState({modalOpen: !this.state.modalOpen});
+        // } // id user say he/she completed then run this function
+         if ( event === 'init_modal' ) {
             // this.setState({open_init_modal: false});
             notify.info("Please Select A Integration First")
         } else {
@@ -580,7 +556,7 @@ class Dashboard extends Component {
                                 error={this.state.info_error.term_and_conditon?'please Check The Term And Conditons':''}
                                 onChange={this.handleFormChange.bind(this,'term_and_conditon')}
                             />
-                            <Button submit primary={true}>Submit</Button>
+                            <Button submit primary>Submit</Button>
                         </FormLayout>
                     </Form>
                 </div>
@@ -609,6 +585,11 @@ class Dashboard extends Component {
         return (
             <React.Fragment>
                 <PlanBody paymentStatus={this.paymentStatus}/>;
+                <div className="p-5 text-center">
+                    <Button onClick={this.checkPayment} primary>
+                        Continue to next step
+                    </Button>
+                </div>
             </React.Fragment>
         );
     }
@@ -618,219 +599,93 @@ class Dashboard extends Component {
         this.changeStep(3);
     }
     openNewWindow(action) {
-        this.setState({modalOpen: !this.state.modalOpen});
-        window.open(action,  '_blank', 'location=yes,height=600,width=550,scrollbars=yes,status=yes');
+        this.setState({modalOpen: !this.state.modalOpen, code: action});
     } // Open Modal And A new Small Window For User
     renderLinkedAccount() {
-        /***     {post_type: "redirect", action: "https://connector.com/google/app/auth?bearer=e...."}      **/
-        let value = this.state.account_linked;
-        let html = <span/>;
-        if ( value.length > 0 ) {
-            value.forEach(data => {
-                if ( data.post_type === 'redirect' ) {
-                    html = <div className="text-center">
-                        <Button primary={true} onClick={() => this.openNewWindow(data.action)}>
-                            Connect
-                        </Button>
-                    </div>
-                }
-            })
-        }
-        return html;
+        return <div>
+            <AppsShared history={history} redirectResult={this.redirectResult}/>
+            <div className="p-5 text-center">
+                <Button onClick={this.checkLinkedAccount} primary>
+                    Continue to next step
+                </Button>
+            </div>
+        </div>;
     }
     /***************************************** step 4 Configurations start here *******************************/
-    getGoogleConfigurations() {
-        requests.getRequest('/connector/get/config', { marketplace: 'google' })
-            .then(data => {
-                if (data.success) {
-                    this.googleConfigurationData = this.modifyGoogleConfigData(data.data);
-                    this.updateState();
-                } else {
-                    notify.error(data.message);
-                }
-            });
-    }
-    modifyGoogleConfigData(data) {
-        for (let i = 0; i < data.length; i++) {
-            this.state.google_configuration[data[i].code] = data[i].value;
-            data[i].options = this.modifyOptionsData(data[i].options);
-        }
-        return data;
-    }
-    modifyOptionsData(data) {
-        let options = [];
-        for (let i = 0; i < Object.keys(data).length; i++) {
-            let key = Object.keys(data)[i];
-            options.push({
-                label: data[key],
-                value: key
-            });
-        }
-        return options;
-    }
-    googleConfigurationChange(index, value) {
-        this.state.google_configuration_updated = true;
-        this.state.google_configuration[this.googleConfigurationData[index].code] = value;
-        this.updateState();
-    }
-    googleConfigurationCheckboxChange(index, optionIndex, value) {
-        this.state.google_configuration_updated = true;
-        const option = this.googleConfigurationData[index].options[optionIndex].value;
-        const valueIndex = this.state.google_configuration[this.googleConfigurationData[index].code].indexOf(option);
-        if (value) {
-            if (valueIndex === -1) {
-                this.state.google_configuration[this.googleConfigurationData[index].code].push(option);
-            }
-        } else {
-            if (valueIndex !== -1) {
-                this.state.google_configuration[this.googleConfigurationData[index].code].splice(valueIndex, 1);
-            }
-        }
-        this.updateState();
-    }
-    saveGoogleConfigData() {
-        requests.postRequest('connector/get/saveConfig', { marketplace: 'google', data: this.state.google_configuration })
-            .then(data => {
-                if (data.success) {
-                    notify.success(data.message);
-                    this.changeStep(4);
-                } else {
-                    notify.error(data.message);
-                }
-                this.getGoogleConfigurations();
-            });
+    checkConfig() {
+        notify.info('Need To Implement API Check');
+        this.changeStep(4);
     }
     renderConfig() {
-        if (this.state.config)
-        {
-            return (
-                <div className="row p-5">
-                    {
-                        this.googleConfigurationData.map(config => {
-                            switch(config.type) {
-                                case 'select':
-                                    return (
-                                        <div className="col-12 pt-2 pb-2" key={this.googleConfigurationData.indexOf(config)}>
-                                            <Select
-                                                options={config.options}
-                                                label={config.title}
-                                                placeholder={config.title}
-                                                value={this.state.google_configuration[config.code]}
-                                                onChange={this.googleConfigurationChange.bind(this, this.googleConfigurationData.indexOf(config))}>
-                                            </Select>
-                                        </div>
-                                    );
-                                    break;
-                                case 'checkbox':
-                                    return (
-                                        <div className="col-12 pt-2 pb-2" key={this.googleConfigurationData.indexOf(config)}>
-                                            <Label>{config.title}</Label>
-                                            <div className="row">
-                                                {
-                                                    config.options.map(option => {
-                                                        return (
-                                                            <div className="col-md-6 col-sm-6 col-12 p-1" key={config.options.indexOf(option)}>
-                                                                <Checkbox
-                                                                    checked={this.state.google_configuration[config.code].indexOf(option.value) !== -1}
-                                                                    label={option.value}
-                                                                    onChange={this.googleConfigurationCheckboxChange.bind(this, this.googleConfigurationData.indexOf(config), config.options.indexOf(option))}
-                                                                />
-                                                            </div>
-                                                        );
-                                                    })
-                                                }
-                                            </div>
-                                        </div>
-                                    );
-                                    break;
-                                default:
-                                    return (
-                                        <div className="col-12 pt-2 pb-2" key={this.googleConfigurationData.indexOf(config)}>
-                                            <TextField
-                                                label={config.title}
-                                                placeholder={config.title}
-                                                value={this.state.google_configuration[config.code]}
-                                                onChange={this.googleConfigurationChange.bind(this, this.googleConfigurationData.indexOf(config))}>
-                                            </TextField>
-                                        </div>
-                                    );
-                                    break;
-                            }
-
-                        })
-                    }
-                    <div className="col-12 text-right pt-2 pb-1">
-                        <Button
-                            onClick={() => {
-                                this.saveGoogleConfigData();
-                            }}
-                            primary>Save</Button>
-                    </div>
+        return (
+            <React.Fragment>
+                <ConfigShared history={history}/>
+                <div className="p-5 text-center">
+                    <Button onClick={this.checkConfig} primary> Completed All The Steps</Button>
                 </div>
-            );
-        }
+            </React.Fragment>
+        );
     }
     /************************************  Render()   **********************************************************/
     render() {
-        const options = [
-            {label: 'Shopify-Google Integration', value: 'Shopify_Google'},
-            {label: 'Amazon-Shopify Integration', value: 'Amazon_Shopify'},
-        ]; {/* Integration Dropdown Options */}
+        // const options = [
+        //     {label: 'Shopify-Google Integration', value: 'Shopify_Google'},
+        //     {label: 'Amazon-Shopify Integration', value: 'Amazon_Shopify'},
+        // ]; {/* Integration Dropdown Options */}
         return (
             <Page
                 title="Dashboard">
-                <Card >
-                    <div className="p-5">
+                {/*<Card >*/}
+                    {/*<div className="p-5">*/}
 
-                        <Select
-                            label="Step To Follow :-"
-                            options={options}
-                            onChange={this.handleChange}
-                            value={this.state.selected}
-                        />
-                    </div>
-                </Card> {/* Dropdown */}
+                        {/*<Select*/}
+                            {/*label="Step To Follow :-"*/}
+                            {/*options={options}*/}
+                            {/*onChange={this.handleChange}*/}
+                            {/*value={this.state.selected}*/}
+                        {/*/>*/}
+                    {/*</div>*/}
+                {/*</Card> /!* Dropdown *!/*/}
+                {/*<Modal*/}
+                    {/*open={this.state.open_init_modal}*/}
+                    {/*onClose={this.handleModalChange.bind(this,'init_modal')}*/}
+                    {/*title="Select Integration"*/}
+                {/*>*/}
+                    {/*<Modal.Section>*/}
+                        {/*<Card>*/}
+                            {/*<div className="p-5">*/}
+                                {/*<Select*/}
+                                    {/*label="Show Steps To Follow For :-"*/}
+                                    {/*placeholder="Select Integration From Here"*/}
+                                    {/*options={ [*/}
+                                        {/*{label: 'Shopify-Google Integration', value: 'Shopify_Google'},*/}
+                                        {/*{label: 'Amazon-Shopify Integration', value: 'Amazon_Shopify'},*/}
+                                    {/*]}*/}
+                                    {/*onChange={this.handleChange}*/}
+                                    {/*value={this.state.selected}*/}
+                                {/*/>*/}
+                            {/*</div>*/}
+                        {/*</Card>*/}
+                    {/*</Modal.Section>*/}
+                {/*</Modal> /!* Open The Init DropDown *!/*/}
                 <Card>
                     {this.renderStepper()}
                 </Card> {/* Stepper */}
                 {this.renderBody()} {/* Main Body Function Call Here */}
                 <Modal
-                    open={this.state.open_init_modal}
-                    onClose={this.handleModalChange.bind(this,'init_modal')}
-                    title="Select Integration"
-                >
-                    <Modal.Section>
-                        <Card>
-                            <div className="p-5">
-                                <Select
-                                    label="Show Steps To Follow For :-"
-                                    placeholder="Select Integration From Here"
-                                    options={ [
-                                        {label: 'Shopify-Google Integration', value: 'Shopify_Google'},
-                                        {label: 'Amazon-Shopify Integration', value: 'Amazon_Shopify'},
-                                    ]}
-                                    onChange={this.handleChange}
-                                    value={this.state.selected}
-                                />
-                            </div>
-                        </Card>
-                    </Modal.Section>
-                </Modal> {/* Open The Init DropDown */}
-                <Modal
                     open={this.state.modalOpen}
                     onClose={this.handleModalChange.bind(this,'no',this.state.active_step)}
-                    title=""
+                    title="Connected Account"
                 >
                     <Modal.Section>
-                        <div className="text-center p-5">
-                            <Button primary onClick={this.handleModalChange.bind(this,'yes',this.state.active_step)}>
-                                Continue To Next Step
-                            </Button>
-                        </div>
+                        <InstallAppsShared history={history} redirect={this.redirectResult} code={this.state.code}/>
                     </Modal.Section>
-                </Modal> {/* Open When The New Window Is open (it is a medium to ask user if he completed its step or not) */}
+                </Modal> {/* Open For Step 3 to see Connected Account */}
             </Page>
         );
+    }
+    redirectResult(status) {
+        this.openNewWindow(status);
     }
     redirect(url) {
         this.props.history.push(url);
