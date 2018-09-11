@@ -16,7 +16,7 @@ class FAQPage extends Component {
                 {
                     id:1,
                     show: false, // for collapse div
-                    search: true, // for search
+                    search: true, // for search, if false then hide the div
                     ques: 'How To Upload My Products on Google Merchant Center?',
                     ans: <ol>
                         <li className="mb-2">Go To Upload Product <NavLink to="/panel/import"> Section </NavLink> </li>
