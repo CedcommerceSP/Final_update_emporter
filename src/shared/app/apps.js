@@ -33,21 +33,23 @@ class AppsShared extends Component {
             <div className="row">
                 {
                     this.state.apps.map(app => {
-                        return (
-                            <div className="col-sm-6 col-12 mt-1 mb-1" key={this.state.apps.indexOf(app)}>
-                                <AccountConnection
-                                    accountName={app.code}
-                                    connected={false}
-                                    title={app.title}
-                                    action={{
-                                        content:app['installed']==0?'Connect':'ReConnect',
-                                        onClick: this.installApp.bind(this,app.code)
-                                    }}
-                                    details={app['installed']==0?'Connect Now':'Already Connected'}
-                                    termsOfService={<img src={app.image} alt={app.title}/>}
-                                />
-                            </div>
-                        );
+                        if (app.code === 'amazonimporter') {
+                            return (
+                                <div className="col-12" key={this.state.apps.indexOf(app)}>
+                                    <AccountConnection
+                                        accountName={app.code}
+                                        connected={false}
+                                        title={app.title}
+                                        action={{
+                                            content:app['installed']==0?'Connect':'ReConnect',
+                                            onClick: this.installApp.bind(this,app.code)
+                                        }}
+                                        details={app['installed']==0?'Connect Now':'Already Connected'}
+                                        termsOfService={<img src={app.image} alt={app.title}/>}
+                                    />
+                                </div>
+                            );
+                        }
                     })
                 }
             </div>

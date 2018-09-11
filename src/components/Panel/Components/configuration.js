@@ -18,7 +18,6 @@ import { isUndefined } from 'util';
 
 export class Configuration extends Component {
 
-    googleConfigurationData = [];
     shopifyConfigurationData = [];
     amazonImporterConfigurationData = [];
 
@@ -38,7 +37,6 @@ export class Configuration extends Component {
           account_information_updated: false
         };
         this.getUserDetails();
-        this.getGoogleConfigurations();
         this.getShopifyConfigurations();
         this.getAmazonImporterConfigurations();
     }
@@ -61,17 +59,6 @@ export class Configuration extends Component {
             });
     }
 
-    getGoogleConfigurations() {
-        requests.getRequest('connector/get/config', { marketplace: 'google' })
-            .then(data => {
-                if (data.success) {
-                    this.googleConfigurationData = this.modifyConfigData(data.data, 'google_configuration');
-                    this.updateState();
-                } else {
-                    notify.error(data.message);
-                }
-            });
-    }
 
     getAmazonImporterConfigurations() {
         requests.getRequest('connector/get/config', { marketplace: 'amazonimporter' })
@@ -153,83 +140,6 @@ export class Configuration extends Component {
         )
     }
 
-    renderGoogleConfigurationSection() {
-        return (
-            <div className="row">
-                <div className="col-md-6 col-sm-6 col-12 text-md-left text-sm-left text-center">
-                    <Heading>Google Configuration</Heading>
-                </div>
-                <div className="col-md-6 col-sm-6 col-12">
-                    <Card>
-                        <div className="row p-5">
-                            {
-                                this.googleConfigurationData.map(config => {
-                                    switch(config.type) {
-                                        case 'select':
-                                            return (
-                                                <div className="col-12 pt-2 pb-2" key={this.googleConfigurationData.indexOf(config)}>
-                                                    <Select
-                                                        options={config.options}
-                                                        label={config.title}
-                                                        placeholder={config.title}
-                                                        value={this.state.google_configuration[config.code]}
-                                                        onChange={this.googleConfigurationChange.bind(this, this.googleConfigurationData.indexOf(config))}>
-                                                    </Select>
-                                                </div>
-                                            );
-                                            break;
-                                        case 'checkbox':
-                                            return (
-                                                <div className="col-12 pt-2 pb-2" key={this.googleConfigurationData.indexOf(config)}>
-                                                    <Label>{config.title}</Label>
-                                                    <div className="row">
-                                                        {
-                                                            config.options.map(option => {
-                                                                return (
-                                                                    <div className="col-md-6 col-sm-6 col-12 p-1" key={config.options.indexOf(option)}>
-                                                                        <Checkbox
-                                                                            checked={this.state.google_configuration[config.code].indexOf(option.value) !== -1}
-                                                                            label={option.label}
-                                                                            onChange={this.googleConfigurationCheckboxChange.bind(this, this.googleConfigurationData.indexOf(config), config.options.indexOf(option))}
-                                                                        />
-                                                                    </div>
-                                                                );
-                                                            })
-                                                        }
-                                                    </div>
-                                                </div>
-                                            );
-                                            break;
-                                        default:
-                                            return (
-                                                <div className="col-12 pt-2 pb-2" key={this.googleConfigurationData.indexOf(config)}>
-                                                    <TextField
-                                                        label={config.title}
-                                                        placeholder={config.title}
-                                                        value={this.state.google_configuration[config.code]}
-                                                        onChange={this.googleConfigurationChange.bind(this, this.googleConfigurationData.indexOf(config))}>
-                                                    </TextField>
-                                                </div>
-                                            );
-                                            break;
-                                    }
-
-                                })
-                            }
-                            <div className="col-12 text-right pt-2 pb-1">
-                                <Button
-                                    disabled={!this.state.google_configuration_updated}
-                                    onClick={() => {
-                                        this.saveGoogleConfigData();
-                                    }}
-                                    primary>Save</Button>
-                            </div>
-                        </div>
-                    </Card>
-                </div>
-            </div>
-        )
-    }
 
     renderShopifyConfigurationSection() {
         return (
@@ -396,9 +306,6 @@ export class Configuration extends Component {
                         {this.renderUserConfigurationSection()}
                     </Layout.Section>
                     <Layout.Section>
-                        {this.renderGoogleConfigurationSection()}
-                    </Layout.Section>
-                    <Layout.Section>
                         {this.renderShopifyConfigurationSection()}
                     </Layout.Section>
                     <Layout.Section>
@@ -407,40 +314,6 @@ export class Configuration extends Component {
                 </Layout>
             </Page>
         );
-    }
-
-    googleConfigurationChange(index, value) {
-        this.state.google_configuration_updated = true;
-        this.state.google_configuration[this.googleConfigurationData[index].code] = value;
-        this.updateState();
-    }
-
-    googleConfigurationCheckboxChange(index, optionIndex, value) {
-        this.state.google_configuration_updated = true;
-        const option = this.googleConfigurationData[index].options[optionIndex].value;
-        const valueIndex = this.state.google_configuration[this.googleConfigurationData[index].code].indexOf(option);
-        if (value) {
-            if (valueIndex === -1) {
-                this.state.google_configuration[this.googleConfigurationData[index].code].push(option);
-            }
-        } else {
-            if (valueIndex !== -1) {
-                this.state.google_configuration[this.googleConfigurationData[index].code].splice(valueIndex, 1);
-            }
-        }
-        this.updateState();
-    }
-
-    saveGoogleConfigData() {
-        requests.postRequest('connector/get/saveConfig', { marketplace: 'google', data: this.state.google_configuration })
-            .then(data => {
-                if (data.success) {
-                    notify.success(data.message);
-                } else {
-                    notify.error(data.message);
-                }
-                this.getGoogleConfigurations();
-            });
     }
 
     amazonImporterConfigurationChange(index, value) {

@@ -49,11 +49,11 @@ class Dashboard extends Component {
             modalOpen: false,
             /********* Step 3 ends **********/
             /********* Step 4 **********/
-            config_API: ['google'],
-            config: false,
-            google_configuration: {},
-            google_configuration_updated: false,
-            account_information_updated: false,
+            // config_API: ['google'],
+            // config: false,
+            // google_configuration: {},
+            // google_configuration_updated: false,
+            // account_information_updated: false,
             /********* Step 4 Ends **********/
             active_step: {
                 name: '', // anchor name
@@ -106,50 +106,7 @@ class Dashboard extends Component {
                         anchor: 'CONFIG', // Which Function to call e.g : 'U-INFO' then call div which take User basic Information
                         stepperActive: false, // used in stepper Check either Completed or not
                     }, // step 4
-                ],
-                // Amazon_Shopify: [
-                //     {
-                //         message:<p>Enter Your Basic Detail</p>,
-                //         stepperMessage: 'User Details', // stepper Small Message
-                //         API_endpoint: '', // Api End Point is used to check to send data or get data
-                //         data: '', // Data additional Field
-                //         method: 'GET', // Method Type
-                //         redirectTo: '/panel/configuration', // After Completion Where To Redirect
-                //         anchor: 'U-INFO', // Which Function to call e.g : 'U-INFO' then call div which take User basic Information
-                //         stepperActive: false, // used in stepper Check either Completed or not
-                //     }, // step 1
-                //     {
-                //         message: <p> Choose a plan for Amazon-Shopify  Integration. If you are <b> buying plan for the first time</b> then, once you buy the plan your
-                //             <b> 7 days trial</b> will be active for first week, and your <b> payment cycle will start after 7 days</b></p>,
-                //         stepperMessage: 'Amazon-Shopify Plan Chosen',
-                //         API_endpoint: '', // Api End Point is used to check to send data or get data
-                //         data: '', // Data additional Field
-                //         method: 'GET', // Method Type
-                //         redirectTo: '/panel/configuration', // After Completion Where To Redirect
-                //         anchor: 'PLANS', // Which Function to call e.g : 'U-INFO' then call div which take User basic Information
-                //         stepperActive: false, // used in stepper Check either Completed or not
-                //     }, // step 2
-                //     {
-                //         message:  <p> Link your AWS/MWS account.</p>,
-                //         stepperMessage: 'AWS/MWS Account Linked',
-                //         API_endpoint: '', // Api End Point is used to check to send data or get data
-                //         data: '', // Data additional Field
-                //         method: 'GET', // Method Type
-                //         redirectTo: '/panel/accounts', // After Completion Where To Redirect
-                //         anchor: 'LINKED', // Which Function to call e.g : 'U-INFO' then call div which take User basic Information
-                //         stepperActive: false, // used in stepper Check either Completed or not
-                //     }, // step 3
-                //     {
-                //         message: <span>Enter default configurations.</span>,
-                //         stepperMessage: 'Configurations',
-                //         API_endpoint: '', // Api End Point is used to check to send data or get data
-                //         data: <p>After All the step Completed You can Import your products from amazon to <NavLink  to="/panel/import">shopify.</NavLink></p>, // Data additional Field
-                //         method: 'GET', // Method Type
-                //         redirectTo: '/panel/configuration', // After Completion Where To Redirect
-                //         anchor: 'CONFIG', // Which Function to call e.g : 'U-INFO' then call div which take User basic Information
-                //         stepperActive: false, // used in stepper Check either Completed or not
-                //     }, // step 4
-                // ],
+                ]
             },
         };
         this.checkStepCompleted = this.checkStepCompleted.bind(this);
@@ -162,15 +119,8 @@ class Dashboard extends Component {
         this.checkConfig = this.checkConfig.bind(this);
     }
     componentDidMount() {
-        // this.setState({
-        //     stepData: this.state.data.Shopify_Google,
-        // });
-        this.mainAPICheck();
         this.setState({stepData:this.state.data.data});
         this.checkStepCompleted();
-        // Object.keys(this.state.data).forEach(data => {
-        //         this.checkStepCompleted(data);
-        // });
     }
     handleChange = (newValue) => {
         this.setState({
@@ -180,43 +130,6 @@ class Dashboard extends Component {
         });
         this.checkStepCompleted(newValue);
     };// This Function Used for dropdown Selection
-    mainAPICheck() {
-        /****** for Plans ******/
-        // requests.getRequest('plan/plan/get').then(data => {
-        //     if ( data.success ) {
-        //         if ( data.data !== null && !isUndefined(data.data) ) {
-        //             data = dataGrids(data.data.data.rows); // change the data into desire format
-        //             this.setState({plans : data});
-        //         }
-        //     } else {
-        //         notify.error(data.message);
-        //     }
-        // });
-        /*************  for step 3 (Link your google merchant center acc)   *****************/
-        // API to get installation form - connector/get/installationForm, method -> get, { code : 'marketplace' }
-        // this.state.API_code.forEach(value => {
-        //     requests.getRequest('connector/get/installationForm', {code:value}).then(data => {
-        //         if ( data.success ) {
-        //             if ( data.data !== null && !isUndefined(data.data) ) {
-        //                 let newData = [];
-        //                 newData.push(data.data);
-        //                 this.setState({account_linked: newData});
-        //             }
-        //         } else {
-        //             notify.error(data.message);
-        //         }
-        //     });
-        // });
-        /*************  for step 4 (Config)   *****************/
-        // API to get default configuration -> /connector/get/config , method -> get, { marketplace : 'marketplace' }
-        this.state.API_code.forEach(value => {
-            requests.getRequest('/connector/get/config', {marketplace:value}).then(data => {
-                this.setState({config: data.success});
-            });
-        }) // only used to check status that we get right data for getGoogleConfigurations()
-
-    }
-    // API_check is used for get information about how many step are completed
     checkStepCompleted(key) {
         let path = '/App/User/Step';
         // if ( key === 'Amazon_Shopify' ) {
@@ -422,13 +335,8 @@ class Dashboard extends Component {
     renderGetUserInfo() {
         return (
             <div className="row">
-                <div className="col-12 text-center">
-                    <hr/>
-                    {/*<h1>Fill Up The Form</h1>*/}
-                    {/*<h4>Some Other Text Here</h4>*/}
-                </div>
                 <div className="col-12">
-                    <Form onSubmit={this.handleSubmit} target="_blank">
+                    <Form onSubmit={this.handleSubmit}>
                         <FormLayout>
                             <div className='row'>
                                 <div className="col-12 col-md-12">
@@ -576,7 +484,7 @@ class Dashboard extends Component {
     }
     paymentStatus(event) {
         if ( event === 'Confirmation' ) {
-            this.setState({modalOpen: !this.state.modalOpen});
+            // this.setState({modalOpen: !this.state.modalOpen});
         } else {
             notify.info(event);
         }
@@ -628,46 +536,9 @@ class Dashboard extends Component {
     }
     /************************************  Render()   **********************************************************/
     render() {
-        // const options = [
-        //     {label: 'Shopify-Google Integration', value: 'Shopify_Google'},
-        //     {label: 'Amazon-Shopify Integration', value: 'Amazon_Shopify'},
-        // ]; {/* Integration Dropdown Options */}
         return (
             <Page
                 title="Dashboard">
-                {/*<Card >*/}
-                    {/*<div className="p-5">*/}
-
-                        {/*<Select*/}
-                            {/*label="Step To Follow :-"*/}
-                            {/*options={options}*/}
-                            {/*onChange={this.handleChange}*/}
-                            {/*value={this.state.selected}*/}
-                        {/*/>*/}
-                    {/*</div>*/}
-                {/*</Card> /!* Dropdown *!/*/}
-                {/*<Modal*/}
-                    {/*open={this.state.open_init_modal}*/}
-                    {/*onClose={this.handleModalChange.bind(this,'init_modal')}*/}
-                    {/*title="Select Integration"*/}
-                {/*>*/}
-                    {/*<Modal.Section>*/}
-                        {/*<Card>*/}
-                            {/*<div className="p-5">*/}
-                                {/*<Select*/}
-                                    {/*label="Show Steps To Follow For :-"*/}
-                                    {/*placeholder="Select Integration From Here"*/}
-                                    {/*options={ [*/}
-                                        {/*{label: 'Shopify-Google Integration', value: 'Shopify_Google'},*/}
-                                        {/*{label: 'Amazon-Shopify Integration', value: 'Amazon_Shopify'},*/}
-                                    {/*]}*/}
-                                    {/*onChange={this.handleChange}*/}
-                                    {/*value={this.state.selected}*/}
-                                {/*/>*/}
-                            {/*</div>*/}
-                        {/*</Card>*/}
-                    {/*</Modal.Section>*/}
-                {/*</Modal> /!* Open The Init DropDown *!/*/}
                 <Card>
                     {this.renderStepper()}
                 </Card> {/* Stepper */}
@@ -686,7 +557,7 @@ class Dashboard extends Component {
     }
     redirectResult(status) {
         this.openNewWindow(status);
-    }
+    } // used in step 3 to get child data and send back to new child
     redirect(url) {
         this.props.history.push(url);
     }
