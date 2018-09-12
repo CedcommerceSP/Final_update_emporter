@@ -32,6 +32,7 @@ import { Checkbox,
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faEdit, faTrash } from '@fortawesome/free-solid-svg-icons';
+import ReadMoreReact from "read-more-react";
 
 class SmartDataTablePlain extends React.Component {
   allSelected = false;
@@ -63,6 +64,8 @@ class SmartDataTablePlain extends React.Component {
       imageColumns: isUndefined(props.imageColumns) ? [] : props.imageColumns,
       uniqueKey: isUndefined(props.uniqueKey) ? 'id' : props.uniqueKey,
       actions: isUndefined(props.actions) ? [] : props.actions,
+      read_more: isUndefined(props.read_more) ? [] : props.read_more,
+      hideFilters: isUndefined(props.hideFilters) ? [] : props.hideFilters,
       visibleColumns: isUndefined(props.visibleColumns) ? false : props.visibleColumns,
       rowActions: isUndefined(props.rowActions) ? {
         edit: false,
@@ -196,14 +199,14 @@ class SmartDataTablePlain extends React.Component {
       const showCol = column.visible;
       if (showCol) {
         return (
-          <td key={column.key} style={{verticalAlign:'bottom'}}>
+          <td key={column.key} style={{verticalAlign:'top'}}>
             <span>
               {column.title}
             </span>
             <span className='rsdt rsdt-sortable'>
               {sortable && column.sortable ? this.renderSorting(column) : null}
             </span>
-              {this.state.showColumnFilters && Object.keys(this.state.columnFilters).length > 0 &&
+              {this.state.showColumnFilters && Object.keys(this.state.columnFilters).length > 0 && this.state.hideFilters.indexOf(column.key) === -1 &&
               this.renderColumnFilters(column)}
           </td>
         )
@@ -240,9 +243,9 @@ class SmartDataTablePlain extends React.Component {
   }
 
   renderRow(columns, row, i) {
-    const { colProperties } = this.state;
-    const { withLinks, filterValue } = this.props;
-    const columnWithoutColumns = columns.map((column, j) => {
+      const { colProperties } = this.state;
+      const { withLinks, filterValue } = this.props;
+      const columnWithoutColumns = columns.map((column, j) => {
         const thisColProps = colProperties[column.key]
         const showCol = column.visible;
         if (showCol) {
@@ -253,13 +256,29 @@ class SmartDataTablePlain extends React.Component {
                       <img src={row[column.key]} style={{width: '100px', height: '100px'}} />
                     }
                     {
-                      this.state.imageColumns.indexOf(column.key) === -1 &&
-                      <ErrorBoundary>
-                        <TableCell withLinks={withLinks} filterValue={filterValue}>
-                            {row[column.key]}
-                        </TableCell>
-                      </ErrorBoundary>
+                        this.state.imageColumns.indexOf(column.key) === -1 && this.state.read_more.indexOf(column.key) !== -1 &&
+                        typeof row[column.key] === 'string'?<TableCell withLinks={withLinks} filterValue={filterValue}>
+                            <ReadMoreReact text={row[column.key]}
+                                                                           min={80}
+                                                                           ideal={100}
+                                                                           max={200} /></TableCell>:
+                            this.state.imageColumns.indexOf(column.key) === -1 && <ErrorBoundary>
+                            <TableCell withLinks={withLinks} filterValue={filterValue}>
+                                {row[column.key]}
+                            </TableCell>
+                        </ErrorBoundary>
                     }
+                    {/*{*/}
+                      {/*this.state.imageColumns.indexOf(column.key) === -1 &&*/}
+                      {/*<ErrorBoundary>*/}
+                        {/*<TableCell withLinks={withLinks} filterValue={filterValue}>*/}
+                            {/*{typeof row[column.key] === 'string'?<ReadMoreReact text={row[column.key]}*/}
+                                                                                {/*min={80}*/}
+                                                                                {/*ideal={100}*/}
+                                                                                {/*max={200} />:null}*/}
+                        {/*</TableCell>*/}
+                      {/*</ErrorBoundary>*/}
+                    {/*}*/}
                 </td>
             )
         }

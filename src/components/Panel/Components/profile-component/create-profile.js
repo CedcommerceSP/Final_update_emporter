@@ -457,6 +457,7 @@ export class CreateProfile extends Component {
                                                 options={query.options}
                                                 placeholder="Filter Value"
                                                 onChange={this.handleQueryBuilderChange.bind(this, querySet.position, querySet.primaryQuery.indexOf(query), 'value')}
+                                                onClick={this.handleQueryBuilderChange.bind(this, querySet.position, querySet.primaryQuery.indexOf(query), 'value')}
                                                 value={query.value}
                                             />}
                                         </div>
@@ -510,7 +511,7 @@ export class CreateProfile extends Component {
     }
 
     handleFilterQueryChange(query) {
-        this.state.products_select.query = this.prepareQuery(query, '');
+        this.state.products_select.query = this.prepareQuery(Object.assign({},query), '');
     }
 
     prepareQuery(query, preparedQuery) {
@@ -642,6 +643,9 @@ export class CreateProfile extends Component {
 
     updateQueryFilter(query, position, index, field, value, options) {
         if (query.position === position) {
+            if ( field === 'key' ) {
+                query.primaryQuery[index]['value'] = '';
+            }
             if ( !isUndefined(options) ) {
                 query.primaryQuery[index][field] = value;
                 query.primaryQuery[index].options = options;

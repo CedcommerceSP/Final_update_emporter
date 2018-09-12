@@ -35,3 +35,11 @@
 table {
   font-size: 13px !important;
 }
+.read-more-button {
+  color: #00bcd4 !important;
+  cursor: pointer;
+}
+.read-more-button:hover {
+  color: #08d442 !important;
+  cursor: pointer;
+}
