@@ -32,6 +32,7 @@ import Analyticsreporting from "./Components/products-component/analytics-report
 import BillingHistory from "./Components/plans-component/billing-history";
 import ConnectedAccounts from "./Components/apps-component/connected-accounts";
 import ReportAnIssue from "./Components/help-component/report-issue";
+import ViewProfile from "./Components/profile-component/view-profile";
 
 export class Panel extends Component {
 
@@ -67,6 +68,7 @@ export class Panel extends Component {
                                 <Route path='/panel/accounts/success' component={AppInstalled}/>
                                 <Route exact path='/panel/import' component={Import}/>
                                 <Route exact path='/panel/profiling' component={Profiling}/>
+                                <Route exact path='/panel/profiling/view' component={ViewProfile}/>
                                 <Route exact path='/panel/profiling/create' component={CreateProfile}/>
                                 <Route exact path='/panel/configuration' component={Configuration}/>
                                 <Route exact path='/panel/plans' component={Plans}/>

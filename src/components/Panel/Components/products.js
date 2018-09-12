@@ -23,7 +23,7 @@ export class Products extends Component {
         column_filters: {}
     };
     gridSettings = {
-      variantsCount: 5,
+      variantsCount: 10,
       activePage: 1
     };
     pageLimits = [
@@ -37,49 +37,51 @@ export class Products extends Component {
         {label: 'Delete', value: 'delete'},
         {label: 'Upload', value: 'upload'}
     ];
-    visibleColumns = ['source_product_id', 'long_description', 'title', 'sku', 'quantity', 'price', 'main_image'];
+    visibleColumns = ['source_product_id', 'main_image', 'long_description', 'title', 'sku', 'price',];
     imageColumns = ['main_image'];
+    hideFilters = ['main_image' ,'long_description'];
+    read_more = ['long_description'];
     columnTitles = {
         source_product_id: {
             title: 'ID',
-            sortable: true
-        },
-        long_description: {
-            title: 'Description',
-            sortable: true
-        },
-        title: {
-            title: 'Title',
-            sortable: true
-        },
-        type: {
-            title: 'Type',
-            sortable: true
-        },
-        quantity: {
-            title: 'Quantity',
-            sortable: true
-        },
-        sku: {
-            title: 'Sku',
-            sortable: true
-        },
-        price: {
-            title: 'Price',
-            sortable: true
-        },
-        weight: {
-            title: 'Weight',
-            sortable: true
-        },
-        weight_unit: {
-            title: 'Weight Unit',
-            sortable: true
+            sortable: false
         },
         main_image: {
             title: 'Image',
             sortable: false
-        }
+        },
+        title: {
+            title: 'Title',
+            sortable: false
+        },
+        long_description: {
+            title: 'Description',
+            sortable: false
+        },
+        type: {
+            title: 'Type',
+            sortable: false
+        },
+        quantity: {
+            title: 'Quantity',
+            sortable: false
+        },
+        sku: {
+            title: 'Sku',
+            sortable: false
+        },
+        price: {
+            title: 'Price',
+            sortable: false
+        },
+        weight: {
+            title: 'Weight',
+            sortable: false
+        },
+        weight_unit: {
+            title: 'Weight Unit',
+            sortable: false
+        },
     };
 
     constructor() {
@@ -178,15 +180,15 @@ export class Products extends Component {
         for (let i = 0; i < data.length; i++) {
             let rowData = {};
             rowData['source_product_id'] = data[i].details.source_product_id;
-            rowData['long_description'] = data[i].details.long_description;
+            rowData['main_image'] = data[i].variants['main_image'];
             rowData['title'] = data[i].details.title;
-            rowData['type'] = data[i].details.type;
-            rowData['quantity'] = data[i].variants['quantity'];
+            rowData['long_description'] = data[i].details.long_description;
             rowData['sku'] = data[i].variants['sku'];
             rowData['price'] = data[i].variants['price'];
+            rowData['type'] = data[i].details.type;
+            rowData['quantity'] = data[i].variants['quantity'];
             rowData['weight'] = data[i].variants['weight'];
             rowData['weight_unit'] = data[i].variants['weight_unit'];
-            rowData['main_image'] = data[i].variants['main_image'];
             products.push(rowData);
         }
         return products;
@@ -277,6 +279,8 @@ export class Products extends Component {
                                 <SmartDataTable
                                     data={this.state.products}
                                     uniqueKey="sku"
+                                    read_more={this.read_more}
+                                    hideFilters={this.hideFilters}
                                     columnTitles={this.columnTitles}
                                     multiSelect={true}
                                     selected={this.state.selectedProducts}

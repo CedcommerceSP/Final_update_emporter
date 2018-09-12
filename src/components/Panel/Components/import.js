@@ -24,6 +24,7 @@ export class Import extends Component {
     constructor() {
         super();
         this.state = {
+            listing_type: 'active',
             importServicesList: [],
             importerShopLists: [],
             uploadServicesList: [],
@@ -119,6 +120,16 @@ export class Import extends Component {
                                 />
                             </div>
                             <div className="col-12 pt-1 pb-1">
+                                <Select
+                                    label="Product Listing Type"
+                                    options={[{label:'Active Products',value:'active'},
+                                        {label:'Inactive Products',value:'inactive'},
+                                        {label:'All Products',value:'all'}]}
+                                    onChange={this.handleImportChange.bind(this, 'listing_type')}
+                                    value={this.state.listing_type}
+                                />
+                            </div>
+                            <div className="col-12 pt-1 pb-1">
                                 {
                                     this.state.importProductsDetails.source !== '' &&
                                     this.state.importerShopLists.length > 1 &&
@@ -176,6 +187,8 @@ export class Import extends Component {
                     break;
                 }
             }
+        } else if ( key === 'listing_type' ) {
+            this.state.listing_type =  value;
         }
         this.updateState();
     }
@@ -185,7 +198,8 @@ export class Import extends Component {
             {
                 marketplace: this.state.importProductsDetails.source,
                 shop: this.state.importProductsDetails.shop,
-                shop_id: this.state.importProductsDetails.shop_id
+                shop_id: this.state.importProductsDetails.shop_id,
+                listing_type: this.state.listing_type
             })
             .then(data => {
                 this.state.showImportProducts = false;

@@ -18,7 +18,8 @@ class ConnectedAccounts extends Component {
                 let shopName = [];
                 for (let i = 0; i < Object.keys(data.data).length; i++) {
                     if (data.data[Object.keys(data.data)[i]].installed === 1 ) {
-                        shopName.push(data.data[Object.keys(data.data)[i]]);
+                        if (data.data[Object.keys(data.data)[i]].code !== 'google')
+                            shopName.push(data.data[Object.keys(data.data)[i]]);
                     }
                 }
                 requests.postRequest('frontend/app/getInstalledConnectorDetails',shopName)
