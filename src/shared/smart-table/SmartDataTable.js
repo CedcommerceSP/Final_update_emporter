@@ -250,7 +250,7 @@ class SmartDataTablePlain extends React.Component {
         const showCol = column.visible;
         if (showCol) {
             return (
-                <td key={`row-${i}-column-${j}`}>
+                <td key={`row-${i}-column-${j}`} style={{maxWidth:'400px'}}>
                     {
                       this.state.imageColumns.indexOf(column.key) !== -1 &&
                       <img src={row[column.key]} style={{width: '100px', height: '100px'}} />

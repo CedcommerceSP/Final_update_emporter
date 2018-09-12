@@ -59,6 +59,7 @@ class Dashboard extends Component {
                 name: '', // anchor name
                 step : 0 // step number
             },
+            welcome_screen: true,
             stepData: [], // this will store the current showing step, which is selected from data object e.g Shopify_Google []
             selected: '',
             open_init_modal: true, // this is used to open modal one time when user visit dashboard
@@ -140,17 +141,18 @@ class Dashboard extends Component {
                 if ( data.data !== null && !isUndefined(data.data)  ) {
                     let temp = this.state.stepData;
                     let anchor = '';
-                    let flag = 0;
+                    let flag = true;
                     temp.forEach((keys, index) => {
                         if ( index < parseInt(data.data) ) { // if  ( step here < no of step completed )
                             keys.stepperActive = true;
-                        } else if ( flag === 0 ) {
+                        } else if ( flag ) {
                             anchor = keys.anchor;
-                            flag = 1;
+                            flag = false;
                         }
                     });
                     this.setState({
                         data: temp,
+                        welcome_screen: flag,
                         active_step: {
                             name: anchor,
                             step: parseInt(data.data) + 1
@@ -503,10 +505,19 @@ class Dashboard extends Component {
     }
     /*****************************************  Step 3 linked you account start Here  ***********************************/
     checkLinkedAccount() {
-        notify.info('Need to Implement API to Check');
-        this.changeStep(3);
+        requests.getRequest('frontend/app/checkAccount?code=amazonimporter').then(data => {
+            if ( data.success ) {
+                if ( data.data.account_connected ) {
+                    notify.success('Account Connected Success');
+                    this.changeStep(3);
+                }
+            } else {
+                notify.error(data.message);
+            }
+        });
     }
     openNewWindow(action) {
+        console.log(action);
         this.setState({modalOpen: !this.state.modalOpen, code: action});
     } // Open Modal And A new Small Window For User
     renderLinkedAccount() {
@@ -520,16 +531,29 @@ class Dashboard extends Component {
         </div>;
     }
     /***************************************** step 4 Configurations start here *******************************/
-    checkConfig() {
-        notify.info('Need To Implement API Check');
-        this.changeStep(4);
+    checkConfig(val) {
+        requests.getRequest('frontend/app/checkDefaultConfiguration?code=' + val).then(data => {
+            console.log(data);
+            if ( data.success ) {
+                if ( data.data.configFilled ) {
+                    if ( val !== 'shopify' ) {
+                        this.checkConfig('shopify')
+                    } else {
+                        notify.success('Account Connected Success');
+                        this.changeStep(4);
+                    }
+                }
+            } else {
+                notify.error(data.message);
+            }
+        });
     }
     renderConfig() {
         return (
             <React.Fragment>
                 <ConfigShared history={history}/>
                 <div className="p-5 text-center">
-                    <Button onClick={this.checkConfig} primary> Completed All The Steps</Button>
+                    <Button onClick={this.checkConfig.bind(this, 'amazonimporter')} primary> Completed All The Steps</Button>
                 </div>
             </React.Fragment>
         );
@@ -539,19 +563,28 @@ class Dashboard extends Component {
         return (
             <Page
                 title="Dashboard">
-                <Card>
-                    {this.renderStepper()}
-                </Card> {/* Stepper */}
-                {this.renderBody()} {/* Main Body Function Call Here */}
-                <Modal
-                    open={this.state.modalOpen}
-                    onClose={this.handleModalChange.bind(this,'no',this.state.active_step)}
-                    title="Connected Account"
-                >
-                    <Modal.Section>
-                        <InstallAppsShared history={history} redirect={this.redirectResult} code={this.state.code}/>
-                    </Modal.Section>
-                </Modal> {/* Open For Step 3 to see Connected Account */}
+                {this.state.welcome_screen?
+                    <Card>
+                        <div>
+                            <img src={require('../../../assets/background/welcome_screen.jpg')} style={{height:'100%',width:'100%'}}/>
+                        </div>
+                    </Card>
+                    :
+                    <React.Fragment>
+                        <Card>
+                            {this.renderStepper()}
+                        </Card> {/* Stepper */}
+                        {this.renderBody()} {/* Main Body Function Call Here */}
+                        <Modal
+                            open={this.state.modalOpen}
+                            onClose={this.handleModalChange.bind(this,'no',this.state.active_step)}
+                            title="Connected Account"
+                        >
+                            <Modal.Section>
+                                <InstallAppsShared history={history} redirect={this.redirectResult} code={this.state.code}/>
+                            </Modal.Section>
+                        </Modal> {/* Open For Step 3 to see Connected Account */}
+                    </React.Fragment>}
             </Page>
         );
     }
