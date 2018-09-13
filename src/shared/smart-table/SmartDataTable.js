@@ -65,6 +65,7 @@ class SmartDataTablePlain extends React.Component {
       uniqueKey: isUndefined(props.uniqueKey) ? 'id' : props.uniqueKey,
       actions: isUndefined(props.actions) ? [] : props.actions,
       read_more: isUndefined(props.read_more) ? [] : props.read_more,
+      customButton: isUndefined(props.customButton) ? [] : props.customButton,
       hideFilters: isUndefined(props.hideFilters) ? [] : props.hideFilters,
       visibleColumns: isUndefined(props.visibleColumns) ? false : props.visibleColumns,
       rowActions: isUndefined(props.rowActions) ? {
@@ -256,29 +257,25 @@ class SmartDataTablePlain extends React.Component {
                       <img src={row[column.key]} style={{width: '100px', height: '100px'}} />
                     }
                     {
-                        this.state.imageColumns.indexOf(column.key) === -1 && this.state.read_more.indexOf(column.key) !== -1 &&
-                        typeof row[column.key] === 'string'?<TableCell withLinks={withLinks} filterValue={filterValue}>
-                            <ReadMoreReact text={row[column.key]}
-                                                                           min={80}
-                                                                           ideal={100}
-                                                                           max={200} /></TableCell>:
-                            this.state.imageColumns.indexOf(column.key) === -1 && <ErrorBoundary>
-                            <TableCell withLinks={withLinks} filterValue={filterValue}>
-                                {row[column.key]}
-                            </TableCell>
-                        </ErrorBoundary>
+                        this.state.imageColumns.indexOf(column.key) === -1 && this.state.customButton.indexOf(column.key) !== -1 &&
+                        <Button onClick={this.props.operations.bind(this, row[column.key])}>
+                            {this.state.columnTitles[column.key].label}
+                        </Button>
                     }
-                    {/*{*/}
-                      {/*this.state.imageColumns.indexOf(column.key) === -1 &&*/}
-                      {/*<ErrorBoundary>*/}
-                        {/*<TableCell withLinks={withLinks} filterValue={filterValue}>*/}
-                            {/*{typeof row[column.key] === 'string'?<ReadMoreReact text={row[column.key]}*/}
-                                                                                {/*min={80}*/}
-                                                                                {/*ideal={100}*/}
-                                                                                {/*max={200} />:null}*/}
-                        {/*</TableCell>*/}
-                      {/*</ErrorBoundary>*/}
-                    {/*}*/}
+                    {
+                        this.state.imageColumns.indexOf(column.key) === -1 && this.state.read_more.indexOf(column.key) !== -1 &&
+                        this.state.customButton.indexOf(column.key) === -1 &&
+                        typeof row[column.key] === 'string'?
+                            <ReadMoreReact text={row[column.key]}
+                                           min={80}
+                                           ideal={100}
+                                           max={200} />:
+                            this.state.imageColumns.indexOf(column.key) === -1 && this.state.customButton.indexOf(column.key) === -1 && <ErrorBoundary>
+                                <TableCell withLinks={withLinks} filterValue={filterValue}>
+                                    {row[column.key]}
+                                </TableCell>
+                            </ErrorBoundary>
+                    }
                 </td>
             )
         }

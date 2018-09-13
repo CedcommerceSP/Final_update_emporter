@@ -27,7 +27,9 @@ export class Profiling extends Component {
         {label: 20, value: 20},
         {label: 25, value: 25}
     ];
-    visibleColumns = ['name', 'source', 'target', 'targetCategory', 'query'];
+    visibleColumns = ['name', 'source', 'target', 'targetCategory', 'query','profile_id'];
+    customButton = ['profile_id']; // button
+    hideFilters= ['profile_id'];
     columnTitles = {
         name: {
             title: 'Profile Name',
@@ -48,6 +50,11 @@ export class Profiling extends Component {
         query: {
             title: 'Product Query',
             sortable: true
+        },
+        profile_id: {
+            title: 'View Profile',
+            label:'View Profile', // button Label
+            sortable:false,
         }
     };
 
@@ -57,6 +64,10 @@ export class Profiling extends Component {
             profiles: []
         };
         this.getProfiles();
+        this.operations = this.operations.bind(this);
+    }
+    operations(event) {
+        this.redirect('/panel/profiling/view?id=' + event);
     }
 
     getProfiles() {
@@ -79,7 +90,8 @@ export class Profiling extends Component {
                 source: profiles[i].source,
                 target: profiles[i].target,
                 targetCategory: profiles[i].targetCategory,
-                query: profiles[i].query
+                query: profiles[i].query,
+                profile_id: profiles[i].profile_id
             });
         }
         return profilesList;
@@ -110,6 +122,9 @@ export class Profiling extends Component {
                             multiSelect={false}
                             className='ui compact selectable table'
                             visibleColumns={this.visibleColumns}
+                            customButton={this.customButton} // button
+                            operations={this.operations} //button
+                            hideFilters={this.hideFilters}
                             columnTitles={this.columnTitles}
                             showColumnFilters={true}
                             rowActions={{
