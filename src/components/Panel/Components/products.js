@@ -94,7 +94,8 @@ export class Products extends Component {
             searchValue: '',
             selectedProducts: [],
             deleteProductData: false,
-            toDeleteRow: {}
+            toDeleteRow: {},
+            totalPage:0
         };
         this.getProducts();
         this.getInstalledApps();
@@ -133,6 +134,7 @@ export class Products extends Component {
         requests.getRequest('connector/product/getProducts', Object.assign( pageSettings, this.state.appliedFilters))
             .then(data => {
                 if (data.success) {
+                    this.setState({totalPage:data.data.count});
                     const products = this.modifyProductsData(data.data.rows);
                     this.state['products'] = products;
                     this.updateState();
@@ -341,12 +343,12 @@ export class Products extends Component {
                         <div className="row mt-3">
                             <div className="col-6 text-right">
                                 <Pagination
-                                    hasPrevious
+                                    hasPrevious={1 < this.gridSettings.activePage}
                                     onPrevious={() => {
                                         this.gridSettings.activePage--;
                                         this.getProducts();
                                     }}
-                                    hasNext
+                                    hasNext={this.state.totalPage/this.gridSettings.count > this.gridSettings.activePage}
                                     onNext={() => {
                                         this.gridSettings.activePage++;
                                         this.getProducts();

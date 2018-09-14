@@ -61,7 +61,8 @@ export class Profiling extends Component {
     constructor() {
         super();
         this.state = {
-            profiles: []
+            profiles: [],
+            totalPage:0
         };
         this.getProfiles();
         this.operations = this.operations.bind(this);
@@ -74,6 +75,7 @@ export class Profiling extends Component {
         requests.getRequest('connector/profile/getAllProfiles', Object.assign({}, this.gridSettings, this.prepareFilterObject()))
             .then(data => {
                 if (data.success) {
+                    this.setState({totalPage:data.data.count});
                     this.state['profiles'] = this.modifyProfilesData(data.data.rows);
                     this.updateState();
                 } else {
@@ -140,12 +142,12 @@ export class Profiling extends Component {
                         <div className="row mt-3">
                             <div className="col-6 text-right">
                                 <Pagination
-                                    hasPrevious
+                                    hasPrevious={1 < this.gridSettings.activePage}
                                     onPrevious={() => {
                                         this.gridSettings.activePage--;
                                         this.getProfiles();
                                     }}
-                                    hasNext
+                                    hasNext={this.state.totalPage/this.gridSettings.count > this.gridSettings.activePage}
                                     onNext={() => {
                                         this.gridSettings.activePage++;
                                         this.getProfiles();
