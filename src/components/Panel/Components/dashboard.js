@@ -18,6 +18,7 @@ import ConfigShared from "../../../shared/config/config-shared";
 class Dashboard extends Component {
     constructor(props) {
         super(props);
+        // props.disableHeader(false); // used in disabled header
         this.state = {
             info: {
                 full_name: '',
@@ -150,6 +151,9 @@ class Dashboard extends Component {
                             flag = false;
                         }
                     });
+                    if ( flag ) {
+                        this.props.disableHeader(true);
+                    }
                     this.setState({
                         data: temp,
                         welcome_screen: flag,
@@ -191,6 +195,10 @@ class Dashboard extends Component {
                     notify.success('Follow The Next Step');
                 } else {
                     notify.success('Now You Can Upload Your Products');
+                    this.props.disableHeader(true);
+                    setTimeout(() => {
+                        this.redirect('/panel/import');
+                    },1500);
                 }
             }
         });

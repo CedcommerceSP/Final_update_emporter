@@ -35,10 +35,17 @@ import ReportAnIssue from "./Components/help-component/report-issue";
 import ViewProfile from "./Components/profile-component/view-profile";
 
 export class Panel extends Component {
-
+    constructor(props) {
+        super(props);
+        this.disableHeader = this.disableHeader.bind(this);
+    }
     state = {
-      showLoader: false,
+        showLoader: false,
+        header: true,
     };
+    disableHeader(value) {
+        this.setState({header:value});
+    }
     menu = panelFunctions.getMenu();
     render() {
         return (
@@ -47,7 +54,7 @@ export class Panel extends Component {
                     <div className="row">
                         <div className="col-12">
                             <div className="app-header">
-                                <Header menu={this.menu} history={history}></Header>
+                                {this.state.header?<Header menu={this.menu} history={history}/>:null}
                             </div>
                         </div>
                     </div>
@@ -57,7 +64,9 @@ export class Panel extends Component {
                                 <Route exact path="/panel/" render={() => (
                                     <Redirect to="/panel/dashboard"/>
                                 )}/>
-                                <Route exact path='/panel/products' component={Products}/>
+                                <Route exact path='/panel/products'  render={() => {
+                                    return <Products parentProps={this.props} history={history}/>
+                                }}/>
                                 <Route exact path='/panel/products/create' component={CreateProduct}/>
                                 <Route path='/panel/products/edit/:id' component={EditProduct}/>
                                 <Route exact path='/panel/products/analysis' component={Analyticsreporting}/>
@@ -78,7 +87,9 @@ export class Panel extends Component {
                                 <Route exact path='/panel/queuedtasks/activities' component={Activities}/>
                                 <Route exact path='/panel/help' component={FAQPage}/>
                                 <Route exact path='/panel/help/report' component={ReportAnIssue}/>
-                                <Route exact path='/panel/dashboard' component={Dashboard}/>
+                                <Route exact path='/panel/dashboard' render={() => {
+                                    return <Dashboard disableHeader={this.disableHeader} parentProps={this.props} history={history}/>
+                                }}/>
                                 <Route exact path="**" render={() => (
                                     <Redirect to="/panel/dashboard"/>
                                 )}/>
