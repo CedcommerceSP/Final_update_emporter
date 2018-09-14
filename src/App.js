@@ -51,9 +51,10 @@ export class App extends Component {
                         <Redirect to="/auth"/>
                     )}/>
                     <Route path='/auth' component={Auth}/>
-                    <Route path='/panel' render={() => {
+                    <Route path='/panel'
+                           render={() => {
                         // return globalState.getLocalStorage('user_authenticated') === 'true' ? <Panel/> : <Redirect to="/auth"/>
-                        return true ? <Panel history={history}/> : <Redirect to="/auth"/>
+                        return true ? <Route path='/panel' component={Panel}/> : <Redirect to="/auth"/>
                     }}/>
                     <Route path='/show' render={() => {
                         // return globalState.getLocalStorage('user_authenticated') === 'true' ? <Panel/> : <Redirect to="/auth"/>

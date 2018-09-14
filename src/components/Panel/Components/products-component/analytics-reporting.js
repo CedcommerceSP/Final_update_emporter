@@ -140,7 +140,6 @@ class Analyticsreporting extends Component {
         let approved=0;
         let pending=0;
             requests.getRequest('frontend/app/getProductsUploadedData', {marketplace: uploader_marketplce}).then(data1 => {
-                console.log(data1);
                 if (data1.success == true) {
                     uploader = data1.data;
 

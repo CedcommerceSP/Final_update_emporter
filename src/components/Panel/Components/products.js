@@ -14,6 +14,7 @@ import { Page,
 import { requests } from '../../../services/request';
 import { notify } from '../../../services/notify';
 import SmartDataTable from '../../../shared/smart-table';
+import {isUndefined} from "util";
 
 export class Products extends Component {
 
@@ -321,7 +322,10 @@ export class Products extends Component {
                                         this.setState(state);
                                     }}
                                     massAction={(event) => {
-                                        console.log(event);
+                                        switch (event) {
+                                            case 'upload':this.redirect('/show/progress',this.state.selectedProducts);break;
+                                            default:console.log(event);
+                                        }
                                     }}
                                     editRow={(row) => {
                                         this.redirect("/panel/products/edit/" + row.id);
@@ -383,7 +387,14 @@ export class Products extends Component {
         this.getProducts();
     }
 
-    redirect(url) {
-        this.props.history.push(url);
+    redirect(url, data) {
+        if ( !isUndefined(data) ) {
+            this.props.parentProps.history.push(
+                '/show/progress',
+                {data: data,marketPlace:'amazon',chunk:'30'}
+            );
+        } else {
+            this.props.history.push(url);
+        }
     }
 }

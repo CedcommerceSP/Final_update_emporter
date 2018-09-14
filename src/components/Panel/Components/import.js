@@ -24,7 +24,7 @@ export class Import extends Component {
     constructor() {
         super();
         this.state = {
-            listing_type: 'active',
+            listing_type: 'all',
             importServicesList: [],
             importerShopLists: [],
             uploadServicesList: [],

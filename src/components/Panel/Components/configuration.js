@@ -69,7 +69,6 @@ export class Configuration extends Component {
     getAmazonImporterConfigurations() {
         requests.getRequest('connector/get/config', { marketplace: 'amazonimporter' })
             .then(data => {
-                console.log(data);
                 if (data.success) {
                     this.amazonImporterConfigurationData = this.modifyConfigData(data.data, 'amazon_importer_configuration');
                     this.updateState();
