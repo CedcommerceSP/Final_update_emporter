@@ -574,7 +574,7 @@ class Dashboard extends Component {
                 {this.state.welcome_screen?
                     <Card>
                         <div>
-                            <img src={require('../../../assets/background/welcome_screen.jpg')} style={{height:'100%',width:'100%'}}/>
+                            <img src={require('../../../assets/background/welcome_screen.png')} style={{height:'100%',width:'100%'}}/>
                         </div>
                     </Card>
                     :

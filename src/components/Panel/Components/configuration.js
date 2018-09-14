@@ -26,7 +26,10 @@ export class Configuration extends Component {
         this.state = {
           account_information: {
               username: '',
-              email: ''
+              email: '',
+              skype_id: '',
+              full_name: '',
+              mobile: ''
           },
           google_configuration: {},
           shopify_configuration: {},
@@ -47,7 +50,10 @@ export class Configuration extends Component {
                 if (data.success) {
                     this.state.account_information = {
                         username: data.data.username,
-                        email: data.data.email
+                        email: data.data.email,
+                        skype_id: data.data.skype_id,
+                        full_name: data.data.full_name,
+                        mobile: data.data.mobile
                     };
                     if (!isUndefined(data.data.phone)) {
                         this.state.account_information['phone'] = data.data.phone;
@@ -116,12 +122,32 @@ export class Configuration extends Component {
                                 />
                             </div>
                             {
-                                !isUndefined(this.state.account_information.phone) &&
+                                !isUndefined(this.state.account_information.full_name) &&
+                                <div className="col-12 pt-2 pb-2">
+                                    <TextField
+                                        label="Full name"
+                                        onChange={this.accountInfoChange.bind(this, 'full_name')}
+                                        value={this.state.account_information.full_name}
+                                    />
+                                </div>
+                            }
+                            {
+                                !isUndefined(this.state.account_information.mobile) &&
                                 <div className="col-12 pt-2 pb-2">
                                     <TextField
                                         label="Phone no."
-                                        onChange={this.accountInfoChange.bind(this, 'phone')}
-                                        value={this.state.account_information.phone}
+                                        onChange={this.accountInfoChange.bind(this, 'mobile')}
+                                        value={this.state.account_information.mobile}
+                                    />
+                                </div>
+                            }
+                            {
+                                !isUndefined(this.state.account_information.skype_id) &&
+                                <div className="col-12 pt-2 pb-2">
+                                    <TextField
+                                        label="Skype ID"
+                                        onChange={this.accountInfoChange.bind(this, 'skype_id')}
+                                        value={this.state.account_information.skype_id}
                                     />
                                 </div>
                             }
@@ -388,6 +414,7 @@ export class Configuration extends Component {
         requests.getRequest('core/user/updateuser', this.state.account_information)
             .then(data => {
                 if (data.success) {
+                    this.state.account_information_updated = false;
                     notify.success(data.message);
                 } else {
                     notify.error(data.message);

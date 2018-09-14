@@ -1,5 +1,7 @@
 import React, {Component} from 'react';
 import {Page, Card, TextField, Select} from "@shopify/polaris";
+import {requests} from "../../../../services/request";
+import {notify} from "../../../../services/notify";
 
 class ReportAnIssue extends Component {
     constructor(props) {
@@ -23,20 +25,40 @@ class ReportAnIssue extends Component {
     }
     submit() {
         console.log(this.state);
+        let data = {
+            body:'',
+            subject:this.state.subject
+        };
+        if ( this.state.option !== 'other' ) {
+            data.body = this.state.option;
+        } else {
+            data.body = this.state.body;
+        }
+        if ( data.body !== '' && data.subject !== '') {
+            requests.postRequest('',data).then(e => {
+                if (e.success) {
+                    notify.success(e.message);
+                } else {
+                    notify.error(e.message);
+                }
+            });
+        } else {
+            notify.info('Field Are Empty');
+        }
     }
     render() {
         const options = [
-                {label:'Server',value:'1'},
-                {label:'Upload/Import',value:'2'},
-                {label:'Account Connection',value:'3'},
-                {label:'Other',value:'other'},
-                ];
+            {label:'Server',value:'1'},
+            {label:'Upload/Import',value:'2'},
+            {label:'Account Connection',value:'3'},
+            {label:'Other',value:'other'},
+        ];
         return (
             <Page
-            title="Report Issue"
-            primaryAction={{content:'Back', onClick:() => {
-                    this.redirect('/panel/help');
-                }}}>
+                title="Report Issue"
+                primaryAction={{content:'Back', onClick:() => {
+                        this.redirect('/panel/help');
+                    }}}>
                 <Card secondaryFooterAction={{content:'Submit', onClick:() => {
                         this.submit();
                     }}}>
