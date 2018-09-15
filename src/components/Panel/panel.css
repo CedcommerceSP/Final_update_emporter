@@ -4,7 +4,7 @@
 
 .app-panel-container {
     height: auto !important;
-    background: #F4F6F8 url("../../assets/background/background.png") no-repeat right;
+    background-color: #F4F6F8;
     min-height: 620px;
 }
 

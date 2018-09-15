@@ -391,7 +391,7 @@ export class Products extends Component {
         if ( !isUndefined(data) ) {
             this.props.parentProps.history.push(
                 '/show/progress',
-                {data: data,marketPlace:'amazon',chunk:'30'}
+                {data: data,marketPlace:'amazon',chunk:10}
             );
         } else {
             this.props.history.push(url);

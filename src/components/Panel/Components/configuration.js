@@ -20,6 +20,7 @@ export class Configuration extends Component {
 
     shopifyConfigurationData = [];
     amazonImporterConfigurationData = [];
+    amazonCredentialsData = [];
 
     constructor() {
         super();
@@ -32,16 +33,20 @@ export class Configuration extends Component {
               mobile: ''
           },
           google_configuration: {},
+          amazon_credentials:{},
+          amazon_credentials_error:{},
           shopify_configuration: {},
           amazon_importer_configuration: {},
           google_configuration_updated: false,
           shopify_configuration_updated: false,
           amazon_importer_configuration_updated: false,
-          account_information_updated: false
+          account_information_updated: false,
+          amazon_credentials_updated: false
         };
         this.getUserDetails();
         this.getShopifyConfigurations();
         this.getAmazonImporterConfigurations();
+        this.amazonCredentials();
     }
 
     getUserDetails() {
@@ -90,9 +95,30 @@ export class Configuration extends Component {
             });
     }
 
+    amazonCredentials() {
+        requests.getRequest('amazonimporter/config/getCredentials').then(data => {
+            if ( data.success ) {
+                this.amazonCredentialsData = this.modifyAmazonCredentialData(data.data, 'amazon_credentials');
+            } else {
+                notify.error(data.message);
+            }
+        })
+    }
+
     modifyConfigData(data, configKey) {
         for (let i = 0; i < data.length; i++) {
             this.state[configKey][data[i].code] = data[i].value;
+            if (!isUndefined(data[i].options)) {
+                data[i].options = modifyOptionsData(data[i].options);
+            }
+        }
+        return data;
+    }
+
+    modifyAmazonCredentialData(data, configKey) {
+        for (let i = 0; i < data.length; i++) {
+            this.state[configKey][data[i].key] = data[i].value === null? '' :data[i].value ;
+            this.state[configKey + '_error'][data[i].key] = false ;
             if (!isUndefined(data[i].options)) {
                 data[i].options = modifyOptionsData(data[i].options);
             }
@@ -165,6 +191,82 @@ export class Configuration extends Component {
         )
     }
 
+    renderAmazonCredentials() {
+        return (
+            <div className="row">
+                <div className="col-md-6 col-sm-6 col-12 text-md-left text-sm-left text-center">
+                    <Heading>Amazon Credentials</Heading>
+                </div>
+                <div className="col-md-6 col-sm-6 col-12">
+                    <Card>
+                        <div className="row p-5">
+                            {
+                                this.amazonCredentialsData.map(config => {
+                                    switch(config.type) {
+                                        case 'select':
+                                            return (
+                                                <div className="col-12 pt-2 pb-2" key={this.amazonCredentialsData.indexOf(config)}>
+                                                    <Select
+                                                        options={config.options}
+                                                        label={config.title}
+                                                        placeholder={config.title}
+                                                        error={this.state.amazon_credentials_error[config.key]?'Field can not be Empty':null}
+                                                        value={this.state.amazon_credentials[config.key]}
+                                                        onChange={this.AmazonCredentialsChange.bind(this, this.amazonCredentialsData.indexOf(config))}>
+                                                    </Select>
+                                                </div>
+                                            );
+                                        case 'checkbox':
+                                            return (
+                                                <div className="col-12 pt-2 pb-2" key={this.amazonCredentialsData.indexOf(config)}>
+                                                    <Label>{config.title}</Label>
+                                                    <div className="row">
+                                                        {
+                                                            config.options.map(option => {
+                                                                return (
+                                                                    <div className="col-md-6 col-sm-6 col-12 p-1" key={config.options.indexOf(option)}>
+                                                                        <Checkbox
+                                                                            checked={this.state.amazon_credentials[config.key].indexOf(option.value) !== -1}
+                                                                            label={option.label}
+                                                                            onChange={this.AmazonCredentialsCheckboxChange.bind(this, this.amazonCredentialsData.indexOf(config), config.options.indexOf(option))}
+                                                                        />
+                                                                    </div>
+                                                                );
+                                                            })
+                                                        }
+                                                    </div>
+                                                </div>
+                                            );
+                                        default:
+                                            return (
+                                                <div className="col-12 pt-2 pb-2" key={this.amazonCredentialsData.indexOf(config)}>
+                                                    <TextField
+                                                        label={config.title}
+                                                        placeholder={config.title}
+                                                        value={this.state.amazon_credentials[config.key]}
+                                                        error={this.state.amazon_credentials_error[config.key]?'Field can not be Empty':null}
+                                                        onChange={this.AmazonCredentialsChange.bind(this, this.amazonCredentialsData.indexOf(config))}>
+                                                    </TextField>
+                                                </div>
+                                            );
+                                    }
+
+                                })
+                            }
+                            <div className="col-12 text-right pt-2 pb-1">
+                                <Button
+                                    disabled={!this.state.amazon_credentials_updated}
+                                    onClick={() => {
+                                        this.saveAmazonCredentialsData();
+                                    }}
+                                    primary>Save</Button>
+                            </div>
+                        </div>
+                    </Card>
+                </div>
+            </div>
+        )
+    }
 
     renderShopifyConfigurationSection() {
         return (
@@ -336,6 +438,9 @@ export class Configuration extends Component {
                     <Layout.Section>
                         {this.renderAmazonImporterConfigurationSection()}
                     </Layout.Section>
+                    <Layout.Section>
+                        {this.renderAmazonCredentials()}
+                    </Layout.Section>
                 </Layout>
             </Page>
         );
@@ -407,6 +512,42 @@ export class Configuration extends Component {
                 }
                 this.getShopifyConfigurations();
             });
+    }
+
+    saveAmazonCredentialsData() {
+        console.log(this.state.amazon_credentials);
+        // requests.postRequest('amazonimporter/request/setAmazonCredentials',this.state.amazon_credentials)
+        //     .then(data => {
+        //         console.log(data);
+        // })
+    }
+    AmazonCredentialsChange(index, value) {
+        this.state.amazon_credentials_updated = true;
+        if (this.amazonCredentialsData[index].required) {
+            if ( value === '' ) {
+                this.state.amazon_credentials_updated = false;
+                this.state.amazon_credentials_error[this.amazonCredentialsData[index].key] = true;
+            } else {
+                this.state.amazon_credentials_error[this.amazonCredentialsData[index].key] = false;
+            }
+        }
+        this.state.amazon_credentials[this.amazonCredentialsData[index].key] = value;
+        this.updateState();
+    }
+    AmazonCredentialsCheckboxChange(index, optionIndex, value) {
+        this.state.amazon_credentials_updated = true;
+        const option = this.amazonCredentialsData[index].options[optionIndex].value;
+        const valueIndex = this.state.amazon_credentials[this.amazonCredentialsData[index].key].indexOf(option);
+        if (value) {
+            if (valueIndex === -1) {
+                this.state.amazon_credentials[this.amazonCredentialsData[index].key].push(option);
+            }
+        } else {
+            if (valueIndex !== -1) {
+                this.state.amazon_credentials[this.amazonCredentialsData[index].key].splice(valueIndex, 1);
+            }
+        }
+        this.updateState();
     }
 
     saveProfileData() {
