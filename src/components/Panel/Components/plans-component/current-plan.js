@@ -7,18 +7,12 @@ import { requests } from '../../../../services/request';
 import {notify} from "../../../../services/notify";
 import './plan.css';
 
-const primaryColor = "#9c27b0";
-const warningColor = "#ff9800";
-const dangerColor = "#f44336";
-const successColor = "#4caf50";
-const infoColor = "#00acc1";
-const roseColor = "#e91e63";
 const grayColor = "#999999";
 class CurrentPlan extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            description: '',
+            description: <React.Fragment><h3>No Active Plan</h3><h4>Please Choose A Plan</h4></React.Fragment>,
             card: [],
             card_service:[]
         };
@@ -45,17 +39,7 @@ class CurrentPlan extends Component {
                             <div className="row p-4 p-sm-5">
                                 <div className="col-12 mb-5 pb-5 pt-0">
                                     <h1>Active Plan</h1>{/*Tittle*/}
-                                    {/*<span style={{fontSize:'40px', color: '#000'}}><b>Starter Plan</b></span>*/}
                                 </div>
-                                {/*<div className="col-12 mb-5 p-5 text-right">*/}
-                                    {/*<div className="progress mb-5" style={{height:'30px'}}>*/}
-                                        {/*<div className="progress-bar BG-primary"*/}
-                                             {/*role={'progressbar'}*/}
-                                             {/*style={{width:'10%'}}/>*/}
-                                    {/*</div>*/}
-                                    {/*<h2>Total Feed Used</h2>*/}
-                                    {/*<h4>999/10000</h4>*/}
-                                {/*</div>*/}
                                 {this.state.card.map((keys, index) => { {/*LVL1*/}
                                     let col = 'col-12 col-sm-6 mb-5';
                                     if ( this.state.card.length % 2 === 1 ) {
@@ -80,7 +64,7 @@ class CurrentPlan extends Component {
                                 })}
                                 <div className="col-12 p-5 text-center">
                                     <Button className="d-block" onClick={this.redirect.bind(this,'/panel/plans')}>
-                                        Upgrade Plan
+                                        {this.state.card.length > 0?'Upgrade Plan':'Choose a Plan'}
                                     </Button>
                                 </div>
                                 <div className="col-12 mt-5">
@@ -102,8 +86,7 @@ class CurrentPlan extends Component {
                                     <hr/>
                                 </div>
                                 <div className="col-12 mb-5 pb-5 pt-0">
-                                    <h2>My Services</h2>{/*Tittle*/}
-                                    {/*<span style={{fontSize:'40px', color: '#000'}}><b>Starter Plan</b></span>*/}
+                                    <h2>{this.state.card_service.length>0?'My Services':''}</h2>{/*Tittle*/}
                                 </div>
                                 {this.state.card_service.map((key, titleIndex) => {
                                     return (<React.Fragment key={titleIndex}>
