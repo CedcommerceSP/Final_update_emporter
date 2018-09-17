@@ -258,7 +258,7 @@ class SmartDataTablePlain extends React.Component {
                     }
                     {
                         this.state.imageColumns.indexOf(column.key) === -1 && this.state.customButton.indexOf(column.key) !== -1 &&
-                        <Button onClick={this.props.operations.bind(this, row[column.key], column.key)}>
+                        <Button primary onClick={this.props.operations.bind(this, row[column.key], column.key)}>
                             {this.state.columnTitles[column.key].label}
                         </Button>
                     }

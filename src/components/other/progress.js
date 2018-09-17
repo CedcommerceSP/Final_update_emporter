@@ -85,10 +85,10 @@ class Progress extends Component {
                                 </div>
                             </div>
                             <div className="col-12 text-right">
-                                <button onClick={() => this.handleChange(this.state.pause?"start":'pause')} className="btn btn-mini mr-5" type="button">
+                                <button onClick={() => this.handleChange(this.state.pause?"start":'pause')} className="btn btn-lg btn-success mr-5" type="button">
                                     {this.state.pause?"Start":'Pause'}
                                 </button>
-                                <button onClick={() => this.handleChange('cancel')} className="btn btn-mini" type="button">
+                                <button onClick={() => this.handleChange('cancel')} className="btn btn-danger btn-lg" type="button">
                                     Cancel
                                 </button>
                             </div>
