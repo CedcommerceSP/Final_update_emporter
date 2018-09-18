@@ -27,7 +27,7 @@ export class Login extends Component {
             username: '',
             password: ''
         };
-
+        this.autoredirect();
     }
 
     render() {
@@ -64,11 +64,6 @@ export class Login extends Component {
                                 this.submitLogin();
                             }}>Login</Button>
                         </div>
-                        <div className="col-12 d-none text-center mt-2 mb-4">
-                            <Button id='autoredirect' onClick={() => {
-                                this.autoredirect();
-                            }}>Login</Button>
-                        </div>
                         <div className="col-12 text-left" style={{fontSize:'15px'}}>
                             <NavLink className="" to="/auth/forget">Forget Password?</NavLink>
                             <NavLink className="float-right mb-3" to="/auth/signup">New User?</NavLink>
@@ -100,18 +95,12 @@ export class Login extends Component {
         return true;
     }
 
-    componentDidMount()
-    {
-        document.getElementById('autoredirect').click();
-    }
-
     autoredirect()
     {
         const  queryParams = queryString.parse(this.props.location.search);
         if(queryParams['user_token']!=null && queryParams['code']!=null) {
             globalState.setLocalStorage('user_authenticated', 'true');
             globalState.setLocalStorage('auth_token', queryParams['user_token']);
-            // globalState.setLocalStorage('code', queryParams['code']);
             this.redirect('/panel/');
         }
 

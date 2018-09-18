@@ -360,6 +360,7 @@ export class CreateProfile extends Component {
         requests.getRequest('connector/get/services', { 'filters[type]': 'importer' })
             .then(data => {
                 if (data.success === true) {
+                    this.importServices = [];
                     let hasService = false;
                     for (let i = 0; i < Object.keys(data.data).length; i++) {
                         let key = Object.keys(data.data)[i];
@@ -387,6 +388,7 @@ export class CreateProfile extends Component {
         requests.getRequest('connector/get/services', { 'filters[type]': 'uploader' })
             .then(data => {
                 if (data.success) {
+                    this.uploadServices = [];
                     let hasService = false;
                     for (let i = 0; i < Object.keys(data.data).length; i++) {
                         let key = Object.keys(data.data)[i];
@@ -796,23 +798,35 @@ export class CreateProfile extends Component {
                             <div className="col-12 pt-1 pb-1" key={this.state.products_select.marketplaceAttributes.indexOf(attribute)}>
                                 {
                                     isUndefined(attribute.options) &&
-                                    <TextField
-                                        placeholder={attribute.title}
-                                        label={attribute.title}
-                                        onChange={this.handleMarketplaceAttributesChange.bind(this, this.state.products_select.marketplaceAttributes.indexOf(attribute))}
-                                        value={attribute.value}
-                                    />
+                                    <React.Fragment>
+                                        <TextField
+                                            placeholder={attribute.title}
+                                            label={attribute.title}
+                                            onChange={this.handleMarketplaceAttributesChange.bind(this, this.state.products_select.marketplaceAttributes.indexOf(attribute))}
+                                            value={attribute.value}
+                                        />
+                                        {attribute.required?
+                                            <div>
+                                            <p style={{color:'green'}}>*Required</p>
+                                            </div>:null}
+                                    </React.Fragment>
                                 }
                                 {
                                     !isUndefined(attribute.options) &&
                                     attribute.type === 'select' &&
-                                    <Select
-                                        options={attribute.options}
-                                        placeholder={attribute.title}
-                                        label={attribute.title}
-                                        onChange={this.handleMarketplaceAttributesChange.bind(this, this.state.products_select.marketplaceAttributes.indexOf(attribute))}
-                                        value={attribute.value}
-                                    />
+                                    <React.Fragment>
+                                        <Select
+                                            options={attribute.options}
+                                            placeholder={attribute.title}
+                                            label={attribute.title}
+                                            onChange={this.handleMarketplaceAttributesChange.bind(this, this.state.products_select.marketplaceAttributes.indexOf(attribute))}
+                                            value={attribute.value}
+                                        />
+                                        {attribute.required?
+                                            <div>
+                                                <p style={{color:'green'}}>*Required</p>
+                                            </div>:null}
+                                    </React.Fragment>
                                 }
                                 {
                                     !isUndefined(attribute.options) &&
@@ -834,17 +848,20 @@ export class CreateProfile extends Component {
                                                 );
                                             })
                                         }
+                                        {attribute.required?
+                                            <div className="col-12">
+                                                <p style={{color:'green'}}>*Required</p>
+                                            </div>:null}
                                     </div>
                                 }
                             </div>
                         );
                     })
-
                 }
-                <div className="col-12 pt-1 pb-1">
+                <div className="col-12 pt-4">
                     <Label>Select Category In Which You Want To Upload Products</Label>
                 </div>
-                <div className="col-12 pt-1 pb-1">
+                <div className="col-12 pb-1 pl-4">
                     {this.renderCategoryTree()}
                 </div>
                 <div className="col-12 pt-1 pb-1">
@@ -914,6 +931,7 @@ export class CreateProfile extends Component {
                                     onChange={this.handleProductsSelectChange.bind(this, this.categoryList.indexOf(category))}
                                     value={category.selected_category}
                                 />
+                                <p style={{color:'green'}}>{category.required?'*Required':null}</p>
                             </div>
                         );
                     })
@@ -1230,12 +1248,12 @@ export class CreateProfile extends Component {
                                         {this.renderStepThree()}
                                     </div>
                                 }
-                                {
-                                    this.state.activeStep === 4 &&
-                                    <div className="col-12 pt-3 pb-3">
-                                        {this.renderStepFour()}
-                                    </div>
-                                }
+                                {/*{*/}
+                                    {/*this.state.activeStep === 4 &&*/}
+                                    {/*<div className="col-12 pt-3 pb-3">*/}
+                                        {/*{this.renderStepFour()}*/}
+                                    {/*</div>*/}
+                                {/*}*/}
                                 <div className="col-12 text-center pt-3 pb-3">
                                     <div className="row">
                                         <div className="col-md-6 col-sm-6 col-12 text-md-left text-sm-left text-center pt-3 pb-3">
@@ -1307,7 +1325,7 @@ export class CreateProfile extends Component {
     }
 
     validateStepTwo() {
-        if (this.state.products_select.targetCategory === '' ||
+        if ( // this.state.products_select.targetCategory === '' ||
             this.state.products_select.query === '') {
             return false;
         } else {
