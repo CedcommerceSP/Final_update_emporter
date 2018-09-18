@@ -4,6 +4,7 @@ import { Redirect } from 'react-router-dom';
 import { Banner,
          TextField,
          Button,
+    Card,
          Heading,
          Checkbox,
          Label,
@@ -46,15 +47,16 @@ export class InstallApp extends Component {
                         this.redirect('/panel/accounts');
                     }}}
                     title="Connect Account">
-                    <div className="row">
-                        <div className="col-12 mt-4 mb-4">
-                            <Banner status="info">
-                                <Heading>{'Connect ' + capitalizeWord(this.state.code)}</Heading>
-                            </Banner>
-                        </div>
-                        <div className="col-12 mt-1">
-                            <div className="row">
-                                {   !isUndefined(this.state.schema) &&
+                    <Card>
+                        <div className="row p-5">
+                            <div className="col-12 mt-4 mb-4">
+                                <Banner status="info">
+                                    <Heading>{'Connect ' + capitalizeWord(this.state.code)}</Heading>
+                                </Banner>
+                            </div>
+                            <div className="col-12 mt-1">
+                                <div className="row">
+                                    {   !isUndefined(this.state.schema) &&
                                     this.state.schema.map((field) => {
                                         switch(field.type) {
                                             case 'select':
@@ -67,6 +69,7 @@ export class InstallApp extends Component {
                                                             value={field.value}
                                                             onChange={this.handleChange.bind(this, field.key)}>
                                                         </Select>
+                                                        <p style={{color:'green'}}>{field.required?'*required':null}</p>
                                                     </div>
                                                 );
                                                 break;
@@ -89,6 +92,9 @@ export class InstallApp extends Component {
                                                                 })
                                                             }
                                                         </div>
+                                                        <div className="col-12">
+                                                            <p style={{color:'green'}}>{field.required?'*required':null}</p>
+                                                        </div>
                                                     </div>
                                                 );
                                                 break;
@@ -101,20 +107,22 @@ export class InstallApp extends Component {
                                                             value={field.value}
                                                             onChange={this.handleChange.bind(this, field.key)}>
                                                         </TextField>
+                                                        <p style={{color:'green'}}>{field.required?'*required':null}</p>
                                                     </div>
                                                 );
                                                 break;
                                         }
                                     })
-                                }
-                                <div className="col-12 text-center mt-3">
-                                    <Button onClick={() => {
-                                        this.onSubmit();
-                                    }}>Submit</Button>
+                                    }
+                                    <div className="col-12 text-center mt-3">
+                                        <Button onClick={() => {
+                                            this.onSubmit();
+                                        }}>Submit</Button>
+                                    </div>
                                 </div>
                             </div>
                         </div>
-                    </div>
+                    </Card>
                 </Page>
             );
         } else {

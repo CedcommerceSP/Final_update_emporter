@@ -5,12 +5,14 @@ export function capitalizeWord(string) {
 
 export function modifyOptionsData(data) {
     let options = [];
-    for (let i = 0; i < Object.keys(data).length; i++) {
-        let key = Object.keys(data)[i];
-        options.push({
-            label: data[key],
-            value: key
-        });
+    if ( data !== null ) {
+        for (let i = 0; i < Object.keys(data).length; i++) {
+            let key = Object.keys(data)[i];
+            options.push({
+                label: data[key],
+                value: key
+            });
+        }
     }
     return options;
 }

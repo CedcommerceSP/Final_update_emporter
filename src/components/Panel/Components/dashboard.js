@@ -18,7 +18,7 @@ import ConfigShared from "../../../shared/config/config-shared";
 class Dashboard extends Component {
     constructor(props) {
         super(props);
-        // props.disableHeader(false); // used in disabled header
+        props.disableHeader(false); // used in disabled header
         this.state = {
             info: {
                 full_name: '',
