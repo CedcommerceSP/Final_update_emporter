@@ -196,9 +196,9 @@ class Dashboard extends Component {
                 } else {
                     notify.success('Now You Can Upload Your Products');
                     this.props.disableHeader(true);
-                    // setTimeout(() => {
-                    //     this.redirect('/panel/import');
-                    // },1500);
+                    setTimeout(() => {
+                        this.redirect('/panel/import');
+                    },1500);
                 }
             }
         });
