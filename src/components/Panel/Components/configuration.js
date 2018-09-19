@@ -515,11 +515,15 @@ export class Configuration extends Component {
     }
 
     saveAmazonCredentialsData() {
-        console.log(this.state.amazon_credentials);
-        // requests.postRequest('amazonimporter/request/setAmazonCredentials',this.state.amazon_credentials)
-        //     .then(data => {
-        //         console.log(data);
-        // })
+        requests.postRequest('amazonimporter/request/setAmazonCredentials',this.state.amazon_credentials)
+            .then(data => {
+                if (data.success) {
+                    notify.success(data.message);
+                    this.amazonCredentials();
+                } else {
+                    notify.error(data.message);
+                }
+        })
     }
     AmazonCredentialsChange(index, value) {
         this.state.amazon_credentials_updated = true;
