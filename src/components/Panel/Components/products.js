@@ -182,17 +182,19 @@ export class Products extends Component {
         let products = [];
         for (let i = 0; i < data.length; i++) {
             let rowData = {};
-            rowData['source_product_id'] = data[i].details.source_product_id.toString();
-            rowData['main_image'] = data[i].variants['main_image'];
-            rowData['title'] = data[i].details.title;
-            rowData['long_description'] = data[i].details.long_description;
-            rowData['sku'] = data[i].variants['sku'].toString();
-            rowData['price'] = data[i].variants['price'].toString();
-            rowData['type'] = data[i].details.type;
-            rowData['quantity'] = data[i].variants['quantity'] !== null?data[i].variants['quantity'].toString():'0';
-            rowData['weight'] = data[i].variants['weight'].toString();
-            rowData['weight_unit'] = data[i].variants['weight_unit'];
-            products.push(rowData);
+            if ( data[i].variants !== {} && !isUndefined(data[i].variants) ) {
+                rowData['source_product_id'] = data[i].details.source_product_id.toString();
+                rowData['main_image'] = data[i].variants['main_image'];
+                rowData['title'] = data[i].details.title;
+                rowData['long_description'] = data[i].details.long_description;
+                rowData['sku'] = data[i].variants['sku'].toString();
+                rowData['price'] = data[i].variants['price'].toString();
+                rowData['type'] = data[i].details.type;
+                rowData['quantity'] = data[i].variants['quantity'] !== null?data[i].variants['quantity'].toString():'0';
+                rowData['weight'] = data[i].variants['weight'];
+                rowData['weight_unit'] = data[i].variants['weight_unit'];
+                products.push(rowData);
+            }
         }
         return products;
     }
@@ -352,7 +354,7 @@ export class Products extends Component {
                                         this.gridSettings.activePage--;
                                         this.getProducts();
                                     }}
-                                    hasNext={this.state.totalPage/this.gridSettings.count > this.gridSettings.activePage}
+                                    hasNext={this.state.totalPage/this.gridSettings.variantsCount > this.gridSettings.activePage}
                                     onNext={() => {
                                         this.gridSettings.activePage++;
                                         this.getProducts();
