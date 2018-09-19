@@ -192,7 +192,7 @@ class Dashboard extends Component {
                     }
                 });
                 if ( arg < 4 ) {
-                    notify.success('Follow The Next Step');
+                   // notify.success('Follow The Next Step');
                 } else {
                     notify.success('Now You Can Upload Your Products');
                     this.props.disableHeader(true);
@@ -232,17 +232,7 @@ class Dashboard extends Component {
         );
     }
     handleModalChange(event, stepActive) {
-        // console.log(stepActive);
-        // if ( event === 'yes' || event === 'no' ) {
-        //     if ( stepActive.name === 'PLANS' ) { // for anchor
-        //         this.checkPayment(); // if step completed
-        //     } else if ( stepActive.name === 'LINKED' ) {
-        //         this.checkLinkedAccount();
-        //     }
-        //     this.setState({modalOpen: !this.state.modalOpen});
-        // } // id user say he/she completed then run this function
          if ( event === 'init_modal' ) {
-            // this.setState({open_init_modal: false});
             notify.info("Please Select A Integration First")
         } else {
             this.setState({modalOpen: !this.state.modalOpen});
@@ -315,6 +305,7 @@ class Dashboard extends Component {
             requests.getRequest('core/user/updateuser', this.state.info).then(data => {
                 if (data.success) {
                     notify.success(data.message);
+                    requests.getRequest('shopifygql/setup/shopifydetails').then();
                     this.changeStep(1); // pass the step number
                 } else {
                     notify.error(data.message);
@@ -484,7 +475,7 @@ class Dashboard extends Component {
         );
     }
     /****************************************** step 2 Plans Start Here ******************************/
-    checkPayment() {
+    checkPayment = () => {
         requests.getRequest('plan/plan/getActive').then(status => {
             if ( status.success ) {
                 notify.success('plan Active');
@@ -493,12 +484,15 @@ class Dashboard extends Component {
                 notify.error(status.message);
             }
         });
-    }
+    };
     paymentStatus(event) {
         if ( event === 'Confirmation' ) {
             // this.setState({modalOpen: !this.state.modalOpen});
+        } else if ( event === 'trial') {
+            // todo trial api
         } else {
             notify.info(event);
+            this.checkPayment();
         }
     }
     renderPlan() {

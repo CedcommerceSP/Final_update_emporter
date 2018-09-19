@@ -205,7 +205,7 @@ export class Import extends Component {
                 this.state.showImportProducts = false;
                 this.updateState();
                 if (data.success === true) {
-                    if (data.code === 'product_import_started') {
+                    if (data.code === 'product_import_started' || data.code === 'import_started') {
                         notify.info('Import process started. Check progress in activities section.');
                         setTimeout(() => {
                             this.redirect('/panel/queuedtasks');
@@ -522,15 +522,15 @@ export class Import extends Component {
                     </div>
                     <div className="col-md-6 col-sm-6 col-12 p-3">
                         <Card>
-                            <div style={{cursor: 'pointer'}}>
+                            <div onClick={() => {
+                                this.state.importProductsDetails.source = '';
+                                this.state.importProductsDetails.shop = '';
+                                this.state.importProductsDetails.shop_id = '';
+                                this.state.showImportProducts = true;
+                                this.updateState();
+                            }} style={{cursor: 'pointer'}}>
                                 <div className="text-center pt-5 pb-5">
-                                    <FontAwesomeIcon onClick={() => {
-                                        this.state.importProductsDetails.source = '';
-                                        this.state.importProductsDetails.shop = '';
-                                        this.state.importProductsDetails.shop_id = '';
-                                        this.state.showImportProducts = true;
-                                        this.updateState();
-                                    }} icon={faArrowAltCircleDown} color="#3f4eae" size="10x" />
+                                    <FontAwesomeIcon icon={faArrowAltCircleDown} color="#3f4eae" size="10x" />
                                 </div>
                                 <div className="text-center pt-2 pb-4">
                                     <span className="h2" style={{color: '#3f4eae'}}>Import Products</span>
@@ -540,16 +540,16 @@ export class Import extends Component {
                     </div>
                     <div className="col-md-6 col-sm-6 col-12 p-3">
                         <Card>
-                            <div style={{cursor: 'pointer'}}>
+                            <div onClick={() => {
+                                this.state.uploadProductDetails.source = '';
+                                this.state.uploadProductDetails.target = '';
+                                this.state.uploadProductDetails.selected_profile = '';
+                                this.state.uploadProductDetails.profile_type = '';
+                                this.state.showUploadProducts = true;
+                                this.updateState();
+                            }} style={{cursor: 'pointer'}}>
                                 <div className="text-center pt-5 pb-5">
-                                    <FontAwesomeIcon onClick={() => {
-                                        this.state.uploadProductDetails.source = '';
-                                        this.state.uploadProductDetails.target = '';
-                                        this.state.uploadProductDetails.selected_profile = '';
-                                        this.state.uploadProductDetails.profile_type = '';
-                                        this.state.showUploadProducts = true;
-                                        this.updateState();
-                                    }} icon={faArrowAltCircleUp} color="#3f4eae" size="10x" />
+                                    <FontAwesomeIcon icon={faArrowAltCircleUp} color="#3f4eae" size="10x" />
                                 </div>
                                 <div className="text-center pt-2 pb-4">
                                     <span className="h2" style={{color: '#3f4eae'}}>Upload Products</span>

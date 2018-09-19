@@ -66,7 +66,6 @@ class PlanBody extends Component {
             }
         });
         data1 = Object.assign({},RemoveService(Object.assign({},newArg), value.slice(0))); // Change the plan in Desire Format
-        console.log(data1);
         requests.postRequest('plan/plan/choose',data1).then(data => {
             if (data.success) {
                 this.getSchema(data.data, data1); // open Modal For Payment Procedure
@@ -93,6 +92,49 @@ class PlanBody extends Component {
         return (
             <React.Fragment>
                 <div className="row">
+                    <div className="col-sm-4 col-12 pt-3 pb-3">{/* Starting Of Plan Card */}
+                        <Card>
+                            <div className="d-flex justify-content-center">
+                                <div className="p-5" >
+                                    <div className="mb-5 text-center" > {/* Plan Numeric Price */}
+                                        <p className="price-tag">
+                                            <span className="price-tag_small">$</span>
+                                            0
+                                            <span className="price-tag_small"></span>
+                                        </p>
+                                    </div>
+                                    <div className="mb-5"> {/* Button To choose Plan */}
+                                        <Button primary={true} fullWidth={true} size="large" onClick={() => this.props.paymentStatus('trial')}>
+                                            Choose Trial Period
+                                        </Button>
+                                    </div>
+                                    <div className="mb-5 text-center"> {/* Descriptions For Particular deatails */}
+                                        <h1 className="mb-4"><b>Trial Pack</b></h1>
+                                        <h4>Trial Pack Will Be Active For 14 Days</h4>
+                                    </div>
+                                    <hr/>
+                                    <div className="text-center mt-5"> {/* Services Data */}
+                                            <React.Fragment>
+                                                <p className="service-body">
+                                                    <span className="service-description mb-3" style={{fontWeight:'bold'}}><b>Services</b></span>
+                                                    <span>
+                                                                <Tooltip content="Trial Pack" preferredPosition="above">
+                                                                    <Link><Icon source="help" color="inkLighter" backdrop={true} /></Link>
+                                                                </Tooltip>
+                                                            </span>
+                                                </p>
+                                                <div className="text-left">
+                                                <Checkbox
+                                                    checked={true}
+                                                    label="24X7 Support"
+                                                    disabled={true} />
+                                                </div>
+                                            </React.Fragment>
+                                    </div>
+                                </div>
+                            </div>
+                        </Card>
+                    </div>
                     {this.state.data.map((data, index) => {
                         return (
                             <div className="col-sm-4 col-12 pt-3 pb-3" key={index}>{/* Starting Of Plan Card */}
@@ -102,7 +144,7 @@ class PlanBody extends Component {
                                             <div className="mb-5 text-center" > {/* Plan Numeric Price */}
                                                 <p className="price-tag">
                                                     <span className="price-tag_small">$</span>
-                                                    <span className="price-tag_discount"><strike>{data.originalValue}</strike></span>
+                                                    {/*<span className="price-tag_discount"><strike>{data.originalValue}</strike></span>*/}
                                                     {data.main_price}
                                                     <span className="price-tag_small">{data.validity_display}</span>
                                                 </p>
