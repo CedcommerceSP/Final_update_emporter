@@ -32,7 +32,6 @@ import { Checkbox,
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faEdit, faTrash } from '@fortawesome/free-solid-svg-icons';
-import ReadMoreReact from "read-more-react";
 
 class SmartDataTablePlain extends React.Component {
   allSelected = false;
@@ -266,10 +265,9 @@ class SmartDataTablePlain extends React.Component {
                         this.state.imageColumns.indexOf(column.key) === -1 && this.state.read_more.indexOf(column.key) !== -1 &&
                         this.state.customButton.indexOf(column.key) === -1 &&
                         typeof row[column.key] === 'string'?
-                            <ReadMoreReact text={row[column.key]}
-                                           min={80}
-                                           ideal={100}
-                                           max={200} />:
+                            <div className="scroll">
+                                <span dangerouslySetInnerHTML={{__html: row[column.key]}}/>
+                            </div>:
                             this.state.imageColumns.indexOf(column.key) === -1 && this.state.customButton.indexOf(column.key) === -1 && <ErrorBoundary>
                                 <TableCell withLinks={withLinks} filterValue={filterValue}>
                                     {row[column.key]}

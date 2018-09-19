@@ -196,9 +196,9 @@ class Dashboard extends Component {
                 } else {
                     notify.success('Now You Can Upload Your Products');
                     this.props.disableHeader(true);
-                    setTimeout(() => {
-                        this.redirect('/panel/import');
-                    },1500);
+                    // setTimeout(() => {
+                    //     this.redirect('/panel/import');
+                    // },1500);
                 }
             }
         });
@@ -262,33 +262,35 @@ class Dashboard extends Component {
                     status = true;
                     flag++;
                 }
-                return (
-                    <React.Fragment key={keys}>
-                        <div style={this.state.stepData[keys].stepperActive?{cursor:'pointer'}:null}  onClick={this.state.stepData[keys].stepperActive?this.redirect.bind(this,this.state.stepData[keys].redirectTo):null}>
-                            <div className="row p-4 mt-sm-0 mt-5">
-                                <div className="CARD col-12" style={{border: `1px solid ${css}`,backgroundColor:'#fff'}}>
-                                    <div className={`CARD-title-small common text-center ${css}`}>
-                                        {this.state.stepData[keys].stepperActive ?
-                                            <FontAwesomeIcon icon={faCheck} size="5x"/>
-                                            : <h1 className="mt-2 font-weight-bold" style={{fontSize:50}}>{parseInt(keys) + 1} </h1>
-                                        }
-                                    </div>
-                                    <div className="CARD-body p-5">
-                                        <div className="col-12 p-3 pl-5">
-                                            <h4>{this.state.stepData[keys].message}</h4>
+                if ( flag !== 1 ) {
+                    return (
+                        <React.Fragment key={keys}>
+                            <div style={this.state.stepData[keys].stepperActive?{cursor:'pointer'}:null}  onClick={this.state.stepData[keys].stepperActive?this.redirect.bind(this,this.state.stepData[keys].redirectTo):null}>
+                                <div className="row p-4 mt-sm-0 mt-5">
+                                    <div className="CARD col-12" style={{border: `1px solid ${css}`,backgroundColor:'#fff'}}>
+                                        <div className={`CARD-title-small common text-center ${css}`}>
+                                            {this.state.stepData[keys].stepperActive ?
+                                                <FontAwesomeIcon icon={faCheck} size="5x"/>
+                                                : <h1 className="mt-2 font-weight-bold" style={{fontSize:50}}>{parseInt(keys) + 1} </h1>
+                                            }
                                         </div>
-                                        {this.checkAnchor(this.state.stepData[keys],status)} {/* switch case for deciding the anchor */}
+                                        <div className="CARD-body p-5">
+                                            <div className="col-12 p-3 pl-5">
+                                                <h4>{this.state.stepData[keys].message}</h4>
+                                            </div>
+                                            {this.checkAnchor(this.state.stepData[keys],status)} {/* switch case for deciding the anchor */}
+                                        </div>
                                     </div>
                                 </div>
+                                { this.state.stepData[keys].data !== '' && this.state.stepData[keys].stepperActive?
+                                    <div className="col-12 mt-5 p-5 text-center">
+                                        <h4>{this.state.stepData[keys].data}</h4>
+                                    </div> :null
+                                } {/* TODO Change condition this.state.stepData[keys].data !== '' if data meaning change */}
                             </div>
-                            { this.state.stepData[keys].data !== '' && this.state.stepData[keys].stepperActive?
-                                <div className="col-12 mt-5 p-5 text-center">
-                                    <h4>{this.state.stepData[keys].data}</h4>
-                                </div> :null
-                            } {/* TODO Change condition this.state.stepData[keys].data !== '' if data meaning change */}
-                        </div>
-                    </React.Fragment>
-                );
+                        </React.Fragment>
+                    );
+                }
             })
         );
     }

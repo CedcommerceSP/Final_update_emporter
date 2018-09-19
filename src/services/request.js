@@ -2,7 +2,7 @@ import { environment } from '../environments/environment';
 import { globalState } from './globalstate';
 
 import { isUndefined } from 'util';
-const message = 'For Report Issue Go to HELP section';
+const message = 'Internal Server Error';
 export const requests = {
     getRequest: (endpoint, params, fullUrl, hideLoader) => {
         if (isUndefined(hideLoader) || !hideLoader) {
