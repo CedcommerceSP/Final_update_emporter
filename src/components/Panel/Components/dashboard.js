@@ -481,7 +481,20 @@ class Dashboard extends Component {
                 notify.success('plan Active');
                 this.changeStep(2);
             } else {
-                notify.error(status.message);
+                requests.getRequest('amazonimporter/config/isTrialActive').then(data => {
+                    console.log(data);
+                    if(data.success) {
+                        if (data.code === 'UNDER_TRIAL') {
+                            notify.success(data.message);
+                            this.changeStep(2);
+                        } else {
+                            notify.info(data.message);
+                        }
+                    } else {
+                        notify.error(data.message);
+                    }
+                });
+                // notify.error(status.message);
             }
         });
     };
@@ -489,7 +502,17 @@ class Dashboard extends Component {
         if ( event === 'Confirmation' ) {
             // this.setState({modalOpen: !this.state.modalOpen});
         } else if ( event === 'trial') {
-            // todo trial api
+            requests.getRequest('amazonimporter/config/activateTrial').then(data => {
+                if(data.success) {
+                    if (data.code === 'UNDER_TRIAL') {
+                        notify.success(data.message);
+                    } else {
+                        notify.info(data.message);
+                    }
+                } else {
+                    notify.error(data.message);
+                }
+            });
         } else {
             notify.info(event);
             this.checkPayment();

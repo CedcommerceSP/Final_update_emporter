@@ -126,6 +126,9 @@ export class Profiling extends Component {
                             visibleColumns={this.visibleColumns}
                             customButton={this.customButton} // button
                             operations={this.operations} //button
+                            getVisibleColumns={(event) => {
+                                this.visibleColumns = event;
+                            }}
                             hideFilters={this.hideFilters}
                             columnTitles={this.columnTitles}
                             showColumnFilters={true}

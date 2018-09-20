@@ -131,7 +131,7 @@ class SmartDataTablePlain extends React.Component {
   }
 
   handleColumnToggle(key) {
-    const { colProperties } = this.state
+      const { colProperties } = this.state
     if (!colProperties[key]) {
       colProperties[key] = {}
     }
@@ -250,7 +250,7 @@ class SmartDataTablePlain extends React.Component {
         const showCol = column.visible;
         if (showCol) {
             return (
-                <td key={`row-${i}-column-${j}`} style={{maxWidth:'400px'}}>
+                <td key={`row-${i}-column-${j}`} style={{maxWidth:'400px',minWidth:'80px'}}>
                     {
                       this.state.imageColumns.indexOf(column.key) !== -1 &&
                       <img src={row[column.key]} style={{width: '100px', height: '100px'}} />
@@ -383,7 +383,7 @@ class SmartDataTablePlain extends React.Component {
   }
 
   renderEnableColumns(columns) {
-    return (
+      return (
         <div className="row">
             {
                 columns.map((column) => {
@@ -393,7 +393,7 @@ class SmartDataTablePlain extends React.Component {
                               checked={this.state.visibleColumns.indexOf(column.key) !== -1}
                               label={column.title}
                               disabled={this.state.visibleColumns.length < 2}
-                              onChange={this.manageVisibleColumns.bind(this, column.key)}></Checkbox>
+                              onChange={this.manageVisibleColumns.bind(this, column.key)}/>
                         </div>
                     );
                 })
@@ -442,7 +442,7 @@ class SmartDataTablePlain extends React.Component {
   }
 
   manageVisibleColumns(key, event) {
-    const keyIndex = this.state.visibleColumns.indexOf(key);
+      const keyIndex = this.state.visibleColumns.indexOf(key);
     if (event) {
       if (keyIndex === -1) {
           this.state.visibleColumns.push(key);
@@ -454,6 +454,7 @@ class SmartDataTablePlain extends React.Component {
     }
     const state = this.state;
     this.setState(state);
+    this.props.getVisibleColumns(this.state.visibleColumns);
   }
 
   getColumns() {
@@ -471,8 +472,17 @@ class SmartDataTablePlain extends React.Component {
     if (this.state.visibleColumns) {
         columns = updateColumnVisibility(columns, this.state.visibleColumns);
     }
-    this.state.columnFilters = getColumnFilters(columns, this.state.columnFilters);
-    return columns;
+      this.state.columnFilters = getColumnFilters(columns, this.state.columnFilters);
+      if ( columns.length <= 0 ) {
+          Object.keys(this.state.columnTitles).forEach(e => {
+              if ( this.state.visibleColumns.indexOf(e) !== -1 ) {
+                  columns.push({key:e,title:this.state.columnTitles[e].title,visible:true,sortable:this.state.columnTitles[e].sortable, filterable: true})
+              } else {
+                  columns.push({key:e,title:this.state.columnTitles[e].title,visible:false,sortable:this.state.columnTitles[e].sortable, filterable: true})
+              }
+          })
+      }
+      return columns;
   }
 
   getRows() {
@@ -529,7 +539,7 @@ class SmartDataTablePlain extends React.Component {
                     <Button onClick={() => {
                         document.getElementById('data-toggle-button').click();
                     }} primary>View Columns</Button>
-                    <button id="data-toggle-button" data-toggle="collapse" data-target="#column-section" hidden></button>
+                    <button id="data-toggle-button" data-toggle="collapse" data-target="#column-section" hidden/>
                   </div>
               }
           </div>

@@ -38,14 +38,14 @@ export class Products extends Component {
         {label: 'Delete', value: 'delete'},
         {label: 'Upload', value: 'upload'}
     ];
-    visibleColumns = ['source_product_id', 'main_image', 'long_description', 'title', 'sku', 'price',];
+    visibleColumns = ['source_product_id', 'main_image', 'long_description', 'title', 'sku', 'price'];
     imageColumns = ['main_image'];
-    hideFilters = ['main_image' ,'long_description'];
+    hideFilters = ['main_image' ,'long_description','type','weight_unit'];
     read_more = ['long_description'];
     columnTitles = {
         source_product_id: {
             title: 'ID',
-            sortable: false
+            sortable: false,
         },
         main_image: {
             title: 'Image',
@@ -59,20 +59,20 @@ export class Products extends Component {
             title: 'Description',
             sortable: false
         },
-        type: {
-            title: 'Type',
-            sortable: false
-        },
-        quantity: {
-            title: 'Quantity',
-            sortable: false
-        },
         sku: {
             title: 'Sku',
             sortable: false
         },
         price: {
             title: 'Price',
+            sortable: false
+        },
+        type: {
+            title: 'Type',
+            sortable: false
+        },
+        quantity: {
+            title: 'Quantity',
             sortable: false
         },
         weight: {
@@ -298,6 +298,9 @@ export class Products extends Component {
                                     rowActions={{
                                         edit: false,
                                         delete: false
+                                    }}
+                                    getVisibleColumns={(event) => {
+                                        this.visibleColumns = event;
                                     }}
                                     userRowSelect={(event) => {
                                         const itemIndex = this.state.selectedProducts.indexOf(event.data.sku);

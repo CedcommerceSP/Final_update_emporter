@@ -136,8 +136,8 @@ export class QueuedTask extends Component {
                                                             <div className={progressClass}>
                                                                 <span>{progress}%</span>
                                                                 <div className="slice">
-                                                                    <div className="bar"></div>
-                                                                    <div className="fill"></div>
+                                                                    <div className="bar"/>
+                                                                    <div className="fill"/>
                                                                 </div>
                                                             </div>
                                                         </div>
