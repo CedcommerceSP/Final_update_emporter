@@ -51,6 +51,7 @@ class InstallAppsShared extends Component {
                                                 value={field.value}
                                                 onChange={this.handleChange.bind(this, field.key)}>
                                             </Select>
+                                            <p style={{color:'green'}}>{field.required?'*required':null}</p>
                                         </div>
                                     );
                                     break;
@@ -73,6 +74,9 @@ class InstallAppsShared extends Component {
                                                     })
                                                 }
                                             </div>
+                                            <div className="col-12">
+                                                <p style={{color:'green'}}>{field.required?'*required':null}</p>
+                                            </div>
                                         </div>
                                     );
                                     break;
@@ -85,6 +89,7 @@ class InstallAppsShared extends Component {
                                                 value={field.value}
                                                 onChange={this.handleChange.bind(this, field.key)}>
                                             </TextField>
+                                            <p style={{color:'green'}}>{field.required?'*required':null}</p>
                                         </div>
                                     );
                                     break;
@@ -139,18 +144,29 @@ class InstallAppsShared extends Component {
         } else {
             let url = this.state.action;
             let data = {};
+            let flag = true;
             for (let i = 0; i < this.state.schema.length; i++) {
-                data[this.state.schema[i].key] = this.state.schema[i].value;
+                if (this.state.schema[i].value !== '' && this.state.schema[i].type !== 'checkbox') {
+                    data[this.state.schema[i].key] = this.state.schema[i].value;
+                } else if (this.state.schema[i].type === 'checkbox' && this.state.schema[i].value.length > 0) {
+                    data[this.state.schema[i].key] = this.state.schema[i].value;
+                } else if (this.state.schema[i].required !== 0) {
+                    flag = false;
+                }
             }
-            requests.postRequest(url, data, true)
-                .then(data => {
-                    if (data.success) {
-                        notify.success(data.message);
-                    } else {
-                        notify.error(data.message);
-                    }
-                    this.redirect();
-                });
+            if ( flag ) {
+                requests.postRequest(url, data, true)
+                    .then(data => {
+                        if (data.success) {
+                            notify.success(data.message);
+                        } else {
+                            notify.error(data.message);
+                        }
+                        this.redirect();
+                    });
+            } else {
+                notify.info('Please Fill Up All Required Field');
+            }
         }
     }
 

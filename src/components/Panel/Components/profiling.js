@@ -27,20 +27,20 @@ export class Profiling extends Component {
         {label: 20, value: 20},
         {label: 25, value: 25}
     ];
-    visibleColumns = ['name', 'source', 'target', 'targetCategory', 'query','profile_id'];
+    visibleColumns = ['name', 'source', 'target', 'query','profile_id'];
     customButton = ['profile_id']; // button
     hideFilters= ['profile_id'];
     columnTitles = {
         name: {
-            title: 'Profile Name',
+            title: 'Name',
             sortable: true
         },
         source: {
-            title: 'Product Import Source',
+            title: 'Source',
             sortable: true
         },
         target: {
-            title: 'Product Upload Target',
+            title: 'Target',
             sortable: true
         },
         targetCategory: {
@@ -48,12 +48,13 @@ export class Profiling extends Component {
             sortable: true
         },
         query: {
-            title: 'Product Query',
+            title: 'Query',
             sortable: true
         },
         profile_id: {
-            title: 'View Profile',
-            label:'View Profile', // button Label
+            title: 'Detail',
+            label:'View', // button Label
+            id:'profile_id',
             sortable:false,
         }
     };
@@ -67,8 +68,11 @@ export class Profiling extends Component {
         this.getProfiles();
         this.operations = this.operations.bind(this);
     }
-    operations(event) {
-        this.redirect('/panel/profiling/view?id=' + event);
+    operations(event, id) {
+        switch (id) {
+            case 'profile_id':this.redirect('/panel/profiling/view?id=' + event);break;
+            default:console.log('Default Case');
+        }
     }
 
     getProfiles() {

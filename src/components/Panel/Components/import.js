@@ -534,6 +534,7 @@ export class Import extends Component {
                                 </div>
                                 <div className="text-center pt-2 pb-4">
                                     <span className="h2" style={{color: '#3f4eae'}}>Import Products</span>
+                                    <Label>(Import From Source To App)</Label>
                                 </div>
                             </div>
                         </Card>
@@ -553,6 +554,7 @@ export class Import extends Component {
                                 </div>
                                 <div className="text-center pt-2 pb-4">
                                     <span className="h2" style={{color: '#3f4eae'}}>Upload Products</span>
+                                    <Label>(Import From App To Shopify)</Label>
                                 </div>
                             </div>
                         </Card>

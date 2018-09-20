@@ -38,50 +38,40 @@ export class Products extends Component {
         {label: 'Delete', value: 'delete'},
         {label: 'Upload', value: 'upload'}
     ];
-    visibleColumns = ['source_product_id', 'main_image', 'long_description', 'title', 'sku', 'price'];
+    visibleColumns = ['source_product_id', 'main_image', 'title', 'sku', 'price','quantity','source_product_id'];
     imageColumns = ['main_image'];
-    hideFilters = ['main_image' ,'long_description','type','weight_unit'];
-    read_more = ['long_description'];
+    hideFilters = ['main_image' ,'long_description','type','source_product_id'];
+    customButton = ['source_product_id']; // button
     columnTitles = {
-        source_product_id: {
-            title: 'ID',
-            sortable: false,
-        },
         main_image: {
             title: 'Image',
             sortable: false
         },
         title: {
             title: 'Title',
-            sortable: false
-        },
-        long_description: {
-            title: 'Description',
-            sortable: false
+            sortable: true
         },
         sku: {
             title: 'Sku',
-            sortable: false
+            sortable: true
         },
         price: {
             title: 'Price',
-            sortable: false
+            sortable: true
         },
         type: {
             title: 'Type',
-            sortable: false
+            sortable: true
         },
         quantity: {
             title: 'Quantity',
-            sortable: false
+            sortable: true
         },
-        weight: {
-            title: 'Weight',
-            sortable: false
-        },
-        weight_unit: {
-            title: 'Weight Unit',
-            sortable: false
+        source_product_id: {
+            title: 'Detail',
+            label:'View', // button Label
+            id:'source_product_id',
+            sortable:false,
         },
     };
 
@@ -183,22 +173,24 @@ export class Products extends Component {
         for (let i = 0; i < data.length; i++) {
             let rowData = {};
             if ( data[i].variants !== {} && !isUndefined(data[i].variants) ) {
-                rowData['source_product_id'] = data[i].details.source_product_id.toString();
                 rowData['main_image'] = data[i].variants['main_image'];
                 rowData['title'] = data[i].details.title;
-                rowData['long_description'] = data[i].details.long_description;
                 rowData['sku'] = data[i].variants['sku'].toString();
                 rowData['price'] = data[i].variants['price'].toString();
                 rowData['type'] = data[i].details.type;
                 rowData['quantity'] = data[i].variants['quantity'] !== null?data[i].variants['quantity'].toString():'0';
-                rowData['weight'] = data[i].variants['weight'];
-                rowData['weight_unit'] = data[i].variants['weight_unit'];
+                rowData['source_product_id'] = data[i].variants.source_variant_id.toString();
                 products.push(rowData);
             }
         }
         return products;
     }
-
+    operations = (event, id) => {
+        switch (id) {
+            case 'source_product_id':this.redirect('/panel/products/view/' + event);break;
+            default:console.log('Default Case');
+        }
+    };
     updateState() {
         const state = this.state;
         this.setState(state);
@@ -250,9 +242,6 @@ export class Products extends Component {
     render() {
         return (
             <Page
-                // primaryAction={{content: 'Add Product', onClick: () => {
-                //     this.redirect('/panel/products/create');
-                // }}}
                 primaryAction={{content: 'Analytics', onClick: () => {
                         this.redirect('/panel/products/analysis');
                     }}}
@@ -284,10 +273,11 @@ export class Products extends Component {
                                 <SmartDataTable
                                     data={this.state.products}
                                     uniqueKey="sku"
-                                    read_more={this.read_more}
                                     hideFilters={this.hideFilters}
                                     columnTitles={this.columnTitles}
                                     multiSelect={true}
+                                    customButton={this.customButton} // button
+                                    operations={this.operations} //button
                                     selected={this.state.selectedProducts}
                                     className='ui compact selectable table'
                                     withLinks={true}

@@ -27,7 +27,7 @@ import { Checkbox,
          Select,
          TextField,
          Button,
-         CalloutCard,
+    Label,
          EmptyState } from '@shopify/polaris';
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -199,15 +199,17 @@ class SmartDataTablePlain extends React.Component {
       const showCol = column.visible;
       if (showCol) {
         return (
-          <td key={column.key} style={{verticalAlign:'top'}}>
+          <td key={column.key} style={{verticalAlign:'top'}} className="pl-4">
             <span>
               {column.title}
             </span>
             <span className='rsdt rsdt-sortable'>
               {sortable && column.sortable ? this.renderSorting(column) : null}
             </span>
-              {this.state.showColumnFilters && Object.keys(this.state.columnFilters).length > 0 && this.state.hideFilters.indexOf(column.key) === -1 &&
-              this.renderColumnFilters(column)}
+              <span>
+                  {this.state.showColumnFilters && Object.keys(this.state.columnFilters).length > 0 && this.state.hideFilters.indexOf(column.key) === -1 &&
+                  this.renderColumnFilters(column)}
+              </span>
           </td>
         )
       }
@@ -250,14 +252,14 @@ class SmartDataTablePlain extends React.Component {
         const showCol = column.visible;
         if (showCol) {
             return (
-                <td key={`row-${i}-column-${j}`} style={{maxWidth:'400px',minWidth:'80px'}}>
+                <td key={`row-${i}-column-${j}`} className="table-filers">
                     {
                       this.state.imageColumns.indexOf(column.key) !== -1 &&
                       <img src={row[column.key]} style={{width: '100px', height: '100px'}} />
                     }
                     {
                         this.state.imageColumns.indexOf(column.key) === -1 && this.state.customButton.indexOf(column.key) !== -1 &&
-                        <Button primary onClick={this.props.operations.bind(this, row[column.key], column.key)}>
+                        <Button primary onClick={this.props.operations.bind(this, row[column.key], this.state.columnTitles[column.key].id)}>
                             {this.state.columnTitles[column.key].label}
                         </Button>
                     }
@@ -268,11 +270,11 @@ class SmartDataTablePlain extends React.Component {
                             <div className="scroll">
                                 <span dangerouslySetInnerHTML={{__html: row[column.key]}}/>
                             </div>:
-                            this.state.imageColumns.indexOf(column.key) === -1 && this.state.customButton.indexOf(column.key) === -1 && <ErrorBoundary>
+                            this.state.imageColumns.indexOf(column.key) === -1 && this.state.customButton.indexOf(column.key) === -1 && <Label><ErrorBoundary>
                                 <TableCell withLinks={withLinks} filterValue={filterValue}>
                                     {row[column.key]}
                                 </TableCell>
-                            </ErrorBoundary>
+                            </ErrorBoundary></Label>
                     }
                 </td>
             )
@@ -338,21 +340,20 @@ class SmartDataTablePlain extends React.Component {
 
   renderColumnFilters(column) {
     return (
-        <div>
-          <div className="mt-1">
-            <Select
-                options={this.filterConditions}
-                value={this.state.columnFilters[column.key].operator}
-                onChange={this.applyColumnFilters.bind(this, 'operator', column.key)}
-            />
-          </div>
-          <div className="mt-1">
+        <div className="row" style={{minWidth:'100px',maxWidth:'400px'}}>
+          <div className="mt-1 col-7 p-0" >
             <TextField
                 placeholder={column.title}
                 value={this.state.columnFilters[column.key].value}
-                onChange={this.applyColumnFilters.bind(this, 'value', column.key)}>
-            </TextField>
+                onChange={this.applyColumnFilters.bind(this, 'value', column.key)}/>
           </div>
+            <div className="mt-1 col-5 p-0" style={{maxWidth:'35px',marginRight:'3px'}}>
+                <Select
+                    options={this.filterConditions}
+                    value={this.state.columnFilters[column.key].operator}
+                    onChange={this.applyColumnFilters.bind(this, 'operator', column.key)}
+                />
+            </div>
         </div>
     );
   }
@@ -552,7 +553,7 @@ class SmartDataTablePlain extends React.Component {
         </div>
         <div className='rsdt rsdt-container'>
             {this.renderToggles(columns)}
-          <table data-table-name={name} className={className}>
+          <table data-table-name={name} className={ ` ${className}`  } style={{border:'1px solid #dee2e6'}}>
               {withHeaders && (
                   <thead>
                   {this.renderHeader(columns)}

@@ -13,7 +13,7 @@ import { requests } from '../../../services/request';
 import { notify } from '../../../services/notify';
 
 import './circle.css';
-
+let intervalRunning;
 export class QueuedTask extends Component {
 
     constructor() {
@@ -26,7 +26,7 @@ export class QueuedTask extends Component {
         };
         this.getAllNotifications();
         this.getAllQueuedTasks();
-        setInterval(() => {
+        intervalRunning = setInterval(() => {
             const activeUrl = this.props.history.location.pathname;
             if (activeUrl === '/panel/queuedtasks') {
                 this.getAllNotifications();
@@ -34,7 +34,9 @@ export class QueuedTask extends Component {
             }
         }, 3000);
     }
-
+    componentWillUnmount() {
+        clearInterval(intervalRunning);
+    }
     getAllQueuedTasks() {
         requests.getRequest('connector/get/allQueuedTasks', {}, false, true)
             .then(data => {
@@ -115,7 +117,7 @@ export class QueuedTask extends Component {
                                 {
                                     this.state.queuedTasks.length === 0 &&
                                     <Banner status="info">
-                                        <Label>No Processes Running Currently</Label>
+                                        <Label>All Processes Completed</Label>
                                     </Banner>
                                 }
                                 {

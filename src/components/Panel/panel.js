@@ -33,17 +33,66 @@ import BillingHistory from "./Components/plans-component/billing-history";
 import ConnectedAccounts from "./Components/apps-component/connected-accounts";
 import ReportAnIssue from "./Components/help-component/report-issue";
 import ViewProfile from "./Components/profile-component/view-profile";
+import {requests} from "../../services/request";
 
+import {globalState} from '../../services/globalstate';
+import ViewProducts from "./Components/products-component/view-products";
+
+
+const style = {
+    trial: {
+        height:'70px',
+        backgroundColor:'#858585',
+        color:'#fff',
+        paddingTop:'48px',
+        paddingRight:'10px'
+    },
+    close: {
+        cursor:'pointer',
+        float:'right'
+    }
+};
 export class Panel extends Component {
     constructor(props) {
         super(props);
         this.disableHeader = this.disableHeader.bind(this);
+        this.trialActive();
     }
     state = {
         showLoader: false,
         header: true,
+        isTrialActive: false,
+        isTrialActiveClose: true, // when user close the notify
+        daysLeft: '',
     };
-    disableHeader(value) {
+    trialActive = () => {
+        if ( globalState.getLocalStorage('trial') ) {
+            this.state.isTrialActive = true;
+            this.state.daysLeft = globalState.getLocalStorage('trial');
+        } else if ( this.state.isTrialActiveClose ) {
+                requests.getRequest('plan/plan/getActive').then(status => {
+                    if ( status.success ) {
+                        this.setState({isTrialActive:false,isTrialActiveClose:false});
+                        globalState.getLocalStorage('trial')?globalState.removeLocalStorage('trial'):null;
+                    } else {
+                        requests.getRequest('amazonimporter/config/isTrialActive').then(data => {
+                            if(data.success) {
+                                if (data.code === 'UNDER_TRIAL') {
+                                    this.setState({isTrialActive:true,daysLeft:data.message});
+                                    globalState.setLocalStorage('trial',data.message);
+                                } else {
+                                    // this.setState({isTrialActive:false,isTrialActiveClose:false});
+                                }
+                            }
+                        });
+                    }
+                });
+            }
+    };
+    // componentWillUnmount() {
+    //     globalState.removeLocalStorage('trial');
+    // }
+    disableHeader(value) { // disable header
         this.setState({header:value});
     }
     menu = panelFunctions.getMenu();
@@ -52,6 +101,17 @@ export class Panel extends Component {
             <Router history={history}>
                 <div className="container-fluid app-panel-container">
                     <div className="row">
+                        {this.state.isTrialActive && this.state.isTrialActiveClose && globalState.getLocalStorage('trial')?<div className="col-12 text-center" style={style.trial}>
+                            <h3>
+                                {this.state.daysLeft}
+                                <span style={style.close} className="text-right" onClick={() => {
+                                    this.setState({isTrialActive:false,isTrialActiveClose:false});
+                                    globalState.removeLocalStorage('trial');
+                                }}>
+                                    ☒
+                                </span>
+                            </h3>
+                        </div>:null}
                         <div className="col-12">
                             <div className="app-header">
                                 {this.state.header?<Header menu={this.menu} history={history}/>:null}
@@ -68,6 +128,7 @@ export class Panel extends Component {
                                     return <Products parentProps={this.props} history={history}/>
                                 }}/>
                                 <Route exact path='/panel/products/create' component={CreateProduct}/>
+                                <Route exact path='/panel/products/view/:id' component={ViewProducts}/>
                                 <Route path='/panel/products/edit/:id' component={EditProduct}/>
                                 <Route exact path='/panel/products/analysis' component={Analyticsreporting}/>
                                 <Route exact path='/panel/accounts' component={Apps}/>

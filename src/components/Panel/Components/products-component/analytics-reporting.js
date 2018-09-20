@@ -60,8 +60,10 @@ class Analyticsreporting extends Component {
             if (data.success == true) {
                 importer = data.data;
                 Object.keys(importer).map(importerkey => {
-                    importertitlearray.push(importer[importerkey]['title']);
-                    importer_marketplacearray.push(importer[importerkey]['marketplace']);
+                    if(importerkey=='amazon_importer') {
+                        importertitlearray.push(importer[importerkey]['title']);
+                        importer_marketplacearray.push(importer[importerkey]['marketplace']);
+                    }
                 });
                 this.get_y_axis_importer(importer_marketplacearray,importertitlearray,importer);
                 this.setState({importer:importertitlearray})

@@ -375,7 +375,25 @@ export class CreateProfile extends Component {
                     }
                     this.updateState();
                     if (!hasService) {
-                        notify.error('You have no available product import service. Please choose a plan.');
+                        requests.getRequest('amazonimporter/config/isTrialActive').then(data => {
+                            if(data.success) {
+                                if (data.code === 'UNDER_TRIAL') {
+                                    for (let i = 0; i < Object.keys(data.data).length; i++) {
+                                        let key = Object.keys(data.data)[i];
+                                        hasService = true;
+                                        this.importServices.push({
+                                            label: data.data[key].title,
+                                            value: data.data[key].marketplace,
+                                            shops: data.data[key].shops
+                                        });
+                                    }
+                                } else {
+                                    notify.info(data.message);
+                                }
+                            } else {
+                                notify.error(data.message);
+                            }
+                        });
                     }
                     this.updateState();
                 } else {
@@ -1194,7 +1212,7 @@ export class CreateProfile extends Component {
             <React.Fragment>
                 {
                     this.state.activeStep > 1 &&
-                    <Button onClick={() => {
+                    <Button primary onClick={() => {
                         this.moveToPreviousStep();
                     }}>Back</Button>
                 }
@@ -1217,7 +1235,7 @@ export class CreateProfile extends Component {
                             </div>
                         </Card>
                     </div>
-                    <div className="col-12 p-2">
+                    <div className="col-12 mt-4">
                         <Card>
                             <div className="row p-5">
                                 <div className="col-12 text-center pt-3 pb-3">

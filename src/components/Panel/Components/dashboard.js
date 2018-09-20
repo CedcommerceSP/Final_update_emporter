@@ -482,7 +482,6 @@ class Dashboard extends Component {
                 this.changeStep(2);
             } else {
                 requests.getRequest('amazonimporter/config/isTrialActive').then(data => {
-                    console.log(data);
                     if(data.success) {
                         if (data.code === 'UNDER_TRIAL') {
                             notify.success(data.message);

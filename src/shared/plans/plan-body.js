@@ -100,17 +100,17 @@ class PlanBody extends Component {
                                         <p className="price-tag">
                                             <span className="price-tag_small">$</span>
                                             0
-                                            <span className="price-tag_small"></span>
+                                            <span className="price-tag_small"> </span>
                                         </p>
                                     </div>
                                     <div className="mb-5"> {/* Button To choose Plan */}
                                         <Button primary={true} fullWidth={true} size="large" onClick={() => this.props.paymentStatus('trial')}>
-                                            Choose Trial Period
+                                            Choose Plan
                                         </Button>
                                     </div>
                                     <div className="mb-5 text-center"> {/* Descriptions For Particular deatails */}
                                         <h1 className="mb-4"><b>Trial Pack</b></h1>
-                                        <h4>Trial Pack Will Be Active For 14 Days</h4>
+                                        <h4>Trial Pack Will Be Active For 10 Days</h4>
                                     </div>
                                     <hr/>
                                     <div className="text-center mt-5"> {/* Services Data */}
@@ -151,7 +151,7 @@ class PlanBody extends Component {
                                             </div>
                                             <div className="mb-5"> {/* Button To choose Plan */}
                                                 <Button primary={true} fullWidth={true} size="large" onClick={this.onSelectPlan.bind(this, data)}>
-                                                    Choose this Plan
+                                                    Choose Plan
                                                 </Button>
                                             </div>
                                             <div className="mb-5 text-center"> {/* Descriptions For Particular deatails */}

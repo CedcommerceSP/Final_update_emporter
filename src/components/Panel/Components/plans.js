@@ -11,6 +11,7 @@ import { Page,
     Label,
     Checkbox, Tooltip, Link, Icon, Modal, RadioButton, Stack, TextField } from '@shopify/polaris';
 import PlanBody from "../../../shared/plans/plan-body";
+import {globalState} from "../../../services/globalstate";
 export class Plans extends Component {
 
     constructor(props) {
@@ -36,7 +37,15 @@ export class Plans extends Component {
             });
         } else {
             notify.info(event);
-            this.checkPayment();
+        }
+    }
+    componentWillUnmount() {
+        if ( globalState.getLocalStorage('trial') ) {
+            requests.getRequest('plan/plan/getActive').then(status => {
+                if ( status.success ) {
+                    globalState.removeLocalStorage('trial');
+                }
+            });
         }
     }
     render() {

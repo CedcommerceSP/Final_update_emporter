@@ -24,7 +24,7 @@ export const panelFunctions = {
             },
             {
                 id: 'import',
-                content: 'Upload Products',
+                content: 'Import Products',
                 accessibilityLabel: 'Import',
                 link: '/panel/import',
                 panelID: 'import'

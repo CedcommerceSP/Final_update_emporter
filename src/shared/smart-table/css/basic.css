@@ -75,3 +75,22 @@ body::-webkit-scrollbar-thumb {
   background-color: darkgrey !important;
   outline: 1px solid slategrey !important;
 }
+
+@media screen and (max-width: 576px) {
+  .table-filers {
+    min-width: 150px !important;
+    max-width: 400px !important;
+  }
+}
+@media screen and (max-width: 1000px) and (min-width: 576px) {
+  .table-filers {
+    min-width: 180px !important;
+    max-width: 400px !important;
+  }
+}
+@media screen and (min-width: 1000px) {
+  .table-filers {
+    max-width: 400px !important;
+    min-width: 80px !important;
+  }
+}
