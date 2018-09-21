@@ -80,11 +80,7 @@ class SmartDataTablePlain extends React.Component {
   }
   componentWillUpdate(nextProps,nextState,nextContext) {
       this.state.selected = nextProps.selected;
-      if ( !isUndefined(nextProps.selected ) && typeof nextProps.selected === 'object') {
-          if ( nextProps.selected.length > 0 ) {
-              this.totalSelected = nextProps.selected.length;
-          }
-      }
+      this.totalSelected = nextProps.selected.length;
       if (nextProps.count !== this.props.count || nextProps.activePage !== this.props.activePage) {
           this.allSelected = false;
       }
