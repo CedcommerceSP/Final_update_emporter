@@ -45,9 +45,9 @@ class SmartDataTablePlain extends React.Component {
   ];
   defaultColumns = [];
   defaultFilters = {};
+  totalSelected = 0;
   constructor(props) {
-    super(props)
-
+    super(props);
     this.state = {
       asyncData: [],
       colProperties: {},
@@ -78,7 +78,17 @@ class SmartDataTablePlain extends React.Component {
     this.handleColumnToggle = this.handleColumnToggle.bind(this);
     this.handleOnPageClick = this.handleOnPageClick.bind(this);
   }
-
+  componentWillUpdate(nextProps,nextState,nextContext) {
+      this.state.selected = nextProps.selected;
+      if ( !isUndefined(nextProps.selected ) && typeof nextProps.selected === 'object') {
+          if ( nextProps.selected.length > 0 ) {
+              this.totalSelected = nextProps.selected.length;
+          }
+      }
+      if (nextProps.count !== this.props.count || nextProps.activePage !== this.props.activePage) {
+          this.allSelected = false;
+      }
+  }
   prepareDefaultColumns() {
       this.defaultColumns = [];
       for (let i = 0; i < this.state.visibleColumns.length; i++) {
@@ -125,7 +135,7 @@ class SmartDataTablePlain extends React.Component {
   }
 
   showWarnings() {
-    const { styled } = this.props
+    const { styled } = this.props;
     const styledError = '[SmartDataTable] The styled prop has been deprecated in v0.5 and is no longer valid.'
     if (styled) console.error(styledError)
   }
@@ -200,16 +210,18 @@ class SmartDataTablePlain extends React.Component {
       if (showCol) {
         return (
           <td key={column.key} style={{verticalAlign:'top'}} className="pl-4">
-            <span>
-              {column.title}
-            </span>
-            <span className='rsdt rsdt-sortable'>
-              {sortable && column.sortable ? this.renderSorting(column) : null}
-            </span>
+            <div style={{'height': '30px'}}>
               <span>
-                  {this.state.showColumnFilters && Object.keys(this.state.columnFilters).length > 0 && this.state.hideFilters.indexOf(column.key) === -1 &&
-                  this.renderColumnFilters(column)}
+                 {column.title}
               </span>
+              <span className='rsdt rsdt-sortable'>
+                  {sortable && column.sortable ? this.renderSorting(column) : null}
+              </span>
+            </div>
+            <div  style={{'height': '50px'}}>
+              {this.state.showColumnFilters && Object.keys(this.state.columnFilters).length > 0 && this.state.hideFilters.indexOf(column.key) === -1 &&
+              this.renderColumnFilters(column)}
+            </div>
           </td>
         )
       }
@@ -226,7 +238,7 @@ class SmartDataTablePlain extends React.Component {
                       onChange={this.allRowSelected.bind(this)}>
                   </Checkbox>
                   <span className="d-block" style={{fontSize: '9px'}}>
-                      {this.state.selected.length} {this.state.selected.length > 1 ? 'rows' : 'row'} selected
+                      {this.totalSelected} {this.totalSelected > 1 ? 'rows' : 'row'} selected
                   </span>
                 </span>
               </td>

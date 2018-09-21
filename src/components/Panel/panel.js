@@ -93,6 +93,11 @@ export class Panel extends Component {
     //     globalState.removeLocalStorage('trial');
     // }
     disableHeader(value) { // disable header
+        if ( !value ) {
+            globalState.removeLocalStorage('trial');
+        } else {
+            this.trialActive();
+        }
         this.setState({header:value});
     }
     menu = panelFunctions.getMenu();

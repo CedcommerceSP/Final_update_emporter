@@ -36,7 +36,7 @@ export class Products extends Component {
     ];
     massActions = [
         {label: 'Delete', value: 'delete'},
-        {label: 'Upload', value: 'upload'}
+        // {label: 'Upload', value: 'upload'}
     ];
     visibleColumns = ['source_product_id', 'main_image', 'title', 'sku', 'price','quantity','source_product_id'];
     imageColumns = ['main_image'];
@@ -57,7 +57,7 @@ export class Products extends Component {
         },
         price: {
             title: 'Price',
-            sortable: true
+            sortable: false
         },
         type: {
             title: 'Type',
@@ -65,7 +65,7 @@ export class Products extends Component {
         },
         quantity: {
             title: 'Quantity',
-            sortable: true
+            sortable: false
         },
         source_product_id: {
             title: 'Detail',
@@ -273,9 +273,12 @@ export class Products extends Component {
                                 <SmartDataTable
                                     data={this.state.products}
                                     uniqueKey="sku"
+                                    count={this.gridSettings.variantsCount}
+                                    activePage={this.gridSettings.activePage}
                                     hideFilters={this.hideFilters}
                                     columnTitles={this.columnTitles}
                                     multiSelect={true}
+                                    gridSettings={this.gridSettings}
                                     customButton={this.customButton} // button
                                     operations={this.operations} //button
                                     selected={this.state.selectedProducts}
@@ -307,19 +310,28 @@ export class Products extends Component {
                                         this.setState(state);
                                     }}
                                     allRowSelected={(event, rows) => {
-                                        this.state.selectedProducts = [];
+                                        // this.state.selectedProducts = [];
+                                        let data = this.state.selectedProducts.slice(0);
                                         if (event) {
                                             for (let i = 0; i < rows.length; i++) {
-                                                this.state.selectedProducts.push(rows[i].sku);
+                                                const itemIndex = this.state.selectedProducts.indexOf(rows[i].sku);
+                                                if ( itemIndex === -1 ) {
+                                                    data.push(rows[i].sku);
+                                                }
+                                            }
+                                        } else {
+                                            for (let i = 0; i < rows.length; i++) {
+                                                if ( data.indexOf(rows[i].sku) !== -1 ) {
+                                                    data.splice(data.indexOf(rows[i].sku), 1)
+                                                }
                                             }
                                         }
-                                        const state = this.state;
-                                        this.setState(state);
+                                        this.setState({selectedProducts: data});
                                     }}
                                     massAction={(event) => {
                                         switch (event) {
                                             case 'upload':this.redirect('/show/progress',this.state.selectedProducts);break;
-                                            default:console.log(event);
+                                            default:console.log(event,this.state.selectedProducts);
                                         }
                                     }}
                                     editRow={(row) => {
@@ -348,6 +360,8 @@ export class Products extends Component {
                                         this.getProducts();
                                     }}
                                     hasNext={this.state.totalPage/this.gridSettings.variantsCount > this.gridSettings.activePage}
+                                    nextKeys={[75]}
+                                    nextTooltip="k"
                                     onNext={() => {
                                         this.gridSettings.activePage++;
                                         this.getProducts();
