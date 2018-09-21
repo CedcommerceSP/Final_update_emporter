@@ -77,7 +77,6 @@ class FAQPage extends Component {
             }
             this.setState({faq: value});
         } catch (e) {
-            console.log(e);
         }
     }
     render() {

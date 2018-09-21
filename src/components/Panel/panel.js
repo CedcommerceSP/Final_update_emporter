@@ -7,8 +7,6 @@ import {
 } from 'react-router-dom';
 
 import { Products } from './Components/products';
-import { CreateProduct } from './Components/products-component/create-product';
-import { EditProduct } from './Components/products-component/edit-product';
 import { Apps } from './Components/apps';
 import { InstallApp } from './Components/apps-component/install-app';
 import { AppInstalled } from './Components/apps-component/app-installed';
@@ -80,8 +78,6 @@ export class Panel extends Component {
                                 if (data.code === 'UNDER_TRIAL') {
                                     this.setState({isTrialActive:true,daysLeft:data.message});
                                     globalState.setLocalStorage('trial',data.message);
-                                } else {
-                                    // this.setState({isTrialActive:false,isTrialActiveClose:false});
                                 }
                             }
                         });
@@ -132,9 +128,7 @@ export class Panel extends Component {
                                 <Route exact path='/panel/products'  render={() => {
                                     return <Products parentProps={this.props} history={history}/>
                                 }}/>
-                                <Route exact path='/panel/products/create' component={CreateProduct}/>
                                 <Route exact path='/panel/products/view/:id' component={ViewProducts}/>
-                                <Route path='/panel/products/edit/:id' component={EditProduct}/>
                                 <Route exact path='/panel/products/analysis' component={Analyticsreporting}/>
                                 <Route exact path='/panel/accounts' component={Apps}/>
                                 <Route exact path='/panel/accounts/connect' component={ConnectedAccounts}/>

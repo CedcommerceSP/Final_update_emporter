@@ -21,6 +21,7 @@ import { isUndefined } from 'util';
 
 export class CreateProfile extends Component {
 
+    isLive = true;
     sourceAttributes = [];
     filteredProducts = {
       runQuery: false,
@@ -364,7 +365,7 @@ export class CreateProfile extends Component {
                     let hasService = false;
                     for (let i = 0; i < Object.keys(data.data).length; i++) {
                         let key = Object.keys(data.data)[i];
-                        if (!data.data[key].usable) {
+                        if (data.data[key].usable || !this.isLive) {
                             hasService = true;
                             this.importServices.push({
                                 label: data.data[key].title,
@@ -410,7 +411,7 @@ export class CreateProfile extends Component {
                     let hasService = false;
                     for (let i = 0; i < Object.keys(data.data).length; i++) {
                         let key = Object.keys(data.data)[i];
-                        if (!data.data[key].usable) {
+                        if (data.data[key].usable || !this.isLive) {
                             hasService = true;
                             this.uploadServices.push({
                                 label: data.data[key].title,

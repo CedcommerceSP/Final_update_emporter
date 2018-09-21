@@ -197,7 +197,6 @@ class Analyticsreporting extends Component {
     };
 
     handleChangeuploadermarketplace = (newValue) => {
-        console.log(newValue);
         this.get_y_axis_uploader(newValue);
         this.setState({selecteduploadermarketplace: newValue});
 

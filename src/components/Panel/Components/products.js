@@ -278,7 +278,6 @@ export class Products extends Component {
                                     hideFilters={this.hideFilters}
                                     columnTitles={this.columnTitles}
                                     multiSelect={true}
-                                    gridSettings={this.gridSettings}
                                     customButton={this.customButton} // button
                                     operations={this.operations} //button
                                     selected={this.state.selectedProducts}

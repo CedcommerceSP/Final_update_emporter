@@ -57,6 +57,8 @@ class SmartDataTablePlain extends React.Component {
       },
       currentPage: 1,
       isLoading: false,
+      count:isUndefined(props.count) ? false : props.multiSelect,
+      activePage:isUndefined(props.activePage) ? false : props.multiSelect,
       multiSelect: isUndefined(props.multiSelect) ? false : props.multiSelect,
       selected: isUndefined(props.selected) ? [] : props.selected,
       columnTitles: isUndefined(props.columnTitles) ? {} : props.columnTitles,
@@ -79,10 +81,14 @@ class SmartDataTablePlain extends React.Component {
     this.handleOnPageClick = this.handleOnPageClick.bind(this);
   }
   componentWillUpdate(nextProps,nextState,nextContext) {
-      this.state.selected = nextProps.selected;
-      this.totalSelected = nextProps.selected.length;
-      if (nextProps.count !== this.props.count || nextProps.activePage !== this.props.activePage) {
-          this.allSelected = false;
+      if ( !isUndefined(nextProps.selected) ) {
+          this.state.selected = nextProps.selected;
+          this.totalSelected = nextProps.selected.length;
+      }
+      if ( !isUndefined(nextProps.count) && !isUndefined(nextProps.activePage) ) {
+          if (nextProps.count !== this.props.count || nextProps.activePage !== this.props.activePage) {
+              this.allSelected = false;
+          }
       }
   }
   prepareDefaultColumns() {

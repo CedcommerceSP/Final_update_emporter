@@ -1,24 +1,14 @@
 import React, { Component } from 'react';
 import './plans-component/plan.css';
 import { requests } from '../../../services/request';
-import { dataGrids, RemoveService } from '../../../shared/plans/plansFuctions';
-import { isUndefined } from 'util';
 import { notify } from '../../../services/notify';
-import { Page,
-    Card,
-    Select,
-    Button,
-    Label,
-    Checkbox, Tooltip, Link, Icon, Modal, RadioButton, Stack, TextField } from '@shopify/polaris';
+import { Page,  Button,} from '@shopify/polaris';
 import PlanBody from "../../../shared/plans/plan-body";
 import {globalState} from "../../../services/globalstate";
 export class Plans extends Component {
 
     constructor(props) {
         super(props);
-    }
-    paymentStatus(event) {
-        console.log(event);
     }
     paymentStatus(event) {
         if ( event === 'Confirmation' ) {

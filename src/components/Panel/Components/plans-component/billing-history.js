@@ -11,14 +11,8 @@ class BillingHistory extends Component {
             open: false,
             open_plan: false,
             data: [
-                // ['28 march 2018 1:59 PM','Starter Plan','Withdrawal','$99'],
-                // ['12 sept 2018 4:48','Advance Plan','Withdrawal','$199'],
-                // ['28 march 2018 1:59 PM','Starter Plan','Withdrawal','$99'],
-                // ['12 sept 2018 4:48','Advance Plan','Withdrawal','$199'],
             ],
             data_secondary: [
-                // ['12 sept 2018 4:48','Advance Plan','Withdrawal','$199'],
-                // ['28 march 2018 1:59 PM','Starter Plan','Withdrawal','$99']
             ],
             data_plan: [
                 ['28 march 2018 1:59 PM','Starter Plan','$99','28','Active'],
@@ -38,7 +32,6 @@ class BillingHistory extends Component {
             {
                 mainarr=[];
                 data.data.forEach(key=>{
-                    console.log(key);
                     let arr=[];
                     arr.push(key['created_at']);
                     arr.push(key['description']);

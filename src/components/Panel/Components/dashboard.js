@@ -49,13 +49,6 @@ class Dashboard extends Component {
             account_linked: [], // merchant center account. linked type
             modalOpen: false,
             /********* Step 3 ends **********/
-            /********* Step 4 **********/
-            // config_API: ['google'],
-            // config: false,
-            // google_configuration: {},
-            // google_configuration_updated: false,
-            // account_information_updated: false,
-            /********* Step 4 Ends **********/
             active_step: {
                 name: '', // anchor name
                 step : 0 // step number
@@ -134,9 +127,6 @@ class Dashboard extends Component {
     };// This Function Used for dropdown Selection
     checkStepCompleted(key) {
         let path = '/App/User/Step';
-        // if ( key === 'Amazon_Shopify' ) {
-        //     path = '/Amazon/Shopify';
-        // }
         requests.getRequest('frontend/app/getStepCompleted', {path: path}).then(data => {
             if ( data.success ) {
                 if ( data.data !== null && !isUndefined(data.data)  ) {
@@ -543,7 +533,6 @@ class Dashboard extends Component {
         });
     }
     openNewWindow(action) {
-        console.log(action);
         this.setState({modalOpen: !this.state.modalOpen, code: action});
     } // Open Modal And A new Small Window For User
     renderLinkedAccount() {
@@ -559,7 +548,6 @@ class Dashboard extends Component {
     /***************************************** step 4 Configurations start here *******************************/
     checkConfig(val) {
         requests.getRequest('frontend/app/checkDefaultConfiguration?code=' + val).then(data => {
-            console.log(data);
             if ( data.success ) {
                 if ( data.data.configFilled ) {
                     if ( val !== 'shopify' ) {

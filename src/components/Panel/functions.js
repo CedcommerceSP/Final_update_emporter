@@ -57,13 +57,13 @@ export const panelFunctions = {
                 link: '/panel/queuedtasks',
                 panelID: 'queuedtasks'
             },
-            {
-                id: 'help',
-                content: 'Help',
-                accessibilityLabel: 'HELP',
-                link: '/panel/help',
-                panelID: 'help'
-            }
+            // {
+            //     id: 'help',
+            //     content: 'Help',
+            //     accessibilityLabel: 'HELP',
+            //     link: '/panel/help',
+            //     panelID: 'help'
+            // }
         ];
         return menu;
     }

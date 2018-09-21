@@ -24,7 +24,6 @@ class ReportAnIssue extends Component {
         });
     }
     submit() {
-        console.log(this.state);
         let data = {
             body:'',
             subject:this.state.subject

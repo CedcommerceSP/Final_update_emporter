@@ -1,10 +1,6 @@
 import React, { Component } from 'react';
 
-import { Button,
-         Page,
-         Card ,
-    AccountConnection,
-    AppProvider} from '@shopify/polaris';
+import { Page, AccountConnection } from '@shopify/polaris';
 import { requests } from '../../../services/request';
 import { notify } from '../../../services/notify';
 
@@ -81,19 +77,3 @@ export class Apps extends Component {
         this.props.history.push(url);
     }
 }
-{/*<Card*/}
-    {/*// accountName={app.code}*/}
-    {/*// connected={true}*/}
-{/*>*/}
-    {/*<div className="row p-5">*/}
-        {/*<div className="col-6">*/}
-            {/*<h2>{app.title}</h2>*/}
-        {/*</div>*/}
-        {/*<div className="col-6 text-right">*/}
-            {/*<Button primary onClick = {() =>this.installApp.bind(this,app.code)}>*/}
-                {/*{app['installed']==0?'Connect':'ReConnect'}</Button></div>*/}
-        {/*<div className="p-4">*/}
-            {/*<img src={app.image} alt={app.title}/>*/}
-        {/*</div>*/}
-    {/*</div>*/}
-{/*</Card>*/}

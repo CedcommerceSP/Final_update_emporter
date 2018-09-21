@@ -3,12 +3,10 @@ import React, { Component } from 'react';
 import { Page,
          Select,
          Pagination,
-         ResourceList,
          Card } from '@shopify/polaris';
 
 import { requests } from '../../../services/request';
 import { notify } from '../../../services/notify';
-import { globalState } from '../../../services/globalstate';
 import SmartDataTable from '../../../shared/smart-table';
 
 export class Profiling extends Component {
@@ -127,6 +125,8 @@ export class Profiling extends Component {
                             data={this.state.profiles}
                             multiSelect={false}
                             className='ui compact selectable table'
+                            count={this.gridSettings.variantsCount}
+                            activePage={this.gridSettings.activePage}
                             visibleColumns={this.visibleColumns}
                             customButton={this.customButton} // button
                             operations={this.operations} //button
@@ -179,17 +179,6 @@ export class Profiling extends Component {
         this.gridSettings.count = event;
         this.gridSettings.activePage = 1;
         this.getProfiles();
-    }
-
-    addSearchFilter(searchValue) {
-        const state = this.state;
-        state.searchValue = searchValue;
-        this.setState(state);
-        if (searchValue !== null &&
-            searchValue !== '') {
-            this.filters['title'] = searchValue;
-            this.getProfiles();
-        }
     }
 
     updateState() {
