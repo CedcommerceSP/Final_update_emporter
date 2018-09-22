@@ -402,7 +402,8 @@ export class Products extends Component {
                 {data: data,marketPlace:'amazon',chunk:1}
             );
         } else {
-            this.props.history.push(url);
+            console.log(this.props);
+            this.props.parentProps.history.push(url);
         }
     }
 }

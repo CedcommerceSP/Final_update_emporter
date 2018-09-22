@@ -16,7 +16,7 @@ import registerServiceWorker from './registerServiceWorker';
 
 ReactDOM.render((
     <div style={{height: '100%'}}>
-        <BrowserRouter basename="/importer/app">
+        <BrowserRouter basename="/importer/app" forceRefresh={false}>
             <App />
         </BrowserRouter>
         <ToastContainer />

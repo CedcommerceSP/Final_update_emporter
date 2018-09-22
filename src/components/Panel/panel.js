@@ -100,7 +100,6 @@ export class Panel extends Component {
     menu = panelFunctions.getMenu();
     render() {
         return (
-            <BrowserRouter history={history} basename="/importer/app">
                 <div className="container-fluid app-panel-container">
                     <div className="row">
                         {this.state.isTrialActive && this.state.isTrialActiveClose && globalState.getLocalStorage('trial')?<div className="col-12 text-center" style={style.trial}>
@@ -116,7 +115,7 @@ export class Panel extends Component {
                         </div>:null}
                         <div className="col-12">
                             <div className="app-header">
-                                {this.state.header?<Header menu={this.menu} history={history}/>:null}
+                                {this.state.header?<Header menu={this.menu} history={this.props.history}/>:null}
                             </div>
                         </div>
                     </div>
@@ -127,7 +126,7 @@ export class Panel extends Component {
                                     <Redirect to="/panel/dashboard"/>
                                 )}/>
                                 <Route exact path='/panel/products'  render={() => {
-                                    return <Products parentProps={this.props} history={history}/>
+                                    return <Products parentProps={this.props} history={this.props.history}/>
                                 }}/>
                                 <Route exact path='/panel/products/view/:id' component={ViewProducts}/>
                                 <Route exact path='/panel/products/analysis' component={Analyticsreporting}/>
@@ -149,7 +148,7 @@ export class Panel extends Component {
                                 <Route exact path='/panel/help' component={FAQPage}/>
                                 <Route exact path='/panel/help/report' component={ReportAnIssue}/>
                                 <Route exact path='/panel/dashboard' render={() => {
-                                    return <Dashboard disableHeader={this.disableHeader} parentProps={this.props} history={history}/>
+                                    return <Dashboard disableHeader={this.disableHeader} parentProps={this.props} history={this.props.history}/>
                                 }}/>
                                 <Route exact path="**" render={() => (
                                     <Redirect to="/panel/dashboard"/>
@@ -158,7 +157,6 @@ export class Panel extends Component {
                         </div>
                     </div>
                 </div>
-            </BrowserRouter>
         );
     }
 }
