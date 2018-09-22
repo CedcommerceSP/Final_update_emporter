@@ -1,6 +1,7 @@
 {
   "name": "react-routing",
   "version": "0.1.0",
+  "homepage": "/importer/app/",
   "private": true,
   "dependencies": {
     "@crossfield/react-read-more": "0.0.4",

@@ -3,7 +3,8 @@ import {
     Route,
     Switch,
     Redirect,
-    Router
+    Router,
+    BrowserRouter
 } from 'react-router-dom';
 
 import { Products } from './Components/products';
@@ -99,7 +100,7 @@ export class Panel extends Component {
     menu = panelFunctions.getMenu();
     render() {
         return (
-            <Router history={history}>
+            <BrowserRouter history={history} basename="/importer/app">
                 <div className="container-fluid app-panel-container">
                     <div className="row">
                         {this.state.isTrialActive && this.state.isTrialActiveClose && globalState.getLocalStorage('trial')?<div className="col-12 text-center" style={style.trial}>
@@ -157,7 +158,7 @@ export class Panel extends Component {
                         </div>
                     </div>
                 </div>
-            </Router>
+            </BrowserRouter>
         );
     }
 }
