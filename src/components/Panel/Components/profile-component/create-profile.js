@@ -19,9 +19,10 @@ import { requests } from '../../../../services/request';
 import { capitalizeWord } from '../static-functions';
 import { isUndefined } from 'util';
 
+import { environment } from '../../../../environments/environment';
+
 export class CreateProfile extends Component {
 
-    isLive = true;
     sourceAttributes = [];
     filteredProducts = {
       runQuery: false,
@@ -365,7 +366,7 @@ export class CreateProfile extends Component {
                     let hasService = false;
                     for (let i = 0; i < Object.keys(data.data).length; i++) {
                         let key = Object.keys(data.data)[i];
-                        if (data.data[key].usable || !this.isLive) {
+                        if (data.data[key].usable || !environment.isLive) {
                             hasService = true;
                             this.importServices.push({
                                 label: data.data[key].title,
@@ -411,7 +412,7 @@ export class CreateProfile extends Component {
                     let hasService = false;
                     for (let i = 0; i < Object.keys(data.data).length; i++) {
                         let key = Object.keys(data.data)[i];
-                        if (data.data[key].usable || !this.isLive) {
+                        if (data.data[key].usable || !environment.isLive) {
                             hasService = true;
                             this.uploadServices.push({
                                 label: data.data[key].title,
@@ -1344,8 +1345,7 @@ export class CreateProfile extends Component {
     }
 
     validateStepTwo() {
-        if ( // this.state.products_select.targetCategory === '' ||
-            this.state.products_select.query === '') {
+        if (this.state.products_select.query === '') {
             return false;
         } else {
             for (let i = 0; i < this.state.products_select.marketplaceAttributes.length; i++) {

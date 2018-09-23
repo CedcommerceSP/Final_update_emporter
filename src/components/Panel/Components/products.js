@@ -5,7 +5,7 @@ import { Page,
          Card,
          Select,
          Pagination,
-         TextStyle,
+         Label,
          ResourceList,
          Modal,
          TextContainer,
@@ -28,20 +28,20 @@ export class Products extends Component {
       activePage: 1
     };
     pageLimits = [
-        {label: 5, value: 5},
         {label: 10, value: 10},
-        {label: 15, value: 15},
         {label: 20, value: 20},
-        {label: 25, value: 25}
+        {label: 30, value: 30},
+        {label: 40, value: 40},
+        {label: 50, value: 50}
     ];
     massActions = [
         {label: 'Delete', value: 'delete'},
         // {label: 'Upload', value: 'upload'}
     ];
-    visibleColumns = ['source_product_id', 'main_image', 'title', 'sku', 'price','quantity','source_product_id'];
+    visibleColumns = ['source_product_id', 'main_image', 'title', 'sku', 'price','quantity','asin'];
     imageColumns = ['main_image'];
-    hideFilters = ['main_image' ,'long_description','type','source_product_id'];
-    customButton = ['source_product_id']; // button
+    hideFilters = ['main_image' ,'long_description','type', 'asin'];
+    customButton = ['asin']; // button
     columnTitles = {
         main_image: {
             title: 'Image',
@@ -68,12 +68,17 @@ export class Products extends Component {
             sortable: false
         },
         source_product_id: {
+            title: 'ASIN',
+            sortable:false,
+        },
+        asin: {
             title: 'Detail',
             label:'View', // button Label
-            id:'source_product_id',
+            id:'asin',
             sortable:false,
         },
     };
+    totalProductCount = 0;
 
     constructor() {
         super();
@@ -127,6 +132,7 @@ export class Products extends Component {
                 if (data.success) {
                     this.setState({totalPage:data.data.count});
                     const products = this.modifyProductsData(data.data.rows);
+                    this.totalProductCount = data.data.count;
                     this.state['products'] = products;
                     this.updateState();
                 } else {
@@ -180,6 +186,7 @@ export class Products extends Component {
                 rowData['type'] = data[i].details.type;
                 rowData['quantity'] = data[i].variants['quantity'] !== null?data[i].variants['quantity'].toString():'0';
                 rowData['source_product_id'] = data[i].variants.source_variant_id.toString();
+                rowData['asin'] = data[i].variants.source_variant_id.toString();
                 products.push(rowData);
             }
         }
@@ -187,7 +194,7 @@ export class Products extends Component {
     }
     operations = (event, id) => {
         switch (id) {
-            case 'source_product_id':this.redirect('/panel/products/view/' + event);break;
+            case 'asin':this.redirect('/panel/products/view/' + event);break;
             default:console.log('Default Case');
         }
     };
@@ -251,23 +258,13 @@ export class Products extends Component {
                         <ResourceList
                             items={['products']}
                             renderItem={item => {}}
-                            filterControl={
-                                <ResourceList.FilterControl
-                                    searchValue={this.filters.full_text_search}
-                                    onSearchChange={(searchValue) => {
-                                        this.filters.full_text_search = searchValue;
-                                        this.updateState();
-                                    }}
-                                    additionalAction={{
-                                        content: 'Search',
-                                        onAction: () => this.getProducts()
-                                    }}
-                                />
-                            }
                         />
                         <div className="row">
                             <div className="col-12">
                                 <Tabs tabs={this.state.installedApps} selected={this.state.selectedApp} onSelect={this.handleMarketplaceChange.bind(this)}/>
+                            </div>
+                            <div className="col-12 p-3 text-right">
+                                <Label>Total {this.totalProductCount} products</Label>
                             </div>
                             <div className="col-12">
                                 <SmartDataTable
@@ -277,14 +274,14 @@ export class Products extends Component {
                                     activePage={this.gridSettings.activePage}
                                     hideFilters={this.hideFilters}
                                     columnTitles={this.columnTitles}
-                                    multiSelect={true}
+                                    multiSelect={false}
                                     customButton={this.customButton} // button
                                     operations={this.operations} //button
                                     selected={this.state.selectedProducts}
                                     className='ui compact selectable table'
                                     withLinks={true}
                                     visibleColumns={this.visibleColumns}
-                                    actions={this.massActions}
+                                    // actions={this.massActions}
                                     showColumnFilters={true}
                                     imageColumns={this.imageColumns}
                                     rowActions={{

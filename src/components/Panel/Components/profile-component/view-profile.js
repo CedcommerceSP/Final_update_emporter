@@ -87,60 +87,63 @@ class ViewProfile extends Component {
                                     );
                                 })}
                             </div>
-                            <div className="p-5">
-                                <Card title="Attribute Mapping">
-                                    <div className="row pr-5 pl-5 pt-5">
-                                        <div className="col-3 text-center d-none d-sm-block">
-                                            <h2>Shopify</h2>
+                            {
+                                this.state.attributeMapping.length > 0 &&
+                                <div className="p-5">
+                                    <Card title="Attribute Mapping">
+                                        <div className="row pr-5 pl-5 pt-5">
+                                            <div className="col-3 text-center d-none d-sm-block">
+                                                <h3>Shopify</h3>
+                                            </div>
+                                            <div className="offset-1 col-3 text-center d-none d-sm-block">
+                                                <h3>Amazon</h3>
+                                            </div>
+                                            <div className="offset-1 col-3 text-center d-none d-sm-block">
+                                                <h3>Default Value</h3>
+                                            </div>
+                                            <div className="col-12 d-none d-sm-block">
+                                                <hr/>
+                                            </div>
                                         </div>
-                                        <div className="offset-1 col-3 text-center d-none d-sm-block">
-                                            <h2>Amazon</h2>
-                                        </div>
-                                        <div className="offset-1 col-3 text-center d-none d-sm-block">
-                                            <h2>Default Value</h2>
-                                        </div>
-                                        <div className="col-12 d-none d-sm-block">
-                                            <hr/>
-                                        </div>
-                                    </div>
-                                    <div className="p-5">
-                                        {this.state.attributeMapping.map((data, key) => {
-                                            return (
-                                                <React.Fragment key={key}>
-                                                    <Card>
-                                                        <div className="row p-4 text-center">
-                                                            <div className="col-sm-3 col-12">
-                                                                <h4>{data.target}</h4>
-                                                                <span className="d-block d-sm-none" style={{color:'#b4afb0'}}>
+                                        <div className="p-5">
+                                            {this.state.attributeMapping.map((data, key) => {
+                                                return (
+                                                    <React.Fragment key={key}>
+                                                        <Card>
+                                                            <div className="row p-4 text-center">
+                                                                <div className="col-sm-3 col-12">
+                                                                    <h4>{data.target}</h4>
+                                                                    <span className="d-block d-sm-none" style={{color:'#b4afb0'}}>
                                                                     <h6>(Google)</h6>
                                                                 </span>
-                                                            </div>
-                                                            <div className="col-sm-1 col-12 text-center">
-                                                                <FontAwesomeIcon icon={faArrowsAltH} size="2x" color="#000"/>
-                                                            </div>
-                                                            <div className="col-sm-3 col-12 text-center">
-                                                                {data.source !== '-'?<h4>{data.source}</h4>:<FontAwesomeIcon icon={faMinus} size="2x" color="#cccccc"/>}
-                                                                <span className="d-block d-sm-none" style={{color:'#b4afb0'}}>
+                                                                </div>
+                                                                <div className="col-sm-1 col-12 text-center">
+                                                                    <FontAwesomeIcon icon={faArrowsAltH} size="2x" color="#000"/>
+                                                                </div>
+                                                                <div className="col-sm-3 col-12 text-center">
+                                                                    {data.source !== '-'?<h4>{data.source}</h4>:<FontAwesomeIcon icon={faMinus} size="2x" color="#cccccc"/>}
+                                                                    <span className="d-block d-sm-none" style={{color:'#b4afb0'}}>
                                                                     <h6>(Shopify)</h6>
                                                                 </span>
-                                                            </div>
-                                                            <div className="col-sm-1 col-12 text-center">
-                                                                <FontAwesomeIcon icon={faArrowsAltH} size="2x" color="#000"/>
-                                                            </div>
-                                                            <div className="col-sm-3 col-12 text-center">
-                                                                {data.default !== '-'?<h4>{data.default}</h4>:<FontAwesomeIcon icon={faMinus} size="2x" color="#cccccc"/>}
-                                                                <span className="d-block d-sm-none" style={{color:'#b4afb0'}}>
+                                                                </div>
+                                                                <div className="col-sm-1 col-12 text-center">
+                                                                    <FontAwesomeIcon icon={faArrowsAltH} size="2x" color="#000"/>
+                                                                </div>
+                                                                <div className="col-sm-3 col-12 text-center">
+                                                                    {data.default !== '-'?<h4>{data.default}</h4>:<FontAwesomeIcon icon={faMinus} size="2x" color="#cccccc"/>}
+                                                                    <span className="d-block d-sm-none" style={{color:'#b4afb0'}}>
                                                                     <h6>(Default Value)</h6>
                                                                 </span>
+                                                                </div>
                                                             </div>
-                                                        </div>
-                                                    </Card>
-                                                </React.Fragment>
-                                            );
-                                        })}
-                                    </div>
-                                </Card>
-                            </div>
+                                                        </Card>
+                                                    </React.Fragment>
+                                                );
+                                            })}
+                                        </div>
+                                    </Card>
+                                </div>
+                            }
                             <div className="p-5">
                                 <Card title="MarketPlace Mapping">
                                     <div className="p-5">

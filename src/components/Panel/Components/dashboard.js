@@ -354,6 +354,7 @@ class Dashboard extends Component {
                                     <TextField
                                         value={this.state.info.mobile}
                                         minLength={5}
+                                        maxLength={14}
                                         error={this.state.info_error.mobile?'Field Is Empty':null}
                                         onChange={this.handleFormChange.bind(this,'mobile')}
                                         label="Phone Number:"

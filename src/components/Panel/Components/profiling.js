@@ -3,6 +3,7 @@ import React, { Component } from 'react';
 import { Page,
          Select,
          Pagination,
+         Label,
          Card } from '@shopify/polaris';
 
 import { requests } from '../../../services/request';
@@ -16,14 +17,14 @@ export class Profiling extends Component {
     };
     gridSettings = {
         activePage: 1,
-        count: 5
+        count: 10
     };
     pageLimits = [
-        {label: 5, value: 5},
         {label: 10, value: 10},
-        {label: 15, value: 15},
         {label: 20, value: 20},
-        {label: 25, value: 25}
+        {label: 30, value: 30},
+        {label: 40, value: 40},
+        {label: 50, value: 50}
     ];
     visibleColumns = ['name', 'source', 'target', 'query','profile_id'];
     customButton = ['profile_id']; // button
@@ -56,6 +57,7 @@ export class Profiling extends Component {
             sortable:false,
         }
     };
+    totalProfiles = 0;
 
     constructor() {
         super();
@@ -79,6 +81,7 @@ export class Profiling extends Component {
                 if (data.success) {
                     this.setState({totalPage:data.data.count});
                     this.state['profiles'] = this.modifyProfilesData(data.data.rows);
+                    this.totalProfiles = data.data.count;
                     this.updateState();
                 } else {
                     notify.error(data.message);
@@ -121,32 +124,37 @@ export class Profiling extends Component {
                 title="Import Profiles">
                 <Card>
                     <div className="p-5">
-                        <SmartDataTable
-                            data={this.state.profiles}
-                            multiSelect={false}
-                            className='ui compact selectable table'
-                            count={this.gridSettings.variantsCount}
-                            activePage={this.gridSettings.activePage}
-                            visibleColumns={this.visibleColumns}
-                            customButton={this.customButton} // button
-                            operations={this.operations} //button
-                            getVisibleColumns={(event) => {
-                                this.visibleColumns = event;
-                            }}
-                            hideFilters={this.hideFilters}
-                            columnTitles={this.columnTitles}
-                            showColumnFilters={true}
-                            rowActions={{
-                                edit: false,
-                                delete: false
-                            }}
-                            columnFilters={(filters) => {
-                                this.filters.column_filters = filters;
-                                this.getProfiles();
-                            }}
-                            sortable
-                        />
                         <div className="row mt-3">
+                            <div className="col-12 p-3 text-right">
+                                <Label>Total {this.totalProfiles} profiles</Label>
+                            </div>
+                            <div className="col-12">
+                                <SmartDataTable
+                                    data={this.state.profiles}
+                                    multiSelect={false}
+                                    className='ui compact selectable table'
+                                    count={this.gridSettings.variantsCount}
+                                    activePage={this.gridSettings.activePage}
+                                    visibleColumns={this.visibleColumns}
+                                    customButton={this.customButton} // button
+                                    operations={this.operations} //button
+                                    getVisibleColumns={(event) => {
+                                        this.visibleColumns = event;
+                                    }}
+                                    hideFilters={this.hideFilters}
+                                    columnTitles={this.columnTitles}
+                                    showColumnFilters={true}
+                                    rowActions={{
+                                        edit: false,
+                                        delete: false
+                                    }}
+                                    columnFilters={(filters) => {
+                                        this.filters.column_filters = filters;
+                                        this.getProfiles();
+                                    }}
+                                    sortable
+                                />
+                            </div>
                             <div className="col-6 text-right">
                                 <Pagination
                                     hasPrevious={1 < this.gridSettings.activePage}

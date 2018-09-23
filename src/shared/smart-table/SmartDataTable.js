@@ -216,9 +216,9 @@ class SmartDataTablePlain extends React.Component {
               <span>
                  {column.title}
               </span>
-              <span className='rsdt rsdt-sortable'>
+              {/*<span className='rsdt rsdt-sortable'>
                   {sortable && column.sortable ? this.renderSorting(column) : null}
-              </span>
+              </span>*/}
             </div>
             <div  style={{'height': '50px'}}>
               {this.state.showColumnFilters && Object.keys(this.state.columnFilters).length > 0 && this.state.hideFilters.indexOf(column.key) === -1 &&

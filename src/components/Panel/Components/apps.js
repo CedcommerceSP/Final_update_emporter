@@ -1,10 +1,11 @@
 import React, { Component } from 'react';
 
-import { Page, AccountConnection } from '@shopify/polaris';
+import { Page,
+        AccountConnection,
+        Button,
+        Card } from '@shopify/polaris';
 import { requests } from '../../../services/request';
 import { notify } from '../../../services/notify';
-
-
 
 export class Apps extends Component {
 
@@ -47,17 +48,18 @@ export class Apps extends Component {
                                 return (
                                     <div className="col-12" key={this.state.apps.indexOf(app)}>
                                         <div className="col-12" key={this.state.apps.indexOf(app)}>
-                                            <AccountConnection
-                                                accountName={app.code}
-                                                connected={false}
-                                                title={app.title}
-                                                action={{
-                                                    content:app['installed']==0?'Connect':'ReConnect',
-                                                    onClick: this.installApp.bind(this,app.code)
-                                                }}
-                                                details={app['installed']==0?'Connect Now':'Already Connected'}
-                                                termsOfService={<img src={app.image} alt={app.title}/>}
-                                            />
+                                            <Card title={app.title}>
+                                                <div className="row">
+                                                    <div className="col-12 text-right">
+                                                        <Button onClick={() => {
+                                                            this.installApp(app.code);
+                                                        }} primary>{app['installed']==0?'Connect':'ReConnect'}</Button>
+                                                    </div>
+                                                    <div className="col-12">
+                                                        <img src={app.image} alt={app.title}/>
+                                                    </div>
+                                                </div>
+                                            </Card>
                                         </div>
                                     </div>
                                 );

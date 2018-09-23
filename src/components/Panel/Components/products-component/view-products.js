@@ -31,14 +31,14 @@ class ViewProducts extends Component {
         };
     }
     componentWillMount() {
-        requests.postRequest('google/app/getUploadedProductById',{'variant_id': this.state.id})
+        requests.postRequest('connector/product/getProductById',{'id': this.state.id})
             .then(data => {
                 if ( data.success ) {
                     let temp = this.state;
                     temp.img = data.data.variants.main_image;
                     temp.products_top = {
                         title:data.data.details.title,
-                        description:data.data.details.short_description
+                        description:data.data.details.long_description
                     };
                     temp.products_middle = {
                         sku:data.data.variants.sku,
@@ -47,9 +47,11 @@ class ViewProducts extends Component {
                         weight:data.data.variants.weight,
                         weight_unit: data.data.variants.weight_unit,
                     };
-                    data.data.variant_attributes.forEach(e => {
-                        temp.products_middle_additional[e.toLowerCase()] = data.data.variants[e.toLowerCase()];
-                    });
+                    if (!isUndefined(data.data.variant_attributes)) {
+                        data.data.variant_attributes.forEach(e => {
+                            temp.products_middle_additional[e.toLowerCase()] = data.data.variants[e.toLowerCase()];
+                        });
+                    }
                     Object.keys(data.data.variants).forEach(keys => {
                         if ( isUndefined(temp.products_middle[keys]) && isUndefined(temp.products_middle_additional[keys.toLowerCase()])) {
                             temp.products_bottom[keys] =!isUndefined(data.data.variants[keys]) && data.data.variants[keys] !== null ?data.data.variants[keys].toString():'';
@@ -70,8 +72,8 @@ class ViewProducts extends Component {
                     <div className="p-5 row">
                         <div className="col-12 col-sm-4 mb-5" >
                             <Card>
-                                <div className="p-3" style={{height:'200px'}}>
-                                    <img src={this.state.img} alt="Product Image" className="img-show"/>
+                                <div className="p-3">
+                                    <img src={this.state.img} height="200px" alt="Product Image" className="img-show"/>
                                 </div>
                             </Card>
                         </div>
