@@ -62,11 +62,13 @@ export class Import extends Component {
                    for (let i = 0; i < Object.keys(data.data).length; i++) {
                        let key = Object.keys(data.data)[i];
                        if (!data.data[key].usable || !environment.isLive) {
-                           this.state.importServicesList.push({
-                               label: data.data[key].title,
-                               value: data.data[key].marketplace,
-                               shops: data.data[key].shops
-                           });
+                           if ( data.data[key].code !== 'shopify_importer' ) {
+                               this.state.importServicesList.push({
+                                   label: data.data[key].title,
+                                   value: data.data[key].marketplace,
+                                   shops: data.data[key].shops
+                               });
+                           }
                        }
                    }
                    this.updateState();

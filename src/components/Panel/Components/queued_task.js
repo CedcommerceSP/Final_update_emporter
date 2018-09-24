@@ -70,7 +70,7 @@ export class QueuedTask extends Component {
         return (
             <Page
                 title="Queued Tasks">
-                <div className="row p-5">
+                <div className="row p-sm-5 p-0">
                     <div className="col-12">
                         <Card>
                             <Banner title="Recent Activities">
@@ -111,7 +111,7 @@ export class QueuedTask extends Component {
                             </Banner>
                         </Card>
                     </div>
-                    <div className="col-12 p-5">
+                    <div className="col-12 p-sm-5 p-0">
                         <Card title="Currently Running Processes">
                             <div className="p-5">
                                 {

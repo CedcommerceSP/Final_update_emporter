@@ -110,12 +110,14 @@ export class Products extends Component {
                 ];
                 if (data.success) {
                     for (let i = 0; i < data.data.length; i++) {
-                        this.state.installedApps.push({
-                            id: data.data[i].code,
-                            content: data.data[i].title,
-                            accessibilityLabel: data.data[i].title,
-                            panelID: data.data[i].code
-                        });
+                        if ( data.data[i].code !== 'shopify' ) {
+                            this.state.installedApps.push({
+                                id: data.data[i].code,
+                                content: data.data[i].title,
+                                accessibilityLabel: data.data[i].title,
+                                panelID: data.data[i].code
+                            });
+                        }
                     }
                 } else {
                     notify.error(data.message);
