@@ -62,11 +62,13 @@ export class Import extends Component {
                    for (let i = 0; i < Object.keys(data.data).length; i++) {
                        let key = Object.keys(data.data)[i];
                        if (!data.data[key].usable || !environment.isLive) {
-                           this.state.importServicesList.push({
-                               label: data.data[key].title,
-                               value: data.data[key].marketplace,
-                               shops: data.data[key].shops
-                           });
+                           if ( data.data[key].code !== 'shopify_importer' ) {
+                               this.state.importServicesList.push({
+                                   label: data.data[key].title,
+                                   value: data.data[key].marketplace,
+                                   shops: data.data[key].shops
+                               });
+                           }
                        }
                    }
                    this.updateState();
@@ -513,12 +515,12 @@ export class Import extends Component {
                 <div className="row">
                     <div className="col-12 p-3">
                         <Banner title="Please Read" status="info">
-                            <Label>In order to upload your products from source marketplace to the marketplace on which you want to upload, kindly import your products from the source by clicking on 'Import Products', and then upload your products by clicking on 'Upload Products'.<a href="javascript:void(0)" onClick={this.handleModalChange}>Click Here</a></Label>
+                            <Label>In order to upload your products from source marketplace to Shopify, kindly import your products from the source by clicking on 'Import Products', and then upload your products on Shopify by clicking on 'Upload Products'.<a href="javascript:void(0)" onClick={this.handleModalChange}>Click Here</a></Label>
                         </Banner>
                     </div>
                     <div className="col-12 p-3">
                         <Banner status="warning">
-                            <Label>Please make sure that you have bought the desired plan before uploading your products to the marketplace you want. You can check your active integrations <NavLink to="/panel/integration">here</NavLink>. You can choose a plan for your requirement from <NavLink to="/panel/plans">here</NavLink>.</Label>
+                            <Label>Please make sure that you have selected a plan to import your products. You can choose a plan for your requirement from <NavLink to="/panel/plans">here</NavLink> and you can check your active plan from <NavLink to='/panel/plans/current'>here</NavLink></Label>
                         </Banner>
                     </div>
                     <div className="col-md-6 col-sm-6 col-12 p-3">

@@ -66,10 +66,17 @@ class PlanBody extends Component {
             }
         });
         data1 = Object.assign({},RemoveService(Object.assign({},newArg), value.slice(0))); // Change the plan in Desire Format
+        let win = window.open('', '_blank', 'location=yes,height=600,width=550,scrollbars=yes,status=yes');
         requests.postRequest('plan/plan/choose',data1).then(data => {
             if (data.success) {
-                this.getSchema(data.data, data1); // open Modal For Payment Procedure
+                if ( !isUndefined(data.data.confirmation_url )) {
+                    win.location = data.data.confirmation_url;
+                } else {
+                    win.close();
+                    this.getSchema(data.data, data1); // open Modal For Payment Procedure
+                }
             } else {
+                win.close();
                 notify.error(data.message);
             }
         });

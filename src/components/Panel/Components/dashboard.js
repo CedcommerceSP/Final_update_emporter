@@ -133,6 +133,9 @@ class Dashboard extends Component {
                     let temp = this.state.stepData;
                     let anchor = '';
                     let flag = true;
+                    if ( parseInt(data.data) === 0 ) {
+                        requests.getRequest('shopifygql/setup/shopifydetails').then();
+                    }
                     temp.forEach((keys, index) => {
                         if ( index < parseInt(data.data) ) { // if  ( step here < no of step completed )
                             keys.stepperActive = true;
@@ -188,7 +191,7 @@ class Dashboard extends Component {
                     this.props.disableHeader(true);
                     setTimeout(() => {
                         this.redirect('/panel/import');
-                    },1500);
+                    },1000);
                 }
             }
         });
@@ -295,7 +298,6 @@ class Dashboard extends Component {
             requests.getRequest('core/user/updateuser', this.state.info).then(data => {
                 if (data.success) {
                     notify.success(data.message);
-                    requests.getRequest('shopifygql/setup/shopifydetails').then();
                     this.changeStep(1); // pass the step number
                 } else {
                     notify.error(data.message);
@@ -527,6 +529,8 @@ class Dashboard extends Component {
                 if ( data.data.account_connected ) {
                     notify.success('Account Connected Success');
                     this.changeStep(3);
+                } else {
+                    notify.info('Please Fill The Form');
                 }
             } else {
                 notify.error(data.message);
@@ -577,7 +581,7 @@ class Dashboard extends Component {
     render() {
         return (
             <Page
-                title="Dashboard">
+                title="Home">
                 {this.state.welcome_screen?
                     <Card>
                         <div>
@@ -593,7 +597,7 @@ class Dashboard extends Component {
                         <Modal
                             open={this.state.modalOpen}
                             onClose={this.handleModalChange.bind(this,'no',this.state.active_step)}
-                            title="Connected Account"
+                            title="Connect Account"
                         >
                             <Modal.Section>
                                 <InstallAppsShared history={history} redirect={this.redirectResult} code={this.state.code}/>

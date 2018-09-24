@@ -371,13 +371,16 @@ export class CreateProfile extends Component {
                         let key = Object.keys(data.data)[i];
                         if (data.data[key].usable || !environment.isLive) {
                             hasService = true;
-                            this.importServices.push({
-                                label: data.data[key].title,
-                                value: data.data[key].marketplace,
-                                shops: data.data[key].shops
-                            });
+                            if ( data.data[key].title.toLowerCase() !== 'shopify' ) {
+                                this.importServices.push({
+                                    label: data.data[key].title,
+                                    value: data.data[key].marketplace,
+                                    shops: data.data[key].shops
+                                });
+                            }
                         }
                     }
+                    this.state.basicDetails.source !== ''?this.handleBasicDetailsChange('source', this.state.basicDetails.source):null;
                     this.updateState();
                     if (!hasService) {
                         // requests.getRequest('amazonimporter/config/isTrialActive').then(data => {
@@ -424,6 +427,7 @@ export class CreateProfile extends Component {
                             });
                         }
                     }
+                    this.handleBasicDetailsChange('target', 'shopifygql');
                     this.updateState();
                     if (!hasService) {
                         notify.error('You have no available product upload service. Please choose a plan for the plan you want to sell product on.');
@@ -716,7 +720,7 @@ export class CreateProfile extends Component {
             <div className="row">
                 <div className="col-12 pt-1 pb-1">
                     <Banner title="General Info" status="info">
-                        <Label>Before creating a profile please make sure that you have imported products from the source first. To import product goto <NavLink to="/panel/import">Upload Products</NavLink></Label>
+                        <Label>Before creating a profile please make sure that you have imported products from the source first. To import your products goto <NavLink to="/panel/import">Import Products</NavLink></Label>
                     </Banner>
                 </div>
                 <div className="col-12 pt-1 pb-1">
@@ -743,7 +747,6 @@ export class CreateProfile extends Component {
                         <Select
                             label="Shop from which product to send"
                             options={this.importShopLists}
-                            placeholder="Source Shop"
                             onChange={this.handleBasicDetailsChange.bind(this, 'sourceShop')}
                             value={this.state.basicDetails.sourceShop}
                         />
@@ -754,6 +757,7 @@ export class CreateProfile extends Component {
                         label="Upload Products To"
                         options={this.uploadServices}
                         placeholder="Product Target"
+                        disabled={true}
                         onChange={this.handleBasicDetailsChange.bind(this, 'target')}
                         value={this.state.basicDetails.target}
                     />

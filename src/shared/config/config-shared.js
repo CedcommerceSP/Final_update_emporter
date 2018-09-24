@@ -123,6 +123,7 @@ class ConfigShared extends Component {
                         }
                         <div className="col-12 text-right pt-2 pb-1">
                             <Button
+                                disabled={!this.state.shopify_configuration_updated}
                                 onClick={() => {
                                     this.saveShopifyConfigData();
                                 }}
@@ -195,6 +196,7 @@ class ConfigShared extends Component {
                         }
                         <div className="col-12 text-right pt-2 pb-1">
                             <Button
+                                disabled={!this.state.amazon_importer_configuration_updated}
                                 onClick={() => {
                                     this.saveAmazonImporterConfigData();
                                 }}
