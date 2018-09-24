@@ -121,7 +121,7 @@ Your Subscription will automatically renew at the end of each billing cycle unle
 
            <p><span style={{fontWeight: "600",fontSize:'12px'}}>Thank you for taking the time to understand our Terms & Conditions. Any questions regarding the Terms and conditions should be addressed to apps@cedcommerce.com.</span></p>
            <br/><br/>
-           <h2 style="text-align:center;">PRIVACY POLICY</h2>
+           <h2 style={{textAlign:'center'}}>PRIVACY POLICY</h2>
            <br/><br/>
            <p><strong>Purpose</strong></p>
 
