@@ -70,9 +70,10 @@ class Dashboard extends Component {
                         stepperActive: false, // used in stepper Check either Completed or not and also help in deciding with step to go
                     }, // step 1
                     {
-                        message: <p> Choose a plan.
-                            If you are <b> buying plan for the first time</b> then, once you buy the plan your
-                            <b> 7 days trial</b> will be active for first week, and your <b> payment cycle will start after 7 days</b>.</p>,
+                        message: <p> Choose a plan. Initially You are entitled to <b>15 days trial</b> restricted to 100 sku. For
+                            activating trial you only need valid shopify store detail and valid Amazon seller account
+                            No Credit Card Detail Required, we play fair. If satisfied, you can remove 100 sku restriction
+                            by choosing any desired paid plan..</p>,
                         stepperMessage: 'Choose a plan', // stepper Small Message
                         API_endpoint: '', // Api End Point is used to check to send data or get data
                         data: '', // Data additional Field

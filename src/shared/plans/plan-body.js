@@ -117,7 +117,7 @@ class PlanBody extends Component {
                                     </div>
                                     <div className="mb-5 text-center"> {/* Descriptions For Particular deatails */}
                                         <h1 className="mb-4"><b>Trial Pack</b></h1>
-                                        <h4>Trial Pack Will Be Active For 10 Days</h4>
+                                        <h4>Trial Pack Will Be Active For 15 Days</h4>
                                     </div>
                                     <hr/>
                                     <div className="text-center mt-5"> {/* Services Data */}

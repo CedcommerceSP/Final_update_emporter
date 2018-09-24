@@ -65,6 +65,8 @@ function checkValidity(data) {
         return '/month';
     } else if ( data === '365' || data === '366' ) {
         return '/annual';
+    } if ( data === '180' ) {
+        return '/6 month';
     }
 }
 function checkIfNull(service) {
