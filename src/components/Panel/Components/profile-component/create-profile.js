@@ -716,7 +716,7 @@ export class CreateProfile extends Component {
             <div className="row">
                 <div className="col-12 pt-1 pb-1">
                     <Banner title="General Info" status="info">
-                        <Label>Before creating a profile please make sure that you have imported products from the source first. To import product goto <NavLink to="/panel/import">Upload Products</NavLink></Label>
+                        <Label>Before creating a profile please make sure that you have imported products from the source first. To import your products goto <NavLink to="/panel/import">Import Products</NavLink></Label>
                     </Banner>
                 </div>
                 <div className="col-12 pt-1 pb-1">

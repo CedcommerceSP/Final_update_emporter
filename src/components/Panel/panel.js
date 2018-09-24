@@ -102,7 +102,7 @@ export class Panel extends Component {
         return (
                 <div className="container-fluid app-panel-container">
                     <div className="row">
-                        {this.state.isTrialActive && this.state.isTrialActiveClose && globalState.getLocalStorage('trial')?<div className="col-12 text-center" style={style.trial}>
+                        {this.state.isTrialActive && this.state.isTrialActiveClose && globalState.getLocalStorage('trial') && this.state.header?<div className="col-12 text-center" style={style.trial}>
                             <h3>
                                 {this.state.daysLeft}
                                 <span style={style.close} className="text-right" onClick={() => {

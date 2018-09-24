@@ -71,7 +71,7 @@ export class QueuedTask extends Component {
             <Page
                 title="Queued Tasks">
                 <div className="row p-5">
-                    <div className="col-12 p-5">
+                    <div className="col-12">
                         <Card>
                             <Banner title="Recent Activities">
                                 <div className="row">
