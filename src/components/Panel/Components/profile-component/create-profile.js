@@ -23,6 +23,7 @@ import { environment } from '../../../../environments/environment';
 
 export class CreateProfile extends Component {
 
+    isLive = false;
     sourceAttributes = [];
     filteredProducts = {
       runQuery: false,
@@ -158,7 +159,7 @@ export class CreateProfile extends Component {
 
     modifyConfigFormData(data) {
         for (let i = 0; i < data.length; i++) {
-            if (!isUndefined(data[i].options)) {
+            if (!isUndefined(data[i].options) && data[i].options !== null) {
                 let options = [];
                 for (let j = 0; j < Object.keys(data[i].options).length; j++) {
                     const key = Object.keys(data[i].options)[j];
@@ -331,30 +332,32 @@ export class CreateProfile extends Component {
                 break;
             case 2:
                 data = Object.assign({}, this.state.basicDetails, this.state.products_select);
-                requests.postRequest('connector/profile/set', {data: data, step: this.state.activeStep})
-                    .then(data => {
-                        if (data.success) {
-                            notify.success('Step ' + this.state.activeStep + ' completed succesfully.');
-                            this.state.activeStep = 3;
-                            this.updateState();
-                            this.fetchDataForStepThree();
-                        } else {
-                            notify.error(data.message);
-                        }
-                    });
-                break;
-            case 3:
-                data = Object.assign({}, this.state.basicDetails, this.state.products_select, { attributeMapping: this.state.targetAttributes });
-                requests.postRequest('connector/profile/set', {data: data, saveInTable: true})
+                requests.postRequest('connector/profile/set', {data: data, step: this.state.activeStep, saveInTable: true})
                     .then(data => {
                         if (data.success) {
                             notify.success('Profile created succesfully');
-                            this.redirect('/panel/profiling');
+                                          this.redirect('/panel/profiling');
+                            // notify.success('Step ' + this.state.activeStep + ' completed succesfully.');
+                            // this.state.activeStep = 3;
+                            // this.updateState();
+                            // this.fetchDataForStepThree();
                         } else {
                             notify.error(data.message);
                         }
                     });
                 break;
+            // case 3:
+            //     data = Object.assign({}, this.state.basicDetails, this.state.products_select, { attributeMapping: this.state.targetAttributes });
+            //     requests.postRequest('connector/profile/set', {data: data, saveInTable: true})
+            //         .then(data => {
+            //             if (data.success) {
+            //                 notify.success('Profile created succesfully');
+            //                 this.redirect('/panel/profiling');
+            //             } else {
+            //                 notify.error(data.message);
+            //             }
+            //         });
+            //     break;
         }
     }
 
@@ -377,25 +380,25 @@ export class CreateProfile extends Component {
                     }
                     this.updateState();
                     if (!hasService) {
-                        requests.getRequest('amazonimporter/config/isTrialActive').then(data => {
-                            if(data.success) {
-                                if (data.code === 'UNDER_TRIAL') {
-                                    for (let i = 0; i < Object.keys(data.data).length; i++) {
-                                        let key = Object.keys(data.data)[i];
-                                        hasService = true;
-                                        this.importServices.push({
-                                            label: data.data[key].title,
-                                            value: data.data[key].marketplace,
-                                            shops: data.data[key].shops
-                                        });
-                                    }
-                                } else {
-                                    notify.info(data.message);
-                                }
-                            } else {
-                                notify.error(data.message);
-                            }
-                        });
+                        // requests.getRequest('amazonimporter/config/isTrialActive').then(data => {
+                        //     if(data.success) {
+                        //         if (data.code === 'UNDER_TRIAL') {
+                        //             for (let i = 0; i < Object.keys(data.data).length; i++) {
+                        //                 let key = Object.keys(data.data)[i];
+                        //                 hasService = true;
+                        //                 this.importServices.push({
+                        //                     label: data.data[key].title,
+                        //                     value: data.data[key].marketplace,
+                        //                     shops: data.data[key].shops
+                        //                 });
+                        //             }
+                        //         } else {
+                        //             notify.info(data.message);
+                        //         }
+                        //     } else {
+                        //         notify.error(data.message);
+                        //     }
+                        // });
                     }
                     this.updateState();
                 } else {
@@ -684,26 +687,26 @@ export class CreateProfile extends Component {
         return (
             <div className="row bs-wizard" style={{borderBottom: 0}}>
 
-                <div className={(this.state.activeStep === 1) ? 'col-4 bs-wizard-step active' : 'col-4 bs-wizard-step complete'}>
+                <div className={(this.state.activeStep === 1) ? 'col-6 bs-wizard-step active' : 'col-6 bs-wizard-step complete'}>
                     <div className="text-center bs-wizard-stepnum">Step 1</div>
                     <div className="progress"><div className="progress-bar"></div></div>
                     <a className="bs-wizard-dot"></a>
                     <div className="bs-wizard-info text-center">Select product source and where to upload products</div>
                 </div>
 
-                <div className={(this.state.activeStep === 2) ? 'col-4 bs-wizard-step active' : (this.state.activeStep > 2) ? ' col-4 bs-wizard-step complete' : 'col-3 bs-wizard-step disabled'}>
+                <div className={(this.state.activeStep === 2) ? 'col-6 bs-wizard-step active' : (this.state.activeStep > 2) ? ' col-6 bs-wizard-step complete' : 'col-3 bs-wizard-step disabled'}>
                     <div className="text-center bs-wizard-stepnum">Step 2</div>
                     <div className="progress"><div className="progress-bar"></div></div>
                     <a className="bs-wizard-dot"></a>
                     <div className="bs-wizard-info text-center">Select products you want to upload</div>
                 </div>
 
-                <div className={(this.state.activeStep === 3) ? 'col-4 bs-wizard-step active' : (this.state.activeStep > 3) ? 'col-4 bs-wizard-step complete' : 'col-3 bs-wizard-step disabled'}>
-                    <div className="text-center bs-wizard-stepnum">Step 3</div>
-                    <div className="progress"><div className="progress-bar"></div></div>
-                    <a className="bs-wizard-dot"></a>
-                    <div className="bs-wizard-info text-center">Attribute Mapping</div>
-                </div>
+                {/*<div className={(this.state.activeStep === 3) ? 'col-4 bs-wizard-step active' : (this.state.activeStep > 3) ? 'col-4 bs-wizard-step complete' : 'col-3 bs-wizard-step disabled'}>*/}
+                    {/*<div className="text-center bs-wizard-stepnum">Step 3</div>*/}
+                    {/*<div className="progress"><div className="progress-bar"></div></div>*/}
+                    {/*<a className="bs-wizard-dot"></a>*/}
+                    {/*<div className="bs-wizard-info text-center">Attribute Mapping</div>*/}
+                {/*</div>*/}
             </div>
         );
     }
@@ -1194,13 +1197,13 @@ export class CreateProfile extends Component {
         return (
             <React.Fragment>
                 {
-                    this.state.activeStep < 3 &&
+                    this.state.activeStep < 2 &&
                     <Button onClick={() => {
                         this.saveDataAndMoveToNextStep();
                     }} primary>Save And Move to Next Step</Button>
                 }
                 {
-                    this.state.activeStep === 3 &&
+                    this.state.activeStep === 2 &&
                     <Button onClick={() => {
                         this.saveDataAndMoveToNextStep();
                     }} primary>Create Profile</Button>
@@ -1262,12 +1265,12 @@ export class CreateProfile extends Component {
                                         {this.renderStepTwo()}
                                     </div>
                                 }
-                                {
-                                    this.state.activeStep === 3 &&
-                                    <div className="col-12 pt-3 pb-3">
-                                        {this.renderStepThree()}
-                                    </div>
-                                }
+                                {/*{*/}
+                                    {/*this.state.activeStep === 3 &&*/}
+                                    {/*<div className="col-12 pt-3 pb-3">*/}
+                                        {/*{this.renderStepThree()}*/}
+                                    {/*</div>*/}
+                                {/*}*/}
                                 {/*{*/}
                                     {/*this.state.activeStep === 4 &&*/}
                                     {/*<div className="col-12 pt-3 pb-3">*/}
@@ -1323,13 +1326,13 @@ export class CreateProfile extends Component {
                     notify.error('Please choose product target category, and add query to select products to upload.');
                 }
                 break;
-            case 3:
-                if (this.validateStepThree()) {
-                    this.saveProfileData();
-                } else {
-                    notify.error('Please map all required attributes first.');
-                }
-                break;
+            // case 3:
+            //     if (this.validateStepThree()) {
+            //         this.saveProfileData();
+            //     } else {
+            //         notify.error('Please map all required attributes first.');
+            //     }
+            //     break;
         }
         this.updateState();
     }

@@ -5,6 +5,7 @@ import {requests} from "../../../../services/request";
 import {notify} from "../../../../services/notify";
 import {faArrowsAltH, faMinus} from '@fortawesome/free-solid-svg-icons';
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
+import {isUndefined} from "util";
 
 class ViewProfile extends Component {
     constructor(props) {
@@ -40,29 +41,33 @@ class ViewProfile extends Component {
         basicInfo.target.value = value.target;
         basicInfo.cat.value = value.targetCategory;
         basicInfo.query.value = value.query;
-        value.attributeMapping.forEach(e => {
-            if ( e.mappedTo !== '' || e.defaultValue !== '' ) {
-                if ( e.mappedTo !== '' ) {
-                    attributeMapping.push({ target: e.code,source:e.mappedTo, default:'-' })
-                } else if ( e.defaultValue !== '' ) {
-                    e.options.forEach(t => {
-                        if ( t.value === e.defaultValue ) {
-                            attributeMapping.push({ target: e.code,source:'-', default:t.label + ' (' + e.defaultValue + ')' })
-                        }
-                    })
+        if ( !isUndefined(value.attributeMapping) && value.attributeMapping !== null ){
+            value.attributeMapping.forEach(e => {
+                if ( e.mappedTo !== '' || e.defaultValue !== '' ) {
+                    if ( e.mappedTo !== '' ) {
+                        attributeMapping.push({ target: e.code,source:e.mappedTo, default:'-' })
+                    } else if ( e.defaultValue !== '' ) {
+                        e.options.forEach(t => {
+                            if ( t.value === e.defaultValue ) {
+                                attributeMapping.push({ target: e.code,source:'-', default:t.label + ' (' + e.defaultValue + ')' })
+                            }
+                        })
+                    }
                 }
-            }
-        });
-        value.marketplaceAttributes.forEach(e => {
-            if ( typeof e.value !== 'object') {
-                marketplaceAttributes.push({title: e.title,value:e.value});
-            } else {
-                let _e = e.value.map(data => {
-                    return data;
-                }).join(', ');
-                marketplaceAttributes.push({title: e.title,value:_e});
-            }
-        });
+            });
+        }
+        if ( !isUndefined(value.marketplaceAttributes) && value.marketplaceAttributes !== null ){
+            value.marketplaceAttributes.forEach(e => {
+                if ( typeof e.value !== 'object') {
+                    marketplaceAttributes.push({title: e.title,value:e.value});
+                } else {
+                    let _e = e.value.map(data => {
+                        return data;
+                    }).join(', ');
+                    marketplaceAttributes.push({title: e.title,value:_e});
+                }
+            });
+        }
         this.setState({
             data: basicInfo,
             attributeMapping:attributeMapping,
