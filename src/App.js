@@ -60,7 +60,7 @@ export class App extends Component {
                         // return globalState.getLocalStorage('user_authenticated') === 'true' ? <Panel/> : <Redirect to="/auth"/>
                         return true ? <OthersRoutes history={history}/> : <Redirect to="/auth"/>
                     }}/>
-                    <Route path="*" render={() => (
+                    <Route path="**" render={() => (
                         <Redirect to="/auth"/>
                     )}/>
                 </Switch>
