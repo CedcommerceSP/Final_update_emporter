@@ -577,7 +577,7 @@ class Dashboard extends Component {
     render() {
         return (
             <Page
-                title="Dashboard">
+                title="Home">
                 {this.state.welcome_screen?
                     <Card>
                         <div>
