@@ -49,7 +49,7 @@ export class Apps extends Component {
                                     <div className="col-12" key={this.state.apps.indexOf(app)}>
                                         <div className="col-12" key={this.state.apps.indexOf(app)}>
                                             <Card title={app.title}>
-                                                <div className="row">
+                                                <div className="row p-5">
                                                     <div className="col-12 text-right">
                                                         <Button onClick={() => {
                                                             this.installApp(app.code);
