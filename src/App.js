@@ -40,10 +40,7 @@ export class App extends Component {
 
   render() {
     return (
-        <AppProvider
-            apiKey="5b1d8296277176f72fcfbdb371c4a6e8"
-            shopOrigin="http://testing-my-store-ced.myshopify.com"
-        >
+        <AppProvider>
             <div>
                 {
                     this.state.showLoader &&
@@ -72,3 +69,8 @@ export class App extends Component {
     );
   }
 }
+
+{/*<AppProvider
+ apiKey="5b1d8296277176f72fcfbdb371c4a6e8"
+ shopOrigin="http://testing-my-store-ced.myshopify.com"
+ >*/}
