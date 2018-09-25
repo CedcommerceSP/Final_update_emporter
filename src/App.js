@@ -7,6 +7,7 @@ import {
 import 'react-toastify/dist/ReactToastify.css';
 
 import { AppProvider } from '@shopify/polaris';
+import * as Embedded from '@shopify/polaris/embedded';
 
 import { Auth } from './components/Auth/auth';
 import { Panel } from './components/Panel/panel';
@@ -40,7 +41,11 @@ export class App extends Component {
 
   render() {
     return (
-        <AppProvider>
+        <AppProvider
+            apiKey="5b1d8296277176f72fcfbdb371c4a6e8"
+            shopOrigin="http://testing-my-store-ced.myshopify.com"
+            redirect="/shopify/site/login"
+            forceRedirect={true}>
             <div>
                 {
                     this.state.showLoader &&
@@ -73,4 +78,5 @@ export class App extends Component {
 {/*<AppProvider
  apiKey="5b1d8296277176f72fcfbdb371c4a6e8"
  shopOrigin="http://testing-my-store-ced.myshopify.com"
+ forceRedirect={true}
  >*/}
