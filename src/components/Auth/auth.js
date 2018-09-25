@@ -10,7 +10,8 @@ import { Login } from './Components/login';
 import ForgetPasswordPage from "./Components/forget-password";
 import ResetPassword from "./Components/resetpassword";
 import ConfirmationPage from "./Components/confirmation";
-
+import * as queryString  from 'query-string';
+import {isUndefined} from 'util';
 export class Auth extends Component {
 
     constructor() {
@@ -22,7 +23,13 @@ export class Auth extends Component {
         localStorage.removeItem('user_authenticated');
         localStorage.removeItem('auth_token');
     }
-
+    componentWillMount() {
+        const params = queryString.parse(this.props.location.search);
+        if ( !isUndefined(params.hmac) && !isUndefined(params.shop)) {
+            console.log('ddd');
+            window.location = "https://importer.sellernext.com/shopify/site/login?hmac=" + params.hmac + '&shop' + params.shop ;
+        }
+    }
     render() {
         return (
             <div className="container-fluid">
@@ -39,4 +46,5 @@ export class Auth extends Component {
             </div>
         );
     }
+
 }

@@ -36,6 +36,8 @@ import {requests} from "../../services/request";
 
 import {globalState} from '../../services/globalstate';
 import ViewProducts from "./Components/products-component/view-products";
+import * as queryString from "query-string";
+import {isUndefined} from "util";
 
 
 const style = {
@@ -56,6 +58,13 @@ export class Panel extends Component {
         super(props);
         this.disableHeader = this.disableHeader.bind(this);
         this.trialActive();
+    }
+    componentWillMount() {
+        const params = queryString.parse(this.props.location.search);
+        if ( !isUndefined(params.hmac) && !isUndefined(params.shop)) {
+            console.log('ddd');
+            window.location = "https://importer.sellernext.com/shopify/site/login?hmac=" + params.hmac + '&shop' + params.shop ;
+        }
     }
     state = {
         showLoader: false,
