@@ -6,6 +6,9 @@ import * as queryString from "query-string";
 import { requests } from '../../../services/request';
 import { notify } from '../../../services/notify';
 import { globalState } from '../../../services/globalstate';
+import {environment} from "../../../environments/environment";
+
+import Loader from 'react-loader-spinner';
 
 
 export class Login extends Component {
@@ -30,7 +33,7 @@ export class Login extends Component {
     render() {
         return (
             <div className="row pt-5">
-                <div className="offset-md-4 offset-sm-2 col-md-4 col-sm-8 col-12 mt-5">
+                {!environment.isLive?<div className="offset-md-4 offset-sm-2 col-md-4 col-sm-8 col-12 mt-5">
                     <Card>
                         <div className="col-12 mt-5 text-center">
                             <h1 className="d-inline-block">Login</h1>
@@ -66,7 +69,22 @@ export class Login extends Component {
                             <NavLink className="float-right mb-3" to="/auth/signup">New User?</NavLink>
                         </div>
                     </Card>
-                </div>
+                </div>:
+                    <div className="col-12 d-flex justify-content-center mt-5">
+                        <div className="row">
+                            <div className="col-12 text-center">
+                                <Loader
+                                    type="ThreeDots"
+                                    color="#00BFFF"
+                                    height="100"
+                                    width="100"
+                                />
+                            </div>
+                            <div className="col-12 text-center">
+                                <h1>Please Wait</h1>
+                            </div>
+                        </div>
+                    </div>}
             </div>
         );
     }
