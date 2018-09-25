@@ -111,51 +111,53 @@ export class Import extends Component {
                     }}
                     title="Pull Products"
                 >
-                    <Modal.Section>
-                        <div className="row">
-                            <div className="col-12 pt-1 pb-1">
-                                <Select
-                                    label="Import From"
-                                    placeholder="Source"
-                                    options={this.state.importServicesList}
-                                    onChange={this.handleImportChange.bind(this, 'source')}
-                                    value={this.state.importProductsDetails.source}
-                                />
-                            </div>
-                            <div className="col-12 pt-1 pb-1">
-                                <Select
-                                    label="Product Listing Type"
-                                    options={[{label:'Active Products',value:'active'},
-                                        {label:'Inactive Products',value:'inactive'},
-                                        {label:'All Products',value:'all'}]}
-                                    onChange={this.handleImportChange.bind(this, 'listing_type')}
-                                    value={this.state.listing_type}
-                                />
-                            </div>
-                            <div className="col-12 pt-1 pb-1">
-                                {
-                                    this.state.importProductsDetails.source !== '' &&
-                                    this.state.importerShopLists.length > 1 &&
+                    <div className="row p-3">
+                        <div className="col-12 p-5">
+                            <div className="row">
+                                <div className="col-12 pt-1 pb-1">
                                     <Select
-                                        label="Shop"
-                                        placeholder="Source Shop"
-                                        options={this.state.importerShopLists}
-                                        onChange={this.handleImportChange.bind(this, 'shop')}
-                                        value={this.state.importProductsDetails.shop}
+                                        label="Import From"
+                                        placeholder="Source"
+                                        options={this.state.importServicesList}
+                                        onChange={this.handleImportChange.bind(this, 'source')}
+                                        value={this.state.importProductsDetails.source}
                                     />
-                                }
-                            </div>
-                            <div className="col-12 pt-1 pb-1 text-center">
-                                <Button disabled={this.state.importProductsDetails.source === ''}
-                                        onClick={() => {
-                                            this.importProducts();
-                                        }}
-                                        primary>
-                                    Import Products
-                                </Button>
+                                </div>
+                                <div className="col-12 pt-1 pb-1">
+                                    <Select
+                                        label="Product Listing Type"
+                                        options={[{label:'Active Products',value:'active'},
+                                            {label:'Inactive Products',value:'inactive'},
+                                            {label:'All Products',value:'all'}]}
+                                        onChange={this.handleImportChange.bind(this, 'listing_type')}
+                                        value={this.state.listing_type}
+                                    />
+                                </div>
+                                <div className="col-12 pt-1 pb-1">
+                                    {
+                                        this.state.importProductsDetails.source !== '' &&
+                                        this.state.importerShopLists.length > 1 &&
+                                        <Select
+                                            label="Shop"
+                                            placeholder="Source Shop"
+                                            options={this.state.importerShopLists}
+                                            onChange={this.handleImportChange.bind(this, 'shop')}
+                                            value={this.state.importProductsDetails.shop}
+                                        />
+                                    }
+                                </div>
+                                <div className="col-12 pt-1 pb-1 text-center">
+                                    <Button disabled={this.state.importProductsDetails.source === ''}
+                                            onClick={() => {
+                                                this.importProducts();
+                                            }}
+                                            primary>
+                                        Import Products
+                                    </Button>
+                                </div>
                             </div>
                         </div>
-                    </Modal.Section>
+                    </div>
                 </Modal>
             </div>
         );
@@ -232,87 +234,88 @@ export class Import extends Component {
                 }}
                 title="Upload Products"
             >
-                <Modal.Section>
-                    <div className="row">
-                        <div className="col-12 pt-1 pb-1 mt-2 mb-2">
-                            <Select
-                                label="Upload Products Of"
-                                placeholder="Product Source"
-                                options={this.state.importServicesList}
-                                onChange={this.handleUploadChange.bind(this, 'source')}
-                                value={this.state.uploadProductDetails.source}
-                            />
-                        </div>
-                        {
-                            this.state.uploadProductDetails.source !== '' &&
-                            this.state.importerShopLists.length > 1 &&
+                <div className="row p-3">
+                    <div className="col-12 p-5">
+                        <div className="row">
                             <div className="col-12 pt-1 pb-1 mt-2 mb-2">
                                 <Select
-                                    label={capitalizeWord(this.state.uploadProductDetails.source) + " Shop"}
-                                    placeholder="Source Shop"
-                                    options={this.state.importerShopLists}
-                                    onChange={this.handleUploadChange.bind(this, 'source_shop')}
-                                    value={this.state.uploadProductDetails.source_shop}
+                                    label="Upload Products Of"
+                                    placeholder="Product Source"
+                                    options={this.state.importServicesList}
+                                    onChange={this.handleUploadChange.bind(this, 'source')}
+                                    value={this.state.uploadProductDetails.source}
                                 />
                             </div>
-                        }
-                        <div className="col-12 pt-1 pb-1 mt-2 mb-2">
-                            <Select
-                                label="Upload Products To"
-                                placeholder="Target"
-                                options={this.state.uploadServicesList}
-                                onChange={this.handleUploadChange.bind(this, 'target')}
-                                value={this.state.uploadProductDetails.target}
-                            />
-                        </div>
-                        {
-                            this.state.uploadProductDetails.target !== '' &&
-                            this.state.uploaderShopLists.length > 1 &&
-                            <div className="col-12 pt-1 pb-1 mt-2 mb-2">
-                                <Select
-                                    label={capitalizeWord(this.state.uploadProductDetails.target) + " Shop"}
-                                    placeholder="Target Shop"
-                                    options={this.state.uploaderShopLists}
-                                    onChange={this.handleUploadChange.bind(this, 'target_shop')}
-                                    value={this.state.uploadProductDetails.target_shop}
-                                />
-                            </div>
-                        }
-                        <div className="col-12 pt-1 pb-1">
-                            <Banner status="info">
-                                <Label>You can upload products from the source to target either through our default profile or you can create an <NavLink to="/panel/profiling/create">custom profile</NavLink> for products upload. To know more about profiling and default profile visit our <NavLink to="/panel/faq">FAQ</NavLink> section.</Label>
-                            </Banner>
-                        </div>
-                        <div className="col-12 pt-1 pb-1">
                             {
-                                this.state.uploadProductDetails.profile_type !== 'custom' &&
-                                <Select
-                                    label="Upload Through"
-                                    options={[
-                                        { label: 'Default Profile(Upload products with default attribute mapping)', value: 'default_profile' },
-                                        { label: 'Custom Profile(Upload products by providing attribute mapping details by yourself)', value: 'custom_profile' }
-                                    ]}
-                                    placeholder="Upload Products By"
-                                    onChange={this.handleUploadChange.bind(this, 'selected_profile')}
-                                    value={this.state.uploadProductDetails.selected_profile}
-                                />
+                                this.state.uploadProductDetails.source !== '' &&
+                                this.state.importerShopLists.length > 1 &&
+                                <div className="col-12 pt-1 pb-1 mt-2 mb-2">
+                                    <Select
+                                        label={capitalizeWord(this.state.uploadProductDetails.source) + " Shop"}
+                                        placeholder="Source Shop"
+                                        options={this.state.importerShopLists}
+                                        onChange={this.handleUploadChange.bind(this, 'source_shop')}
+                                        value={this.state.uploadProductDetails.source_shop}
+                                    />
+                                </div>
                             }
-                        </div>
-                        {
-                            this.state.uploadProductDetails.profile_type === 'custom' &&
+                            <div className="col-12 pt-1 pb-1 mt-2 mb-2">
+                                <Select
+                                    label="Upload Products To"
+                                    placeholder="Target"
+                                    options={this.state.uploadServicesList}
+                                    onChange={this.handleUploadChange.bind(this, 'target')}
+                                    value={this.state.uploadProductDetails.target}
+                                />
+                            </div>
+                            {
+                                this.state.uploadProductDetails.target !== '' &&
+                                this.state.uploaderShopLists.length > 1 &&
+                                <div className="col-12 pt-1 pb-1 mt-2 mb-2">
+                                    <Select
+                                        label={capitalizeWord(this.state.uploadProductDetails.target) + " Shop"}
+                                        placeholder="Target Shop"
+                                        options={this.state.uploaderShopLists}
+                                        onChange={this.handleUploadChange.bind(this, 'target_shop')}
+                                        value={this.state.uploadProductDetails.target_shop}
+                                    />
+                                </div>
+                            }
+                            <div className="col-12 pt-1 pb-1">
+                                <Banner status="info">
+                                    <Label>You can upload products from the source to target either through our default profile or you can create an <NavLink to="/panel/profiling/create">custom profile</NavLink> for products upload. To know more about profiling and default profile visit our <NavLink to="/panel/faq">FAQ</NavLink> section.</Label>
+                                </Banner>
+                            </div>
                             <div className="col-12 pt-1 pb-1">
                                 {
-                                    this.profilesList.length > 0 &&
+                                    this.state.uploadProductDetails.profile_type !== 'custom' &&
                                     <Select
-                                        label="Select Custom Profile"
-                                        options={this.profilesList}
-                                        placeholder="Custom Profile"
-                                        onChange={this.handleProfileSelect.bind(this)}
+                                        label="Upload Through"
+                                        options={[
+                                            { label: 'Default Profile(Upload products with default attribute mapping)', value: 'default_profile' },
+                                            { label: 'Custom Profile(Upload products by providing attribute mapping details by yourself)', value: 'custom_profile' }
+                                        ]}
+                                        placeholder="Upload Products By"
+                                        onChange={this.handleUploadChange.bind(this, 'selected_profile')}
                                         value={this.state.uploadProductDetails.selected_profile}
                                     />
                                 }
-                                {
-                                    this.profilesList.length === 0 &&
+                            </div>
+                            {
+                                this.state.uploadProductDetails.profile_type === 'custom' &&
+                                <div className="col-12 pt-1 pb-1">
+                                    {
+                                        this.profilesList.length > 0 &&
+                                        <Select
+                                            label="Select Custom Profile"
+                                            options={this.profilesList}
+                                            placeholder="Custom Profile"
+                                            onChange={this.handleProfileSelect.bind(this)}
+                                            value={this.state.uploadProductDetails.selected_profile}
+                                        />
+                                    }
+                                    {
+                                        this.profilesList.length === 0 &&
                                         <div className="text-center">
                                             <Banner status="warning">
                                                 <Label>No profiles for {capitalizeWord(this.state.uploadProductDetails.source)} and {capitalizeWord(this.state.uploadProductDetails.target)} integration</Label>
@@ -334,23 +337,24 @@ export class Import extends Component {
                                                 </Button>
                                             </div>
                                         </div>
-                                }
-                            </div>
+                                    }
+                                </div>
 
-                        }
-                        <div className="col-12 text-center pt-3 pb-3">
-                            <Button onClick={() => {
-                                this.uploadProducts();
-                            }}
-                                    disabled={!(this.state.uploadProductDetails.source !== '' &&
-                                                this.state.uploadProductDetails.target !== '' &&
-                                                this.state.uploadProductDetails.selected_profile !== '')}
-                                    primary>
-                                Upload Products
-                            </Button>
+                            }
+                            <div className="col-12 text-center pt-3 pb-3">
+                                <Button onClick={() => {
+                                    this.uploadProducts();
+                                }}
+                                        disabled={!(this.state.uploadProductDetails.source !== '' &&
+                                        this.state.uploadProductDetails.target !== '' &&
+                                        this.state.uploadProductDetails.selected_profile !== '')}
+                                        primary>
+                                    Upload Products
+                                </Button>
+                            </div>
                         </div>
                     </div>
-                </Modal.Section>
+                </div>
             </Modal>
         );
     }

@@ -33,8 +33,19 @@ export class App extends Component {
 
   getShopOrigin() {
       if (globalState.getLocalStorage('shop') !== null) {
-          this.state.shopOrigin = globalState.getLocalStorage('shop');
-          this.setState(this.state);
+          if (!this.inFrame()) {
+              this.state.shopOrigin = globalState.getLocalStorage('shop');
+              globalState.removeLocalStorage('shop');
+              this.setState(this.state);
+          }
+      }
+  }
+
+  inFrame() {
+      try {
+          return window.self !== window.top;
+      } catch (e) {
+          return true;
       }
   }
 
@@ -97,9 +108,3 @@ export class App extends Component {
       }
   }
 }
-
-{/*<AppProvider
- apiKey="5b1d8296277176f72fcfbdb371c4a6e8"
- shopOrigin="http://testing-my-store-ced.myshopify.com"
- forceRedirect={true}
- >*/}

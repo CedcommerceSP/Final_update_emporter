@@ -14,6 +14,8 @@ import history from '../../../shared/history';
 import InstallAppsShared from "../../../shared/app/install-apps";
 import ConfigShared from "../../../shared/config/config-shared";
 
+import * as embedded from '@shopify/polaris/embedded';
+
 
 class Dashboard extends Component {
     constructor(props) {
@@ -602,9 +604,11 @@ class Dashboard extends Component {
                             onClose={this.handleModalChange.bind(this,'no',this.state.active_step)}
                             title="Connect Account"
                         >
-                            <Modal.Section>
-                                <InstallAppsShared history={history} redirect={this.redirectResult} code={this.state.code}/>
-                            </Modal.Section>
+                            <div className="row p-3">
+                                <div className="col-12 p-5">
+                                    <InstallAppsShared history={this.props.history} redirect={this.redirectResult} code={this.state.code}/>
+                                </div>
+                            </div>
                         </Modal> {/* Open For Step 3 to see Connected Account */}
                     </React.Fragment>}
             </Page>

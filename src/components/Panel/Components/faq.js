@@ -132,24 +132,26 @@ class FAQPage extends Component {
                     title="Default Profile Example"
                     onClose={this.modalOpen}
                 >
-                    <Modal.Section>
-                        <TextContainer>
-                            <h2>Google Attribute Mapping Are Something Like this: </h2>
-                            <h4>
-                                <ul>
-                                    <li className="mb-3">'title' <FontAwesomeIcon icon={faArrowsAltH} size="1x" color="#000"/> 'title</li>
-                                    <li className="mb-3">'description' <FontAwesomeIcon icon={faArrowsAltH} size="1x" color="#000"/> 'long_description'</li>
-                                    <li className="mb-3">'price' <FontAwesomeIcon icon={faArrowsAltH} size="1x" color="#000"/> 'price'</li>
-                                    <li className="mb-3">'link' <FontAwesomeIcon icon={faArrowsAltH} size="1x" color="#000"/> Your Product Link </li>
-                                    <li className="mb-3">'brand' <FontAwesomeIcon icon={faArrowsAltH} size="1x" color="#000"/> 'vendor'</li>
-                                    <li className="mb-3">'image_link' <FontAwesomeIcon icon={faArrowsAltH} size="1x" color="#000"/> 'main_image'</li>
-                                    <li className="mb-3">'main_image' <FontAwesomeIcon icon={faArrowsAltH} size="1x" color="#000"/> 'container_id'</li>
-                                    <li className="mb-3">'gtin' <FontAwesomeIcon icon={faArrowsAltH} size="1x" color="#000"/> 'bar_code'</li>
-                                    <li className="mb-3">'mpn' <FontAwesomeIcon icon={faArrowsAltH} size="1x" color="#000"/> 'sku'</li>
-                                </ul>
-                            </h4>
-                        </TextContainer>
-                    </Modal.Section>
+                    <div className="row p-3">
+                        <div className="col-12 p-5">
+                            <TextContainer>
+                                <h2>Google Attribute Mapping Are Something Like this: </h2>
+                                <h4>
+                                    <ul>
+                                        <li className="mb-3">'title' <FontAwesomeIcon icon={faArrowsAltH} size="1x" color="#000"/> 'title</li>
+                                        <li className="mb-3">'description' <FontAwesomeIcon icon={faArrowsAltH} size="1x" color="#000"/> 'long_description'</li>
+                                        <li className="mb-3">'price' <FontAwesomeIcon icon={faArrowsAltH} size="1x" color="#000"/> 'price'</li>
+                                        <li className="mb-3">'link' <FontAwesomeIcon icon={faArrowsAltH} size="1x" color="#000"/> Your Product Link </li>
+                                        <li className="mb-3">'brand' <FontAwesomeIcon icon={faArrowsAltH} size="1x" color="#000"/> 'vendor'</li>
+                                        <li className="mb-3">'image_link' <FontAwesomeIcon icon={faArrowsAltH} size="1x" color="#000"/> 'main_image'</li>
+                                        <li className="mb-3">'main_image' <FontAwesomeIcon icon={faArrowsAltH} size="1x" color="#000"/> 'container_id'</li>
+                                        <li className="mb-3">'gtin' <FontAwesomeIcon icon={faArrowsAltH} size="1x" color="#000"/> 'bar_code'</li>
+                                        <li className="mb-3">'mpn' <FontAwesomeIcon icon={faArrowsAltH} size="1x" color="#000"/> 'sku'</li>
+                                    </ul>
+                                </h4>
+                            </TextContainer>
+                        </div>
+                    </div>
                 </Modal>
             </Page>
         );

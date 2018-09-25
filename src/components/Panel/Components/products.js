@@ -237,13 +237,15 @@ export class Products extends Component {
                     },
                 ]}
             >
-                <Modal.Section>
-                    <TextContainer>
-                        <p>
-                            Are you sure, you want to delete {this.state.toDeleteRow.title}?
-                        </p>
-                    </TextContainer>
-                </Modal.Section>
+                <div className="row p-3">
+                    <div className="col-12 p-5">
+                        <TextContainer>
+                            <p>
+                                Are you sure, you want to delete {this.state.toDeleteRow.title}?
+                            </p>
+                        </TextContainer>
+                    </div>
+                </div>
             </Modal>
         );
     }

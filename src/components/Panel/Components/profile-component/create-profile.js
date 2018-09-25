@@ -1118,36 +1118,38 @@ export class CreateProfile extends Component {
                     },
                 }}
             >
-                <Modal.Section>
-                    <div className="row">
-                        <div className="col-6 text-center">
-                            <Label>{this.optionMapping.code} Options</Label>
+                <div className="row p-3">
+                    <div className="col-12 p-5">
+                        <div className="row">
+                            <div className="col-6 text-center">
+                                <Label>{this.optionMapping.code} Options</Label>
+                            </div>
+                            <div className="col-6  text-center">
+                                <Label>{this.optionMapping.mappedTo} Options</Label>
+                            </div>
+                            {
+                                !isUndefined(this.optionMapping.options) &&
+                                this.optionMapping.options.map(option => {
+                                    return (
+                                        <React.Fragment key={this.optionMapping.options.indexOf(option)}>
+                                            <div className="col-6 p-3">
+                                                <Label>{option.code}</Label>
+                                            </div>
+                                            <div className="col-6 p-3">
+                                                <Select
+                                                    options={this.optionMapping.sourceOptions}
+                                                    placeholder="Target Attribute option"
+                                                    onChange={this.handleMapOption.bind(this, this.optionMapping.options.indexOf(option))}
+                                                    value={option.mappedTo}
+                                                />
+                                            </div>
+                                        </React.Fragment>
+                                    );
+                                })
+                            }
                         </div>
-                        <div className="col-6  text-center">
-                            <Label>{this.optionMapping.mappedTo} Options</Label>
-                        </div>
-                        {
-                            !isUndefined(this.optionMapping.options) &&
-                            this.optionMapping.options.map(option => {
-                                return (
-                                    <React.Fragment key={this.optionMapping.options.indexOf(option)}>
-                                        <div className="col-6 p-3">
-                                            <Label>{option.code}</Label>
-                                        </div>
-                                        <div className="col-6 p-3">
-                                            <Select
-                                                options={this.optionMapping.sourceOptions}
-                                                placeholder="Target Attribute option"
-                                                onChange={this.handleMapOption.bind(this, this.optionMapping.options.indexOf(option))}
-                                                value={option.mappedTo}
-                                            />
-                                        </div>
-                                    </React.Fragment>
-                                );
-                            })
-                        }
                     </div>
-                </Modal.Section>
+                </div>
             </Modal>
         );
     }
