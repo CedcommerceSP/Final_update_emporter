@@ -62,7 +62,6 @@ export class Panel extends Component {
     componentWillMount() {
         const params = queryString.parse(this.props.location.search);
         if ( !isUndefined(params.hmac) && !isUndefined(params.shop)) {
-            console.log('ddd');
             window.location = "https://importer.sellernext.com/shopify/site/login?hmac=" + params.hmac + '&shop' + params.shop ;
         }
     }
