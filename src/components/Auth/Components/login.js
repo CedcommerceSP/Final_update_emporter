@@ -19,10 +19,7 @@ export class Login extends Component {
         password: /^.{4,}$/
     };
     constructor(props) {
-
         super(props);
-
-
         this.state = {
             username: '',
             password: ''
@@ -101,6 +98,7 @@ export class Login extends Component {
         if(queryParams['user_token']!=null && queryParams['code']!=null) {
             globalState.setLocalStorage('user_authenticated', 'true');
             globalState.setLocalStorage('auth_token', queryParams['user_token']);
+            globalState.setLocalStorage('shop', queryParams['shop']);
             this.redirect('/panel/');
         }
 

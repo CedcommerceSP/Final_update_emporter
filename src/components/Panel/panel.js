@@ -21,8 +21,7 @@ import { Plans } from './Components/plans';
 import { Header } from './Layout/header';
 import Dashboard from './Components/dashboard';
 import FAQPage from './Components/faq';
-
-import history from '../../shared/history';
+import { environment } from '../../environments/environment';
 import { panelFunctions } from './functions';
 
 import './panel.css';
@@ -62,8 +61,14 @@ export class Panel extends Component {
     componentWillMount() {
         const params = queryString.parse(this.props.location.search);
         if ( !isUndefined(params.hmac) && !isUndefined(params.shop)) {
-            console.log('ddd');
-            window.location = "https://importer.sellernext.com/shopify/site/login?hmac=" + params.hmac + '&shop' + params.shop ;
+            let url = environment.API_ENDPOINT + "shopify/site/login?";
+            let end = '';
+            for (let i = 0; i < Object.keys(params).length; i++) {
+                const key = Object.keys(params)[i];
+                url += end + key + '=' + params[key];
+                end = '&';
+            }
+            window.location = url;
         }
     }
     state = {

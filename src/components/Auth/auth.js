@@ -12,6 +12,8 @@ import ResetPassword from "./Components/resetpassword";
 import ConfirmationPage from "./Components/confirmation";
 import * as queryString  from 'query-string';
 import {isUndefined} from 'util';
+import { environment } from '../../environments/environment';
+
 export class Auth extends Component {
 
     constructor() {
@@ -26,8 +28,14 @@ export class Auth extends Component {
     componentWillMount() {
         const params = queryString.parse(this.props.location.search);
         if ( !isUndefined(params.hmac) && !isUndefined(params.shop)) {
-            console.log('ddd');
-            window.location = "https://importer.sellernext.com/shopify/site/login?hmac=" + params.hmac + '&shop' + params.shop ;
+            let url = environment.API_ENDPOINT + "shopify/site/login?";
+            let end = '';
+            for (let i = 0; i < Object.keys(params).length; i++) {
+                const key = Object.keys(params)[i];
+                url += end + key + '=' + params[key];
+                end = '&';
+            }
+            window.location = url;
         }
     }
     render() {
