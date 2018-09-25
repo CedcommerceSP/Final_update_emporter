@@ -1118,8 +1118,7 @@ export class CreateProfile extends Component {
                     },
                 }}
             >
-                <div className="row p-3">
-                    <div className="col-12 p-5">
+                <Modal.Section>
                         <div className="row">
                             <div className="col-6 text-center">
                                 <Label>{this.optionMapping.code} Options</Label>
@@ -1148,8 +1147,7 @@ export class CreateProfile extends Component {
                                 })
                             }
                         </div>
-                    </div>
-                </div>
+                </Modal.Section>
             </Modal>
         );
     }

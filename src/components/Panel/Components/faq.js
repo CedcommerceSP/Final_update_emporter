@@ -132,8 +132,7 @@ class FAQPage extends Component {
                     title="Default Profile Example"
                     onClose={this.modalOpen}
                 >
-                    <div className="row p-3">
-                        <div className="col-12 p-5">
+                    <Modal.Section>
                             <TextContainer>
                                 <h2>Google Attribute Mapping Are Something Like this: </h2>
                                 <h4>
@@ -150,8 +149,7 @@ class FAQPage extends Component {
                                     </ul>
                                 </h4>
                             </TextContainer>
-                        </div>
-                    </div>
+                    </Modal.Section>
                 </Modal>
             </Page>
         );

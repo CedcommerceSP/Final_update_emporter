@@ -604,11 +604,9 @@ class Dashboard extends Component {
                             onClose={this.handleModalChange.bind(this,'no',this.state.active_step)}
                             title="Connect Account"
                         >
-                            <div className="row p-3">
-                                <div className="col-12 p-5">
+                            <Modal.Section>
                                     <InstallAppsShared history={this.props.history} redirect={this.redirectResult} code={this.state.code}/>
-                                </div>
-                            </div>
+                            </Modal.Section>
                         </Modal> {/* Open For Step 3 to see Connected Account */}
                     </React.Fragment>}
             </Page>

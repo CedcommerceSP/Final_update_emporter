@@ -111,8 +111,7 @@ export class Import extends Component {
                     }}
                     title="Pull Products"
                 >
-                    <div className="row p-3">
-                        <div className="col-12 p-5">
+                    <Modal.Section>
                             <div className="row">
                                 <div className="col-12 pt-1 pb-1">
                                     <Select
@@ -156,8 +155,7 @@ export class Import extends Component {
                                     </Button>
                                 </div>
                             </div>
-                        </div>
-                    </div>
+                    </Modal.Section>
                 </Modal>
             </div>
         );
@@ -234,8 +232,7 @@ export class Import extends Component {
                 }}
                 title="Upload Products"
             >
-                <div className="row p-3">
-                    <div className="col-12 p-5">
+                <Modal.Section>
                         <div className="row">
                             <div className="col-12 pt-1 pb-1 mt-2 mb-2">
                                 <Select
@@ -353,8 +350,7 @@ export class Import extends Component {
                                 </Button>
                             </div>
                         </div>
-                    </div>
-                </div>
+                </Modal.Section>
             </Modal>
         );
     }
