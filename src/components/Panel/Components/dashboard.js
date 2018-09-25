@@ -531,7 +531,7 @@ class Dashboard extends Component {
                     notify.success('Account Connected Success');
                     this.changeStep(3);
                 } else {
-                    notify.info('Please Fill The Form');
+                    notify.info('Please Connect Your Account First');
                 }
             } else {
                 notify.error(data.message);
@@ -543,7 +543,7 @@ class Dashboard extends Component {
     } // Open Modal And A new Small Window For User
     renderLinkedAccount() {
         return <div>
-            <AppsShared history={history} redirectResult={this.redirectResult}/>
+            <AppsShared history={this.props.history} redirectResult={this.redirectResult}/>
             <div className="p-5 text-center">
                 <Button onClick={this.checkLinkedAccount} primary>
                     Continue to next step

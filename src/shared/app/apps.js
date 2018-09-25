@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {AccountConnection} from "@shopify/polaris";
+import {AccountConnection, Button, Card} from "@shopify/polaris";
 import {requests} from "../../services/request";
 import {notify} from "../../services/notify";
 
@@ -36,17 +36,20 @@ class AppsShared extends Component {
                         if (app.code === 'amazonimporter') {
                             return (
                                 <div className="col-12" key={this.state.apps.indexOf(app)}>
-                                    <AccountConnection
-                                        accountName={app.code}
-                                        connected={false}
-                                        title={app.title}
-                                        action={{
-                                            content:app['installed']==0?'Connect':'ReConnect',
-                                            onClick: this.installApp.bind(this,app.code)
-                                        }}
-                                        details={app['installed']==0?'Connect Now':'Already Connected'}
-                                        termsOfService={<img src={app.image} alt={app.title}/>}
-                                    />
+                                    <div className="col-12" key={this.state.apps.indexOf(app)}>
+                                        <Card title={app.title}>
+                                            <div className="row p-5">
+                                                <div className="col-12 text-right">
+                                                    <Button onClick={() => {
+                                                        this.installApp(app.code);
+                                                    }} primary>{app['installed']==0?'Connect':'ReConnect'}</Button>
+                                                </div>
+                                                <div className="col-12">
+                                                    <img src={app.image} alt={app.title}/>
+                                                </div>
+                                            </div>
+                                        </Card>
+                                    </div>
                                 </div>
                             );
                         }
