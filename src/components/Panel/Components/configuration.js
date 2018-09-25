@@ -242,6 +242,7 @@ export class Configuration extends Component {
                                                 <div className="col-12 pt-2 pb-2" key={this.amazonCredentialsData.indexOf(config)}>
                                                     <TextField
                                                         label={config.title}
+                                                        disabled={config.key === 'account_name'}
                                                         placeholder={config.title}
                                                         value={this.state.amazon_credentials[config.key]}
                                                         error={this.state.amazon_credentials_error[config.key]?'Field can not be Empty':null}
