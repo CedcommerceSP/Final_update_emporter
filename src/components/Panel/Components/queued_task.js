@@ -111,7 +111,7 @@ export class QueuedTask extends Component {
                             </Banner>
                         </Card>
                     </div>
-                    <div className="col-12 p-sm-5 p-0">
+                    <div className="col-12 mt-4">
                         <Card title="Currently Running Processes">
                             <div className="p-5">
                                 {

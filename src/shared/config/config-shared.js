@@ -53,7 +53,7 @@ class ConfigShared extends Component {
 
     modifyConfigData(data, configKey) {
         for (let i = 0; i < data.length; i++) {
-            this.state[configKey][data[i].code] = data[i].value;
+            this.state[configKey][data[i].code] = typeof data[i].value === 'object'?'':data[i].value;
             if (!isUndefined(data[i].options)) {
                 data[i].options = modifyOptionsData(data[i].options);
             }
@@ -76,7 +76,7 @@ class ConfigShared extends Component {
                                                 <Select
                                                     options={config.options}
                                                     label={config.title}
-                                                    placeholder={config.title}
+                                                    placeholder={'Select'}
                                                     value={this.state.shopify_configuration[config.code]}
                                                     onChange={this.shopifyConfigurationChange.bind(this, this.shopifyConfigurationData.indexOf(config))}>
                                                 </Select>

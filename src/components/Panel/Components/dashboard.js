@@ -556,12 +556,14 @@ class Dashboard extends Component {
         requests.getRequest('frontend/app/checkDefaultConfiguration?code=' + val).then(data => {
             if ( data.success ) {
                 if ( data.data.configFilled ) {
-                    if ( val !== 'shopify' ) {
-                        this.checkConfig('shopify')
-                    } else {
+                    // if ( val !== 'shopify' ) {
+                    //     this.checkConfig('shopify')
+                    // } else {
                         notify.success('Account Connected Success');
                         this.changeStep(4);
-                    }
+                    // }
+                } else {
+                    notify.info('Please Fill The Form');
                 }
             } else {
                 notify.error(data.message);
@@ -571,7 +573,7 @@ class Dashboard extends Component {
     renderConfig() {
         return (
             <React.Fragment>
-                <ConfigShared history={history}/>
+                <ConfigShared history={this.props.history}/>
                 <div className="p-5 text-center">
                     <Button onClick={this.checkConfig.bind(this, 'amazonimporter')} primary> Completed All The Steps</Button>
                 </div>
