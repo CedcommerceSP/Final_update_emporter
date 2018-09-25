@@ -107,7 +107,7 @@ class PlanBody extends Component {
                                         <p className="price-tag">
                                             <span className="price-tag_small">$</span>
                                             0
-                                            <span className="price-tag_small"> </span>
+                                            <span className="price-tag_small">/15 Days </span>
                                         </p>
                                     </div>
                                     <div className="mb-5"> {/* Button To choose Plan */}
@@ -117,26 +117,38 @@ class PlanBody extends Component {
                                     </div>
                                     <div className="mb-5 text-center"> {/* Descriptions For Particular deatails */}
                                         <h1 className="mb-4"><b>Trial Pack</b></h1>
-                                        <h4>Trial Pack Will Be Active For 15 Days</h4>
+                                        <h4>Upload upto 100 SKU</h4>
                                     </div>
                                     <hr/>
                                     <div className="text-center mt-5"> {/* Services Data */}
-                                            <React.Fragment>
-                                                <p className="service-body">
-                                                    <span className="service-description mb-3" style={{fontWeight:'bold'}}><b>Services</b></span>
-                                                    <span>
-                                                                <Tooltip content="Trial Pack" preferredPosition="above">
-                                                                    <Link><Icon source="help" color="inkLighter" backdrop={true} /></Link>
-                                                                </Tooltip>
-                                                            </span>
-                                                </p>
-                                                <div className="text-left">
+                                        <React.Fragment>
+                                            <p className="service-body">
+                                                <span className="service-description mb-3" style={{fontWeight:'bold'}}><b>Services</b></span>
+                                                <span>
+                                                <Tooltip content="Trial Pack" preferredPosition="above">
+                                                    <Link><Icon source="help" color="inkLighter" backdrop={true} /></Link>
+                                                </Tooltip>
+                                            </span>
+                                            </p>
+                                            <div className="text-left">
                                                 <Checkbox
                                                     checked={true}
                                                     label="24X7 Support"
                                                     disabled={true} />
-                                                </div>
-                                            </React.Fragment>
+                                            </div>
+                                            <div className="text-left">
+                                                <Checkbox
+                                                    checked={true}
+                                                    label="100 SKU"
+                                                    disabled={true} />
+                                            </div>
+                                            <div className="text-left">
+                                                <Checkbox
+                                                    checked={true}
+                                                    label="Profiling"
+                                                    disabled={true} />
+                                            </div>
+                                        </React.Fragment>
                                     </div>
                                 </div>
                             </div>
