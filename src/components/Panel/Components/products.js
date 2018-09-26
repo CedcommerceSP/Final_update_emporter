@@ -38,15 +38,15 @@ export class Products extends Component {
         {label: 'Delete', value: 'delete'},
         // {label: 'Upload', value: 'upload'}
     ];
-    visibleColumns = ['source_product_id', 'main_image', 'title', 'sku', 'price','quantity','asin'];
+    visibleColumns = ['source_product_id', 'title', 'sku', 'price','quantity','asin'];
     imageColumns = ['main_image'];
     hideFilters = ['main_image' ,'long_description','type', 'asin'];
     customButton = ['asin']; // button
     columnTitles = {
-        main_image: {
-            title: 'Image',
-            sortable: false
-        },
+        // main_image: {
+        //     title: 'Image',
+        //     sortable: false
+        // },
         title: {
             title: 'Title',
             sortable: true
@@ -181,7 +181,7 @@ export class Products extends Component {
         for (let i = 0; i < data.length; i++) {
             let rowData = {};
             if ( data[i].variants !== {} && !isUndefined(data[i].variants) ) {
-                rowData['main_image'] = data[i].variants['main_image'];
+                // rowData['main_image'] = data[i].variants['main_image'];
                 rowData['title'] = data[i].details.title;
                 rowData['sku'] = data[i].variants['sku'].toString();
                 rowData['price'] = data[i].variants['price'].toString();

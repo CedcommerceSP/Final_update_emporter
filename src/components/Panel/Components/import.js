@@ -260,6 +260,7 @@ export class Import extends Component {
                                 <Select
                                     label="Upload Products To"
                                     placeholder="Target"
+                                    disabled={true}
                                     options={this.state.uploadServicesList}
                                     onChange={this.handleUploadChange.bind(this, 'target')}
                                     value={this.state.uploadProductDetails.target}
@@ -270,7 +271,7 @@ export class Import extends Component {
                                 this.state.uploaderShopLists.length > 1 &&
                                 <div className="col-12 pt-1 pb-1 mt-2 mb-2">
                                     <Select
-                                        label={capitalizeWord(this.state.uploadProductDetails.target) + " Shop"}
+                                        label={"Shopify Shop"}
                                         placeholder="Target Shop"
                                         options={this.state.uploaderShopLists}
                                         onChange={this.handleUploadChange.bind(this, 'target_shop')}
@@ -550,6 +551,7 @@ export class Import extends Component {
                                 this.state.uploadProductDetails.selected_profile = '';
                                 this.state.uploadProductDetails.profile_type = '';
                                 this.state.showUploadProducts = true;
+                                this.handleUploadChange('target','shopifygql');
                                 this.updateState();
                             }} style={{cursor: 'pointer'}}>
                                 <div className="text-center pt-5 pb-5">

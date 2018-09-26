@@ -190,7 +190,7 @@ class Dashboard extends Component {
                 if ( arg < 4 ) {
                    // notify.success('Follow The Next Step');
                 } else {
-                    notify.success('Now You Can Upload Your Products');
+                    // notify.success('Now You Can Upload Your Products');
                     this.props.disableHeader(true);
                     setTimeout(() => {
                         this.redirect('/panel/import');
