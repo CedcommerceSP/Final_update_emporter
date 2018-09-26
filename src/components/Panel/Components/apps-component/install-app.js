@@ -51,7 +51,7 @@ export class InstallApp extends Component {
                         <div className="row p-5">
                             <div className="col-12 mt-4 mb-4">
                                 <Banner status="info">
-                                    <Heading>{'Connect ' + capitalizeWord(this.state.code)}</Heading>
+                                    <Heading>{'Connect '} { capitalizeWord(this.state.code) === 'Amazonimporter'?'Amazon Importer':capitalizeWord(this.state.code)}</Heading>
                                 </Banner>
                             </div>
                             <div className="col-12 mt-1">

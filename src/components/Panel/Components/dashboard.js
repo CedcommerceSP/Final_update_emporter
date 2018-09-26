@@ -15,6 +15,7 @@ import InstallAppsShared from "../../../shared/app/install-apps";
 import ConfigShared from "../../../shared/config/config-shared";
 
 import * as embedded from '@shopify/polaris/embedded';
+import Analyticsreporting from "./products-component/analytics-reporting";
 
 
 class Dashboard extends Component {
@@ -55,7 +56,7 @@ class Dashboard extends Component {
                 name: '', // anchor name
                 step : 0 // step number
             },
-            welcome_screen: true,
+            welcome_screen: false,
             stepData: [], // this will store the current showing step, which is selected from data object e.g Shopify_Google []
             selected: '',
             open_init_modal: true, // this is used to open modal one time when user visit dashboard
@@ -72,10 +73,10 @@ class Dashboard extends Component {
                         stepperActive: false, // used in stepper Check either Completed or not and also help in deciding with step to go
                     }, // step 1
                     {
-                        message: <p> Choose a plan. Initially You are entitled to <b>15 days trial</b> restricted to 100 sku. For
-                            activating trial you only need valid shopify store detail and valid Amazon seller account
-                            No Credit Card Detail Required, we play fair. If satisfied, you can remove 100 sku restriction
-                            by choosing any desired paid plan..</p>,
+                        message: <p> Choose a plan. Initially, You are entitled to 15 days trial restricted to 100 SKU.
+                            For activating trial you only need valid Shopify store detail and valid Amazon seller account,
+                            No Credit Card Detail Required, we play fair. If satisfied, you can remove 100 SKU restriction by
+                            choosing any desired payment plan.</p>,
                         stepperMessage: 'Choose a plan', // stepper Small Message
                         API_endpoint: '', // Api End Point is used to check to send data or get data
                         data: '', // Data additional Field
@@ -95,7 +96,7 @@ class Dashboard extends Component {
                         stepperActive: false, // used in stepper Check either Completed or not
                     }, // step 3
                     {
-                        message: <span>Enter default configurations.</span>,
+                        message: <span>Enter default configurations</span>,
                         stepperMessage: 'Default Configurations',
                         API_endpoint: '', // Api End Point is used to check to send data or get data
                         data: <p>Now goto <NavLink  to="/panel/import">Upload Products</NavLink> section, first import products from shopify.  <br/>When import completed upload your products on google. </p>, // Data additional Field
@@ -459,7 +460,7 @@ class Dashboard extends Component {
                             </div>
                             <Checkbox
                                 checked={this.state.info.term_and_conditon}
-                                label="Accept Term & Conditions"
+                                label="Accept Terms & Conditions"
                                 error={this.state.info_error.term_and_conditon?'please Check The Term And Conditons':''}
                                 onChange={this.handleFormChange.bind(this,'term_and_conditon')}
                             />
@@ -588,11 +589,14 @@ class Dashboard extends Component {
             <Page
                 title="Home">
                 {this.state.welcome_screen?
-                    <Card>
-                        <div>
-                            <img src={require('../../../assets/background/welcome_screen.png')} style={{height:'100%',width:'100%'}}/>
-                        </div>
-                    </Card>
+                    <div>
+                        {/*<Card>*/}
+                        {/*<div>*/}
+                        {/*<img src={require('../../../assets/background/welcome_screen.png')} style={{height:'100%',width:'100%'}}/>*/}
+                        {/*</div>*/}
+                        {/*</Card>*/}
+                        <Analyticsreporting/>
+                    </div>
                     :
                     <React.Fragment>
                         <Card>

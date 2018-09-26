@@ -251,9 +251,9 @@ export class Products extends Component {
     render() {
         return (
             <Page
-                primaryAction={{content: 'Analytics', onClick: () => {
-                        this.redirect('/panel/products/analysis');
-                    }}}
+                // primaryAction={{content: 'Analytics', onClick: () => {
+                //         this.redirect('/panel/products/analysis');
+                //     }}}
                 title="Products List">
                 <Card>
                     <div className="p-5">

@@ -16,14 +16,6 @@ const options = [
 
 let uploaderoptions=[];
 
-const primaryColor = "#9c27b0";
-const warningColor = "#ff9800";
-const dangerColor = "#f44336";
-const successColor = "#4caf50";
-const infoColor = "#00acc1";
-const roseColor = "#e91e63";
-const grayColor = "#999999";
-
 class Analyticsreporting extends Component {
     constructor(props)
     {
@@ -523,10 +515,10 @@ class Analyticsreporting extends Component {
 
         return (
             <Page
-                primaryAction={{content: 'Back', onClick: () => {
-                        this.redirect('/panel/products');
-                    }}}
-                title="Product Analytics">
+                // primaryAction={{content: 'Back', onClick: () => {
+                //         this.redirect('/panel/products');
+                //     }}}
+                title="Product Analytics" titleHidden={true}>
                 {/*<Card title="Products Imported">*/}
                 <div className="CARD w-100" style={{marginTop:75}}>
                     <div className='CARD-title-small text-center BG-primary common'>

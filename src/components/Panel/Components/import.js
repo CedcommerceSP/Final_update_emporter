@@ -289,6 +289,7 @@ export class Import extends Component {
                                     this.state.uploadProductDetails.profile_type !== 'custom' &&
                                     <Select
                                         label="Upload Through"
+                                        placeholder="Choose Profile"
                                         options={[
                                             { label: 'Default Profile(Upload products with default attribute mapping)', value: 'default_profile' },
                                             { label: 'Custom Profile(Upload products by providing attribute mapping details by yourself)', value: 'custom_profile' }
@@ -342,9 +343,7 @@ export class Import extends Component {
                                 <Button onClick={() => {
                                     this.uploadProducts();
                                 }}
-                                        disabled={!(this.state.uploadProductDetails.source !== '' &&
-                                        this.state.uploadProductDetails.target !== '' &&
-                                        this.state.uploadProductDetails.selected_profile !== '')}
+                                        disabled={!(this.state.uploadProductDetails.source !== '')}
                                         primary>
                                     Upload Products
                                 </Button>
@@ -381,7 +380,7 @@ export class Import extends Component {
                 this.state.importerShopLists = [];
                 this.state.uploadProductDetails.source = value;
                 this.state.uploadProductDetails.profile_type = '';
-                this.state.uploadProductDetails.selected_profile = '';
+                this.state.uploadProductDetails.selected_profile = 'default_profile';
                 this.state.uploadProductDetails.source_shop = '';
                 this.state.uploadProductDetails.source_shop_id = '';
                 for (let i = 0; i < this.state.importServicesList.length; i++) {
@@ -405,7 +404,7 @@ export class Import extends Component {
                 this.state.uploaderShopLists = [];
                 this.state.uploadProductDetails.target = value;
                 this.state.uploadProductDetails.profile_type = '';
-                this.state.uploadProductDetails.selected_profile = '';
+                this.state.uploadProductDetails.selected_profile = 'default_profile';
                 this.state.uploadProductDetails.target_shop = '';
                 this.state.uploadProductDetails.target_shop_id = '';
                 for (let i = 0; i < this.state.uploadServicesList.length; i++) {
@@ -427,7 +426,7 @@ export class Import extends Component {
                 break;
             case 'source_shop':
                 this.state.uploadProductDetails.profile_type = '';
-                this.state.uploadProductDetails.selected_profile = '';
+                this.state.uploadProductDetails.selected_profile = 'default_profile';
                 for (let i = 0; i < this.state.importerShopLists.length; i++) {
                     if (this.state.importerShopLists[i].value === value) {
                         this.state.uploadProductDetails.source_shop_id = this.state.importerShopLists[i].shop_id;
@@ -438,7 +437,7 @@ export class Import extends Component {
                 break;
             case 'target_shop':
                 this.state.uploadProductDetails.profile_type = '';
-                this.state.uploadProductDetails.selected_profile = '';
+                this.state.uploadProductDetails.selected_profile = 'default_profile';
                 for (let i = 0; i < this.state.uploaderShopLists.length; i++) {
                     if (this.state.uploaderShopLists[i].value === value) {
                         this.state.uploadProductDetails.target_shop_id = this.state.uploaderShopLists[i].shop_id;
