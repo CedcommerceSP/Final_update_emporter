@@ -99,6 +99,7 @@ export class Configuration extends Component {
         requests.getRequest('amazonimporter/config/getCredentials').then(data => {
             if ( data.success ) {
                 this.amazonCredentialsData = this.modifyAmazonCredentialData(data.data, 'amazon_credentials');
+                this.updateState();
             } else {
                 notify.error(data.message);
             }
@@ -351,7 +352,7 @@ export class Configuration extends Component {
         return (
             <div className="row">
                 <div className="col-md-6 col-sm-6 col-12 text-md-left text-sm-left text-center">
-                    <Heading>Amazon Importer Configuration</Heading>
+                    <Heading>Amazon Importer Sync Settings</Heading>
                 </div>
                 <div className="col-md-6 col-sm-6 col-12">
                     <Card>
@@ -437,10 +438,10 @@ export class Configuration extends Component {
                         {this.renderShopifyConfigurationSection()}
                     </Layout.Section>
                     <Layout.Section>
-                        {this.renderAmazonImporterConfigurationSection()}
+                        {this.renderAmazonCredentials()}
                     </Layout.Section>
                     <Layout.Section>
-                        {this.renderAmazonCredentials()}
+                        {this.renderAmazonImporterConfigurationSection()}
                     </Layout.Section>
                 </Layout>
             </Page>

@@ -474,7 +474,7 @@ class Dashboard extends Component {
     checkPayment = () => {
         requests.getRequest('plan/plan/getActive').then(status => {
             if ( status.success ) {
-                notify.success('plan Active');
+                notify.success('Your Plan is Activated');
                 this.changeStep(2);
             } else {
                 requests.getRequest('amazonimporter/config/isTrialActive').then(data => {
