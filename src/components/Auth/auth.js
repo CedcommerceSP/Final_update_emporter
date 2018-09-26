@@ -24,6 +24,7 @@ export class Auth extends Component {
     removeLocalStorage() {
         localStorage.removeItem('user_authenticated');
         localStorage.removeItem('auth_token');
+        localStorage.removeItem('trial');
     }
     componentWillMount() {
         const params = queryString.parse(this.props.location.search);

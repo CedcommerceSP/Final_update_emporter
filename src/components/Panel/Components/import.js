@@ -281,7 +281,7 @@ export class Import extends Component {
                             }
                             <div className="col-12 pt-1 pb-1">
                                 <Banner status="info">
-                                    <Label>You can upload products from the source to target either through our default profile or you can create an <NavLink to="/panel/profiling/create">custom profile</NavLink> for products upload. To know more about profiling and default profile visit our <NavLink to="/panel/faq">FAQ</NavLink> section.</Label>
+                                    <Label>You can upload products from the source to target either through our default profile or you can create an <NavLink to="/panel/profiling/create">custom profile</NavLink> for products upload.</Label>
                                 </Banner>
                             </div>
                             <div className="col-12 pt-1 pb-1">
@@ -293,7 +293,6 @@ export class Import extends Component {
                                             { label: 'Default Profile(Upload products with default attribute mapping)', value: 'default_profile' },
                                             { label: 'Custom Profile(Upload products by providing attribute mapping details by yourself)', value: 'custom_profile' }
                                         ]}
-                                        placeholder="Upload Products By"
                                         onChange={this.handleUploadChange.bind(this, 'selected_profile')}
                                         value={this.state.uploadProductDetails.selected_profile}
                                     />
@@ -552,6 +551,7 @@ export class Import extends Component {
                                 this.state.uploadProductDetails.profile_type = '';
                                 this.state.showUploadProducts = true;
                                 this.handleUploadChange('target','shopifygql');
+                                this.handleUploadChange('selected_profile','default_profile');
                                 this.updateState();
                             }} style={{cursor: 'pointer'}}>
                                 <div className="text-center pt-5 pb-5">
