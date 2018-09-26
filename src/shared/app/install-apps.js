@@ -157,9 +157,11 @@ class InstallAppsShared extends Component {
                 requests.postRequest(url, data, true)
                     .then(data => {
                         if (data.success) {
+                            this.props.success3(true);
                             notify.success(data.message);
                         } else {
                             notify.error(data.message);
+                            this.props.success3(false);
                         }
                         this.redirect();
                     });

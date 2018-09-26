@@ -248,7 +248,7 @@ export class Import extends Component {
                                 this.state.importerShopLists.length > 1 &&
                                 <div className="col-12 pt-1 pb-1 mt-2 mb-2">
                                     <Select
-                                        label={capitalizeWord(this.state.uploadProductDetails.source) + " Shop"}
+                                        label={"Amazon Shop"}
                                         placeholder="Source Shop"
                                         options={this.state.importerShopLists}
                                         onChange={this.handleUploadChange.bind(this, 'source_shop')}

@@ -40,9 +40,11 @@ class AppsShared extends Component {
                                         <Card title={app.title}>
                                             <div className="row p-5">
                                                 <div className="col-12 text-right">
-                                                    <Button onClick={() => {
+                                                    <Button
+                                                        disabled={this.props.success}
+                                                        onClick={() => {
                                                         this.installApp(app.code);
-                                                    }} primary>{app['installed']==0?'Connect':'ReConnect'}</Button>
+                                                    }} primary>{app['installed']===0?'Connect':'ReConnect'}</Button>
                                                 </div>
                                                 <div className="col-12">
                                                     <img src={app.image} alt={app.title}/>

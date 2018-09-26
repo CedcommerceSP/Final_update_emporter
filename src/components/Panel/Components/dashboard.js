@@ -51,6 +51,7 @@ class Dashboard extends Component {
             API_code: ['google'], // connector/get/installationForm, method -> get, eg: { code : 'google' }
             account_linked: [], // merchant center account. linked type
             modalOpen: false,
+            data3Check:false,
             /********* Step 3 ends **********/
             active_step: {
                 name: '', // anchor name
@@ -73,10 +74,9 @@ class Dashboard extends Component {
                         stepperActive: false, // used in stepper Check either Completed or not and also help in deciding with step to go
                     }, // step 1
                     {
-                        message: <p> Choose a plan. Initially, You are entitled to 15 days trial restricted to 100 SKU.
-                            For activating trial you only need valid Shopify store detail and valid Amazon seller account,
-                            No Credit Card Detail Required, we play fair. If satisfied, you can remove 100 SKU restriction by
-                            choosing any desired payment plan.</p>,
+                        message: <p>Grab the early mover advantage. First 15 day and 100 SKU upload is Free.
+                            The pre-requisites for using the app is a valid shopify store and Amazon
+                            Seller Account. No Credit Card details required to unlock free trial. </p>,
                         stepperMessage: 'Choose a plan', // stepper Small Message
                         API_endpoint: '', // Api End Point is used to check to send data or get data
                         data: '', // Data additional Field
@@ -364,7 +364,7 @@ class Dashboard extends Component {
                                         error={this.state.info_error.mobile?'Field Is Empty':null}
                                         onChange={this.handleFormChange.bind(this,'mobile')}
                                         label="Phone Number:"
-                                        type="tel"
+                                        type="number"
                                     />
                                 </div>
                                 <div className="col-12 col-md-12 text-left">
@@ -544,9 +544,9 @@ class Dashboard extends Component {
     openNewWindow(action) {
         this.setState({modalOpen: !this.state.modalOpen, code: action});
     } // Open Modal And A new Small Window For User
-    renderLinkedAccount() {
+    renderLinkedAccount = () => {
         return <div>
-            <AppsShared history={this.props.history} redirectResult={this.redirectResult}/>
+            <AppsShared history={this.props.history} redirectResult={this.redirectResult} success={this.state.data3Check}/>
             <div className="p-5 text-center">
                 <Button onClick={this.checkLinkedAccount} primary>
                     Continue to next step
@@ -609,12 +609,20 @@ class Dashboard extends Component {
                             title="Connect Account"
                         >
                             <Modal.Section>
-                                    <InstallAppsShared history={this.props.history} redirect={this.redirectResult} code={this.state.code}/>
+                                    <InstallAppsShared
+                                        history={this.props.history}
+                                        redirect={this.redirectResult}
+                                        code={this.state.code}
+                                        success3={this.handleLinkedAccount}
+                                    />
                             </Modal.Section>
                         </Modal> {/* Open For Step 3 to see Connected Account */}
                     </React.Fragment>}
             </Page>
         );
+    }
+    handleLinkedAccount = (event) => {
+        this.setState({data3Check:event});
     }
     redirectResult(status) {
         this.openNewWindow(status);
