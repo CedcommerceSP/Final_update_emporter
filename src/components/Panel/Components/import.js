@@ -248,7 +248,7 @@ export class Import extends Component {
                                 this.state.importerShopLists.length > 1 &&
                                 <div className="col-12 pt-1 pb-1 mt-2 mb-2">
                                     <Select
-                                        label={capitalizeWord(this.state.uploadProductDetails.source) + " Shop"}
+                                        label={"Amazon Shop"}
                                         placeholder="Source Shop"
                                         options={this.state.importerShopLists}
                                         onChange={this.handleUploadChange.bind(this, 'source_shop')}
@@ -260,6 +260,7 @@ export class Import extends Component {
                                 <Select
                                     label="Upload Products To"
                                     placeholder="Target"
+                                    disabled={true}
                                     options={this.state.uploadServicesList}
                                     onChange={this.handleUploadChange.bind(this, 'target')}
                                     value={this.state.uploadProductDetails.target}
@@ -270,7 +271,7 @@ export class Import extends Component {
                                 this.state.uploaderShopLists.length > 1 &&
                                 <div className="col-12 pt-1 pb-1 mt-2 mb-2">
                                     <Select
-                                        label={capitalizeWord(this.state.uploadProductDetails.target) + " Shop"}
+                                        label={"Shopify Shop"}
                                         placeholder="Target Shop"
                                         options={this.state.uploaderShopLists}
                                         onChange={this.handleUploadChange.bind(this, 'target_shop')}
@@ -280,7 +281,7 @@ export class Import extends Component {
                             }
                             <div className="col-12 pt-1 pb-1">
                                 <Banner status="info">
-                                    <Label>You can upload products from the source to target either through our default profile or you can create an <NavLink to="/panel/profiling/create">custom profile</NavLink> for products upload. To know more about profiling and default profile visit our <NavLink to="/panel/faq">FAQ</NavLink> section.</Label>
+                                    <Label>You can upload products from the source to target either through our default profile or you can create an <NavLink to="/panel/profiling/create">custom profile</NavLink> for products upload.</Label>
                                 </Banner>
                             </div>
                             <div className="col-12 pt-1 pb-1">
@@ -288,11 +289,11 @@ export class Import extends Component {
                                     this.state.uploadProductDetails.profile_type !== 'custom' &&
                                     <Select
                                         label="Upload Through"
+                                        placeholder="Choose Profile"
                                         options={[
                                             { label: 'Default Profile(Upload products with default attribute mapping)', value: 'default_profile' },
                                             { label: 'Custom Profile(Upload products by providing attribute mapping details by yourself)', value: 'custom_profile' }
                                         ]}
-                                        placeholder="Upload Products By"
                                         onChange={this.handleUploadChange.bind(this, 'selected_profile')}
                                         value={this.state.uploadProductDetails.selected_profile}
                                     />
@@ -342,9 +343,7 @@ export class Import extends Component {
                                 <Button onClick={() => {
                                     this.uploadProducts();
                                 }}
-                                        disabled={!(this.state.uploadProductDetails.source !== '' &&
-                                        this.state.uploadProductDetails.target !== '' &&
-                                        this.state.uploadProductDetails.selected_profile !== '')}
+                                        disabled={!(this.state.uploadProductDetails.source !== '')}
                                         primary>
                                     Upload Products
                                 </Button>
@@ -381,7 +380,7 @@ export class Import extends Component {
                 this.state.importerShopLists = [];
                 this.state.uploadProductDetails.source = value;
                 this.state.uploadProductDetails.profile_type = '';
-                this.state.uploadProductDetails.selected_profile = '';
+                this.state.uploadProductDetails.selected_profile = 'default_profile';
                 this.state.uploadProductDetails.source_shop = '';
                 this.state.uploadProductDetails.source_shop_id = '';
                 for (let i = 0; i < this.state.importServicesList.length; i++) {
@@ -405,7 +404,7 @@ export class Import extends Component {
                 this.state.uploaderShopLists = [];
                 this.state.uploadProductDetails.target = value;
                 this.state.uploadProductDetails.profile_type = '';
-                this.state.uploadProductDetails.selected_profile = '';
+                this.state.uploadProductDetails.selected_profile = 'default_profile';
                 this.state.uploadProductDetails.target_shop = '';
                 this.state.uploadProductDetails.target_shop_id = '';
                 for (let i = 0; i < this.state.uploadServicesList.length; i++) {
@@ -427,7 +426,7 @@ export class Import extends Component {
                 break;
             case 'source_shop':
                 this.state.uploadProductDetails.profile_type = '';
-                this.state.uploadProductDetails.selected_profile = '';
+                this.state.uploadProductDetails.selected_profile = 'default_profile';
                 for (let i = 0; i < this.state.importerShopLists.length; i++) {
                     if (this.state.importerShopLists[i].value === value) {
                         this.state.uploadProductDetails.source_shop_id = this.state.importerShopLists[i].shop_id;
@@ -438,7 +437,7 @@ export class Import extends Component {
                 break;
             case 'target_shop':
                 this.state.uploadProductDetails.profile_type = '';
-                this.state.uploadProductDetails.selected_profile = '';
+                this.state.uploadProductDetails.selected_profile = 'default_profile';
                 for (let i = 0; i < this.state.uploaderShopLists.length; i++) {
                     if (this.state.uploaderShopLists[i].value === value) {
                         this.state.uploadProductDetails.target_shop_id = this.state.uploaderShopLists[i].shop_id;
@@ -518,11 +517,6 @@ export class Import extends Component {
                             <Label>In order to upload your products from source marketplace to Shopify, kindly import your products from the source by clicking on 'Import Products', and then upload your products on Shopify by clicking on 'Upload Products'.<a href="javascript:void(0)" onClick={this.handleModalChange}>Click Here</a></Label>
                         </Banner>
                     </div>
-                    <div className="col-12 p-3">
-                        <Banner status="warning">
-                            <Label>Please make sure that you have selected a plan to import your products. You can choose a plan for your requirement from <NavLink to="/panel/plans">here</NavLink> and you can check your active plan from <NavLink to='/panel/plans/current'>here</NavLink></Label>
-                        </Banner>
-                    </div>
                     <div className="col-md-6 col-sm-6 col-12 p-3">
                         <Card>
                             <div onClick={() => {
@@ -550,6 +544,8 @@ export class Import extends Component {
                                 this.state.uploadProductDetails.selected_profile = '';
                                 this.state.uploadProductDetails.profile_type = '';
                                 this.state.showUploadProducts = true;
+                                this.handleUploadChange('target','shopifygql');
+                                this.handleUploadChange('selected_profile','default_profile');
                                 this.updateState();
                             }} style={{cursor: 'pointer'}}>
                                 <div className="text-center pt-5 pb-5">

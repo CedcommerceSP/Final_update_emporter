@@ -28,7 +28,7 @@ export class App extends Component {
       this.checkLoader();
       setTimeout(() => {
           this.getShopOrigin();
-      }, 1000)
+      }, 400)
   }
 
   getShopOrigin() {

@@ -2,7 +2,6 @@ import React, {Component} from 'react';
 import {Banner, Button, Checkbox, Heading, Label, Select, TextField} from "@shopify/polaris";
 import {capitalizeWord, modifyOptionsData} from "../../components/Panel/Components/static-functions";
 import {isUndefined} from "util";
-import * as queryString from "query-string";
 import {requests} from "../../services/request";
 import {notify} from "../../services/notify";
 
@@ -158,9 +157,11 @@ class InstallAppsShared extends Component {
                 requests.postRequest(url, data, true)
                     .then(data => {
                         if (data.success) {
+                            this.props.success3(true);
                             notify.success(data.message);
                         } else {
                             notify.error(data.message);
+                            this.props.success3(false);
                         }
                         this.redirect();
                     });
@@ -171,17 +172,17 @@ class InstallAppsShared extends Component {
     }
 
     getAppInstallationForm() {
-        let win = window.open('', '_blank', 'location=yes,height=600,width=550,scrollbars=yes,status=yes');
+        //let win = window.open('', '_blank', 'location=yes,height=600,width=550,scrollbars=yes,status=yes');
         requests.getRequest('connector/get/installationForm', {code: this.state.code })
             .then(data => {
                 if (data.success === true) {
                     if (data.data.post_type === 'redirect') {
-                        win.location = data.data.action;
+                       // win.location = data.data.action;
                         this.redirect();
                     } else {
-                        if (win !== null) {
-                            win.close();
-                        }
+                        // if (win !== null) {
+                        //     win.close();
+                        // }
                         const state = this.state;
                         this.state['schema'] = this.modifySchemaData(data.data.schema);
                         this.state['action'] = data.data.action;

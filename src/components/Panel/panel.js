@@ -93,6 +93,8 @@ export class Panel extends Component {
                                 if (data.code === 'UNDER_TRIAL') {
                                     this.setState({isTrialActive:true,daysLeft:data.message});
                                     globalState.setLocalStorage('trial',data.message);
+                                } else {
+                                    globalState.getLocalStorage('trial')?globalState.removeLocalStorage('trial'):null;
                                 }
                             }
                         });

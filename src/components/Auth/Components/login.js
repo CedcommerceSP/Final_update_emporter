@@ -75,7 +75,7 @@ export class Login extends Component {
                             <div className="col-12 text-center">
                                 <Loader
                                     type="ThreeDots"
-                                    color="#00BFFF"
+                                    color="#5c6ac4"
                                     height="100"
                                     width="100"
                                 />

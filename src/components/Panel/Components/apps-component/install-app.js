@@ -51,7 +51,7 @@ export class InstallApp extends Component {
                         <div className="row p-5">
                             <div className="col-12 mt-4 mb-4">
                                 <Banner status="info">
-                                    <Heading>{'Connect ' + capitalizeWord(this.state.code)}</Heading>
+                                    <Heading>{'Connect '} { capitalizeWord(this.state.code) === 'Amazonimporter'?'Amazon Importer':capitalizeWord(this.state.code)}</Heading>
                                 </Banner>
                             </div>
                             <div className="col-12 mt-1">
@@ -197,17 +197,17 @@ export class InstallApp extends Component {
     }
 
     getAppInstallationForm() {
-        let win = window.open('', '_blank', 'location=yes,height=600,width=550,scrollbars=yes,status=yes');
+        // let win = window.open('', '_blank', 'location=yes,height=600,width=550,scrollbars=yes,status=yes');
         requests.getRequest('connector/get/installationForm', {code: this.state.code })
             .then(data => {
                 if (data.success === true) {
                     if (data.data.post_type === 'redirect') {
-                        win.location = data.data.action;
+                        // win.location = data.data.action;
                         this.redirect();
                     } else {
-                        if (win !== null) {
-                            win.close();
-                        }
+                        // if (win !== null) {
+                        //     win.close();
+                        // }
                         const state = this.state;
                         this.state['schema'] = this.modifySchemaData(data.data.schema);
                         this.state['action'] = data.data.action;
