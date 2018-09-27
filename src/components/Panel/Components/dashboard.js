@@ -74,9 +74,7 @@ class Dashboard extends Component {
                         stepperActive: false, // used in stepper Check either Completed or not and also help in deciding with step to go
                     }, // step 1
                     {
-                        message: <p>Grab the early mover advantage. First 15 day and 100 SKU upload is Free.
-                            The pre-requisites for using the app is a valid shopify store and Amazon
-                            Seller Account. No Credit Card details required to unlock free trial. </p>,
+                        message: <p>Grab the early mover advantage and get first 15 days and 100 SKU uploads free. There are only two prerequisites for using this app, a valid Shopify store and Amazon Seller Account. No Credit Card details required to unlock free trial.</p>,
                         stepperMessage: 'Choose a plan', // stepper Small Message
                         API_endpoint: '', // Api End Point is used to check to send data or get data
                         data: '', // Data additional Field
