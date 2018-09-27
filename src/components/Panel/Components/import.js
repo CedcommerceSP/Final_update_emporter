@@ -57,7 +57,7 @@ export class Import extends Component {
     getAllImporterServices() {
         requests.getRequest('connector/get/services', { 'filters[type]': 'importer' })
             .then(data => {
-               if (data.success === true) {
+               if (data.success) {
                    this.state.importServicesList = [];
                    for (let i = 0; i < Object.keys(data.data).length; i++) {
                        let key = Object.keys(data.data)[i];
@@ -73,7 +73,7 @@ export class Import extends Component {
                    }
                    this.updateState();
                } else {
-                   notify.error('You have no available services');
+                   notify.error(data.message);
                }
             });
     }
@@ -81,7 +81,7 @@ export class Import extends Component {
     getAllUploaderServices() {
         requests.getRequest('connector/get/services', { 'filters[type]': 'uploader' })
             .then(data => {
-               if (data.success === true) {
+               if (data.success) {
                    this.state.uploadServicesList = [];
                    for (let i = 0; i < Object.keys(data.data).length; i++) {
                        let key = Object.keys(data.data)[i];
@@ -95,7 +95,7 @@ export class Import extends Component {
                    }
                    this.updateState();
                } else {
-                   notify.error('You have no available services');
+                   notify.error(data.message);
                }
             });
     }
@@ -553,7 +553,7 @@ export class Import extends Component {
                                 </div>
                                 <div className="text-center pt-2 pb-4">
                                     <span className="h2" style={{color: '#3f4eae'}}>Upload Products</span>
-                                    <Label>(Import From App To Shopify)</Label>
+                                    <Label>(Upload From App To Shopify)</Label>
                                 </div>
                             </div>
                         </Card>

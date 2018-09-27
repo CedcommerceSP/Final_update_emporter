@@ -63,8 +63,8 @@ export class Apps extends Component {
                                                                 Connect
                                                             </Button>
                                                         </div>:
-                                                        <div className="col-4 text-right">
-                                                            <FontAwesomeIcon icon={faCheckCircle} size="5x" color="#0f0"/>
+                                                        <div className="col-4 d-flex align-items-center justify-content-end">
+                                                            <FontAwesomeIcon icon={faCheckCircle} size="5x" color="#5c6ac4"/>
                                                         </div>}
                                                 </div>
                                             </Card>

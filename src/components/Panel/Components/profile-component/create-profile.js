@@ -383,25 +383,6 @@ export class CreateProfile extends Component {
                     this.state.basicDetails.source !== ''?this.handleBasicDetailsChange('source', this.state.basicDetails.source):null;
                     this.updateState();
                     if (!hasService) {
-                        // requests.getRequest('amazonimporter/config/isTrialActive').then(data => {
-                        //     if(data.success) {
-                        //         if (data.code === 'UNDER_TRIAL') {
-                        //             for (let i = 0; i < Object.keys(data.data).length; i++) {
-                        //                 let key = Object.keys(data.data)[i];
-                        //                 hasService = true;
-                        //                 this.importServices.push({
-                        //                     label: data.data[key].title,
-                        //                     value: data.data[key].marketplace,
-                        //                     shops: data.data[key].shops
-                        //                 });
-                        //             }
-                        //         } else {
-                        //             notify.info(data.message);
-                        //         }
-                        //     } else {
-                        //         notify.error(data.message);
-                        //     }
-                        // });
                     }
                     this.updateState();
                 } else {
@@ -430,7 +411,7 @@ export class CreateProfile extends Component {
                     this.handleBasicDetailsChange('target', 'shopifygql');
                     this.updateState();
                     if (!hasService) {
-                        notify.error('You have no available product upload service. Please choose a plan for the plan you want to sell product on.');
+                        notify.info('You have no available product upload service. Please choose a plan for the plan you want to sell product on.');
                     }
                     this.updateState();
                 } else {

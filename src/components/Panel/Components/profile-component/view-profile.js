@@ -37,8 +37,8 @@ class ViewProfile extends Component {
         let attributeMapping = this.state.attributeMapping;
         let marketplaceAttributes = this.state.marketplaceAttributes;
         basicInfo.name.value = value.name;
-        basicInfo.source.value = value.source;
-        basicInfo.target.value = value.target;
+        basicInfo.source.value = value.source === 'amazonimporter'?'Amazon':value.source;
+        basicInfo.target.value = value.target === 'shopifygql'?'Shopify':value.target;
         basicInfo.cat.value = value.targetCategory;
         basicInfo.query.value = value.query;
         if ( !isUndefined(value.attributeMapping) && value.attributeMapping !== null ){

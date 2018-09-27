@@ -30,13 +30,13 @@ export class Plans extends Component {
         }
     }
     componentWillUnmount() {
-        if ( globalState.getLocalStorage('trial') ) {
-            requests.getRequest('plan/plan/getActive').then(status => {
-                if ( status.success ) {
-                    globalState.removeLocalStorage('trial');
-                }
-            });
-        }
+        // if ( globalState.getLocalStorage('trial') ) {
+        //     requests.getRequest('plan/plan/getActive').then(status => {
+        //         if ( status.success ) {
+        //             globalState.removeLocalStorage('trial');
+        //         }
+        //     });
+        // }
     }
     render() {
         return (

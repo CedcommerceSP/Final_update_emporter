@@ -56,7 +56,7 @@ export class Panel extends Component {
     constructor(props) {
         super(props);
         this.disableHeader = this.disableHeader.bind(this);
-        this.trialActive();
+        // this.trialActive();
     }
     componentWillMount() {
         const params = queryString.parse(this.props.location.search);
@@ -79,38 +79,38 @@ export class Panel extends Component {
         daysLeft: '',
     };
     trialActive = () => {
-        if ( globalState.getLocalStorage('trial') ) {
-            this.state.isTrialActive = true;
-            this.state.daysLeft = globalState.getLocalStorage('trial');
-        } else if ( this.state.isTrialActiveClose ) {
-                requests.getRequest('plan/plan/getActive').then(status => {
-                    if ( status.success ) {
-                        this.setState({isTrialActive:false,isTrialActiveClose:false});
-                        globalState.getLocalStorage('trial')?globalState.removeLocalStorage('trial'):null;
-                    } else {
-                        requests.getRequest('amazonimporter/config/isTrialActive').then(data => {
-                            if(data.success) {
-                                if (data.code === 'UNDER_TRIAL') {
-                                    this.setState({isTrialActive:true,daysLeft:data.message});
-                                    globalState.setLocalStorage('trial',data.message);
-                                } else {
-                                    globalState.getLocalStorage('trial')?globalState.removeLocalStorage('trial'):null;
-                                }
-                            }
-                        });
-                    }
-                });
-            }
+        // if ( globalState.getLocalStorage('trial') ) {
+        //     this.state.isTrialActive = true;
+        //     this.state.daysLeft = globalState.getLocalStorage('trial');
+        // } else if ( this.state.isTrialActiveClose ) {
+        //         requests.getRequest('plan/plan/getActive').then(status => {
+        //             if ( status.success ) {
+        //                 this.setState({isTrialActive:false,isTrialActiveClose:false});
+        //                 globalState.getLocalStorage('trial')?globalState.removeLocalStorage('trial'):null;
+        //             } else {
+        //                 requests.getRequest('amazonimporter/config/isTrialActive').then(data => {
+        //                     if(data.success) {
+        //                         if (data.code === 'UNDER_TRIAL') {
+        //                             this.setState({isTrialActive:true,daysLeft:data.message});
+        //                             globalState.setLocalStorage('trial',data.message);
+        //                         } else {
+        //                             globalState.getLocalStorage('trial')?globalState.removeLocalStorage('trial'):null;
+        //                         }
+        //                     }
+        //                 });
+        //             }
+        //         });
+        //     }
     };
     // componentWillUnmount() {
     //     globalState.removeLocalStorage('trial');
     // }
     disableHeader(value) { // disable header
-        if ( !value ) {
-            globalState.removeLocalStorage('trial');
-        } else {
-            this.trialActive();
-        }
+        // if ( !value ) {
+        //     globalState.removeLocalStorage('trial');
+        // } else {
+        //     this.trialActive();
+        // }
         this.setState({header:value});
     }
     menu = panelFunctions.getMenu();
@@ -118,17 +118,17 @@ export class Panel extends Component {
         return (
                 <div className="container-fluid app-panel-container">
                     <div className="row">
-                        {this.state.isTrialActive && this.state.isTrialActiveClose && globalState.getLocalStorage('trial') && this.state.header?<div className="col-12 text-center" style={style.trial}>
-                            <h3>
-                                {this.state.daysLeft}
-                                <span style={style.close} className="text-right" onClick={() => {
-                                    this.setState({isTrialActive:false,isTrialActiveClose:false});
-                                    globalState.removeLocalStorage('trial');
-                                }}>
-                                    ☒
-                                </span>
-                            </h3>
-                        </div>:null}
+                        {/*{this.state.isTrialActive && this.state.isTrialActiveClose && globalState.getLocalStorage('trial') && this.state.header?<div className="col-12 text-center" style={style.trial}>*/}
+                            {/*<h3>*/}
+                                {/*{this.state.daysLeft}*/}
+                                {/*<span style={style.close} className="text-right" onClick={() => {*/}
+                                    {/*this.setState({isTrialActive:false,isTrialActiveClose:false});*/}
+                                    {/*globalState.removeLocalStorage('trial');*/}
+                                {/*}}>*/}
+                                    {/*☒*/}
+                                {/*</span>*/}
+                            {/*</h3>*/}
+                        {/*</div>:null}*/}
                         <div className="col-12">
                             <div className="app-header">
                                 {this.state.header?<Header menu={this.menu} history={this.props.history}/>:null}

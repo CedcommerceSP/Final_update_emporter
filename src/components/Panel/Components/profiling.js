@@ -94,7 +94,7 @@ export class Profiling extends Component {
         for (let i = 0; i < profiles.length; i++) {
             profilesList.push({
                 name: profiles[i].name,
-                source: profiles[i].source,
+                source: profiles[i].source === 'amazonimporter'?'Amazon':profiles[i].source,
                 target: profiles[i].target === 'shopifygql'?'shopify':profiles[i].target,
                 targetCategory: profiles[i].targetCategory,
                 query: profiles[i].query,

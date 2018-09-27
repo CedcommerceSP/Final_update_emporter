@@ -154,6 +154,7 @@ class Dashboard extends Component {
                     this.setState({
                         data: temp,
                         welcome_screen: flag,
+                        stepStart:!flag,
                         active_step: {
                             name: anchor,
                             step: parseInt(data.data) + 1
@@ -590,14 +591,9 @@ class Dashboard extends Component {
                 title="Home">
                 {this.state.welcome_screen?
                     <div>
-                        {/*<Card>*/}
-                        {/*<div>*/}
-                        {/*<img src={require('../../../assets/background/welcome_screen.png')} style={{height:'100%',width:'100%'}}/>*/}
-                        {/*</div>*/}
-                        {/*</Card>*/}
                         <Analyticsreporting/>
                     </div>
-                    :
+                    : this.state.stepStart?
                     <React.Fragment>
                         <Card>
                             {this.renderStepper()}
@@ -617,7 +613,13 @@ class Dashboard extends Component {
                                     />
                             </Modal.Section>
                         </Modal> {/* Open For Step 3 to see Connected Account */}
-                    </React.Fragment>}
+                    </React.Fragment>:<div>
+                            <Card>
+                            <div>
+                            <img src={require('../../../assets/background/welcome_screen.png')} style={{height:'100%',width:'100%'}}/>
+                            </div>
+                            </Card>
+                        </div>}
             </Page>
         );
     }
