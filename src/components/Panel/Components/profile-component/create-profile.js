@@ -676,7 +676,7 @@ export class CreateProfile extends Component {
                     <div className="text-center bs-wizard-stepnum">Step 1</div>
                     <div className="progress"><div className="progress-bar"></div></div>
                     <a className="bs-wizard-dot"></a>
-                    <div className="bs-wizard-info text-center">Select product source and where to upload products</div>
+                    <div className="bs-wizard-info text-center">Select product source and Destination</div>
                 </div>
 
                 <div className={(this.state.activeStep === 2) ? 'col-6 bs-wizard-step active' : (this.state.activeStep > 2) ? ' col-6 bs-wizard-step complete' : 'col-3 bs-wizard-step disabled'}>
@@ -1301,14 +1301,14 @@ export class CreateProfile extends Component {
                 if (this.validateStepOne()) {
                     this.saveProfileData();
                 } else {
-                    notify.error('Please choose product source, and where to upload product.');
+                    notify.error('Please fill all the required fields.');
                 }
                 break;
             case 2:
                 if (this.validateStepTwo()) {
                     this.saveProfileData();
                 } else {
-                    notify.error('Please choose product target category, and add query to select products to upload.');
+                    notify.error('Please choose product target Location, and add query to select products to upload.');
                 }
                 break;
             // case 3:

@@ -38,7 +38,7 @@ export class Products extends Component {
         {label: 'Delete', value: 'delete'},
         // {label: 'Upload', value: 'upload'}
     ];
-    visibleColumns = ['source_product_id', 'title', 'sku', 'price','quantity','asin'];
+    visibleColumns = ['source_variant_id', 'title', 'sku', 'price','quantity','asin'];
     imageColumns = ['main_image'];
     hideFilters = ['main_image' ,'long_description','type', 'asin'];
     customButton = ['asin']; // button

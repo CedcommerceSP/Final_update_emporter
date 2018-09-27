@@ -109,7 +109,7 @@ export class Import extends Component {
                         this.state.showImportProducts = false;
                         this.updateState();
                     }}
-                    title="Pull Products"
+                    title="Import Products"
                 >
                     <Modal.Section>
                             <div className="row">
@@ -281,7 +281,7 @@ export class Import extends Component {
                             }
                             <div className="col-12 pt-1 pb-1">
                                 <Banner status="info">
-                                    <Label>You can upload products from the source to target either through our default profile or you can create an <NavLink to="/panel/profiling/create">custom profile</NavLink> for products upload.</Label>
+                                    <Label>You can upload products from the source to target either through our default profile or you can create <NavLink to="/panel/profiling/create">custom profile</NavLink> for products upload.</Label>
                                 </Banner>
                             </div>
                             <div className="col-12 pt-1 pb-1">
@@ -316,7 +316,7 @@ export class Import extends Component {
                                         this.profilesList.length === 0 &&
                                         <div className="text-center">
                                             <Banner status="warning">
-                                                <Label>No profiles for {capitalizeWord(this.state.uploadProductDetails.source)} and {capitalizeWord(this.state.uploadProductDetails.target)} integration</Label>
+                                                <Label>No profiles for {this.state.uploadProductDetails.source === 'amazonimporter'?'Amazon':capitalizeWord(this.state.uploadProductDetails.source)} and {this.state.uploadProductDetails.target === 'shopifygql'?'Shopify':capitalizeWord(this.state.uploadProductDetails.target)}</Label>
                                             </Banner>
                                             <div className="text-center mt-2 mb-2">
                                                 <Button onClick={() => {
@@ -510,7 +510,7 @@ export class Import extends Component {
     render() {
         return (
             <Page
-                title="Upload Products">
+                title="Manage Products">
                 <div className="row">
                     <div className="col-12 p-3">
                         <Banner title="Please Read" status="info">

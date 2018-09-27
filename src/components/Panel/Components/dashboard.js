@@ -344,7 +344,7 @@ class Dashboard extends Component {
                                         value={this.state.info.full_name}
                                         minLength={5}
                                         onChange={this.handleFormChange.bind(this,'full_name')}
-                                        error={this.state.info_error.full_name?'Field Is Empty':null}
+                                        error={this.state.info_error.full_name?'*Please Enter Detail':null}
                                         label="Full Name:"
                                         type="text"
                                     />
@@ -362,7 +362,7 @@ class Dashboard extends Component {
                                         value={this.state.info.mobile}
                                         minLength={5}
                                         maxLength={14}
-                                        error={this.state.info_error.mobile?'Field Is Empty':null}
+                                        error={this.state.info_error.mobile?'*Please Enter Detail':null}
                                         onChange={this.handleFormChange.bind(this,'mobile')}
                                         label="Phone Number:"
                                         type="number"
@@ -380,7 +380,7 @@ class Dashboard extends Component {
                                     <TextField
                                         value={this.state.info.email}
                                         minLength={5}
-                                        error={this.state.info_error.email?'Field Is Empty':null}
+                                        error={this.state.info_error.email?'*Please Enter Detail':null}
                                         onChange={this.handleFormChange.bind(this,'email')}
                                         label="Email:"
                                         type="email"
@@ -462,7 +462,7 @@ class Dashboard extends Component {
                             <Checkbox
                                 checked={this.state.info.term_and_conditon}
                                 label="Accept Terms & Conditions"
-                                error={this.state.info_error.term_and_conditon?'please Check The Term And Conditons':''}
+                                error={this.state.info_error.term_and_conditon?'Please Check The Terms & Conditions':''}
                                 onChange={this.handleFormChange.bind(this,'term_and_conditon')}
                             />
                             <Button submit primary>Submit</Button>
@@ -532,7 +532,7 @@ class Dashboard extends Component {
         requests.getRequest('frontend/app/checkAccount?code=amazonimporter').then(data => {
             if ( data.success ) {
                 if ( data.data.account_connected ) {
-                    notify.success('Account Connected Success');
+                    notify.success('Account Connected Successfully');
                     this.changeStep(3);
                 } else {
                     notify.info('Please Connect Your Account First');
@@ -579,7 +579,7 @@ class Dashboard extends Component {
             <React.Fragment>
                 <ConfigShared history={this.props.history}/>
                 <div className="p-5 text-center">
-                    <Button onClick={this.checkConfig.bind(this, 'amazonimporter')} primary> Completed All The Steps</Button>
+                    <Button onClick={this.checkConfig.bind(this, 'amazonimporter')} primary>Submit</Button>
                 </div>
             </React.Fragment>
         );
@@ -588,7 +588,7 @@ class Dashboard extends Component {
     render() {
         return (
             <Page
-                title="Home">
+                title="Dashboard">
                 {this.state.welcome_screen?
                     <div>
                         <Analyticsreporting/>

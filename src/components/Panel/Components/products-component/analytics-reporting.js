@@ -25,13 +25,11 @@ class Analyticsreporting extends Component {
             selecteduploader: "bar",
             selecteduploadermarketplace:'',
             importer:[],
-            uploader:['Pending','Approved','Uploaded'],
+            uploader:['Uploaded'],
             uploadermarketplace:[],
             yaxisuploader:[],
             uploaderstatus:{
               uploaded:0,
-              approved:0,
-              pending:0
             },
             yaxisimporter:[]
         };
@@ -85,7 +83,8 @@ class Analyticsreporting extends Component {
                         }
                     })
                 }
-            })
+            });
+                total_products_importer.push(0);
                 this.setState({
                     yaxisimporter:total_products_importer
                 });
