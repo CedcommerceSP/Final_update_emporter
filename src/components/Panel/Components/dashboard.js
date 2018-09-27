@@ -479,19 +479,19 @@ class Dashboard extends Component {
                 notify.success('Your Plan is Activated');
                 this.changeStep(2);
             } else {
-                requests.getRequest('amazonimporter/config/isTrialActive').then(data => {
-                    if(data.success) {
-                        if (data.code === 'UNDER_TRIAL') {
-                            notify.success(data.message);
-                            this.changeStep(2);
-                        } else {
-                            notify.info(data.message);
-                        }
-                    } else {
-                        notify.error(data.message);
-                    }
-                });
-                // notify.error(status.message);
+                // requests.getRequest('amazonimporter/config/isTrialActive').then(data => {
+                //     if(data.success) {
+                //         if (data.code === 'UNDER_TRIAL') {
+                //             notify.success(data.message);
+                //             this.changeStep(2);
+                //         } else {
+                //             notify.info(data.message);
+                //         }
+                //     } else {
+                //         notify.error(data.message);
+                //     }
+                // });
+                notify.error(status.message);
             }
         });
     };

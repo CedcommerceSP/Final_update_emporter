@@ -232,7 +232,7 @@ class PlanBody extends Component {
                                                                 </div>);
                                                             }
                                                         })}
-                                                    </React.Fragment>);
+                                                    </React.Fragment>)
                                                 }):null}
                                             </div>
                                         </div>
