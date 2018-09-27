@@ -67,7 +67,7 @@ export class Products extends Component {
             title: 'Quantity',
             sortable: false
         },
-        source_product_id: {
+        source_variant_id: {
             title: 'ASIN',
             sortable:false,
         },
@@ -159,9 +159,9 @@ export class Products extends Component {
                     case 'type':
                     case 'title':
                     case 'long_description':
-                    case 'source_product_id':
                         this.state.appliedFilters['filter[details.' + key + '][' + this.filters.column_filters[key].operator + ']'] = this.filters.column_filters[key].value;
                         break;
+                    case 'source_variant_id':
                     case 'sku':
                     case 'price':
                     case 'weight':
@@ -187,7 +187,7 @@ export class Products extends Component {
                 rowData['price'] = data[i].variants['price'].toString();
                 rowData['type'] = data[i].details.type;
                 rowData['quantity'] = data[i].variants['quantity'] !== null?data[i].variants['quantity'].toString():'0';
-                rowData['source_product_id'] = data[i].variants.source_variant_id.toString();
+                rowData['source_variant_id'] = data[i].variants.source_variant_id.toString();
                 rowData['asin'] = data[i].variants.source_variant_id.toString();
                 products.push(rowData);
             }
