@@ -517,11 +517,6 @@ export class Import extends Component {
                             <Label>In order to upload your products from source marketplace to Shopify, kindly import your products from the source by clicking on 'Import Products', and then upload your products on Shopify by clicking on 'Upload Products'.<a href="javascript:void(0)" onClick={this.handleModalChange}>Click Here</a></Label>
                         </Banner>
                     </div>
-                    <div className="col-12 p-3">
-                        <Banner status="warning">
-                            <Label>Please make sure that you have selected a plan to import your products. You can choose a plan for your requirement from <NavLink to="/panel/plans">here</NavLink> and you can check your active plan from <NavLink to='/panel/plans/current'>here</NavLink></Label>
-                        </Banner>
-                    </div>
                     <div className="col-md-6 col-sm-6 col-12 p-3">
                         <Card>
                             <div onClick={() => {

@@ -407,7 +407,7 @@ class SmartDataTablePlain extends React.Component {
                           <Checkbox
                               checked={this.state.visibleColumns.indexOf(column.key) !== -1}
                               label={column.title}
-                              disabled={this.state.visibleColumns.length < 2}
+                              disabled={this.state.visibleColumns.length < 2 && this.state.visibleColumns.indexOf(column.key) !== -1}
                               onChange={this.manageVisibleColumns.bind(this, column.key)}/>
                         </div>
                     );
