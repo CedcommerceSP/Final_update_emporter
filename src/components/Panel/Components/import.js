@@ -61,7 +61,7 @@ export class Import extends Component {
                    this.state.importServicesList = [];
                    for (let i = 0; i < Object.keys(data.data).length; i++) {
                        let key = Object.keys(data.data)[i];
-                       if (!data.data[key].usable || !environment.isLive) {
+                       if (data.data[key].usable || !environment.isLive) {
                            if ( data.data[key].code !== 'shopify_importer' ) {
                                this.state.importServicesList.push({
                                    label: data.data[key].title,
@@ -85,7 +85,7 @@ export class Import extends Component {
                    this.state.uploadServicesList = [];
                    for (let i = 0; i < Object.keys(data.data).length; i++) {
                        let key = Object.keys(data.data)[i];
-                       if (!data.data[key].usable || !environment.isLive) {
+                       if (data.data[key].usable || !environment.isLive) {
                            this.state.uploadServicesList.push({
                                label: data.data[key].title,
                                value: data.data[key].marketplace,
