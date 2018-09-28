@@ -14,7 +14,7 @@ import InstallAppsShared from "../../../shared/app/install-apps";
 import ConfigShared from "../../../shared/config/config-shared";
 
 import * as embedded from '@shopify/polaris/embedded';
-import Analyticsreporting from "./products-component/analytics-reporting";
+import AnalyticsReporting from "./products-component/analytics-reporting";
 
 
 class Dashboard extends Component {
@@ -588,7 +588,7 @@ class Dashboard extends Component {
                 title="Dashboard">
                 {this.state.welcome_screen?
                     <div>
-                        <Analyticsreporting/>
+                        <AnalyticsReporting/>
                     </div>
                     : this.state.stepStart?
                     <React.Fragment>

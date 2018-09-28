@@ -1,22 +1,20 @@
 import React, {Component} from 'react';
-import {Page,Card,Select} from "@shopify/polaris";
-import {Bar, Doughnut, Line, Pie, Polar, Radar} from 'react-chartjs-2';
+import {Page, Card, Select} from "@shopify/polaris";
+import {Bar, Line, Pie} from 'react-chartjs-2';
 import {requests} from "../../../../services/request";
 import {notify} from "../../../../services/notify";
 import './analytics.css';
-import {
-    faCheck,faArrowAltCircleDown,faArrowAltCircleUp
-} from '@fortawesome/free-solid-svg-icons';
+import {faArrowAltCircleDown,faArrowAltCircleUp} from '@fortawesome/free-solid-svg-icons';
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 const options = [
-    {label: 'Line Chart', value: 'line'},
+    // {label: 'Line Chart', value: 'line'},
     {label: 'Bar Chart', value: 'bar'},
     {label: 'Pie Chart', value: 'pie'},
 ];
 
 let uploaderoptions=[];
 
-class Analyticsreporting extends Component {
+class AnalyticsReporting extends Component {
     constructor(props)
     {
         super(props);
@@ -50,7 +48,7 @@ class Analyticsreporting extends Component {
             if (data.success == true) {
                 importer = data.data;
                 Object.keys(importer).map(importerkey => {
-                    if(importerkey=='amazon_importer') {
+                    if(importerkey === 'amazon_importer') {
                         importertitlearray.push(importer[importerkey]['title']);
                         importer_marketplacearray.push(importer[importerkey]['marketplace']);
                     }
@@ -61,10 +59,7 @@ class Analyticsreporting extends Component {
             }
             else {
                 notify.error(data.message);
-
             }
-
-
         })
     }
     get_y_axis_importer(importer_marketplace_array,importer_title_array,entiredata_importer)
@@ -105,15 +100,13 @@ class Analyticsreporting extends Component {
         let uploaderarray=[];
         let uploader={};
         requests.getRequest('connector/get/services?filters[type]=uploader').then(data1 => {
-            if (data1.success == true) {
+            if (data1.success) {
                 uploader = data1.data;
 
                 Object.keys(uploader).map(uploaderkey => {
-
                         uploaderarray.push(uploader[uploaderkey]['marketplace']);
                         uploaderoptions.push({label:uploader[uploaderkey]['title'],value:uploader[uploaderkey]['marketplace']})
-                    }
-                )
+                    })
                 this.setState({
                     selecteduploadermarketplace:uploaderarray[0]
                 });
@@ -132,52 +125,36 @@ class Analyticsreporting extends Component {
         let uploaded=0;
         let approved=0;
         let pending=0;
-            requests.getRequest('frontend/app/getProductsUploadedData', {marketplace: uploader_marketplce}).then(data1 => {
-                if (data1.success == true) {
-                    uploader = data1.data;
-
-                   for(let j=0;j<uploader.length;j++)
+        requests.getRequest('frontend/app/getProductsUploadedData', {marketplace: uploader_marketplce}).then(data1 => {
+            if (data1.success == true) {
+                uploader = data1.data;
+            for(let j=0;j<uploader.length;j++){
+               let status=uploader[j].status
+                   if(status=='approved'){
+                       approved+=1;
+                   }
+                   else if(status=='uploaded'){
+                       uploaded+=1;
+                   }
+                   else if(status=='pending')
                    {
-                       let status=uploader[j].status
-                           if(status=='approved'){
-                               approved+=1;
-                           }
-                           else if(status=='uploaded'){
-                               uploaded+=1;
-                           }
-                           else if(status=='pending')
-                           {
-                               pending+=1;
-                           }
-                        }
-
-
+                       pending+=1;
+                   }
                 }
-                else {
-                    notify.error(data1.message);
-                }
-                uploaderarray=[];
-                uploaderarray.push(pending);
-                uploaderarray.push(approved);
-                uploaderarray.push(uploaded);
-
-                this.setState({yaxisuploader:uploaderarray})
-            })
-
-
-
-
+            }
+            else {
+                notify.error(data1.message);
+            }
+            uploaderarray=[];
+            uploaderarray.push(pending);
+            uploaderarray.push(approved);
+            uploaderarray.push(uploaded);
+            this.setState({yaxisuploader:uploaderarray})
+        })
     }
-
-
-
-
-
     preparedata(){
         this.getallimporter();
-        // this.get_y_axis_importer();
         this.getalluploader();
-        // this.get_y_axis_uploader();
     }
 
     handleChangeimporter = (newValue) => {
@@ -192,10 +169,6 @@ class Analyticsreporting extends Component {
         this.setState({selecteduploadermarketplace: newValue});
 
     };
-
-
-
-
     importerreports()
     {
         const line = {
@@ -239,7 +212,6 @@ class Analyticsreporting extends Component {
                     '#990033',
                     '#9900cc',
                     '#a3c2c2'
-
                 ],
                 hoverBackgroundColor: [
                     '#FF6384',
@@ -252,27 +224,9 @@ class Analyticsreporting extends Component {
                     '#990033',
                     '#9900cc',
                     '#a3c2c2'
-
-
-
                 ]
             }]
         };
-
-        // const bar = {
-        //     labels:  this.state.importer,
-        //     datasets: [
-        //         {
-        //             label: '',
-        //             backgroundColor: 'rgba(255,99,132,0.2)',
-        //             borderColor: 'rgba(255,99,132,1)',
-        //             borderWidth: 1,
-        //             hoverBackgroundColor: 'rgba(255,99,132,0.4)',
-        //             hoverBorderColor: 'rgba(255,99,132,1)',
-        //             data: [65, 59, 80, 81, 56, 55, 40]
-        //         }
-        //     ]
-        // };
         const bar = {
             labels:  this.state.importer,
             datasets: [
@@ -302,9 +256,6 @@ class Analyticsreporting extends Component {
                         '#990033',
                         '#9900cc',
                         '#a3c2c2'
-
-
-
                     ],
                     borderWidth: 1,
                     hoverBackgroundColor: [
@@ -318,9 +269,6 @@ class Analyticsreporting extends Component {
                         '#990033',
                         '#9900cc',
                         '#a3c2c2'
-
-
-
                     ],
                     hoverBorderColor: [
                         '#FF6384',
@@ -333,9 +281,6 @@ class Analyticsreporting extends Component {
                         '#990033',
                         '#9900cc',
                         '#a3c2c2'
-
-
-
                     ],
                     data:this.state.yaxisimporter
                 }
@@ -351,17 +296,14 @@ class Analyticsreporting extends Component {
                                      maintainAspectRatio: false
                                  }}
                 />
-                break;
             case 'bar':
                 return   <Bar height={300} data={bar}
                               options={{
                                   maintainAspectRatio: false
                               }}
                 />
-                break;
             case 'pie':
                 return <Pie height={150} data={pie}/>
-                break;
         }
     }
     uploaderreports()
@@ -496,27 +438,20 @@ class Analyticsreporting extends Component {
                                      maintainAspectRatio: false
                                  }}
                 />
-                break;
             case 'bar':
                 return   <Bar height={300} data={bar}
                               options={{
                                   maintainAspectRatio: false
                               }}
                 />
-                break;
             case 'pie':
                 return <Pie height={150} data={pie}/>
-                break;
         }
     }
 
     render() {
-
         return (
             <Page
-                // primaryAction={{content: 'Back', onClick: () => {
-                //         this.redirect('/panel/products');
-                //     }}}
                 title="Product Analytics" titleHidden={true}>
                 {/*<Card title="Products Imported">*/}
                 <div className="CARD w-100" style={{marginTop:75}}>
@@ -531,7 +466,7 @@ class Analyticsreporting extends Component {
                             <Card>
                     <div className="p-4">
                         <div className="row">
-                            <div className="col-md-8"></div>
+                            <div className="col-md-8"/>
                             <div className="col-12 col-md-4">
                                 <Select
                                     label=""
@@ -603,4 +538,4 @@ class Analyticsreporting extends Component {
     }
 }
 
-export default Analyticsreporting;
+export default AnalyticsReporting;

@@ -26,7 +26,7 @@ import { panelFunctions } from './functions';
 
 import './panel.css';
 import CurrentPlan from "./Components/plans-component/current-plan";
-import Analyticsreporting from "./Components/products-component/analytics-reporting";
+import AnalyticsReporting from "./Components/products-component/analytics-reporting";
 import BillingHistory from "./Components/plans-component/billing-history";
 import ConnectedAccounts from "./Components/apps-component/connected-accounts";
 import ReportAnIssue from "./Components/help-component/report-issue";
@@ -145,7 +145,7 @@ export class Panel extends Component {
                                     return <Products parentProps={this.props} history={this.props.history}/>
                                 }}/>
                                 <Route exact path='/panel/products/view/:id' component={ViewProducts}/>
-                                <Route exact path='/panel/products/analysis' component={Analyticsreporting}/>
+                                <Route exact path='/panel/products/analysis' component={AnalyticsReporting}/>
                                 <Route exact path='/panel/accounts' component={Apps}/>
                                 <Route exact path='/panel/accounts/connect' component={ConnectedAccounts}/>
                                 <Route exact path='/panel/plans' component={Plans}/>
