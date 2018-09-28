@@ -1,23 +1,20 @@
 import { environment } from '../environments/environment';
 
-import { Header } from '../components/Panel/Layout/header';
-
-let activePageUrl = '';
 export const globalState = {
     setLocalStorage: (key, value) => {
-        localStorage.setItem(key, value);
+        sessionStorage.setItem(key, value);
     },
     getLocalStorage: (key) => {
-        return localStorage.getItem(key);
+        return sessionStorage.getItem(key);
     },
     removeLocalStorage: (key) => {
-        return localStorage.removeItem(key);
+        return sessionStorage.removeItem(key);
     },
     getBearerToken: () => {
-        if (localStorage.getItem('user_authenticated') !== 'true') {
+        if (sessionStorage.getItem('user_authenticated') !== 'true') {
             return environment.Bearer;
         } else {
-            return localStorage.getItem('auth_token');
+            return sessionStorage.getItem('auth_token');
         }
     },
     prepareQuery: (params) => {
@@ -30,4 +27,4 @@ export const globalState = {
         }
         return queryString;
     }
-}
+};

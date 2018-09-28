@@ -10,7 +10,6 @@ import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {term_and_conditon} from './dashboard/term&condition';
 import PlanBody from "../../../shared/plans/plan-body";
 import AppsShared from "../../../shared/app/apps";
-import history from '../../../shared/history';
 import InstallAppsShared from "../../../shared/app/install-apps";
 import ConfigShared from "../../../shared/config/config-shared";
 

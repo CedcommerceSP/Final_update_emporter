@@ -2,7 +2,7 @@ import { environment } from '../environments/environment';
 import { globalState } from './globalstate';
 
 import { isUndefined } from 'util';
-const message = `Internal Server Error. We are fixing it, Don't Worry :)`;
+const message = `Internal Server Error. We are fixing it, Don't Worry`;
 export const requests = {
     getRequest: (endpoint, params, fullUrl, hideLoader) => {
         if (isUndefined(hideLoader) || !hideLoader) {

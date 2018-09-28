@@ -13,7 +13,6 @@ import { Panel } from './components/Panel/panel';
 import { PageLoader } from './shared/loader';
 import  OthersRoutes  from './components/other/routes';
 import { globalState } from './services/globalstate';
-import history from './shared/history';
 import { environment } from './environments/environment';
 import { isUndefined } from 'util';
 
@@ -75,11 +74,11 @@ export class App extends Component {
                   <Route path='/panel'
                          render={() => {
                              // return globalState.getLocalStorage('user_authenticated') === 'true' ? <Panel/> : <Redirect to="/auth"/>
-                             return true ? <Route path='/panel' component={Panel}/> : <Redirect to="/auth"/>
+                             return <Route path='/panel' component={Panel}/>
                          }}/>
                   <Route path='/show' render={() => {
                       // return globalState.getLocalStorage('user_authenticated') === 'true' ? <Panel/> : <Redirect to="/auth"/>
-                      return true ? <OthersRoutes history={history}/> : <Redirect to="/auth"/>
+                      return <Route path='/show' component={OthersRoutes}/>
                   }}/>
                   <Route path="**" render={() => (
                       <Redirect to="/auth"/>

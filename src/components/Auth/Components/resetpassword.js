@@ -53,7 +53,6 @@ class ResetPassword extends Component {
             if (this.state.newpassword == this.state.confirmpassword) {
                 requests.getRequest('user/forgotreset',{newpassword:this.state.newpassword,token:this.state.reset_key})
                     .then(data => {
-                        console.log(data);
                         if (data.success === true) {
                             notify.success(data.message);
                             this.redirect('/auth');
@@ -72,7 +71,6 @@ class ResetPassword extends Component {
     }
     componentWillMount() {
        const  queryParams = queryString.parse(this.props.location.search);
-       console.log(queryParams);
        if(queryParams.reset_key!=null) {
            this.setState({
                reset_key: queryParams['reset_key']

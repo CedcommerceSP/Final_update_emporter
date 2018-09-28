@@ -111,7 +111,6 @@ export class Signup extends Component {
     validateForm(data, key) {
         if (key === 'repeatPassword') {
             this.fieldErrors[key] = this.state.password !== data;
-            console.log(this.fieldErrors[key]);
         } else {
             this.fieldErrors[key] = !this.fieldValidations[key].test(data);
         }

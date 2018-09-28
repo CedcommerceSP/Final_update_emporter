@@ -78,7 +78,6 @@ class ForgetPasswordPage extends Component {
         if (this.isFormValid()) {
             requests.getRequest('core/user/forgot', this.state)
                 .then(data => {
-                    console.log(data);
                     if (data.success === true) {
                         notify.success(data.message);
                         this.redirect('/auth');

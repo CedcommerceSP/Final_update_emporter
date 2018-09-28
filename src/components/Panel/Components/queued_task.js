@@ -73,8 +73,8 @@ export class QueuedTask extends Component {
                 <div className="row p-sm-5 p-0">
                     <div className="col-12">
                         <Card>
-                            <Banner title="Recent Activities">
-                                <div className="row">
+                            <Card title="Recent Activities">
+                                <div className="row p-5">
                                     <div className="col-12 p-5">
                                         {
                                             this.state.recentActivities.map(activity => {
@@ -108,7 +108,7 @@ export class QueuedTask extends Component {
                                         </div>
                                     }
                                 </div>
-                            </Banner>
+                            </Card>
                         </Card>
                     </div>
                     <div className="col-12 mt-4">

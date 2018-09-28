@@ -13,6 +13,7 @@ import ConfirmationPage from "./Components/confirmation";
 import * as queryString  from 'query-string';
 import {isUndefined} from 'util';
 import { environment } from '../../environments/environment';
+import {globalState} from "../../services/globalstate";
 
 export class Auth extends Component {
 
@@ -22,9 +23,9 @@ export class Auth extends Component {
     }
 
     removeLocalStorage() {
-        localStorage.removeItem('user_authenticated');
-        localStorage.removeItem('auth_token');
-        localStorage.removeItem('trial');
+        globalState.removeLocalStorage('user_authenticated');
+        globalState.removeLocalStorage('auth_token');
+        globalState.removeLocalStorage('trial');
     }
     componentWillMount() {
         const params = queryString.parse(this.props.location.search);
