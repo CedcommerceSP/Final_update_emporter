@@ -4,12 +4,12 @@ import { globalState } from './globalstate';
 import { isUndefined } from 'util';
 const message = `Internal Server Error. We are fixing it, Don't Worry`;
 export const requests = {
-    getRequest: (endpoint, params, fullUrl, hideLoader) => {
+    getRequest: (endpoint, params, fullUrl, hideLoader, hide_error) => {
         if (isUndefined(hideLoader) || !hideLoader) {
             window.showLoader = true;
         }
         let paramsString = '';
-        if (!isUndefined(params)) {
+        if (!isUndefined(params) && typeof params === 'object') {
             paramsString += '?';
             for (let i = 0; i < Object.keys(params).length; i++) {
                 const end = (i < (Object.keys(params).length - 1)) ? '&' : '';
@@ -27,11 +27,11 @@ export const requests = {
                     if (isUndefined(hideLoader) || !hideLoader) {
                         window.showLoader = false;
                     }
-                    // window.showReportIssue = true;
                     return res.json();
                 }).catch(e => {
-                    // window.showReportIssue = true;
-                    return { success: false, message: message,code: e }
+                    if ( !hide_error || isUndefined(hide_error) ) {
+                        return { success: false, message: message,code: e }
+                    }
                 });
         } else {
             return fetch(endpoint + paramsString, {
@@ -46,7 +46,9 @@ export const requests = {
                     }
                     return res.json();
                 }).catch(e => {
-                    return { success: false, message: message,code: e }
+                    if ( !hide_error || isUndefined(hide_error) ) {
+                        return { success: false, message: message,code: e }
+                    }
                 });
         }
     },

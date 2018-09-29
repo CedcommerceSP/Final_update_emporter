@@ -135,7 +135,7 @@ class Dashboard extends Component {
                     let anchor = '';
                     let flag = true;
                     if ( parseInt(data.data) === 0 ) {
-                        requests.getRequest('shopifygql/setup/shopifydetails').then();
+                        requests.getRequest('shopifygql/setup/shopifydetails', false,false,false,true).then();
                     }
                     temp.forEach((keys, index) => {
                         if ( index < parseInt(data.data) ) { // if  ( step here < no of step completed )
