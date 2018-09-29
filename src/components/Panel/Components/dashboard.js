@@ -135,7 +135,7 @@ class Dashboard extends Component {
                     let anchor = '';
                     let flag = true;
                     if ( parseInt(data.data) === 0 ) {
-                        requests.getRequest('shopifygql/setup/shopifydetails', false,false,false,true).then();
+                        requests.getRequest('shopifygql/setup/shopifydetails').then();
                     }
                     temp.forEach((keys, index) => {
                         if ( index < parseInt(data.data) ) { // if  ( step here < no of step completed )
@@ -159,7 +159,7 @@ class Dashboard extends Component {
                     });
                 }
             } else {
-                notify.error(data.message);
+                // notify.error(data.message);
             }
         })
     } // initially run this to check which step is completed
