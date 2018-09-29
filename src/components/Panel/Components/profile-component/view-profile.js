@@ -59,12 +59,16 @@ class ViewProfile extends Component {
         if ( !isUndefined(value.marketplaceAttributes) && value.marketplaceAttributes !== null ){
             value.marketplaceAttributes.forEach(e => {
                 if ( typeof e.value !== 'object') {
-                    marketplaceAttributes.push({title: e.title,value:e.value});
+                    if ( e.value !== null && e.value !== '' ) {
+                        marketplaceAttributes.push({title: e.title,value:e.value});
+                    }
                 } else {
                     let _e = e.value.map(data => {
                         return data;
                     }).join(', ');
-                    marketplaceAttributes.push({title: e.title,value:_e});
+                    if ( _e !== '' && _e !== null ) {
+                        marketplaceAttributes.push({title: e.title,value:_e});
+                    }
                 }
             });
         }
@@ -82,14 +86,16 @@ class ViewProfile extends Component {
                         <Card title="Products Details">
                             <div className="row p-5">
                                 {Object.keys(this.state.data).map((data, index) => {
-                                    return (
-                                        <div className="col-6 mb-4" key={index}>
-                                            <Label id={this.state.data[data].name}>
-                                                <h3><b>{this.state.data[data].name}</b></h3>
-                                                <h4>{this.state.data[data].value}</h4>
-                                            </Label>
-                                        </div>
-                                    );
+                                    if ( this.state.data[data].value !== null && this.state.data[data].value !== '' ) {
+                                        return (
+                                            <div className="col-6 mb-4" key={index}>
+                                                <Label id={this.state.data[data].name}>
+                                                    <h3><b>{this.state.data[data].name}</b></h3>
+                                                    <h4>{this.state.data[data].value}</h4>
+                                                </Label>
+                                            </div>
+                                        );
+                                    }
                                 })}
                             </div>
                             {
@@ -149,31 +155,32 @@ class ViewProfile extends Component {
                                     </Card>
                                 </div>
                             }
-                            <div className="p-5">
-                                <Card title="MarketPlace Mapping">
-                                    <div className="p-5">
-                                        {this.state.marketplaceAttributes.map((data, key) => {
-                                            return (
-                                                <React.Fragment key={key}>
-                                                    <Card>
-                                                        <div className="row p-4 text-center">
-                                                            <div className="col-5 text-center">
-                                                                <h4>{data.title}</h4>
+                            {this.state.marketplaceAttributes.length > 0?
+                                <div className="p-5">
+                                    <Card title="MarketPlace Mapping">
+                                        <div className="p-5">
+                                            {this.state.marketplaceAttributes.map((data, key) => {
+                                                return (
+                                                    <React.Fragment key={key}>
+                                                        <Card>
+                                                            <div className="row p-4 text-center">
+                                                                <div className="col-5 text-center">
+                                                                    <h4>{data.title}</h4>
+                                                                </div>
+                                                                <div className="col-1 text-center">
+                                                                    <FontAwesomeIcon icon={faArrowsAltH} size="2x" color="#000"/>
+                                                                </div>
+                                                                <div className="col-5 text-center">
+                                                                    <h4>{data.value}</h4>
+                                                                </div>
                                                             </div>
-                                                            <div className="col-1 text-center">
-                                                                <FontAwesomeIcon icon={faArrowsAltH} size="2x" color="#000"/>
-                                                            </div>
-                                                            <div className="col-5 text-center">
-                                                                <h4>{data.value}</h4>
-                                                            </div>
-                                                        </div>
-                                                    </Card>
-                                                </React.Fragment>
-                                            );
-                                        })}
-                                    </div>
-                                </Card>
-                            </div>
+                                                        </Card>
+                                                    </React.Fragment>
+                                                );
+                                            })}
+                                        </div>
+                                    </Card>
+                                </div>:null}
                         </Card>
                     </div>
                 </Card>

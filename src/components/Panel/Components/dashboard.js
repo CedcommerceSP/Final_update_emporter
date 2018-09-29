@@ -83,7 +83,7 @@ class Dashboard extends Component {
                         stepperActive: false, // used in stepper Check either Completed or not
                     }, // step 2
                     {
-                        message: <p> Link your <b>account.</b></p>,
+                        message: <p> Link your <b>Account</b></p>,
                         stepperMessage: 'Account linked',
                         API_endpoint: '', // Api End Point is used to check to send data or get data
                         data: '', // Data additional Field

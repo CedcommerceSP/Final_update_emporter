@@ -95,7 +95,7 @@ export class Profiling extends Component {
             profilesList.push({
                 name: profiles[i].name,
                 source: profiles[i].source === 'amazonimporter'?'Amazon':profiles[i].source,
-                target: profiles[i].target === 'shopifygql'?'shopify':profiles[i].target,
+                target: profiles[i].target === 'shopifygql'?'Shopify':profiles[i].target,
                 targetCategory: profiles[i].targetCategory,
                 query: profiles[i].query,
                 profile_id: profiles[i].profile_id

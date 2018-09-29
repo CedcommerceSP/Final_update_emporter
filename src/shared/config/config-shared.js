@@ -9,8 +9,8 @@ class ConfigShared extends Component {
     shopifyConfigurationData = [];
     amazonImporterConfigurationData = [];
 
-    constructor() {
-        super();
+    constructor(props) {
+        super(props);
         this.state = {
             account_information: {
                 username: '',

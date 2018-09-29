@@ -95,29 +95,35 @@ class ViewProducts extends Component {
                         <div className="col-12 mb-5">
                             <Card>
                                 <div className="p-5 row">
+                                    {this.state.products_middle.sku !== ''?
                                     <div className="mb-5 col-sm-6 col-12">
                                         <h4><b>SKU</b></h4>
                                         <h5>{this.state.products_middle.sku}</h5>
-                                    </div>
+                                    </div>:null}
+                                    {this.state.products_middle.price !== ''?
                                     <div className="mb-5 col-sm-6 col-12">
                                         <h4><b>Title</b></h4>
                                         <h5>{this.state.products_middle.price}</h5>
-                                    </div>
+                                    </div>:null}
+                                    {this.state.products_middle.quantity !== ''?
                                     <div className="mb-5 col-sm-6 col-12">
                                         <h4><b>Quantity</b></h4>
                                         <h5>{this.state.products_middle.quantity}</h5>
-                                    </div>
+                                    </div>:null}
+                                    {this.state.products_middle.weight !=='' && this.state.products_middle.weight_unit !== '' ?
                                     <div className="mb-5 col-sm-6 col-12">
                                         <h4><b>Weight</b></h4>
                                         <h5>{this.state.products_middle.weight}&nbsp;/&nbsp;<i>{this.state.products_middle.weight_unit}</i></h5>
-                                    </div>
+                                    </div>:null}
                                     {Object.keys(this.state.products_middle_additional).map((key,index) => {
-                                        return (
-                                            <div className="mb-5 col-sm-6 col-12" key={index}>
-                                                <h4><b>{key.toUpperCase()}</b></h4>
-                                                <h5>{this.state.products_middle_additional[key]}</h5>
-                                            </div>
-                                        );
+                                        if (this.state.products_middle_additional[key] !=='' ) {
+                                            return (
+                                                <div className="mb-5 col-sm-6 col-12" key={index}>
+                                                    <h4><b>{key.toUpperCase()}</b></h4>
+                                                    <h5>{this.state.products_middle_additional[key]}</h5>
+                                                </div>
+                                            );
+                                        }
                                     })}
                                 </div>
                             </Card>
@@ -128,16 +134,18 @@ class ViewProducts extends Component {
                                     <Collapsible id="basic-collapsible" open={this.state.open}>
                                         <div className="row p-5">
                                             {Object.keys(this.state.products_bottom).map((key, index) => {
-                                                return (
-                                                    <div className="mb-5 col-sm-6 col-12" key={index}>
-                                                        <h4><b>{key.toUpperCase()}</b></h4>
-                                                        <ReadMoreReact
-                                                            text={this.state.products_bottom[key]}
-                                                              min={50}
-                                                              ideal={100}
-                                                              max={200} />
-                                                    </div>
-                                                );
+                                                if ( this.state.products_bottom[key] !== '' ) {
+                                                    return (
+                                                        <div className="mb-5 col-sm-6 col-12" key={index}>
+                                                            <h4><b>{key.toUpperCase()}</b></h4>
+                                                            <ReadMoreReact
+                                                                text={this.state.products_bottom[key]}
+                                                                min={50}
+                                                                ideal={100}
+                                                                max={200} />
+                                                        </div>
+                                                    );
+                                                }
                                             })}
                                         </div>
                                     </Collapsible>
