@@ -51,6 +51,7 @@ export function columnObject(key, columnTitles) {
     title: isUndefined(columnTitles[key]) ? parseHeader(key) : columnTitles[key].title,
     visible: true,
     sortable: isUndefined(columnTitles[key]) ? true : columnTitles[key].sortable,
+    type:isUndefined(columnTitles[key].type) ? 'string' : columnTitles[key].type,
     filterable: true,
   }
 }

@@ -57,6 +57,7 @@ export class Products extends Component {
         },
         price: {
             title: 'Price',
+            type: 'int',
             sortable: false
         },
         type: {
@@ -65,6 +66,7 @@ export class Products extends Component {
         },
         quantity: {
             title: 'Quantity',
+            type: 'int',
             sortable: false
         },
         source_variant_id: {
@@ -140,7 +142,6 @@ export class Products extends Component {
                 } else {
                     notify.error('No products found');
                 }
-
             });
     }
 

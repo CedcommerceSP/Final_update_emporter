@@ -32,6 +32,7 @@ import { Checkbox,
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faEdit, faTrash } from '@fortawesome/free-solid-svg-icons';
+import {PageLoader} from "../loader";
 
 class SmartDataTablePlain extends React.Component {
   allSelected = false;
@@ -42,6 +43,10 @@ class SmartDataTablePlain extends React.Component {
       {label: 'does not contains', value: 4},
       {label: 'starts with', value: 5},
       {label: 'ends with', value: 6}
+  ];
+  filterInt = [
+      {label: 'equals', value: 1},
+      {label: 'not equals', value: 2}
   ];
   defaultColumns = [];
   defaultFilters = {};
@@ -57,6 +62,7 @@ class SmartDataTablePlain extends React.Component {
       },
       currentPage: 1,
       isLoading: false,
+      showLoaderBar: true,
       count:isUndefined(props.count) ? false : props.multiSelect,
       activePage:isUndefined(props.activePage) ? false : props.multiSelect,
       multiSelect: isUndefined(props.multiSelect) ? false : props.multiSelect,
@@ -74,7 +80,8 @@ class SmartDataTablePlain extends React.Component {
         delete: false
       } : props.rowActions,
       columnFilters: {},
-      showColumnFilters: isUndefined(props.showColumnFilters) ? false : props.showColumnFilters
+      showColumnFilters: isUndefined(props.showColumnFilters) ? false : props.showColumnFilters,
+        dataTimeOut:''
     };
     this.prepareDefaultColumns();
     this.handleColumnToggle = this.handleColumnToggle.bind(this);
@@ -88,6 +95,14 @@ class SmartDataTablePlain extends React.Component {
       if ( !isUndefined(nextProps.count) && !isUndefined(nextProps.activePage) ) {
           if (nextProps.count !== this.props.count || nextProps.activePage !== this.props.activePage) {
               this.allSelected = false;
+              this.setState({showLoaderBar:true});
+          }
+      }
+  }
+  componentWillReceiveProps(nextProps) {
+      if ( !isUndefined(nextProps.data) ) {
+          if ( this.props.data !== nextProps.data ) {
+              this.setState({showLoaderBar:false});
           }
       }
   }
@@ -100,6 +115,7 @@ class SmartDataTablePlain extends React.Component {
               visible: true,
               sortable: isUndefined(this.state.columnTitles[this.state.visibleColumns[i]]) ? true : this.state.columnTitles[this.state.visibleColumns[i]].sortable,
               filterable: true,
+              type: isUndefined(this.state.columnTitles[this.state.visibleColumns[i]].type) ? 'string': 'int'
           });
       }
   }
@@ -132,6 +148,7 @@ class SmartDataTablePlain extends React.Component {
     this.state.columnFilters[key][field] = value;
     const state = this.state;
     this.setState(state);
+    this.setState({showLoaderBar:true});
     this.defaultFilters = Object.assign({}, this.state.columnFilters);
     this.props.columnFilters(this.state.columnFilters);
   }
@@ -353,7 +370,7 @@ class SmartDataTablePlain extends React.Component {
   }
 
   renderColumnFilters(column) {
-    return (
+      return (
         <div className="row" style={{minWidth:'100px',maxWidth:'400px'}}>
           <div className="mt-1 col-7 p-0" >
             <TextField
@@ -363,7 +380,7 @@ class SmartDataTablePlain extends React.Component {
           </div>
             <div className="mt-1 col-5 p-0" style={{maxWidth:'35px',marginRight:'3px'}}>
                 <Select
-                    options={this.filterConditions}
+                    options={column.type === 'int'?this.filterInt:this.filterConditions}
                     value={this.state.columnFilters[column.key].operator}
                     onChange={this.applyColumnFilters.bind(this, 'operator', column.key)}
                 />
@@ -491,9 +508,9 @@ class SmartDataTablePlain extends React.Component {
       if ( columns.length <= 0 ) {
           Object.keys(this.state.columnTitles).forEach(e => {
               if ( this.state.visibleColumns.indexOf(e) !== -1 ) {
-                  columns.push({key:e,title:this.state.columnTitles[e].title,visible:true,sortable:this.state.columnTitles[e].sortable, filterable: true})
+                  columns.push({key:e,title:this.state.columnTitles[e].title,visible:true,sortable:this.state.columnTitles[e].sortable,type:this.state.columnTitles[e].type, filterable: true})
               } else {
-                  columns.push({key:e,title:this.state.columnTitles[e].title,visible:false,sortable:this.state.columnTitles[e].sortable, filterable: true})
+                  columns.push({key:e,title:this.state.columnTitles[e].title,visible:false,sortable:this.state.columnTitles[e].sortable,type:this.state.columnTitles[e].type, filterable: true})
               }
           })
       }
@@ -516,8 +533,12 @@ class SmartDataTablePlain extends React.Component {
     const { isLoading } = this.state
     const columns = this.getColumns();
     const rows = this.getRows();
-    return !isLoading ? (
+    return (
       <div>
+          {
+              this.state.showLoaderBar &&
+              <PageLoader height="100" width="100" type="Bars" color="#3f4eae" ></PageLoader>
+          }
         <div className="row p-4">
           <div className="col-md-2 col-sm-4 col-4">
               {
@@ -607,7 +628,7 @@ class SmartDataTablePlain extends React.Component {
             {this.renderPagination(rows)}
         </div>
       </div>
-    ) : loader
+    )
   }
 }
 
