@@ -132,7 +132,7 @@ export class Login extends Component {
                         globalState.setLocalStorage('auth_token', data.data.token);
                         this.redirect('/panel/');
                     } else {
-                        notify.error(data.message);
+                        // notify.error(data.message);
                     }
                 });
         } else {
