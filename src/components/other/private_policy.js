@@ -133,21 +133,6 @@ class PrivatePolicy extends Component {
                                             account. We are also not responsible for any illegal use of CedCommerce.com
                                             by our users.
                                         </Label>
-                                        <span className="font-weight-bold" style={{fontSize:'25px',color:'#4d4849'}}> Communication Policy</span>
-                                        <Label>
-                                            We understand the value of your time and money and expect same from you. We
-                                            expect that if you are providing any contact details at the time of
-                                            registration, it will be used by us to communicate with you in future. We
-                                            can use your contact details for the following purpose-
-
-                                            1) To inform you about latest updates about app and marketplaces.
-                                            2) To inform you about any any issue of app or marketplace.
-                                            3) Inform you about your trial and subscription.
-                                            4) Introducing any new product.
-                                            5) Strategies to boost up your business
-
-                                            We hope you will also be keep in touch and cooperate with us.
-                                        </Label>
                                         <span className="font-weight-bold" style={{fontSize:'25px',color:'#4d4849'}}> Review Policy</span>
                                         <Label>
                                             We respect your thoughts and ofcourse we will always agree with your

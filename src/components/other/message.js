@@ -5,6 +5,7 @@ import {
     faCheck,faTimes
 } from '@fortawesome/free-solid-svg-icons';
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
+import {Button} from "@shopify/polaris";
 class MessageShow extends Component {
     constructor(props) {
         super(props);
@@ -12,6 +13,8 @@ class MessageShow extends Component {
             message: '',
             title: '',
             success: '',
+            shop: null,
+            failed:'',
         }
     }
     componentWillMount() {
@@ -26,19 +29,34 @@ class MessageShow extends Component {
                message: queryParams.message,
                title: queryParams.title,
                success: queryParams.success,
+               shop: queryParams.shop !== undefined ?queryParams.shop : null,
+               failed: queryParams.failed !== undefined,
            });
-           setTimeout(() => {
-               window.close();
-           },2000)
+           if ( !this.state.failed ) {
+               setTimeout(() => {
+                   // window.location.href = 'https://' + this.state.shop + '/admin';
+                   window.close();
+               },2000)
+           } else {
+               setTimeout(() => {
+                   // window.location.href = 'https://' + this.state.shop + '/admin';
+                   window.close();
+               },6000)
+           }
        }
        else
        {
+           window.close();
            this.redirect('/auth');
        }
     }
     redirect(url) {
         this.props.history.push(url);
     }
+    handleClick = () => {
+        window.close();
+        // window.location.href = 'https://' + this.state.shop;
+    };
     render() {
         return (
             <div className="row text-center m-5 h-100">
@@ -50,8 +68,21 @@ class MessageShow extends Component {
                                 : <FontAwesomeIcon icon={faTimes} size="5x"/>
                             }
                         </div>
-                        <div className="CARD-body col-12 p-5 pl-5 w-100" style={{height:360}}>
+                        <div className="CARD-body col-12 p-5 pl-5 w-100" style={{height:300}}>
+                            <hr/>
                             <h4>{this.state.message}</h4>
+                            <div className="text-left mt-4">
+                                {this.state.failed?<ul>
+                                    <li><h5>You Can uninstall:-</h5></li>
+                                    <li><h5>Go to app from your shopify dahboard</h5></li>
+                                    <li><h5>You can Un-install the App by clicking in Bin Icon</h5></li>
+                                </ul>:null}
+                            </div>
+                            <div className="p-5 text-right">
+                                {this.state.failed?<Button primary onClick={this.handleClick}>
+                                    Back
+                                </Button>:null}
+                            </div>
                         </div>
                     </div>
                 </div>

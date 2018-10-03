@@ -84,14 +84,10 @@ class AnalyticsReporting extends Component {
                     yaxisimporter:total_products_importer
                 });
             }
-
-
             else {
                 notify.error(data.message);
 
             }
-
-
         })
     }
 
@@ -99,14 +95,16 @@ class AnalyticsReporting extends Component {
     {
         let uploaderarray=[];
         let uploader={};
+        let uploaderoptionsTemp = [];
         requests.getRequest('connector/get/services?filters[type]=uploader').then(data1 => {
             if (data1.success) {
                 uploader = data1.data;
 
                 Object.keys(uploader).map(uploaderkey => {
                         uploaderarray.push(uploader[uploaderkey]['marketplace']);
-                        uploaderoptions.push({label:uploader[uploaderkey]['title'],value:uploader[uploaderkey]['marketplace']})
-                    })
+                        uploaderoptionsTemp.push({label:uploader[uploaderkey]['title'],value:uploader[uploaderkey]['marketplace']})
+                    });
+                uploaderoptions = uploaderoptionsTemp.slice(0);
                 this.setState({
                     selecteduploadermarketplace:uploaderarray[0]
                 });

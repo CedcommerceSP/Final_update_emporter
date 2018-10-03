@@ -121,14 +121,14 @@ class ConfigShared extends Component {
 
                             })
                         }
-                        <div className="col-12 text-right pt-2 pb-1">
-                            <Button
-                                // disabled={!this.state.shopify_configuration_updated}
-                                onClick={() => {
-                                    this.saveShopifyConfigData();
-                                }}
-                                primary>Save</Button>
-                        </div>
+                        {/*<div className="col-12 text-right pt-2 pb-1">*/}
+                            {/*<Button*/}
+                                {/*// disabled={!this.state.shopify_configuration_updated}*/}
+                                {/*onClick={() => {*/}
+                                    {/*this.saveShopifyConfigData();*/}
+                                {/*}}*/}
+                                {/*primary>Save</Button>*/}
+                        {/*</div>*/}
                     </div>
                 </Card>
             </div>
@@ -155,7 +155,6 @@ class ConfigShared extends Component {
                                                 </Select>
                                             </div>
                                         );
-                                        break;
                                     case 'checkbox':
                                         return (
                                             <div className="col-12 pt-2 pb-2" key={this.amazonImporterConfigurationData.indexOf(config)}>
@@ -177,7 +176,6 @@ class ConfigShared extends Component {
                                                 </div>
                                             </div>
                                         );
-                                        break;
                                     default:
                                         return (
                                             <div className="col-12 pt-2 pb-2" key={this.amazonImporterConfigurationData.indexOf(config)}>
@@ -189,19 +187,18 @@ class ConfigShared extends Component {
                                                 </TextField>
                                             </div>
                                         );
-                                        break;
                                 }
 
                             })
                         }
-                        <div className="col-12 text-right pt-2 pb-1">
-                            <Button
-                                // disabled={!this.state.amazon_importer_configuration_updated}
-                                onClick={() => {
-                                    this.saveAmazonImporterConfigData();
-                                }}
-                                primary>Save</Button>
-                        </div>
+                        {/*<div className="col-12 text-right pt-2 pb-1">*/}
+                            {/*<Button*/}
+                                {/*disabled={!this.state.amazon_importer_configuration_updated}*/}
+                                {/*onClick={() => {*/}
+                                    {/*this.saveAmazonImporterConfigData();*/}
+                                {/*}}*/}
+                                {/*primary>Save</Button>*/}
+                        {/*</div>*/}
                     </div>
                 </Card>
             </div>
@@ -214,6 +211,15 @@ class ConfigShared extends Component {
                 <div className="row">
                     {this.renderShopifyConfigurationSection()}
                     {this.renderAmazonImporterConfigurationSection()}
+                    <div className="col-12 p-5 text-center">
+                        <Button
+                            onClick={() => {
+                                this.saveAmazonImporterConfigData();
+                                this.saveShopifyConfigData();
+                            }}
+                            disabled={!this.state.amazon_importer_configuration_updated}
+                            primary>Submit</Button>
+                    </div>
                 </div>
             </Page>
         );
@@ -246,6 +252,7 @@ class ConfigShared extends Component {
             .then(data => {
                 if (data.success) {
                     notify.success(data.message);
+                    this.props.checkConfig('amazonimporter');
                 } else {
                     notify.error(data.message);
                 }
@@ -279,9 +286,9 @@ class ConfigShared extends Component {
         requests.postRequest('connector/get/saveConfig', { marketplace: 'shopify', data: this.state.shopify_configuration })
             .then(data => {
                 if (data.success) {
-                    notify.success(data.message);
+                   //  notify.success(data.message);
                 } else {
-                    notify.error(data.message);
+                   // notify.error(data.message);
                 }
                 this.getShopifyConfigurations();
             });

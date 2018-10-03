@@ -41,22 +41,6 @@ Your Subscription will automatically renew at the end of each billing cycle unle
 
            <p><span style={{fontWeight: "600",fontSize:'12px'}}>You are responsible for your account, content, and communications with others while using the Services. You agree to use the Services in compliance with applicable law. This is your responsibility and you agree to not use CedCommerce in a way that violates marketplace Terms of Use. By using CedCommerce.com, you agree to not violate any of marketplace terms. In the event of violating any marketplace rules, we have the right to close your account. We are also not responsible for any illegal use of CedCommerce.com by our users.</span></p>
 
-               <p style={{fontWeight: "700",fontSize:'16px',padding:'30px 0 20px'}}><strong>Communication Policy</strong></p>
-
-           <p><span style={{fontWeight: "600",fontSize:'12px'}}> We understand the value of your time and money and expect the same from you. We expect that if you are providing any contact details at the time of registration, it will be used by us to communicate with you in the future. We can use your contact details for the following purpose-</span></p>
-
-           <p><span style={{fontWeight: "600",fontSize:'12px'}}>1) To inform you about the latest updates about app and marketplaces.</span></p>
-
-           <p><span style={{fontWeight: "600",fontSize:'12px'}}>2) To inform you about any issue of app or marketplace.</span></p>
-
-           <p><span style={{fontWeight: "600",fontSize:'12px'}}>3)Inform you about your trial and subscription.</span></p>
-
-           <p><span style={{fontWeight: "600",fontSize:'12px'}}>4) Introducing any new product.</span></p>
-
-           <p><span style={{fontWeight: "600",fontSize:'12px'}}>5) Strategies to boost up your business</span></p>
-
-           <p><span style={{fontWeight: "600",fontSize:'12px'}}>We hope you will also be kept in touch and cooperate with us.</span></p>
-
            <p style={{fontWeight: "700",fontSize:'16px',padding:'30px 0 20px'}}><strong>Review Policy</strong></p>
 
            <p><span style={{fontWeight: "600",fontSize:'12px'}}>We respect your thoughts and of course we will always agree with your decision. In case you are not finding us useful for you, first, you have to communicate properly with us so that we can understand your problem. We assure we will never let you go with dissatisfaction.</span></p>

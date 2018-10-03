@@ -4,6 +4,8 @@ import {capitalizeWord, modifyOptionsData} from "../../components/Panel/Componen
 import {isUndefined} from "util";
 import {requests} from "../../services/request";
 import {notify} from "../../services/notify";
+import {environment} from "../../environments/environment";
+import {globalState} from "../../services/globalstate";
 
 class InstallAppsShared extends Component {
     queryParams;
@@ -34,6 +36,11 @@ class InstallAppsShared extends Component {
                     <Banner status="info">
                         <Heading>{'Connect '} { capitalizeWord(this.state.code) === 'Amazonimporter'?'Amazon Importer':capitalizeWord(this.state.code)}</Heading>
                     </Banner>
+                </div>
+                <div className="col-12 text-right">
+                    <Button onClick={() => {window.open('http://apps.cedcommerce.com/importer/amazon_seller.pdf' )}}>
+                        Help PDF
+                    </Button>
                 </div>
                 <div className="col-12 mt-1">
                     <div className="row">

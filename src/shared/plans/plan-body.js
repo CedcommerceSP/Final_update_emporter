@@ -67,6 +67,7 @@ class PlanBody extends Component {
         });
         data1 = Object.assign({},RemoveService(Object.assign({},newArg), value.slice(0))); // Change the plan in Desire Format
         let win = window.open('', '_blank', 'location=yes,height=600,width=550,scrollbars=yes,status=yes');
+        // win.close();
         requests.postRequest('plan/plan/choose',data1).then(data => {
             if (data.success) {
                 if ( !isUndefined(data.data.confirmation_url )) {
@@ -99,61 +100,6 @@ class PlanBody extends Component {
         return (
             <React.Fragment>
                 <div className="row">
-                    {/*<div className="col-sm-4 col-12 pt-3 pb-3">/!* Starting Of Plan Card *!/*/}
-                        {/*<Card>*/}
-                            {/*<div className="d-flex justify-content-center">*/}
-                                {/*<div className="p-5" >*/}
-                                    {/*<div className="mb-5 text-center" > /!* Plan Numeric Price *!/*/}
-                                        {/*<p className="price-tag">*/}
-                                            {/*<span className="price-tag_small">$</span>*/}
-                                            {/*0*/}
-                                            {/*<span className="price-tag_small">/15 Days </span>*/}
-                                        {/*</p>*/}
-                                    {/*</div>*/}
-                                    {/*<div className="mb-5"> /!* Button To choose Plan *!/*/}
-                                        {/*<Button primary={true} fullWidth={true} size="large" onClick={() => this.props.paymentStatus('trial')}>*/}
-                                            {/*Choose Plan*/}
-                                        {/*</Button>*/}
-                                    {/*</div>*/}
-                                    {/*<div className="mb-5 text-center"> /!* Descriptions For Particular deatails *!/*/}
-                                        {/*<h1 className="mb-4"><b>Trial Pack</b></h1>*/}
-                                        {/*<h4>Upload upto 100 SKU</h4>*/}
-                                    {/*</div>*/}
-                                    {/*<hr/>*/}
-                                    {/*<div className="text-center mt-5"> /!* Services Data *!/*/}
-                                        {/*<React.Fragment>*/}
-                                            {/*<p className="service-body">*/}
-                                                {/*<span className="service-description mb-3" style={{fontWeight:'bold'}}><b>Services</b></span>*/}
-                                                {/*<span>*/}
-                                                {/*<Tooltip content="Trial Pack" preferredPosition="above">*/}
-                                                    {/*<Link><Icon source="help" color="inkLighter" backdrop={true} /></Link>*/}
-                                                {/*</Tooltip>*/}
-                                            {/*</span>*/}
-                                            {/*</p>*/}
-                                            {/*<div className="text-left">*/}
-                                                {/*<Checkbox*/}
-                                                    {/*checked={true}*/}
-                                                    {/*label="24X7 Support"*/}
-                                                    {/*disabled={true} />*/}
-                                            {/*</div>*/}
-                                            {/*<div className="text-left">*/}
-                                                {/*<Checkbox*/}
-                                                    {/*checked={true}*/}
-                                                    {/*label="100 SKU"*/}
-                                                    {/*disabled={true} />*/}
-                                            {/*</div>*/}
-                                            {/*<div className="text-left">*/}
-                                                {/*<Checkbox*/}
-                                                    {/*checked={true}*/}
-                                                    {/*label="Profiling"*/}
-                                                    {/*disabled={true} />*/}
-                                            {/*</div>*/}
-                                        {/*</React.Fragment>*/}
-                                    {/*</div>*/}
-                                {/*</div>*/}
-                            {/*</div>*/}
-                        {/*</Card>*/}
-                    {/*</div>*/}
                     {this.state.data.map((data, index) => {
                         return (
                             <div className="col-sm-4 col-12 pt-3 pb-3" key={index}>{/* Starting Of Plan Card */}

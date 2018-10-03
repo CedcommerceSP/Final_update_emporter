@@ -119,7 +119,6 @@ export class Login extends Component {
             globalState.setLocalStorage('shop', queryParams['shop']);
             this.redirect('/panel/');
         }
-
     }
 
     submitLogin() {

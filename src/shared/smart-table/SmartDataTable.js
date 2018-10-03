@@ -62,7 +62,7 @@ class SmartDataTablePlain extends React.Component {
       },
       currentPage: 1,
       isLoading: false,
-      showLoaderBar: true,
+      showLoaderBar: !isUndefined(props.showLoaderBar)?props.showLoaderBar:false,
       count:isUndefined(props.count) ? false : props.multiSelect,
       activePage:isUndefined(props.activePage) ? false : props.multiSelect,
       multiSelect: isUndefined(props.multiSelect) ? false : props.multiSelect,
@@ -95,14 +95,16 @@ class SmartDataTablePlain extends React.Component {
       if ( !isUndefined(nextProps.count) && !isUndefined(nextProps.activePage) ) {
           if (nextProps.count !== this.props.count || nextProps.activePage !== this.props.activePage) {
               this.allSelected = false;
-              this.setState({showLoaderBar:true});
+              if ( !isUndefined(nextProps.showLoaderBar) ) {
+                  this.setState({showLoaderBar:nextProps.showLoaderBar});
+              }
           }
       }
   }
   componentWillReceiveProps(nextProps) {
       if ( !isUndefined(nextProps.data) ) {
           if ( this.props.data !== nextProps.data ) {
-              this.setState({showLoaderBar:false});
+             this.setState({showLoaderBar:false});
           }
       }
   }
@@ -148,7 +150,9 @@ class SmartDataTablePlain extends React.Component {
     this.state.columnFilters[key][field] = value;
     const state = this.state;
     this.setState(state);
-    this.setState({showLoaderBar:true});
+    if ( !isUndefined(this.props.showLoaderBar) ) {
+        this.setState({showLoaderBar:this.props.showLoaderBar});
+    }
     this.defaultFilters = Object.assign({}, this.state.columnFilters);
     this.props.columnFilters(this.state.columnFilters);
   }
@@ -237,9 +241,11 @@ class SmartDataTablePlain extends React.Component {
                   {sortable && column.sortable ? this.renderSorting(column) : null}
               </span>*/}
             </div>
-            <div  style={{'height': '50px'}}>
+            <div>
               {this.state.showColumnFilters && Object.keys(this.state.columnFilters).length > 0 && this.state.hideFilters.indexOf(column.key) === -1 &&
-              this.renderColumnFilters(column)}
+              <div style={{'height': '50px'}}>
+                  {this.renderColumnFilters(column)}
+              </div>}
             </div>
           </td>
         )
@@ -535,10 +541,10 @@ class SmartDataTablePlain extends React.Component {
     const rows = this.getRows();
     return (
       <div>
-          {
-              this.state.showLoaderBar &&
-              <PageLoader height="100" width="100" type="Bars" color="#3f4eae" ></PageLoader>
-          }
+          {/*{*/}
+              {/*this.state.showLoaderBar &&*/}
+              {/*<PageLoader height="100" width="100" type="Bars" color="#3f4eae" />*/}
+          {/*}*/}
         <div className="row p-4">
           <div className="col-md-2 col-sm-4 col-4">
               {

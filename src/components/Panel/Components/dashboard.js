@@ -560,7 +560,7 @@ class Dashboard extends Component {
                     // if ( val !== 'shopify' ) {
                     //     this.checkConfig('shopify')
                     // } else {
-                        notify.success('Account Connected Success');
+                       // notify.success('Account Connected Success');
                         this.changeStep(4);
                     // }
                 } else {
@@ -574,10 +574,10 @@ class Dashboard extends Component {
     renderConfig() {
         return (
             <React.Fragment>
-                <ConfigShared history={this.props.history}/>
-                <div className="p-5 text-center">
-                    <Button onClick={this.checkConfig.bind(this, 'amazonimporter')} primary>Submit</Button>
-                </div>
+                <ConfigShared history={this.props.history} checkConfig={this.checkConfig} />
+                {/*<div className="p-5 text-center">*/}
+                    {/*<Button onClick={this.checkConfig.bind(this, 'amazonimporter')} primary>Submit</Button>*/}
+                {/*</div>*/}
             </React.Fragment>
         );
     }

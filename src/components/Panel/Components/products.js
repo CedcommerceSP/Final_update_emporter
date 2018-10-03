@@ -93,7 +93,8 @@ export class Products extends Component {
             selectedProducts: [],
             deleteProductData: false,
             toDeleteRow: {},
-            totalPage:0
+            totalPage:0,
+            showLoaderBar:false,
         };
         this.getProducts();
         this.getInstalledApps();
@@ -124,6 +125,7 @@ export class Products extends Component {
                 } else {
                     notify.error(data.message);
                 }
+               this.state.showLoaderBar = data.success;
                 this.updateState();
             });
     }
@@ -138,9 +140,12 @@ export class Products extends Component {
                     const products = this.modifyProductsData(data.data.rows);
                     this.totalProductCount = data.data.count;
                     this.state['products'] = products;
+                    this.state.showLoaderBar = data.success;
                     this.updateState();
                 } else {
+                    this.setState({showLoaderBar:false});
                     notify.error('No products found');
+                    this.updateState();
                 }
             });
     }
@@ -273,6 +278,7 @@ export class Products extends Component {
                                 <SmartDataTable
                                     data={this.state.products}
                                     uniqueKey="sku"
+                                    showLoaderBar={this.state.showLoaderBar}
                                     count={this.gridSettings.variantsCount}
                                     activePage={this.gridSettings.activePage}
                                     hideFilters={this.hideFilters}

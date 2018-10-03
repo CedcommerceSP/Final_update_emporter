@@ -3,6 +3,7 @@ import { NavLink } from 'react-router-dom';
 import { Page, Stack, Button,Card,Collapsible, Banner, ResourceList, Modal, TextContainer} from '@shopify/polaris';
 import {faArrowsAltH} from '@fortawesome/free-solid-svg-icons';
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
+import {globalState} from "../../../services/globalstate";
 
 class FAQPage extends Component {
     constructor(props) {
@@ -17,37 +18,49 @@ class FAQPage extends Component {
                     id:1,
                     show: false, // for collapse div
                     search: true, // for search, if false then hide the div
-                    ques: 'How To Upload My Products on Google Merchant Center?',
-                    ans: <ol>
-                        <li className="mb-2">Go To Upload Product <NavLink to="/panel/import"> Section </NavLink> </li>
-                        <li className="mb-2">Import Your Product from source Store (Shopify)  </li>
-                        <li className="mb-2">When Import Is completed you can upload your product by clicking on Upload Products </li>
-                    </ol>
+                    ques: 'How do I send my items from Amazon to Shopify and make sure they are in sync?',
+                    ans:
+                        <React.Fragment>
+                            <p>With the Omni-Importer App you can send your Products from Amazon to Your Shopify Store. Process for sending items is very simple, please see the following points:-</p>
+                            <ol>
+                                <li className="mb-2">First, you need to import products from Amazon Marketplace to our Omni-Importer App.</li>
+                                <li className="mb-2">Once products are imported in the Omni-Importer App, after that you can upload the products to your Shopify Store.
+                                </li>
+                            </ol>
+                        </React.Fragment>
                 },
                 {
                     id:2,
                     show: false,
                     search: true,
-                    ques: 'How To Register On Google Express?',
-                    ans: <ol>
-                        <li className="mb-2">Create Your Google Merchant <a href='https://support.google.com/merchants/answer/188924?hl=en' target="_blank">Account</a> (If you Don't Have any)</li>
-                        <li className="mb-2"> Fill Out Google Action interest <a href='https://www.google.com/retail/shoppingactions/' target='_blank'>Form</a> and mention Agency Partner and Channel Partner <a href='https://cedcommerce.com/' target="_blank">CedCommerce</a>  </li>
-                        <li className="mb-2">Sign Up to shop with <a href='https://support.google.com/express/answer/4559815?hl=en' target='_blank'>Google Express</a></li>
-                    </ol>
+                    ques: 'How can I update my product information?',
+                    ans: <React.Fragment>
+                        <p>If you want to update any product information you can update that information by reuploading the items on Shopify through Omni-Importer App.</p>
+                    </React.Fragment>
                 },
                 {
                     id:3,
                     show: false,
                     search: true,
-                    ques: 'What Is Profiling And what is default Profile?',
-                    ans: <React.Fragment>
-                        <p><b>Profiling</b> is a medium to upload products from one market place to Another market place in desire format.</p>
-                        <p><b>Profiling</b> Convert Your product data into appropriate format in which the target Market place Accept It.</p>
-                        <p>You Can Create Your own Custom Profile. <NavLink to="/panel/profiling/create">here</NavLink></p>
-                        <p>In default Profile We Have Some Fixed Format. For Example Click <a href="javascript:void(0)" onClick={this.modalOpen}>Here</a></p>
-                    </React.Fragment>
+                    ques: 'What is the difference between custom and default profile?',
+                    ans: <p>
+                        Profiling convert your data into appropriate format and it is a way to upload the products from one marketplace (source marketplace)  in a specified format to another marketplace (destination marketplace). Where as Default profile  have some fixed format and is used in the same manner.
+                    </p>
+                },{
+                    id:4,
+                    show: false,
+                    search: true,
+                    ques: 'Does Omni Importer handle my product variations?',
+                    ans: <p>
+                        Yes ,Along with the main products, the app helps you fetch all the variations of the products.
+                    </p>
                 },
             ]
+        };
+        if ( !globalState.getLocalStorage('auth_token') ) {
+            this.props.disableHeader(false);
+        } else {
+            this.props.disableHeader(true);
         }
     }
     handleSearch() {
@@ -83,9 +96,11 @@ class FAQPage extends Component {
         return (
             <Page
                 title="Help"
-            primaryAction={{content:'Report An Issue', onClick:() => {
-                    this.redirect('/panel/help/report');
-                }}}>
+            // primaryAction={{content:'Report An Issue', onClick:() => {
+            //         this.redirect('/panel/help/report');
+            //     }}}
+            //
+            >
                 <div className="row">
                     <div className="col-12 mb-4">
                         <Card>

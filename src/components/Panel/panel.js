@@ -79,38 +79,16 @@ export class Panel extends Component {
         daysLeft: '',
     };
     trialActive = () => {
-        // if ( globalState.getLocalStorage('trial') ) {
-        //     this.state.isTrialActive = true;
-        //     this.state.daysLeft = globalState.getLocalStorage('trial');
-        // } else if ( this.state.isTrialActiveClose ) {
-        //         requests.getRequest('plan/plan/getActive').then(status => {
-        //             if ( status.success ) {
-        //                 this.setState({isTrialActive:false,isTrialActiveClose:false});
-        //                 globalState.getLocalStorage('trial')?globalState.removeLocalStorage('trial'):null;
-        //             } else {
-        //                 requests.getRequest('amazonimporter/config/isTrialActive').then(data => {
-        //                     if(data.success) {
-        //                         if (data.code === 'UNDER_TRIAL') {
-        //                             this.setState({isTrialActive:true,daysLeft:data.message});
-        //                             globalState.setLocalStorage('trial',data.message);
-        //                         } else {
-        //                             globalState.getLocalStorage('trial')?globalState.removeLocalStorage('trial'):null;
-        //                         }
-        //                     }
-        //                 });
-        //             }
-        //         });
-        //     }
+
     };
-    // componentWillUnmount() {
-    //     globalState.removeLocalStorage('trial');
-    // }
-    disableHeader(value) { // disable header
-        // if ( !value ) {
-        //     globalState.removeLocalStorage('trial');
-        // } else {
-        //     this.trialActive();
-        // }
+    componentWillUpdate() {
+        console.clear();
+        console.info("Welcome To OMNI-Importer")
+    }
+    disableHeader(value) {
+        if ( !value ) {
+            console.clear();
+        }
         this.setState({header:value});
     }
     menu = panelFunctions.getMenu();
@@ -118,17 +96,6 @@ export class Panel extends Component {
         return (
                 <div className="container-fluid app-panel-container">
                     <div className="row">
-                        {/*{this.state.isTrialActive && this.state.isTrialActiveClose && globalState.getLocalStorage('trial') && this.state.header?<div className="col-12 text-center" style={style.trial}>*/}
-                            {/*<h3>*/}
-                                {/*{this.state.daysLeft}*/}
-                                {/*<span style={style.close} className="text-right" onClick={() => {*/}
-                                    {/*this.setState({isTrialActive:false,isTrialActiveClose:false});*/}
-                                    {/*globalState.removeLocalStorage('trial');*/}
-                                {/*}}>*/}
-                                    {/*☒*/}
-                                {/*</span>*/}
-                            {/*</h3>*/}
-                        {/*</div>:null}*/}
                         <div className="col-12">
                             <div className="app-header">
                                 {this.state.header?<Header menu={this.menu} history={this.props.history}/>:null}
@@ -161,7 +128,9 @@ export class Panel extends Component {
                                 <Route exact path='/panel/plans/history' component={BillingHistory}/>
                                 <Route exact path='/panel/queuedtasks' component={QueuedTask}/>
                                 <Route exact path='/panel/queuedtasks/activities' component={Activities}/>
-                                <Route exact path='/panel/help' component={FAQPage}/>
+                                <Route exact path='/panel/help' render={() => {
+                                    return <FAQPage parentProps={this.props} history={this.props.history} disableHeader={this.disableHeader}/>
+                                }}/>
                                 <Route exact path='/panel/help/report' component={ReportAnIssue}/>
                                 <Route exact path='/panel/dashboard' render={() => {
                                     return <Dashboard disableHeader={this.disableHeader} parentProps={this.props} history={this.props.history}/>
