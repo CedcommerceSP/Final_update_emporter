@@ -78,11 +78,11 @@ class MessageShow extends Component {
                                     <li><h5>You can Un-install the App by clicking in Bin Icon</h5></li>
                                 </ul>:null}
                             </div>
-                            <div className="p-5 text-right">
-                                {this.state.failed?<Button primary onClick={this.handleClick}>
-                                    Back
-                                </Button>:null}
-                            </div>
+                            {/*<div className="p-5 text-right">*/}
+                                {/*{this.state.failed?<Button primary onClick={this.handleClick}>*/}
+                                    {/*Back*/}
+                                {/*</Button>:null}*/}
+                            {/*</div>*/}
                         </div>
                     </div>
                 </div>
