@@ -360,40 +360,35 @@ class PrivatePolicy extends Component {
                                             We will use your contact information that is being gathered from you for the
                                             following purposes :
                                             <br/>
-                                            Sending New Product Information
+                                            • Sending New Product Information
                                             <br/>
-                                            Product Related and Major Updates
+                                            • Product Related and Major Updates
                                             <br/>
-                                            Improving the overall structure of site to give personalized
+                                            • Improving the overall structure of site to give personalized
                                             experience based personal traits
                                             <br/>
-                                            Conduct surveys, promotions and marketing
+                                            • Payment Related Telephonic Conversations
                                             <br/>
-                                            Payment Related Telephonic Conversations
+                                            • Feedback related Mails and Calls
                                             <br/>
-                                            Feedback related Mails and Calls
+                                            • Informational Mails and Calls
                                             <br/>
-                                            Informational Mails and Calls
+                                            • Industry related news and updates
                                             <br/>
-                                            Industry related news and updates
+                                            • Scheduled Calling
                                             <br/>
-                                            Scheduled Calling
+                                            • Service Related Mails
                                             <br/>
-                                            Service Related Mails
+                                            • Notification Mails
                                             <br/>
-                                            Notification Mails
-                                            <br/>
-                                            Text Messaging Service
+                                            • Text Messaging Service
                                             <br/>
 
                                             There is always a
                                             procedure for
                                             unsubscription to
                                             receiving such emails
-                                            and newsletters and
-                                            after doing so you won’t
-                                            be receiving such
-                                            information.
+                                            and newsletters.
                                         </Label>
                                         <span className="font-weight-bold" style={{fontSize:'25px',color:'#4d4849'}}> How do we deal with 3rd Parties?</span>
                                         <Label>

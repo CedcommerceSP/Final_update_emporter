@@ -52,6 +52,14 @@ class Dashboard extends Component {
             modalOpen: false,
             data3Check:false,
             /********* Step 3 ends **********/
+            /*********** 4 ***************/
+            payment_show:false,
+            payment: {
+                message:'',
+                title:'',
+                body:''
+            },
+            /*********** 4 ***************/
             active_step: {
                 name: '', // anchor name
                 step : 0 // step number
@@ -73,7 +81,7 @@ class Dashboard extends Component {
                         stepperActive: false, // used in stepper Check either Completed or not and also help in deciding with step to go
                     }, // step 1
                     {
-                        message: <p>Grab the early mover advantage and get first 15 days and 100 SKU uploads free. There are only two prerequisites for using this app, a valid Shopify store and Amazon Seller Account. No Credit Card details required to unlock free trial.</p>,
+                        message: <p>Grab the early mover advantage and get first 15 days free. There are only two prerequisites for using this app, a valid Shopify store and Amazon Seller Account. No Credit Card details required to unlock free trial.</p>,
                         stepperMessage: 'Choose a plan', // stepper Small Message
                         API_endpoint: '', // Api End Point is used to check to send data or get data
                         data: '', // Data additional Field
@@ -476,18 +484,6 @@ class Dashboard extends Component {
                 notify.success('Your Plan is Activated');
                 this.changeStep(2);
             } else {
-                // requests.getRequest('amazonimporter/config/isTrialActive').then(data => {
-                //     if(data.success) {
-                //         if (data.code === 'UNDER_TRIAL') {
-                //             notify.success(data.message);
-                //             this.changeStep(2);
-                //         } else {
-                //             notify.info(data.message);
-                //         }
-                //     } else {
-                //         notify.error(data.message);
-                //     }
-                // });
                 notify.error(status.message);
             }
         });
@@ -512,7 +508,31 @@ class Dashboard extends Component {
             this.checkPayment();
         }
     }
-    renderPlan() {
+    renderPlan = () => {
+        if ( localStorage.getItem('plan_status') ) {
+            let data = JSON.parse(localStorage.getItem('plan_status'));
+            if ( !data.success ) {
+                let temp = {
+                    title:'Payment Status',
+                    temp:data,
+                    message:data.message,
+                    body:<div className="text-left mt-4">
+                        <h6>You Can uninstall:-</h6>
+                        <ul>
+                            <li><h5>Go to Apps Section from your shopify dashboard</h5></li>
+                            <li><h5>You can Un-install the App by clicking the Bin Icon right to App</h5></li>
+                        </ul>
+                    </div>
+                };
+                this.setState({
+                    payment_show:true,
+                    payment:temp,
+                });
+            } else {
+                this.checkPayment();
+            }
+            localStorage.removeItem('plan_status');
+        }
         return (
             <React.Fragment>
                 <PlanBody paymentStatus={this.paymentStatus}/>;
@@ -523,7 +543,7 @@ class Dashboard extends Component {
                 </div>
             </React.Fragment>
         );
-    }
+    };
     /*****************************************  Step 3 linked you account start Here  ***********************************/
     checkLinkedAccount() {
         requests.getRequest('frontend/app/checkAccount?code=amazonimporter').then(data => {
@@ -551,18 +571,13 @@ class Dashboard extends Component {
                 </Button>
             </div>
         </div>;
-    }
+    };
     /***************************************** step 4 Configurations start here *******************************/
     checkConfig(val) {
         requests.getRequest('frontend/app/checkDefaultConfiguration?code=' + val).then(data => {
             if ( data.success ) {
                 if ( data.data.configFilled ) {
-                    // if ( val !== 'shopify' ) {
-                    //     this.checkConfig('shopify')
-                    // } else {
-                       // notify.success('Account Connected Success');
-                        this.changeStep(4);
-                    // }
+                    this.changeStep(4);
                 } else {
                     notify.info('Please Fill The Form');
                 }
@@ -575,9 +590,6 @@ class Dashboard extends Component {
         return (
             <React.Fragment>
                 <ConfigShared history={this.props.history} checkConfig={this.checkConfig} />
-                {/*<div className="p-5 text-center">*/}
-                    {/*<Button onClick={this.checkConfig.bind(this, 'amazonimporter')} primary>Submit</Button>*/}
-                {/*</div>*/}
             </React.Fragment>
         );
     }
@@ -610,6 +622,18 @@ class Dashboard extends Component {
                                     />
                             </Modal.Section>
                         </Modal> {/* Open For Step 3 to see Connected Account */}
+                        <Modal title={this.state.payment.title} open={this.state.payment_show} onClose={() => {
+                            this.setState({payment_show:false});}}
+                        secondaryActions={{content:'OK', onClick:() => {
+                                this.setState({payment_show:false});
+                            }}}>
+                            <Modal.Section>
+                                <div className="text-center">
+                                    <h3>{this.state.payment.message}</h3>
+                                    {this.state.payment.body}
+                                </div>
+                            </Modal.Section>
+                        </Modal>
                     </React.Fragment>:<div>
                             <Card>
                             <div>

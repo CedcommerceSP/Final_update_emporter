@@ -26,23 +26,23 @@ class MessageShow extends Component {
                queryParams.success = 'BG-success';
            }
            this.setState({
-               message: queryParams.message,
+               message: queryParams.message === 'BG-success',
                title: queryParams.title,
                success: queryParams.success,
                shop: queryParams.shop !== undefined ?queryParams.shop : null,
                failed: queryParams.failed !== undefined,
            });
-           if ( !this.state.failed ) {
-               setTimeout(() => {
-                   // window.location.href = 'https://' + this.state.shop + '/admin';
-                   window.close();
-               },2000)
-           } else {
-               setTimeout(() => {
-                   // window.location.href = 'https://' + this.state.shop + '/admin';
-                   window.close();
-               },6000)
-           }
+           localStorage.setItem('plan_status',JSON.stringify({
+               message: queryParams.message,
+               title: queryParams.title,
+               success: queryParams.success,
+               shop: queryParams.shop !== undefined ?queryParams.shop : null,
+               failed: queryParams.failed !== undefined,
+           }));
+           setTimeout(() => {
+               window.location.href = 'https://' + this.state.shop + '/admin/apps/importer-5';
+               // window.close();
+           },2000)
        }
        else
        {
@@ -71,13 +71,13 @@ class MessageShow extends Component {
                         <div className="CARD-body col-12 p-5 pl-5 w-100" style={{height:300}}>
                             <hr/>
                             <h4>{this.state.message}</h4>
-                            <div className="text-left mt-4">
-                                {this.state.failed?<ul>
-                                    <li><h5>You Can uninstall:-</h5></li>
-                                    <li><h5>Go to app from your shopify dahboard</h5></li>
-                                    <li><h5>You can Un-install the App by clicking in Bin Icon</h5></li>
-                                </ul>:null}
-                            </div>
+                            {/*<div className="text-left mt-4">*/}
+                                {/*{this.state.failed?<ul>*/}
+                                    {/*<li><h5>You Can uninstall:-</h5></li>*/}
+                                    {/*<li><h5>Go to app from your shopify dahboard</h5></li>*/}
+                                    {/*<li><h5>You can Un-install the App by clicking in Bin Icon</h5></li>*/}
+                                {/*</ul>:null}*/}
+                            {/*</div>*/}
                             {/*<div className="p-5 text-right">*/}
                                 {/*{this.state.failed?<Button primary onClick={this.handleClick}>*/}
                                     {/*Back*/}

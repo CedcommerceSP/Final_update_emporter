@@ -124,15 +124,11 @@ Your Subscription will automatically renew at the end of each billing cycle unle
             <p style={{fontWeight: "700",fontSize:'16px',padding:'30px 0 20px'}}><strong>Use of Information</strong></p>
            <p><span style={{fontWeight: "600",fontSize:'12px'}}>We will use your contact information that is being gathered from you for the following purposes :</span></p>
 
-           <p><span style={{fontWeight: "600",fontSize:'12px',paddingLeft:'20px'}}>• Sending Associated Product Emails based on the interest shows</span></p>
-
            <p><span style={{fontWeight: "600",fontSize:'12px',paddingLeft:'20px'}}>• Sending New Product Information</span></p>
 
            <p><span style={{fontWeight: "600",fontSize:'12px',paddingLeft:'20px'}}>• Product Related and Major Updates</span></p>
 
            <p><span style={{fontWeight: "600",fontSize:'12px',paddingLeft:'20px'}}>• Improving the overall structure of the site to give personalized experience based personal traits</span></p>
-
-           <p><span style={{fontWeight: "600",fontSize:'12px',paddingLeft:'20px'}}>• Conduct surveys, promotions, and marketing</span></p>
 
            <p><span style={{fontWeight: "600",fontSize:'12px',paddingLeft:'20px'}}>• Payment Related Telephonic Conversations</span></p>
 
@@ -151,7 +147,7 @@ Your Subscription will automatically renew at the end of each billing cycle unle
            <p><span style={{fontWeight: "600",fontSize:'12px',paddingLeft:'20px'}}>• Text Messaging Service</span></p>
 
 
-           <p><span style={{fontWeight: "600",fontSize:'12px'}}>There is always a procedure for unsubscription to receiving such emails and newsletters and after doing so you won’t be receiving such information.</span></p>
+           <p><span style={{fontWeight: "600",fontSize:'12px'}}>There is always a procedure for unsubscription to receiving such emails and newsletters.</span></p>
            <p><span style={{fontWeight: "600",fontSize:'12px',paddingLeft:'20px'}}>• Order and Transaction-Related Information</span></p>
        </React.Fragment>)
 }

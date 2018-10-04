@@ -18,13 +18,13 @@ class FAQPage extends Component {
                     id:1,
                     show: false, // for collapse div
                     search: true, // for search, if false then hide the div
-                    ques: 'How do I send my items from Amazon to Shopify and make sure they are in sync?',
+                    ques: 'How do I send my Items from Amazon to Shopify and make sure they are in sync?',
                     ans:
                         <React.Fragment>
-                            <p>With the Omni-Importer App you can send your Products from Amazon to Your Shopify Store. Process for sending items is very simple, please see the following points:-</p>
+                            <p>With the Omni-Importer app you can send your products from Amazon to your shopify store.The processing for transferring item is very simple. Please see the following points-</p>
                             <ol>
-                                <li className="mb-2">First, you need to import products from Amazon Marketplace to our Omni-Importer App.</li>
-                                <li className="mb-2">Once products are imported in the Omni-Importer App, after that you can upload the products to your Shopify Store.
+                                <li className="mb-2">First you will need to import products from Amazon Marketplace to our Omni-Importer app.This is done on the 'Manage Products' page.</li>
+                                <li className="mb-2">Once Products are imported 	into the Omni-Importer app you will be able to upload those products to your Shopify store.
                                 </li>
                             </ol>
                         </React.Fragment>
@@ -35,7 +35,7 @@ class FAQPage extends Component {
                     search: true,
                     ques: 'How can I update my product information?',
                     ans: <React.Fragment>
-                        <p>If you want to update any product information you can update that information by reuploading the items on Shopify through Omni-Importer App.</p>
+                        <p>If you want to update any product information you can do so by reuplaoding those items on Shopify through the Omni-Importer App.</p>
                     </React.Fragment>
                 },
                 {
@@ -44,15 +44,15 @@ class FAQPage extends Component {
                     search: true,
                     ques: 'What is the difference between custom and default profile?',
                     ans: <p>
-                        Profiling convert your data into appropriate format and it is a way to upload the products from one marketplace (source marketplace)  in a specified format to another marketplace (destination marketplace). Where as Default profile  have some fixed format and is used in the same manner.
+                        Profiling converts your data into the correct format and is a way to only one products from one Marketplace (the source marketplace) in a specified format to another Marketplace (the destination marketplace). Where as , a default profile has a mixed format and is used in a same manner.
                     </p>
                 },{
                     id:4,
                     show: false,
                     search: true,
-                    ques: 'Does Omni Importer handle my product variations?',
+                    ques: 'Does Omni-Importer handle my product information?',
                     ans: <p>
-                        Yes ,Along with the main products, the app helps you fetch all the variations of the products.
+                        Yes. Along with the main products the app helps you fetch all the variation of the products.
                     </p>
                 },
             ]
@@ -102,23 +102,23 @@ class FAQPage extends Component {
             //
             >
                 <div className="row">
-                    <div className="col-12 mb-4">
-                        <Card>
-                            <ResourceList
-                                items={this.state.noSearchFound}
-                                renderItem={item => {}}
-                                filterControl={
-                                    <ResourceList.FilterControl
-                                        searchValue={this.state.search}
-                                        onSearchChange={(searchValue) => {
-                                            this.setState({search : searchValue.toLowerCase()});
-                                            this.handleSearch();
-                                        }}
-                                    />
-                                }
-                            />
-                        </Card>
-                    </div>
+                    {/*<div className="col-12 mb-4">*/}
+                        {/*<Card>*/}
+                            {/*<ResourceList*/}
+                                {/*items={this.state.noSearchFound}*/}
+                                {/*renderItem={item => {}}*/}
+                                {/*filterControl={*/}
+                                    {/*<ResourceList.FilterControl*/}
+                                        {/*searchValue={this.state.search}*/}
+                                        {/*onSearchChange={(searchValue) => {*/}
+                                            {/*this.setState({search : searchValue.toLowerCase()});*/}
+                                            {/*this.handleSearch();*/}
+                                        {/*}}*/}
+                                    {/*/>*/}
+                                {/*}*/}
+                            {/*/>*/}
+                        {/*</Card>*/}
+                    {/*</div>*/}
                     {this.state.faq.map(data => {
                         return (<React.Fragment key={data.id}>
                                 {data.search?<div className="col-sm-6 col-12 mb-3">
@@ -141,6 +141,13 @@ class FAQPage extends Component {
                             </div>:null}
                         </React.Fragment>);
                     })}
+                </div>
+                <div className="col-12 mt-5">
+                    <div className="text-center mt-5">
+                            <h3><b>Contact Us- </b></h3>
+                            <h5><b>Email id-</b> apps@cedcommerce.com</h5>
+                            <h5><b>Phone Number-</b>(+1) 888-882-0953</h5>
+                    </div>
                 </div>
                 <Modal
                     open={this.state.modal}

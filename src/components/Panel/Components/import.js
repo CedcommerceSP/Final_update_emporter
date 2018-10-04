@@ -93,6 +93,7 @@ export class Import extends Component {
                            });
                        }
                    }
+                   // this.handleImportChange('shop','shopify');
                    this.updateState();
                } else {
                    notify.error(data.message);

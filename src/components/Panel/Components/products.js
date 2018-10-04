@@ -268,9 +268,9 @@ export class Products extends Component {
                             renderItem={item => {}}
                         />
                         <div className="row">
-                            <div className="col-12">
-                                <Tabs tabs={this.state.installedApps} selected={this.state.selectedApp} onSelect={this.handleMarketplaceChange.bind(this)}/>
-                            </div>
+                            {/*<div className="col-12">*/}
+                                {/*<Tabs tabs={this.state.installedApps} selected={this.state.selectedApp} onSelect={this.handleMarketplaceChange.bind(this)}/>*/}
+                            {/*</div>*/}
                             <div className="col-12 p-3 text-right">
                                 <Label>Total {this.totalProductCount} products</Label>
                             </div>

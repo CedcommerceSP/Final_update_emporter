@@ -217,7 +217,7 @@ class ConfigShared extends Component {
                                 this.saveAmazonImporterConfigData();
                                 this.saveShopifyConfigData();
                             }}
-                            disabled={!this.state.amazon_importer_configuration_updated}
+                            // disabled={!this.state.amazon_importer_configuration_updated}
                             primary>Submit</Button>
                     </div>
                 </div>

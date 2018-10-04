@@ -66,7 +66,7 @@ class PlanBody extends Component {
             }
         });
         data1 = Object.assign({},RemoveService(Object.assign({},newArg), value.slice(0))); // Change the plan in Desire Format
-        let win = window.open('', '_blank', 'location=yes,height=600,width=550,scrollbars=yes,status=yes');
+        let win = window.open('', '_parent', 'location=yes,height=600,width=550,scrollbars=yes,status=yes');
         // win.close();
         requests.postRequest('plan/plan/choose',data1).then(data => {
             if (data.success) {
@@ -367,7 +367,7 @@ class PlanBody extends Component {
     } // mainly its last step when data either succeed or fail (data come from server)
     submit() {
         if (this.validationCheck()) {
-            let win = window.open('', '_blank', 'location=yes,height=600,width=550,scrollbars=yes,status=yes'); // open new Window
+            let win = window.open('', '_parent', 'location=yes,height=600,width=550,scrollbars=yes,status=yes'); // open new Window
             requests.postRequest('plan/plan/submitSchema',this.state.schemaData).then(data => {
                 if (data.success) {
                     if ( !isUndefined(data.data.confirmation_url )) {
