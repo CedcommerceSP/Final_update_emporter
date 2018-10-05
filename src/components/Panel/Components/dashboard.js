@@ -15,6 +15,7 @@ import ConfigShared from "../../../shared/config/config-shared";
 
 import * as embedded from '@shopify/polaris/embedded';
 import AnalyticsReporting from "./products-component/analytics-reporting";
+import {globalState} from "../../../services/globalstate";
 
 
 class Dashboard extends Component {
@@ -511,27 +512,29 @@ class Dashboard extends Component {
     renderPlan = () => {
         if ( localStorage.getItem('plan_status') ) {
             let data = JSON.parse(localStorage.getItem('plan_status'));
-            if ( !data.success ) {
-                let temp = {
-                    title:'Payment Status',
-                    temp:data,
-                    message:data.message,
-                    body:<div className="text-left mt-4">
-                        <h6>You Can uninstall:-</h6>
-                        <ul>
-                            <li><h5>Go to Apps Section from your shopify dashboard</h5></li>
-                            <li><h5>You can Un-install the App by clicking the Bin Icon right to App</h5></li>
-                        </ul>
-                    </div>
-                };
-                this.setState({
-                    payment_show:true,
-                    payment:temp,
-                });
-            } else {
-                this.checkPayment();
+            if ( data.shop === globalState.getLocalStorage('shop') ) {
+                if (!data.success) {
+                    let temp = {
+                        title: 'Payment Status',
+                        temp: data,
+                        message: data.message,
+                        body: <div className="text-left mt-5">
+                            <h4>You Can uninstall:-</h4>
+                            <ul>
+                                <li><h5>Go to Apps Section from your shopify dashboard</h5></li>
+                                <li><h5>You can Un-install the App by clicking the Bin Icon right to App</h5></li>
+                            </ul>
+                        </div>
+                    };
+                    this.setState({
+                        payment_show: true,
+                        payment: temp,
+                    });
+                } else {
+                    this.checkPayment();
+                }
+                localStorage.removeItem('plan_status');
             }
-            localStorage.removeItem('plan_status');
         }
         return (
             <React.Fragment>
@@ -600,7 +603,7 @@ class Dashboard extends Component {
                 title="Dashboard">
                 {this.state.welcome_screen?
                     <div>
-                        <AnalyticsReporting/>
+                        <AnalyticsReporting history={this.props.history}/>
                     </div>
                     : this.state.stepStart?
                     <React.Fragment>
@@ -636,9 +639,9 @@ class Dashboard extends Component {
                         </Modal>
                     </React.Fragment>:<div>
                             <Card>
-                            <div>
-                            <img src={require('../../../assets/background/welcome_screen.png')} style={{height:'100%',width:'100%'}}/>
-                            </div>
+                                <div>
+                                    <img src={require('../../../assets/background/welcome_screen.png')} style={{height:'100%',width:'100%'}}/>
+                                </div>
                             </Card>
                         </div>}
             </Page>

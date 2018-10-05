@@ -17,6 +17,7 @@ import {
     Stack, TextField,
     Tooltip
 } from "@shopify/polaris";
+import {globalState} from "../../services/globalstate";
 
 class PlanBody extends Component {
     constructor(props) {
@@ -33,7 +34,8 @@ class PlanBody extends Component {
             },
             schemaData: { // this one is send to server
                 plan:{}, // selected plans
-            } // more field is added like schema and payment_method below
+            }, // more field is added like schema and payment_method below
+            schemaShopSelected: false,
         };
         this.toggleSchemaModal = this.toggleSchemaModal.bind(this);
         this.createSchema = this.createSchema.bind(this);
@@ -277,11 +279,22 @@ class PlanBody extends Component {
                             }
                             options.push({label: e,value:key.options[e]});
                         });
+                        let disable_flag = this.state.schemaShopSelected;
+                        if ( !disable_flag ) {
+                            options.forEach((e) => {
+                                if ( e.value === globalState.getLocalStorage('shop') ) {
+                                    disable_flag = true;
+                                    this.setState({schemaShopSelected:disable_flag});
+                                    this.schemaConfigurationChange(index,'select',e.value);
+                                }
+                            });
+                        }
                         return (
                             <div key = {index}>
                                 <Select
                                     options={options}
                                     label={key.title}
+                                    disabled={disable_flag}
                                     onChange={this.schemaConfigurationChange.bind(this, index,'select')}
                                     value={this.state.schemaModal.data[index].value}/>
                             </div>
@@ -324,6 +337,7 @@ class PlanBody extends Component {
         if ( isUndefined(data2.schema) ) { // define a schema object
             data2.schema = {};
         }
+        console.log(data2, index,type,value);
         if ( type === 'select' ) {
             data2.schema[data.data[index].key] = value; // will set the server data (We need to send)
             data.data[index].value = value; // this is for frontend side data
@@ -432,7 +446,8 @@ class PlanBody extends Component {
             schemaModal: data,
             schemaData: {
                 plan:{},
-            }
+            },
+            schemaShopSelected:false
         });
     } // this will reset All the object And close the Modal of Payment
 }

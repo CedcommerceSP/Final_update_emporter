@@ -1,6 +1,7 @@
 import React, {Component} from 'react';
 import {Card, Banner} from "@shopify/polaris";
 import {notify} from "../../services/notify";
+import { isUndefined } from 'util';
 
 class Progress extends Component {
     constructor(props) {

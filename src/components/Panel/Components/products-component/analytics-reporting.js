@@ -1,11 +1,12 @@
 import React, {Component} from 'react';
-import {Page, Card, Select} from "@shopify/polaris";
+import {Page, Card, Select, Modal} from "@shopify/polaris";
 import {Bar, Line, Pie} from 'react-chartjs-2';
 import {requests} from "../../../../services/request";
 import {notify} from "../../../../services/notify";
 import './analytics.css';
 import {faArrowAltCircleDown,faArrowAltCircleUp} from '@fortawesome/free-solid-svg-icons';
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
+import {globalState} from "../../../../services/globalstate";
 const options = [
     // {label: 'Line Chart', value: 'line'},
     {label: 'Bar Chart', value: 'bar'},
@@ -29,6 +30,12 @@ class AnalyticsReporting extends Component {
             uploaderstatus:{
               uploaded:0,
             },
+            payment_show:false,
+            payment: {
+                message:'',
+                title:'',
+                body:''
+            },
             yaxisimporter:[]
         };
 
@@ -37,7 +44,43 @@ class AnalyticsReporting extends Component {
     }
     componentDidUpdate()
     {
-
+        if ( localStorage.getItem('plan_status') ) {
+            let data = JSON.parse(localStorage.getItem('plan_status'));
+            if ( data.shop === globalState.getLocalStorage('shop') ) {
+                if ( !data.success && data.failed ) {
+                    let temp = {
+                        title:'Payment Status',
+                        temp:data,
+                        message:data.message,
+                        body:<div className="text-left mt-5">
+                            <h4>You Can uninstall:-</h4>
+                            <ul>
+                                <li><h5>Go to Apps Section from your shopify dashboard</h5></li>
+                                <li><h5>You can Un-install the App by clicking the Bin Icon right to App</h5></li>
+                            </ul>
+                        </div>
+                    };
+                    this.setState({
+                        payment_show:true,
+                        payment:temp,
+                    });
+                } else  {
+                    let temp = {
+                        title:'Payment Status',
+                        temp:data,
+                        message:data.message,
+                        body:<div className="text-center mt-5">
+                            <h4>Congrats!</h4>
+                        </div>
+                    };
+                    this.setState({
+                        payment_show:true,
+                        payment:temp,
+                    });
+                }
+                localStorage.removeItem('plan_status');
+            }
+        }
     }
     getallimporter()
     {
@@ -452,6 +495,18 @@ class AnalyticsReporting extends Component {
             <Page
                 title="Product Analytics" titleHidden={true}>
                 {/*<Card title="Products Imported">*/}
+                <Modal title={this.state.payment.title} open={this.state.payment_show} onClose={() => {
+                    this.setState({payment_show:false});}}
+                       secondaryActions={{content:'OK', onClick:() => {
+                               this.setState({payment_show:false});
+                           }}}>
+                    <Modal.Section>
+                        <div className="text-center">
+                            <h3>{this.state.payment.message}</h3>
+                            {this.state.payment.body}
+                        </div>
+                    </Modal.Section>
+                </Modal>
                 <div className="CARD w-100" style={{marginTop:75}}>
                     <div className='CARD-title-small text-center BG-primary common'>
                             <FontAwesomeIcon icon={faArrowAltCircleDown} size="5x"/>

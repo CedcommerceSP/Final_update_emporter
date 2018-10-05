@@ -21,7 +21,7 @@ class FAQPage extends Component {
                     ques: 'How do I send my Items from Amazon to Shopify and make sure they are in sync?',
                     ans:
                         <React.Fragment>
-                            <p>With the Omni-Importer app you can send your products from Amazon to your shopify store.The processing for transferring item is very simple. Please see the following points-</p>
+                            <p>With the Omni-Importer app you can send your products from Amazon to your Shopify store.The processing for transferring item is very simple. Please see the following points-</p>
                             <ol>
                                 <li className="mb-2">First you will need to import products from Amazon Marketplace to our Omni-Importer app.This is done on the 'Manage Products' page.</li>
                                 <li className="mb-2">Once Products are imported 	into the Omni-Importer app you will be able to upload those products to your Shopify store.

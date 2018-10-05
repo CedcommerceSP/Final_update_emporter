@@ -66,7 +66,7 @@ export class Import extends Component {
                                this.state.importServicesList.push({
                                    label: data.data[key].title,
                                    value: data.data[key].marketplace,
-                                   shops: data.data[key].shops
+                                   shops: []//data.data[key].shops
                                });
                            }
                        }
