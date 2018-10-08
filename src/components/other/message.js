@@ -7,6 +7,7 @@ import {
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {Button} from "@shopify/polaris";
 import Loader from "react-loader-spinner";
+import {globalState} from "../../services/globalstate";
 
 class MessageShow extends Component {
     constructor(props) {
@@ -17,6 +18,7 @@ class MessageShow extends Component {
             success: '',
             shop: null,
             failed:'',
+            isPlan:false,
         }
     }
     componentWillMount() {
@@ -32,21 +34,20 @@ class MessageShow extends Component {
                title: queryParams.title,
                success: queryParams.success,
                shop: queryParams.shop !== undefined ?queryParams.shop : null,
-               failed: queryParams.failed !== undefined,
+               isPlan: queryParams.isPlan !== undefined,
            });
            localStorage.setItem('plan_status',JSON.stringify({
                message: queryParams.message,
                title: queryParams.title,
                success: queryParams.success === 'BG-success',
                shop: queryParams.shop !== undefined ?queryParams.shop : null,
-               failed: queryParams.failed !== undefined,
+               isPlan: queryParams.isPlan !== undefined,
            }));
            let win = window.open('','_parent','location=yes,width=20px,height=10px,scrollbars=yes,status=yes');
-           setTimeout(() => {
-               if ( queryParams.shop !== undefined ) {
-                   win.location = 'https://' + queryParams.shop + '/admin/apps/importer-5';
-               }
-           },3000);
+           if ( queryParams.shop !== undefined ) {
+               globalState.setLocalStorage('shop',queryParams.shop);
+               win.location = 'https://' + queryParams.shop + '/admin/apps/importer-5';
+           }
        }
        else
        {
@@ -67,7 +68,7 @@ class MessageShow extends Component {
     render() {
         return (
             <div className="row text-center m-5 h-100">
-                <div className="offset-md-3 offset-sm-1 col-md-6 col-sm-10 col-12 mt-5">
+                {this.state.plan?<div className="offset-md-3 offset-sm-1 col-md-6 col-sm-10 col-12 mt-5">
                     <div className="CARD w-100">
                         <div className={`CARD-title-small text-center ${this.state.success}`}>
                             {this.state.success === 'BG-success'?
@@ -79,28 +80,29 @@ class MessageShow extends Component {
                             <hr/>
                             <h4>{this.state.message}</h4>
                             <hr/>
-                            <div className="col-12 d-flex justify-content-center">
-                                <div className="row">
-                                    <div className="col-12 text-center">
-                                        <Loader
-                                            type="ThreeDots"
-                                            color="#5c6ac4"
-                                            height="100"
-                                            width="100"
-                                        />
-                                    </div>
-                                    <div className="col-12 text-center">
-                                        <h4>Please Wait..</h4>
-                                    </div>
-                                </div>
-                            </div>
-                            {this.state.shop !== null?<div className="text-right">
-                                <Button onClick={() => {window.open( 'https://' + this.state.shop + '/admin/apps/importer-5','_parent')}}>Home</Button>
-                                <p style={{color:'#645f5b'}}>*In Case redirect not happen,<br/> Click on Home Button</p>
-                                </div>:null}
                         </div>
                     </div>
-                </div>
+                </div>:<React.Fragment>
+                    <div className="col-12 d-flex justify-content-center">
+                        <div className="row">
+                            <div className="col-12 text-center">
+                                <Loader
+                                    type="ThreeDots"
+                                    color="#5c6ac4"
+                                    height="100"
+                                    width="100"
+                                />
+                            </div>
+                            <div className="col-12 text-center">
+                                <h4>Please Wait..</h4>
+                            </div>
+                        </div>
+                    </div>
+                    {this.state.shop !== null?<div className="text-right">
+                        <Button onClick={() => {window.open( 'https://' + this.state.shop + '/admin/apps/importer-5','_parent')}}>Home</Button>
+                        <p style={{color:'#645f5b'}}>*In Case redirect not happen,<br/> Click on Home Button</p>
+                    </div>:null}
+                </React.Fragment>}
             </div>
         );
     }

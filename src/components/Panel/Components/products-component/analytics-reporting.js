@@ -47,7 +47,7 @@ class AnalyticsReporting extends Component {
         if ( localStorage.getItem('plan_status') ) {
             let data = JSON.parse(localStorage.getItem('plan_status'));
             if ( data.shop === globalState.getLocalStorage('shop') ) {
-                if ( !data.success && data.failed ) {
+                if ( !data.success ) {
                     let temp = {
                         title:'Payment Status',
                         temp:data,
