@@ -35,7 +35,16 @@ export class Activities extends Component {
                 }
             });
     }
-
+    handleClearAllActivity = () => {
+        requests.getRequest('/connector/get/clearNotifications').then(data => {
+            if ( data.success ) {
+                notify.success(data.message);
+                this.redirect('/panel/queuedtasks');
+            } else {
+                notify.error(data.message);
+            }
+        });
+    };
     render() {
         return (
             <Page
@@ -45,7 +54,9 @@ export class Activities extends Component {
                 title="Activities">
                 <div className="row">
                     <div className="col-12">
-                        <Card>
+                        <Card secondaryFooterAction={{content:'Clear All Activity', onClick:() => {
+                                this.handleClearAllActivity();
+                            }}}>
                             <div className="w-100 p-3">
                                 <Banner>
                                     <Label>{"Last " + this.state.totalActivities + " activities"}</Label>

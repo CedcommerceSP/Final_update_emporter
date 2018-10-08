@@ -65,7 +65,15 @@ export class QueuedTask extends Component {
                 }
             });
     }
-
+    handleClearAllActivity = () => {
+        requests.getRequest('/connector/get/clearNotifications').then(data => {
+            if ( data.success ) {
+                notify.success(data.message);
+            } else {
+                notify.error(data.message);
+            }
+        })
+    };
     render() {
         return (
             <Page
@@ -101,7 +109,12 @@ export class QueuedTask extends Component {
                                     </div>
                                     {
                                         this.state.totalRecentActivities > 3 &&
-                                        <div className="col-12 p-5 text-right">
+                                        <div className="col-12 pb-0 pl-5 pr-5 pt-5 text-right">
+                                                    <span className="pr-4">
+                                                        <Button onClick={this.handleClearAllActivity}>
+                                                        Clear All Activity
+                                                    </Button>
+                                                    </span>
                                             <Button onClick={() => {
                                                 this.redirect("/panel/queuedtasks/activities");
                                             }} primary>View All Activities</Button>
