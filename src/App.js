@@ -36,8 +36,6 @@ export class App extends Component {
               this.state.shopOrigin = globalState.getLocalStorage('shop');
               globalState.removeLocalStorage('shop');
               this.setState(this.state);
-          }  else {
-              globalState.removeLocalStorage('shop');
           }
       }
   }

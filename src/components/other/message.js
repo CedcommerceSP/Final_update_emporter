@@ -18,8 +18,9 @@ class MessageShow extends Component {
             success: '',
             shop: null,
             failed:'',
-            isPlan:false,
-        }
+            isPlan:true,
+        };
+        globalState.removeLocalStorage('shop');
     }
     componentWillMount() {
        const queryParams = queryString.parse(this.props.location.search);
@@ -44,16 +45,19 @@ class MessageShow extends Component {
                isPlan: queryParams.isPlan !== undefined,
            }));
            let win = window.open('','_parent','location=yes,width=20px,height=10px,scrollbars=yes,status=yes');
-           if ( queryParams.shop !== undefined ) {
-               globalState.setLocalStorage('shop',queryParams.shop);
-               win.location = 'https://' + queryParams.shop + '/admin/apps/importer-5';
-           }
+           setTimeout(() => {
+               if ( queryParams.shop !== undefined ) {
+                   globalState.setLocalStorage('shop',queryParams.shop);
+                   win.location = 'https://' + queryParams.shop + '/admin/apps/importer-5';
+               }
+           },500);
        }
        else
        {
            let win = window.open('','_parent','location=yes,width=200px,height=500px,scrollbars=yes,status=yes');
            setTimeout(() => {
                if ( queryParams.shop !== undefined ) {
+                   globalState.setLocalStorage('shop',queryParams.shop);
                    win.location = 'https://' + queryParams.shop + '/admin/apps/importer-5';
                }
            },3000);
@@ -68,7 +72,7 @@ class MessageShow extends Component {
     render() {
         return (
             <div className="row text-center m-5 h-100">
-                {this.state.plan?<div className="offset-md-3 offset-sm-1 col-md-6 col-sm-10 col-12 mt-5">
+                {!this.state.isPlan?<div className="offset-md-3 offset-sm-1 col-md-6 col-sm-10 col-12 mt-5">
                     <div className="CARD w-100">
                         <div className={`CARD-title-small text-center ${this.state.success}`}>
                             {this.state.success === 'BG-success'?
@@ -98,7 +102,7 @@ class MessageShow extends Component {
                             </div>
                         </div>
                     </div>
-                    {this.state.shop !== null?<div className="text-right">
+                    {this.state.shop !== null?<div className=" col-12 text-center">
                         <Button onClick={() => {window.open( 'https://' + this.state.shop + '/admin/apps/importer-5','_parent')}}>Home</Button>
                         <p style={{color:'#645f5b'}}>*In Case redirect not happen,<br/> Click on Home Button</p>
                     </div>:null}
