@@ -26,5 +26,8 @@ export const globalState = {
             key = '&';
         }
         return queryString;
-    }
+    },
+    log: (msg) => {
+        return environment.isLive?null:console.log(msg);
+    },
 };

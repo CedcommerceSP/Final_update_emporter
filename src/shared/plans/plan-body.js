@@ -337,7 +337,6 @@ class PlanBody extends Component {
         if ( isUndefined(data2.schema) ) { // define a schema object
             data2.schema = {};
         }
-        console.log(data2, index,type,value);
         if ( type === 'select' ) {
             data2.schema[data.data[index].key] = value; // will set the server data (We need to send)
             data.data[index].value = value; // this is for frontend side data
