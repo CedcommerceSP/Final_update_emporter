@@ -123,7 +123,7 @@ export class Login extends Component {
 
     submitLogin() {
         if (this.isFormValid()) {
-            requests.getRequest('user/login', this.state)
+            requests.getRequest('user/shopifyLogin', this.state)
                 .then(data => {
                     if (data.success === true) {
                         notify.success(data.message);

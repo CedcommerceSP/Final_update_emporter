@@ -2,7 +2,7 @@ export const environment = {
     production: false,
     isLive: false,
    // API_ENDPOINT: 'http://192.168.0.222/phalcon/importer/public/',
-   //   API_ENDPOINT: 'http://192.168.0.215/nextgen/public/',
+    //   API_ENDPOINT: 'http://192.168.0.215/nextgen/public/',
      API_ENDPOINT: 'https://importer.sellernext.com/',
     APP_API_KEY: '5b1d8296277176f72fcfbdb371c4a6e8',
     AppName: 'Omni Importer',
