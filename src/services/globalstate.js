@@ -1,4 +1,5 @@
 import { environment } from '../environments/environment';
+import { isUndefined } from 'util';
 
 export const globalState = {
     setLocalStorage: (key, value) => {
@@ -27,7 +28,15 @@ export const globalState = {
         }
         return queryString;
     },
-    log: (msg) => {
-        return environment.isLive?null:console.log(msg);
+    log: (msg1, msg2, msg3) => {
+        if ( !environment.isLive ) {
+            if ( !isUndefined(msg2) && !isUndefined(msg3) ) {
+                return console.log(msg1, msg2, msg3);
+            } else if (!isUndefined(msg2) ) {
+                return console.log(msg1, msg2);
+            } else {
+                return console.log(msg1);
+            }
+        }
     },
 };

@@ -83,7 +83,7 @@ export class Panel extends Component {
     };
     componentWillUpdate() {
         console.clear();
-        console.info("Welcome To OMNI-Importer")
+        console.info("Welcome To OMNI-Importer");
     }
     disableHeader(value) {
         if ( !value ) {
