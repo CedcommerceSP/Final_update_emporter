@@ -28,8 +28,8 @@ class Dashboard extends Component {
                 mobile: '',
                 email: '',
                 skype_id:'',
-                primary_time_zone:'Pacific Time',
-                best_time_to_contact: '8-12',
+                // primary_time_zone:'Pacific Time',
+                // best_time_to_contact: '8-12',
                 term_and_conditon: false,
                 how_u_know_about_us: '',
                 Other_text:'',
@@ -405,39 +405,39 @@ class Dashboard extends Component {
                                 label="Skype ID:"
                                 type="text"
                             />
-                            <div className="row mt-3">
-                                <div className="col-12 col-md-6">
-                                    <Select
-                                        label="Your Primary Time Zone"
-                                        options={[
-                                            {label: 'Pacific Time', value: 'Pacific Time'},
-                                            {label: 'Mountain Time', value: 'Mountain Time'},
-                                            {label: 'Central Time', value: 'Central Time'},
-                                            {label: 'Eastern Time', value: 'Eastern Time'},
-                                            {label: 'Hawaii Standard Time', value: 'Hawaii Standard Time'},
-                                            {label: 'Alaska Daylight Time', value: 'Alaska Daylight Time'},
-                                            {label: 'other', value: 'other'},
-                                        ]}
-                                        onChange={this.handleFormChange.bind(this,'primary_time_zone')}
-                                        value={this.state.info.primary_time_zone}
-                                    />
-                                </div>
-                                <div className="col-12 col-md-6 mt-3 mt-md-0">
-                                    <Select
-                                        label="Preferable Time For Calling"
-                                        options={[
-                                            {label: '0-4', value: '0-4'},
-                                            {label: '4-8', value: '4-8'},
-                                            {label: '8-12', value: '8-12'},
-                                            {label: '12-16', value: '12-16'},
-                                            {label: '16-20', value: '16-20'},
-                                            {label: '20-24', value: '20-24'},
-                                        ]}
-                                        onChange={this.handleFormChange.bind(this,'best_time_to_contact')}
-                                        value={this.state.info.best_time_to_contact}
-                                    />
-                                </div>
-                            </div>
+                            {/*<div className="row mt-3">*/}
+                                {/*<div className="col-12 col-md-6">*/}
+                                    {/*<Select*/}
+                                        {/*label="Your Primary Time Zone"*/}
+                                        {/*options={[*/}
+                                            {/*{label: 'Pacific Time', value: 'Pacific Time'},*/}
+                                            {/*{label: 'Mountain Time', value: 'Mountain Time'},*/}
+                                            {/*{label: 'Central Time', value: 'Central Time'},*/}
+                                            {/*{label: 'Eastern Time', value: 'Eastern Time'},*/}
+                                            {/*{label: 'Hawaii Standard Time', value: 'Hawaii Standard Time'},*/}
+                                            {/*{label: 'Alaska Daylight Time', value: 'Alaska Daylight Time'},*/}
+                                            {/*{label: 'other', value: 'other'},*/}
+                                        {/*]}*/}
+                                        {/*onChange={this.handleFormChange.bind(this,'primary_time_zone')}*/}
+                                        {/*value={this.state.info.primary_time_zone}*/}
+                                    {/*/>*/}
+                                {/*</div>*/}
+                                {/*<div className="col-12 col-md-6 mt-3 mt-md-0">*/}
+                                    {/*<Select*/}
+                                        {/*label="Preferable Time For Calling"*/}
+                                        {/*options={[*/}
+                                            {/*{label: '0-4', value: '0-4'},*/}
+                                            {/*{label: '4-8', value: '4-8'},*/}
+                                            {/*{label: '8-12', value: '8-12'},*/}
+                                            {/*{label: '12-16', value: '12-16'},*/}
+                                            {/*{label: '16-20', value: '16-20'},*/}
+                                            {/*{label: '20-24', value: '20-24'},*/}
+                                        {/*]}*/}
+                                        {/*onChange={this.handleFormChange.bind(this,'best_time_to_contact')}*/}
+                                        {/*value={this.state.info.best_time_to_contact}*/}
+                                    {/*/>*/}
+                                {/*</div>*/}
+                            {/*</div>*/}
                             <Select
                                 label="How Do you Know About us"
                                 placeholder="Select"
