@@ -50,6 +50,15 @@ class FAQPage extends Component {
                     id:4,
                     show: false,
                     search: true,
+                    ques: `My products are imported from Amazon. What's next?`,
+                    ans: <p>
+                        Omni-Importer App sync inventory and price of the products once in a day.So your products are never out of sync.
+                    </p>
+                },
+                {
+                    id:5,
+                    show: false,
+                    search: true,
                     ques: 'Does Omni-Importer handle my product information?',
                     ans: <p>
                         Yes. Along with the main products the app helps you fetch all the variation of the products.
