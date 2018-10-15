@@ -514,9 +514,21 @@ class SmartDataTablePlain extends React.Component {
       if ( columns.length <= 0 ) {
           Object.keys(this.state.columnTitles).forEach(e => {
               if ( this.state.visibleColumns.indexOf(e) !== -1 ) {
-                  columns.push({key:e,title:this.state.columnTitles[e].title,visible:true,sortable:this.state.columnTitles[e].sortable,type:this.state.columnTitles[e].type, filterable: true})
+                  columns.push({
+                      key:e,
+                      title:this.state.columnTitles[e].title,
+                      visible:true,sortable:this.state.columnTitles[e].sortable,
+                      type:this.state.columnTitles[e].type,
+                      filterable: true
+                  })
               } else {
-                  columns.push({key:e,title:this.state.columnTitles[e].title,visible:false,sortable:this.state.columnTitles[e].sortable,type:this.state.columnTitles[e].type, filterable: true})
+                  columns.push({
+                      key:e,
+                      title:this.state.columnTitles[e].title,
+                      visible:false,
+                      sortable:this.state.columnTitles[e].sortable,
+                      type:this.state.columnTitles[e].type,
+                      filterable: true})
               }
           })
       }
