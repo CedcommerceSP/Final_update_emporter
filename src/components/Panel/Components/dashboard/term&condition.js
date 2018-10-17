@@ -1,7 +1,7 @@
 import React from "react";
 import {Label} from "@shopify/polaris";
 
-export function term_and_conditon() {
+export function term_and_condition() {
     return (
        <React.Fragment>
            <Label>

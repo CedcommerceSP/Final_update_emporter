@@ -1,23 +1,22 @@
 import React, {Component} from 'react';
 import {NavLink} from 'react-router-dom';
-import {Button, Card, Checkbox, Form, FormLayout, Label, Page, Select, TextField,Modal} from '@shopify/polaris';
+import {Button, Card, Checkbox, Form, FormLayout, Page, Select, TextField,Modal} from '@shopify/polaris';
 import {requests} from '../../../services/request';
 import {isUndefined} from "util";
 import {notify} from "../../../services/notify";
 import './dashboard/dashboard.css';
 import {faCheck} from '@fortawesome/free-solid-svg-icons';
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
-import {term_and_conditon} from './dashboard/term&condition';
+import {term_and_condition} from './dashboard/term&condition';
 import PlanBody from "../../../shared/plans/plan-body";
 import AppsShared from "../../../shared/app/apps";
 import InstallAppsShared from "../../../shared/app/install-apps";
 import ConfigShared from "../../../shared/config/config-shared";
-
-import * as embedded from '@shopify/polaris/embedded';
 import AnalyticsReporting from "./products-component/analytics-reporting";
 import {globalState} from "../../../services/globalstate";
 
-
+// not remove setState from checkStepCompleted
+// remove stepper true from all the step, and make them false before uploading to server
 class Dashboard extends Component {
     constructor(props) {
         super(props);
@@ -30,7 +29,7 @@ class Dashboard extends Component {
                 skype_id:'',
                 // primary_time_zone:'Pacific Time',
                 // best_time_to_contact: '8-12',
-                term_and_conditon: false,
+                term_and_condition: false,
                 how_u_know_about_us: '',
                 Other_text:'',
 
@@ -42,7 +41,7 @@ class Dashboard extends Component {
                 skype_id:'',
                 primary_time_zone:'Pacific Time',
                 best_time_to_contact: '8-12',
-                term_and_conditon: false,
+                term_and_condition: false,
                 how_u_know_about_us: '',
 
             }, // Step 1
@@ -79,7 +78,7 @@ class Dashboard extends Component {
                         method: 'GET', // Method Type
                         redirectTo: '/panel/configuration', // After Completion Where To Redirect
                         anchor: 'U-INFO', // Which Function to call e.g : 'U-INFO' then call div which take User basic Information
-                        stepperActive: false, // used in stepper Check either Completed or not and also help in deciding with step to go
+                        stepperActive: true, // used in stepper Check either Completed or not and also help in deciding with step to go
                     }, // step 1
                     {
                         message: <p>Grab the early mover advantage and get first 15 days free. There are only two prerequisites for using this app, a valid Shopify store and Amazon Seller Account. No Credit Card details required to unlock free trial.</p>,
@@ -89,7 +88,7 @@ class Dashboard extends Component {
                         method: 'GET', // Method Type
                         redirectTo: '/panel/plans', // After Completion Where To Redirect
                         anchor: 'PLANS', // Which Function to call e.g : 'U-INFO' then call div which take User basic Information
-                        stepperActive: false, // used in stepper Check either Completed or not
+                        stepperActive: true, // used in stepper Check either Completed or not
                     }, // step 2
                     {
                         message: <p> Link your <b>Account</b></p>,
@@ -135,7 +134,7 @@ class Dashboard extends Component {
         });
         this.checkStepCompleted(newValue);
     };// This Function Used for dropdown Selection
-    checkStepCompleted(key) {
+    checkStepCompleted() {
         let path = '/App/User/Step';
         requests.getRequest('frontend/app/getStepCompleted', {path: path}).then(data => {
             if ( data.success ) {
@@ -168,9 +167,18 @@ class Dashboard extends Component {
                     });
                 }
             } else {
-                // notify.error(data.message);
+                notify.error(data.message);
             }
-        })
+        });
+        this.setState({
+            data: this.state.stepData,
+            welcome_screen: false,
+            stepStart:true,
+            active_step: {
+                name: '',
+                step: 1
+            }
+        });
     } // initially run this to check which step is completed
     changeStep(arg) { // arg means step number
         let data = this.state.stepData;
@@ -235,7 +243,7 @@ class Dashboard extends Component {
             </div>
         );
     }
-    handleModalChange(event, stepActive) {
+    handleModalChange(event) {
          if ( event === 'init_modal' ) {
             notify.info("Please Select A Integration First")
         } else {
@@ -300,8 +308,8 @@ class Dashboard extends Component {
         }
     } // decide where to go when step is active
     /****************** step 1 User Information Body Start Here *************************/
-    handleSubmit = (event) => { // this function is used to submit user basic info
-        if (this.state.info.term_and_conditon &&
+    handleSubmit = () => { // this function is used to submit user basic info
+        if (this.state.info.term_and_condition &&
             this.state.info.full_name !== '' &&
             this.state.info.email !== '' &&
             this.state.info.mobile !== '')
@@ -322,8 +330,8 @@ class Dashboard extends Component {
                 tempData.email = true;
             if (this.state.info.mobile === '')
                 tempData.mobile = true;
-            if ( !this.state.info.term_and_conditon )
-                tempData.term_and_conditon = true;
+            if ( !this.state.info.term_and_condition )
+                tempData.term_and_condition = true;
             this.setState({info_error: tempData});
         }
     };
@@ -356,7 +364,7 @@ class Dashboard extends Component {
                                     />
                                 </div>
                                 <div className="col-12 col-md-12 text-left">
-                                    {this.state.info.full_name=='' && this.state.info_error.full_name!=true?
+                                    {this.state.info.full_name ==='' && this.state.info_error.full_name !== true?
                                         <p className="mt-1" style={{color: 'green'}}>*required</p>
                                         :null
                                     }
@@ -375,7 +383,7 @@ class Dashboard extends Component {
                                     />
                                 </div>
                                 <div className="col-12 col-md-12 text-left">
-                                    {this.state.info.mobile=='' && this.state.info_error.mobile!=true?
+                                    {this.state.info.mobile==='' && this.state.info_error.mobile!==true?
                                         <p className="mt-1" style={{color: 'green'}}>*required</p>
                                         :null
                                     }
@@ -393,7 +401,7 @@ class Dashboard extends Component {
                                     />
                                 </div>
                                 <div className="col-12 col-md-12 text-left">
-                                    {this.state.info.email=='' && this.state.info_error.email!=true?
+                                    {this.state.info.email==='' && this.state.info_error.email!==true?
                                         <p className="mt-1" style={{color: 'green'}}>*required</p>
                                         :null
                                     }
@@ -405,46 +413,13 @@ class Dashboard extends Component {
                                 label="Skype ID:"
                                 type="text"
                             />
-                            {/*<div className="row mt-3">*/}
-                                {/*<div className="col-12 col-md-6">*/}
-                                    {/*<Select*/}
-                                        {/*label="Your Primary Time Zone"*/}
-                                        {/*options={[*/}
-                                            {/*{label: 'Pacific Time', value: 'Pacific Time'},*/}
-                                            {/*{label: 'Mountain Time', value: 'Mountain Time'},*/}
-                                            {/*{label: 'Central Time', value: 'Central Time'},*/}
-                                            {/*{label: 'Eastern Time', value: 'Eastern Time'},*/}
-                                            {/*{label: 'Hawaii Standard Time', value: 'Hawaii Standard Time'},*/}
-                                            {/*{label: 'Alaska Daylight Time', value: 'Alaska Daylight Time'},*/}
-                                            {/*{label: 'other', value: 'other'},*/}
-                                        {/*]}*/}
-                                        {/*onChange={this.handleFormChange.bind(this,'primary_time_zone')}*/}
-                                        {/*value={this.state.info.primary_time_zone}*/}
-                                    {/*/>*/}
-                                {/*</div>*/}
-                                {/*<div className="col-12 col-md-6 mt-3 mt-md-0">*/}
-                                    {/*<Select*/}
-                                        {/*label="Preferable Time For Calling"*/}
-                                        {/*options={[*/}
-                                            {/*{label: '0-4', value: '0-4'},*/}
-                                            {/*{label: '4-8', value: '4-8'},*/}
-                                            {/*{label: '8-12', value: '8-12'},*/}
-                                            {/*{label: '12-16', value: '12-16'},*/}
-                                            {/*{label: '16-20', value: '16-20'},*/}
-                                            {/*{label: '20-24', value: '20-24'},*/}
-                                        {/*]}*/}
-                                        {/*onChange={this.handleFormChange.bind(this,'best_time_to_contact')}*/}
-                                        {/*value={this.state.info.best_time_to_contact}*/}
-                                    {/*/>*/}
-                                {/*</div>*/}
-                            {/*</div>*/}
                             <Select
                                 label="How Do you Know About us"
                                 placeholder="Select"
                                 options={[
                                     {label: 'Shopify App Store', value: 'Shopify App Store'},
                                     {label: 'Google Ads', value: 'Google Ads'},
-                                    {label: 'FaceBook Ads', value: 'FaceBook Ads'},
+                                    {label: 'Facebook Ads', value: 'Facebook Ads'},
                                     {label: 'Twitter', value: 'Twitter'},
                                     {label: 'Yahoo', value: 'Yahoo'},
                                     {label: 'Youtube', value: 'Youtube'},
@@ -453,7 +428,7 @@ class Dashboard extends Component {
                                 onChange={this.handleFormChange.bind(this,'how_u_know_about_us')}
                                 value={this.state.info.how_u_know_about_us}
                             />
-                            {this.state.info.how_u_know_about_us=='Other'?
+                            {this.state.info.how_u_know_about_us === 'Other'?
                                 <TextField
                                     value={this.state.info.Other_text}
                                     onChange={this.handleFormChange.bind(this, 'Other_text')}
@@ -463,13 +438,13 @@ class Dashboard extends Component {
                             }
                             <div className="form-control" style={{height:'180px', width:'100%',overflow:'auto'}}>
                                 <h3>CedCommerce Terms & Condition and Privacy Policy</h3><br/><br/><br/>
-                                {term_and_conditon()}
+                                {term_and_condition()}
                             </div>
                             <Checkbox
-                                checked={this.state.info.term_and_conditon}
+                                checked={this.state.info.term_and_condition}
                                 label="Accept Terms & Conditions"
-                                error={this.state.info_error.term_and_conditon?'Please Check The Terms & Conditions':''}
-                                onChange={this.handleFormChange.bind(this,'term_and_conditon')}
+                                error={this.state.info_error.term_and_condition?'Please Check The Terms & Conditions':''}
+                                onChange={this.handleFormChange.bind(this,'term_and_condition')}
                             />
                             <Button submit primary>Submit</Button>
                         </FormLayout>
@@ -649,7 +624,7 @@ class Dashboard extends Component {
     }
     handleLinkedAccount = (event) => {
         this.setState({data3Check:event});
-    }
+    };
     redirectResult(status) {
         this.openNewWindow(status);
     } // used in step 3 to get child data and send back to new child
