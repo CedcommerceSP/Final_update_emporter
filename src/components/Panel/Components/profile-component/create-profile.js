@@ -434,6 +434,10 @@ export class CreateProfile extends Component {
                 }
                 <div className="col-12 p-4">
                     <Card>
+                        <Banner title="*Please note" status="info">
+                            <Label><h4>{"Add rule corresponds to && (AND) condition"}</h4></Label>
+                            <Label><h4>{"Add rule group corresponds to || (OR) condition"}</h4></Label>
+                        </Banner>
                         {
                             querySet.primaryQuery.map((query) => {
                                 return (
