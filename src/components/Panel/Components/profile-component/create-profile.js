@@ -202,13 +202,13 @@ export class CreateProfile extends Component {
     }
 
     modifyAttributesData(attributes) {
-        let toReturnAttributes = [];
+        let toReturnAttributes;
         let requiredAttributes = [];
         let optionalAttributes = [];
         for (let i = 0; i < attributes.length; i++) {
             let attributeData = {
                 code: attributes[i].code,
-                required: attributes[i].required == 1,
+                required: attributes[i].required === 1,
                 title: attributes[i].title,
                 mappedTo: '',
                 defaultValue: ''
@@ -220,10 +220,10 @@ export class CreateProfile extends Component {
                 attributeData['mappedTo'] = attributes[i].mapped;
             }
             if (!isUndefined(attributes[i].system)) {
-                attributeData['system'] = (attributeData['system'] == 1);
+                attributeData['system'] = (attributeData['system'] === 1);
             }
             if (!isUndefined(attributes[i].visible)) {
-                attributeData['visible'] = (attributeData['visible'] == 1);
+                attributeData['visible'] = (attributeData['visible'] === 1);
             }
             if (attributeData.required) {
                 requiredAttributes.push(attributeData);
@@ -678,15 +678,15 @@ export class CreateProfile extends Component {
 
                 <div className={(this.state.activeStep === 1) ? 'col-6 bs-wizard-step active' : 'col-6 bs-wizard-step complete'}>
                     <div className="text-center bs-wizard-stepnum">Step 1</div>
-                    <div className="progress"><div className="progress-bar"></div></div>
-                    <a className="bs-wizard-dot"></a>
+                    <div className="progress"><div className="progress-bar"/></div>
+                    <a className="bs-wizard-dot"/>
                     <div className="bs-wizard-info text-center">Select product source and Destination</div>
                 </div>
 
                 <div className={(this.state.activeStep === 2) ? 'col-6 bs-wizard-step active' : (this.state.activeStep > 2) ? ' col-6 bs-wizard-step complete' : 'col-3 bs-wizard-step disabled'}>
                     <div className="text-center bs-wizard-stepnum">Step 2</div>
-                    <div className="progress"><div className="progress-bar"></div></div>
-                    <a className="bs-wizard-dot"></a>
+                    <div className="progress"><div className="progress-bar"/></div>
+                    <a className="bs-wizard-dot"/>
                     <div className="bs-wizard-info text-center">Select products you want to upload</div>
                 </div>
 

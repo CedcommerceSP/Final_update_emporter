@@ -15,8 +15,8 @@ import ConfigShared from "../../../shared/config/config-shared";
 import AnalyticsReporting from "./products-component/analytics-reporting";
 import {globalState} from "../../../services/globalstate";
 
-// not remove setState from checkStepCompleted
-// remove stepper true from all the step, and make them false before uploading to server
+// TODO: not remove static setState from checkStepCompleted
+// TODO: remove stepper true from all the step, and make them false before uploading to server
 class Dashboard extends Component {
     constructor(props) {
         super(props);
@@ -210,7 +210,7 @@ class Dashboard extends Component {
                     this.props.disableHeader(true);
                     setTimeout(() => {
                         this.redirect('/panel/import');
-                    },1000);
+                    },500);
                 }
             }
         });

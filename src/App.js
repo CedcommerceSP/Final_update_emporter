@@ -22,8 +22,8 @@ export class App extends Component {
       showLoader: false,
       shopOrigin: ''
   };
-  constructor() {
-      super();
+  constructor(props) {
+      super(props);
       this.checkLoader();
       setTimeout(() => {
           this.getShopOrigin();
@@ -51,7 +51,7 @@ export class App extends Component {
   checkLoader() {
       setInterval(() => {
           if (this.state.showLoader !== window.showLoader &&
-                !isUndefined(window.showLoader)) {
+              !isUndefined(window.showLoader)) {
               this.state.showLoader = window.showLoader;
               const state = this.state;
               this.setState(state);
@@ -64,7 +64,7 @@ export class App extends Component {
           <div>
               {
                   this.state.showLoader &&
-                  <PageLoader height="100" width="100" type="Bars" color="#3f4eae" ></PageLoader>
+                  <PageLoader height="100" width="100" type="Bars" color="#3f4eae" > </PageLoader>
               }
               <Switch>
                   <Route exact path="/" render={() => (

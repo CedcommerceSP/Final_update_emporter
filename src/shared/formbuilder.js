@@ -10,7 +10,7 @@ import { TextField,
 export class Formbuilder extends Component {
 
     constructor(props) {
-        super();
+        super(props);
         this.state = {
           form: props.form
         };
@@ -32,7 +32,6 @@ export class Formbuilder extends Component {
                                         />
                                     </div>
                                 );
-                                break;
                             case 'select':
                                 return (
                                     <div className="col-12 mt-1 mb-1" key={this.state.form.indexOf(field)}>
@@ -44,7 +43,6 @@ export class Formbuilder extends Component {
                                         />
                                     </div>
                                 );
-                                break;
                             case 'checkbox':
                                 return (
                                     <div className="col-12 mt-1 mb-1" key={this.state.form.indexOf(field)}>
@@ -66,7 +64,6 @@ export class Formbuilder extends Component {
                                         </div>
                                     </div>
                                 );
-                                break;
                             case 'radio':
                                 return (
                                     <div className="col-12 mt-1 mb-1" key={this.state.form.indexOf(field)}>
@@ -90,7 +87,6 @@ export class Formbuilder extends Component {
                                         </div>
                                     </div>
                                 );
-                                break;
                         }
                     })
                 }
@@ -103,7 +99,7 @@ export class Formbuilder extends Component {
         );
     }
 
-    componentWillReceiveProps(nextProps) {
+    componentWillReceiveProps(nextProps, nextContext) {
         this.setState({
            form: nextProps.form
         });
