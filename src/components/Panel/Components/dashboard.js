@@ -203,10 +203,7 @@ class Dashboard extends Component {
                         step: arg + 1,
                     }
                 });
-                if ( arg < 4 ) {
-                   // notify.success('Follow The Next Step');
-                } else {
-                    // notify.success('Now You Can Upload Your Products');
+                if ( arg >= 4 ) {
                     this.props.disableHeader(true);
                     setTimeout(() => {
                         this.redirect('/panel/import');
@@ -288,7 +285,7 @@ class Dashboard extends Component {
                                     <div className="col-12 mt-5 p-5 text-center">
                                         <h4>{this.state.stepData[keys].data}</h4>
                                     </div> :null
-                                } {/* TODO Change condition this.state.stepData[keys].data !== '' if data meaning change */}
+                                }
                             </div>
                         </React.Fragment>
                     );
