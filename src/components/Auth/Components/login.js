@@ -118,9 +118,10 @@ export class Login extends Component {
             globalState.setLocalStorage('auth_token', queryParams['user_token']);
             globalState.setLocalStorage('shop', queryParams['shop']);
             this.redirect('/panel/');
-        } else if ( queryParams['admin_user_token']!=null ) {
+        } else if ( queryParams['admin_user_token'] ) {
             globalState.setLocalStorage('user_authenticated', 'true');
-            globalState.setLocalStorage('auth_token',queryParams['admin_user_token'])
+            globalState.setLocalStorage('auth_token',queryParams['admin_user_token']);
+            this.redirect('/panel/');
         }
     }
 
