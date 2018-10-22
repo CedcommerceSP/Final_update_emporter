@@ -15,7 +15,7 @@ import ConfigShared from "../../../shared/config/config-shared";
 import AnalyticsReporting from "./products-component/analytics-reporting";
 import {globalState} from "../../../services/globalstate";
 
-// TODO: not remove static setState from checkStepCompleted
+// TODO: remove static setState from checkStepCompleted
 // TODO: remove stepper true from all the step, and make them false before uploading to server
 class Dashboard extends Component {
     constructor(props) {
@@ -78,7 +78,7 @@ class Dashboard extends Component {
                         method: 'GET', // Method Type
                         redirectTo: '/panel/configuration', // After Completion Where To Redirect
                         anchor: 'U-INFO', // Which Function to call e.g : 'U-INFO' then call div which take User basic Information
-                        stepperActive: true, // used in stepper Check either Completed or not and also help in deciding with step to go
+                        stepperActive: false, // used in stepper Check either Completed or not and also help in deciding with step to go
                     }, // step 1
                     {
                         message: <p>Grab the early mover advantage and get first 15 days free. There are only two prerequisites for using this app, a valid Shopify store and Amazon Seller Account. No Credit Card details required to unlock free trial.</p>,
@@ -88,7 +88,7 @@ class Dashboard extends Component {
                         method: 'GET', // Method Type
                         redirectTo: '/panel/plans', // After Completion Where To Redirect
                         anchor: 'PLANS', // Which Function to call e.g : 'U-INFO' then call div which take User basic Information
-                        stepperActive: true, // used in stepper Check either Completed or not
+                        stepperActive: false, // used in stepper Check either Completed or not
                     }, // step 2
                     {
                         message: <p> Link your <b>Account</b></p>,
@@ -167,18 +167,18 @@ class Dashboard extends Component {
                     });
                 }
             } else {
-                notify.error(data.message);
+                // notify.error(data.message);
             }
         });
-        this.setState({
-            data: this.state.stepData,
-            welcome_screen: false,
-            stepStart:true,
-            active_step: {
-                name: '',
-                step: 1
-            }
-        });
+        // this.setState({
+        //     data: this.state.stepData,
+        //     welcome_screen: false,
+        //     stepStart:true,
+        //     active_step: {
+        //         name: '',
+        //         step: 1
+        //     }
+        // });
     } // initially run this to check which step is completed
     changeStep(arg) { // arg means step number
         let data = this.state.stepData;
