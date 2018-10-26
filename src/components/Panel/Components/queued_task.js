@@ -112,7 +112,7 @@ export class QueuedTask extends Component {
                                         <div className="col-12 pb-0 pl-5 pr-5 pt-5 text-right">
                                                     <span className="pr-4">
                                                         <Button onClick={this.handleClearAllActivity}>
-                                                        Clear All Activity
+                                                        Clear All Activities
                                                     </Button>
                                                     </span>
                                             <Button onClick={() => {
