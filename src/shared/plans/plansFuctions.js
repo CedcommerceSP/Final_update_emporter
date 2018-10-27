@@ -11,6 +11,7 @@ export function dataGrids(result, manageService) {
            description: value.description,
            connectors:value.connectors,
            main_price: checkValue(value.custom_price, value.discount_type, value.discount, value.services_groups,manageService,value.plan_id ),
+           const_main_price: checkValue(value.custom_price, value.discount_type, value.discount, value.services_groups,manageService,value.plan_id ),
            discount: value.discount,
            originalValue: value.custom_price !== ""?value.custom_price:checkIfNull(value.services_groups),
            services: createServices(value.services_groups),
@@ -118,4 +119,22 @@ arg2 = JSON.parse(arg2);
     });
     arg2.services = val;
     return arg2;
+}
+/***************************  manage MarketPlace price Plan   *************************************/
+export function marketPlacePricingPlan(arg, plan) {
+    let trueCases = 0;
+    Object.keys(arg).forEach(e => {
+        if ( arg[e].isSelected ) {
+            trueCases ++;
+        }
+    });
+    plan.forEach(e => {
+        e.main_price = e.const_main_price;
+    });
+    if ( trueCases > 1 ) {
+        plan.forEach(e => {
+           e.main_price = parseInt(((e.main_price *70)/100)*(trueCases-1) + e.const_main_price);
+        });
+    }
+    return plan;
 }

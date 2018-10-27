@@ -101,12 +101,12 @@ export class Login extends Component {
     }
 
     isFormValid() {
-        for (let i = 0; i < Object.keys(this.state).length; i++) {
-            const key = Object.keys(this.state)[i];
-            if (!this.fieldValidations[key].test(this.state[key])) {
-                return false;
-            }
-        }
+        // for (let i = 0; i < Object.keys(this.state).length; i++) {
+        //     const key = Object.keys(this.state)[i];
+        //     if (!this.fieldValidations[key].test(this.state[key])) {
+        //         return false;
+        //     }
+        // }
         return true;
     }
 

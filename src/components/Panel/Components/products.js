@@ -20,6 +20,7 @@ import {isUndefined} from "util";
 import {NavLink} from "react-router-dom";
 import {capitalizeWord} from "./static-functions";
 import {environment} from "../../../environments/environment";
+import {paginationShow} from "./static-functions";
 
 export class Products extends Component {
 
@@ -112,7 +113,9 @@ export class Products extends Component {
             deleteProductData: false,
             toDeleteRow: {},
             totalPage:0,
-            showLoaderBar:false,
+            showLoaderBar:true,
+            hideLoader: false,
+            pagination_show:0
         };
         this.getAllImporterServices();
         this.getAllUploaderServices();
@@ -172,7 +175,7 @@ export class Products extends Component {
         this.updateState();
     }
     getInstalledApps() {
-        requests.getRequest('connector/get/getInstalledApps')
+        requests.getRequest('connector/get/getInstalledApps', false, false, true)
             .then(data => {
                 this.state.installedApps = [
                     {
@@ -204,7 +207,7 @@ export class Products extends Component {
     getProducts() {
         this.prepareFilterObject();
         const pageSettings = Object.assign({}, this.gridSettings);
-        requests.getRequest('connector/product/getProducts', Object.assign( pageSettings, this.state.appliedFilters))
+        requests.getRequest('connector/product/getProducts', Object.assign( pageSettings, this.state.appliedFilters),false,true)
             .then(data => {
                 if (data.success) {
                     this.setState({totalPage:data.data.count});
@@ -212,9 +215,15 @@ export class Products extends Component {
                     this.totalProductCount = data.data.count;
                     this.state['products'] = products;
                     this.state.showLoaderBar = data.success;
+                    this.state.hideLoader = !data.success;
+                    this.state.pagination_show = paginationShow(this.gridSettings.activePage,this.gridSettings.variantsCount,data.data.count,true);
                     this.updateState();
                 } else {
-                    this.setState({showLoaderBar:false});
+                    this.setState({
+                        showLoaderBar:false,
+                        hideLoader:true,
+                        pagination_show: paginationShow(0,0,0,false),
+                    });
                     notify.error('No products found');
                     this.updateState();
                 }
@@ -405,7 +414,7 @@ export class Products extends Component {
                                 {/*<Tabs tabs={this.state.installedApps} selected={this.state.selectedApp} onSelect={this.handleMarketplaceChange.bind(this)}/>*/}
                             {/*</div>*/}
                             <div className="col-12 p-3 text-right">
-                                <Label>Total {this.totalProductCount} products</Label>
+                                <Label>{this.state.pagination_show} products</Label>
                             </div>
                             <div className="col-12">
                                 <SmartDataTable

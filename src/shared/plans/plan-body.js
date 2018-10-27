@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
 import {requests} from "../../services/request";
 import {isUndefined} from "util";
-import {dataGrids, RemoveService} from "./plansFuctions";
+import {dataGrids, RemoveService, marketPlacePricingPlan} from "./plansFuctions";
 import {notify} from "../../services/notify";
 import {
     Button,
@@ -36,6 +36,16 @@ class PlanBody extends Component {
                 plan:{}, // selected plans
             }, // more field is added like schema and payment_method below
             schemaShopSelected: false,
+            marketPlace: {
+                amazon: {
+                    title:'Amazon',
+                    isSelected: true,
+                },
+                ebay: {
+                    title: 'Ebay',
+                    isSelected: true,
+                }
+            }
         };
         this.toggleSchemaModal = this.toggleSchemaModal.bind(this);
         this.createSchema = this.createSchema.bind(this);
@@ -46,6 +56,7 @@ class PlanBody extends Component {
                 if ( data.data !== null && !isUndefined(data.data) ) {
                     const temp = JSON.parse(JSON.stringify(data.data.data.rows));
                     data = dataGrids(data.data.data.rows, null);
+                    data = marketPlacePricingPlan(this.state.marketPlace,data);
                     this.setState({
                         data : data,
                         originalData: temp,
@@ -98,10 +109,37 @@ class PlanBody extends Component {
             data : dataPrice
         });
     }
+    handleMarketPlaceSelected = (event,key) => {
+        let data = this.state.marketPlace;
+        let plan = this.state.data;
+        data[key].isSelected = event;
+        plan = marketPlacePricingPlan(data,plan);
+        this.setState({marketPlace: data, data: plan});
+    };
     render() {
         return (
             <React.Fragment>
                 <div className="row">
+                    <div className="col-12 text-center">
+                        {Object.keys(this.state.marketPlace).map(key => {
+                            let trueCases = 0;
+                            Object.keys(this.state.marketPlace).forEach(e => {
+                                if ( this.state.marketPlace[e].isSelected ) {
+                                    trueCases ++;
+                                }
+                            });
+                            return (<React.Fragment key={key}>
+                                <label className="mr-4 mb-4">
+                                    <Checkbox
+                                        label={this.state.marketPlace[key].title}
+                                        disabled={trueCases === 1 && this.state.marketPlace[key].isSelected}
+                                        checked={this.state.marketPlace[key].isSelected}
+                                        onChange={(e) => this.handleMarketPlaceSelected(e,key)}
+                                    />
+                                </label>
+                            </React.Fragment>)
+                        })}
+                    </div>
                     {this.state.data.map((data, index) => {
                         return (
                             <div className="col-sm-4 col-12 pt-3 pb-3" key={index}>{/* Starting Of Plan Card */}

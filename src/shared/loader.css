@@ -7,13 +7,13 @@
     left: 0;
     right: 0;
     bottom: 0;
-    background-color: rgba(0,0,0,0.5); /* Black background with opacity */
+    background-color: rgba(239, 239, 239, 0.5); /* Black background with opacity */
     z-index: 999; /* Specify a stack order in case you're using a different order for other elements */
     cursor: pointer; /* Add a pointer on hover */
 }
 
 .loader-area {
     position: fixed;
-    top: 45%;
-    left: 45%;
+    top: 40%;
+    left: 42%;
 }
