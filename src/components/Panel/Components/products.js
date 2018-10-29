@@ -41,8 +41,9 @@ export class Products extends Component {
         {label: 50, value: 50}
     ];
     massActions = [
-        {label: 'Delete', value: 'delete'},
-        // {label: 'Upload', value: 'upload'}
+        // {label: 'Delete', value: 'delete'},
+        {label: 'Upload', value: 'upload'},
+        {label: 'Upload All', value: 'upload_all'}
     ];
     visibleColumns = ['source_variant_id', 'title', 'sku', 'price','quantity','asin'];
     imageColumns = ['main_image'];
@@ -115,7 +116,9 @@ export class Products extends Component {
             totalPage:0,
             showLoaderBar:true,
             hideLoader: false,
-            pagination_show:0
+            pagination_show:0,
+            selectedUploadModal: false,
+            selectUpload:{option:[],value:''}
         };
         this.getAllImporterServices();
         this.getAllUploaderServices();
@@ -204,6 +207,47 @@ export class Products extends Component {
             });
     }
 
+    handleSelectedUpload = (arg,val) => {
+        let data = {
+            target:'shopifygql',
+            source:'amazonimporter',
+            target_shop:'anshuman-test-store.myshopify.com'
+        };
+        switch (arg) {
+            case 'modalClose': this.setState({selectedUploadModal: false}); break;
+            case 'profile': requests.getRequest('connector/profile/getMatchingProfiles', data)
+                .then(data => {
+                    if (data.success) {
+                        this.state.selectUpload.option.push({
+                            label: 'Default Profile',
+                            value: 'default_profile'
+                        });
+                        for (let i = 0; i < data.data.length; i++) {
+                            this.state.selectUpload.option.push({
+                                label: data.data[i].name,
+                                value: data.data[i].id
+                            });
+                        }
+                        this.state.selectUpload.value = 'default_profile';
+                        this.setState({selectedUploadModal: true});
+                        this.updateState();
+                    } else {
+                        notify.error(data.message);
+                    }
+                }); break;
+            case 'Start_Upload':requests.postRequest('connector/product/selectUpload', {
+                                    selected_profile:this.state.selectUpload.value,
+                                    list_ids:this.state.selectedProducts
+                                }).then(data => {
+                                    console.log(data);
+                                });
+            break;
+            case 'select': this.state.selectUpload.value = val;
+                            this.setState(this.state);break;
+            default:notify.info('Case Not Exits');
+        }
+    };
+
     getProducts() {
         this.prepareFilterObject();
         const pageSettings = Object.assign({}, this.gridSettings);
@@ -288,7 +332,7 @@ export class Products extends Component {
     prepareFilterObject() {
         this.state.appliedFilters = {};
         if (this.filters.marketplace !== 'all') {
-            this.state.appliedFilters['marketplace'] = this.filters.marketplace;
+            this.state.appliedFilters['filter[marketplace][1]'] = this.filters.marketplace;
         }
         if (this.filters.full_text_search !== '') {
             this.state.appliedFilters['search'] = this.filters.full_text_search;
@@ -410,29 +454,29 @@ export class Products extends Component {
                             renderItem={item => {}}
                         />
                         <div className="row">
-                            {/*<div className="col-12">*/}
-                                {/*<Tabs tabs={this.state.installedApps} selected={this.state.selectedApp} onSelect={this.handleMarketplaceChange.bind(this)}/>*/}
-                            {/*</div>*/}
+                            <div className="col-12">
+                                <Tabs tabs={this.state.installedApps} selected={this.state.selectedApp} onSelect={this.handleMarketplaceChange.bind(this)}/>
+                            </div>
                             <div className="col-12 p-3 text-right">
                                 <Label>{this.state.pagination_show} products</Label>
                             </div>
                             <div className="col-12">
                                 <SmartDataTable
                                     data={this.state.products}
-                                    uniqueKey="sku"
+                                    uniqueKey="asin"
                                     showLoaderBar={this.state.showLoaderBar}
                                     count={this.gridSettings.variantsCount}
                                     activePage={this.gridSettings.activePage}
                                     hideFilters={this.hideFilters}
                                     columnTitles={this.columnTitles}
-                                    multiSelect={false}
+                                    multiSelect={true}
                                     customButton={this.customButton} // button
                                     operations={this.operations} //button
                                     selected={this.state.selectedProducts}
                                     className='ui compact selectable table'
                                     withLinks={true}
                                     visibleColumns={this.visibleColumns}
-                                    // actions={this.massActions}
+                                    actions={this.massActions}
                                     showColumnFilters={true}
                                     imageColumns={this.imageColumns}
                                     rowActions={{
@@ -443,10 +487,10 @@ export class Products extends Component {
                                         this.visibleColumns = event;
                                     }}
                                     userRowSelect={(event) => {
-                                        const itemIndex = this.state.selectedProducts.indexOf(event.data.sku);
+                                        const itemIndex = this.state.selectedProducts.indexOf(event.data.asin);
                                         if (event.isSelected) {
                                             if (itemIndex === -1) {
-                                                this.state.selectedProducts.push(event.data.sku);
+                                                this.state.selectedProducts.push(event.data.asin);
                                             }
                                         } else {
                                             if (itemIndex !== -1) {
@@ -461,15 +505,15 @@ export class Products extends Component {
                                         let data = this.state.selectedProducts.slice(0);
                                         if (event) {
                                             for (let i = 0; i < rows.length; i++) {
-                                                const itemIndex = this.state.selectedProducts.indexOf(rows[i].sku);
+                                                const itemIndex = this.state.selectedProducts.indexOf(rows[i].asin);
                                                 if ( itemIndex === -1 ) {
-                                                    data.push(rows[i].sku);
+                                                    data.push(rows[i].asin);
                                                 }
                                             }
                                         } else {
                                             for (let i = 0; i < rows.length; i++) {
-                                                if ( data.indexOf(rows[i].sku) !== -1 ) {
-                                                    data.splice(data.indexOf(rows[i].sku), 1)
+                                                if ( data.indexOf(rows[i].asin) !== -1 ) {
+                                                    data.splice(data.indexOf(rows[i].asin), 1)
                                                 }
                                             }
                                         }
@@ -477,7 +521,10 @@ export class Products extends Component {
                                     }}
                                     massAction={(event) => {
                                         switch (event) {
-                                            case 'upload':this.redirect('/show/progress',this.state.selectedProducts);break;
+                                            case 'upload':
+                                                this.state.selectedProducts.length > 0?
+                                                this.handleSelectedUpload('profile'):notify.info('No Product Selected');
+                                                break;
                                             default:console.log(event,this.state.selectedProducts);
                                         }
                                     }}
@@ -525,6 +572,29 @@ export class Products extends Component {
                         </div>
                     </div>
                 </Card>
+                <Modal
+                    open={this.state.selectedUploadModal}
+                    onClose={this.handleSelectedUpload.bind(this,'modalClose')}
+                    title={"Upload"}
+                    primaryAction={{content:'Accept', onClick:() => { this.handleSelectedUpload('Start_Upload') }}}
+                    secondaryActions={{content:'Cancel', onClick:() => {this.handleSelectedUpload('modalClose')}}}
+                >
+                    <Modal.Section>
+                        <div>
+                            <Banner title="Please Note" status="info">
+                                <Label id={'sUploadLabel'}>
+                                    Product Without an profile, will be uploaded via Default Profile.
+                                </Label>
+                            </Banner>
+                            <Select
+                                label={'Profile'}
+                                options={this.state.selectUpload.option}
+                                onChange={this.handleSelectedUpload.bind(this,'select')}
+                                value={this.state.selectUpload.value}
+                            />
+                        </div>
+                    </Modal.Section>
+                </Modal>
                 {this.state.deleteProductData && this.deleteProductModal()}
                 {this.renderUploadProductsModal()}
             </Page>

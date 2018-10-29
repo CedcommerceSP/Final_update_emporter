@@ -43,7 +43,7 @@ class PlanBody extends Component {
                 },
                 ebay: {
                     title: 'Ebay',
-                    isSelected: true,
+                    isSelected: false,
                 }
             }
         };
@@ -110,17 +110,18 @@ class PlanBody extends Component {
         });
     }
     handleMarketPlaceSelected = (event,key) => {
-        let data = this.state.marketPlace;
-        let plan = this.state.data;
-        data[key].isSelected = event;
-        plan = marketPlacePricingPlan(data,plan);
-        this.setState({marketPlace: data, data: plan});
+        notify.info('Comming Soon..');
+        // let data = this.state.marketPlace;
+        // let plan = this.state.data;
+        // data[key].isSelected = event;
+        // plan = marketPlacePricingPlan(data,plan);
+        // this.setState({marketPlace: data, data: plan});
     };
     render() {
         return (
             <React.Fragment>
                 <div className="row">
-                    <div className="col-12 text-center">
+                    <div className="col-12 p-4 text-center">
                         {Object.keys(this.state.marketPlace).map(key => {
                             let trueCases = 0;
                             Object.keys(this.state.marketPlace).forEach(e => {

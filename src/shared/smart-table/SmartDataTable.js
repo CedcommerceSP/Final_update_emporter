@@ -110,6 +110,14 @@ class SmartDataTablePlain extends React.Component {
         if ( !isUndefined(nextProps.data) ) {
             if ( this.props.data !== nextProps.data ) {
                 this.setState({showLoaderBar:false});
+                if (!isUndefined(nextProps.selected)) {
+                    let flag = true;
+                    nextProps.data.forEach((e,index) => {
+                        if ( nextProps.selected.indexOf(e[this.state.uniqueKey]) === -1 ) { flag = false;
+                        }
+                    });
+                    if (flag && nextProps.data.length > 0) { this.allSelected = true }
+                }
             }
         }
         if ( !isUndefined(nextProps.hideLoader) ) {
@@ -139,8 +147,8 @@ class SmartDataTablePlain extends React.Component {
     }
 
     componentDidUpdate(prevProps) {
-        const {data} = this.props
-        const {data: prevData} = prevProps
+        const {data} = this.props;
+        const {data: prevData} = prevProps;
         if (typeof data === 'string'
             && (typeof data !== typeof prevData || data !== prevData)) {
             this.fetchData()

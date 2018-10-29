@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+ import React, { Component } from 'react';
 import { NavLink } from 'react-router-dom';
 import './import-component/import.css';
 
@@ -593,56 +593,43 @@ export class Import extends Component {
                                                 <li data-target="#carouselExampleIndicators" data-slide-to="3"/>
                                                 <li data-target="#carouselExampleIndicators" data-slide-to="4"/>
                                                 <li data-target="#carouselExampleIndicators" data-slide-to="5"/>
-                                                <li data-target="#carouselExampleIndicators" data-slide-to="6"/>
                                             </ol>
                                             <div className="carousel-inner">
                                                 <div className="carousel-item active">
-                                                    <img className="d-block w-100" src={require("../../../assets/img/step_1.jpg")} alt="First slide" height={480}/>
+                                                    <img className="d-block w-100" src={require("../../../assets/img/s1.png")} alt="First slide" height={480}/>
                                                     <div className="carousel-caption text-dark">
                                                         <h2 className="cation-back">Step 1</h2>
-                                                        <h3 className="cation-back">Choose Import To Start The Import Process</h3>
+                                                        {/*<h3 className="cation-back">Choose Import To Start The Import Process</h3>*/}
                                                     </div>
                                                 </div>
                                                 <div className="carousel-item">
-                                                    <img className="d-block w-100" src={require("../../../assets/img/step_2.1.jpg")} alt="Second slide" height={480}/>
+                                                    <img className="d-block w-100" src={require("../../../assets/img/s2.png")} alt="Second slide" height={480}/>
                                                     <div className="carousel-caption text-dark">
                                                         <h2 className="cation-back">Step 2</h2>
-                                                        <h3 className="cation-back">Choose The Source Destination.</h3>
                                                     </div>
                                                 </div>
                                                 <div className="carousel-item">
-                                                    <img className="d-block w-100" src={require("../../../assets/img/step_2.2.jpg")} alt="Third slide" height={480}/>
+                                                    <img className="d-block w-100" src={require("../../../assets/img/s3.png")} alt="Third slide" height={480}/>
                                                     <div className="carousel-caption text-dark">
                                                         <h2 className="cation-back">Step 3</h2>
-                                                        <h3 className="cation-back">Now Import Product From Source Destination</h3>
                                                     </div>
                                                 </div>
                                                 <div className="carousel-item">
-                                                    <img className="d-block w-100" src={require("../../../assets/img/step_2.5.jpg")} alt="Third slide" height={480}/>
+                                                    <img className="d-block w-100" src={require("../../../assets/img/s4.png")} alt="Third slide" height={480}/>
                                                     <div className="carousel-caption text-dark">
                                                         <h2 className="cation-back">Step 4</h2>
-                                                        <h3 className="cation-back">In this page you can see the progress of your operations</h3>
                                                     </div>
                                                 </div>
                                                 <div className="carousel-item">
-                                                    <img className="d-block w-100" src={require("../../../assets/img/step_3.1.jpg")} alt="Third slide" height={480}/>
+                                                    <img className="d-block w-100" src={require("../../../assets/img/s5.png")} alt="Third slide" height={480}/>
                                                     <div className="carousel-caption text-dark">
                                                         <h2 className="cation-back">Step 5</h2>
-                                                        <h3 className="cation-back">All Completed Task Are Shown Here</h3>
                                                     </div>
                                                 </div>
                                                 <div className="carousel-item">
-                                                    <img className="d-block w-100" src={require("../../../assets/img/step_4.1.jpg")} alt="Third slide" height={480}/>
+                                                    <img className="d-block w-100" src={require("../../../assets/img/s6.png")} alt="Third slide" height={480}/>
                                                     <div className="carousel-caption text-dark">
                                                         <h2 className="cation-back">Step 6</h2>
-                                                        <h3 className="cation-back">Now You can Upload Products</h3>
-                                                    </div>
-                                                </div>
-                                                <div className="carousel-item">
-                                                    <img className="d-block w-100" src={require("../../../assets/img/step_4.2.jpg")} alt="Third slide" height={480}/>
-                                                    <div className="carousel-caption text-dark">
-                                                        <h2 className="cation-back">Step 7</h2>
-                                                        <h3 className="cation-back">Fill The Form And Click Upload To start The Process</h3>
                                                     </div>
                                                 </div>
                                             </div>
