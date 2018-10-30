@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 import {NavLink} from 'react-router-dom';
-import {Button, Card, Checkbox, Form, FormLayout, Page, Select, TextField,Modal} from '@shopify/polaris';
+import {Button, Card, Checkbox, Form, FormLayout, Page, Select, TextField,Modal, Label} from '@shopify/polaris';
 import {requests} from '../../../services/request';
 import {isUndefined} from "util";
 import {notify} from "../../../services/notify";
@@ -15,8 +15,7 @@ import ConfigShared from "../../../shared/config/config-shared";
 import AnalyticsReporting from "./products-component/analytics-reporting";
 import {globalState} from "../../../services/globalstate";
 
-// TODO: remove static setState from checkStepCompleted
-// TODO: remove stepper true from all the step, and make them false before uploading to server
+// TODO: remove the variable "Step started on line near to 75"
 class Dashboard extends Component {
     constructor(props) {
         super(props);
@@ -45,6 +44,12 @@ class Dashboard extends Component {
                 how_u_know_about_us: '',
 
             }, // Step 1
+            otpCheck: {
+                status:false,
+                pin:'',
+                error:false,
+                number_change: false,
+            }, // step 1
             plans:[], // step 2
             /****** step 3 ********/
             API_code: ['google'], // connector/get/installationForm, method -> get, eg: { code : 'google' }
@@ -68,6 +73,7 @@ class Dashboard extends Component {
             stepData: [], // this will store the current showing step, which is selected from data object e.g Shopify_Google []
             selected: '',
             open_init_modal: true, // this is used to open modal one time when user visit dashboard
+            // stepStart:true,
             data: {
                 data : [ //Shopify_Google old Name
                     {
@@ -181,15 +187,6 @@ class Dashboard extends Component {
                 // notify.error(data.message);
             }
         });
-        // this.setState({
-        //     data: this.state.stepData,
-        //     welcome_screen: false,
-        //     stepStart:true,
-        //     active_step: {
-        //         name: '',
-        //         step: 1
-        //     }
-        // });
     } // initially run this to check which step is completed
     changeStep(arg) { // arg means step number
         let data = this.state.stepData;
@@ -307,7 +304,8 @@ class Dashboard extends Component {
     checkAnchor(data, status) {
         if ( status ) {
             switch (data.anchor) {
-                case 'U-INFO': return this.renderGetUserInfo();
+                case 'U-INFO':
+                    return this.renderGetUserInfo();
                 case 'PLANS': return this.renderPlan();
                 case 'LINKED': return this.renderLinkedAccount();
                 case 'CONFIG': return this.renderConfig();
@@ -325,7 +323,10 @@ class Dashboard extends Component {
             requests.getRequest('core/user/updateuser', this.state.info).then(data => {
                 if (data.success) {
                     notify.success(data.message);
-                    this.changeStep(1); // pass the step number
+                    // let otpCheck = this.state.otpCheck;
+                    // otpCheck.status = true;
+                    // this.setState({otpCheck:otpCheck});
+                     this.changeStep(1); // pass the step number
                 } else {
                     notify.error(data.message);
                 }
@@ -354,109 +355,167 @@ class Dashboard extends Component {
             info_error:tempData
         });
     };
+    handleOTPSubmit = () => {
+        console.log('Submit');
+    };
+    handleOTPChange = (arg,value) => {
+        let otpCheck = this.state.otpCheck;
+        otpCheck[arg] = value;
+        this.setState({otpCheck:otpCheck});
+    };
     renderGetUserInfo() {
         return (
             <div className="row">
                 <div className="col-12">
-                    <Form onSubmit={this.handleSubmit}>
-                        <FormLayout>
-                            <div className='row'>
-                                <div className="col-12 col-md-12">
-                                    <TextField
-                                        value={this.state.info.full_name}
-                                        minLength={5}
-                                        onChange={this.handleFormChange.bind(this,'full_name')}
-                                        error={this.state.info_error.full_name?'*Please Enter Detail':null}
-                                        label="Full Name:"
-                                        type="text"
-                                    />
+                    {this.state.otpCheck.status?
+                        <div>
+                            <Form onSubmit={this.handleOTPSubmit}>
+                                <FormLayout>
+                                    <div className="row">
+                                        <div className="col-12 col-sm-4 offset-0 offset-sm-4">
+                                            {this.state.otpCheck.number_change?
+                                                <div className='row'>
+                                                    <div className="col-12">
+                                                        <TextField
+                                                            value={this.state.info.mobile}
+                                                            minLength={5}
+                                                            maxLength={14}
+                                                            error={this.state.info_error.mobile?'*Please Enter Detail':null}
+                                                            onChange={this.handleFormChange.bind(this,'mobile')}
+                                                            label="Enter New Mobile Number:"
+                                                            type="number"
+                                                        />
+                                                    </div>
+                                                    <div className="col-12 col-md-12 text-left">
+                                                        {this.state.info.mobile==='' && this.state.info_error.mobile!==true?
+                                                            <p className="mt-1" style={{color: 'green'}}>*required</p>
+                                                            :null
+                                                        }
+                                                    </div>
+                                                </div>:
+                                                <div>
+                                                    <Label>Phone number: </Label>
+                                                    <Label>{this.state.info.mobile}</Label>
+                                                    <div className='row mt-4'>
+                                                        <div className="col-12">
+                                                            <TextField
+                                                                value={this.state.otpCheck.pin}
+                                                                minLength={5}
+                                                                maxLength={14}
+                                                                error={this.state.otpCheck.error?'*Please Enter Detail':null}
+                                                                onChange={this.handleOTPChange.bind(this,'mobile')}
+                                                                label="Enter OTP"
+                                                                type="number"
+                                                            />
+                                                        </div>
+                                                    </div>
+                                                </div>}
+                                            <Button submit primary>Submit</Button>
+                                        </div>
+                                    </div>
+                                </FormLayout>
+                            </Form>
+                        </div>:
+                        <Form onSubmit={this.handleSubmit}>
+                            <FormLayout>
+                                <div className='row'>
+                                    <div className="col-12 col-md-12">
+                                        <TextField
+                                            value={this.state.info.full_name}
+                                            minLength={5}
+                                            onChange={this.handleFormChange.bind(this,'full_name')}
+                                            error={this.state.info_error.full_name?'*Please Enter Detail':null}
+                                            label="Full Name:"
+                                            type="text"
+                                        />
+                                    </div>
+                                    <div className="col-12 col-md-12 text-left">
+                                        {this.state.info.full_name ==='' && this.state.info_error.full_name !== true?
+                                            <p className="mt-1" style={{color: 'green'}}>*required</p>
+                                            :null
+                                        }
+                                    </div>
                                 </div>
-                                <div className="col-12 col-md-12 text-left">
-                                    {this.state.info.full_name ==='' && this.state.info_error.full_name !== true?
-                                        <p className="mt-1" style={{color: 'green'}}>*required</p>
-                                        :null
-                                    }
+                                <div className='row'>
+                                    <div className="col-12 col-md-12">
+                                        <TextField
+                                            value={this.state.info.mobile}
+                                            minLength={5}
+                                            maxLength={14}
+                                            error={this.state.info_error.mobile?'*Please Enter Detail':null}
+                                            onChange={this.handleFormChange.bind(this,'mobile')}
+                                            helpText={"OTP will sent to this number for verification"}
+                                            label="Phone Number:"
+                                            type="number"
+                                        />
+                                    </div>
+                                    <div className="col-12 col-md-12 text-left">
+                                        {this.state.info.mobile==='' && this.state.info_error.mobile!==true?
+                                            <p className="mt-1" style={{color: 'green'}}>*required</p>
+                                            :null
+                                        }
+                                    </div>
                                 </div>
-                            </div>
-                            <div className='row'>
-                                <div className="col-12 col-md-12">
-                                    <TextField
-                                        value={this.state.info.mobile}
-                                        minLength={5}
-                                        maxLength={14}
-                                        error={this.state.info_error.mobile?'*Please Enter Detail':null}
-                                        onChange={this.handleFormChange.bind(this,'mobile')}
-                                        label="Phone Number:"
-                                        type="number"
-                                    />
+                                <div className='row'>
+                                    <div className="col-12 col-md-12">
+                                        <TextField
+                                            value={this.state.info.email}
+                                            minLength={5}
+                                            error={this.state.info_error.email?'*Please Enter Detail':null}
+                                            onChange={this.handleFormChange.bind(this,'email')}
+                                            label="Email:"
+                                            type="email"
+                                        />
+                                    </div>
+                                    <div className="col-12 col-md-12 text-left">
+                                        {this.state.info.email==='' && this.state.info_error.email!==true?
+                                            <p className="mt-1" style={{color: 'green'}}>*required</p>
+                                            :null
+                                        }
+                                    </div>
                                 </div>
-                                <div className="col-12 col-md-12 text-left">
-                                    {this.state.info.mobile==='' && this.state.info_error.mobile!==true?
-                                        <p className="mt-1" style={{color: 'green'}}>*required</p>
-                                        :null
-                                    }
-                                </div>
-                            </div>
-                            <div className='row'>
-                                <div className="col-12 col-md-12">
-                                    <TextField
-                                        value={this.state.info.email}
-                                        minLength={5}
-                                        error={this.state.info_error.email?'*Please Enter Detail':null}
-                                        onChange={this.handleFormChange.bind(this,'email')}
-                                        label="Email:"
-                                        type="email"
-                                    />
-                                </div>
-                                <div className="col-12 col-md-12 text-left">
-                                    {this.state.info.email==='' && this.state.info_error.email!==true?
-                                        <p className="mt-1" style={{color: 'green'}}>*required</p>
-                                        :null
-                                    }
-                                </div>
-                            </div>
-                            <TextField
-                                value={this.state.info.skype_id}
-                                onChange={this.handleFormChange.bind(this,'skype_id')}
-                                label="Skype ID:"
-                                type="text"
-                            />
-                            <Select
-                                label="How Do you Know About us"
-                                placeholder="Select"
-                                options={[
-                                    {label: 'Shopify App Store', value: 'Shopify App Store'},
-                                    {label: 'Google Ads', value: 'Google Ads'},
-                                    {label: 'Facebook Ads', value: 'Facebook Ads'},
-                                    {label: 'Twitter', value: 'Twitter'},
-                                    {label: 'Yahoo', value: 'Yahoo'},
-                                    {label: 'Youtube', value: 'Youtube'},
-                                    {label: 'Other', value: 'Other'},
-                                ]}
-                                onChange={this.handleFormChange.bind(this,'how_u_know_about_us')}
-                                value={this.state.info.how_u_know_about_us}
-                            />
-                            {this.state.info.how_u_know_about_us === 'Other'?
                                 <TextField
-                                    value={this.state.info.Other_text}
-                                    onChange={this.handleFormChange.bind(this, 'Other_text')}
-                                    label="Kindly Mention your Source"
+                                    value={this.state.info.skype_id}
+                                    onChange={this.handleFormChange.bind(this,'skype_id')}
+                                    label="Skype ID:"
                                     type="text"
-                                />:null
-                            }
-                            <div className="form-control" style={{height:'180px', width:'100%',overflow:'auto'}}>
-                                <h3>CedCommerce Terms & Condition and Privacy Policy</h3><br/><br/><br/>
-                                {term_and_condition()}
-                            </div>
-                            <Checkbox
-                                checked={this.state.info.term_and_condition}
-                                label="Accept Terms & Conditions"
-                                error={this.state.info_error.term_and_condition?'Please Check The Terms & Conditions':''}
-                                onChange={this.handleFormChange.bind(this,'term_and_condition')}
-                            />
-                            <Button submit primary>Submit</Button>
-                        </FormLayout>
-                    </Form>
+                                />
+                                <Select
+                                    label="How Do you Know About us"
+                                    placeholder="Select"
+                                    options={[
+                                        {label: 'Shopify App Store', value: 'Shopify App Store'},
+                                        {label: 'Google Ads', value: 'Google Ads'},
+                                        {label: 'Facebook Ads', value: 'Facebook Ads'},
+                                        {label: 'Twitter', value: 'Twitter'},
+                                        {label: 'Yahoo', value: 'Yahoo'},
+                                        {label: 'Youtube', value: 'Youtube'},
+                                        {label: 'Other', value: 'Other'},
+                                    ]}
+                                    onChange={this.handleFormChange.bind(this,'how_u_know_about_us')}
+                                    value={this.state.info.how_u_know_about_us}
+                                />
+                                {this.state.info.how_u_know_about_us === 'Other'?
+                                    <TextField
+                                        value={this.state.info.Other_text}
+                                        onChange={this.handleFormChange.bind(this, 'Other_text')}
+                                        label="Kindly Mention your Source"
+                                        type="text"
+                                    />:null
+                                }
+                                <div className="form-control" style={{height:'180px', width:'100%',overflow:'auto'}}>
+                                    <h3>CedCommerce Terms & Condition and Privacy Policy</h3><br/><br/><br/>
+                                    {term_and_condition()}
+                                </div>
+                                <Checkbox
+                                    checked={this.state.info.term_and_condition}
+                                    label="Accept Terms & Conditions"
+                                    error={this.state.info_error.term_and_condition?'Please Check The Terms & Conditions':''}
+                                    onChange={this.handleFormChange.bind(this,'term_and_condition')}
+                                />
+                                <Button submit primary>Submit</Button>
+                            </FormLayout>
+                        </Form>}
                 </div>
             </div>
         );
@@ -504,7 +563,7 @@ class Dashboard extends Component {
                         body: <div className="text-left mt-5">
                             <h4>You Can uninstall:-</h4>
                             <ul>
-                                <li><h5>Go to Apps Section from your shopify dashboard</h5></li>
+                                <li><h5>Go to Apps Section from your Shopify dashboard</h5></li>
                                 <li><h5>You can Un-install the App by clicking the Bin Icon right to App</h5></li>
                             </ul>
                         </div>
