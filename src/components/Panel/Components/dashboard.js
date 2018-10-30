@@ -323,10 +323,9 @@ class Dashboard extends Component {
             requests.getRequest('core/user/updateuser', this.state.info).then(data => {
                 if (data.success) {
                     notify.success(data.message);
-                    // let otpCheck = this.state.otpCheck;
-                    // otpCheck.status = true;
-                    // this.setState({otpCheck:otpCheck});
-                     this.changeStep(1); // pass the step number
+                    let otpCheck = this.state.otpCheck;
+                    otpCheck.status = true;
+                    this.setState({otpCheck:otpCheck});
                 } else {
                     notify.error(data.message);
                 }
@@ -356,7 +355,12 @@ class Dashboard extends Component {
         });
     };
     handleOTPSubmit = () => {
-        console.log('Submit');
+        if ( this.state.otpCheck.pin !== '' ) {
+            this.changeStep(1); // pass the step number
+            notify.success('Done!!');
+        } else {
+            notify.info('Empty, please enter pin');
+        }
     };
     handleOTPChange = (arg,value) => {
         let otpCheck = this.state.otpCheck;
@@ -403,14 +407,16 @@ class Dashboard extends Component {
                                                                 minLength={5}
                                                                 maxLength={14}
                                                                 error={this.state.otpCheck.error?'*Please Enter Detail':null}
-                                                                onChange={this.handleOTPChange.bind(this,'mobile')}
+                                                                onChange={this.handleOTPChange.bind(this,'pin')}
                                                                 label="Enter OTP"
                                                                 type="number"
                                                             />
                                                         </div>
                                                     </div>
                                                 </div>}
-                                            <Button submit primary>Submit</Button>
+                                            <div className="mt-4">
+                                                <Button submit primary>Submit</Button>
+                                            </div>
                                         </div>
                                     </div>
                                 </FormLayout>

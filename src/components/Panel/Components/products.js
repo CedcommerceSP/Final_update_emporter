@@ -44,7 +44,7 @@ export class Products extends Component {
     massActions = [
         // {label: 'Delete', value: 'delete'},
         {label: 'Upload', value: 'upload'},
-        {label: 'Upload All', value: 'upload_all'}
+        // {label: 'Upload All', value: 'upload_all'}
     ];
     visibleColumns = ['source_variant_id', 'title', 'sku', 'price','quantity','asin'];
     imageColumns = ['main_image'];
@@ -219,6 +219,7 @@ export class Products extends Component {
             case 'profile': requests.getRequest('connector/profile/getMatchingProfiles', data)
                 .then(data => {
                     if (data.success) {
+                        this.state.selectUpload.option = [];
                         this.state.selectUpload.option.push({
                             label: 'Default Profile',
                             value: 'default_profile'
