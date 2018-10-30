@@ -21,6 +21,7 @@ import {NavLink} from "react-router-dom";
 import {capitalizeWord} from "./static-functions";
 import {environment} from "../../../environments/environment";
 import {paginationShow} from "./static-functions";
+import {globalState} from "../../../services/globalstate";
 
 export class Products extends Component {
 
@@ -120,8 +121,8 @@ export class Products extends Component {
             selectedUploadModal: false,
             selectUpload:{option:[],value:''}
         };
-        this.getAllImporterServices();
-        this.getAllUploaderServices();
+        // this.getAllImporterServices();
+        // this.getAllUploaderServices();
         this.getProducts();
         this.getInstalledApps();
 
@@ -211,7 +212,7 @@ export class Products extends Component {
         let data = {
             target:'shopifygql',
             source:'amazonimporter',
-            target_shop:'anshuman-test-store.myshopify.com'
+            target_shop: globalState.getLocalStorage('shop')?globalState.getLocalStorage('shop'):!environment.isLive?'anshuman-test-store.myshopify.com':''
         };
         switch (arg) {
             case 'modalClose': this.setState({selectedUploadModal: false}); break;
@@ -436,15 +437,16 @@ export class Products extends Component {
     render() {
         return (
             <Page
-                primaryAction={{content: 'Upload products', onClick: () => {
-                        this.state.uploadProductDetails.source = '';
-                        this.state.uploadProductDetails.target = '';
-                        this.state.uploadProductDetails.selected_profile = '';
-                        this.state.uploadProductDetails.profile_type = '';
-                        this.state.showUploadProducts = true;
-                        this.handleUploadChange('target','shopifygql');
-                        this.handleUploadChange('selected_profile','default_profile');
-                        this.updateState();
+                primaryAction={{content: 'Create Profile', onClick: () => {
+                    this.redirect('/panel/profiling/create');
+                        // this.state.uploadProductDetails.source = '';
+                        // this.state.uploadProductDetails.target = '';
+                        // this.state.uploadProductDetails.selected_profile = '';
+                        // this.state.uploadProductDetails.profile_type = '';
+                        // this.state.showUploadProducts = true;
+                        // this.handleUploadChange('target','shopifygql');
+                        // this.handleUploadChange('selected_profile','default_profile');
+                        // this.updateState();
                     }}} style={{cursor: 'pointer'}}
                 title="Products List">
                 <Card>
