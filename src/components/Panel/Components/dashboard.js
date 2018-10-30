@@ -73,7 +73,7 @@ class Dashboard extends Component {
             stepData: [], // this will store the current showing step, which is selected from data object e.g Shopify_Google []
             selected: '',
             open_init_modal: true, // this is used to open modal one time when user visit dashboard
-            // stepStart:true,
+            stepStart:true,
             data: {
                 data : [ //Shopify_Google old Name
                     {
@@ -415,7 +415,7 @@ class Dashboard extends Component {
                                                     </div>
                                                 </div>}
                                             <div className="mt-4">
-                                                <Button submit primary>Submit</Button>
+                                                <Button submit primary disabled={this.state.otpCheck.pin.length <= 3}>Submit</Button>
                                             </div>
                                         </div>
                                     </div>
