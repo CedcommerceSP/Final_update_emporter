@@ -164,11 +164,11 @@ class InstallAppsShared extends Component {
                 requests.postRequest(url, data, true)
                     .then(data => {
                         if (data.success) {
-                            this.props.success3(true);
+                            this.props.success3({success:true});
                             notify.success(data.message);
                         } else {
                             notify.error(data.message);
-                            this.props.success3(false);
+                            this.props.success3({success: false});
                         }
                         this.redirect();
                     });
@@ -179,17 +179,23 @@ class InstallAppsShared extends Component {
     }
 
     getAppInstallationForm() {
-        //let win = window.open('', '_blank', 'location=yes,height=600,width=550,scrollbars=yes,status=yes');
-        requests.getRequest('connector/get/installationForm', {code: this.state.code })
+        let win = window.open('', '_blank', 'location=yes,height=600,width=550,scrollbars=yes,status=yes');
+        let params = {};
+        if ( !isUndefined(this.props.ebay_country_code) || this.props.ebay_country_code !== '' ) {
+            params = {code: this.state.code, ebay_site_id: this.props.ebay_country_code};
+        } else {
+            params = {code: this.state.code };
+        }
+        requests.getRequest('connector/get/installationForm', params)
             .then(data => {
                 if (data.success === true) {
                     if (data.data.post_type === 'redirect') {
-                       // win.location = data.data.action;
+                       win.location = data.data.action;
                         this.redirect();
                     } else {
-                        // if (win !== null) {
-                        //     win.close();
-                        // }
+                        if (win !== null) {
+                            win.close();
+                        }
                         const state = this.state;
                         this.state['schema'] = this.modifySchemaData(data.data.schema);
                         this.state['action'] = data.data.action;

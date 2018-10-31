@@ -55,7 +55,7 @@ class Dashboard extends Component {
             API_code: ['google'], // connector/get/installationForm, method -> get, eg: { code : 'google' }
             account_linked: [], // merchant center account. linked type
             modalOpen: false,
-            data3Check:false,
+            data3Check:{},
             /********* Step 3 ends **********/
             /*********** 4 ***************/
             payment_show:false,
@@ -84,7 +84,7 @@ class Dashboard extends Component {
                         method: 'GET', // Method Type
                         redirectTo: '/panel/configuration', // After Completion Where To Redirect
                         anchor: 'U-INFO', // Which Function to call e.g : 'U-INFO' then call div which take User basic Information
-                        stepperActive: false, // used in stepper Check either Completed or not and also help in deciding with step to go
+                        stepperActive: true, // used in stepper Check either Completed or not and also help in deciding with step to go
                     }, // step 1
                     {
                         message: <p>Grab the early mover advantage and get first 15 days free. There are only two prerequisites for using this app, a valid Shopify store and Amazon Seller Account. No Credit Card details required to unlock free trial.</p>,
@@ -94,7 +94,7 @@ class Dashboard extends Component {
                         method: 'GET', // Method Type
                         redirectTo: '/panel/plans', // After Completion Where To Redirect
                         anchor: 'PLANS', // Which Function to call e.g : 'U-INFO' then call div which take User basic Information
-                        stepperActive: false, // used in stepper Check either Completed or not
+                        stepperActive: true, // used in stepper Check either Completed or not
                     }, // step 2
                     {
                         message: <p> Link your <b>Account</b></p>,
@@ -610,8 +610,8 @@ class Dashboard extends Component {
             }
         });
     }
-    openNewWindow(action) {
-        this.setState({modalOpen: !this.state.modalOpen, code: action});
+    openNewWindow(code, val) {
+        this.setState({modalOpen: !this.state.modalOpen, code: code, ebay_country_code: val});
     } // Open Modal And A new Small Window For User
     renderLinkedAccount = () => {
         return <div>
@@ -669,6 +669,7 @@ class Dashboard extends Component {
                                         history={this.props.history}
                                         redirect={this.redirectResult}
                                         code={this.state.code}
+                                        ebay_country_code={this.state.ebay_country_code}
                                         success3={this.handleLinkedAccount}
                                     />
                             </Modal.Section>
@@ -698,8 +699,9 @@ class Dashboard extends Component {
     handleLinkedAccount = (event) => {
         this.setState({data3Check:event});
     };
-    redirectResult(status) {
-        this.openNewWindow(status);
+    redirectResult(code, val) {
+        if ( isUndefined(val) ) { val = '' }
+        this.openNewWindow(code, val);
     } // used in step 3 to get child data and send back to new child
     redirect(url) {
         this.props.history.push(url);

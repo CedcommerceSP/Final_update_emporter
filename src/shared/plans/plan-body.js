@@ -110,12 +110,12 @@ class PlanBody extends Component {
         });
     }
     handleMarketPlaceSelected = (event,key) => {
-        notify.info('Comming Soon..');
-        // let data = this.state.marketPlace;
-        // let plan = this.state.data;
-        // data[key].isSelected = event;
-        // plan = marketPlacePricingPlan(data,plan);
-        // this.setState({marketPlace: data, data: plan});
+        // notify.info('Comming Soon..');
+        let data = this.state.marketPlace;
+        let plan = this.state.data;
+        data[key].isSelected = event;
+        plan = marketPlacePricingPlan(data,plan);
+        this.setState({marketPlace: data, data: plan});
     };
     render() {
         return (

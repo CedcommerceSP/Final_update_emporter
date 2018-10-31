@@ -1,7 +1,8 @@
 import React, {Component} from 'react';
-import {AccountConnection, Button, Card} from "@shopify/polaris";
+import {Select, Button, Card} from "@shopify/polaris";
 import {requests} from "../../services/request";
 import {notify} from "../../services/notify";
+import {json} from "../../environments/static-json";
 
 class AppsShared extends Component {
     constructor(props) {
@@ -11,7 +12,8 @@ class AppsShared extends Component {
 
     getConnectors() {
         this.state = {
-            apps: []
+            apps: [],
+            ebay_county_code:'',
         };
         requests.getRequest('connector/get/all')
             .then(data => {
@@ -28,23 +30,38 @@ class AppsShared extends Component {
                 }
             });
     }
+    handleEbayCountryChange = (val) => {
+        this.setState({ebay_county_code:val});
+    };
     render() {
         return (
             <div className="row">
                 {
                     this.state.apps.map(app => {
-                        if (app.code === 'amazonimporter') {
+                        if (app.code === 'amazonimporter' || app.code === 'ebayimporter') {
                             return (
                                 <div className="col-12" key={this.state.apps.indexOf(app)}>
                                     <div className="col-12" key={this.state.apps.indexOf(app)}>
                                         <Card title={app.title}>
                                             <div className="row p-5">
                                                 <div className="col-12 text-right">
-                                                    <Button
-                                                        disabled={this.props.success || app['installed'] !==0}
-                                                        onClick={() => {
-                                                        this.installApp(app.code);
-                                                    }} primary>{!this.props.success && app['installed']===0?'Connect':'Connected'}</Button>
+                                                    <div className="row">
+                                                        {app.code === 'ebayimporter'?<div className="col-sm-4 col-12 offset-sm-8 offset-0 mb-4">
+                                                            <Select
+                                                                options={json.country}
+                                                                value={this.state.ebay_county_code}
+                                                                onChange={this.handleEbayCountryChange}
+                                                                placeholder={'Choose Country'}
+                                                                label={''}/>
+                                                        </div>:null}
+                                                        <div className="col-12">
+                                                            <Button
+                                                                disabled={this.props.success.success || app['installed'] !==0}
+                                                                onClick={() => {
+                                                                    this.installApp(app.code);
+                                                                }} primary>{!this.props.success.success && app['installed']===0?'Connect':'Connected'}</Button>
+                                                        </div>
+                                                    </div>
                                                 </div>
                                                 <div className="col-12">
                                                     <img src={app.image} alt={app.title}/>
@@ -61,7 +78,10 @@ class AppsShared extends Component {
         );
     }
     installApp(code) {
-        this.props.redirectResult(code);
+        if ( code === 'ebayimporter' )
+            this.props.redirectResult(code, this.state.ebay_county_code);
+        else
+            this.props.redirectResult(code, '');
     }
 }
 
