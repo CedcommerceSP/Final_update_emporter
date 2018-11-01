@@ -119,9 +119,10 @@ export class Products extends Component {
             hideLoader: false,
             pagination_show:0,
             selectedUploadModal: false,
-            selectUpload:{option:[],value:''}
+            selectUpload:{option:[],value:''},
+            selectImporterService:[]
         };
-        // this.getAllImporterServices();
+        this.getAllImporterServices();
         // this.getAllUploaderServices();
         this.getProducts();
         this.getInstalledApps();
@@ -137,11 +138,17 @@ export class Products extends Component {
                         let key = Object.keys(data.data)[i];
                         if (data.data[key].usable || !environment.isLive) {
                             if ( data.data[key].code !== 'shopify_importer' ) {
-                                this.state.importServicesList.push({
-                                    label: data.data[key].title,
-                                    value: data.data[key].marketplace,
-                                    shops: []//data.data[key].shops
-                                });
+                                if ( data.data[key].code !== 'shopify_importer' ) {
+                                    if ( data.data[key].code === 'amazon_importer' )
+                                        this.state.selectImporterService.push('amazonimporter');
+                                    if ( data.data[key].code === 'ebay_importer' )
+                                        this.state.selectImporterService.push('ebayimporter');
+                                }
+                                // this.state.importServicesList.push({
+                                //     label: data.data[key].title,
+                                //     value: data.data[key].marketplace,
+                                //     shops: []//data.data[key].shops
+                                // });
                             }
                         }
                     }
@@ -209,39 +216,51 @@ export class Products extends Component {
     }
 
     handleSelectedUpload = (arg,val) => {
-        let data = {
-            target:'shopifygql',
-            source:'amazonimporter',
-            target_shop: globalState.getLocalStorage('shop')?globalState.getLocalStorage('shop'):!environment.isLive?'anshuman-test-store.myshopify.com':''
-        };
         switch (arg) {
             case 'modalClose': this.setState({selectedUploadModal: false}); break;
-            case 'profile': requests.getRequest('connector/profile/getMatchingProfiles', data)
-                .then(data => {
-                    if (data.success) {
-                        this.state.selectUpload.option = [];
-                        this.state.selectUpload.option.push({
-                            label: 'Default Profile',
-                            value: 'default_profile'
-                        });
-                        for (let i = 0; i < data.data.length; i++) {
-                            this.state.selectUpload.option.push({
-                                label: data.data[i].name,
-                                value: data.data[i].id
-                            });
+            case 'profile':
+                this.state.selectUpload.option = [];
+                for( let i = 0; i < this.state.selectImporterService.length; i++) {
+                let data = {
+                    target:'shopifygql',
+                    source: this.state.selectImporterService[i],
+                    target_shop: globalState.getLocalStorage('shop')?globalState.getLocalStorage('shop'):''
+                };
+                requests.getRequest('connector/profile/getMatchingProfiles', data)
+                    .then(data => {
+                        if (data.success) {
+                            if ( this.state.selectUpload.option.length < 1 ) {
+                                this.state.selectUpload.option.push({
+                                    label: 'Default Profile',
+                                    value: 'default_profile'
+                                });
+                            }
+                            for (let i = 0; i < data.data.length; i++) {
+                                this.state.selectUpload.option.push({
+                                    label: data.data[i].name,
+                                    value: data.data[i].id
+                                });
+                            }
+                            this.state.selectUpload.value = 'default_profile';
+                            this.setState({selectedUploadModal: true});
+                            this.updateState();
+                        } else {
+                            notify.error(data.message);
                         }
-                        this.state.selectUpload.value = 'default_profile';
-                        this.setState({selectedUploadModal: true});
-                        this.updateState();
-                    } else {
-                        notify.error(data.message);
-                    }
-                }); break;
+                    })
+            } break;
             case 'Start_Upload':requests.postRequest('connector/product/selectUpload', {
                                     selected_profile:this.state.selectUpload.value,
                                     list_ids:this.state.selectedProducts
                                 }).then(data => {
-                                    console.log(data);
+                                    if ( data.success ) {
+                                        if ( data.code === 'product_upload_started' ) {
+                                            notify.info(data.message)
+                                        }
+                                        setTimeout(() => {this.redirect('/panel/queuedtasks');},400);
+                                    } else {
+                                        notify.error(data.message);
+                                    }
                                 });
             break;
             case 'select': this.state.selectUpload.value = val;
@@ -457,9 +476,9 @@ export class Products extends Component {
                             renderItem={item => {}}
                         />
                         <div className="row">
-                            <div className="col-12">
-                                <Tabs tabs={this.state.installedApps} selected={this.state.selectedApp} onSelect={this.handleMarketplaceChange.bind(this)}/>
-                            </div>
+                            {/*<div className="col-12">*/}
+                                {/*<Tabs tabs={this.state.installedApps} selected={this.state.selectedApp} onSelect={this.handleMarketplaceChange.bind(this)}/>*/}
+                            {/*</div>*/}
                             <div className="col-12 p-3 text-right">
                                 <Label>{this.state.pagination_show} products</Label>
                             </div>

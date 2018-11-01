@@ -20,7 +20,7 @@ export function dataGrids(result, manageService) {
     return data;
 }
 function checkValue(main, type, disc, service, manageService, id) {
-    if ( main !== 0 && main !== '' && main !== undefined ) {
+    if ( main !== 0 && main !== '' && main !== undefined && main !== null ) {
         if ( type === 'Fixed' ) {
             return main - disc;
         } else {

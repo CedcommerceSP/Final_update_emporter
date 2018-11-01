@@ -43,12 +43,13 @@ class MessageShow extends Component {
                success: queryParams.success === 'BG-success',
                shop: queryParams.shop !== undefined ?queryParams.shop : null,
                isPlan: queryParams.isPlan !== undefined,
+               isEbayImporter: queryParams.isEbayImporter !== undefined
            }));
            let win = window.open('','_parent','location=yes,width=20px,height=10px,scrollbars=yes,status=yes');
            setTimeout(() => {
                if ( queryParams.shop !== undefined ) {
                    globalState.setLocalStorage('shop',queryParams.shop);
-                   win.location = 'https://' + queryParams.shop + '/admin/apps/importer-5';
+                   win.location = 'https://' + queryParams.shop + '/admin/apps/omni-importer';
                }
            },500);
        }
@@ -58,7 +59,7 @@ class MessageShow extends Component {
            setTimeout(() => {
                if ( queryParams.shop !== undefined ) {
                    globalState.setLocalStorage('shop',queryParams.shop);
-                   win.location = 'https://' + queryParams.shop + '/admin/apps/importer-5';
+                   win.location = 'https://' + queryParams.shop + '/admin/apps/omni-importer';
                }
            },3000);
        }
@@ -67,7 +68,7 @@ class MessageShow extends Component {
         this.props.history.push(url);
     }
     handle = () => {
-        window.open( 'https://' + this.state.shop + '/admin/apps/importer-5','_parent');
+        window.open( 'https://' + this.state.shop + '/admin/apps/omni-importer','_parent');
     };
     render() {
         return (
@@ -103,7 +104,7 @@ class MessageShow extends Component {
                         </div>
                     </div>
                     {this.state.shop !== null?<div className=" col-12 text-center">
-                        <Button onClick={() => {window.open( 'https://' + this.state.shop + '/admin/apps/importer-5','_parent')}}>Home</Button>
+                        <Button onClick={() => {window.open( 'https://' + this.state.shop + '/admin/apps/omni-importer','_parent')}}>Home</Button>
                         <p style={{color:'#645f5b'}}>*In Case redirect not happen,<br/> Click on Home Button</p>
                     </div>:null}
                 </React.Fragment>}

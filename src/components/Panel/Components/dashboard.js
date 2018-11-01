@@ -16,6 +16,7 @@ import AnalyticsReporting from "./products-component/analytics-reporting";
 import {globalState} from "../../../services/globalstate";
 
 // TODO: remove the variable "Step started on line near to 75"
+// TODO: remove the true condition for step 2 and 3 "Step started on line near to 75"
 class Dashboard extends Component {
     constructor(props) {
         super(props);
@@ -56,6 +57,7 @@ class Dashboard extends Component {
             account_linked: [], // merchant center account. linked type
             modalOpen: false,
             data3Check:{},
+            importerServices:[],
             /********* Step 3 ends **********/
             /*********** 4 ***************/
             payment_show:false,
@@ -73,7 +75,7 @@ class Dashboard extends Component {
             stepData: [], // this will store the current showing step, which is selected from data object e.g Shopify_Google []
             selected: '',
             open_init_modal: true, // this is used to open modal one time when user visit dashboard
-            stepStart:true,
+            // stepStart:true,
             data: {
                 data : [ //Shopify_Google old Name
                     {
@@ -84,7 +86,7 @@ class Dashboard extends Component {
                         method: 'GET', // Method Type
                         redirectTo: '/panel/configuration', // After Completion Where To Redirect
                         anchor: 'U-INFO', // Which Function to call e.g : 'U-INFO' then call div which take User basic Information
-                        stepperActive: true, // used in stepper Check either Completed or not and also help in deciding with step to go
+                        stepperActive: false, // used in stepper Check either Completed or not and also help in deciding with step to go
                     }, // step 1
                     {
                         message: <p>Grab the early mover advantage and get first 15 days free. There are only two prerequisites for using this app, a valid Shopify store and Amazon Seller Account. No Credit Card details required to unlock free trial.</p>,
@@ -94,7 +96,7 @@ class Dashboard extends Component {
                         method: 'GET', // Method Type
                         redirectTo: '/panel/plans', // After Completion Where To Redirect
                         anchor: 'PLANS', // Which Function to call e.g : 'U-INFO' then call div which take User basic Information
-                        stepperActive: true, // used in stepper Check either Completed or not
+                        stepperActive: false, // used in stepper Check either Completed or not
                     }, // step 2
                     {
                         message: <p> Link your <b>Account</b></p>,
@@ -597,7 +599,7 @@ class Dashboard extends Component {
     };
     /*****************************************  Step 3 linked you account start Here  ***********************************/
     checkLinkedAccount() {
-        requests.getRequest('frontend/app/checkAccount?code=amazonimporter').then(data => {
+        requests.postRequest('frontend/app/checkAccount', {code:this.state.importerServices}).then(data => {
             if ( data.success ) {
                 if ( data.data.account_connected ) {
                     notify.success('Account Connected Successfully');
@@ -613,9 +615,12 @@ class Dashboard extends Component {
     openNewWindow(code, val) {
         this.setState({modalOpen: !this.state.modalOpen, code: code, ebay_country_code: val});
     } // Open Modal And A new Small Window For User
+    handleImporterService = (arg) => {
+        this.setState({importerServices:arg});
+    };
     renderLinkedAccount = () => {
         return <div>
-            <AppsShared history={this.props.history} redirectResult={this.redirectResult} success={this.state.data3Check}/>
+            <AppsShared history={this.props.history} importerServices={this.handleImporterService} redirectResult={this.redirectResult} success={this.state.data3Check}/>
             <div className="p-5 text-center">
                 <Button onClick={this.checkLinkedAccount} primary>
                     Continue to next step

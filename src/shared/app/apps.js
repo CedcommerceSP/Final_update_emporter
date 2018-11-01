@@ -3,6 +3,7 @@ import {Select, Button, Card} from "@shopify/polaris";
 import {requests} from "../../services/request";
 import {notify} from "../../services/notify";
 import {json} from "../../environments/static-json";
+import {environment} from "../../environments/environment";
 
 class AppsShared extends Component {
     constructor(props) {
@@ -14,6 +15,7 @@ class AppsShared extends Component {
         this.state = {
             apps: [],
             ebay_county_code:'',
+            code_usable:[],
         };
         requests.getRequest('connector/get/all')
             .then(data => {
@@ -29,6 +31,27 @@ class AppsShared extends Component {
                     notify.error(data.message);
                 }
             });
+        requests.getRequest('connector/get/services', { 'filters[type]': 'importer' })
+            .then(data => {
+                if (data.success) {
+                    this.state.code_usable = [];
+                    for (let i = 0; i < Object.keys(data.data).length; i++) {
+                        let key = Object.keys(data.data)[i];
+                        if (data.data[key].usable || !environment.isLive) {
+                            if ( data.data[key].code !== 'shopify_importer' ) {
+                                if ( data.data[key].code === 'amazon_importer' )
+                                    this.state.code_usable.push('amazonimporter');
+                                if ( data.data[key].code === 'ebay_importer' )
+                                    this.state.code_usable.push('ebayimporter');
+                            }
+                        }
+                    }
+                    this.setState(this.state);
+                    setTimeout(() => {this.props.importerServices(this.state.code_usable)},500);
+                } else {
+                    notify.error(data.message);
+                }
+            });
     }
     handleEbayCountryChange = (val) => {
         this.setState({ebay_county_code:val});
@@ -38,7 +61,7 @@ class AppsShared extends Component {
             <div className="row">
                 {
                     this.state.apps.map(app => {
-                        if (app.code === 'amazonimporter' || app.code === 'ebayimporter') {
+                        if (this.state.code_usable.indexOf(app.code) !== -1) {
                             return (
                                 <div className="col-12" key={this.state.apps.indexOf(app)}>
                                     <div className="col-12" key={this.state.apps.indexOf(app)}>
@@ -56,10 +79,10 @@ class AppsShared extends Component {
                                                         </div>:null}
                                                         <div className="col-12">
                                                             <Button
-                                                                disabled={this.props.success.success || app['installed'] !==0}
+                                                                disabled={this.props.success.code === app.code || app['installed'] !==0}
                                                                 onClick={() => {
                                                                     this.installApp(app.code);
-                                                                }} primary>{!this.props.success.success && app['installed']===0?'Connect':'Connected'}</Button>
+                                                                }} primary>{this.props.success.code !== app.code && app['installed']===0?'Connect':'Connected'}</Button>
                                                         </div>
                                                     </div>
                                                 </div>
@@ -79,7 +102,11 @@ class AppsShared extends Component {
     }
     installApp(code) {
         if ( code === 'ebayimporter' )
-            this.props.redirectResult(code, this.state.ebay_county_code);
+            if ( this.state.ebay_county_code !== '' ) {
+                this.props.redirectResult(code, this.state.ebay_county_code);
+            } else {
+                notify.info('Country is not selected');
+            }
         else
             this.props.redirectResult(code, '');
     }

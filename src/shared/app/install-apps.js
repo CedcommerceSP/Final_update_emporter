@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {Banner, Button, Checkbox, Heading, Label, Select, TextField} from "@shopify/polaris";
+import {Banner, Button, Checkbox, Heading, Label, Select, TextField, Modal} from "@shopify/polaris";
 import {capitalizeWord, modifyOptionsData} from "../../components/Panel/Components/static-functions";
 import {isUndefined} from "util";
 import {requests} from "../../services/request";
@@ -22,7 +22,11 @@ class InstallAppsShared extends Component {
     getInstallationForm() {
         if (!isUndefined(this.queryParams.code)) {
             this.state = {
-                code: this.queryParams.code
+                code: this.queryParams.code,
+                confirmOpen: {
+                    open: false,
+                    url:''
+                }
             };
             this.getAppInstallationForm();
         } else {
@@ -109,6 +113,41 @@ class InstallAppsShared extends Component {
                         </div>
                     </div>
                 </div>
+                <Modal open={this.state.confirmOpen.open} onClose={() => {
+                    let temp = {
+                        open: false,
+                        url: '',
+                    };
+                    this.props.redirect(false);
+                    this.setState({confirmOpen: temp});
+                }}>
+                    <Modal.Section>
+                        <div className="row p-5">
+                            <div className="col-12 text-center">
+                                <h2>Redirect To Account Connection Page?</h2>
+                            </div>
+                            <div className="col-6 text-right pt-5">
+                                <Button onClick={() => {
+                                    let temp = {
+                                        open: false,
+                                        url: '',
+                                    };
+                                    this.props.redirect(false);
+                                    this.setState({confirmOpen: temp});
+                                }}>
+                                    Cancel
+                                </Button>
+                            </div>
+                            <div className="col-6 pt-5">
+                                <a style={{color:'#fff'}} href={this.state.confirmOpen.url} target="_parent">
+                                    <Button primary>
+                                        Redirect
+                                    </Button>
+                                </a>
+                            </div>
+                        </div>
+                    </Modal.Section>
+                </Modal>
             </div>
         );
     }
@@ -164,11 +203,11 @@ class InstallAppsShared extends Component {
                 requests.postRequest(url, data, true)
                     .then(data => {
                         if (data.success) {
-                            this.props.success3({success:true});
+                            this.props.success3({code:this.props.code});
                             notify.success(data.message);
                         } else {
                             notify.error(data.message);
-                            this.props.success3({success: false});
+                            this.props.success3({code: false});
                         }
                         this.redirect();
                     });
@@ -179,7 +218,7 @@ class InstallAppsShared extends Component {
     }
 
     getAppInstallationForm() {
-        let win = window.open('', '_blank', 'location=yes,height=600,width=550,scrollbars=yes,status=yes');
+        // let win = window.open('', '_blank', 'location=yes,height=600,width=550,scrollbars=yes,status=yes');
         let params = {};
         if ( !isUndefined(this.props.ebay_country_code) || this.props.ebay_country_code !== '' ) {
             params = {code: this.state.code, ebay_site_id: this.props.ebay_country_code};
@@ -190,13 +229,12 @@ class InstallAppsShared extends Component {
             .then(data => {
                 if (data.success === true) {
                     if (data.data.post_type === 'redirect') {
-                       win.location = data.data.action;
-                        this.redirect();
+                        let tempURL = {
+                            open: true,
+                            url: data.data.action,
+                        };
+                        this.setState({confirmOpen: tempURL})
                     } else {
-                        if (win !== null) {
-                            win.close();
-                        }
-                        const state = this.state;
                         this.state['schema'] = this.modifySchemaData(data.data.schema);
                         this.state['action'] = data.data.action;
                         this.state['postType'] = data.data.post_type;
