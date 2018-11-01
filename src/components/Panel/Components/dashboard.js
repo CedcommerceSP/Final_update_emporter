@@ -325,9 +325,10 @@ class Dashboard extends Component {
             requests.getRequest('core/user/updateuser', this.state.info).then(data => {
                 if (data.success) {
                     notify.success(data.message);
-                    let otpCheck = this.state.otpCheck;
-                    otpCheck.status = true;
-                    this.setState({otpCheck:otpCheck});
+                    this.changeStep(1);
+                    // let otpCheck = this.state.otpCheck;
+                    // otpCheck.status = true;
+                    // this.setState({otpCheck:otpCheck});
                 } else {
                     notify.error(data.message);
                 }
