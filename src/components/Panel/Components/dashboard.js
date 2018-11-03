@@ -14,6 +14,7 @@ import InstallAppsShared from "../../../shared/app/install-apps";
 import ConfigShared from "../../../shared/config/config-shared";
 import AnalyticsReporting from "./products-component/analytics-reporting";
 import {globalState} from "../../../services/globalstate";
+import {json} from "../../../environments/static-json";
 
 // TODO: remove the variable "Step started on line near to 75"
 // TODO: remove the true condition for step 2 and 3 "Step started on line near to 75"
@@ -25,6 +26,8 @@ class Dashboard extends Component {
             info: {
                 full_name: '',
                 mobile: '',
+                mobile_code: '+1',
+                country_code: 'US',
                 email: '',
                 skype_id:'',
                 // primary_time_zone:'Pacific Time',
@@ -89,7 +92,7 @@ class Dashboard extends Component {
                         stepperActive: false, // used in stepper Check either Completed or not and also help in deciding with step to go
                     }, // step 1
                     {
-                        message: <p>Grab the early mover advantage and get first 15 days free. There are only two prerequisites for using this app, a valid Shopify store and Amazon Seller Account. No Credit Card details required to unlock free trial.</p>,
+                        message: <p>Grab the early mover advantage and get first 7 days free. There are only two prerequisites for using this app, a valid Shopify store and Amazon Seller Account. No Credit Card details required to unlock free trial.</p>,
                         stepperMessage: 'Choose a plan', // stepper Small Message
                         API_endpoint: '', // Api End Point is used to check to send data or get data
                         data: '', // Data additional Field
@@ -108,16 +111,16 @@ class Dashboard extends Component {
                         anchor: 'LINKED', // Which Function to call e.g : 'U-INFO' then call div which take User basic Information
                         stepperActive: false, // used in stepper Check either Completed or not
                     }, // step 3
-                    {
-                        message: <span>Enter default configurations</span>,
-                        stepperMessage: 'Default Configurations',
-                        API_endpoint: '', // Api End Point is used to check to send data or get data
-                        data: <p>Now goto <NavLink  to="/panel/import">Upload Products</NavLink> section, first import products from shopify.  <br/>When import completed upload your products on google. </p>, // Data additional Field
-                        method: 'GET', // Method Type
-                        redirectTo: '/panel/configuration', // After Completion Where To Redirect
-                        anchor: 'CONFIG', // Which Function to call e.g : 'U-INFO' then call div which take User basic Information
-                        stepperActive: false, // used in stepper Check either Completed or not
-                    }, // step 4
+                    // {
+                    //     message: <span>Enter default configurations</span>,
+                    //     stepperMessage: 'Default Configurations',
+                    //     API_endpoint: '', // Api End Point is used to check to send data or get data
+                    //     data: <p>Now goto <NavLink  to="/panel/import">Upload Products</NavLink> section, first import products from shopify.  <br/>When import completed upload your products on google. </p>, // Data additional Field
+                    //     method: 'GET', // Method Type
+                    //     redirectTo: '/panel/configuration', // After Completion Where To Redirect
+                    //     anchor: 'CONFIG', // Which Function to call e.g : 'U-INFO' then call div which take User basic Information
+                    //     stepperActive: false, // used in stepper Check either Completed or not
+                    // }, // step 4
                 ]
             },
         };
@@ -213,7 +216,7 @@ class Dashboard extends Component {
                         step: arg + 1,
                     }
                 });
-                if ( arg >= 4 ) {
+                if ( arg >= 3 ) {
                     this.props.disableHeader(true);
                     setTimeout(() => {
                         this.redirect('/panel/import');
@@ -236,7 +239,7 @@ class Dashboard extends Component {
                             flag++;
                         }
                         return(<React.Fragment key={index}>
-                            <div className={`col-3 bs-wizard-step ${css}`}>
+                            <div className={`col-4 bs-wizard-step ${css}`}>
                                 <div className="text-center bs-wizard-stepnum">Step {index + 1}</div>
                                 <div className="progress">
                                     <div className="progress-bar"/>
@@ -257,7 +260,7 @@ class Dashboard extends Component {
             this.setState({modalOpen: !this.state.modalOpen});
         } // if he/she cancel or close the modal
     } // all operation perform on modal of step 3 and step 2 (plan) and also responsible for not closing the init modal comes here
-    /******************* MAIN BODY **********************/
+    /********************************** MAIN BODY ***************************************/
     renderBody() {
         let flag = 1;
         return(
@@ -322,13 +325,13 @@ class Dashboard extends Component {
             this.state.info.email !== '' &&
             this.state.info.mobile !== '')
         {
-            requests.getRequest('core/user/updateuser', this.state.info).then(data => {
-                if (data.success) {
-                    notify.success(data.message);
-                    this.changeStep(1);
-                    // let otpCheck = this.state.otpCheck;
-                    // otpCheck.status = true;
-                    // this.setState({otpCheck:otpCheck});
+            requests.postRequest('core/app/sendOtp', {phone: this.state.info.mobile_code + '' + this.state.info.mobile}).then(data => {
+                if ( data.success ) {
+                    let otpCheck = this.state.otpCheck;
+                    otpCheck.status = true;
+                    otpCheck.number_change = false;
+                    this.setState({otpCheck:otpCheck});
+                    notify.info("You will shortly recieve OTP to your register mobile number");
                 } else {
                     notify.error(data.message);
                 }
@@ -356,19 +359,46 @@ class Dashboard extends Component {
             info:data,
             info_error:tempData
         });
+        if ( field === 'country_code' ) {
+            let temp;
+            json.country_mobile_code.forEach(e => {
+                if ( e.value === value ) {
+                    temp = e.phone_code;
+                }
+            });
+            this.handleFormChange('mobile_code', temp);
+        }
     };
     handleOTPSubmit = () => {
-        if ( this.state.otpCheck.pin !== '' ) {
-            this.changeStep(1); // pass the step number
-            notify.success('Done!!');
+        if ( this.state.otpCheck.pin !== '' && !this.state.otpCheck.number_change ) {
+            requests.postRequest('core/app/matchOtp', {otp: this.state.otpCheck.pin}).then(data => {
+                if ( data.success ) {
+                    requests.getRequest('core/user/updateuser', this.state.info).then(data => {
+                        if (data.success) {
+                            notify.success(data.message);
+                            // this.changeStep(1);
+                        } else {
+                            notify.error(data.message);
+                        }
+                    });
+                } else {
+                    notify.error(data.message);
+                }
+            })
+        } else if ( this.state.otpCheck.number_change && this.state.info.mobile !== '' ) {
+            this.handleSubmit();
         } else {
-            notify.info('Empty, please enter pin');
+            notify.info('Field is empty');
         }
     };
     handleOTPChange = (arg,value) => {
-        let otpCheck = this.state.otpCheck;
-        otpCheck[arg] = value;
-        this.setState({otpCheck:otpCheck});
+        if ( arg === 'resend' ) {
+            this.handleSubmit();
+        } else {
+            let otpCheck = this.state.otpCheck;
+            otpCheck[arg] = value;
+            this.setState({otpCheck:otpCheck});
+        }
     };
     renderGetUserInfo() {
         return (
@@ -379,17 +409,30 @@ class Dashboard extends Component {
                             <Form onSubmit={this.handleOTPSubmit}>
                                 <FormLayout>
                                     <div className="row">
-                                        <div className="col-12 col-sm-4 offset-0 offset-sm-4">
+                                        <div className={`col-12 offset-0 ${this.state.otpCheck.number_change?'':'col-sm-4 offset-sm-4'}`}>
                                             {this.state.otpCheck.number_change?
                                                 <div className='row'>
-                                                    <div className="col-12">
+                                                    <div className="col-3">
+                                                        <Select
+                                                            label="Country"
+                                                            placeholder="Select"
+                                                            options={json.country_mobile_code}
+                                                            onChange={this.handleFormChange.bind(this,'country_code')}
+                                                            value={this.state.info.country_code}
+                                                        />
+                                                    </div>
+                                                    <div className="col-2">
+                                                        <TextField label={'Code'} readOnly={true} value={this.state.info.mobile_code}/>
+                                                    </div>
+                                                    <div className="col-7">
                                                         <TextField
                                                             value={this.state.info.mobile}
                                                             minLength={5}
                                                             maxLength={14}
                                                             error={this.state.info_error.mobile?'*Please Enter Detail':null}
                                                             onChange={this.handleFormChange.bind(this,'mobile')}
-                                                            label="Enter New Mobile Number:"
+                                                            helpText={"OTP will sent to this number for verification"}
+                                                            label="Phone Number:"
                                                             type="number"
                                                         />
                                                     </div>
@@ -402,7 +445,8 @@ class Dashboard extends Component {
                                                 </div>:
                                                 <div>
                                                     <Label>Phone number: </Label>
-                                                    <Label>{this.state.info.mobile}</Label>
+                                                    <Label>{this.state.info.mobile_code + '' + this.state.info.mobile}</Label>
+                                                    <a href="javascript:void(0)" onClick={this.handleOTPChange.bind(this,'number_change', true)}>Change Mobile Number</a><br/>
                                                     <div className='row mt-4'>
                                                         <div className="col-12">
                                                             <TextField
@@ -415,10 +459,20 @@ class Dashboard extends Component {
                                                                 type="number"
                                                             />
                                                         </div>
+                                                        <div className="col-12">
+                                                            <a href="javascript:void(0)" onClick={this.handleOTPChange.bind(this,'resend')}>Resent OTP</a>
+                                                        </div>
                                                     </div>
                                                 </div>}
                                             <div className="mt-4">
-                                                <Button submit primary disabled={this.state.otpCheck.pin.length <= 3}>Submit</Button>
+                                                <Button
+                                                    submit
+                                                    primary
+                                                    disabled={this.state.otpCheck.pin.length <= 3 && !this.state.otpCheck.number_change}
+                                                >
+                                                    Submit
+                                                </Button>
+                                                {this.state.otpCheck.number_change?'':<p>OTP will Valid for 5 min</p>}
                                             </div>
                                         </div>
                                     </div>
@@ -446,7 +500,19 @@ class Dashboard extends Component {
                                     </div>
                                 </div>
                                 <div className='row'>
-                                    <div className="col-12 col-md-12">
+                                    <div className="col-3">
+                                        <Select
+                                            label="Country"
+                                            placeholder="Select"
+                                            options={json.country_mobile_code}
+                                            onChange={this.handleFormChange.bind(this,'country_code')}
+                                            value={this.state.info.country_code}
+                                        />
+                                    </div>
+                                    <div className="col-2">
+                                        <TextField label={'Code'} readOnly={true} value={this.state.info.mobile_code}/>
+                                    </div>
+                                    <div className="col-7">
                                         <TextField
                                             value={this.state.info.mobile}
                                             minLength={5}
@@ -529,7 +595,7 @@ class Dashboard extends Component {
             </div>
         );
     }
-    /****************************************** step 2 Plans Start Here ******************************/
+    /****************************** step 2 Plans Start Here *****************************/
     checkPayment = () => {
         requests.getRequest('plan/plan/getActive').then(status => {
             if ( status.success ) {
@@ -598,7 +664,7 @@ class Dashboard extends Component {
             </React.Fragment>
         );
     };
-    /*****************************************  Step 3 linked you account start Here  ***********************************/
+    /**************************  Step 3 linked you account start Here  ******************/
     checkLinkedAccount() {
         requests.postRequest('frontend/app/checkAccount', {code:this.state.importerServices}).then(data => {
             if ( data.success ) {
@@ -629,7 +695,7 @@ class Dashboard extends Component {
             </div>
         </div>;
     };
-    /***************************************** step 4 Configurations start here *******************************/
+    /********************** step 4 Configurations start here ****************************/
     checkConfig(val) {
         requests.getRequest('frontend/app/checkDefaultConfiguration?code=' + val).then(data => {
             if ( data.success ) {
@@ -650,7 +716,7 @@ class Dashboard extends Component {
             </React.Fragment>
         );
     }
-    /************************************  Render()   **********************************************************/
+    /************************************  Render()   ***********************************/
     render() {
         return (
             <Page

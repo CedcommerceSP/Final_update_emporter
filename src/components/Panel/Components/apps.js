@@ -8,6 +8,7 @@ import { requests } from '../../../services/request';
 import { notify } from '../../../services/notify';
 import {faArrowsAltH, faCheckCircle} from '@fortawesome/free-solid-svg-icons';
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
+import {environment} from "../../../environments/environment";
 
 export class Apps extends Component {
 
@@ -18,7 +19,8 @@ export class Apps extends Component {
 
     getConnectors() {
         this.state = {
-            apps: []
+            apps: [],
+            code_usable:[],
         };
         requests.getRequest('connector/get/all')
             .then(data => {
@@ -30,6 +32,26 @@ export class Apps extends Component {
                     this.setState({
                         apps: installedApps
                     });
+                } else {
+                    notify.error(data.message);
+                }
+            });
+        requests.getRequest('connector/get/services', { 'filters[type]': 'importer' })
+            .then(data => {
+                if (data.success) {
+                    this.state.code_usable = [];
+                    for (let i = 0; i < Object.keys(data.data).length; i++) {
+                        let key = Object.keys(data.data)[i];
+                        if (data.data[key].usable || !environment.isLive) {
+                            if ( data.data[key].code !== 'shopify_importer' ) {
+                                if ( data.data[key].code === 'amazon_importer' )
+                                    this.state.code_usable.push('amazonimporter');
+                                if ( data.data[key].code === 'ebay_importer' )
+                                    this.state.code_usable.push('ebayimporter');
+                            }
+                        }
+                    }
+                    this.setState(this.state);
                 } else {
                     notify.error(data.message);
                 }
@@ -46,7 +68,7 @@ export class Apps extends Component {
                 <div className="row">
                     {
                         this.state.apps.map(app => {
-                            if (app.code === 'amazonimporter') {
+                            if (this.state.code_usable.indexOf(app.code) !== -1) {
                                 return (
                                     <div className="col-12" key={this.state.apps.indexOf(app)}>
                                         <div className="col-12" key={this.state.apps.indexOf(app)}>
