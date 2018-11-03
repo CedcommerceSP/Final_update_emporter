@@ -376,7 +376,7 @@ class Dashboard extends Component {
                     requests.getRequest('core/user/updateuser', this.state.info).then(data => {
                         if (data.success) {
                             notify.success(data.message);
-                            // this.changeStep(1);
+                            this.changeStep(1);
                         } else {
                             notify.error(data.message);
                         }

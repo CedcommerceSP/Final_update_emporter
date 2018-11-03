@@ -31,23 +31,38 @@ class AppsShared extends Component {
                     notify.error(data.message);
                 }
             });
-        requests.getRequest('connector/get/services', { 'filters[type]': 'importer' })
+        // requests.getRequest('connector/get/services', { 'filters[type]': 'importer' })
+        //     .then(data => {
+        //         if (data.success) {
+        //             this.state.code_usable = [];
+        //             for (let i = 0; i < Object.keys(data.data).length; i++) {
+        //                 let key = Object.keys(data.data)[i];
+        //                 if (data.data[key].usable || !environment.isLive) {
+        //                     if ( data.data[key].code !== 'shopify_importer' ) {
+        //                         if ( data.data[key].code === 'amazon_importer' )
+        //                             this.state.code_usable.push('amazonimporter');
+        //                         if ( data.data[key].code === 'ebay_importer' )
+        //                             this.state.code_usable.push('ebayimporter');
+        //                     }
+        //                 }
+        //             }
+        //             this.setState(this.state);
+        //         } else {
+        //             notify.error(data.message);
+        //         }
+        //     });
+        requests.getRequest('plan/plan/getActive')
             .then(data => {
                 if (data.success) {
                     this.state.code_usable = [];
-                    for (let i = 0; i < Object.keys(data.data).length; i++) {
-                        let key = Object.keys(data.data)[i];
-                        if (data.data[key].usable || !environment.isLive) {
-                            if ( data.data[key].code !== 'shopify_importer' ) {
-                                if ( data.data[key].code === 'amazon_importer' )
-                                    this.state.code_usable.push('amazonimporter');
-                                if ( data.data[key].code === 'ebay_importer' )
-                                    this.state.code_usable.push('ebayimporter');
-                            }
-                        }
-                    }
+                    data.data.services.forEach(e => {
+                        console.log(e.code);
+                        if ( e.code === 'amazon_importer' )
+                            this.state.code_usable.push('amazonimporter');
+                        if ( e.code === 'ebay_importer' )
+                            this.state.code_usable.push('ebayimporter');
+                    });
                     this.setState(this.state);
-                    setTimeout(() => {this.props.importerServices(this.state.code_usable)},500);
                 } else {
                     notify.error(data.message);
                 }
