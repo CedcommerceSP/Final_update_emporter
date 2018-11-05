@@ -64,7 +64,7 @@ export class App extends Component {
           <div>
               {
                   this.state.showLoader &&
-                  <PageLoader height="100" width="100" type="Bars" color="#3f4eae" > </PageLoader>
+                  <PageLoader height="100" width="100" type="Watch" color="#3f4eae" > </PageLoader>
               }
               <Switch>
                   <Route exact path="/" render={() => (

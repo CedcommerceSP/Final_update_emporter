@@ -26,15 +26,17 @@ class ReportAnIssue extends Component {
     submit() {
         let data = {
             body:'',
-            subject:this.state.subject
+            subject:''
         };
         if ( this.state.option !== 'other' ) {
-            data.body = this.state.option;
+            data.body = this.state.body;
+            data.subject = 'We have Received Your Issue Related to ' + this.state.option;
         } else {
             data.body = this.state.body;
+            data.subject = 'We have Received Your Issue ';
         }
         if ( data.body !== '' && data.subject !== '') {
-            requests.postRequest('',data).then(e => {
+            requests.postRequest('frontend/app/submitReport',data).then(e => {
                 if (e.success) {
                     notify.success(e.message);
                 } else {
@@ -47,46 +49,57 @@ class ReportAnIssue extends Component {
     }
     render() {
         const options = [
-            {label:'Server',value:'1'},
-            {label:'Upload/Import',value:'2'},
-            {label:'Account Connection',value:'3'},
+            {label:'Issue in regarding Amazon or Ebay seller panel',value:'Amazon/Ebay Seller Panel'},
+            {label:'Issue regarding product import or product upload to Shopify',value:'Import/Upload'},
+            {label:'Issue Regarding pricing plan',value:'Pricing Plan'},
+            {label:'Issue Regarding profiling',value:'Profiling'},
             {label:'Other',value:'other'},
         ];
         return (
             <Page
-                title="Report Issue"
+                title="Contact Us"
                 primaryAction={{content:'Back', onClick:() => {
                         this.redirect('/panel/help');
                     }}}>
-                <Card secondaryFooterAction={{content:'Submit', onClick:() => {
-                        this.submit();
-                    }}}>
-                    <div className="p-5">
-                        <TextField
-                            label="Subject"
-                            placeholder="Subject"
-                            value={this.state.subject}
-                            onChange={this.handleTextChange.bind(this,'subject')}
-                        />
-                        <div className="mt-4">
-                            <Select
-                                label="Issue"
-                                options={options}
-                                onChange={this.handleSelectChange}
-                                placeholder="Select here"
-                                value={this.state.option}
-                            />
-                        </div>
-                        {this.state.option === 'other'?<div className="mt-4">
-                            <TextField
-                                label="Other"
-                                placeholder="Issue"
-                                value={this.state.body}
-                                onChange={this.handleTextChange.bind(this,'body')}
-                            />
-                        </div>:null}
+                <div className="row">
+                    <div className="col-12 col-sm-8 order-2 order-sm-1">
+                        <Card secondaryFooterAction={{content:'Submit', onClick:() => {
+                                this.submit();
+                            }}} title={"Have an issue?"}>
+                            <div className="p-5">
+                                <div className="mt-4 mb-4">
+                                    <Select
+                                        label="Issue"
+                                        options={options}
+                                        onChange={this.handleSelectChange}
+                                        placeholder="Select here"
+                                        value={this.state.option}
+                                    />
+                                </div>
+                                <TextField
+                                    label="Description"
+                                    placeholder="Eg. how to config setting"
+                                    value={this.state.body}
+                                    onChange={this.handleTextChange.bind(this,'body')}
+                                />
+                            </div>
+                        </Card>
                     </div>
-                </Card>
+                    <div className="col-12 col-sm-4 order-1 order-sm-2 mb-4">
+                        <Card>
+                            <div className="row">
+                                <div className="col-12 p-5 text-center">
+                                    <img src={require('../../../../assets/img/contact-us.png')} height={"165px"}/>
+                                    <h5><b>Email:</b> </h5>
+                                    <h5>apps@cedcommerce.com</h5>
+                                    <hr/>
+                                    <h5><b>Phone:</b></h5>
+                                    <h5>(+1) 888-882-0953</h5>
+                                </div>
+                            </div>
+                        </Card>
+                    </div>
+                </div>
             </Page>
         );
     }

@@ -3,7 +3,8 @@ import {Select, Button, Card} from "@shopify/polaris";
 import {requests} from "../../services/request";
 import {notify} from "../../services/notify";
 import {json} from "../../environments/static-json";
-import {environment} from "../../environments/environment";
+import {faArrowsAltH, faCheckCircle} from '@fortawesome/free-solid-svg-icons';
+import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 
 class AppsShared extends Component {
     constructor(props) {
@@ -78,13 +79,13 @@ class AppsShared extends Component {
                     this.state.apps.map(app => {
                         if (this.state.code_usable.indexOf(app.code) !== -1) {
                             return (
-                                <div className="col-12" key={this.state.apps.indexOf(app)}>
+                                <div className="col-12 mb-4" key={this.state.apps.indexOf(app)}>
                                     <div className="col-12" key={this.state.apps.indexOf(app)}>
                                         <Card title={app.title}>
                                             <div className="row p-5">
-                                                <div className="col-12 text-right">
+                                                <div className="col-4 order-2 text-right">
                                                     <div className="row">
-                                                        {app.code === 'ebayimporter'?<div className="col-sm-4 col-12 offset-sm-8 offset-0 mb-4">
+                                                        {app.code === 'ebayimporter' && app['installed']===0?<div className="col-sm-4 col-12 offset-sm-8 offset-0 mb-4">
                                                             <Select
                                                                 options={json.country}
                                                                 value={this.state.ebay_county_code}
@@ -93,15 +94,17 @@ class AppsShared extends Component {
                                                                 label={''}/>
                                                         </div>:null}
                                                         <div className="col-12">
-                                                            <Button
+                                                            {this.props.success.code !== app.code && app['installed']===0?<Button
                                                                 disabled={this.props.success.code === app.code || app['installed'] !==0}
                                                                 onClick={() => {
                                                                     this.installApp(app.code);
-                                                                }} primary>{this.props.success.code !== app.code && app['installed']===0?'Connect':'Connected'}</Button>
+                                                                }} primary>Connect</Button>:<div className="text-right">
+                                                                               <FontAwesomeIcon icon={faCheckCircle} size="7x" color="#5c6ac4"/>
+                                                                   </div>}
                                                         </div>
                                                     </div>
                                                 </div>
-                                                <div className="col-12">
+                                                <div className="col-8 order-1">
                                                     <img src={app.image} alt={app.title}/>
                                                 </div>
                                             </div>

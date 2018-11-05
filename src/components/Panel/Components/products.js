@@ -130,7 +130,7 @@ export class Products extends Component {
     }
 
     getAllImporterServices() {
-        requests.getRequest('connector/get/services', { 'filters[type]': 'importer' })
+        requests.getRequest('connector/get/services', { 'filters[type]': 'importer' }, false, true)
             .then(data => {
                 if (data.success) {
                     this.state.importServicesList = [];

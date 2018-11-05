@@ -9,13 +9,12 @@ export class PageLoader extends Component {
         return (
             <div className="overlay">
                 <div className="loader-area">
-                    {/*<Loader*/}
-                        {/*type={this.props.type}*/}
-                        {/*color={this.props.color}*/}
-                        {/*height={this.props.height}*/}
-                        {/*width={this.props.width}*/}
-                    {/*/>*/}
-                    <img src={require('../assets/background/progress.gif')} style={{height:'190px'}}/>
+                    <Loader
+                        type={this.props.type}
+                        color={this.props.color}
+                        height={this.props.height}
+                        width={this.props.width}
+                    />
                 </div>
             </div>
         );

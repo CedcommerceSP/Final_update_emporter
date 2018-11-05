@@ -105,10 +105,10 @@ class FAQPage extends Component {
         return (
             <Page
                 title="Help"
-            // primaryAction={{content:'Report An Issue', onClick:() => {
-            //         this.redirect('/panel/help/report');
-            //     }}}
-            //
+            primaryAction={{content:'Contact Us', onClick:() => {
+                    this.redirect('/panel/help/report');
+                }}}
+
             >
                 <div className="row">
                     {/*<div className="col-12 mb-4">*/}
@@ -151,13 +151,13 @@ class FAQPage extends Component {
                         </React.Fragment>);
                     })}
                 </div>
-                <div className="col-12 mt-5">
-                    <div className="text-center mt-5">
-                            <h3><b>Contact Us- </b></h3>
-                            <h5><b>Email id-</b> apps@cedcommerce.com</h5>
-                            <h5><b>Phone Number-</b>(+1) 888-882-0953</h5>
-                    </div>
-                </div>
+                {/*<div className="col-12 mt-5">*/}
+                    {/*<div className="text-center mt-5">*/}
+                            {/*<h3><b>Contact Us- </b></h3>*/}
+                            {/*<h5><b>Email id-</b> apps@cedcommerce.com</h5>*/}
+                            {/*<h5><b>Phone Number-</b>(+1) 888-882-0953</h5>*/}
+                    {/*</div>*/}
+                {/*</div>*/}
                 <Modal
                     open={this.state.modal}
                     title="Default Profile Example"

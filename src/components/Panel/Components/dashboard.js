@@ -695,6 +695,10 @@ class Dashboard extends Component {
             </div>
         </div>;
     };
+    redirectResult(code, val) {
+        if ( isUndefined(val) ) { val = '' }
+        this.openNewWindow(code, val);
+    } // used in step 3 to get child data and send back to new child
     /********************** step 4 Configurations start here ****************************/
     checkConfig(val) {
         requests.getRequest('frontend/app/checkDefaultConfiguration?code=' + val).then(data => {
@@ -771,10 +775,6 @@ class Dashboard extends Component {
     handleLinkedAccount = (event) => {
         this.setState({data3Check:event});
     };
-    redirectResult(code, val) {
-        if ( isUndefined(val) ) { val = '' }
-        this.openNewWindow(code, val);
-    } // used in step 3 to get child data and send back to new child
     redirect(url) {
         this.props.history.push(url);
     }
