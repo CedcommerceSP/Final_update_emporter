@@ -140,6 +140,7 @@ class Dashboard extends Component {
                 this.state.info.full_name = data.data.full_name;
                 this.state.info.email = data.data.email;
                 this.state.info.mobile = data.data.mobile;
+                this.handleFormChange('country_code', data.data.country)
                 this.setState(this.state);
             }
         });
