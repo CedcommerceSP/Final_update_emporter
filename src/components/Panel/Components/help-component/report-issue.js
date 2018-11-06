@@ -51,8 +51,8 @@ class ReportAnIssue extends Component {
         const options = [
             {label:'Issue in regarding Amazon or Ebay seller panel',value:'Amazon/Ebay Seller Panel'},
             {label:'Issue regarding product import or product upload to Shopify',value:'Import/Upload'},
-            {label:'Issue Regarding pricing plan',value:'Pricing Plan'},
-            {label:'Issue Regarding profiling',value:'Profiling'},
+            {label:'Issue regarding pricing plan',value:'Pricing Plan'},
+            {label:'Issue regarding profiling',value:'Profiling'},
             {label:'Other',value:'other'},
         ];
         return (
@@ -63,7 +63,7 @@ class ReportAnIssue extends Component {
                     }}}>
                 <div className="row">
                     <div className="col-12 col-sm-8 order-2 order-sm-1">
-                        <Card secondaryFooterAction={{content:'Submit', onClick:() => {
+                        <Card primaryFooterAction={{content:'Submit', onClick:() => {
                                 this.submit();
                             }}} title={"Have an issue?"}>
                             <div className="p-5">
@@ -78,7 +78,7 @@ class ReportAnIssue extends Component {
                                 </div>
                                 <TextField
                                     label="Description"
-                                    placeholder="Eg. how to config setting"
+                                    placeholder="Eg. how to create profile"
                                     value={this.state.body}
                                     onChange={this.handleTextChange.bind(this,'body')}
                                 />

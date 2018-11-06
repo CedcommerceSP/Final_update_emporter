@@ -85,6 +85,7 @@ class PlanBody extends Component {
         });
     }
     onCheckBox(event, key) { // this function is used to check unCheck Checkbox which is not Required by default
+        console.log(event, key);
         let data = this.state.checkBox;
         data.forEach(Data => {
             if ( Data.code === event && key === Data.key ) {
@@ -123,7 +124,7 @@ class PlanBody extends Component {
                                                     size="large"
                                                     disabled={data.main_price === 0 || data.main_price === '0'}
                                                     onClick={this.onSelectPlan.bind(this, data)}>
-                                                    Choose Plan
+                                                    {data.main_price === 0 || data.main_price === '0'?'Select Marketplace':'Choose Plan'}
                                                 </Button>
                                             </div>
                                             <div className="mb-5 text-center"> {/* Descriptions For Particular deatails */}
@@ -142,6 +143,7 @@ class PlanBody extends Component {
                                                                 </Tooltip>
                                                             </span>
                                                         </p>
+                                                        <p style={{fontSize:'11px',fontWeight:'bold'}}>Choose source marketplace</p>
                                                         {Object.keys(data.services[keys].services).map(key1 => {
                                                             if ( data.services[keys].services[key1].required === 1 ) {
                                                                 return (<div key={key1} className="text-left">
@@ -163,22 +165,23 @@ class PlanBody extends Component {
                                                                 if ( flag === 0 ) {
                                                                     temp.push({
                                                                         code:data.services[keys].services[key1].code,
-                                                                        isSelected: true,
+                                                                        isSelected: false,
                                                                         key: data.id,
                                                                         id: key1
                                                                     });
                                                                     this.state.checkBox = temp;
                                                                 }
-                                                                return (<div key={key1} className="text-left form-inline">
+                                                                return (<div key={key1} className="text-left">
                                                                     {this.state.checkBox.map(KEYS => {
                                                                         if ( KEYS.code === data.services[keys].services[key1].code && KEYS.key === data.id ) {
                                                                             return (
-                                                                                <Checkbox
-                                                                                    key = { KEYS.code }
-                                                                                    checked={KEYS.isSelected}
-                                                                                    label={data.services[keys].services[key1].title}
-                                                                                    onChange={this.onCheckBox.bind(this,data.services[keys].services[key1].code, data.id)}
-                                                                                />
+                                                                                <div className="p-2" key = { KEYS.code } style={{backgroundColor:'#FCF1CD'}}>
+                                                                                    <Checkbox
+                                                                                        checked={KEYS.isSelected}
+                                                                                        label={data.services[keys].services[key1].title}
+                                                                                        onChange={this.onCheckBox.bind(this,data.services[keys].services[key1].code, data.id)}
+                                                                                    />
+                                                                                </div>
                                                                             );
                                                                         }
                                                                     })}

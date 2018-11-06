@@ -39,9 +39,10 @@ function checkValue(main, type, disc, service, manageService, id) {
                                 price = price + parseInt(service[keys].services[key1].prepaid.fixed_price) + parseInt(service[keys].services[key1].service_charge);
                             }
                         });
-                    } else {
-                        price = price + parseInt(service[keys].services[key1].prepaid.fixed_price) + parseInt(service[keys].services[key1].service_charge);
                     }
+                    // else {
+                    //     price = price + parseInt(service[keys].services[key1].prepaid.fixed_price) + parseInt(service[keys].services[key1].service_charge);
+                    // }
                 }
             });
         });

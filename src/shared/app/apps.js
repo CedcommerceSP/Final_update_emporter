@@ -85,7 +85,7 @@ class AppsShared extends Component {
                                             <div className="row p-5">
                                                 <div className="col-4 order-2 text-right">
                                                     <div className="row">
-                                                        {app.code === 'ebayimporter' && app['installed']===0?<div className="col-sm-4 col-12 offset-sm-8 offset-0 mb-4">
+                                                        {app.code === 'ebayimporter' && app['installed']===0?<div className="mb-4 col-12">
                                                             <Select
                                                                 options={json.country}
                                                                 value={this.state.ebay_county_code}
@@ -99,7 +99,7 @@ class AppsShared extends Component {
                                                                 onClick={() => {
                                                                     this.installApp(app.code);
                                                                 }} primary>Connect</Button>:<div className="text-right">
-                                                                               <FontAwesomeIcon icon={faCheckCircle} size="7x" color="#5c6ac4"/>
+                                                                               <FontAwesomeIcon icon={faCheckCircle} size="6x" color="#5c6ac4"/>
                                                                    </div>}
                                                         </div>
                                                     </div>

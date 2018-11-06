@@ -92,7 +92,7 @@ class Dashboard extends Component {
                         stepperActive: false, // used in stepper Check either Completed or not and also help in deciding with step to go
                     }, // step 1
                     {
-                        message: <p>Grab the early mover advantage and get first 7 days free. There are only two prerequisites for using this app, a valid Shopify store and Amazon Seller Account. No Credit Card details required to unlock free trial.</p>,
+                        message: <p>Grab the early mover advantage and get first 7 days free. There are only two prerequisites for using this app, a valid Shopify store and either Ebay or Amazon Seller Account.</p>,
                         stepperMessage: 'Choose a plan', // stepper Small Message
                         API_endpoint: '', // Api End Point is used to check to send data or get data
                         data: '', // Data additional Field
@@ -473,7 +473,7 @@ class Dashboard extends Component {
                                                 >
                                                     Submit
                                                 </Button>
-                                                {this.state.otpCheck.number_change?'':<p>OTP will Valid for 5 min</p>}
+                                                {this.state.otpCheck.number_change?'':<p>OTP will valid for 5 min</p>}
                                             </div>
                                         </div>
                                     </div>
