@@ -374,7 +374,9 @@ class Dashboard extends Component {
         if ( this.state.otpCheck.pin !== '' && !this.state.otpCheck.number_change ) {
             requests.postRequest('core/app/matchOtp', {otp: this.state.otpCheck.pin}).then(data => {
                 if ( data.success ) {
-                    requests.getRequest('core/user/updateuser', this.state.info).then(data => {
+                    let tempInfo = Object.assign({}, this.state.info);
+                    tempInfo.mobile = tempInfo.mobile_code + '-' + tempInfo.mobile;
+                    requests.getRequest('core/user/updateuser', tempInfo).then(data => {
                         if (data.success) {
                             notify.success(data.message);
                             this.changeStep(1);
