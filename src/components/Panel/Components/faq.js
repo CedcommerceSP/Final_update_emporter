@@ -1,5 +1,4 @@
 import React, {Component} from 'react';
-import { NavLink } from 'react-router-dom';
 import { Page, Stack, Button,Card,Collapsible, Banner, ResourceList, Modal, TextContainer} from '@shopify/polaris';
 import {faArrowsAltH} from '@fortawesome/free-solid-svg-icons';
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
