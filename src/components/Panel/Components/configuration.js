@@ -22,8 +22,8 @@ export class Configuration extends Component {
     amazonImporterConfigurationData = [];
     amazonCredentialsData = [];
 
-    constructor() {
-        super();
+    constructor(props) {
+        super(props);
         this.state = {
           account_information: {
               username: '',
@@ -35,6 +35,7 @@ export class Configuration extends Component {
           google_configuration: {},
           amazon_credentials:{},
           amazon_credentials_error:{},
+          amazon_plan_buy: false,
           shopify_configuration: {},
           amazon_importer_configuration: {},
           google_configuration_updated: false,
@@ -96,12 +97,23 @@ export class Configuration extends Component {
     }
 
     amazonCredentials() {
+        requests.getRequest('plan/plan/getActive')
+            .then(data => {
+                if (data.success) {
+                    this.state.amazon_plan_buy = false;
+                    data.data.services.forEach(e => {
+                        if ( e.code === 'amazon_importer' )
+                            this.state.amazon_plan_buy = true;
+                    });
+                    this.setState(this.state);
+                }
+            });
         requests.getRequest('amazonimporter/config/getCredentials').then(data => {
             if ( data.success ) {
                 this.amazonCredentialsData = this.modifyAmazonCredentialData(data.data, 'amazon_credentials');
                 this.updateState();
             } else {
-                notify.error(data.message);
+                // notify.error(data.message);
             }
         })
     }
@@ -438,9 +450,9 @@ export class Configuration extends Component {
                     <Layout.Section>
                         {this.renderShopifyConfigurationSection()}
                     </Layout.Section>
-                    <Layout.Section>
+                    {this.state.amazon_plan_buy && <Layout.Section>
                         {this.renderAmazonCredentials()}
-                    </Layout.Section>
+                    </Layout.Section>}
                     <Layout.Section>
                         {this.renderAmazonImporterConfigurationSection()}
                     </Layout.Section>

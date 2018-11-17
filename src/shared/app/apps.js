@@ -3,7 +3,7 @@ import {Select, Button, Card} from "@shopify/polaris";
 import {requests} from "../../services/request";
 import {notify} from "../../services/notify";
 import {json} from "../../environments/static-json";
-import {faArrowsAltH, faCheckCircle} from '@fortawesome/free-solid-svg-icons';
+import {faCheckCircle} from '@fortawesome/free-solid-svg-icons';
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 
 class AppsShared extends Component {
