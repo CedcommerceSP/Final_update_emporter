@@ -62,6 +62,7 @@ class AppsShared extends Component {
                             this.state.code_usable.push('amazonimporter');
                         if ( e.code === 'ebay_importer' )
                             this.state.code_usable.push('ebayimporter');
+                        this.props.importerServices(this.state.code_usable);
                     });
                     this.setState(this.state);
                 } else {
