@@ -669,18 +669,20 @@ class Dashboard extends Component {
     };
     /**************************  Step 3 linked you account start Here  ******************/
     checkLinkedAccount() {
-        requests.postRequest('frontend/app/checkAccount', {code:this.state.importerServices}).then(data => {
-            if ( data.success ) {
-                if ( data.data.account_connected ) {
-                    notify.success('Account Connected Successfully');
-                    this.changeStep(3);
+        if ( this.state.importerServices.length > 0 ) {
+            requests.postRequest('frontend/app/checkAccount', {code:this.state.importerServices}).then(data => {
+                if ( data.success ) {
+                    if ( data.data.account_connected ) {
+                        notify.success('Account Connected Successfully');
+                        this.changeStep(3);
+                    } else {
+                        notify.info('Please Connect Your Account First');
+                    }
                 } else {
-                    notify.info('Please Connect Your Account First');
+                    notify.error(data.message);
                 }
-            } else {
-                notify.error(data.message);
-            }
-        });
+            });
+        }
     }
     openNewWindow(code, val) {
         this.setState({modalOpen: !this.state.modalOpen, code: code, ebay_country_code: val});

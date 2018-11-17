@@ -102,20 +102,21 @@ export class Configuration extends Component {
                 if (data.success) {
                     this.state.amazon_plan_buy = false;
                     data.data.services.forEach(e => {
-                        if ( e.code === 'amazon_importer' )
+                        if ( e.code === 'amazon_importer' ) {
                             this.state.amazon_plan_buy = true;
+                            requests.getRequest('amazonimporter/config/getCredentials').then(data => {
+                                if ( data.success ) {
+                                    this.amazonCredentialsData = this.modifyAmazonCredentialData(data.data, 'amazon_credentials');
+                                    this.updateState();
+                                } else {
+                                    notify.error(data.message);
+                                }
+                            })
+                        }
                     });
                     this.setState(this.state);
                 }
             });
-        requests.getRequest('amazonimporter/config/getCredentials').then(data => {
-            if ( data.success ) {
-                this.amazonCredentialsData = this.modifyAmazonCredentialData(data.data, 'amazon_credentials');
-                this.updateState();
-            } else {
-                // notify.error(data.message);
-            }
-        })
     }
 
     modifyConfigData(data, configKey) {
