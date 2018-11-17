@@ -1,23 +1,13 @@
 import React, {Component} from 'react';
-import {requests} from "../../services/request";
+import { Button, Card, Checkbox, Icon, Label, Link, Modal,
+           RadioButton, Select, Stack, TextField, Tooltip } from "@shopify/polaris";
 import {isUndefined} from "util";
-import {dataGrids, RemoveService, marketPlacePricingPlan} from "./plansFuctions";
+
+import {requests} from "../../services/request";
 import {notify} from "../../services/notify";
-import {
-    Button,
-    Card,
-    Checkbox,
-    Icon,
-    Label,
-    Link,
-    Modal,
-    Page,
-    RadioButton,
-    Select,
-    Stack, TextField,
-    Tooltip
-} from "@shopify/polaris";
 import {globalState} from "../../services/globalstate";
+
+import {dataGrids, RemoveService, marketPlacePricingPlan} from "./plansFuctions";
 
 class PlanBody extends Component {
     constructor(props) {
