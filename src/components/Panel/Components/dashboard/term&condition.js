@@ -7,7 +7,7 @@ export function term_and_condition() {
            <Label>
                <p>
                    CedCommerce Terms & Condition and Privacy Policy CedCommerce, LLC currently provides
-                   importing functionality with Amazon.com .Our goal is to provide reliable services for a
+                   importing functionality with Amazon & Ebay Marketplace .Our goal is to provide reliable services for a
                    competitive price that helps merchants to sell their products across multiple platforms. We work
                    hard to ensure this service works to its full potential and meet each case with the utmost
                    dedication. We understand how important a secure website is to e-commerce. Our investment in
@@ -15,12 +15,12 @@ export function term_and_condition() {
                    on 3rd party providers that may have other measures in place. Therefore, we cannot guarantee
                    a 100% error free code or website that is accessible at all times. Our service is not liable for any
                    damages or loss of income, revenue or data. Additionally, there is no guarantee that the error in
-                   code or functionality will prevent the suspension or deletion of a Amazon.com account.
+                   code or functionality will prevent the suspension or deletion of a Amazon or Ebay Marketplace account.
                </p>
                <p>
                    As a user of CedCommerce.com, products you are responsible for your account as well as any
                    content related to your account. Furthermore, you agree to use CedCommerce.com in
-                   compliance with all applicable laws and will in no way violate the Amazon.com Terms of Use or
+                   compliance with all applicable laws and will in no way violate the Amazon or Ebay Marketplace Terms of Use or
                    Seller Agreement.
                </p>
                <p>
@@ -77,14 +77,14 @@ export function term_and_condition() {
            </Label>
            <span className="font-weight-bold" style={{fontSize:'18px',color:'#4d4849'}}>When You Can Claim The Refund- </span>
            <Label>
-               ● Refund only be initiated if you are not able to get Seller Panel from Amazon.com.
+               ● Refund only be initiated if you are not able to get Seller Panel from Amazon or Ebay Marketplace.
            </Label>
            <span className="font-weight-bold" style={{fontSize:'25px',color:'#4d4849'}}>Usage of the Service </span>
            <Label>
                <p>
                    You are responsible for your account, content, and communications with others while using the
                    Services. You agree to use the Services in compliance with applicable law. This is your
-                   responsibility and you agree to not use CedCommerce in a way that violates Amazon.com
+                   responsibility and you agree to not use CedCommerce in a way that violates Amazon or Ebay Marketplace
                    Terms of Use. By using CedCommerce.com, you agree to not violate any of marketplace terms.
                    In the event of violating any marketplace rules, we have the right to close your account. We are
                    also not responsible for any illegal use of CedCommerce.com by our users.
