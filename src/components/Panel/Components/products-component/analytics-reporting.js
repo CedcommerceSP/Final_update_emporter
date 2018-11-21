@@ -20,8 +20,8 @@ class AnalyticsReporting extends Component {
     {
         super(props);
         this.state = {
-            selectedimporter: "bar",
-            selecteduploader: "bar",
+            selectedimporter: "pie",
+            selecteduploader: "pie",
             selecteduploadermarketplace:'',
             importer:[],
             uploader:['Uploaded'],
@@ -36,7 +36,8 @@ class AnalyticsReporting extends Component {
                 title:'',
                 body:''
             },
-            yaxisimporter:[]
+            yaxisimporter:[],
+            activePlan: globalState.getLocalStorage('activePlan')?JSON.parse(globalState.getLocalStorage('activePlan')):[],
         };
 
         this.preparedata();
@@ -91,7 +92,7 @@ class AnalyticsReporting extends Component {
             if (data.success == true) {
                 importer = data.data;
                 Object.keys(importer).map(importerkey => {
-                    if(importerkey === 'amazon_importer') {
+                    if(this.state.activePlan.indexOf(importerkey) !== -1) {
                         importertitlearray.push(importer[importerkey]['title']);
                         importer_marketplacearray.push(importer[importerkey]['marketplace']);
                     }

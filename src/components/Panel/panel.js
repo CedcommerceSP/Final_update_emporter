@@ -37,6 +37,7 @@ import {globalState} from '../../services/globalstate';
 import ViewProducts from "./Components/products-component/view-products";
 import * as queryString from "query-string";
 import {isUndefined} from "util";
+import {getActivePlan} from "./Components/static-functions";
 
 
 const style = {
@@ -70,21 +71,7 @@ export class Panel extends Component {
             }
             window.location = url;
         }
-        if ( !globalState.getLocalStorage('activePlan') ) {
-            requests.getRequest('plan/plan/getActive')
-                .then(data => {
-                    if (data.success) {
-                        let tempPlan = [];
-                        data.data.services.forEach(e => {
-                            if ( e.code === 'amazon_importer' )
-                                tempPlan.push('amazonimporter', 'amazon_importer');
-                            if ( e.code === 'ebay_importer' )
-                                tempPlan.push('ebayimporter', 'ebay_importer');
-                        });
-                        globalState.setLocalStorage('activePlan', JSON.stringify(tempPlan));
-                    }
-                });
-        }
+        getActivePlan();
     }
     state = {
         showLoader: false,
