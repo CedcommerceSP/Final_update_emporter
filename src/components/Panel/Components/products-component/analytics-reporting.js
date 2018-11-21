@@ -48,25 +48,25 @@ class AnalyticsReporting extends Component {
             let data = JSON.parse(localStorage.getItem('plan_status'));
             if ( data.shop === globalState.getLocalStorage('shop') ) {
                 if ( !data.success ) {
-                    let temp = {
-                        title:'Payment Status',
-                        temp:data,
-                        message:data.message,
-                        body:<div className="text-left mt-5">
-                            <h4>You Can uninstall:-</h4>
-                            <ul>
-                                <li><h5>Go to Apps Section from your shopify dashboard</h5></li>
-                                <li><h5>You can Un-install the App by clicking the Bin Icon right to App</h5></li>
-                            </ul>
-                        </div>
-                    };
-                    this.setState({
-                        payment_show:true,
-                        payment:temp,
-                    });
+                    // let temp = {
+                    //     title:'Payment Status',
+                    //     temp:data,
+                    //     message:data.message,
+                    //     body:<div className="text-left mt-5">
+                    //         <h4>You Can uninstall:-</h4>
+                    //         <ul>
+                    //             <li><h5>Go to Apps Section from your shopify dashboard</h5></li>
+                    //             <li><h5>You can Un-install the App by clicking the Bin Icon right to App</h5></li>
+                    //         </ul>
+                    //     </div>
+                    // };
+                    // this.setState({
+                    //     payment_show:true,
+                    //     payment:temp,
+                    // });
                 } else  {
                     let temp = {
-                        title:'Payment Status',
+                        title:'Status',
                         temp:data,
                         message:data.message,
                         body:<div className="text-center mt-5">

@@ -25,7 +25,7 @@ export class Auth extends Component {
     removeLocalStorage() {
         globalState.removeLocalStorage('user_authenticated');
         globalState.removeLocalStorage('auth_token');
-        globalState.removeLocalStorage('trial');
+        globalState.removeLocalStorage('activePlan');
     }
     componentWillMount() {
         const params = queryString.parse(this.props.location.search);

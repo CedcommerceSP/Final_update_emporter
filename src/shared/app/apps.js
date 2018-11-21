@@ -57,7 +57,6 @@ class AppsShared extends Component {
                 if (data.success) {
                     this.state.code_usable = [];
                     data.data.services.forEach(e => {
-                        console.log(e.code);
                         if ( e.code === 'amazon_importer' )
                             this.state.code_usable.push('amazonimporter');
                         if ( e.code === 'ebay_importer' )
@@ -81,36 +80,34 @@ class AppsShared extends Component {
                         if (this.state.code_usable.indexOf(app.code) !== -1) {
                             return (
                                 <div className="col-12 mb-4" key={this.state.apps.indexOf(app)}>
-                                    <div className="col-12" key={this.state.apps.indexOf(app)}>
-                                        <Card title={app.title}>
-                                            <div className="row p-5">
-                                                <div className="col-4 order-2 text-right">
-                                                    <div className="row">
-                                                        {app.code === 'ebayimporter' && app['installed']===0?<div className="mb-4 col-12">
-                                                            <Select
-                                                                options={json.country}
-                                                                value={this.state.ebay_county_code}
-                                                                onChange={this.handleEbayCountryChange}
-                                                                placeholder={'Choose Country'}
-                                                                label={''}/>
-                                                        </div>:null}
-                                                        <div className="col-12">
-                                                            {this.props.success.code !== app.code && app['installed']===0?<Button
-                                                                disabled={this.props.success.code === app.code || app['installed'] !==0}
-                                                                onClick={() => {
-                                                                    this.installApp(app.code);
-                                                                }} primary>Connect</Button>:<div className="text-right">
-                                                                               <FontAwesomeIcon icon={faCheckCircle} size="6x" color="#5c6ac4"/>
-                                                                   </div>}
-                                                        </div>
+                                    <Card title={app.title}>
+                                        <div className="row p-5">
+                                            <div className="col-4 order-2 text-right">
+                                                <div className="row">
+                                                    {app.code === 'ebayimporter' && app['installed']===0?<div className="mb-4 col-12">
+                                                        <Select
+                                                            options={json.country}
+                                                            value={this.state.ebay_county_code}
+                                                            onChange={this.handleEbayCountryChange}
+                                                            placeholder={'Choose Country'}
+                                                            label={''}/>
+                                                    </div>:null}
+                                                    <div className="col-12">
+                                                        {this.props.success.code !== app.code && app['installed']===0?<Button
+                                                            disabled={this.props.success.code === app.code || app['installed'] !==0}
+                                                            onClick={() => {
+                                                                this.installApp(app.code);
+                                                            }} primary>Connect</Button>:<div className="text-right">
+                                                                           <FontAwesomeIcon icon={faCheckCircle} size="6x" color="#5c6ac4"/>
+                                                               </div>}
                                                     </div>
                                                 </div>
-                                                <div className="col-8 order-1">
-                                                    <img src={app.image} alt={app.title}/>
-                                                </div>
                                             </div>
-                                        </Card>
-                                    </div>
+                                            <div className="col-8 order-1">
+                                                <img src={app.image} alt={app.title}/>
+                                            </div>
+                                        </div>
+                                    </Card>
                                 </div>
                             );
                         }

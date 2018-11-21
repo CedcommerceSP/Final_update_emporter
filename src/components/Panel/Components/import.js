@@ -18,6 +18,7 @@ import { notify } from '../../../services/notify';
 import { requests } from '../../../services/request';
 import { environment } from '../../../environments/environment';
 import { capitalizeWord } from './static-functions';
+ import {globalState} from "../../../services/globalstate";
 
 export class Import extends Component {
 
@@ -48,6 +49,7 @@ export class Import extends Component {
                 profile_type: ''
             },
             openModal: false,
+            activePlan: globalState.getLocalStorage('activePlan')?JSON.parse(globalState.getLocalStorage('activePlan')):[],
         };
         this.getAllImporterServices();
         this.getAllUploaderServices();
@@ -62,12 +64,14 @@ export class Import extends Component {
                    for (let i = 0; i < Object.keys(data.data).length; i++) {
                        let key = Object.keys(data.data)[i];
                        if (data.data[key].usable || !environment.isLive) {
-                           if ( data.data[key].code !== 'shopify_importer' ) {
-                               this.state.importServicesList.push({
-                                   label: data.data[key].title,
-                                   value: data.data[key].marketplace,
-                                   shops: []//data.data[key].shops
-                               });
+                           if ( data.data[key].code !== 'shopify_importer') {
+                               if ( this.state.activePlan.length <= 0 || this.state.activePlan.indexOf(data.data[key].code) !== -1) {
+                                   this.state.importServicesList.push({
+                                       label: data.data[key].title,
+                                       value: data.data[key].marketplace,
+                                       shops: []//data.data[key].shops
+                                   });
+                               }
                            }
                        }
                    }

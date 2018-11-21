@@ -54,9 +54,9 @@ export class Apps extends Component {
         this.openNewWindow(code, val);
     }; // used in step 3 to get child data and send back to new child
     renderAccountInfo = () => {
-        return <div className="row">
+        return <div className="">
                 <AppsShared history={this.props.history} importerServices={this.handleImporterService} redirectResult={this.redirectResult} success={this.state.data3Check}/>
-        </div>;
+                </div>;
     };
     handleModalChange = (event) => {
         if (event === 'init_modal') {

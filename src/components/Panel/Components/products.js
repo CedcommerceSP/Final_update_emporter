@@ -115,6 +115,7 @@ export class Products extends Component {
             deleteProductData: false,
             toDeleteRow: {},
             totalPage:0,
+            totalMainCount:0 ,
             showLoaderBar:true,
             hideLoader: false,
             pagination_show:0,
@@ -276,6 +277,9 @@ export class Products extends Component {
             .then(data => {
                 if (data.success) {
                     this.setState({totalPage:data.data.count});
+                    if ( !isUndefined(data.data.mainCount) ) {
+                        this.setState({totalMainCount:data.data.mainCount});
+                    }
                     const products = this.modifyProductsData(data.data.rows);
                     this.totalProductCount = data.data.count;
                     this.state['products'] = products;
@@ -481,6 +485,7 @@ export class Products extends Component {
                             {/*</div>*/}
                             <div className="col-12 p-3 text-right">
                                 <Label>{this.state.pagination_show} products</Label>
+                                <Label>{this.state.totalMainCount && Object.keys(this.filters.column_filters).length <= 0?`Total Main Product ${this.state.totalMainCount}`:''}</Label>
                             </div>
                             <div className="col-12">
                                 <SmartDataTable

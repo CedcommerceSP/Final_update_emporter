@@ -603,6 +603,18 @@ class Dashboard extends Component {
         requests.getRequest('plan/plan/getActive').then(status => {
             if ( status.success ) {
                 notify.success('Your Plan is Activated');
+                try {
+                    let tempPlan = [];
+                    status.data.services.forEach(e => {
+                        if ( e.code === 'amazon_importer' )
+                            tempPlan.push('amazonimporter', 'amazon_importer');
+                        if ( e.code === 'ebay_importer' )
+                            tempPlan.push('ebayimporter', 'ebay_importer');
+                    });
+                    globalState.setLocalStorage('activePlan', JSON.stringify(tempPlan));
+                } catch (e) {
+                    
+                }
                 this.changeStep(2);
             } else {
                 notify.error(status.message);

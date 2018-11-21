@@ -20,6 +20,7 @@ import { capitalizeWord } from '../static-functions';
 import { isUndefined } from 'util';
 
 import { environment } from '../../../../environments/environment';
+import {globalState} from "../../../../services/globalstate";
 
 export class CreateProfile extends Component {
 
@@ -79,6 +80,7 @@ export class CreateProfile extends Component {
             },
             targetAttributes: [],
             sourceAttributes: [],
+            activePlan: globalState.getLocalStorage('activePlan')?JSON.parse(globalState.getLocalStorage('activePlan')):[],
         };
         this.getProfile();
     }
@@ -372,11 +374,13 @@ export class CreateProfile extends Component {
                         if (data.data[key].usable || !environment.isLive) {
                             hasService = true;
                             if ( data.data[key].title.toLowerCase() !== 'shopify' ) {
-                                this.importServices.push({
-                                    label: data.data[key].title,
-                                    value: data.data[key].marketplace,
-                                    shops: data.data[key].shops
-                                });
+                                if (this.state.activePlan.length <= 0 || this.state.activePlan.indexOf(data.data[key].code) !== -1) {
+                                    this.importServices.push({
+                                        label: data.data[key].title,
+                                        value: data.data[key].marketplace,
+                                        shops: data.data[key].shops
+                                    });
+                                }
                             }
                         }
                     }

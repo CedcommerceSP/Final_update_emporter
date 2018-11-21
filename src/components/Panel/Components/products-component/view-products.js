@@ -102,7 +102,7 @@ class ViewProducts extends Component {
                                     </div>:null}
                                     {this.state.products_middle.price !== ''?
                                     <div className="mb-5 col-sm-6 col-12">
-                                        <h4><b>Title</b></h4>
+                                        <h4><b>Price</b></h4>
                                         <h5>{this.state.products_middle.price}</h5>
                                     </div>:null}
                                     {this.state.products_middle.quantity !== ''?
