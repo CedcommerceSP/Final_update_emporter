@@ -380,6 +380,7 @@ class Dashboard extends Component {
                         if (data.success) {
                             notify.success(data.message);
                             this.changeStep(1);
+                            window.gtag1 = true
                         } else {
                             notify.error(data.message);
                         }
