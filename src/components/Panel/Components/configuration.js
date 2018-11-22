@@ -37,6 +37,7 @@ export class Configuration extends Component {
           amazon_credentials_error:{},
           amazon_plan_buy: false,
           shopify_configuration: {},
+          show_shopify_child_component: {},
           amazon_importer_configuration: {},
           google_configuration_updated: false,
           shopify_configuration_updated: false,
@@ -70,7 +71,6 @@ export class Configuration extends Component {
                 }
             });
     }
-
 
     getAmazonImporterConfigurations() {
         requests.getRequest('connector/get/config', { marketplace: 'amazonimporter' })
@@ -122,9 +122,15 @@ export class Configuration extends Component {
     modifyConfigData(data, configKey) {
         for (let i = 0; i < data.length; i++) {
             // this.state[configKey][data[i].code] = data[i].value;
-            this.state[configKey][data[i].code] = typeof data[i].value === 'object'?'':data[i].value;
+            this.state[configKey][data[i].code] = data[i].value;
             if (!isUndefined(data[i].options)) {
                 data[i].options = modifyOptionsData(data[i].options);
+            }
+            if ( !isUndefined(data[i]['is_parent']) ) {
+                this.state.show_shopify_child_component[data[i]['is_parent']] = {
+                    show: data[i].value,
+                    code: data[i].code
+                };
             }
         }
         return data;
@@ -295,6 +301,7 @@ export class Configuration extends Component {
                         <div className="row p-5">
                             {
                                 this.shopifyConfigurationData.map(config => {
+                                    // if (!isUndefined(this.state.show_shopify_child_component[config.is_child]) || !this.state.show_shopify_child_component[config.is_child].show === 'hide')
                                     switch(config.type) {
                                         case 'select':
                                             return (
@@ -503,6 +510,7 @@ export class Configuration extends Component {
     }
 
     shopifyConfigurationCheckboxChange(index, optionIndex, value) {
+        console.log(index, optionIndex, value, this.state.shopify_configuration, this.shopifyConfigurationData[index].code);
         this.state.shopify_configuration_updated = true;
         const option = this.shopifyConfigurationData[index].options[optionIndex].value;
         const valueIndex = this.state.shopify_configuration[this.shopifyConfigurationData[index].code].indexOf(option);
