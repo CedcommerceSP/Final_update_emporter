@@ -480,9 +480,9 @@ export class Products extends Component {
                             renderItem={item => {}}
                         />
                         <div className="row">
-                            {/*<div className="col-12">*/}
-                                {/*<Tabs tabs={this.state.installedApps} selected={this.state.selectedApp} onSelect={this.handleMarketplaceChange.bind(this)}/>*/}
-                            {/*</div>*/}
+                            <div className="col-12">
+                                <Tabs tabs={this.state.installedApps} selected={this.state.selectedApp} onSelect={this.handleMarketplaceChange.bind(this)}/>
+                            </div>
                             <div className="col-12 p-3 text-right">
                                 <Label>{this.state.pagination_show} products</Label>
                                 <Label>{this.state.totalMainCount && Object.keys(this.filters.column_filters).length <= 0?`Total Main Product ${this.state.totalMainCount}`:''}</Label>
@@ -496,14 +496,14 @@ export class Products extends Component {
                                     activePage={this.gridSettings.activePage}
                                     hideFilters={this.hideFilters}
                                     columnTitles={this.columnTitles}
-                                    multiSelect={false}
+                                    multiSelect={true}
                                     customButton={this.customButton} // button
                                     operations={this.operations} //button
                                     selected={this.state.selectedProducts}
                                     className='ui compact selectable table'
                                     withLinks={true}
                                     visibleColumns={this.visibleColumns}
-                                    // actions={this.massActions}
+                                    actions={this.massActions}
                                     showColumnFilters={true}
                                     imageColumns={this.imageColumns}
                                     rowActions={{
