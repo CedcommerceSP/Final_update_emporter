@@ -15,6 +15,7 @@ import { requests } from '../../../services/request';
 import { modifyOptionsData } from './static-functions';
 
 import { isUndefined } from 'util';
+import AmazonInstallationForm from "../../../shared/app/amazon-form";
 
 export class Configuration extends Component {
 
@@ -106,10 +107,12 @@ export class Configuration extends Component {
                             this.state.amazon_plan_buy = true;
                             requests.getRequest('amazonimporter/config/getCredentials').then(data => {
                                 if ( data.success ) {
-                                    this.amazonCredentialsData = this.modifyAmazonCredentialData(data.data, 'amazon_credentials');
+                                    // this.amazonCredentialsData = this.modifyAmazonCredentialData(data.data, 'amazon_credentials');
+                                    this.amazonCredentialsData = data.data;
+                                    this.setState({amazon_data: data.data});
                                     this.updateState();
                                 } else {
-                                    notify.error(data.message);
+                                    notify.info('Amazon Account Not Connected!');
                                 }
                             })
                         }
@@ -127,10 +130,7 @@ export class Configuration extends Component {
                 data[i].options = modifyOptionsData(data[i].options);
             }
             if ( !isUndefined(data[i]['is_parent']) ) {
-                this.state.show_shopify_child_component[data[i]['is_parent']] = {
-                    show: data[i].value,
-                    code: data[i].code
-                };
+                this.state.show_shopify_child_component[data[i]['is_parent']] = data[i].value !== 'enable';
             }
         }
         return data;
@@ -220,69 +220,75 @@ export class Configuration extends Component {
                 </div>
                 <div className="col-md-6 col-sm-6 col-12">
                     <Card>
-                        <div className="row p-5">
-                            {
-                                this.amazonCredentialsData.map(config => {
-                                    switch(config.type) {
-                                        case 'select':
-                                            return (
-                                                <div className="col-12 pt-2 pb-2" key={this.amazonCredentialsData.indexOf(config)}>
-                                                    <Select
-                                                        options={config.options}
-                                                        label={config.title}
-                                                        placeholder={config.title}
-                                                        error={this.state.amazon_credentials_error[config.key]?'Field can not be Empty':null}
-                                                        value={this.state.amazon_credentials[config.key]}
-                                                        onChange={this.AmazonCredentialsChange.bind(this, this.amazonCredentialsData.indexOf(config))}>
-                                                    </Select>
-                                                </div>
-                                            );
-                                        case 'checkbox':
-                                            return (
-                                                <div className="col-12 pt-2 pb-2" key={this.amazonCredentialsData.indexOf(config)}>
-                                                    <Label>{config.title}</Label>
-                                                    <div className="row">
-                                                        {
-                                                            config.options.map(option => {
-                                                                return (
-                                                                    <div className="col-md-6 col-sm-6 col-12 p-1" key={config.options.indexOf(option)}>
-                                                                        <Checkbox
-                                                                            checked={this.state.amazon_credentials[config.key].indexOf(option.value) !== -1}
-                                                                            label={option.label}
-                                                                            onChange={this.AmazonCredentialsCheckboxChange.bind(this, this.amazonCredentialsData.indexOf(config), config.options.indexOf(option))}
-                                                                        />
-                                                                    </div>
-                                                                );
-                                                            })
-                                                        }
-                                                    </div>
-                                                </div>
-                                            );
-                                        default:
-                                            return (
-                                                <div className="col-12 pt-2 pb-2" key={this.amazonCredentialsData.indexOf(config)}>
-                                                    <TextField
-                                                        label={config.title}
-                                                        disabled={config.key === 'account_name'}
-                                                        placeholder={config.title}
-                                                        value={this.state.amazon_credentials[config.key]}
-                                                        error={this.state.amazon_credentials_error[config.key]?'Field can not be Empty':null}
-                                                        onChange={this.AmazonCredentialsChange.bind(this, this.amazonCredentialsData.indexOf(config))}>
-                                                    </TextField>
-                                                </div>
-                                            );
-                                    }
+                        {/*<div className="row p-5">*/}
+                            {/*{*/}
+                                {/*this.amazonCredentialsData.map(config => {*/}
+                                    {/*switch(config.type) {*/}
+                                        {/*case 'select':*/}
+                                            {/*return (*/}
+                                                {/*<div className="col-12 pt-2 pb-2" key={this.amazonCredentialsData.indexOf(config)}>*/}
+                                                    {/*<Select*/}
+                                                        {/*options={config.options}*/}
+                                                        {/*label={config.title}*/}
+                                                        {/*placeholder={config.title}*/}
+                                                        {/*error={this.state.amazon_credentials_error[config.key]?'Field can not be Empty':null}*/}
+                                                        {/*value={this.state.amazon_credentials[config.key]}*/}
+                                                        {/*onChange={this.AmazonCredentialsChange.bind(this, this.amazonCredentialsData.indexOf(config))}>*/}
+                                                    {/*</Select>*/}
+                                                {/*</div>*/}
+                                            {/*);*/}
+                                        {/*case 'checkbox':*/}
+                                            {/*return (*/}
+                                                {/*<div className="col-12 pt-2 pb-2" key={this.amazonCredentialsData.indexOf(config)}>*/}
+                                                    {/*<Label>{config.title}</Label>*/}
+                                                    {/*<div className="row">*/}
+                                                        {/*{*/}
+                                                            {/*config.options.map(option => {*/}
+                                                                {/*return (*/}
+                                                                    {/*<div className="col-md-6 col-sm-6 col-12 p-1" key={config.options.indexOf(option)}>*/}
+                                                                        {/*<Checkbox*/}
+                                                                            {/*checked={this.state.amazon_credentials[config.key].indexOf(option.value) !== -1}*/}
+                                                                            {/*label={option.label}*/}
+                                                                            {/*onChange={this.AmazonCredentialsCheckboxChange.bind(this, this.amazonCredentialsData.indexOf(config), config.options.indexOf(option))}*/}
+                                                                        {/*/>*/}
+                                                                    {/*</div>*/}
+                                                                {/*);*/}
+                                                            {/*})*/}
+                                                        {/*}*/}
+                                                    {/*</div>*/}
+                                                {/*</div>*/}
+                                            {/*);*/}
+                                        {/*default:*/}
+                                            {/*return (*/}
+                                                {/*<div className="col-12 pt-2 pb-2" key={this.amazonCredentialsData.indexOf(config)}>*/}
+                                                    {/*<TextField*/}
+                                                        {/*label={config.title}*/}
+                                                        {/*disabled={config.key === 'account_name'}*/}
+                                                        {/*placeholder={config.title}*/}
+                                                        {/*value={this.state.amazon_credentials[config.key]}*/}
+                                                        {/*error={this.state.amazon_credentials_error[config.key]?'Field can not be Empty':null}*/}
+                                                        {/*onChange={this.AmazonCredentialsChange.bind(this, this.amazonCredentialsData.indexOf(config))}>*/}
+                                                    {/*</TextField>*/}
+                                                {/*</div>*/}
+                                            {/*);*/}
+                                    {/*}*/}
 
-                                })
-                            }
-                            <div className="col-12 text-right pt-2 pb-1">
-                                <Button
-                                    disabled={!this.state.amazon_credentials_updated}
-                                    onClick={() => {
-                                        this.saveAmazonCredentialsData();
-                                    }}
-                                    primary>Save</Button>
-                            </div>
+                                {/*})*/}
+                            {/*}*/}
+                            {/*<div className="col-12 text-right pt-2 pb-1">*/}
+                                {/*<Button*/}
+                                    {/*disabled={!this.state.amazon_credentials_updated}*/}
+                                    {/*onClick={() => {*/}
+                                        {/*this.saveAmazonCredentialsData();*/}
+                                    {/*}}*/}
+                                    {/*primary>Save</Button>*/}
+                            {/*</div>*/}
+                        {/*</div>*/}
+                    </Card>
+                    <Card>
+                        <div className="p-4">
+                            {isUndefined(this.state.amazon_data) ? <Button primary fullWidth onClick={this.redirect.bind(this, '/panel/accounts')}>Connect Now</Button>:
+                            <AmazonInstallationForm page={'config'} amazon_data={this.state.amazon_data}/>}
                         </div>
                     </Card>
                 </div>
@@ -301,7 +307,7 @@ export class Configuration extends Component {
                         <div className="row p-5">
                             {
                                 this.shopifyConfigurationData.map(config => {
-                                    // if (!isUndefined(this.state.show_shopify_child_component[config.is_child]) || !this.state.show_shopify_child_component[config.is_child].show === 'hide')
+                                    if (!this.state.show_shopify_child_component[config['is_child']])
                                     switch(config.type) {
                                         case 'select':
                                             return (
@@ -461,9 +467,9 @@ export class Configuration extends Component {
                     {this.state.amazon_plan_buy && <Layout.Section>
                         {this.renderAmazonCredentials()}
                     </Layout.Section>}
-                    <Layout.Section>
+                    {this.state.amazon_plan_buy && <Layout.Section>
                         {this.renderAmazonImporterConfigurationSection()}
-                    </Layout.Section>
+                    </Layout.Section>}
                 </Layout>
             </Page>
         );
@@ -504,6 +510,9 @@ export class Configuration extends Component {
     }
 
     shopifyConfigurationChange(index, value) {
+        if ( value === 'disable' || value === 'enable' ) {
+            this.state.show_shopify_child_component['sync_field'] = value !== 'enable';
+        }
         this.state.shopify_configuration_updated = true;
         this.state.shopify_configuration[this.shopifyConfigurationData[index].code] = value;
         this.updateState();
@@ -547,7 +556,7 @@ export class Configuration extends Component {
                 } else {
                     notify.error(data.message);
                 }
-        })
+        });
     }
     AmazonCredentialsChange(index, value) {
         this.state.amazon_credentials_updated = true;
@@ -616,6 +625,10 @@ export class Configuration extends Component {
         this.state.account_information[key] = value;
         this.state.account_information_updated = true;
         this.updateState();
+    }
+
+    redirect(url) {
+        this.props.history.push(url);
     }
 
     updateState() {

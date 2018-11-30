@@ -701,7 +701,6 @@ class Dashboard extends Component {
         this.setState({modalOpen: !this.state.modalOpen, code: code, ebay_country_code: val});
     } // Open Modal And A new Small Window For User
     handleImporterService = (arg) => {
-        console.log(arg);
         this.setState({importerServices:arg});
     };
     renderLinkedAccount = () => {

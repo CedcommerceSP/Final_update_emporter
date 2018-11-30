@@ -4,8 +4,7 @@ import {capitalizeWord, modifyOptionsData} from "../../components/Panel/Componen
 import {isUndefined} from "util";
 import {requests} from "../../services/request";
 import {notify} from "../../services/notify";
-import Dropdown  from 'react-dropdown';
-import 'react-dropdown/style.css'
+import AmazonInstallationForm from "./amazon-form";
 
 class InstallAppsShared extends Component {
     
@@ -30,7 +29,8 @@ class InstallAppsShared extends Component {
                     url:''
                 }
             };
-            this.getAppInstallationForm();
+            if ( this.queryParams.code !== 'amazonimporter' )
+                this.getAppInstallationForm();
         } else {
             this.props.redirect(false);
         }
@@ -39,102 +39,82 @@ class InstallAppsShared extends Component {
     render() {
         return (
             <React.Fragment>
-                {   !isUndefined(this.state.schema) &&
-                <div className="row">
-                    <div className="col-12 mt-4 mb-4">
-                        <Banner status="info">
-                            <Heading>{'Connect '} { capitalizeWord(this.state.code) === 'Amazonimporter'?'Amazon Importer':capitalizeWord(this.state.code)}</Heading>
-                        </Banner>
-                    </div>
-                    <div className="col-12 text-right">
-                        <Button onClick={() => {window.open('http://apps.cedcommerce.com/importer/amazon_seller.pdf' )}}>
-                            Help PDF
-                        </Button>
-                    </div>
-                    <div className="col-12 mt-4 mb-1">
-                        <Dropdown options={[
-                            { value: 'one', label: 'One' },
-                            { value: 'two', label: 'Two' },
-                            {
-                                type: 'group', name: 'group1', items: [
-                                    { value: 'three', label: 'Three' },
-                                    { value: 'four', label: 'Four' }
-                                ]
-                            },
-                            {
-                                type: 'group', name: 'group2', items: [
-                                    { value: 'five', label: 'Five' },
-                                    { value: 'six', label: 'Six' }
-                                ]
-                            }
-                        ]} placeholder="Select an option"/>
-                    </div>
-                    <div className="col-12 mt-1">
-                        <div className="row">
-                            {this.state.schema.map((field) => {
-                                switch(field.type) {
-                                    case 'select':
-                                        return (
-                                            <div className="col-12 pt-2 pb-2" key={this.state.schema.indexOf(field)}>
-                                                <Select
-                                                    options={field.options}
-                                                    label={field.title}
-                                                    placeholder={field.title}
-                                                    value={field.value}
-                                                    onChange={this.handleChange.bind(this, field.key)}>
-                                                </Select>
-                                                <p style={{color:'green'}}>{field.required?'*required':null}</p>
-                                            </div>
-                                        );
-                                        break;
-                                    case 'checkbox':
-                                        return (
-                                            <div className="col-12 pt-2 pb-2" key={this.state.schema.indexOf(field)}>
-                                                <Label>{field.title}</Label>
-                                                <div className="row">
-                                                    {
-                                                        field.options.map(option => {
-                                                            return (
-                                                                <div className="col-md-6 col-sm-6 col-12 p-1" key={field.options.indexOf(option)}>
-                                                                    <Checkbox
-                                                                        checked={field.value.indexOf(option.value) !== -1}
-                                                                        label={option.value}
-                                                                        onChange={this.handleMultiselectChange.bind(this, this.state.schema.indexOf(field), field.options.indexOf(option))}
-                                                                    />
-                                                                </div>
-                                                            );
-                                                        })
-                                                    }
-                                                </div>
-                                                <div className="col-12">
+                {   this.state.code === 'amazonimporter' ?
+                    <AmazonInstallationForm {...this.state} {...this.props}/>:
+                    !isUndefined(this.state.schema) &&
+                    <div className="row">
+                        <div className="col-12 mt-4 mb-4">
+                            <Banner status="info">
+                                <Heading>{'Connect '} { capitalizeWord(this.state.code) === 'Amazonimporter'?'Amazon Importer':capitalizeWord(this.state.code)}</Heading>
+                            </Banner>
+                        </div>
+                        <div className="col-12 mt-1">
+                            <div className="row">
+                                {this.state.schema.map((field) => {
+                                    switch(field.type) {
+                                        case 'select':
+                                            return (
+                                                <div className="col-12 pt-2 pb-2" key={this.state.schema.indexOf(field)}>
+                                                    <Select
+                                                        options={field.options}
+                                                        label={field.title}
+                                                        placeholder={field.title}
+                                                        value={field.value}
+                                                        onChange={this.handleChange.bind(this, field.key)}>
+                                                    </Select>
                                                     <p style={{color:'green'}}>{field.required?'*required':null}</p>
                                                 </div>
-                                            </div>
-                                        );
-                                        break;
-                                    default:
-                                        return (
-                                            <div className="col-12 pt-2 pb-2" key={this.state.schema.indexOf(field)}>
-                                                <TextField
-                                                    label={field.title}
-                                                    placeholder={field.title}
-                                                    value={field.value}
-                                                    onChange={this.handleChange.bind(this, field.key)}>
-                                                </TextField>
-                                                <p style={{color:'green'}}>{field.required?'*required':null}</p>
-                                            </div>
-                                        );
-                                        break;
-                                }
-                            })}
-                            <div className="col-12 text-center mt-3">
-                                <Button onClick={() => {
-                                    this.onSubmit();
-                                }}>Submit</Button>
+                                            );
+                                            break;
+                                        case 'checkbox':
+                                            return (
+                                                <div className="col-12 pt-2 pb-2" key={this.state.schema.indexOf(field)}>
+                                                    <Label>{field.title}</Label>
+                                                    <div className="row">
+                                                        {
+                                                            field.options.map(option => {
+                                                                return (
+                                                                    <div className="col-md-6 col-sm-6 col-12 p-1" key={field.options.indexOf(option)}>
+                                                                        <Checkbox
+                                                                            checked={field.value.indexOf(option.value) !== -1}
+                                                                            label={option.value}
+                                                                            onChange={this.handleMultiselectChange.bind(this, this.state.schema.indexOf(field), field.options.indexOf(option))}
+                                                                        />
+                                                                    </div>
+                                                                );
+                                                            })
+                                                        }
+                                                    </div>
+                                                    <div className="col-12">
+                                                        <p style={{color:'green'}}>{field.required?'*required':null}</p>
+                                                    </div>
+                                                </div>
+                                            );
+                                            break;
+                                        default:
+                                            return (
+                                                <div className="col-12 pt-2 pb-2" key={this.state.schema.indexOf(field)}>
+                                                    <TextField
+                                                        label={field.title}
+                                                        placeholder={field.title}
+                                                        value={field.value}
+                                                        onChange={this.handleChange.bind(this, field.key)}>
+                                                    </TextField>
+                                                    <p style={{color:'green'}}>{field.required?'*required':null}</p>
+                                                </div>
+                                            );
+                                            break;
+                                    }
+                                })}
+                                <div className="col-12 text-center mt-3">
+                                    <Button onClick={() => {
+                                        this.onSubmit();
+                                    }}>Submit</Button>
+                                </div>
                             </div>
                         </div>
                     </div>
-                </div>}
+                }
                 <Modal open={this.state.confirmOpen.open} onClose={() => {
                     let temp = {
                         open: false,

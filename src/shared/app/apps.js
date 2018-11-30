@@ -84,7 +84,7 @@ class AppsShared extends Component {
                                         <div className="row p-5">
                                             <div className="col-4 order-2 text-right">
                                                 <div className="row">
-                                                    {app.code === 'ebayimporter' && app['installed']===0?<div className="mb-4 col-12">
+                                                    {app.code === 'ebayimporter'?<div className="mb-4 col-12">
                                                         <Select
                                                             options={json.country}
                                                             value={this.state.ebay_county_code}
@@ -93,11 +93,11 @@ class AppsShared extends Component {
                                                             label={''}/>
                                                     </div>:null}
                                                     <div className="col-12">
-                                                        {this.props.success.code !== app.code && app['installed']===0?<Button
-                                                            disabled={this.props.success.code === app.code || app['installed'] !==0}
+                                                        {this.props.success.code !== app.code && app['installed']===0 || app.code === 'ebayimporter'?<Button
+                                                            disabled={this.props.success.code === app.code || app['installed'] !==0 && app.code !== 'ebayimporter'}
                                                             onClick={() => {
                                                                 this.installApp(app.code);
-                                                            }} primary>Connect</Button>:<div className="text-right">
+                                                            }} primary>{app['installed']!==0?'ReConnect':'Connect'}</Button>:<div className="text-right">
                                                                            <FontAwesomeIcon icon={faCheckCircle} size="6x" color="#5c6ac4"/>
                                                                </div>}
                                                     </div>
