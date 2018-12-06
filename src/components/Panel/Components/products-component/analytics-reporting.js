@@ -24,7 +24,7 @@ class AnalyticsReporting extends Component {
             selecteduploader: "pie",
             selecteduploadermarketplace:'',
             importer:[],
-            uploader:['Uploaded'],
+            uploader:[''],
             uploadermarketplace:[],
             yaxisuploader:[],
             uploaderstatus:{
@@ -41,7 +41,12 @@ class AnalyticsReporting extends Component {
         };
 
         this.preparedata();
-
+        setTimeout(() => {
+            if ( globalState.getLocalStorage('activePlan') && this.state.activePlan.length <= 0) {
+                this.setState({activePlan:JSON.parse(globalState.getLocalStorage('activePlan'))});
+                this.preparedata();
+            }
+        },2000);
     }
     componentDidUpdate()
     {
@@ -110,7 +115,7 @@ class AnalyticsReporting extends Component {
     {
         let total_products_importer=[];
         let importer_data_recieved={};
-        requests.postRequest('frontend/app/getProductsImportedData',{importers:importer_marketplace_array}).then(data=> {
+        requests.postRequest('frontend/app/getImportedProductCount',{importers:importer_marketplace_array}).then(data=> {
             if (data.success == true) {
                 importer_data_recieved = data.data;
                 Object.keys(importer_data_recieved).map(importer_recieved_mp=>{
@@ -143,54 +148,66 @@ class AnalyticsReporting extends Component {
         requests.getRequest('connector/get/services?filters[type]=uploader').then(data1 => {
             if (data1.success) {
                 uploader = data1.data;
-
-                Object.keys(uploader).map(uploaderkey => {
+                let temp = [];
+                this.state.activePlan.forEach(e => {
+                    if (e === 'amazon_importer') {
+                        temp.push('Amazon');
+                    }
+                    if ( e === 'ebay_importer' ) {
+                        temp.push('Ebay');
+                    }
+                })
+                if ( temp.length > 0 ) {
+                    Object.keys(uploader).map(uploaderkey => {
                         uploaderarray.push(uploader[uploaderkey]['marketplace']);
                         uploaderoptionsTemp.push({label:uploader[uploaderkey]['title'],value:uploader[uploaderkey]['marketplace']})
                     });
-                uploaderoptions = uploaderoptionsTemp.slice(0);
-                this.setState({
-                    selecteduploadermarketplace:uploaderarray[0]
-                });
-                this.get_y_axis_uploader(uploaderarray[0]);
+                    uploaderoptions = uploaderoptionsTemp.slice(0);
+                    this.setState({
+                        selecteduploadermarketplace:uploaderarray[0],
+                        uploader: temp
+                    });
+                    this.get_y_axis_uploader(uploaderarray[0]);
+                }
             }
             else {
                 notify.error(data1.message);
             }
-
         })
     }
 
     get_y_axis_uploader(uploader_marketplce) {
         let uploaderarray = [];
         let uploader = [];
-        let uploaded=0;
-        let approved=0;
-        let pending=0;
-        requests.getRequest('frontend/app/getProductsUploadedData', {marketplace: uploader_marketplce}).then(data1 => {
-            if (data1.success == true) {
+        let amazon=0;
+        let ebay=0;
+
+        requests.getRequest('frontend/app/getUploadedProductsCount', {marketplace: uploader_marketplce}).then(data1 => {
+            if (data1.success) {
                 uploader = data1.data;
-            for(let j=0;j<uploader.length;j++){
-               let status=uploader[j].status
-                   if(status=='approved'){
-                       approved+=1;
-                   }
-                   else if(status=='uploaded'){
-                       uploaded+=1;
-                   }
-                   else if(status=='pending')
-                   {
-                       pending+=1;
-                   }
-                }
+                amazon=data1.data.amazon;
+                ebay=data1.data.ebay;
+            // for(let j=0;j<uploader.length;j++){
+            //    let status=uploader[j].status
+            //        if(status=='approved'){
+            //            approved+=1;
+            //        }
+            //        else if(status=='uploaded'){
+            //            uploaded+=1;
+            //        }
+            //        else if(status=='pending')
+            //        {
+            //            pending+=1;
+            //        }
+            //     }
             }
             else {
                 notify.error(data1.message);
             }
             uploaderarray=[];
-            uploaderarray.push(pending);
-            uploaderarray.push(approved);
-            uploaderarray.push(uploaded);
+            uploaderarray.push(amazon);
+            uploaderarray.push(ebay);
+            uploaderarray.push(0);
             this.setState({yaxisuploader:uploaderarray})
         })
     }
@@ -381,12 +398,12 @@ class AnalyticsReporting extends Component {
             datasets: [{
                 data: this.state.yaxisuploader,
                 backgroundColor: [
-                    '#FF6384',
-                    '#36A2EB',
+                    '#a2ff38',
+                    '#2b6beb',
                     '#FFCE56',
-                    '#00cc66',
+                    '#2650cc',
                     '#ff0000',
-                    '#ff99ff',
+                    '#fe0eff',
                     '#000066',
                     '#990033',
                     '#9900cc',
@@ -550,37 +567,37 @@ class AnalyticsReporting extends Component {
                     </div>
                     <div className="CARD-body">
                         <div className="col-12 p-0">
-                <Card>
-                    <div className="p-4">
-                        <div className="row">
-                            <div className="col-12 col-md-4 pt-1 pb-1">
-                                <Select
-                                    label=""
-                                    options={uploaderoptions}
-                                    onChange={this.handleChangeuploadermarketplace}
-                                    value={this.state.selecteduploadermarketplace}
-                                />
-                            </div>
-                            <div className="col-md-4 pt-1 pb-1"></div>
-                            <div className="col-12 col-md-4 pt-1 pb-1">
-                                <Select
-                                    label=""
-                                    options={options}
-                                    onChange={this.handleChangeuploader}
-                                    value={this.state.selecteduploader}
-                                />
-                            </div>
-                        </div>
+                            <Card>
+                                <div className="p-4">
+                                    <div className="row">
+                                        {/*<div className="col-12 col-md-4 pt-1 pb-1">*/}
+                                            {/*<Select*/}
+                                                {/*label=""*/}
+                                                {/*options={uploaderoptions}*/}
+                                                {/*onChange={this.handleChangeuploadermarketplace}*/}
+                                                {/*value={this.state.selecteduploadermarketplace}*/}
+                                            {/*/>*/}
+                                        {/*</div>*/}
+                                        <div className="col-md-4 pt-1 pb-1"></div>
+                                        <div className="col-12 col-md-4 pt-1 pb-1">
+                                            <Select
+                                                label=""
+                                                options={options}
+                                                onChange={this.handleChangeuploader}
+                                                value={this.state.selecteduploader}
+                                            />
+                                        </div>
+                                    </div>
 
-                        <div className="row">
-                            <div className="col-md-12">
-                                {
-                                    this.uploaderreports()
-                                }
-                            </div>
-                        </div>
-                    </div>
-                </Card>
+                                    <div className="row">
+                                        <div className="col-md-12">
+                                            {
+                                                this.uploaderreports()
+                                            }
+                                        </div>
+                                    </div>
+                                </div>
+                            </Card>
                         </div>
                     </div>
                 </div>

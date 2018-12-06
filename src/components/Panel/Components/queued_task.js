@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import { isUndefined } from 'util';
 
 import { Page,
     TextStyle,
@@ -7,7 +8,7 @@ import { Page,
     Card,
     ProgressBar,
     Label,
-    Banner } from '@shopify/polaris';
+    Banner, Modal } from '@shopify/polaris';
 
 import { requests } from '../../../services/request';
 import { notify } from '../../../services/notify';
@@ -16,13 +17,15 @@ import './circle.css';
 let intervalRunning;
 export class QueuedTask extends Component {
 
-    constructor() {
-        super();
+    constructor(props) {
+        super(props);
         this.state = {
           queuedTasks: [],
           totalQueuedTasks: 0,
           recentActivities: [],
-          totalRecentActivities: 0
+          totalRecentActivities: 0,
+          modalOpen: false,
+          isAlreadyActive: true,
         };
         this.getAllNotifications();
         this.getAllQueuedTasks();
@@ -62,6 +65,15 @@ export class QueuedTask extends Component {
                     this.state.recentActivities = data.data.rows;
                     this.state.totalRecentActivities = data.data.count;
                     this.updateState();
+                }
+                if ( !isUndefined(data.data.rows[1]['message']) && this.state.isAlreadyActive) {
+                    if ( data.data.rows[1]['message'] === 'You can upload upto 50 products on Shopify during your trial period' ) {
+                        // this.redirect('/panel/plans');
+                        this.setState({
+                            isAlreadyActive: false,
+                            modalOpen: true,
+                        });
+                    }
                 }
             });
     }
@@ -172,6 +184,20 @@ export class QueuedTask extends Component {
                         </Card>
                     </div>
                 </div>
+                <Modal
+                    onClose={() => {this.setState({modalOpen: false})}}
+                    open={this.state.modalOpen}
+                    primaryAction={{content:'Yes', onClick:() => {this.redirect('/panel/plans')}}}
+                    secondaryActions={{content:'Cancel', onClick:() => {this.setState({modalOpen: false})}}}
+                    title={"Buy A Plan"}
+                >
+                    <Modal.Section>
+                        <div className="text-center">
+                            <Label>During Trial Period You Can Only Upload 50 Product.</Label>
+                            {/*<Label>Buy A Plan?</Label>*/}
+                        </div>
+                    </Modal.Section>
+                </Modal>
             </Page>
         );
     }

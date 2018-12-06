@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 import {Banner, Button, Checkbox, Heading, Label, Select, TextField} from "@shopify/polaris";
-import {capitalizeWord, modifyOptionsData} from "../../components/Panel/Components/static-functions";
+import {modifyOptionsData} from "../../components/Panel/Components/static-functions";
 import {isUndefined} from "util";
 import {requests} from "../../services/request";
 import {notify} from "../../services/notify";
@@ -18,7 +18,14 @@ class AmazonInstallationForm extends Component {
             hide: [],
             region: '',
             noChange:true,
-            dev_acc_avail:'true'
+            dev_acc_avail:'true',
+            init_show: false,
+            init_array_show: ['country_code','account_name'],
+            dev_credentials: {
+                region_in:['CEDCOMMERCE IN','1634-1171-8947'],
+                region_europe:['CEDCOMMERCE','2336-2330-8975'],
+            },
+            dev:[]
         };
         if ( isUndefined(props.page) ) {
             this.getAppInstallationForm();
@@ -38,20 +45,30 @@ class AmazonInstallationForm extends Component {
         return (
             <React.Fragment>
                 <div className="row">
-                    {this.state.page !== 'config' &&  <div className="col-12 mt-4 mb-4">
-                        <Banner status="info">
-                            <Heading>{'Connect Amazon Importer'}</Heading>
-                        </Banner>
-                    </div>}
+                    {/*{this.state.page !== 'config' &&  <div className="col-12 mt-4 mb-4">*/}
+                        {/*<Banner status="info">*/}
+                            {/*<Heading>{'Connect Amazon Importer'}</Heading>*/}
+                        {/*</Banner>*/}
+                    {/*</div>}*/}
                     <div className="col-12 text-right">
-                        <Button onClick={() => {window.open('http://apps.cedcommerce.com/importer/amazon_seller.pdf' )}}>
+                        <Button onClick={() => {window.open('http://apps.cedcommerce.com/importer/amazon_seller.pdf' )}} size={"slim"}>
                             Help PDF
+                        </Button> &nbsp;
+                        <Button onClick={() => {window.open('http://apps.cedcommerce.com/importer/amazon_UK_IN.pdf' )}} size={"slim"}>
+                            UK & IN Help
                         </Button>
                     </div>
+                    {this.state.init_show && this.state.page !== 'config' && this.state.dev.length > 0 && <div className="col-12 mt-1">
+                        <Banner status="info">
+                            <Label><b>Developer name: </b>{this.state.dev[0]}</Label>
+                            <Label><b>Developer id: </b> {this.state.dev[1]}</Label>
+                        </Banner>
+                    </div>}
                     <div className="col-12 mt-1">
                         <div className="row">
                             {!isUndefined(this.state.schema) && this.state.schema.map((field) => {
                                 if ( this.state.hide.indexOf(field.key) === -1 )
+                                    if ( this.state.init_array_show.indexOf(field.key) !== -1 || this.state.init_show )
                                 switch(field.type) {
                                     case 'select':
                                         return (
@@ -113,7 +130,7 @@ class AmazonInstallationForm extends Component {
                                                 <TextField
                                                     label={field.title}
                                                     placeholder={field.title}
-                                                    value={field.value}
+                                                    value={field.value !== null?field.value:'' }
                                                     disabled={field.key === 'account_name' && this.state.page === 'config'}
                                                     onChange={this.handleChange.bind(this, field.key)}>
                                                 </TextField>
@@ -166,6 +183,7 @@ class AmazonInstallationForm extends Component {
             if (this.state.schema[i].key === key) {
                 const state = this.state;
                 if ( typeof event === 'object' && !isUndefined(event.value)) {
+                    this.setState({init_show: true});
                     state.schema[i].value = event.value;
                 } else {
                     state.schema[i].value = event;
@@ -266,7 +284,12 @@ class AmazonInstallationForm extends Component {
                 }
             });
         });
-        this.setState({hide: hide, region: region,dev_acc_avail:dev_acc_avail});
+        if ( !isUndefined(this.state.dev_credentials[region]) ) {
+            this.setState({dev:this.state.dev_credentials[region]});
+        } else {
+            this.setState({dev:[]});
+        }
+        this.setState({hide: hide, region: region,dev_acc_avail:dev_acc_avail, init_show: true});
     };
 
     modifySchemaData(data) {
@@ -290,7 +313,7 @@ class AmazonInstallationForm extends Component {
                     option.forEach(e => {
                         e.items.forEach(key => {
                             if ( key.value === data[i]['value'] ) {
-                                this.setState({hide:e.hide});
+                                this.setState({hide:e.hide, init_show: true});
                             }
                         })
                     })

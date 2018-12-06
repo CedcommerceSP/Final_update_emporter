@@ -92,7 +92,7 @@ class Dashboard extends Component {
                         stepperActive: false, // used in stepper Check either Completed or not and also help in deciding with step to go
                     }, // step 1
                     {
-                        message: <p>Grab the early mover advantage and get first 7 days free. There are only two prerequisites for using this app, a valid Shopify store and either Ebay or Amazon Seller Account.</p>,
+                        message: <p>Grab the early mover advantage and get first 3 days free. There are only two prerequisites for using this app, a valid Shopify store and either Ebay or Amazon Seller Account.</p>,
                         stepperMessage: 'Choose a plan', // stepper Small Message
                         API_endpoint: '', // Api End Point is used to check to send data or get data
                         data: '', // Data additional Field
