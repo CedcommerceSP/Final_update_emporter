@@ -22,34 +22,40 @@ export class Configuration extends Component {
     shopifyConfigurationData = [];
     amazonImporterConfigurationData = [];
     amazonCredentialsData = [];
+    ebayConfigurationData = [];
 
     constructor(props) {
         super(props);
         this.state = {
-          account_information: {
+            account_information: {
               username: '',
               email: '',
               skype_id: '',
               full_name: '',
               mobile: ''
-          },
-          google_configuration: {},
-          amazon_credentials:{},
-          amazon_credentials_error:{},
-          amazon_plan_buy: false,
-          shopify_configuration: {},
-          show_shopify_child_component: {},
-          amazon_importer_configuration: {},
-          google_configuration_updated: false,
-          shopify_configuration_updated: false,
-          amazon_importer_configuration_updated: false,
-          account_information_updated: false,
-          amazon_credentials_updated: false
+            },
+            google_configuration: {},
+            amazon_credentials:{},
+            amazon_credentials_error:{},
+            amazon_plan_buy: false,
+            ebay_plan_buy: false,
+            shopify_configuration: {},
+            show_shopify_child_component: {},
+            amazon_importer_configuration: {},
+            google_configuration_updated: false,
+            shopify_configuration_updated: false,
+            amazon_importer_configuration_updated: false,
+            account_information_updated: false,
+            amazon_credentials_updated: false,
+            ebay_configuration:{},
+            ebay_configuration_updated: false,
+            show_ebay_child_component: {},
         };
         this.getUserDetails();
         this.getShopifyConfigurations();
         this.getAmazonImporterConfigurations();
         this.amazonCredentials();
+        this.getEbayConfig();
     }
 
     getUserDetails() {
@@ -81,6 +87,29 @@ export class Configuration extends Component {
                     this.updateState();
                 } else {
                     notify.error(data.message);
+                }
+            });
+    }
+
+    getEbayConfig() {
+        requests.getRequest('plan/plan/getActive')
+            .then(data => {
+                if (data.success) {
+                    this.state.ebay_plan_buy = false;
+                    data.data.services.forEach(e => {
+                        if ( e.code === 'ebay_importer' ) {
+                            this.state.ebay_plan_buy = true;
+                            requests.getRequest('connector/get/config', { marketplace: 'ebayimporter' }).then(data => {
+                                if (data.success) {
+                                    this.ebayConfigurationData = this.modifyConfigData(data.data, 'ebay_configuration');
+                                    this.updateState();
+                                } else {
+                                    notify.error(data.message);
+                                }
+                            })
+                        }
+                    });
+                    this.setState(this.state);
                 }
             });
     }
@@ -453,6 +482,85 @@ export class Configuration extends Component {
         )
     }
 
+    renderEbayConfig() {
+        return (
+            <div className="row">
+                <div className="col-md-6 col-sm-6 col-12 text-md-left text-sm-left text-center">
+                    <Heading>Ebay Configuration</Heading>
+                </div>
+                <div className="col-md-6 col-sm-6 col-12">
+                    <Card>
+                        <div className="row p-5">
+                            {
+                                this.ebayConfigurationData.map(config => {
+                                    if (!this.state.show_ebay_child_component[config['is_child']])
+                                        switch(config.type) {
+                                            case 'select':
+                                                return (
+                                                    <div className="col-12 pt-2 pb-2" key={this.ebayConfigurationData.indexOf(config)}>
+                                                        <Select
+                                                            options={config.options}
+                                                            label={config.title}
+                                                            placeholder={config.title}
+                                                            value={this.state.ebay_configuration[config.code]}
+                                                            onChange={this.ebayConfigurationChange.bind(this, this.ebayConfigurationData.indexOf(config))}>
+                                                        </Select>
+                                                    </div>
+                                                );
+                                                break;
+                                            case 'checkbox':
+                                                return (
+                                                    <div className="col-12 pt-2 pb-2" key={this.ebayConfigurationData.indexOf(config)}>
+                                                        <Label>{config.title}</Label>
+                                                        <div className="row">
+                                                            {
+                                                                config.options.map(option => {
+                                                                    return (
+                                                                        <div className="col-md-6 col-sm-6 col-12 p-1" key={config.options.indexOf(option)}>
+                                                                            <Checkbox
+                                                                                checked={this.state.ebay_configuration[config.code].indexOf(option.value) !== -1}
+                                                                                label={option.label}
+                                                                                onChange={this.ebayConfigurationCheckboxChange.bind(this, this.ebayConfigurationData.indexOf(config), config.options.indexOf(option))}
+                                                                            />
+                                                                        </div>
+                                                                    );
+                                                                })
+                                                            }
+                                                        </div>
+                                                    </div>
+                                                );
+                                                break;
+                                            default:
+                                                return (
+                                                    <div className="col-12 pt-2 pb-2" key={this.ebayConfigurationData.indexOf(config)}>
+                                                        <TextField
+                                                            label={config.title}
+                                                            placeholder={config.title}
+                                                            value={this.state.ebay_configuration[config.code]}
+                                                            onChange={this.ebayConfigurationChange.bind(this, this.ebayConfigurationData.indexOf(config))}>
+                                                        </TextField>
+                                                    </div>
+                                                );
+                                                break;
+                                        }
+
+                                })
+                            }
+                            <div className="col-12 text-right pt-2 pb-1">
+                                <Button
+                                    disabled={!this.state.ebay_configuration_updated}
+                                    onClick={() => {
+                                        this.saveEbayConfigData();
+                                    }}
+                                    primary>Save</Button>
+                            </div>
+                        </div>
+                    </Card>
+                </div>
+            </div>
+        )
+    }
+
     render() {
         return (
             <Page
@@ -464,6 +572,9 @@ export class Configuration extends Component {
                     <Layout.Section>
                         {this.renderShopifyConfigurationSection()}
                     </Layout.Section>
+                    {this.state.ebay_plan_buy && <Layout.Section>
+                        {this.renderEbayConfig()}
+                    </Layout.Section>}
                     {this.state.amazon_plan_buy && <Layout.Section>
                         {this.renderAmazonCredentials()}
                     </Layout.Section>}
@@ -547,6 +658,32 @@ export class Configuration extends Component {
             });
     }
 
+    ebayConfigurationChange(index, value) {
+        if ( value === 'disable' || value === 'enable' ) {
+            this.state.show_ebay_child_component['sync_field'] = value !== 'enable';
+        }
+        this.state.ebay_configuration_updated = true;
+        this.state.ebay_configuration[this.ebayConfigurationData[index].code] = value;
+        this.updateState();
+    }
+
+    ebayConfigurationCheckboxChange(index, optionIndex, value) {
+        console.log(index, optionIndex, value, this.state.ebay_configuration, this.ebayConfigurationData[index].code);
+        this.state.ebay_configuration_updated = true;
+        const option = this.ebayConfigurationData[index].options[optionIndex].value;
+        const valueIndex = this.state.ebay_configuration[this.ebayConfigurationData[index].code].indexOf(option);
+        if (value) {
+            if (valueIndex === -1) {
+                this.state.ebay_configuration[this.ebayConfigurationData[index].code].push(option);
+            }
+        } else {
+            if (valueIndex !== -1) {
+                this.state.ebay_configuration[this.ebayConfigurationData[index].code].splice(valueIndex, 1);
+            }
+        }
+        this.updateState();
+    }
+
     saveAmazonCredentialsData() {
         requests.postRequest('amazonimporter/request/setAmazonCredentials',this.state.amazon_credentials)
             .then(data => {
@@ -558,6 +695,7 @@ export class Configuration extends Component {
                 }
         });
     }
+
     AmazonCredentialsChange(index, value) {
         this.state.amazon_credentials_updated = true;
         if (this.amazonCredentialsData[index].required) {
@@ -571,6 +709,7 @@ export class Configuration extends Component {
         this.state.amazon_credentials[this.amazonCredentialsData[index].key] = value;
         this.updateState();
     }
+
     AmazonCredentialsCheckboxChange(index, optionIndex, value) {
         this.state.amazon_credentials_updated = true;
         const option = this.amazonCredentialsData[index].options[optionIndex].value;
@@ -625,6 +764,18 @@ export class Configuration extends Component {
         this.state.account_information[key] = value;
         this.state.account_information_updated = true;
         this.updateState();
+    }
+
+    saveEbayConfigData() {
+        requests.postRequest('connector/get/saveConfig', { marketplace: 'ebayimporter', data: this.state.ebay_configuration })
+            .then(data => {
+                if (data.success) {
+                    notify.success(data.message);
+                } else {
+                    notify.error(data.message);
+                }
+                this.getShopifyConfigurations();
+            });
     }
 
     redirect(url) {
