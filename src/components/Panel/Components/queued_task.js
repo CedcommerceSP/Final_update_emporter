@@ -66,15 +66,15 @@ export class QueuedTask extends Component {
                     this.state.totalRecentActivities = data.data.count;
                     this.updateState();
                 }
-                if ( !isUndefined(data.data.rows[1]['message']) && this.state.isAlreadyActive) {
-                    if ( data.data.rows[1]['message'] === 'You can upload upto 50 products on Shopify during your trial period' ) {
-                        // this.redirect('/panel/plans');
-                        this.setState({
-                            isAlreadyActive: false,
-                            modalOpen: true,
-                        });
-                    }
-                }
+                // if ( !isUndefined(data.data.rows[1]['message']) && this.state.isAlreadyActive) {
+                //     if ( data.data.rows[1]['message'] === 'You can upload upto 50 products on Shopify during your trial period' ) {
+                //         // this.redirect('/panel/plans');
+                //         this.setState({
+                //             isAlreadyActive: false,
+                //             modalOpen: true,
+                //         });
+                //     }
+                // }
             });
     }
     handleClearAllActivity = () => {

@@ -1,20 +1,25 @@
 import React, {Component} from 'react';
 import {NavLink} from 'react-router-dom';
-import {Button, Card, Checkbox, Form, FormLayout, Page, Select, TextField,Modal, Label} from '@shopify/polaris';
-import {requests} from '../../../services/request';
+import {Button, Card, Checkbox, Form, FormLayout, Page, Select, TextField,Modal, Label, Banner} from '@shopify/polaris';
 import {isUndefined} from "util";
-import {notify} from "../../../services/notify";
-import './dashboard/dashboard.css';
 import {faCheck} from '@fortawesome/free-solid-svg-icons';
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
-import {term_and_condition} from './dashboard/term&condition';
+
 import PlanBody from "../../../shared/plans/plan-body";
 import AppsShared from "../../../shared/app/apps";
 import InstallAppsShared from "../../../shared/app/install-apps";
 import ConfigShared from "../../../shared/config/config-shared";
+
+import {term_and_condition} from './dashboard/term&condition';
 import AnalyticsReporting from "./products-component/analytics-reporting";
+
+import {requests} from '../../../services/request';
+import {notify} from "../../../services/notify";
 import {globalState} from "../../../services/globalstate";
+
 import {json} from "../../../environments/static-json";
+
+import './dashboard/dashboard.css';
 
 // TODO: remove the variable "Step started on line near to 75"
 // TODO: remove the true condition for step 2 and 3 "Step started on line near to 75"
@@ -134,6 +139,7 @@ class Dashboard extends Component {
         this.checkConfig = this.checkConfig.bind(this);
         this.autoFillDetails();
     }
+
     autoFillDetails(){
         requests.getRequest('frontend/app/getShopDetails').then(data=>{
             if(data.success) {
@@ -145,10 +151,12 @@ class Dashboard extends Component {
             }
         });
     }
+
     componentDidMount() {
         this.setState({stepData:this.state.data.data});
         this.checkStepCompleted();
     }
+
     handleChange = (newValue) => {
         this.setState({
             selected: newValue,
@@ -157,6 +165,7 @@ class Dashboard extends Component {
         });
         this.checkStepCompleted(newValue);
     };// This Function Used for dropdown Selection
+
     checkStepCompleted() {
         let path = '/App/User/Step';
         requests.getRequest('frontend/app/getStepCompleted', {path: path}).then(data => {
@@ -194,6 +203,7 @@ class Dashboard extends Component {
             }
         });
     } // initially run this to check which step is completed
+
     changeStep(arg) { // arg means step number
         let data = this.state.stepData;
         let path = [];
@@ -226,6 +236,7 @@ class Dashboard extends Component {
             }
         });
     } // change stage just pass the completed step here in arg
+
     renderStepper() {
         let flag = 1;
         return (
@@ -254,6 +265,7 @@ class Dashboard extends Component {
             </div>
         );
     }
+
     handleModalChange(event) {
          if ( event === 'init_modal' ) {
             notify.info("Please Select A Integration First")
@@ -261,6 +273,7 @@ class Dashboard extends Component {
             this.setState({modalOpen: !this.state.modalOpen});
         } // if he/she cancel or close the modal
     } // all operation perform on modal of step 3 and step 2 (plan) and also responsible for not closing the init modal comes here
+
     /********************************** MAIN BODY ***************************************/
     renderBody() {
         let flag = 1;
@@ -307,6 +320,7 @@ class Dashboard extends Component {
             })
         );
     }
+
     checkAnchor(data, status) {
         if ( status ) {
             switch (data.anchor) {
@@ -319,6 +333,7 @@ class Dashboard extends Component {
             }
         }
     } // decide where to go when step is active
+
     /****************** step 1 User Information Body Start Here *************************/
     handleSubmit = () => { // this function is used to submit user basic info
         if (this.state.info.term_and_condition &&
@@ -350,6 +365,7 @@ class Dashboard extends Component {
             this.setState({info_error: tempData});
         }
     };
+
     handleFormChange = (field, value) => { // this function is used to submit user basic info
         let data  = this.state.info;
         data[field] = value;
@@ -370,6 +386,7 @@ class Dashboard extends Component {
             this.handleFormChange('mobile_code', temp);
         }
     };
+
     handleOTPSubmit = () => {
         if ( this.state.otpCheck.pin !== '' && !this.state.otpCheck.number_change ) {
             requests.postRequest('core/app/matchOtp', {otp: this.state.otpCheck.pin}).then(data => {
@@ -395,6 +412,7 @@ class Dashboard extends Component {
             notify.info('Field is empty');
         }
     };
+
     handleOTPChange = (arg,value) => {
         if ( arg === 'resend' ) {
             this.handleSubmit();
@@ -404,6 +422,7 @@ class Dashboard extends Component {
             this.setState({otpCheck:otpCheck});
         }
     };
+
     renderGetUserInfo() {
         return (
             <div className="row">
@@ -599,6 +618,7 @@ class Dashboard extends Component {
             </div>
         );
     }
+
     /****************************** step 2 Plans Start Here *****************************/
     checkPayment = () => {
         requests.getRequest('plan/plan/getActive').then(status => {
@@ -618,10 +638,11 @@ class Dashboard extends Component {
                 }
                 this.changeStep(2);
             } else {
-                notify.error(status.message);
+                notify.error('Kindly Buy A Plan First, Then Move To Next Step.');
             }
         });
     };
+
     paymentStatus(event) {
         if ( event === 'Confirmation' ) {
             // this.setState({modalOpen: !this.state.modalOpen});
@@ -642,6 +663,7 @@ class Dashboard extends Component {
             this.checkPayment();
         }
     }
+
     renderPlan = () => {
         if ( localStorage.getItem('plan_status') ) {
             let data = JSON.parse(localStorage.getItem('plan_status'));
@@ -671,15 +693,27 @@ class Dashboard extends Component {
         }
         return (
             <React.Fragment>
+                <Banner status="info">
+                    <div className="row">
+                        <div className="col-12 text-center">
+                            <Label id={1324461}>
+                                <h4>
+                                    Do you want to start your own Shopify store? We can guide you through it. <a href="https://docs.google.com/forms/d/1YPIZ-S3Q_5EwjGWSpgScR-OU0R9YKQQDsdxSXIKPrO4/edit" target="_blank">Contact us!</a>
+                                </h4>
+                            </Label>
+                        </div>
+                    </div>
+                </Banner>
                 <PlanBody paymentStatus={this.paymentStatus}/>;
                 <div className="p-5 text-center">
                     <Button onClick={this.checkPayment} primary>
-                        Continue to next step
+                        Move To Next Step
                     </Button>
                 </div>
             </React.Fragment>
         );
     };
+
     /**************************  Step 3 linked you account start Here  ******************/
     checkLinkedAccount() {
         if ( this.state.importerServices.length > 0 ) {
@@ -697,12 +731,15 @@ class Dashboard extends Component {
             });
         }
     }
+
     openNewWindow(code, val) {
         this.setState({modalOpen: !this.state.modalOpen, code: code, ebay_country_code: val});
     } // Open Modal And A new Small Window For User
+
     handleImporterService = (arg) => {
         this.setState({importerServices:arg});
     };
+
     renderLinkedAccount = () => {
         return <div>
             <AppsShared history={this.props.history} importerServices={this.handleImporterService} redirectResult={this.redirectResult} success={this.state.data3Check}/>
@@ -713,10 +750,12 @@ class Dashboard extends Component {
             </div>
         </div>;
     };
+
     redirectResult(code, val) {
         if ( isUndefined(val) ) { val = '' }
         this.openNewWindow(code, val);
     } // used in step 3 to get child data and send back to new child
+
     /********************** step 4 Configurations start here ****************************/
     checkConfig(val) {
         requests.getRequest('frontend/app/checkDefaultConfiguration?code=' + val).then(data => {
@@ -731,6 +770,7 @@ class Dashboard extends Component {
             }
         });
     }
+
     renderConfig() {
         return (
             <React.Fragment>
@@ -738,6 +778,7 @@ class Dashboard extends Component {
             </React.Fragment>
         );
     }
+
     /************************************  Render()   ***********************************/
     render() {
         return (
@@ -790,16 +831,20 @@ class Dashboard extends Component {
             </Page>
         );
     }
+
     handleLinkedAccount = (event) => {
         this.setState({data3Check:event});
     };
+
     redirect(url) {
         this.props.history.push(url);
     }
+
     updateState() {
         const state = this.state;
         this.setState(state);
     }
+
 }
 
 export default Dashboard;

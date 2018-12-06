@@ -572,9 +572,9 @@ export class Configuration extends Component {
                     <Layout.Section>
                         {this.renderShopifyConfigurationSection()}
                     </Layout.Section>
-                    {this.state.ebay_plan_buy && <Layout.Section>
-                        {this.renderEbayConfig()}
-                    </Layout.Section>}
+                    {/*{this.state.ebay_plan_buy && <Layout.Section>*/}
+                        {/*{this.renderEbayConfig()}*/}
+                    {/*</Layout.Section>}*/}
                     {this.state.amazon_plan_buy && <Layout.Section>
                         {this.renderAmazonCredentials()}
                     </Layout.Section>}
