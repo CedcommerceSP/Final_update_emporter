@@ -37,6 +37,8 @@ class AnalyticsReporting extends Component {
                 body:''
             },
             yaxisimporter:[],
+            uploaded_product: false,
+            imported_product: false,
             activePlan: globalState.getLocalStorage('activePlan')?JSON.parse(globalState.getLocalStorage('activePlan')):[],
         };
 
@@ -200,15 +202,14 @@ class AnalyticsReporting extends Component {
             //            pending+=1;
             //        }
             //     }
+                uploaderarray=[];
+                uploaderarray.push(amazon);
+                uploaderarray.push(ebay);
+                uploaderarray.push(0);
+                this.setState({yaxisuploader:uploaderarray, uploaded_product: true})
+            } else {
+                // this.setState({:true})
             }
-            else {
-                notify.error(data1.message);
-            }
-            uploaderarray=[];
-            uploaderarray.push(amazon);
-            uploaderarray.push(ebay);
-            uploaderarray.push(0);
-            this.setState({yaxisuploader:uploaderarray})
         })
     }
     preparedata(){
@@ -557,7 +558,7 @@ class AnalyticsReporting extends Component {
                     </div>
                 </div>
                 {/*</Card>*/}
-                <div className="CARD w-100" style={{marginTop:75}}>
+                {this.state.uploaded_product && <div className="CARD w-100" style={{marginTop:75}}>
                     <div className={`CARD-title-small text-center BG-primary common`}>
                             <FontAwesomeIcon icon={faArrowAltCircleUp} size="5x"/>
                             {/*// <h1 className="mt-2 font-weight-bold pt-2" style={{fontSize:20}}>Uploader</h1>*/}
@@ -600,7 +601,7 @@ class AnalyticsReporting extends Component {
                             </Card>
                         </div>
                     </div>
-                </div>
+                </div>}
             </Page>
         );
     }

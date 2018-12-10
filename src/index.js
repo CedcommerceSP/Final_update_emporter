@@ -8,7 +8,7 @@ import 'jquery/dist/jquery.slim.min';
 import 'popper.js/dist/umd/popper.min';
 import 'bootstrap/dist/js/bootstrap.min';
 import 'react-dom/cjs/react-dom.production.min';
-import '@shopify/polaris/styles.scss';
+import '@shopify/polaris/styles.css';
 
 import { App } from './App';
 import { ToastContainer } from 'react-toastify';

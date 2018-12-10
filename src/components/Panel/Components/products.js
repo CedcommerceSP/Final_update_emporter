@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
-// import { Link } from 'react-router-dom';
-
+import {isUndefined} from "util";
+import {NavLink} from "react-router-dom";
 import {
     Page,
     Card,
@@ -15,31 +15,32 @@ import {
 
 import { requests } from '../../../services/request';
 import { notify } from '../../../services/notify';
-import SmartDataTable from '../../../shared/smart-table';
-import {isUndefined} from "util";
-import {NavLink} from "react-router-dom";
-import {capitalizeWord} from "./static-functions";
-import {environment} from "../../../environments/environment";
-import {paginationShow} from "./static-functions";
 import {globalState} from "../../../services/globalstate";
+
+import SmartDataTable from '../../../shared/smartTable';
+
+import {capitalizeWord, paginationShow} from "./static-functions";
+
+import {environment} from "../../../environments/environment";
 
 export class Products extends Component {
 
     filters = {
         full_text_search: '',
         marketplace: 'all',
+        single_column_filter: [],
         column_filters: {}
     };
     gridSettings = {
-      variantsCount: 10,
+      variantsCount: "10",
       activePage: 1
     };
     pageLimits = [
-        {label: 10, value: 10},
-        {label: 20, value: 20},
-        {label: 30, value: 30},
-        {label: 40, value: 40},
-        {label: 50, value: 50}
+        {label: 10, value: "10"},
+        {label: 20, value: "20"},
+        {label: 30, value: "30"},
+        {label: 40, value: "40"},
+        {label: 50, value: "50"}
     ];
     massActions = [
         // {label: 'Delete', value: 'delete'},
@@ -81,12 +82,12 @@ export class Products extends Component {
             title: 'Unique Id',
             sortable:false,
         },
-        asin: {
-            title: 'Detail',
-            label:'View', // button Label
-            id:'asin',
-            sortable:false,
-        },
+        // asin: {
+        //     title: 'Detail',
+        //     label:'View', // button Label
+        //     id:'asin',
+        //     sortable:false,
+        // },
     };
     totalProductCount = 0;
 
@@ -182,10 +183,12 @@ export class Products extends Component {
                 }
             });
     }
+
     handleProfileSelect(profile) {
         this.state.uploadProductDetails.selected_profile = profile;
         this.updateState();
     }
+
     getInstalledApps() {
         requests.getRequest('connector/get/getInstalledApps', false, false, true)
             .then(data => {
@@ -271,11 +274,13 @@ export class Products extends Component {
     };
 
     getProducts() {
+        window.showGridLoader = true;
         this.prepareFilterObject();
         const pageSettings = Object.assign({}, this.gridSettings);
         requests.getRequest('connector/product/getProducts', Object.assign( pageSettings, this.state.appliedFilters),false,true)
             .then(data => {
                 if (data.success) {
+                    window.showGridLoader = false;
                     this.setState({totalPage:data.data.count});
                     if ( !isUndefined(data.data.mainCount) ) {
                         this.setState({totalMainCount:data.data.mainCount});
@@ -293,11 +298,15 @@ export class Products extends Component {
                         hideLoader:true,
                         pagination_show: paginationShow(0,0,0,false),
                     });
+                    setTimeout(() => {
+                        window.handleOutOfControlLoader = true;
+                    },3000);
                     notify.error('No products found');
                     this.updateState();
                 }
             });
     }
+
     getMatchingProfiles() {
         this.profilesList = [];
         const data = {
@@ -354,6 +363,7 @@ export class Products extends Component {
                 this.updateState();
             });
     }
+
     prepareFilterObject() {
         this.state.appliedFilters = {};
         if (this.filters.marketplace !== 'all') {
@@ -362,6 +372,24 @@ export class Products extends Component {
         if (this.filters.full_text_search !== '') {
             this.state.appliedFilters['search'] = this.filters.full_text_search;
         }
+        this.filters.single_column_filter.forEach((e, i) => {
+            switch (e.name) {
+                case 'type':
+                case 'title':
+                case 'long_description':
+                    this.state.appliedFilters['filter[details.' + e.name + '][' + e.condition + ']'] = e.value;
+                    break;
+                case 'source_variant_id':
+                case 'sku':
+                case 'price':
+                case 'weight':
+                case 'weight_unit':
+                case 'main_image':
+                case 'quantity':
+                    this.state.appliedFilters['filter[variants.' + e.name + '][' + e.condition + ']'] = e.value;
+                    break;
+            }
+        });
         for (let i = 0; i < Object.keys(this.filters.column_filters).length; i++) {
             const key = Object.keys(this.filters.column_filters)[i];
             if (this.filters.column_filters[key].value !== '') {
@@ -398,18 +426,20 @@ export class Products extends Component {
                 rowData['type'] = data[i].details.type;
                 rowData['quantity'] = data[i].variants['quantity'] !== null?data[i].variants['quantity'].toString():'0';
                 rowData['source_variant_id'] = data[i].variants.source_variant_id.toString();
-                rowData['asin'] = data[i].variants.source_variant_id.toString();
+                // rowData['asin'] = data[i].variants.source_variant_id.toString();
                 products.push(rowData);
             }
         }
         return products;
     }
+
     operations = (event, id) => {
         switch (id) {
-            case 'asin':this.redirect('/panel/products/view/' + event);break;
+            case 'grid':this.redirect('/panel/products/view/' + event['source_variant_id']);break;
             default:console.log('Default Case');
         }
     };
+
     updateState() {
         const state = this.state;
         this.setState(state);
@@ -490,7 +520,7 @@ export class Products extends Component {
                             <div className="col-12">
                                 <SmartDataTable
                                     data={this.state.products}
-                                    uniqueKey="asin"
+                                    uniqueKey="source_variant_id"
                                     showLoaderBar={this.state.showLoaderBar}
                                     count={this.gridSettings.variantsCount}
                                     activePage={this.gridSettings.activePage}
@@ -504,7 +534,8 @@ export class Products extends Component {
                                     withLinks={true}
                                     visibleColumns={this.visibleColumns}
                                     actions={this.massActions}
-                                    showColumnFilters={true}
+                                    showColumnFilters={false}
+                                    showButtonFilter={true}
                                     imageColumns={this.imageColumns}
                                     rowActions={{
                                         edit: false,
@@ -514,10 +545,10 @@ export class Products extends Component {
                                         this.visibleColumns = event;
                                     }}
                                     userRowSelect={(event) => {
-                                        const itemIndex = this.state.selectedProducts.indexOf(event.data.asin);
+                                        const itemIndex = this.state.selectedProducts.indexOf(event.data.source_variant_id);
                                         if (event.isSelected) {
                                             if (itemIndex === -1) {
-                                                this.state.selectedProducts.push(event.data.asin);
+                                                this.state.selectedProducts.push(event.data.source_variant_id);
                                             }
                                         } else {
                                             if (itemIndex !== -1) {
@@ -532,15 +563,15 @@ export class Products extends Component {
                                         let data = this.state.selectedProducts.slice(0);
                                         if (event) {
                                             for (let i = 0; i < rows.length; i++) {
-                                                const itemIndex = this.state.selectedProducts.indexOf(rows[i].asin);
+                                                const itemIndex = this.state.selectedProducts.indexOf(rows[i].source_variant_id);
                                                 if ( itemIndex === -1 ) {
-                                                    data.push(rows[i].asin);
+                                                    data.push(rows[i].source_variant_id);
                                                 }
                                             }
                                         } else {
                                             for (let i = 0; i < rows.length; i++) {
-                                                if ( data.indexOf(rows[i].asin) !== -1 ) {
-                                                    data.splice(data.indexOf(rows[i].asin), 1)
+                                                if ( data.indexOf(rows[i].source_variant_id) !== -1 ) {
+                                                    data.splice(data.indexOf(rows[i].source_variant_id), 1)
                                                 }
                                             }
                                         }
@@ -568,6 +599,10 @@ export class Products extends Component {
                                         this.filters.column_filters = filters;
                                         this.getProducts();
                                     }}
+                                    singleButtonColumnFilter={(filter) => {
+                                        this.filters.single_column_filter = filter;
+                                        this.getProducts();
+                                    }}
                                     sortable
                                 />
                             </div>
@@ -577,15 +612,21 @@ export class Products extends Component {
                                 <Pagination
                                     hasPrevious={1 < this.gridSettings.activePage}
                                     onPrevious={() => {
-                                        this.gridSettings.activePage--;
-                                        this.getProducts();
+                                        if (1 < this.gridSettings.activePage) {
+                                            this.gridSettings.activePage--;
+                                            this.getProducts();
+                                        }
                                     }}
                                     hasNext={this.state.totalPage/this.gridSettings.variantsCount > this.gridSettings.activePage}
-                                    nextKeys={[75]}
-                                    nextTooltip="k"
+                                    nextKeys={[39]}
+                                    previousKeys={[37]}
+                                    previousTooltip="use Right Arrow"
+                                    nextTooltip="use Left Arrow"
                                     onNext={() => {
-                                        this.gridSettings.activePage++;
-                                        this.getProducts();
+                                        if (this.state.totalPage/this.gridSettings.variantsCount > this.gridSettings.activePage ) {
+                                            this.gridSettings.activePage++;
+                                            this.getProducts();
+                                        }
                                     }}
                                 />
                             </div>
@@ -627,6 +668,7 @@ export class Products extends Component {
             </Page>
         );
     }
+
     handleUploadChange(key, value) {
         switch (key) {
             case 'selected_profile':
@@ -717,6 +759,7 @@ export class Products extends Component {
         }
         this.updateState();
     }
+
     renderUploadProductsModal() {
         return (
             <Modal

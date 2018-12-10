@@ -70,14 +70,14 @@ class ViewProducts extends Component {
                 }}}>
                 <Card>
                     <div className="p-5 row">
-                        {/*<div className="col-12 col-sm-4 mb-5" >*/}
-                            {/*<Card>*/}
-                                {/*<div className="p-3">*/}
-                                    {/*<img src={this.state.img} height="200px" alt="Product Image" className="img-show"/>*/}
-                                {/*</div>*/}
-                            {/*</Card>*/}
-                        {/*</div>*/}
-                        <div className="col-12 col-sm-12 mb-5">
+                        <div className="col-12 col-sm-4 mb-5" >
+                            <Card>
+                                <div className="p-3">
+                                    <img src={this.state.img} height="200px" alt="Product Image" className="img-show"/>
+                                </div>
+                            </Card>
+                        </div>
+                        <div className="col-12 col-sm-8 mb-5">
                             <Card>
                                 <div className="p-5" style={{height:'200px',overflow:'auto'}}>
                                     <div className="mb-5">

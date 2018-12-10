@@ -55,7 +55,7 @@ export class Configuration extends Component {
         this.getShopifyConfigurations();
         this.getAmazonImporterConfigurations();
         this.amazonCredentials();
-        this.getEbayConfig();
+        // this.getEbayConfig();
     }
 
     getUserDetails() {
