@@ -298,6 +298,7 @@ export class Products extends Component {
                         hideLoader:true,
                         pagination_show: paginationShow(0,0,0,false),
                     });
+                    window.showGridLoader = false;
                     setTimeout(() => {
                         window.handleOutOfControlLoader = true;
                     },3000);

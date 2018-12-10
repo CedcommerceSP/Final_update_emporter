@@ -348,7 +348,7 @@ class SmartDataTablePlain extends React.Component {
                         </td>:<td key={`row-${i}-column-${j}`} className="table-filers" onClick={this.props.operations.bind(this, row, 'grid')}>
                         {
                             this.state.imageColumns.indexOf(column.key) !== -1 &&
-                            <img src={row[column.key]} style={{width: '50px'}}/>
+                            <img src={row[column.key]} style={{width: '32px'}}/>
                         }
                         {
                             this.state.imageColumns.indexOf(column.key) === -1 && this.state.read_more.indexOf(column.key) !== -1 &&
@@ -766,12 +766,6 @@ class SmartDataTablePlain extends React.Component {
                             </div>
                         }
                     </div>
-                    <div className="col-12 mt-2 mb-2 collapse" id="column-section">
-                        {
-                            this.state.visibleColumns &&
-                            this.renderEnableColumns(columns)
-                        }
-                    </div>
                 </div>
                 <div className="col-12 mb-4">
                     {columnFilterNameArray.map((e, i) => {
@@ -788,6 +782,12 @@ class SmartDataTablePlain extends React.Component {
                             <span className="mr-3"><Tag onRemove={this.handleFilterRemove.bind(this,e)}>{e.name} {condition} to {e.value}</Tag></span>
                         </React.Fragment>)
                     })}
+                </div>
+                <div className="col-12 mt-2 mb-2 collapse" id="column-section">
+                    {
+                        this.state.visibleColumns &&
+                        this.renderEnableColumns(columns)
+                    }
                 </div>
                 <div className='rsdt rsdt-container'>
                     {this.renderToggles(columns)}
