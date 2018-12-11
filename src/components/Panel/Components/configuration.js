@@ -55,7 +55,7 @@ export class Configuration extends Component {
         this.getShopifyConfigurations();
         this.getAmazonImporterConfigurations();
         this.amazonCredentials();
-        // this.getEbayConfig();
+        this.getEbayConfig();
     }
 
     getUserDetails() {
@@ -104,7 +104,7 @@ export class Configuration extends Component {
                                     this.ebayConfigurationData = this.modifyConfigData(data.data, 'ebay_configuration');
                                     this.updateState();
                                 } else {
-                                    notify.error(data.message);
+                                    // notify.error(data.message);
                                 }
                             })
                         }
@@ -572,9 +572,9 @@ export class Configuration extends Component {
                     <Layout.Section>
                         {this.renderShopifyConfigurationSection()}
                     </Layout.Section>
-                    {/*{this.state.ebay_plan_buy && <Layout.Section>*/}
-                        {/*{this.renderEbayConfig()}*/}
-                    {/*</Layout.Section>}*/}
+                    {this.state.ebay_plan_buy && <Layout.Section>
+                        {this.renderEbayConfig()}
+                    </Layout.Section>}
                     {this.state.amazon_plan_buy && <Layout.Section>
                         {this.renderAmazonCredentials()}
                     </Layout.Section>}

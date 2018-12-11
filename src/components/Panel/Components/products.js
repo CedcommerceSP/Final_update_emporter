@@ -417,10 +417,17 @@ export class Products extends Component {
 
     modifyProductsData(data) {
         let products = [];
+        let re = new RegExp("^(https)://", "i");
+        let str = '';
         for (let i = 0; i < data.length; i++) {
             let rowData = {};
             if ( data[i].variants !== {} && !isUndefined(data[i].variants) ) {
-                rowData['main_image'] = data[i].variants['main_image'];
+                str = data[i].variants['main_image'];
+                if ( re.test(str) ) {
+                    rowData['main_image'] = data[i].variants['main_image'];
+                } else {
+                    rowData['main_image'] = 'https://www.csd.uwo.ca/people/gradstudents/zwang688/empty.png';
+                }
                 rowData['title'] = data[i].details.title;
                 rowData['sku'] = data[i].variants['sku'].toString();
                 rowData['price'] = data[i].variants['price'].toString();

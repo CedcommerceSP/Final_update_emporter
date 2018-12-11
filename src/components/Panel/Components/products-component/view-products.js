@@ -13,6 +13,7 @@ class ViewProducts extends Component {
             id:props.match.params.id,
             open: false,
             img:'',
+            img_found: false,
             products_top: {
                 title:'',
                 description:'',
@@ -29,13 +30,19 @@ class ViewProducts extends Component {
             products_bottom: {
             }
         };
+        this.getData();
     }
-    componentWillMount() {
+    getData = () => {
         requests.postRequest('connector/product/getProductById',{'id': this.state.id})
             .then(data => {
                 if ( data.success ) {
                     let temp = this.state;
-                    temp.img = data.data.variants.main_image;
+                    let re = new RegExp("^(https)://", "i");
+                    let str = data.data.variants.main_image;
+                    if ( re.test(str) ) {
+                        temp.img = data.data.variants.main_image;
+                        temp.img_found = true;
+                    }
                     temp.products_top = {
                         title:data.data.details.title,
                         description:data.data.details.long_description
@@ -62,7 +69,7 @@ class ViewProducts extends Component {
                     notify.error(data.message);
                 }
             })
-    }
+    };
     render() {
         return (
             <Page title="View Products" primaryAction={{content:'Back', onClick:() => {
@@ -70,14 +77,15 @@ class ViewProducts extends Component {
                 }}}>
                 <Card>
                     <div className="p-5 row">
-                        <div className="col-12 col-sm-4 mb-5" >
+                        {console.log(this.state.img_found, this.state)}
+                        {this.state.img_found && <div className="col-12 col-sm-4 mb-5" >
                             <Card>
                                 <div className="p-3">
                                     <img src={this.state.img} height="200px" alt="Product Image" className="img-show"/>
                                 </div>
                             </Card>
-                        </div>
-                        <div className="col-12 col-sm-8 mb-5">
+                        </div>}
+                        <div className={`col-12 ${this.state.img_found?'col-sm-8':'col-sm-12'} mb-5`}>
                             <Card>
                                 <div className="p-5" style={{height:'200px',overflow:'auto'}}>
                                     <div className="mb-5">

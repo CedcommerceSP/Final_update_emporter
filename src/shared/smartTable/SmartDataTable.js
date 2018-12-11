@@ -348,7 +348,7 @@ class SmartDataTablePlain extends React.Component {
                         </td>:<td key={`row-${i}-column-${j}`} className="table-filers" onClick={this.props.operations.bind(this, row, 'grid')}>
                         {
                             this.state.imageColumns.indexOf(column.key) !== -1 &&
-                            <img src={row[column.key]} style={{width: '32px'}}/>
+                            <img src={row[column.key]} style={{width: '50px'}}/>
                         }
                         {
                             this.state.imageColumns.indexOf(column.key) === -1 && this.state.read_more.indexOf(column.key) !== -1 &&

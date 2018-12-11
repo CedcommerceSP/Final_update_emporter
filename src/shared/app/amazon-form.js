@@ -24,6 +24,7 @@ class AmazonInstallationForm extends Component {
             dev_credentials: {
                 region_in:['CEDCOMMERCE IN','1634-1171-8947'],
                 region_europe:['CEDCOMMERCE','2336-2330-8975'],
+                region_na:['CedCommerce Inc','337320726556'],
             },
             dev:[]
         };
