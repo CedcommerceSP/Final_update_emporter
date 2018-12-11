@@ -52,11 +52,8 @@ class AmazonInstallationForm extends Component {
                         {/*</Banner>*/}
                     {/*</div>}*/}
                     <div className="col-12 text-right">
-                        <Button onClick={() => {window.open('http://apps.cedcommerce.com/importer/amazon_seller.pdf' )}} size={"slim"}>
-                            Help PDF
-                        </Button> &nbsp;
                         <Button onClick={() => {window.open('http://apps.cedcommerce.com/importer/amazon_UK_IN.pdf' )}} size={"slim"}>
-                            UK & IN Help
+                            Help PDF
                         </Button>
                     </div>
                     {this.state.init_show && this.state.page !== 'config' && this.state.dev.length > 0 && <div className="col-12 mt-1">
