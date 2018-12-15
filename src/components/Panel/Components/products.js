@@ -534,14 +534,14 @@ export class Products extends Component {
                                     activePage={this.gridSettings.activePage}
                                     hideFilters={this.hideFilters}
                                     columnTitles={this.columnTitles}
-                                    multiSelect={true}
+                                    multiSelect={false}
                                     customButton={this.customButton} // button
                                     operations={this.operations} //button
                                     selected={this.state.selectedProducts}
                                     className='ui compact selectable table'
                                     withLinks={true}
                                     visibleColumns={this.visibleColumns}
-                                    actions={this.massActions}
+                                    // actions={this.massActions}
                                     showColumnFilters={false}
                                     showButtonFilter={true}
                                     imageColumns={this.imageColumns}

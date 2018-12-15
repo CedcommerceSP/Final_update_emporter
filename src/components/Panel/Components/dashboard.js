@@ -397,7 +397,10 @@ class Dashboard extends Component {
                         if (data.success) {
                             notify.success(data.message);
                             this.changeStep(1);
-                            window.gtag1 = true
+                            if ( window.gtag1 === 'not_init' ) {
+                                window.gtag1 = 'start';
+                            }
+
                         } else {
                             notify.error(data.message);
                         }

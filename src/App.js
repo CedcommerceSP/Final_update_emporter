@@ -66,6 +66,11 @@ export class App extends Component {
                   this.state.showLoader &&
                   <PageLoader height="100" width="100" type="Watch" color="#3f4eae" > </PageLoader>
               }
+              <div style={{'position':'fixed','bottom':'10px','left':'10px',zIndex:'999999'}}>
+                  <a href={"https://apps.cedcommerce.com/offers/"} target="_blank">
+                      <img src={require('./assets/img/christmas_image.png')} width={"150"}/>
+                  </a>
+              </div>
               <Switch>
                   <Route exact path="/" render={() => (
                       <Redirect to="/auth"/>
