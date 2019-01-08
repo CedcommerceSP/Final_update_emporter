@@ -308,9 +308,13 @@ export class CreateProfile extends Component {
     }
 
     addLabelInCategories(categories) {
-        for (let i = 0; i < categories.length; i++) {
-            categories[i]['label'] = categories[i]['code'];
-            categories[i]['value'] = categories[i]['code'];
+        if ( categories !== null ) {
+            for (let i = 0; i < categories.length; i++) {
+                categories[i]['label'] = categories[i]['code'];
+                categories[i]['value'] = categories[i]['code'];
+            }
+        } else {
+            categories = [];
         }
         return categories;
     }
@@ -647,6 +651,7 @@ export class CreateProfile extends Component {
         this.handleFilterQueryChange(this.state.filterQuery);
         this.updateState();
     }
+
     checkForOptions(value) {
         let temp = false;
         this.sourceAttributes.forEach(data => {
@@ -663,6 +668,9 @@ export class CreateProfile extends Component {
         if (query.position === position) {
             if ( field === 'key' ) {
                 query.primaryQuery[index]['value'] = '';
+                if ( isUndefined(options) ) {
+                    query.primaryQuery[index].options = undefined;
+                }
             }
             if ( !isUndefined(options) ) {
                 query.primaryQuery[index][field] = value;

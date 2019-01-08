@@ -426,8 +426,14 @@ export class Products extends Component {
                 if ( re.test(str) ) {
                     rowData['main_image'] = data[i].variants['main_image'];
                 } else {
-                    rowData['main_image'] = 'https://www.csd.uwo.ca/people/gradstudents/zwang688/empty.png';
+                    if ( data[i]['source_marketplace'] === 'ebayimporter' && typeof data[i]['details']['additional_images'] === 'object'
+                        && !isUndefined(data[i]['details']['additional_images'][0])) {
+                        rowData['main_image'] = data[i]['details']['additional_images'][0];
+                    } else {
+                        rowData['main_image'] = 'https://www.csd.uwo.ca/people/gradstudents/zwang688/empty.png';
+                    }
                 }
+
                 rowData['title'] = data[i].details.title;
                 rowData['sku'] = data[i].variants['sku'].toString();
                 rowData['price'] = data[i].variants['price'].toString();
