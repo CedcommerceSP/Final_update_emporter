@@ -203,10 +203,16 @@ export class Products extends Component {
                 if (data.success) {
                     for (let i = 0; i < data.data.length; i++) {
                         if ( data.data[i].code !== 'shopify' ) {
+                            let title = data.data[i].title;
+                            if ( title === 'Ebay Importer' ) {
+                                title = 'Ebay';
+                            } else if ( title === 'Amazon Importer' ) {
+                                title = 'Amazon';
+                            }
                             this.state.installedApps.push({
                                 id: data.data[i].code,
-                                content: data.data[i].title,
-                                accessibilityLabel: data.data[i].title,
+                                content: title,
+                                accessibilityLabel: title,
                                 panelID: data.data[i].code
                             });
                         }
@@ -368,7 +374,7 @@ export class Products extends Component {
     prepareFilterObject() {
         this.state.appliedFilters = {};
         if (this.filters.marketplace !== 'all') {
-            this.state.appliedFilters['filter[marketplace][1]'] = this.filters.marketplace;
+            this.state.appliedFilters['filter[source_marketplace][1]'] = this.filters.marketplace;
         }
         if (this.filters.full_text_search !== '') {
             this.state.appliedFilters['search'] = this.filters.full_text_search;
@@ -524,9 +530,9 @@ export class Products extends Component {
                             renderItem={item => {}}
                         />
                         <div className="row">
-                            {/*<div className="col-12">*/}
-                                {/*<Tabs tabs={this.state.installedApps} selected={this.state.selectedApp} onSelect={this.handleMarketplaceChange.bind(this)}/>*/}
-                            {/*</div>*/}
+                            <div className="col-12">
+                                <Tabs tabs={this.state.installedApps} selected={this.state.selectedApp} onSelect={this.handleMarketplaceChange.bind(this)}/>
+                            </div>
                             <div className="col-12 p-3 text-right">
                                 <Label>{this.state.pagination_show} products</Label>
                                 <Label>{this.state.totalMainCount && Object.keys(this.filters.column_filters).length <= 0?`Total Main Product ${this.state.totalMainCount}`:''}</Label>

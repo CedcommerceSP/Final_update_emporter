@@ -189,22 +189,11 @@ class AnalyticsReporting extends Component {
                 uploader = data1.data;
                 amazon=data1.data.amazon;
                 ebay=data1.data.ebay;
-            // for(let j=0;j<uploader.length;j++){
-            //    let status=uploader[j].status
-            //        if(status=='approved'){
-            //            approved+=1;
-            //        }
-            //        else if(status=='uploaded'){
-            //            uploaded+=1;
-            //        }
-            //        else if(status=='pending')
-            //        {
-            //            pending+=1;
-            //        }
-            //     }
                 uploaderarray=[];
-                uploaderarray.push(amazon);
-                uploaderarray.push(ebay);
+                if ( amazon !== 0 )
+                    uploaderarray.push(amazon);
+                if ( ebay !== 0 )
+                    uploaderarray.push(ebay);
                 uploaderarray.push(0);
                 this.setState({yaxisuploader:uploaderarray, uploaded_product: true})
             } else {
@@ -274,9 +263,9 @@ class AnalyticsReporting extends Component {
                     '#a3c2c2'
                 ],
                 hoverBackgroundColor: [
-                    '#FF6384',
-                    '#36A2EB',
-                    '#FFCE56',
+                    '#ff4662',
+                    '#2e73eb',
+                    '#ffe736',
                     '#00cc66',
                     '#ff0000',
                     '#ff99ff',
@@ -412,11 +401,10 @@ class AnalyticsReporting extends Component {
 
                 ],
                 hoverBackgroundColor: [
-                    '#FF6384',
-                    '#36A2EB',
-                    '#FFCE56',
-                    '#00cc66',
-                    '#ff0000',
+                    // '#36A2EB',
+                    // '#FFCE56',
+                    '#7bff29',
+                    '#223aeb',
                     '#ff99ff',
                     '#000066',
                     '#990033',
