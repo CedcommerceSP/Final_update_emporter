@@ -187,8 +187,10 @@ class AnalyticsReporting extends Component {
         requests.getRequest('frontend/app/getUploadedProductsCount', {marketplace: uploader_marketplce}).then(data1 => {
             if (data1.success) {
                 uploader = data1.data;
-                amazon=data1.data.amazon;
-                ebay=data1.data.ebay;
+                if ( typeof data1.data.amazon !== "undefined" )
+                    amazon=data1.data.amazon;
+                if ( typeof data1.data.ebay !== "undefined" )
+                    ebay=data1.data.ebay;
                 uploaderarray=[];
                 if ( amazon !== 0 )
                     uploaderarray.push(amazon);

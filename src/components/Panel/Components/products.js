@@ -47,10 +47,10 @@ export class Products extends Component {
         {label: 'Upload', value: 'upload'},
         // {label: 'Upload All', value: 'upload_all'}
     ];
-    visibleColumns = ['main_image','source_variant_id', 'title', 'sku', 'price','quantity','asin'];
+    visibleColumns = ['main_image', 'title', 'sku', 'price','quantity','asin'];
     imageColumns = ['main_image'];
     hideFilters = ['main_image' ,'long_description','type', 'asin'];
-    customButton = ['asin']; // button
+    customButton = ['asin1']; // button
     columnTitles = {
         main_image: {
             title: 'Image',
@@ -79,15 +79,15 @@ export class Products extends Component {
             sortable: false
         },
         source_variant_id: {
-            title: 'Unique Id',
+            title: 'Parent Id',
             sortable:false,
         },
-        // asin: {
-        //     title: 'Detail',
-        //     label:'View', // button Label
-        //     id:'asin',
-        //     sortable:false,
-        // },
+        asin: {
+            title: 'Unique ID',
+            // label:'View', // button Label
+            // id:'asin',
+            sortable:false,
+        },
     };
     totalProductCount = 0;
 
@@ -226,6 +226,7 @@ export class Products extends Component {
     }
 
     handleSelectedUpload = (arg,val) => {
+        console.log(this.filters.marketplace);
         switch (arg) {
             case 'modalClose': this.setState({selectedUploadModal: false}); break;
             case 'profile':
@@ -259,19 +260,32 @@ export class Products extends Component {
                         }
                     })
             } break;
-            case 'Start_Upload':requests.postRequest('connector/product/selectUpload', {
-                                    selected_profile:this.state.selectUpload.value,
-                                    list_ids:this.state.selectedProducts
-                                }).then(data => {
-                                    if ( data.success ) {
-                                        if ( data.code === 'product_upload_started' ) {
-                                            notify.info(data.message)
-                                        }
-                                        setTimeout(() => {this.redirect('/panel/queuedtasks');},400);
-                                    } else {
-                                        notify.error(data.message);
-                                    }
-                                });
+            case 'Start_Upload':
+                requests.getRequest('frontend/app/getShopID?marketplace=shopifygql&source='+this.filters.marketplace).then(e => {
+                    if ( e.success ) {
+                        let source_shop_id = e.data.source_shop_id;
+                        let target_shop_id = e.data.target_shop_id;
+                        requests.postRequest('connector/product/selectProductAndUpload', {
+                            marketplace:'shopifygql',
+                            source:this.filters.marketplace,
+                            source_shop_id: source_shop_id,
+                            target_shop_id:target_shop_id,
+                            selected_profile:this.state.selectUpload.value,
+                            selected_products:this.state.selectedProducts
+                        }).then(data => {
+                            if ( data.success ) {
+                                if ( data.code === 'product_upload_started' ) {
+                                    notify.info(data.message)
+                                }
+                                setTimeout(() => {this.redirect('/panel/queuedtasks');},400);
+                            } else {
+                                notify.error(data.message);
+                            }
+                        });
+                    } else {
+                        notify.error(e.message);
+                    }
+                });
             break;
             case 'select': this.state.selectUpload.value = val;
                             this.setState(this.state);break;
@@ -445,8 +459,9 @@ export class Products extends Component {
                 rowData['price'] = data[i].variants['price'].toString();
                 rowData['type'] = data[i].details.type;
                 rowData['quantity'] = data[i].variants['quantity'] !== null?data[i].variants['quantity'].toString():'0';
-                rowData['source_variant_id'] = data[i].variants.source_variant_id.toString();
-                // rowData['asin'] = data[i].variants.source_variant_id.toString();
+                rowData['source_variant_id'] = data[i].details.source_product_id.toString();
+                // rowData['source_variant_id'] =data[i].variants.source_variant_id.toString();
+                rowData['asin'] = data[i].variants.source_variant_id.toString();
                 products.push(rowData);
             }
         }
@@ -455,7 +470,7 @@ export class Products extends Component {
 
     operations = (event, id) => {
         switch (id) {
-            case 'grid':this.redirect('/panel/products/view/' + event['source_variant_id']);break;
+            case 'grid':this.redirect('/panel/products/view/' + event['asin']);break;
             default:console.log('Default Case');
         }
     };
@@ -513,14 +528,6 @@ export class Products extends Component {
             <Page
                 primaryAction={{content: 'Create Profile', onClick: () => {
                     this.redirect('/panel/profiling/create');
-                        // this.state.uploadProductDetails.source = '';
-                        // this.state.uploadProductDetails.target = '';
-                        // this.state.uploadProductDetails.selected_profile = '';
-                        // this.state.uploadProductDetails.profile_type = '';
-                        // this.state.showUploadProducts = true;
-                        // this.handleUploadChange('target','shopifygql');
-                        // this.handleUploadChange('selected_profile','default_profile');
-                        // this.updateState();
                     }}} style={{cursor: 'pointer'}}
                 title="Products List">
                 <Card>
@@ -546,14 +553,14 @@ export class Products extends Component {
                                     activePage={this.gridSettings.activePage}
                                     hideFilters={this.hideFilters}
                                     columnTitles={this.columnTitles}
-                                    multiSelect={false}
+                                    multiSelect={this.filters.marketplace !== 'all'}
                                     customButton={this.customButton} // button
                                     operations={this.operations} //button
                                     selected={this.state.selectedProducts}
                                     className='ui compact selectable table'
                                     withLinks={true}
                                     visibleColumns={this.visibleColumns}
-                                    // actions={this.massActions}
+                                    actions={this.massActions}
                                     showColumnFilters={false}
                                     showButtonFilter={true}
                                     imageColumns={this.imageColumns}
@@ -664,27 +671,30 @@ export class Products extends Component {
                     open={this.state.selectedUploadModal}
                     onClose={this.handleSelectedUpload.bind(this,'modalClose')}
                     title={"Upload"}
-                    primaryAction={{content:'Accept', onClick:() => { this.handleSelectedUpload('Start_Upload') }}}
+                    primaryAction={{content:'Start Upload', onClick:() => { this.handleSelectedUpload('Start_Upload') }}}
                     secondaryActions={{content:'Cancel', onClick:() => {this.handleSelectedUpload('modalClose')}}}
                 >
                     <Modal.Section>
                         <div>
                             <Banner title="Please Note" status="info">
                                 <Label id={'sUploadLabel'}>
-                                    Product Without an profile, will be uploaded via Default Profile.
+                                    Product without an profile, will be uploaded via Default Profile.
+                                </Label>
+                                <Label id={'sUploadLabel2'}>
+                                    Selected Product if have multiple variants, those variants will also be uploaded.
                                 </Label>
                             </Banner>
-                            <Select
-                                label={'Profile'}
-                                options={this.state.selectUpload.option}
-                                onChange={this.handleSelectedUpload.bind(this,'select')}
-                                value={this.state.selectUpload.value}
-                            />
+                            {/*<Select*/}
+                                {/*label={'Profile'}*/}
+                                {/*options={this.state.selectUpload.option}*/}
+                                {/*onChange={this.handleSelectedUpload.bind(this,'select')}*/}
+                                {/*value={this.state.selectUpload.value}*/}
+                            {/*/>*/}
                         </div>
                     </Modal.Section>
                 </Modal>
                 {this.state.deleteProductData && this.deleteProductModal()}
-                {this.renderUploadProductsModal()}
+                {/*{this.renderUploadProductsModal()}*/}
             </Page>
         );
     }
@@ -913,6 +923,8 @@ export class Products extends Component {
     }
 
     handleMarketplaceChange(event) {
+        this.state.selectedProducts = [];
+        window.showGridLoader = true;
         this.filters.marketplace = this.state.installedApps[event].id;
         this.state.selectedApp = event;
         this.updateState();

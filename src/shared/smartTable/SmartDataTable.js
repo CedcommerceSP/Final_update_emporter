@@ -108,10 +108,6 @@ class SmartDataTablePlain extends React.Component {
         clearInterval(this.stopinterval);
     }
     componentWillUpdate(nextProps, nextState, nextContext) {
-        if (!isUndefined(nextProps.selected)) {
-            this.state.selected = nextProps.selected;
-            this.totalSelected = nextProps.selected.length;
-        }
         if (!isUndefined(nextProps.count) && !isUndefined(nextProps.activePage)) {
             if (nextProps.count !== this.props.count || nextProps.activePage !== this.props.activePage) {
                 this.allSelected = false;
@@ -122,6 +118,16 @@ class SmartDataTablePlain extends React.Component {
         }
     }
     componentWillReceiveProps(nextProps) {
+        if ( !isUndefined(nextProps.multiSelect) ) {
+            this.setState({multiSelect: nextProps.multiSelect});
+            // setTimeout(() => {
+            //     this.setState({showLoaderBar: false});
+            // },1000);
+        }
+        if (!isUndefined(nextProps.selected)) {
+            this.state.selected = nextProps.selected;
+            this.totalSelected = nextProps.selected.length;
+        }
         if ( !isUndefined(nextProps.data) ) {
             if ( this.props.data !== nextProps.data ) {
                 this.setState({showLoaderBar:false});
