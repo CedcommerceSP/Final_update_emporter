@@ -404,7 +404,7 @@ class SmartDataTablePlain extends React.Component {
                 {
                     this.state.rowActions.edit &&
                     <li className="list-inline-item">
-                        <FontAwesomeIcon icon={faEdit} size="sm" color="#3f4eae" onClick={() => {
+                        <FontAwesomeIcon icon={faEdit} size="lg" color="#3f4eae" onClick={() => {
                             this.props.editRow(row);
                         }}/>
                     </li>
@@ -412,7 +412,7 @@ class SmartDataTablePlain extends React.Component {
                 {
                     this.state.rowActions.delete &&
                     <li className="list-inline-item">
-                        <FontAwesomeIcon icon={faTrash} size="sm" color="#3f4eae" onClick={() => {
+                        <FontAwesomeIcon icon={faTrash} size="lg" color="#3f4eae" onClick={() => {
                             this.props.deleteRow(row);
                         }}/>
                     </li>

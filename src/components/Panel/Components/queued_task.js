@@ -104,7 +104,12 @@ export class QueuedTask extends Component {
                                                             <div className="col-12">
                                                                 <Label>{activity.message}</Label>
                                                             </div>
-                                                            <div className="col-12 text-right">
+                                                            <div className="col-6 pt-2">
+                                                                {activity.url !== null && activity.severity !== 'success'?
+                                                                    <a href={activity.url} target={'_blank'}>View Report</a>
+                                                                    :''}
+                                                            </div>
+                                                            <div className="col-6 text-right pt-2">
                                                                 <p>{activity.created_at}</p>
                                                             </div>
                                                         </div>

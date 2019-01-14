@@ -1,13 +1,71 @@
 import React, {Component} from 'react';
-import {Page, Card, DataTable, Label} from "@shopify/polaris";
+import {Page, Card, Pagination, Select, Label} from "@shopify/polaris";
 import * as queryString from "query-string";
 import {requests} from "../../../../services/request";
 import {notify} from "../../../../services/notify";
 import {faArrowsAltH, faMinus} from '@fortawesome/free-solid-svg-icons';
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {isUndefined} from "util";
+import {paginationShow} from "../static-functions";
+import SmartDataTable from "../../../../shared/smart-table";
 
 class ViewProfile extends Component {
+
+    filters = {
+        column_filters: {}
+    };
+    gridSettings = {
+        activePage: 1,
+        count: 5
+    };
+    pageLimits = [
+        {label: 5, value: 5},
+        {label: 10, value: 10},
+        {label: 15, value: 15},
+        {label: 20, value: 20},
+        {label: 25, value: 25}
+    ];
+    visibleColumns = ['source_product_id', 'main_image', 'title', 'sku', 'price'];
+    imageColumns = ['main_image'];
+    columnTitles = {
+        source_product_id: {
+            title: 'ID',
+            sortable: false
+        },
+        main_image: {
+            title: 'Image',
+            sortable: false
+        },
+        title: {
+            title: 'Title',
+            sortable: false
+        },
+        type: {
+            title: 'Type',
+            sortable: false
+        },
+        quantity: {
+            title: 'Quantity',
+            sortable: false
+        },
+        sku: {
+            title: 'Sku',
+            sortable: false
+        },
+        price: {
+            title: 'Price',
+            sortable: false
+        },
+        weight: {
+            title: 'Weight',
+            sortable: false
+        },
+        weight_unit: {
+            title: 'Weight Unit',
+            sortable: false
+        }
+    };
+
     constructor(props) {
         super(props);
         this.state = {
@@ -19,19 +77,32 @@ class ViewProfile extends Component {
                 cat:{name:'Category',value:''},
                 query:{name:'Query',value:''},
             },
+            products: [],
             attributeMapping: [],
             marketplaceAttributes:[],
+            totalPage: 0,
+            pagination_show: 0,
         }
     }
     componentWillMount() {
-        requests.postRequest('connector/profile/getProfile', this.state.queryParams).then(data => {
+        requests.postRequest('connector/profile/getProfile', {id:this.state.queryParams.id,activePage:this.gridSettings.activePage,count:this.gridSettings.count}).then(data => {
             if ( data.success ) {
                 this.prepareData(data.data);
+                const products = this.modifyProductsData(data.data.products_data);
+                this.setState({
+                    products:products,
+                    totalPage:data.data.products_data_count,
+                    pagination_show: paginationShow(this.gridSettings.activePage,this.gridSettings.count,data.data.products_data_count,true)
+                });
             } else {
                 notify.error(data.message);
+                this.setState({
+                    pagination_show: paginationShow(0,0,0,false),
+                });
             }
         })
     }
+
     prepareData(value) {
         let basicInfo = this.state.data;
         let attributeMapping = this.state.attributeMapping;
@@ -78,6 +149,25 @@ class ViewProfile extends Component {
             marketplaceAttributes:marketplaceAttributes
         });
     }
+
+    modifyProductsData(data) {
+        let products = [];
+        for (let i = 0; i < data.length; i++) {
+            let rowData = {};
+            rowData['source_product_id'] = data[i].details.source_product_id.toString();
+            rowData['main_image'] = data[i].variants['main_image'];
+            rowData['title'] = data[i].details.title;
+            rowData['sku'] = data[i].variants['sku'].toString();
+            rowData['price'] = data[i].variants['price'].toString();
+            rowData['quantity'] = isUndefined(data[i].variants['quantity']) || data[i].variants['quantity'] === null ?'':data[i].variants['quantity'].toString();
+            // rowData['type'] = data[i].details.type;
+            // rowData['weight'] = isUndefined(data[i].variants['weight']) || data[i].variants['weight'] === null?'':data[i].variants['weight'].toString();
+            // rowData['weight_unit'] = data[i].variants['weight_unit'];
+            products.push(rowData);
+        }
+        return products;
+    }
+
     render() {
         return (
             <Page title="View" primaryAction={{content:'Back', onClick:() => {this.redirect('/panel/profiling')}}}>
@@ -182,11 +272,66 @@ class ViewProfile extends Component {
                                     </Card>
                                 </div>:null}
                         </Card>
+                        {this.state.products.length > 0 ? <Card title="Product Data">
+                            <div className="p-5">
+                                <div className="row">
+                                    <div className="col-12 text-right">
+                                        <h5 className="mr-5">{this.state.pagination_show} Products</h5>
+                                        <hr/>
+                                    </div>
+                                    <div className="col-12">
+                                        <SmartDataTable
+                                            data={this.state.products}
+                                            uniqueKey="sku"
+                                            columnTitles={this.columnTitles}
+                                            className='ui compact selectable table'
+                                            withLinks={true}
+                                            visibleColumns={this.visibleColumns}
+                                            imageColumns={this.imageColumns}
+                                            getVisibleColumns={(event) => {
+                                                this.visibleColumns = event;
+                                            }}
+                                            sortable
+                                        />
+                                    </div>
+                                </div>
+                                <div className="row mt-3">
+                                    <div className="col-6 text-right">
+                                        <Pagination
+                                            hasPrevious={1 < this.gridSettings.activePage}
+                                            onPrevious={() => {
+                                                this.gridSettings.activePage--;
+                                                this.getProducts();
+                                            }}
+                                            hasNext={this.state.totalPage/this.gridSettings.count > this.gridSettings.activePage}
+                                            onNext={() => {
+                                                this.gridSettings.activePage++;
+                                                this.getProducts();
+                                            }}
+                                        />
+                                    </div>
+                                    <div className="col-md-2 col-sm-2 col-6">
+                                        <Select
+                                            options={this.pageLimits}
+                                            value={this.gridSettings.count}
+                                            onChange={this.pageSettingsChange.bind(this)}>
+                                        </Select>
+                                    </div>
+                                </div>
+                            </div>
+                        </Card>:null}
                     </div>
                 </Card>
             </Page>
         );
     }
+
+    pageSettingsChange(event) {
+        this.gridSettings.count = event;
+        this.gridSettings.activePage = 1;
+        this.getProducts();
+    }
+
     redirect(url) {
         this.props.history.push(url);
     }

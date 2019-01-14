@@ -80,6 +80,11 @@ export class Activities extends Component {
                                                       </h5>
                                                   </div>
                                                   <div className="col-12">
+                                                      {item.url !== null && item.severity !== 'success' ?
+                                                          <a href={item.url} target={'_blank'}>View Report</a>
+                                                          :''}
+                                                  </div>
+                                                  <div className="col-12">
                                                       <div>{item.created_at}</div>
                                                   </div>
                                               </div>

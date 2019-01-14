@@ -146,7 +146,11 @@ export class Profiling extends Component {
                                     showColumnFilters={true}
                                     rowActions={{
                                         edit: false,
-                                        delete: false
+                                        delete: true
+                                    }}
+                                    deleteRow={(row) => {
+                                        if ( window.confirm('Do You Want To Delete This Profile?') )
+                                            this.deleteProfile(row);
                                     }}
                                     columnFilters={(filters) => {
                                         this.filters.column_filters = filters;
@@ -182,6 +186,17 @@ export class Profiling extends Component {
             </Page>
         );
     }
+
+    deleteProfile = (row) => {
+        requests.getRequest('connector/profile/delete?id='+ row['profile_id']).then(e => {
+            if ( e.success ) {
+                notify.success(e.message);
+            } else {
+                notify.error(e.message);
+            }
+            this.getProfiles();
+        });
+    };
 
     pageSettingsChange(event) {
         this.gridSettings.count = event;
