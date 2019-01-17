@@ -97,12 +97,33 @@ export class Profiling extends Component {
                 source: profiles[i].source === 'amazonimporter'?'Amazon':profiles[i].source,
                 target: profiles[i].target === 'shopifygql'?'Shopify':profiles[i].target,
                 targetCategory: profiles[i].targetCategory,
-                query: profiles[i].query,
+                query: this.preapreUser(profiles[i].query),
                 profile_id: profiles[i].profile_id
             });
         }
         return profilesList;
     }
+
+    preapreUser = (str) => {
+        let equals = '==';
+        let nequals = '!=';
+        let like = '%LIKE%';
+        let nlike = '!%LIKE%';
+        let gt = '<';
+        let lt = '>';
+        let gte = '<=';
+        let lte = '>=';
+        str = str.replace(new RegExp(equals, 'g'), "Equals");
+        str = str.replace(new RegExp(nequals, 'g'), "Not Equals");
+        str = str.replace(new RegExp(nlike, 'g'), "Not Contains");
+        str = str.replace(new RegExp(like, 'g'), "Contains");
+        str = str.replace(new RegExp(gt, 'g'), "greater then");
+        str = str.replace(new RegExp(gte, 'g'), "greater then equals to");
+        str = str.replace(new RegExp(lte, 'g'), "less then equals to");
+        str = str.replace(new RegExp(lt, 'g'), "less then");
+        str = str.replace(new RegExp("&&", 'g'), "And");
+        return str;
+    };
 
     prepareFilterObject() {
         const filters = {};

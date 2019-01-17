@@ -111,7 +111,7 @@ class ViewProfile extends Component {
         basicInfo.source.value = value.source === 'amazonimporter'?'Amazon':value.source;
         basicInfo.target.value = value.target === 'shopifygql'?'Shopify':value.target;
         basicInfo.cat.value = value.targetCategory;
-        basicInfo.query.value = value.query;
+        basicInfo.query.value = this.preapreUser(value.query);
         if ( !isUndefined(value.attributeMapping) && value.attributeMapping !== null ){
             value.attributeMapping.forEach(e => {
                 if ( e.mappedTo !== '' || e.defaultValue !== '' ) {
@@ -167,6 +167,27 @@ class ViewProfile extends Component {
         }
         return products;
     }
+
+    preapreUser = (str) => {
+        let equals = '==';
+        let nequals = '!=';
+        let like = '%LIKE%';
+        let nlike = '!%LIKE%';
+        let gt = '<';
+        let lt = '>';
+        let gte = '<=';
+        let lte = '>=';
+        str = str.replace(new RegExp(equals, 'g'), "Equals");
+        str = str.replace(new RegExp(nequals, 'g'), "Not Equals");
+        str = str.replace(new RegExp(nlike, 'g'), "Not Contains");
+        str = str.replace(new RegExp(like, 'g'), "Contains");
+        str = str.replace(new RegExp(gt, 'g'), "greater then");
+        str = str.replace(new RegExp(gte, 'g'), "greater then equals to");
+        str = str.replace(new RegExp(lte, 'g'), "less then equals to");
+        str = str.replace(new RegExp(lt, 'g'), "less then");
+        str = str.replace(new RegExp("&&", 'g'), "And");
+        return str;
+    };
 
     render() {
         return (

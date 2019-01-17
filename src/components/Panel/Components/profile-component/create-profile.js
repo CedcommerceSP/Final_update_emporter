@@ -10,6 +10,7 @@ import { Page,
     Modal,
     Checkbox,
     Banner,
+    DatePicker,
     DisplayText } from '@shopify/polaris';
 
 import './create-profile.css';
@@ -52,6 +53,7 @@ export class CreateProfile extends Component {
 
     constructor() {
         super();
+        let today_date = new Date();
         this.state = {
             activeStep: 1,
             filterQuery: {
@@ -81,6 +83,16 @@ export class CreateProfile extends Component {
             targetAttributes: [],
             sourceAttributes: [],
             activePlan: globalState.getLocalStorage('activePlan')?JSON.parse(globalState.getLocalStorage('activePlan')):[],
+            today: {
+                end:new Date(),
+                start:new Date(),
+            },
+            dd: today_date.getDate(),
+            mm: today_date.getMonth(), //January is 0!
+            yyyy: today_date.getFullYear(),
+            month:{},
+            year:{},
+            selected:{}
         };
         this.getProfile();
     }
@@ -459,17 +471,28 @@ export class CreateProfile extends Component {
                                                 value={query.key}
                                             />
                                         </div>
-                                        <div className="col-md-4 col-sm-4 col-6 pt-3">
-                                            <Select
-                                                label="Operator"
-                                                options={this.filterConditions}
-                                                placeholder="Select Operator"
-                                                onChange={this.handleQueryBuilderChange.bind(this, querySet.position, querySet.primaryQuery.indexOf(query), 'operator')}
-                                                value={query.operator}
-                                            />
+                                        <div className={`${query.key === 'importdate'?'col-8':'col-md-4 col-sm-4 col-6'} pt-3`}>
+                                            {
+                                                query.key === 'importdate'?<DatePicker
+                                                    month={this.state.month[querySet.position][querySet.primaryQuery.indexOf(query)]}
+                                                    year={this.state.year[querySet.position][querySet.primaryQuery.indexOf(query)]}
+                                                    multiMonth={true}
+                                                    allowRange={true}
+                                                    selected={this.state.selected[querySet.position][querySet.primaryQuery.indexOf(query)]}
+                                                    onChange={this.handleChange.bind(this, querySet.position, querySet.primaryQuery.indexOf(query))}
+                                                    onMonthChange={this.handleMonthChange.bind(this, querySet.position, querySet.primaryQuery.indexOf(query))}
+                                                />:<Select
+                                                    label="Operator"
+                                                    options={this.filterConditions}
+                                                    placeholder="Select Operator"
+                                                    onChange={this.handleQueryBuilderChange.bind(this, querySet.position, querySet.primaryQuery.indexOf(query), 'operator')}
+                                                    value={query.operator}
+                                                />
+                                            }
                                         </div>
                                         <div className="col-md-4 col-sm-4 col-6 pt-3">
-                                            {isUndefined(query.options) || query.options.length <= 0?<TextField
+                                            {
+                                                query.key === 'importdate'?null:isUndefined(query.options) || query.options.length <= 0?<TextField
                                                 label="Value"
                                                 value={query.value}
                                                 placeholder="Filter Value"
@@ -532,8 +555,30 @@ export class CreateProfile extends Component {
         );
     }
 
+    handleChange = (position,index,value) => {
+        let selected = this.state.selected;
+        selected[position][index] = value;
+        // this.prepareDateQuery(this.state.products_select.query, selected);
+        this.handleFilterQueryChange(this.state.filterQuery);
+        this.setState({selected: selected});
+    };
+
+    handleMonthChange = (position,index,month, year) => {
+        let mm = this.state.month;
+        let yy = this.state.year;
+
+        mm[position][index] = month;
+        yy[position][index] = year;
+
+        this.setState({
+            month: mm,
+            year:yy,
+        });
+    };
+
     handleFilterQueryChange(query) {
         this.state.products_select.query = this.prepareQuery(Object.assign({},query), '');
+        // this.prepareDateQuery(this.prepareQuery(Object.assign({},query), ''), this.state.selected);
     }
 
     prepareQuery(query, preparedQuery) {
@@ -545,6 +590,12 @@ export class CreateProfile extends Component {
                 query.primaryQuery[i].value !== '') {
                 preparedQuery += end + query.primaryQuery[i].key + ' ' + query.primaryQuery[i].operator + ' ' + query.primaryQuery[i].value;
                 end = ' && ';
+            } else if (query.primaryQuery[i].key === 'importdate') {
+                let date = this.prepareSingleDateQuery(query.position,i);
+                preparedQuery += end + date;
+                if ( date !== '') {
+                    end = ' && ';
+                }
             }
         }
         preparedQuery += ')';
@@ -558,6 +609,81 @@ export class CreateProfile extends Component {
             }
         }
         return preparedQuery;
+    }
+
+    prepareDateQuery(query, data) {
+        let date = '(';
+        Object.keys(data).forEach(p_key => {
+            if ( date !== '(' ) {
+                date = date + ' || (';
+            }
+            Object.keys(data[p_key]).forEach(c_key => {
+                if ( date !== '(' && date[date.length - 1] !== '(' ) {
+                    date = date + ' &&';
+                }
+                if ( !isUndefined(data[p_key][c_key]['end']) ) {
+                    let start = new Date(data[p_key][c_key]['start']);
+                    let end = new Date(data[p_key][c_key]['end']);
+                    let month_start = start.getMonth() + 1;
+                    let day_start = start.getDate();
+                    let month_end = end.getMonth() + 1;
+                    let day_end = end.getDate();
+                    if ( month_start < 10 ) {
+                        month_start = '0' + month_start;
+                    }
+                    if ( day_start < 10 ) {
+                        day_start = '0' + day_start;
+                    }
+                    if ( month_end < 10 ) {
+                        month_end = '0' + month_end;
+                    }
+                    if ( day_end < 10 ) {
+                        day_end = '0' + day_end;
+                    }
+                    start = start.getFullYear() + '-' + month_start + '-' + day_start;
+                    end = end.getFullYear() + '-' + month_end + '-' + day_end;
+                    date = date + ' date from ' + start + ' to ' + end;
+                }
+            });
+            if ( date !== '(' ) {
+                date = date + ' )';
+            }
+        });
+        if ( date === '(' ) {
+            date = '';
+        }
+        let products = this.state.products_select;
+        products['query'] = date;
+        this.setState({products_select: products});
+    }
+
+    prepareSingleDateQuery(p_key, c_key) {
+        let data = this.state.selected;
+        if ( !isUndefined(data[p_key][c_key]['end']) ) {
+            let start = new Date(data[p_key][c_key]['start']);
+            let end = new Date(data[p_key][c_key]['end']);
+            let month_start = start.getMonth() + 1;
+            let day_start = start.getDate();
+            let month_end = end.getMonth() + 1;
+            let day_end = end.getDate();
+            if ( month_start < 10 ) {
+                month_start = '0' + month_start;
+            }
+            if ( day_start < 10 ) {
+                day_start = '0' + day_start;
+            }
+            if ( month_end < 10 ) {
+                month_end = '0' + month_end;
+            }
+            if ( day_end < 10 ) {
+                day_end = '0' + day_end;
+            }
+            start = start.getFullYear() + '-' + month_start + '-' + day_start;
+            end = end.getFullYear() + '-' + month_end + '-' + day_end;
+            let query = 'date from ' + start + ' to ' + end;
+            return query;
+        }
+        return '';
     }
 
     handleDeleteRule(position, index) {
@@ -636,6 +762,26 @@ export class CreateProfile extends Component {
     }
 
     handleQueryBuilderChange(position, index, field, value) {
+        if ( value === 'importdate' ) {
+            let month = this.state.month;
+            let year = this.state.year;
+            let selected = this.state.selected;
+            if ( isUndefined(month[position]) ) {
+                month[position] = {};
+            }
+            month[position][index] = this.state.mm;
+            if ( isUndefined(year[position]) )
+                year[position] = {};
+            year[position][index] = this.state.yyyy;
+            if ( isUndefined(selected[position]) )
+                selected[position] = {};
+            selected[position][index] = this.state.today;
+            this.setState({
+                month: month,
+                year: year,
+                selected: selected
+            });
+        }
         this.checkForOptions(value);
         this.filteredProducts.runQuery = false;
         if (field === 'key') {

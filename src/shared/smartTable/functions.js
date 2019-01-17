@@ -149,7 +149,7 @@ export function sortData(filterValue, sorting, data) {
   }
   return filterRows(filterValue, sortedRows)
 }
-export function columnFilterName(columnTitles, hideFilters) {
+export function columnFilterName(columnTitles, hideFilters, datePicker) {
     let val = [];
     if ( !isUndefined(columnTitles) ) {
         if ( !isUndefined(hideFilters) ) {
@@ -165,6 +165,9 @@ export function columnFilterName(columnTitles, hideFilters) {
                 val.push({label:columnTitles[key].title, value:key, type: type});
             })
         }
+    }
+    if ( datePicker ) {
+        val.push({label:'datePicker', value:'datePicker', type: 'date'});
     }
     return val;
 }

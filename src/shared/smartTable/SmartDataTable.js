@@ -31,7 +31,7 @@ import {
     Button,
     Label,
     Icon, SkeletonBodyText, Spinner, SkeletonDisplayText,
-    EmptyState, Card, FormLayout, Popover, Tag
+    EmptyState, Card, FormLayout, Popover, Tag, DatePicker
 } from '@shopify/polaris';
 
 import {FontAwesomeIcon} from '@fortawesome/react-fontawesome';
@@ -59,6 +59,7 @@ class SmartDataTablePlain extends React.Component {
     stopinterval = '';
     constructor(props) {
         super(props);
+        let today_date = new Date();
         this.state = {
             asyncData: [],
             colProperties: {},
@@ -72,6 +73,7 @@ class SmartDataTablePlain extends React.Component {
             count: isUndefined(props.count) ? false : props.multiSelect,
             hideResetFilter: isUndefined(props.hideResetFilter) ? false : props.hideResetFilter,
             activePage: isUndefined(props.activePage) ? false : props.multiSelect,
+            datePicker: isUndefined(props.datePicker) ? false : props.datePicker,
             vieworderaction: isUndefined(props.vieworderaction) ? false : props.vieworderaction,
             multiSelect: isUndefined(props.multiSelect) ? false : props.multiSelect,
             selected: isUndefined(props.selected) ? [] : props.selected,
@@ -90,9 +92,16 @@ class SmartDataTablePlain extends React.Component {
             columnFilters: {},
             showColumnFilters: isUndefined(props.showColumnFilters) ? false : props.showColumnFilters,
             showButtonFilter: isUndefined(props.showButtonFilter) ? false : props.showButtonFilter,
-            columnFilterName: columnFilterName(props.columnTitles, props.hideFilters),
+            columnFilterName: columnFilterName(props.columnTitles, props.hideFilters, !isUndefined(props.datePicker)),
             columnFilterNameValue:{name:'',condition:'',value:''},
             columnFilterNameArray:[],
+            today: {
+                end:new Date(),
+                start:new Date(),
+            },
+            dd: today_date.getDate(),
+            mm: today_date.getMonth(), //January is 0!
+            yyyy: today_date.getFullYear(),
         };
         this.prepareDefaultColumns();
         this.handleColumnToggle = this.handleColumnToggle.bind(this);
@@ -635,6 +644,7 @@ class SmartDataTablePlain extends React.Component {
     handleButtonFilterChange = (fieldName, value) => {
         let { columnFilterNameValue } = this.state;
         let { columnFilterName } = this.state;
+        console.log(columnFilterName);
         columnFilterName.forEach(key => {
             if ( key.value === value ) {
                 if ( key.type === 'int' && fieldName === 'name') {
@@ -652,8 +662,8 @@ class SmartDataTablePlain extends React.Component {
         let { columnFilterNameValue } = this.state;
         let { columnFilterNameArray } = this.state;
         columnFilterNameArray.push(columnFilterNameValue);
-        columnFilterNameValue = {name:'', condition:'', value:'', isInt: false};
         this.props.singleButtonColumnFilter(columnFilterNameArray);
+        columnFilterNameValue = {name:'', condition:'', value:'', isInt: false};
         this.setState({
             columnFilterNameValue: columnFilterNameValue,
             columnFilterNameArray: columnFilterNameArray
@@ -671,6 +681,41 @@ class SmartDataTablePlain extends React.Component {
         if ( !isUndefined(this.props.showLoaderBar) ) {
             this.setState({showLoaderBar:this.props.showLoaderBar});
         }
+    };
+    handleChange = value => {
+        let { columnFilterNameValue } = this.state;
+        let start = new Date(value.start);
+        let end = new Date(value.end);
+        let month_start = start.getMonth() + 1;
+        let day_start = start.getDate();
+        let month_end = end.getMonth() + 1;
+        let day_end = end.getDate();
+        if ( month_start < 10 ) {
+            month_start = '0' + month_start;
+        }
+        if ( day_start < 10 ) {
+            day_start = '0' + day_start;
+        }
+        if ( month_end < 10 ) {
+            month_end = '0' + month_end;
+        }
+        if ( day_end < 10 ) {
+            day_end = '0' + day_end;
+        }
+        start = start.getFullYear() + '-' + month_start + '-' + day_start;
+        end = end.getFullYear() + '-' + month_end + '-' + day_end;
+        let query = 'date from ' + start + ' to ' + end;
+        columnFilterNameValue['condition'] = start;
+        columnFilterNameValue['value'] = end;
+        console.log(query);
+        this.setState({ today: value ,columnFilterNameValue:columnFilterNameValue});
+    };
+
+    handleMonthChange = (month, year) => {
+        this.setState({
+            mm:month,
+            yyyy: year
+        });
     };
     render() {
         const {
@@ -712,7 +757,15 @@ class SmartDataTablePlain extends React.Component {
                                             value={this.state.columnFilterNameValue.name}
                                             onChange={this.handleButtonFilterChange.bind(this,'name')}
                                         />
-                                        {this.state.columnFilterNameValue.name !== '' && <Select
+                                        {this.state.columnFilterNameValue.name === 'datePicker' ? <DatePicker
+                                            month={this.state.mm}
+                                            year={this.state.yyyy}
+                                            multiMonth={false}
+                                            allowRange={true}
+                                            selected={this.state.today}
+                                            onChange={this.handleChange}
+                                            onMonthChange={this.handleMonthChange}
+                                        /> :this.state.columnFilterNameValue.name !== '' && <Select
                                             label="Condition"
                                             disabled={this.state.columnFilterNameValue.name === ''}
                                             placeholder={"select contains"}
@@ -720,7 +773,7 @@ class SmartDataTablePlain extends React.Component {
                                             value={this.state.columnFilterNameValue.condition}
                                             onChange={this.handleButtonFilterChange.bind(this,'condition')}
                                         />}
-                                        {this.state.columnFilterNameValue.condition !== '' && <TextField
+                                        {this.state.columnFilterNameValue.name !== 'datePicker' && this.state.columnFilterNameValue.condition !== '' && <TextField
                                             label="Value"
                                             disabled={this.state.columnFilterNameValue.condition === ''}
                                             placeholder={"Enter Value"}
@@ -729,9 +782,11 @@ class SmartDataTablePlain extends React.Component {
                                             readOnly={false}/>}
                                         <Button size="slim"
                                                 primary
-                                                disabled={this.state.columnFilterNameValue.name === '' ||
+                                                disabled={
+                                                this.state.columnFilterNameValue.name === '' ||
                                                 this.state.columnFilterNameValue.condition === '' ||
-                                                this.state.columnFilterNameValue.value.trim() === ''}
+                                                this.state.columnFilterNameValue.value.trim() === ''
+                                                }
                                                 onClick={this.handleButtonFilterSubmit}
                                         >
                                             Add filter
@@ -783,6 +838,9 @@ class SmartDataTablePlain extends React.Component {
                             case '5' : condition = 'start with';break;
                             case '6' : condition = 'end with';break;
                             default : condition = 'equals';
+                        }
+                        if ( e.name === 'datePicker' ) {
+                            condition = 'from ' + e.condition;
                         }
                         return (<React.Fragment key={i}>
                             <span className="mr-3"><Tag onRemove={this.handleFilterRemove.bind(this,e)}>{e.name} {condition} to {e.value}</Tag></span>

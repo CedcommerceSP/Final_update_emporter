@@ -409,6 +409,10 @@ export class Products extends Component {
                 case 'quantity':
                     this.state.appliedFilters['filter[variants.' + e.name + '][' + e.condition + ']'] = e.value;
                     break;
+                case 'datePicker' :
+                    this.state.appliedFilters['filter[date][from]'] = e.condition; // start date
+                    this.state.appliedFilters['filter[date][to]'] = e.value;// end date
+                    break;
             }
         });
         for (let i = 0; i < Object.keys(this.filters.column_filters).length; i++) {
@@ -553,6 +557,7 @@ export class Products extends Component {
                                     activePage={this.gridSettings.activePage}
                                     hideFilters={this.hideFilters}
                                     columnTitles={this.columnTitles}
+                                    datePicker={true}
                                     multiSelect={this.filters.marketplace !== 'all'}
                                     customButton={this.customButton} // button
                                     operations={this.operations} //button
