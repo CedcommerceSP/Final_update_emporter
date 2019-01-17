@@ -122,7 +122,9 @@ export class Products extends Component {
             pagination_show:0,
             selectedUploadModal: false,
             selectUpload:{option:[],value:''},
-            selectImporterService:[]
+            selectImporterService:[],
+            parent_sku: 0,
+            child_sku:0,
         };
         this.getAllImporterServices();
         // this.getAllUploaderServices();
@@ -231,35 +233,24 @@ export class Products extends Component {
             case 'modalClose': this.setState({selectedUploadModal: false}); break;
             case 'profile':
                 this.state.selectUpload.option = [];
-                for( let i = 0; i < this.state.selectImporterService.length; i++) {
                 let data = {
-                    target:'shopifygql',
-                    source: this.state.selectImporterService[i],
-                    target_shop: globalState.getLocalStorage('shop')?globalState.getLocalStorage('shop'):''
+                    'list_ids': this.state.selectedProducts
                 };
-                requests.getRequest('connector/profile/getMatchingProfiles', data)
+                requests.postRequest('frontend/app/getSKUCount', data)
                     .then(data => {
                         if (data.success) {
-                            if ( this.state.selectUpload.option.length < 1 ) {
-                                this.state.selectUpload.option.push({
-                                    label: 'Default Profile',
-                                    value: 'default_profile'
-                                });
+                            console.log(data);
+                            if ( !isUndefined(data.data.parent) && !isUndefined(data.data.child) ) {
+                                this.setState({selectedUploadModal: true, parent_sku: data.data.parent, child_sku: data.data.child});
+                            } else {
+                                notify.warn('Something Went Wrong');
                             }
-                            for (let i = 0; i < data.data.length; i++) {
-                                this.state.selectUpload.option.push({
-                                    label: data.data[i].name,
-                                    value: data.data[i].id
-                                });
-                            }
-                            this.state.selectUpload.value = 'default_profile';
-                            this.setState({selectedUploadModal: true});
                             this.updateState();
                         } else {
                             notify.error(data.message);
                         }
-                    })
-            } break;
+                    });
+            break;
             case 'Start_Upload':
                 requests.getRequest('frontend/app/getShopID?marketplace=shopifygql&source='+this.filters.marketplace).then(e => {
                     if ( e.success ) {
@@ -410,8 +401,8 @@ export class Products extends Component {
                     this.state.appliedFilters['filter[variants.' + e.name + '][' + e.condition + ']'] = e.value;
                     break;
                 case 'datePicker' :
-                    this.state.appliedFilters['filter[date][from]'] = e.condition; // start date
-                    this.state.appliedFilters['filter[date][to]'] = e.value;// end date
+                    this.state.appliedFilters['filter[details.created_at][7][from]'] = e.condition; // start date
+                    this.state.appliedFilters['filter[details.created_at][7][to]'] = e.value;// end date
                     break;
             }
         });
@@ -557,7 +548,7 @@ export class Products extends Component {
                                     activePage={this.gridSettings.activePage}
                                     hideFilters={this.hideFilters}
                                     columnTitles={this.columnTitles}
-                                    datePicker={true}
+                                    datePicker={this.filters.marketplace === 'amazonimporter'}
                                     multiSelect={this.filters.marketplace !== 'all'}
                                     customButton={this.customButton} // button
                                     operations={this.operations} //button
@@ -687,6 +678,12 @@ export class Products extends Component {
                                 </Label>
                                 <Label id={'sUploadLabel2'}>
                                     Selected Product if have multiple variants, those variants will also be uploaded.
+                                </Label>
+                                <br/>
+                                <Label id={'sUploadLabel3'}>
+                                    <h5>Total Selected Products:</h5>
+                                    <h5>Parent: <b>{this.state.parent_sku}</b></h5>
+                                    <h5>Variants: <b>{this.state.child_sku}</b></h5>
                                 </Label>
                             </Banner>
                             {/*<Select*/}

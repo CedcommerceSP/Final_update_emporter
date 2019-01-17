@@ -127,6 +127,13 @@ class SmartDataTablePlain extends React.Component {
         }
     }
     componentWillReceiveProps(nextProps) {
+        if ( !isUndefined(nextProps.datePicker) ) {
+            let columnFilterNameValue = {name:'', condition:'', value:'', isInt: false};
+            this.setState({
+                columnFilterName: columnFilterName(nextProps.columnTitles, nextProps.hideFilters, nextProps.datePicker),
+                columnFilterNameValue: columnFilterNameValue
+            });
+        }
         if ( !isUndefined(nextProps.multiSelect) ) {
             this.setState({multiSelect: nextProps.multiSelect});
             // setTimeout(() => {

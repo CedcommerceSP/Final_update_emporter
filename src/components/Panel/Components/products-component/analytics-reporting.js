@@ -188,14 +188,15 @@ class AnalyticsReporting extends Component {
             if (data1.success) {
                 uploader = data1.data;
                 if ( typeof uploader !== "undefined") {
-                    if ( uploader.amazon === undefined )
+                    if ( typeof uploader.amazon !== "undefined" )
                         amazon=uploader.amazon;
                     if ( typeof uploader.ebay !== "undefined" )
                         ebay=uploader.ebay;
                 }
                 uploaderarray=[];
-                if ( amazon !== 0 )
+                if ( amazon !== 0 ) {
                     uploaderarray.push(amazon);
+                }
                 if ( ebay !== 0 )
                     uploaderarray.push(ebay);
                 uploaderarray.push(0);
