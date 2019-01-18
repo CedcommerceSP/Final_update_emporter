@@ -31,7 +31,7 @@ import {
     Button,
     Label,
     Icon, SkeletonBodyText, Spinner, SkeletonDisplayText,
-    EmptyState, Card, FormLayout, Popover, Tag, DatePicker
+    EmptyState, Card, FormLayout, Popover, Tag, DatePicker,Badge
 } from '@shopify/polaris';
 
 import {FontAwesomeIcon} from '@fortawesome/react-fontawesome';
@@ -379,7 +379,8 @@ class SmartDataTablePlain extends React.Component {
                                 <div className="scroll">
                                     <span dangerouslySetInnerHTML={{__html: row[column.key]}}/>
                                 </div> :
-                                this.state.imageColumns.indexOf(column.key) === -1 && this.state.customButton.indexOf(column.key) === -1 &&
+                                this.state.imageColumns.indexOf(column.key) === -1 && this.state.customButton.indexOf(column.key) === -1 ?
+                                    column.key === 'upload_status'? <Badge status={row[column.key]}><span style={{backgroundColor:"transparent"}}>.</span></Badge>:
                                 <Label><ErrorBoundary>
                                     {/*<TableCell withLinks={withLinks} filterValue={filterValue}>*/}
                                     <p style={{overflow: 'hidden',
@@ -390,7 +391,7 @@ class SmartDataTablePlain extends React.Component {
                                         {row[column.key]}
                                     </p>
                                     {/*</TableCell>*/}
-                                </ErrorBoundary></Label>
+                                </ErrorBoundary></Label>:null
                         }
                     </td>
                 )

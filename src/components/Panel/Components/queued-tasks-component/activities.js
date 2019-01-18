@@ -80,7 +80,7 @@ export class Activities extends Component {
                                                       </h5>
                                                   </div>
                                                   <div className="col-12">
-                                                      {item.url !== null && item.severity !== 'success' ?
+                                                      {item.url !== null ?
                                                           <a href={item.url} target={'_blank'}>View Report</a>
                                                           :''}
                                                   </div>

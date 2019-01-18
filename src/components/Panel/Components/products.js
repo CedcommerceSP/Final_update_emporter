@@ -47,9 +47,9 @@ export class Products extends Component {
         {label: 'Upload', value: 'upload'},
         // {label: 'Upload All', value: 'upload_all'}
     ];
-    visibleColumns = ['main_image', 'title', 'sku', 'price','quantity','asin'];
+    visibleColumns = ['main_image', 'title', 'sku', 'price','quantity','asin', 'upload_status'];
     imageColumns = ['main_image'];
-    hideFilters = ['main_image' ,'long_description','type', 'asin'];
+    hideFilters = ['main_image' ,'long_description','type', 'asin', 'upload_status'];
     customButton = ['asin1']; // button
     columnTitles = {
         main_image: {
@@ -84,9 +84,11 @@ export class Products extends Component {
         },
         asin: {
             title: 'Unique ID',
-            // label:'View', // button Label
-            // id:'asin',
             sortable:false,
+        },
+        upload_status: {
+            title: 'Upload Status',
+            sortable: false,
         },
     };
     totalProductCount = 0;
@@ -455,6 +457,7 @@ export class Products extends Component {
                 rowData['type'] = data[i].details.type;
                 rowData['quantity'] = data[i].variants['quantity'] !== null?data[i].variants['quantity'].toString():'0';
                 rowData['source_variant_id'] = data[i].details.source_product_id.toString();
+                rowData['upload_status'] = !isUndefined(data[i].upload_status) && data[i].upload_status? 'success':'warning';
                 // rowData['source_variant_id'] =data[i].variants.source_variant_id.toString();
                 rowData['asin'] = data[i].variants.source_variant_id.toString();
                 products.push(rowData);
@@ -682,8 +685,8 @@ export class Products extends Component {
                                 <br/>
                                 <Label id={'sUploadLabel3'}>
                                     <h5>Total Selected Products:</h5>
-                                    <h5>Parent: <b>{this.state.parent_sku}</b></h5>
-                                    <h5>Variants: <b>{this.state.child_sku}</b></h5>
+                                    <h5>Main Product: <b>{this.state.parent_sku}</b></h5>
+                                    <h5>SKU: <b>{this.state.child_sku}</b></h5>
                                 </Label>
                             </Banner>
                             {/*<Select*/}

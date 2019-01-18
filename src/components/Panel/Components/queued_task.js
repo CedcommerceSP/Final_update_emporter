@@ -105,7 +105,7 @@ export class QueuedTask extends Component {
                                                                 <Label>{activity.message}</Label>
                                                             </div>
                                                             <div className="col-6 pt-2">
-                                                                {activity.url !== null && activity.severity !== 'success'?
+                                                                {activity.url !== null?
                                                                     <a href={activity.url} target={'_blank'}>View Report</a>
                                                                     :''}
                                                             </div>
