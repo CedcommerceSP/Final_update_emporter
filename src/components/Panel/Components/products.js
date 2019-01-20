@@ -47,7 +47,7 @@ export class Products extends Component {
         {label: 'Upload', value: 'upload'},
         // {label: 'Upload All', value: 'upload_all'}
     ];
-    visibleColumns = ['main_image', 'title', 'sku', 'price','quantity','asin', 'upload_status'];
+    visibleColumns = ['main_image', 'title', 'sku', 'price','quantity', 'upload_status'];
     imageColumns = ['main_image'];
     hideFilters = ['main_image' ,'long_description','type', 'asin', 'upload_status'];
     customButton = ['asin1']; // button
@@ -87,7 +87,7 @@ export class Products extends Component {
             sortable:false,
         },
         upload_status: {
-            title: 'Upload Status',
+            title: 'Uploaded',
             sortable: false,
         },
     };
@@ -441,16 +441,17 @@ export class Products extends Component {
             if ( data[i].variants !== {} && !isUndefined(data[i].variants) ) {
                 str = data[i].variants['main_image'];
                 if ( re.test(str) ) {
-                    rowData['main_image'] = data[i].variants['main_image'];
+                    str = data[i].variants['main_image'];
                 } else {
                     if ( data[i]['source_marketplace'] === 'ebayimporter' && typeof data[i]['details']['additional_images'] === 'object'
                         && !isUndefined(data[i]['details']['additional_images'][0])) {
-                        rowData['main_image'] = data[i]['details']['additional_images'][0];
+                        str = data[i]['details']['additional_images'][0];
                     } else {
-                        rowData['main_image'] = 'https://www.csd.uwo.ca/people/gradstudents/zwang688/empty.png';
+                        // str = data[i].variants['main_image'];
+                        str = 'https://www.csd.uwo.ca/people/gradstudents/zwang688/empty.png';
                     }
                 }
-
+                rowData['main_image'] = str;
                 rowData['title'] = data[i].details.title;
                 rowData['sku'] = data[i].variants['sku'].toString();
                 rowData['price'] = data[i].variants['price'].toString();

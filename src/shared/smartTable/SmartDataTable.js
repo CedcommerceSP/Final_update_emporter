@@ -31,7 +31,7 @@ import {
     Button,
     Label,
     Icon, SkeletonBodyText, Spinner, SkeletonDisplayText,
-    EmptyState, Card, FormLayout, Popover, Tag, DatePicker,Badge
+    EmptyState, Card, FormLayout, Popover, Tag, DatePicker,Badge,Thumbnail
 } from '@shopify/polaris';
 
 import {FontAwesomeIcon} from '@fortawesome/react-fontawesome';
@@ -370,7 +370,8 @@ class SmartDataTablePlain extends React.Component {
                         </td>:<td key={`row-${i}-column-${j}`} className="table-filers" onClick={this.props.operations.bind(this, row, 'grid')}>
                         {
                             this.state.imageColumns.indexOf(column.key) !== -1 &&
-                            <img src={row[column.key]} style={{width: '50px'}}/>
+                                <Thumbnail source={row[column.key]} alt={"UnAvailable"} />
+                            // <img src={row[column.key]} style={{width: '50px'}}/>
                         }
                         {
                             this.state.imageColumns.indexOf(column.key) === -1 && this.state.read_more.indexOf(column.key) !== -1 &&
@@ -380,7 +381,9 @@ class SmartDataTablePlain extends React.Component {
                                     <span dangerouslySetInnerHTML={{__html: row[column.key]}}/>
                                 </div> :
                                 this.state.imageColumns.indexOf(column.key) === -1 && this.state.customButton.indexOf(column.key) === -1 ?
-                                    column.key === 'upload_status'? <Badge status={row[column.key]}><span style={{backgroundColor:"transparent"}}>.</span></Badge>:
+                                    column.key === 'upload_status'? <div className="text-center">
+                                            <Badge status={row[column.key]}><span style={{color:"transparent"}}>.</span></Badge>
+                                        </div>:
                                 <Label><ErrorBoundary>
                                     {/*<TableCell withLinks={withLinks} filterValue={filterValue}>*/}
                                     <p style={{overflow: 'hidden',
