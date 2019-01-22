@@ -16,15 +16,8 @@ export const panelFunctions = {
                 panelID: 'accounts',
             },
             {
-                id: 'products',
-                content: 'Products',
-                accessibilityLabel: 'Products',
-                link: '/panel/products',
-                panelID: 'products'
-            },
-            {
                 id: 'import',
-                content: 'Import/Export',
+                content: 'Import/Upload',
                 accessibilityLabel: 'Import',
                 link: '/panel/import',
                 panelID: 'import'
@@ -35,6 +28,13 @@ export const panelFunctions = {
                 accessibilityLabel: 'Profiling',
                 link: '/panel/profiling',
                 panelID: 'profiling'
+            },
+            {
+                id: 'products',
+                content: 'Products',
+                accessibilityLabel: 'Products',
+                link: '/panel/products',
+                panelID: 'products'
             },
             {
                 id: 'configuration',
