@@ -382,7 +382,8 @@ class SmartDataTablePlain extends React.Component {
                                 </div> :
                                 this.state.imageColumns.indexOf(column.key) === -1 && this.state.customButton.indexOf(column.key) === -1 ?
                                     column.key === 'upload_status'? <div className="text-center">
-                                            <Badge status={row[column.key]}><span style={{color:"transparent"}}>.</span></Badge>
+                                        {row[column.key] === 'success' && <Badge status={"success"}>Uploaded</Badge>}
+                                            <Badge status={"attention"}>Imported</Badge>
                                         </div>:
                                 <Label><ErrorBoundary>
                                     {/*<TableCell withLinks={withLinks} filterValue={filterValue}>*/}

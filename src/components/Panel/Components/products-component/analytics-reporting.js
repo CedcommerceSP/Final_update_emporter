@@ -194,11 +194,14 @@ class AnalyticsReporting extends Component {
                         ebay=uploader.ebay;
                 }
                 uploaderarray=[];
-                if ( amazon !== 0 ) {
-                    uploaderarray.push(amazon);
-                }
-                if ( ebay !== 0 )
-                    uploaderarray.push(ebay);
+                this.state.activePlan.forEach(e => {
+                    if (e === 'amazon_importer') {
+                        uploaderarray.push(amazon);
+                    }
+                    if ( e === 'ebay_importer' ) {
+                        uploaderarray.push(ebay);
+                    }
+                })
                 uploaderarray.push(0);
                 this.setState({yaxisuploader:uploaderarray, uploaded_product: true})
             } else {

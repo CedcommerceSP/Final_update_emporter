@@ -5,6 +5,7 @@ import {notify} from "../../services/notify";
 import {json} from "../../environments/static-json";
 import {faCheckCircle} from '@fortawesome/free-solid-svg-icons';
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
+import {environment} from "../../environments/environment";
 
 class AppsShared extends Component {
     constructor(props) {
@@ -25,6 +26,7 @@ class AppsShared extends Component {
                     for (let i = 0; i < Object.keys(data.data).length; i++) {
                         installedApps.push(data.data[Object.keys(data.data)[i]]);
                     }
+
                     this.setState({
                         apps: installedApps
                     });
@@ -77,7 +79,7 @@ class AppsShared extends Component {
             <div className="row">
                 {
                     this.state.apps.map(app => {
-                        if (this.state.code_usable.indexOf(app.code) !== -1) {
+                        if (this.state.code_usable.indexOf(app.code) !== -1 || app.code === 'etsyimporter' && !environment.isLive) {
                             return (
                                 <div className="col-12 mb-4" key={this.state.apps.indexOf(app)}>
                                     <Card title={app.title}>

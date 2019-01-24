@@ -87,7 +87,7 @@ export class Products extends Component {
             sortable:false,
         },
         upload_status: {
-            title: 'Uploaded',
+            title: 'Status',
             sortable: false,
         },
     };

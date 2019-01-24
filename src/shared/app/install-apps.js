@@ -223,7 +223,7 @@ class InstallAppsShared extends Component {
     getAppInstallationForm() {
         // let win = window.open('', '_blank', 'location=yes,height=600,width=550,scrollbars=yes,status=yes');
         let params = {};
-        if ( !isUndefined(this.props.ebay_country_code) || this.props.ebay_country_code !== '' ) {
+        if ( !isUndefined(this.props.ebay_country_code) && this.props.ebay_country_code !== '' ) {
             params = {code: this.state.code, ebay_site_id: this.props.ebay_country_code};
         } else {
             params = {code: this.state.code };
