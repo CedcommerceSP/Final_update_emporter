@@ -17,7 +17,7 @@ import './create-profile.css';
 
 import { notify } from '../../../../services/notify';
 import { requests } from '../../../../services/request';
-import { capitalizeWord } from '../static-functions';
+import { capitalizeWord, validateImporter } from '../static-functions';
 import { isUndefined } from 'util';
 
 import { environment } from '../../../../environments/environment';
@@ -82,7 +82,6 @@ export class CreateProfile extends Component {
             },
             targetAttributes: [],
             sourceAttributes: [],
-            activePlan: globalState.getLocalStorage('activePlan')?JSON.parse(globalState.getLocalStorage('activePlan')):[],
             today: {
                 end:new Date(),
                 start:new Date(),
@@ -389,14 +388,12 @@ export class CreateProfile extends Component {
                         let key = Object.keys(data.data)[i];
                         if (data.data[key].usable || !environment.isLive) {
                             hasService = true;
-                            if ( data.data[key].title.toLowerCase() !== 'shopify' ) {
-                                if (this.state.activePlan.length <= 0 || this.state.activePlan.indexOf(data.data[key].code) !== -1) {
-                                    this.importServices.push({
-                                        label: data.data[key].title,
-                                        value: data.data[key].marketplace,
-                                        shops: data.data[key].shops
-                                    });
-                                }
+                            if ( validateImporter(data.data[key].code) ) {
+                                this.importServices.push({
+                                    label: data.data[key].title,
+                                    value: data.data[key].marketplace,
+                                    shops: data.data[key].shops
+                                });
                             }
                         }
                     }

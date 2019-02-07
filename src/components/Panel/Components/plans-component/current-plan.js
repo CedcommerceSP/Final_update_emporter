@@ -1,5 +1,10 @@
 import React, {Component} from 'react';
-import {Page, Card, Button} from "@shopify/polaris";
+import {Page,
+        Card,
+        Button,
+        Label,
+        ProgressBar,
+        DisplayText} from "@shopify/polaris";
 import {faDollarSign, faCalendarCheck, faCalendarTimes, faHeadphones, faCogs, faQuoteLeft, faQuoteRight} from '@fortawesome/free-solid-svg-icons';
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {displayArray} from './current-plan-func';
@@ -9,21 +14,35 @@ import './plan.css';
 
 const grayColor = "#999999";
 class CurrentPlan extends Component {
+
     constructor(props) {
         super(props);
         this.state = {
             description: <React.Fragment><h3>No Active Plan</h3><h4>Please Choose A Plan</h4></React.Fragment>,
             card: [],
-            card_service:[]
+            card_service:[],
+            available_credits: 0,
+            used_credits:1
         };
+        this.getCreditsSettings();
     }
+
+    getCreditsSettings() {
+        requests.getRequest('shopifygql/payment/getCreditsSettings')
+            .then(data => {
+                if (data.success) {
+                    this.state.available_credits = data['data']['available_credits'];
+                    this.state.used_credits = data['data']['used_credits'];
+                    this.setState(this.state);
+                }
+            });
+    }
+
     componentWillMount() {
         requests.getRequest('plan/plan/getActive').then(data => {
             if ( data.success ) {
                 const state = displayArray(data.data);
                 this.setState(state);
-            } else {
-                notify.error(data.message);
             }
         });
     }
@@ -38,7 +57,44 @@ class CurrentPlan extends Component {
                         <div className="container">
                             <div className="row p-4 p-sm-5">
                                 <div className="col-12 mb-5 pb-5 pt-0">
-                                    <h1>Active Plan</h1>{/*Tittle*/}
+                                    <div className="row pt-4 pb-4">
+                                        <div className="col-3 d-md-block d-sm-none">
+                                            <hr/>
+                                        </div>
+                                        <div className="col-md-6 col-sm-12 col-12 text-center">
+                                            <DisplayText element="h3">Available Credits</DisplayText>
+                                        </div>
+                                        <div className="col-3 d-md-block d-sm-none">
+                                            <hr/>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div className="col-12 pt-2 pb-5">
+                                    <div className="row">
+                                        <div className="col-12 pt-2 pb-3">
+                                            <Label>
+                                                Product Upload Credits - <b>{this.state.available_credits}</b>
+                                            </Label>
+                                        </div>
+                                        <div className="col-12">
+                                            <ProgressBar
+                                                size="large"
+                                                progress={(this.state.available_credits/(this.state.available_credits+this.state.used_credits)*100)} />
+                                        </div>
+                                    </div>
+                                </div>
+                                <div className="col-12 mb-5 pb-5 pt-0">
+                                    <div className="row pt-4 pb-4">
+                                        <div className="col-3 d-md-block d-sm-none">
+                                            <hr/>
+                                        </div>
+                                        <div className="col-md-6 col-sm-12 col-12 text-center">
+                                            <DisplayText element="h3">Active Plan</DisplayText>
+                                        </div>
+                                        <div className="col-3 d-md-block d-sm-none">
+                                            <hr/>
+                                        </div>
+                                    </div>
                                 </div>
                                 {this.state.card.map((keys, index) => { {/*LVL1*/}
                                     let col = 'col-12 col-sm-6 mb-5';

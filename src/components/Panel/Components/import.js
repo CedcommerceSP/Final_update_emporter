@@ -17,7 +17,7 @@ import { faArrowAltCircleDown,
 import { notify } from '../../../services/notify';
 import { requests } from '../../../services/request';
 import { environment } from '../../../environments/environment';
-import { capitalizeWord } from './static-functions';
+import { capitalizeWord, validateImporter } from './static-functions';
  import {globalState} from "../../../services/globalstate";
 
 export class Import extends Component {
@@ -49,7 +49,6 @@ export class Import extends Component {
                 profile_type: ''
             },
             openModal: false,
-            activePlan: globalState.getLocalStorage('activePlan')?JSON.parse(globalState.getLocalStorage('activePlan')):[],
         };
         this.getAllImporterServices();
         this.getAllUploaderServices();
@@ -64,14 +63,12 @@ export class Import extends Component {
                    for (let i = 0; i < Object.keys(data.data).length; i++) {
                        let key = Object.keys(data.data)[i];
                        if (data.data[key].usable || !environment.isLive) {
-                           if ( data.data[key].code !== 'shopify_importer') {
-                               if ( this.state.activePlan.length <= 0 || this.state.activePlan.indexOf(data.data[key].code) !== -1) {
-                                   this.state.importServicesList.push({
-                                       label: data.data[key].title,
-                                       value: data.data[key].marketplace,
-                                       shops: []//data.data[key].shops
-                                   });
-                               }
+                           if ( validateImporter(data.data[key].code) ) {
+                               this.state.importServicesList.push({
+                                   label: data.data[key].title,
+                                   value: data.data[key].marketplace,
+                                   shops: []//data.data[key].shops
+                               });
                            }
                        }
                    }
@@ -127,16 +124,18 @@ export class Import extends Component {
                                         value={this.state.importProductsDetails.source}
                                     />
                                 </div>
-                                <div className="col-12 pt-1 pb-1">
+                                {this.state.importProductsDetails.source.toLowerCase() === 'etsyimporter' && <div className="col-12 pt-1 pb-1">
                                     <Select
                                         label="Product Listing Type"
                                         options={[{label:'Active Products',value:'active'},
                                             {label:'Inactive Products',value:'inactive'},
-                                            {label:'All Products',value:'all'}]}
+                                            {label:'All Products',value:'all'},
+                                            {label:'Expire Products',value:'expire'},
+                                            {label:'Draft Products',value:'draft'}]}
                                         onChange={this.handleImportChange.bind(this, 'listing_type')}
                                         value={this.state.listing_type}
                                     />
-                                </div>
+                                </div>}
                                 <div className="col-12 pt-1 pb-1">
                                     {
                                         this.state.importProductsDetails.source !== '' &&

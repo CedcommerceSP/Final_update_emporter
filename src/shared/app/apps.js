@@ -1,10 +1,8 @@
 import React, {Component} from 'react';
-import {Select, Button, Card} from "@shopify/polaris";
+import {Select, Button, Card, TextField} from "@shopify/polaris";
 import {requests} from "../../services/request";
 import {notify} from "../../services/notify";
 import {json} from "../../environments/static-json";
-import {faCheckCircle} from '@fortawesome/free-solid-svg-icons';
-import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {environment} from "../../environments/environment";
 
 class AppsShared extends Component {
@@ -26,7 +24,6 @@ class AppsShared extends Component {
                     for (let i = 0; i < Object.keys(data.data).length; i++) {
                         installedApps.push(data.data[Object.keys(data.data)[i]]);
                     }
-
                     this.setState({
                         apps: installedApps
                     });
@@ -34,79 +31,39 @@ class AppsShared extends Component {
                     notify.error(data.message);
                 }
             });
-        // requests.getRequest('connector/get/services', { 'filters[type]': 'importer' })
-        //     .then(data => {
-        //         if (data.success) {
-        //             this.state.code_usable = [];
-        //             for (let i = 0; i < Object.keys(data.data).length; i++) {
-        //                 let key = Object.keys(data.data)[i];
-        //                 if (data.data[key].usable || !environment.isLive) {
-        //                     if ( data.data[key].code !== 'shopify_importer' ) {
-        //                         if ( data.data[key].code === 'amazon_importer' )
-        //                             this.state.code_usable.push('amazonimporter');
-        //                         if ( data.data[key].code === 'ebay_importer' )
-        //                             this.state.code_usable.push('ebayimporter');
-        //                     }
-        //                 }
-        //             }
-        //             this.setState(this.state);
-        //         } else {
-        //             notify.error(data.message);
-        //         }
-        //     });
-        requests.getRequest('plan/plan/getActive')
-            .then(data => {
-                if (data.success) {
-                    this.state.code_usable = [];
-                    data.data.services.forEach(e => {
-                        if ( e.code === 'amazon_importer' )
-                            this.state.code_usable.push('amazonimporter');
-                        if ( e.code === 'ebay_importer' )
-                            this.state.code_usable.push('ebayimporter');
-                        this.props.importerServices(this.state.code_usable);
-                    });
-                    this.setState(this.state);
-                } else {
-                    notify.error(data.message);
-                }
-            });
     }
-    handleEbayCountryChange = (val) => {
-        this.setState({ebay_county_code:val});
+    handleChange = (obj, val) => {
+        console.log(val, obj);
+        this.setState({[obj]:val});
     };
     render() {
         return (
             <div className="row">
                 {
                     this.state.apps.map(app => {
-                        if (this.state.code_usable.indexOf(app.code) !== -1 || app.code === 'etsyimporter' && !environment.isLive) {
+                        if (this.validateCode(app.code)) {
                             return (
-                                <div className="col-12 mb-4" key={this.state.apps.indexOf(app)}>
+                                <div className="col-12 col-sm-6 mb-4" key={this.state.apps.indexOf(app)}>
                                     <Card title={app.title}>
                                         <div className="row p-5">
-                                            <div className="col-4 order-2 text-right">
+                                            <div className="col-12">
+                                                <img src={app.image} alt={app.title} height={"160px"}/>
+                                            </div>
+                                            <div className="col-12 mt-4 mb-4">
                                                 <div className="row">
-                                                    {app.code === 'ebayimporter'?<div className="mb-4 col-12">
-                                                        <Select
-                                                            options={json.country}
-                                                            value={this.state.ebay_county_code}
-                                                            onChange={this.handleEbayCountryChange}
-                                                            placeholder={'Choose Country'}
-                                                            label={''}/>
-                                                    </div>:null}
-                                                    <div className="col-12">
-                                                        {this.props.success.code !== app.code && app['installed']===0 || app.code === 'ebayimporter'?<Button
+                                                    <div className="col-12 col-sm-6">
+                                                        {this.additionalInput(app.code)}
+                                                    </div>
+                                                    <div className="col-12 col-sm-6">
+                                                        <Button
                                                             disabled={this.props.success.code === app.code || app['installed'] !==0 && app.code !== 'ebayimporter'}
                                                             onClick={() => {
                                                                 this.installApp(app.code);
-                                                            }} primary>{app['installed']!==0?'ReConnect':'Connect'}</Button>:<div className="text-right">
-                                                                           <FontAwesomeIcon icon={faCheckCircle} size="6x" color="#5c6ac4"/>
-                                                               </div>}
+                                                            }} primary fullWidth={true}>
+                                                                {app['installed']!==0?'ReConnect':'Connect'}
+                                                            </Button>
                                                     </div>
                                                 </div>
-                                            </div>
-                                            <div className="col-8 order-1">
-                                                <img src={app.image} alt={app.title}/>
                                             </div>
                                         </div>
                                     </Card>
@@ -118,15 +75,45 @@ class AppsShared extends Component {
             </div>
         );
     }
+    validateCode = (code) => {
+        if ( code === 'shopifygql' || code === 'shopify'  || code === 'opensky' || code === 'oberlosupply' || code === 'ebay' ) {
+            return false;
+        }
+        return true;
+    };
+    additionalInput = (code) => {
+        if ( code === 'ebayimporter' ) {
+            return <Select
+                options={json.country}
+                value={this.state.ebay_county_code}
+                onChange={this.handleChange.bind(this,'ebay_county_code')}
+                placeholder={'Choose Country'}
+                label={''}/>;
+        } else if ( code === 'etsyimporter' ) {
+            return <TextField
+                label={"Shop URL"}
+                value={this.state.etsy}
+                onChange={this.handleChange.bind(this,'etsy')}
+                placeholder={"Etsy URL"} labelHidden={true}/>
+        }
+        return null;
+    };
     installApp(code) {
         if ( code === 'ebayimporter' )
             if ( this.state.ebay_county_code !== '' ) {
-                this.props.redirectResult(code, this.state.ebay_county_code);
+                this.props.redirectResult(code, {code:code, ebay_site_id:this.state.ebay_county_code});
             } else {
                 notify.info('Country is not selected');
             }
-        else
+        else if (code === 'etsyimporter' ) {
+            if ( this.state.etsy !== undefined && this.state.etsy !== '' ) {
+                this.props.redirectResult(code, {code:code, shop_name:this.state.etsy});
+            } else {
+                notify.info('Please Provide The Valid URL.');
+            }
+        } else {
             this.props.redirectResult(code, '');
+        }
     }
 }
 

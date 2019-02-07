@@ -6,6 +6,7 @@ import {notify} from "../../../../services/notify";
 import './analytics.css';
 import {faArrowAltCircleDown,faArrowAltCircleUp} from '@fortawesome/free-solid-svg-icons';
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
+import { validateImporter } from '../static-functions.js';
 import {globalState} from "../../../../services/globalstate";
 const options = [
     // {label: 'Line Chart', value: 'line'},
@@ -43,36 +44,13 @@ class AnalyticsReporting extends Component {
         };
 
         this.preparedata();
-        setTimeout(() => {
-            if ( globalState.getLocalStorage('activePlan') && this.state.activePlan.length <= 0) {
-                this.setState({activePlan:JSON.parse(globalState.getLocalStorage('activePlan'))});
-                this.preparedata();
-            }
-        },2000);
     }
     componentDidUpdate()
     {
         if ( localStorage.getItem('plan_status') ) {
             let data = JSON.parse(localStorage.getItem('plan_status'));
             if ( data.shop === globalState.getLocalStorage('shop') ) {
-                if ( !data.success ) {
-                    // let temp = {
-                    //     title:'Payment Status',
-                    //     temp:data,
-                    //     message:data.message,
-                    //     body:<div className="text-left mt-5">
-                    //         <h4>You Can uninstall:-</h4>
-                    //         <ul>
-                    //             <li><h5>Go to Apps Section from your shopify dashboard</h5></li>
-                    //             <li><h5>You can Un-install the App by clicking the Bin Icon right to App</h5></li>
-                    //         </ul>
-                    //     </div>
-                    // };
-                    // this.setState({
-                    //     payment_show:true,
-                    //     payment:temp,
-                    // });
-                } else  {
+                if ( data.success ) {
                     let temp = {
                         title:'Status',
                         temp:data,
@@ -96,15 +74,16 @@ class AnalyticsReporting extends Component {
         let importer={};
         let importer_marketplacearray=[];
         requests.getRequest('connector/get/services?filters[type]=importer').then(data=> {
-            if (data.success == true) {
+            if (data.success) {
                 importer = data.data;
                 Object.keys(importer).map(importerkey => {
-                    if(this.state.activePlan.indexOf(importerkey) !== -1) {
+                    if(validateImporter(importerkey)) {
                         importertitlearray.push(importer[importerkey]['title']);
                         importer_marketplacearray.push(importer[importerkey]['marketplace']);
                     }
                 });
                 this.get_y_axis_importer(importer_marketplacearray,importertitlearray,importer);
+                this.get_y_axis_uploader(importer_marketplacearray,importertitlearray,importer);
                 this.setState({importer:importertitlearray})
 
             }
@@ -118,7 +97,7 @@ class AnalyticsReporting extends Component {
         let total_products_importer=[];
         let importer_data_recieved={};
         requests.postRequest('frontend/app/getImportedProductCount',{importers:importer_marketplace_array}).then(data=> {
-            if (data.success == true) {
+            if (data.success) {
                 importer_data_recieved = data.data;
                 Object.keys(importer_data_recieved).map(importer_recieved_mp=>{
                 for (let i = 0; i < importer_marketplace_array.length; i++) {
@@ -178,32 +157,21 @@ class AnalyticsReporting extends Component {
         })
     }
 
-    get_y_axis_uploader(uploader_marketplce) {
+    get_y_axis_uploader(uploader_marketplce, title, data) {
         let uploaderarray = [];
         let uploader = [];
-        let amazon=0;
-        let ebay=0;
-
-        requests.getRequest('frontend/app/getUploadedProductsCount', {marketplace: uploader_marketplce}).then(data1 => {
+        let show = false;
+        requests.postRequest('frontend/app/getUploadedProductsCount', {marketplace: title}).then(data1 => {
             if (data1.success) {
-                uploader = data1.data;
-                if ( typeof uploader !== "undefined") {
-                    if ( typeof uploader.amazon !== "undefined" )
-                        amazon=uploader.amazon;
-                    if ( typeof uploader.ebay !== "undefined" )
-                        ebay=uploader.ebay;
-                }
-                uploaderarray=[];
-                this.state.activePlan.forEach(e => {
-                    if (e === 'amazon_importer') {
-                        uploaderarray.push(amazon);
+                Object.keys(data1.data).forEach(e => {
+                    if ( data1.data[e] !== 0 ) {
+                        uploader.push(e);
+                        uploaderarray.push(data1.data[e]);
+                        show = true;
                     }
-                    if ( e === 'ebay_importer' ) {
-                        uploaderarray.push(ebay);
-                    }
-                })
+                });
                 uploaderarray.push(0);
-                this.setState({yaxisuploader:uploaderarray, uploaded_product: true})
+                this.setState({yaxisuploader:uploaderarray, uploaded_product: show,uploader:uploader})
             } else {
                 // this.setState({:true})
             }
@@ -211,7 +179,7 @@ class AnalyticsReporting extends Component {
     }
     preparedata(){
         this.getallimporter();
-        this.getalluploader();
+        // this.getalluploader();
     }
 
     handleChangeimporter = (newValue) => {
@@ -396,29 +364,28 @@ class AnalyticsReporting extends Component {
             datasets: [{
                 data: this.state.yaxisuploader,
                 backgroundColor: [
-                    '#a2ff38',
-                    '#2b6beb',
+                    '#FF6384',
+                    '#36A2EB',
                     '#FFCE56',
-                    '#2650cc',
+                    '#00cc66',
                     '#ff0000',
-                    '#fe0eff',
-                    '#000066',
-                    '#990033',
-                    '#9900cc',
-                    '#a3c2c2'
-
-                ],
-                hoverBackgroundColor: [
-                    // '#36A2EB',
-                    // '#FFCE56',
-                    '#7bff29',
-                    '#223aeb',
                     '#ff99ff',
                     '#000066',
                     '#990033',
                     '#9900cc',
                     '#a3c2c2'
-
+                ],
+                hoverBackgroundColor: [
+                    '#ff4662',
+                    '#2e73eb',
+                    '#ffe736',
+                    '#00cc66',
+                    '#ff0000',
+                    '#ff99ff',
+                    '#000066',
+                    '#990033',
+                    '#9900cc',
+                    '#a3c2c2'
                 ]
             }]
         };
@@ -567,14 +534,6 @@ class AnalyticsReporting extends Component {
                             <Card>
                                 <div className="p-4">
                                     <div className="row">
-                                        {/*<div className="col-12 col-md-4 pt-1 pb-1">*/}
-                                            {/*<Select*/}
-                                                {/*label=""*/}
-                                                {/*options={uploaderoptions}*/}
-                                                {/*onChange={this.handleChangeuploadermarketplace}*/}
-                                                {/*value={this.state.selecteduploadermarketplace}*/}
-                                            {/*/>*/}
-                                        {/*</div>*/}
                                         <div className="col-md-4 pt-1 pb-1"></div>
                                         <div className="col-12 col-md-4 pt-1 pb-1">
                                             <Select

@@ -44,7 +44,7 @@ export class Apps extends Component {
         });
     }
     openNewWindow = (code, val) => {
-        this.setState({modalOpen: !this.state.modalOpen, code: code, ebay_country_code: val});
+        this.setState({modalOpen: !this.state.modalOpen, code: code, additional_data: val});
     }; // Open Modal And A new Small Window For User
     handleImporterService = (arg) => {
         this.setState({importerServices:arg});
@@ -84,7 +84,7 @@ export class Apps extends Component {
                               history={this.props.history}
                               redirect={this.redirectResult}
                               code={this.state.code}
-                              ebay_country_code={this.state.ebay_country_code}
+                              additional_data={this.state.additional_data}
                               success3={this.handleLinkedAccount}
                           />
                       </Modal.Section>

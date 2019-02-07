@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 import { Button, Card, Checkbox, Icon, Label, Link, Modal,
-           RadioButton, Select, Stack, TextField, Tooltip } from "@shopify/polaris";
+           RadioButton, Select, Stack, TextField, Tooltip, DisplayText } from "@shopify/polaris";
 import {isUndefined} from "util";
 
 import {requests} from "../../services/request";
@@ -10,6 +10,7 @@ import {globalState} from "../../services/globalstate";
 import {dataGrids, RemoveService, marketPlacePricingPlan} from "./plansFuctions";
 
 class PlanBody extends Component {
+
     constructor(props) {
         super(props);
         this.state = {
@@ -26,10 +27,31 @@ class PlanBody extends Component {
                 plan:{}, // selected plans
             }, // more field is added like schema and payment_method below
             schemaShopSelected: false,
+            perProductCharge: 'NaN',
+            oneTimePaymentDetails: {
+                totalCredits: 0,
+                totalAmount: 0,
+                service: false
+            }
         };
         this.toggleSchemaModal = this.toggleSchemaModal.bind(this);
         this.createSchema = this.createSchema.bind(this);
+        this.getImportPaymentSettings();
     }
+
+    getImportPaymentSettings() {
+        requests.getRequest('shopifygql/payment/getPaymentSettings')
+            .then(data => {
+                if (data.success) {
+                    this.state.perProductCharge = data['data']['per_product_cost'];
+                    this.state.oneTimePaymentDetails.service = data['data']['import_service'];
+                    this.setState(this.state);
+                } else {
+                    notify.error(data.message);
+                }
+            });
+    }
+
     componentWillMount() {
         requests.getRequest('plan/plan/get').then(data => { // get All the Plans Available
             if ( data.success ) {
@@ -46,6 +68,7 @@ class PlanBody extends Component {
             }
         });
     }
+
     onSelectPlan(arg) {
         let value = [];
         let flag = 0;
@@ -74,6 +97,7 @@ class PlanBody extends Component {
             }
         });
     }
+
     onCheckBox(event, key) { // this function is used to check unCheck Checkbox which is not Required by default
         console.log(event, key);
         let data = this.state.checkBox;
@@ -89,10 +113,149 @@ class PlanBody extends Component {
             data : dataPrice
         });
     }
+
+    handleCreditsChange(credits) {
+        let creditCount = parseInt(credits);
+        if (isNaN(creditCount)) {
+            creditCount = 0;
+        }
+        this.state.oneTimePaymentDetails.totalCredits = creditCount;
+        this.state.oneTimePaymentDetails.totalAmount = Math.round((creditCount * this.state.perProductCharge) * 100) / 100;
+        this.setState(this.state);
+    }
+
+    makePaymentForImporter() {
+        if (this.validateOneTimeCharge()) {
+            const paymentData = {
+                connectors: 'shopify',
+                total_credits: this.state.oneTimePaymentDetails.totalCredits,
+                services: [
+                    this.state.oneTimePaymentDetails.service
+                ]
+            };
+            let win = window.open('', '_parent', 'location=yes,height=600,width=550,scrollbars=yes,status=yes');
+            requests.postRequest('plan/plan/importerPlanChoose', paymentData).then(data => {
+                if (data.success) {
+                    if ( !isUndefined(data.data.confirmation_url )) {
+                        win.location = data.data.confirmation_url;
+                    } else {
+                        win.close();
+                        this.getSchema(data.data, paymentData); // open Modal For Payment Procedure
+                    }
+                } else {
+                    win.close();
+                    notify.error(data.message);
+                }
+            });
+        }
+    }
+
+    productImportPaymentModal() {
+
+    }
+
+    validateOneTimeCharge() {
+        if (this.state.oneTimePaymentDetails.totalAmount == 0) {
+            notify.info('Please enter number of products you want to upload to Shopify');
+            return false;
+        }
+        return true;
+    }
+
     render() {
         return (
             <React.Fragment>
                 <div className="row">
+                    <div className="col-12">
+                        <div className="row pt-4 pb-4">
+                            <div className="col-3 d-md-block d-sm-none">
+                                <hr/>
+                            </div>
+                            <div className="col-md-6 col-sm-12 col-12 text-center">
+                                <DisplayText element="h3">Product Import Charges</DisplayText>
+                            </div>
+                            <div className="col-3 d-md-block d-sm-none">
+                                <hr/>
+                            </div>
+                        </div>
+                    </div>
+                    <div className="col-12 p-3">
+                        <Card>
+                            <div className="row p-5">
+                                <div className="col-12 text-center pt-5 pb-2">
+                                    <div className="mb-5 text-center">
+                                        <p className="price-tag">
+                                            <span className="price-tag_small">$</span>
+                                            {this.state.perProductCharge}
+                                            <span className="price-tag_small">/ per product</span>
+                                        </p>
+                                    </div>
+                                </div>
+                                <div className="col-12 p-3">
+                                    <Card>
+                                        <div className="row p-5">
+                                            <div className="col-md-3 col-sm-12 col-12 text-center">
+                                                <TextField
+                                                    label="Product Count"
+                                                    type="number"
+                                                    value={this.state.oneTimePaymentDetails.totalCredits}
+                                                    onChange={this.handleCreditsChange.bind(this)}
+                                                    helpText="No. of product you want to upload on Shopify"
+                                                />
+                                            </div>
+                                            <div className="col-md-1 col-sm-12 col-12 text-center pt-5">
+                                                <h2><b>X</b></h2>
+                                            </div>
+                                            <div className="col-md-3 col-sm-12 col-12 text-center pt-5">
+                                                <div className="mb-5 text-center">
+                                                    <p className="price-tag">
+                                                        <span className="price-tag_small">$</span>
+                                                        {this.state.perProductCharge}
+                                                    </p>
+                                                </div>
+                                            </div>
+                                            <div className="col-md-1 col-sm-12 col-12 text-center pt-5">
+                                                <h2><b>=</b></h2>
+                                            </div>
+                                            <div className="col-md-4 col-sm-12 col-12 text-center pt-5">
+                                                <div className="mb-5 text-center">
+                                                    <p className="price-tag">
+                                                        <span className="price-tag_small">$</span>
+                                                        {this.state.oneTimePaymentDetails.totalAmount}
+                                                    </p>
+                                                </div>
+                                                <Label>Payable Amount</Label>
+                                            </div>
+                                        </div>
+                                    </Card>
+                                </div>
+                                <div className="col-12 text-center pt-3 pb-2">
+                                    <Button
+                                        primary={true}
+                                        size="large"
+                                        disabled={this.state.oneTimePaymentDetails.totalAmount === 0}
+                                        onClick={() => {
+                                            this.makePaymentForImporter();
+                                        }}>
+                                        Make Payment
+                                    </Button>
+                                </div>
+                            </div>
+                        </Card>
+                    </div>
+                    <div className="col-12">
+                        <div className="row pt-4 pb-4">
+                            <div className="col-3 d-md-block d-sm-none">
+                                <hr/>
+                            </div>
+                            <div className="col-md-6 col-sm-12 col-12 text-center">
+                                <DisplayText element="h3">Product Syncing Charges</DisplayText>
+                            </div>
+                            <div className="col-3 d-md-block d-sm-none">
+                                <hr/>
+                            </div>
+                        </div>
+                    </div>
                     {this.state.data.map((data, index) => {
                         return (
                             <div className="col-sm-4 col-12 pt-3 pb-3" key={index}>{/* Starting Of Plan Card */}
@@ -201,6 +364,7 @@ class PlanBody extends Component {
             </React.Fragment>
         );
     }
+
     getSchema(arg, plan) {
         let data = this.state.schemaData;
         if (plan !== null ){
@@ -221,6 +385,7 @@ class PlanBody extends Component {
             this.setSchema(4, arg.payment_done);
         }
     } // this is responsible for deciding what data we get from server (schema, payment_method etc) and send info to setSchema
+
     setSchema(event,arg) {
         let data = this.state.schemaModal;
         data.show = true;
@@ -236,6 +401,7 @@ class PlanBody extends Component {
             schemaModal: data
         });
     } // this function is responsible for creating the Body of Payment Modal
+
     paymentMethod(arg) {
         // let data = this.state.schemaData;
         // data.payment_method = arg[Object.keys(arg)[Object.keys(arg).length - 1]];
@@ -257,6 +423,7 @@ class PlanBody extends Component {
             </Stack>
         );
     } // create a choose payment method
+
     createSchema(arg) {
         let data = this.state.schemaModal;
         data.data = arg;
@@ -329,6 +496,7 @@ class PlanBody extends Component {
             })
         );
     } // create a schema For payment modal
+
     schemaConfigurationChange(index,type,value) {
         let data = this.state.schemaModal; // frontend data we need to maintain
         let data2 = this.state.schemaData; // server data we need to send
@@ -355,6 +523,7 @@ class PlanBody extends Component {
         });
         this.setSchema(2, this.state.schemaModal.data);
     } // maintain the value of schema
+
     handleSchemaModalChange(status, plan,event) {
         let data = this.state.schemaData;
         data.payment_method = status;
@@ -362,10 +531,12 @@ class PlanBody extends Component {
             schemaData: data,
         });
     } // choose the payment method
+
     openNewWindow() {
         this.props.paymentStatus('Confirmation',true); // this will send Data to its parent Component
         this.toggleSchemaModal();
     } // open new Window
+
     paymentDone(arg) {
         this.toggleSchemaModal();
         if ( arg ) {
@@ -376,6 +547,7 @@ class PlanBody extends Component {
             this.props.paymentStatus('Something Went Wrong');
         }
     } // mainly its last step when data either succeed or fail (data come from server)
+
     submit() {
         if (this.validationCheck()) {
             let win = window.open('', '_parent', 'location=yes,height=600,width=550,scrollbars=yes,status=yes'); // open new Window
@@ -394,6 +566,7 @@ class PlanBody extends Component {
             });
         }
     } // submit the data to server When clicked
+
     validationCheck() {
         const server = this.state.schemaData;
         const frontEnd = this.state.schemaModal.data;
@@ -431,6 +604,7 @@ class PlanBody extends Component {
         }
         return validate;
     } // this is for Validation check to make Sure User follow All Steps
+
     toggleSchemaModal() {
         const data  = {
             show: false,

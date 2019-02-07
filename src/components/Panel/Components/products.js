@@ -19,7 +19,7 @@ import {globalState} from "../../../services/globalstate";
 
 import SmartDataTable from '../../../shared/smartTable';
 
-import {capitalizeWord, paginationShow} from "./static-functions";
+import {capitalizeWord, paginationShow, validateImporter} from "./static-functions";
 
 import {environment} from "../../../environments/environment";
 
@@ -129,72 +129,12 @@ export class Products extends Component {
             child_sku:0,
         };
         this.getAllImporterServices();
-        // this.getAllUploaderServices();
         this.getProducts();
-        this.getInstalledApps();
 
     }
 
     getAllImporterServices() {
         requests.getRequest('connector/get/services', { 'filters[type]': 'importer' }, false, true)
-            .then(data => {
-                if (data.success) {
-                    this.state.importServicesList = [];
-                    for (let i = 0; i < Object.keys(data.data).length; i++) {
-                        let key = Object.keys(data.data)[i];
-                        if (data.data[key].usable || !environment.isLive) {
-                            if ( data.data[key].code !== 'shopify_importer' ) {
-                                if ( data.data[key].code !== 'shopify_importer' ) {
-                                    if ( data.data[key].code === 'amazon_importer' )
-                                        this.state.selectImporterService.push('amazonimporter');
-                                    if ( data.data[key].code === 'ebay_importer' )
-                                        this.state.selectImporterService.push('ebayimporter');
-                                }
-                                // this.state.importServicesList.push({
-                                //     label: data.data[key].title,
-                                //     value: data.data[key].marketplace,
-                                //     shops: []//data.data[key].shops
-                                // });
-                            }
-                        }
-                    }
-                    this.updateState();
-                } else {
-                    notify.error(data.message);
-                }
-            });
-    }
-
-    getAllUploaderServices() {
-        requests.getRequest('connector/get/services', { 'filters[type]': 'uploader' })
-            .then(data => {
-                if (data.success) {
-                    this.state.uploadServicesList = [];
-                    for (let i = 0; i < Object.keys(data.data).length; i++) {
-                        let key = Object.keys(data.data)[i];
-                        if (data.data[key].usable || !environment.isLive) {
-                            this.state.uploadServicesList.push({
-                                label: data.data[key].title,
-                                value: data.data[key].marketplace,
-                                shops: data.data[key].shops
-                            });
-                        }
-                    }
-                    // this.handleImportChange('shop','shopify');
-                    this.updateState();
-                } else {
-                    notify.error(data.message);
-                }
-            });
-    }
-
-    handleProfileSelect(profile) {
-        this.state.uploadProductDetails.selected_profile = profile;
-        this.updateState();
-    }
-
-    getInstalledApps() {
-        requests.getRequest('connector/get/getInstalledApps', false, false, true)
             .then(data => {
                 this.state.installedApps = [
                     {
@@ -205,28 +145,36 @@ export class Products extends Component {
                     }
                 ];
                 if (data.success) {
-                    for (let i = 0; i < data.data.length; i++) {
-                        if ( data.data[i].code !== 'shopify' ) {
-                            let title = data.data[i].title;
-                            if ( title === 'Ebay Importer' ) {
-                                title = 'Ebay';
-                            } else if ( title === 'Amazon Importer' ) {
-                                title = 'Amazon';
+                    this.state.importServicesList = [];
+                    for (let i = 0; i < Object.keys(data.data).length; i++) {
+                        let key = Object.keys(data.data)[i];
+                        if (data.data[key].usable || !environment.isLive) {
+                            if ( validateImporter(data.data[key].code) ) {
+                                this.state.importServicesList.push({
+                                    label: data.data[key].title,
+                                    value: data.data[key].marketplace,
+                                    shops: []//data.data[key].shops
+                                });
+                                let title = data.data[key].title;
+                                this.state.installedApps.push({
+                                    id: data.data[key].code,
+                                    content: title,
+                                    accessibilityLabel: title,
+                                    panelID: data.data[key].code
+                                });
                             }
-                            this.state.installedApps.push({
-                                id: data.data[i].code,
-                                content: title,
-                                accessibilityLabel: title,
-                                panelID: data.data[i].code
-                            });
                         }
                     }
+                    this.updateState();
                 } else {
                     notify.error(data.message);
                 }
-               this.state.showLoaderBar = data.success;
-                this.updateState();
             });
+    }
+
+    handleProfileSelect(profile) {
+        this.state.uploadProductDetails.selected_profile = profile;
+        this.updateState();
     }
 
     handleSelectedUpload = (arg,val) => {
@@ -381,7 +329,12 @@ export class Products extends Component {
     prepareFilterObject() {
         this.state.appliedFilters = {};
         if (this.filters.marketplace !== 'all') {
-            this.state.appliedFilters['filter[source_marketplace][1]'] = this.filters.marketplace;
+            switch (this.filters.marketplace) {
+                case 'ebay_importer' : this.state.appliedFilters['filter[source_marketplace][1]'] = 'ebayimporter'; break;
+                case 'amazon_importer' : this.state.appliedFilters['filter[source_marketplace][1]'] = 'amazonimporter'; break;
+                case 'walmart_importer' : this.state.appliedFilters['filter[source_marketplace][1]'] = 'walmartimporter'; break;
+                default : this.state.appliedFilters['filter[source_marketplace][1]'] = this.filters.marketplace; break;
+            }
         }
         if (this.filters.full_text_search !== '') {
             this.state.appliedFilters['search'] = this.filters.full_text_search;
@@ -442,14 +395,11 @@ export class Products extends Component {
                 str = data[i].variants['main_image'];
                 if ( re.test(str) ) {
                     str = data[i].variants['main_image'];
+                } else if ( data[i]['source_marketplace'] === 'ebayimporter' && typeof data[i]['details']['additional_images'] === 'object'
+                    && !isUndefined(data[i]['details']['additional_images'][0])) {
+                    str = data[i]['details']['additional_images'][0];
                 } else {
-                    if ( data[i]['source_marketplace'] === 'ebayimporter' && typeof data[i]['details']['additional_images'] === 'object'
-                        && !isUndefined(data[i]['details']['additional_images'][0])) {
-                        str = data[i]['details']['additional_images'][0];
-                    } else {
-                        // str = data[i].variants['main_image'];
-                        str = 'https://www.csd.uwo.ca/people/gradstudents/zwang688/empty.png';
-                    }
+                    str = 'https://www.csd.uwo.ca/people/gradstudents/zwang688/empty.png';
                 }
                 rowData['main_image'] = str;
                 rowData['title'] = data[i].details.title;
@@ -540,7 +490,7 @@ export class Products extends Component {
                                 <Tabs tabs={this.state.installedApps} selected={this.state.selectedApp} onSelect={this.handleMarketplaceChange.bind(this)}/>
                             </div>
                             <div className="col-12 p-3 text-right">
-                                <Label>{this.state.pagination_show} products</Label>
+                                <Label>{this.state.pagination_show} SKU</Label>
                                 <Label>{this.state.totalMainCount && Object.keys(this.filters.column_filters).length <= 0?`Total Main Product ${this.state.totalMainCount}`:''}</Label>
                             </div>
                             <div className="col-12">

@@ -45,3 +45,12 @@ export function getActivePlan() {
             }
         });
 }
+
+export function validateImporter(code) {
+    if ( code === 'product_sync'
+        || code === 'product_import'
+        || code === 'shopify_importer' ) {
+        return false;
+    }
+    return true;
+}
