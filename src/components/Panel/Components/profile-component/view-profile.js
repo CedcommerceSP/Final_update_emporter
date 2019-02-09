@@ -82,9 +82,10 @@ class ViewProfile extends Component {
             marketplaceAttributes:[],
             totalPage: 0,
             pagination_show: 0,
-        }
+        };
+        this.getProducts();
     }
-    componentWillMount() {
+    getProducts = () => {
         requests.postRequest('connector/profile/getProfile', {id:this.state.queryParams.id,activePage:this.gridSettings.activePage,count:this.gridSettings.count}).then(data => {
             if ( data.success ) {
                 this.prepareData(data.data);
