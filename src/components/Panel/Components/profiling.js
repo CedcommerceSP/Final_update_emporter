@@ -109,10 +109,10 @@ export class Profiling extends Component {
         let nequals = '!=';
         let like = '%LIKE%';
         let nlike = '!%LIKE%';
-        let gt = '<';
-        let lt = '>';
-        let gte = '<=';
-        let lte = '>=';
+        let gt = '>';
+        let lt = '<';
+        let gte = '>=';
+        let lte = '<=';
         str = str.replace(new RegExp(equals, 'g'), "Equals");
         str = str.replace(new RegExp(nequals, 'g'), "Not Equals");
         str = str.replace(new RegExp(nlike, 'g'), "Not Contains");

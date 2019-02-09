@@ -21,8 +21,8 @@ class AnalyticsReporting extends Component {
     {
         super(props);
         this.state = {
-            selectedimporter: "pie",
-            selecteduploader: "pie",
+            selectedimporter: "bar",
+            selecteduploader: "bar",
             selecteduploadermarketplace:'',
             importer:[],
             uploader:[''],
