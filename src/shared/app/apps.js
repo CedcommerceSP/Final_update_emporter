@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {Select, Button, Card, TextField} from "@shopify/polaris";
+import {Select, Button, Card, TextField, Banner, Label} from "@shopify/polaris";
 import {requests} from "../../services/request";
 import {notify} from "../../services/notify";
 import {json} from "../../environments/static-json";
@@ -21,9 +21,12 @@ class AppsShared extends Component {
             .then(data => {
                 if (data.success) {
                     let installedApps = [];
+                    let code = [];
                     for (let i = 0; i < Object.keys(data.data).length; i++) {
                         installedApps.push(data.data[Object.keys(data.data)[i]]);
+                        code.push(data.data[Object.keys(data.data)[i]]['code'])
                     }
+                    this.props.importerServices(code);
                     this.setState({
                         apps: installedApps
                     });
@@ -39,6 +42,13 @@ class AppsShared extends Component {
     render() {
         return (
             <div className="row">
+                <div className="col-12 mb-5">
+                    <Banner title="Note" status="info">
+                        <Label id={"trial"}>
+                            During Trial Period You can Only Upload Upto 10 Products.
+                        </Label>
+                    </Banner>
+                </div>
                 {
                     this.state.apps.map(app => {
                         if (this.validateCode(app.code)) {
@@ -56,7 +66,7 @@ class AppsShared extends Component {
                                                     </div>
                                                     <div className="col-12 col-sm-6">
                                                         <Button
-                                                            disabled={this.props.success.code === app.code || app['installed'] !==0 && app.code !== 'ebayimporter'}
+                                                            // disabled={this.props.success.code === app.code || app['installed'] !==0 && app.code !== 'ebayimporter'}
                                                             onClick={() => {
                                                                 this.installApp(app.code);
                                                             }} primary fullWidth={true}>

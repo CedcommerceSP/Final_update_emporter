@@ -21,8 +21,6 @@ import {json} from "../../../environments/static-json";
 
 import './dashboard/dashboard.css';
 
-// TODO: remove the variable "Step started on line near to 75"
-// TODO: remove the true condition for step 2 and 3 "Step started on line near to 75"
 class Dashboard extends Component {
     constructor(props) {
         super(props);
@@ -96,26 +94,26 @@ class Dashboard extends Component {
                         anchor: 'U-INFO', // Which Function to call e.g : 'U-INFO' then call div which take User basic Information
                         stepperActive: false, // used in stepper Check either Completed or not and also help in deciding with step to go
                     }, // step 1
-                    {
-                        message: <p>Grab the early mover advantage and get first 3 days free. There are only two prerequisites for using this app, a valid Shopify store and either Ebay or Amazon Seller Account.</p>,
-                        stepperMessage: 'Choose a plan', // stepper Small Message
-                        API_endpoint: '', // Api End Point is used to check to send data or get data
-                        data: '', // Data additional Field
-                        method: 'GET', // Method Type
-                        redirectTo: '/panel/plans', // After Completion Where To Redirect
-                        anchor: 'PLANS', // Which Function to call e.g : 'U-INFO' then call div which take User basic Information
-                        stepperActive: false, // used in stepper Check either Completed or not
-                    }, // step 2
-                    {
-                        message: <p> Link your <b>Account</b></p>,
-                        stepperMessage: 'Account linked',
-                        API_endpoint: '', // Api End Point is used to check to send data or get data
-                        data: '', // Data additional Field
-                        method: 'GET', // Method Type
-                        redirectTo: '/panel/accounts', // After Completion Where To Redirect
-                        anchor: 'LINKED', // Which Function to call e.g : 'U-INFO' then call div which take User basic Information
-                        stepperActive: false, // used in stepper Check either Completed or not
-                    }, // step 3
+                    // {
+                    //     message: <p>Grab the early mover advantage and get first 3 days free. There are only two prerequisites for using this app, a valid Shopify store and either Ebay or Amazon Seller Account.</p>,
+                    //     stepperMessage: 'Choose a plan', // stepper Small Message
+                    //     API_endpoint: '', // Api End Point is used to check to send data or get data
+                    //     data: '', // Data additional Field
+                    //     method: 'GET', // Method Type
+                    //     redirectTo: '/panel/plans', // After Completion Where To Redirect
+                    //     anchor: 'PLANS', // Which Function to call e.g : 'U-INFO' then call div which take User basic Information
+                    //     stepperActive: false, // used in stepper Check either Completed or not
+                    // }, // step 2
+                    // {
+                    //     message: <p> Link your <b>Account</b></p>,
+                    //     stepperMessage: 'Account linked',
+                    //     API_endpoint: '', // Api End Point is used to check to send data or get data
+                    //     data: '', // Data additional Field
+                    //     method: 'GET', // Method Type
+                    //     redirectTo: '/panel/accounts', // After Completion Where To Redirect
+                    //     anchor: 'LINKED', // Which Function to call e.g : 'U-INFO' then call div which take User basic Information
+                    //     stepperActive: false, // used in stepper Check either Completed or not
+                    // }, // step 3
                     // {
                     //     message: <span>Enter default configurations</span>,
                     //     stepperMessage: 'Default Configurations',
@@ -227,10 +225,10 @@ class Dashboard extends Component {
                         step: arg + 1,
                     }
                 });
-                if ( arg >= 3 ) {
+                if ( arg >= 1 ) {
                     this.props.disableHeader(true);
                     setTimeout(() => {
-                        this.redirect('/panel/import');
+                        this.redirect('/panel/accounts');
                     },500);
                 }
             }
@@ -238,32 +236,33 @@ class Dashboard extends Component {
     } // change stage just pass the completed step here in arg
 
     renderStepper() {
-        let flag = 1;
-        return (
-            <div className="container">
-                <div className="row bs-wizard" style={{borderBottom:"0"}}>
-                    {this.state.stepData.map((data, index) => {
-                        let css = 'disabled '; // when Previous Step is not Completed
-                        if (data.stepperActive) {
-                            css = 'complete'; // When Step Is completed
-                        } else if (flag === 1) {
-                            css = 'active'; // which Step Is Active
-                            flag++;
-                        }
-                        return(<React.Fragment key={index}>
-                            <div className={`col-4 bs-wizard-step ${css}`}>
-                                <div className="text-center bs-wizard-stepnum">Step {index + 1}</div>
-                                <div className="progress">
-                                    <div className="progress-bar"/>
-                                </div>
-                                <a href="javascript:void(0)" className="bs-wizard-dot"/>
-                                <div className="bs-wizard-info text-center">{data.stepperMessage}</div>
-                            </div>
-                        </React.Fragment>);
-                    })}
-                </div>
-            </div>
-        );
+        return null;
+        // let flag = 1;
+        // return (
+        //     <div className="container">
+        //         <div className="row bs-wizard" style={{borderBottom:"0"}}>
+        //             {this.state.stepData.map((data, index) => {
+        //                 let css = 'disabled '; // when Previous Step is not Completed
+        //                 if (data.stepperActive) {
+        //                     css = 'complete'; // When Step Is completed
+        //                 } else if (flag === 1) {
+        //                     css = 'active'; // which Step Is Active
+        //                     flag++;
+        //                 }
+        //                 return(<React.Fragment key={index}>
+        //                     <div className={`col-4 bs-wizard-step ${css}`}>
+        //                         <div className="text-center bs-wizard-stepnum">Step {index + 1}</div>
+        //                         <div className="progress">
+        //                             <div className="progress-bar"/>
+        //                         </div>
+        //                         <a href="javascript:void(0)" className="bs-wizard-dot"/>
+        //                         <div className="bs-wizard-info text-center">{data.stepperMessage}</div>
+        //                     </div>
+        //                 </React.Fragment>);
+        //             })}
+        //         </div>
+        //     </div>
+        // );
     }
 
     handleModalChange(event) {
@@ -786,7 +785,7 @@ class Dashboard extends Component {
     render() {
         return (
             <Page
-                title="Dashboard">
+                title={this.state.stepStart ? "Registration" : 'Dashboard'}>
                 {this.state.welcome_screen?
                     <div>
                         <AnalyticsReporting history={this.props.history}/>

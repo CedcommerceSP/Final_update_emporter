@@ -23,6 +23,7 @@ export class Configuration extends Component {
     amazonImporterConfigurationData = [];
     amazonCredentialsData = [];
     ebayConfigurationData = [];
+    etsyConfigurationData = [];
 
     constructor(props) {
         super(props);
@@ -49,6 +50,7 @@ export class Configuration extends Component {
             amazon_credentials_updated: false,
             ebay_configuration:{},
             ebay_configuration_updated: false,
+            etsy_configuration_updated: false,
             show_ebay_child_component: {},
         };
         this.getUserDetails();
@@ -56,6 +58,7 @@ export class Configuration extends Component {
         this.getAmazonImporterConfigurations();
         this.amazonCredentials();
         this.getEbayConfig();
+        // this.getEtsyConfig();
     }
 
     getUserDetails() {
@@ -92,26 +95,25 @@ export class Configuration extends Component {
     }
 
     getEbayConfig() {
-        requests.getRequest('plan/plan/getActive')
-            .then(data => {
-                if (data.success) {
-                    this.state.ebay_plan_buy = false;
-                    data.data.services.forEach(e => {
-                        if ( e.code === 'ebay_importer' ) {
-                            this.state.ebay_plan_buy = true;
-                            requests.getRequest('connector/get/config', { marketplace: 'ebayimporter' }).then(data => {
-                                if (data.success) {
-                                    this.ebayConfigurationData = this.modifyConfigData(data.data, 'ebay_configuration');
-                                    this.updateState();
-                                } else {
-                                    // notify.error(data.message);
-                                }
-                            })
-                        }
-                    });
-                    this.setState(this.state);
-                }
-            });
+        requests.getRequest('connector/get/config', { marketplace: 'ebayimporter' }).then(data => {
+            if (data.success) {
+                this.ebayConfigurationData = this.modifyConfigData(data.data, 'ebay_configuration');
+                this.updateState();
+            } else {
+                // notify.error(data.message);
+            }
+        })
+    }
+
+    getEtsyConfig() {
+        requests.getRequest('connector/get/config', { marketplace: 'etsyimporter' }).then(data => {
+            if (data.success) {
+                this.etsyConfigurationData = this.modifyConfigData(data.data, 'etsy_configuration');
+                this.updateState();
+            } else {
+                // notify.error(data.message);
+            }
+        })
     }
 
     getShopifyConfigurations() {
@@ -127,33 +129,22 @@ export class Configuration extends Component {
     }
 
     amazonCredentials() {
-        requests.getRequest('plan/plan/getActive')
-            .then(data => {
-                if (data.success) {
-                    this.state.amazon_plan_buy = false;
-                    data.data.services.forEach(e => {
-                        if ( e.code === 'amazon_importer' ) {
-                            this.state.amazon_plan_buy = true;
-                            requests.getRequest('amazonimporter/config/getCredentials').then(data => {
-                                if ( data.success ) {
-                                    // this.amazonCredentialsData = this.modifyAmazonCredentialData(data.data, 'amazon_credentials');
-                                    this.amazonCredentialsData = data.data;
-                                    this.setState({amazon_data: data.data});
-                                    this.updateState();
-                                } else {
-                                    notify.info('Amazon Account Not Connected!');
-                                }
-                            })
-                        }
-                    });
-                    this.setState(this.state);
-                }
-            });
+        requests.getRequest('amazonimporter/config/getCredentials').then(data => {
+            if ( data.success ) {
+                // this.amazonCredentialsData = this.modifyAmazonCredentialData(data.data, 'amazon_credentials');
+                this.amazonCredentialsData = data.data;
+                this.setState({amazon_data: data.data});
+                this.updateState();
+            } else {
+                notify.info('Amazon Account Not Connected!');
+            }
+        })
     }
 
     modifyConfigData(data, configKey) {
         for (let i = 0; i < data.length; i++) {
-            // this.state[configKey][data[i].code] = data[i].value;
+            if ( typeof this.state[configKey] !== 'object')
+                this.state[configKey] = {};
             this.state[configKey][data[i].code] = data[i].value;
             if (!isUndefined(data[i].options)) {
                 data[i].options = modifyOptionsData(data[i].options);
@@ -249,72 +240,6 @@ export class Configuration extends Component {
                 </div>
                 <div className="col-md-6 col-sm-6 col-12">
                     <Card>
-                        {/*<div className="row p-5">*/}
-                            {/*{*/}
-                                {/*this.amazonCredentialsData.map(config => {*/}
-                                    {/*switch(config.type) {*/}
-                                        {/*case 'select':*/}
-                                            {/*return (*/}
-                                                {/*<div className="col-12 pt-2 pb-2" key={this.amazonCredentialsData.indexOf(config)}>*/}
-                                                    {/*<Select*/}
-                                                        {/*options={config.options}*/}
-                                                        {/*label={config.title}*/}
-                                                        {/*placeholder={config.title}*/}
-                                                        {/*error={this.state.amazon_credentials_error[config.key]?'Field can not be Empty':null}*/}
-                                                        {/*value={this.state.amazon_credentials[config.key]}*/}
-                                                        {/*onChange={this.AmazonCredentialsChange.bind(this, this.amazonCredentialsData.indexOf(config))}>*/}
-                                                    {/*</Select>*/}
-                                                {/*</div>*/}
-                                            {/*);*/}
-                                        {/*case 'checkbox':*/}
-                                            {/*return (*/}
-                                                {/*<div className="col-12 pt-2 pb-2" key={this.amazonCredentialsData.indexOf(config)}>*/}
-                                                    {/*<Label>{config.title}</Label>*/}
-                                                    {/*<div className="row">*/}
-                                                        {/*{*/}
-                                                            {/*config.options.map(option => {*/}
-                                                                {/*return (*/}
-                                                                    {/*<div className="col-md-6 col-sm-6 col-12 p-1" key={config.options.indexOf(option)}>*/}
-                                                                        {/*<Checkbox*/}
-                                                                            {/*checked={this.state.amazon_credentials[config.key].indexOf(option.value) !== -1}*/}
-                                                                            {/*label={option.label}*/}
-                                                                            {/*onChange={this.AmazonCredentialsCheckboxChange.bind(this, this.amazonCredentialsData.indexOf(config), config.options.indexOf(option))}*/}
-                                                                        {/*/>*/}
-                                                                    {/*</div>*/}
-                                                                {/*);*/}
-                                                            {/*})*/}
-                                                        {/*}*/}
-                                                    {/*</div>*/}
-                                                {/*</div>*/}
-                                            {/*);*/}
-                                        {/*default:*/}
-                                            {/*return (*/}
-                                                {/*<div className="col-12 pt-2 pb-2" key={this.amazonCredentialsData.indexOf(config)}>*/}
-                                                    {/*<TextField*/}
-                                                        {/*label={config.title}*/}
-                                                        {/*disabled={config.key === 'account_name'}*/}
-                                                        {/*placeholder={config.title}*/}
-                                                        {/*value={this.state.amazon_credentials[config.key]}*/}
-                                                        {/*error={this.state.amazon_credentials_error[config.key]?'Field can not be Empty':null}*/}
-                                                        {/*onChange={this.AmazonCredentialsChange.bind(this, this.amazonCredentialsData.indexOf(config))}>*/}
-                                                    {/*</TextField>*/}
-                                                {/*</div>*/}
-                                            {/*);*/}
-                                    {/*}*/}
-
-                                {/*})*/}
-                            {/*}*/}
-                            {/*<div className="col-12 text-right pt-2 pb-1">*/}
-                                {/*<Button*/}
-                                    {/*disabled={!this.state.amazon_credentials_updated}*/}
-                                    {/*onClick={() => {*/}
-                                        {/*this.saveAmazonCredentialsData();*/}
-                                    {/*}}*/}
-                                    {/*primary>Save</Button>*/}
-                            {/*</div>*/}
-                        {/*</div>*/}
-                    </Card>
-                    <Card>
                         <div className="p-4">
                             {isUndefined(this.state.amazon_data) ? <Button primary fullWidth onClick={this.redirect.bind(this, '/panel/accounts')}>Connect Now</Button>:
                             <AmazonInstallationForm page={'config'} amazon_data={this.state.amazon_data}/>}
@@ -386,7 +311,6 @@ export class Configuration extends Component {
                                             );
                                             break;
                                     }
-
                                 })
                             }
                             <div className="col-12 text-right pt-2 pb-1">
@@ -561,6 +485,84 @@ export class Configuration extends Component {
         )
     }
 
+    renderEtsyConfig() {
+        return (
+            <div className="row">
+                <div className="col-md-6 col-sm-6 col-12 text-md-left text-sm-left text-center">
+                    <Heading>Etsy Configuration</Heading>
+                </div>
+                <div className="col-md-6 col-sm-6 col-12">
+                    <Card>
+                        <div className="row p-5">
+                            {
+                                this.etsyConfigurationData.map(config => {
+                                        switch(config.type) {
+                                            case 'select':
+                                                return (
+                                                    <div className="col-12 pt-2 pb-2" key={this.etsyConfigurationData.indexOf(config)}>
+                                                        <Select
+                                                            options={config.options}
+                                                            label={config.title}
+                                                            placeholder={config.title}
+                                                            value={this.state.etsy_configuration[config.code]}
+                                                            onChange={this.etsyConfigurationChange.bind(this, this.etsyConfigurationData.indexOf(config))}>
+                                                        </Select>
+                                                    </div>
+                                                );
+                                                break;
+                                            case 'checkbox':
+                                                return (
+                                                    <div className="col-12 pt-2 pb-2" key={this.etsyConfigurationData.indexOf(config)}>
+                                                        <Label>{config.title}</Label>
+                                                        <div className="row">
+                                                            {
+                                                                config.options.map(option => {
+                                                                    return (
+                                                                        <div className="col-md-6 col-sm-6 col-12 p-1" key={config.options.indexOf(option)}>
+                                                                            <Checkbox
+                                                                                checked={this.state.etsy_configuration[config.code].indexOf(option.value) !== -1}
+                                                                                label={option.label}
+                                                                                onChange={this.etsyConfigurationCheckboxChange.bind(this, this.etsyConfigurationData.indexOf(config), config.options.indexOf(option))}
+                                                                            />
+                                                                        </div>
+                                                                    );
+                                                                })
+                                                            }
+                                                        </div>
+                                                    </div>
+                                                );
+                                                break;
+                                            default:
+                                                return (
+                                                    <div className="col-12 pt-2 pb-2" key={this.etsyConfigurationData.indexOf(config)}>
+                                                        <TextField
+                                                            label={config.title}
+                                                            placeholder={config.title}
+                                                            value={this.state.etsy_configuration[config.code]}
+                                                            onChange={this.etsyConfigurationChange.bind(this, this.etsyConfigurationData.indexOf(config))}>
+                                                        </TextField>
+                                                    </div>
+                                                );
+                                                break;
+                                        }
+
+                                })
+                            }
+                            <div className="col-12 text-right pt-2 pb-1">
+                                <Button
+                                    disabled={!this.state.etsy_configuration_updated}
+                                    onClick={() => {
+                                        this.saveEtsyConfigData();
+                                    }}
+                                    primary>Save</Button>
+                            </div>
+                        </div>
+                    </Card>
+                </div>
+            </div>
+        )
+    }
+
     render() {
         return (
             <Page
@@ -572,15 +574,18 @@ export class Configuration extends Component {
                     <Layout.Section>
                         {this.renderShopifyConfigurationSection()}
                     </Layout.Section>
-                    {this.state.ebay_plan_buy && <Layout.Section>
+                    <Layout.Section>
                         {this.renderEbayConfig()}
-                    </Layout.Section>}
-                    {this.state.amazon_plan_buy && <Layout.Section>
+                    </Layout.Section>
+                    {/*<Layout.Section>*/}
+                        {/*{this.renderEtsyConfig()}*/}
+                    {/*</Layout.Section>*/}
+                    <Layout.Section>
                         {this.renderAmazonCredentials()}
-                    </Layout.Section>}
-                    {this.state.amazon_plan_buy && <Layout.Section>
+                    </Layout.Section>
+                    <Layout.Section>
                         {this.renderAmazonImporterConfigurationSection()}
-                    </Layout.Section>}
+                    </Layout.Section>
                 </Layout>
             </Page>
         );
@@ -684,43 +689,28 @@ export class Configuration extends Component {
         this.updateState();
     }
 
-    saveAmazonCredentialsData() {
-        requests.postRequest('amazonimporter/request/setAmazonCredentials',this.state.amazon_credentials)
-            .then(data => {
-                if (data.success) {
-                    notify.success(data.message);
-                    this.amazonCredentials();
-                } else {
-                    notify.error(data.message);
-                }
-        });
-    }
 
-    AmazonCredentialsChange(index, value) {
-        this.state.amazon_credentials_updated = true;
-        if (this.amazonCredentialsData[index].required) {
-            if ( value === '' ) {
-                this.state.amazon_credentials_updated = false;
-                this.state.amazon_credentials_error[this.amazonCredentialsData[index].key] = true;
-            } else {
-                this.state.amazon_credentials_error[this.amazonCredentialsData[index].key] = false;
-            }
+    etsyConfigurationChange(index, value) {
+        if ( value === 'disable' || value === 'enable' ) {
+            this.state.show_etsy_child_component['sync_field'] = value !== 'enable';
         }
-        this.state.amazon_credentials[this.amazonCredentialsData[index].key] = value;
+        this.state.etsy_configuration_updated = true;
+        this.state.etsy_configuration[this.etsyConfigurationData[index].code] = value;
         this.updateState();
     }
 
-    AmazonCredentialsCheckboxChange(index, optionIndex, value) {
-        this.state.amazon_credentials_updated = true;
-        const option = this.amazonCredentialsData[index].options[optionIndex].value;
-        const valueIndex = this.state.amazon_credentials[this.amazonCredentialsData[index].key].indexOf(option);
+    etsyConfigurationCheckboxChange(index, optionIndex, value) {
+        console.log(index, optionIndex, value, this.state.etsy_configuration, this.etsyConfigurationData[index].code);
+        this.state.etsy_configuration_updated = true;
+        const option = this.etsyConfigurationData[index].options[optionIndex].value;
+        const valueIndex = this.state.etsy_configuration[this.etsyConfigurationData[index].code].indexOf(option);
         if (value) {
             if (valueIndex === -1) {
-                this.state.amazon_credentials[this.amazonCredentialsData[index].key].push(option);
+                this.state.etsy_configuration[this.etsyConfigurationData[index].code].push(option);
             }
         } else {
             if (valueIndex !== -1) {
-                this.state.amazon_credentials[this.amazonCredentialsData[index].key].splice(valueIndex, 1);
+                this.state.etsy_configuration[this.etsyConfigurationData[index].code].splice(valueIndex, 1);
             }
         }
         this.updateState();
@@ -739,42 +729,35 @@ export class Configuration extends Component {
             });
     }
 
-    importConfigurationChange(key, value) {
-        this.state.importer_configuration_updated = true;
-        this.state.importer_configuration[key] = value;
-        this.updateState();
-    }
-
-    defaultProfileChange(value, event) {
-        this.state.importer_configuration_updated = true;
-        const itemIndex = this.state.importer_configuration.default_profile_settings.indexOf(value);
-        if (event) {
-            if (itemIndex === -1) {
-                this.state.importer_configuration.default_profile_settings.push(value);
-            }
-        } else {
-            if (itemIndex !== -1) {
-                this.state.importer_configuration.default_profile_settings.splice(itemIndex, 1);
-            }
-        }
-        this.updateState();
-    }
-
     accountInfoChange(key, value) {
         this.state.account_information[key] = value;
         this.state.account_information_updated = true;
         this.updateState();
     }
 
-    saveEbayConfigData() {
-        requests.postRequest('connector/get/saveConfig', { marketplace: 'ebayimporter', data: this.state.ebay_configuration })
+    saveEtsyConfigData() {
+        requests.postRequest('connector/get/saveConfig', { marketplace: 'etsyimporter', data: this.state.etsy_configuration })
             .then(data => {
                 if (data.success) {
+                    this.setState({etsy_configuration_updated:false});
                     notify.success(data.message);
                 } else {
                     notify.error(data.message);
                 }
-                this.getShopifyConfigurations();
+                this.getEtsyConfig();
+            });
+    }
+
+    saveEbayConfigData() {
+        requests.postRequest('connector/get/saveConfig', { marketplace: 'ebayimporter', data: this.state.ebay_configuration })
+            .then(data => {
+                if (data.success) {
+                    this.setState({ebay_configuration_updated:false});
+                    notify.success(data.message);
+                } else {
+                    notify.error(data.message);
+                }
+                this.getEbayConfig();
             });
     }
 

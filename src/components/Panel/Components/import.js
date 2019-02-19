@@ -129,7 +129,7 @@ export class Import extends Component {
                                         label="Product Listing Type"
                                         options={[{label:'Active Products',value:'active'},
                                             {label:'Inactive Products',value:'inactive'},
-                                            {label:'All Products',value:'all'},
+                                            // {label:'All Products',value:'all'},
                                             {label:'Expire Products',value:'expire'},
                                             {label:'Draft Products',value:'draft'}]}
                                         onChange={this.handleImportChange.bind(this, 'listing_type')}
@@ -221,7 +221,14 @@ export class Import extends Component {
                         notify.success(data.message);
                     }
                 } else {
-                    notify.error(data.message);
+                    if ( data.code === 'limit_exhausted' ) {
+                        setTimeout(() => {
+                            this.redirect('/panel/accounts');
+                        }, 1000);
+                        notify.info('Credit Not Available.');
+                    } else {
+                        notify.error(data.message);
+                    }
                 }
             });
     }
@@ -505,6 +512,15 @@ export class Import extends Component {
                        setTimeout(() => {
                            this.redirect('/panel/accounts');
                        }, 1200);
+                       notify.info('Account Not Linked.');
+                   }
+                   if ( data.code === 'limit_exhausted' ) {
+                       setTimeout(() => {
+                           this.redirect('/panel/accounts');
+                       }, 1000);
+                       notify.info('Credit Not Available.');
+                   } else {
+                       notify.error(data.message);
                    }
                }
                this.updateState();

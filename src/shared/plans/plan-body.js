@@ -166,96 +166,96 @@ class PlanBody extends Component {
         return (
             <React.Fragment>
                 <div className="row">
-                    {/*<div className="col-12">*/}
-                        {/*<div className="row pt-4 pb-4">*/}
-                            {/*<div className="col-3 d-md-block d-sm-none">*/}
-                                {/*<hr/>*/}
-                            {/*</div>*/}
-                            {/*<div className="col-md-6 col-sm-12 col-12 text-center">*/}
-                                {/*<DisplayText element="h3">Product Import Charges</DisplayText>*/}
-                            {/*</div>*/}
-                            {/*<div className="col-3 d-md-block d-sm-none">*/}
-                                {/*<hr/>*/}
-                            {/*</div>*/}
-                        {/*</div>*/}
-                    {/*</div>*/}
-                    {/*<div className="col-12 p-3">*/}
-                        {/*<Card>*/}
-                            {/*<div className="row p-5">*/}
-                                {/*<div className="col-12 text-center pt-5 pb-2">*/}
-                                    {/*<div className="mb-5 text-center">*/}
-                                        {/*<p className="price-tag">*/}
-                                            {/*<span className="price-tag_small">$</span>*/}
-                                            {/*{this.state.perProductCharge}*/}
-                                            {/*<span className="price-tag_small">/ per product</span>*/}
-                                        {/*</p>*/}
-                                    {/*</div>*/}
-                                {/*</div>*/}
-                                {/*<div className="col-12 p-3">*/}
-                                    {/*<Card>*/}
-                                        {/*<div className="row p-5">*/}
-                                            {/*<div className="col-md-3 col-sm-12 col-12 text-center">*/}
-                                                {/*<TextField*/}
-                                                    {/*label="Product Count"*/}
-                                                    {/*type="number"*/}
-                                                    {/*value={this.state.oneTimePaymentDetails.totalCredits}*/}
-                                                    {/*onChange={this.handleCreditsChange.bind(this)}*/}
-                                                    {/*helpText="No. of product you want to upload on Shopify"*/}
-                                                {/*/>*/}
-                                            {/*</div>*/}
-                                            {/*<div className="col-md-1 col-sm-12 col-12 text-center pt-5">*/}
-                                                {/*<h2><b>X</b></h2>*/}
-                                            {/*</div>*/}
-                                            {/*<div className="col-md-3 col-sm-12 col-12 text-center pt-5">*/}
-                                                {/*<div className="mb-5 text-center">*/}
-                                                    {/*<p className="price-tag">*/}
-                                                        {/*<span className="price-tag_small">$</span>*/}
-                                                        {/*{this.state.perProductCharge}*/}
-                                                    {/*</p>*/}
-                                                {/*</div>*/}
-                                            {/*</div>*/}
-                                            {/*<div className="col-md-1 col-sm-12 col-12 text-center pt-5">*/}
-                                                {/*<h2><b>=</b></h2>*/}
-                                            {/*</div>*/}
-                                            {/*<div className="col-md-4 col-sm-12 col-12 text-center pt-5">*/}
-                                                {/*<div className="mb-5 text-center">*/}
-                                                    {/*<p className="price-tag">*/}
-                                                        {/*<span className="price-tag_small">$</span>*/}
-                                                        {/*{this.state.oneTimePaymentDetails.totalAmount}*/}
-                                                    {/*</p>*/}
-                                                {/*</div>*/}
-                                                {/*<Label>Payable Amount</Label>*/}
-                                            {/*</div>*/}
-                                        {/*</div>*/}
-                                    {/*</Card>*/}
-                                {/*</div>*/}
-                                {/*<div className="col-12 text-center pt-3 pb-2">*/}
-                                    {/*<Button*/}
-                                        {/*primary={true}*/}
-                                        {/*size="large"*/}
-                                        {/*disabled={this.state.oneTimePaymentDetails.totalAmount === 0}*/}
-                                        {/*onClick={() => {*/}
-                                            {/*this.makePaymentForImporter();*/}
-                                        {/*}}>*/}
-                                        {/*Make Payment*/}
-                                    {/*</Button>*/}
-                                {/*</div>*/}
-                            {/*</div>*/}
-                        {/*</Card>*/}
-                    {/*</div>*/}
-                    {/*<div className="col-12">*/}
-                        {/*<div className="row pt-4 pb-4">*/}
-                            {/*<div className="col-3 d-md-block d-sm-none">*/}
-                                {/*<hr/>*/}
-                            {/*</div>*/}
-                            {/*<div className="col-md-6 col-sm-12 col-12 text-center">*/}
-                                {/*<DisplayText element="h3">Product Syncing Charges</DisplayText>*/}
-                            {/*</div>*/}
-                            {/*<div className="col-3 d-md-block d-sm-none">*/}
-                                {/*<hr/>*/}
-                            {/*</div>*/}
-                        {/*</div>*/}
-                    {/*</div>*/}
+                    <div className="col-12">
+                        <div className="row pt-4 pb-4">
+                            <div className="col-3 d-md-block d-sm-none">
+                                <hr/>
+                            </div>
+                            <div className="col-md-6 col-sm-12 col-12 text-center">
+                                <DisplayText element="h3">Product Import Charges</DisplayText>
+                            </div>
+                            <div className="col-3 d-md-block d-sm-none">
+                                <hr/>
+                            </div>
+                        </div>
+                    </div>
+                    <div className="col-12 p-3">
+                        <Card>
+                            <div className="row p-5">
+                                <div className="col-12 text-center pt-5 pb-2">
+                                    <div className="mb-5 text-center">
+                                        <p className="price-tag">
+                                            <span className="price-tag_small">$</span>
+                                            {this.state.perProductCharge}
+                                            <span className="price-tag_small">/ per product</span>
+                                        </p>
+                                    </div>
+                                </div>
+                                <div className="col-12 p-3">
+                                    <Card>
+                                        <div className="row p-5">
+                                            <div className="col-md-3 col-sm-12 col-12 text-center">
+                                                <TextField
+                                                    label="Product Count"
+                                                    type="number"
+                                                    value={this.state.oneTimePaymentDetails.totalCredits}
+                                                    onChange={this.handleCreditsChange.bind(this)}
+                                                    helpText="No. of product you want to upload on Shopify"
+                                                />
+                                            </div>
+                                            <div className="col-md-1 col-sm-12 col-12 text-center pt-5">
+                                                <h2><b>X</b></h2>
+                                            </div>
+                                            <div className="col-md-3 col-sm-12 col-12 text-center pt-5">
+                                                <div className="mb-5 text-center">
+                                                    <p className="price-tag">
+                                                        <span className="price-tag_small">$</span>
+                                                        {this.state.perProductCharge}
+                                                    </p>
+                                                </div>
+                                            </div>
+                                            <div className="col-md-1 col-sm-12 col-12 text-center pt-5">
+                                                <h2><b>=</b></h2>
+                                            </div>
+                                            <div className="col-md-4 col-sm-12 col-12 text-center pt-5">
+                                                <div className="mb-5 text-center">
+                                                    <p className="price-tag">
+                                                        <span className="price-tag_small">$</span>
+                                                        {this.state.oneTimePaymentDetails.totalAmount}
+                                                    </p>
+                                                </div>
+                                                <Label>Payable Amount</Label>
+                                            </div>
+                                        </div>
+                                    </Card>
+                                </div>
+                                <div className="col-12 text-center pt-3 pb-2">
+                                    <Button
+                                        primary={true}
+                                        size="large"
+                                        disabled={this.state.oneTimePaymentDetails.totalAmount === 0}
+                                        onClick={() => {
+                                            this.makePaymentForImporter();
+                                        }}>
+                                        Make Payment
+                                    </Button>
+                                </div>
+                            </div>
+                        </Card>
+                    </div>
+                    <div className="col-12">
+                        <div className="row pt-4 pb-4">
+                            <div className="col-3 d-md-block d-sm-none">
+                                <hr/>
+                            </div>
+                            <div className="col-md-6 col-sm-12 col-12 text-center">
+                                <DisplayText element="h3">Product Syncing Charges</DisplayText>
+                            </div>
+                            <div className="col-3 d-md-block d-sm-none">
+                                <hr/>
+                            </div>
+                        </div>
+                    </div>
                     {this.state.data.map((data, index) => {
                         return (
                             <div className="col-sm-4 col-12 pt-3 pb-3" key={index}>{/* Starting Of Plan Card */}
