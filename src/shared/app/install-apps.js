@@ -48,6 +48,14 @@ class InstallAppsShared extends Component {
                                 <Heading>{'Connect '} { capitalizeWord(this.state.code) === 'Amazonimporter'?'Amazon Importer':capitalizeWord(this.state.code)}</Heading>
                             </Banner>
                         </div>
+                        {
+                            this.state.code === 'walmartimporter' &&
+                            <div className="col-12 text-right">
+                                <Button onClick={() => {window.open('http://apps.cedcommerce.com/importer/walmart_doc.pdf' )}} size={"slim"}>
+                                    Help PDF
+                                </Button>
+                            </div>
+                        }
                         <div className="col-12 mt-1">
                             <div className="row">
                                 {this.state.schema.map((field) => {

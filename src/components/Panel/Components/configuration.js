@@ -56,8 +56,8 @@ export class Configuration extends Component {
         this.getUserDetails();
         this.getShopifyConfigurations();
         this.getAmazonImporterConfigurations();
-        this.amazonCredentials();
-        this.getEbayConfig();
+        // this.amazonCredentials();
+        // this.getEbayConfig();
         // this.getEtsyConfig();
     }
 
@@ -574,15 +574,15 @@ export class Configuration extends Component {
                     <Layout.Section>
                         {this.renderShopifyConfigurationSection()}
                     </Layout.Section>
-                    <Layout.Section>
-                        {this.renderEbayConfig()}
-                    </Layout.Section>
+                    {/*<Layout.Section>*/}
+                        {/*{this.renderEbayConfig()}*/}
+                    {/*</Layout.Section>*/}
                     {/*<Layout.Section>*/}
                         {/*{this.renderEtsyConfig()}*/}
                     {/*</Layout.Section>*/}
-                    <Layout.Section>
-                        {this.renderAmazonCredentials()}
-                    </Layout.Section>
+                    {/*<Layout.Section>*/}
+                        {/*{this.renderAmazonCredentials()}*/}
+                    {/*</Layout.Section>*/}
                     <Layout.Section>
                         {this.renderAmazonImporterConfigurationSection()}
                     </Layout.Section>

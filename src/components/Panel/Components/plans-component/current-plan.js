@@ -73,7 +73,7 @@ class CurrentPlan extends Component {
                                     <div className="row">
                                         <div className="col-12 pt-2 pb-3">
                                             <Label>
-                                                Product Upload Credits - <b>{this.state.available_credits}</b>
+                                                Product Upload Credits -: <b>{this.state.available_credits}</b>
                                             </Label>
                                         </div>
                                         <div className="col-12">

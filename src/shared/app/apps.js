@@ -45,7 +45,7 @@ class AppsShared extends Component {
                 <div className="col-12 mb-5">
                     <Banner title="Note" status="info">
                         <Label id={"trial"}>
-                            During Trial Period You can Only Upload Upto 10 Products.
+                            You can upload 10 product for free.
                         </Label>
                     </Banner>
                 </div>

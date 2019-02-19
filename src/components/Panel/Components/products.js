@@ -628,10 +628,10 @@ export class Products extends Component {
                         <div>
                             <Banner title="Please Note" status="info">
                                 <Label id={'sUploadLabel'}>
-                                    Product without an profile, will be uploaded via Default Profile.
+                                    Product without a profile, will be uploaded via default profile.
                                 </Label>
                                 <Label id={'sUploadLabel2'}>
-                                    Selected Product if have multiple variants, those variants will also be uploaded.
+                                    The multiple variants of a product will be auto uploaded on selecting one of the variants.
                                 </Label>
                                 <br/>
                                 <Label id={'sUploadLabel3'}>

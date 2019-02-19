@@ -221,7 +221,7 @@ export class Import extends Component {
                         notify.success(data.message);
                     }
                 } else {
-                    if ( data.code === 'limit_exhausted' ) {
+                    if ( data.code === 'account_not_connected' ) {
                         setTimeout(() => {
                             this.redirect('/panel/accounts');
                         }, 1000);
@@ -516,7 +516,7 @@ export class Import extends Component {
                    }
                    if ( data.code === 'limit_exhausted' ) {
                        setTimeout(() => {
-                           this.redirect('/panel/accounts');
+                           this.redirect('/panel/plans');
                        }, 1000);
                        notify.info('Credit Not Available.');
                    } else {

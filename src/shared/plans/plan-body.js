@@ -225,6 +225,7 @@ class PlanBody extends Component {
                                                     </p>
                                                 </div>
                                                 <Label>Payable Amount</Label>
+                                                <p style={{color:'#7d7d7d'}}><Label>( should be more than 0.5$ )</Label></p>
                                             </div>
                                         </div>
                                     </Card>
@@ -233,7 +234,7 @@ class PlanBody extends Component {
                                     <Button
                                         primary={true}
                                         size="large"
-                                        disabled={this.state.oneTimePaymentDetails.totalAmount === 0}
+                                        disabled={this.state.oneTimePaymentDetails.totalAmount < 0.6}
                                         onClick={() => {
                                             this.makePaymentForImporter();
                                         }}>
@@ -258,10 +259,10 @@ class PlanBody extends Component {
                     </div>
                     {this.state.data.map((data, index) => {
                         return (
-                            <div className="col-sm-4 col-12 pt-3 pb-3" key={index}>{/* Starting Of Plan Card */}
+                            <div className="col-sm-4 col-12" key={index}>{/* Starting Of Plan Card */}
                                 <Card>
-                                    <div className="d-flex justify-content-center">
-                                        <div className="p-5" >
+                                    <div className="d-flex justify-content-center p-5">
+                                        <div className="pt-5" >
                                             <div className="mb-5 text-center" > {/* Plan Numeric Price */}
                                                 <p className="price-tag">
                                                     <span className="price-tag_small">$</span>
@@ -288,7 +289,7 @@ class PlanBody extends Component {
                                             <div className="text-center mt-5"> {/* Services Data */}
                                                 {data.services?Object.keys(data.services).map(keys => {
                                                     return (<React.Fragment key={keys}>
-                                                        <p className="service-body">
+                                                        <p className="service-body mb-5">
                                                             <span className="service-description mb-3" style={{fontWeight:'bold'}}><b>{data.services[keys].title}</b></span>
                                                             <span>
                                                                 <Tooltip content={data.services[keys].description} preferredPosition="above">
@@ -296,7 +297,6 @@ class PlanBody extends Component {
                                                                 </Tooltip>
                                                             </span>
                                                         </p>
-                                                        <p style={{fontSize:'11px',fontWeight:'bold'}}>Choose source marketplace</p>
                                                         {Object.keys(data.services[keys].services).map(key1 => {
                                                             if ( data.services[keys].services[key1].required === 1 ) {
                                                                 return (<div key={key1} className="text-left">
