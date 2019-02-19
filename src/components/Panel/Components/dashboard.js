@@ -172,9 +172,6 @@ class Dashboard extends Component {
                     let temp = this.state.stepData;
                     let anchor = '';
                     let flag = true;
-                    if ( parseInt(data.data) === 0 ) {
-                        requests.getRequest('shopifygql/setup/shopifydetails').then();
-                    }
                     temp.forEach((keys, index) => {
                         if ( index < parseInt(data.data) ) { // if  ( step here < no of step completed )
                             keys.stepperActive = true;
@@ -197,6 +194,9 @@ class Dashboard extends Component {
                     });
                 }
             } else {
+                if ( data.code === 'under_maintenance' ) {
+                    this.redirect('/show/message?success=sucess&message='+ data.message + '&icon=faToolbox')
+                }
                 // notify.error(data.message);
             }
         });
@@ -394,12 +394,12 @@ class Dashboard extends Component {
                     tempInfo.mobile = tempInfo.mobile_code + '-' + tempInfo.mobile;
                     requests.getRequest('core/user/updateuser', tempInfo).then(data => {
                         if (data.success) {
+                            requests.getRequest('shopifygql/setup/shopifydetails').then();
                             notify.success(data.message);
                             this.changeStep(1);
                             if ( window.gtag1 === 'not_init' ) {
                                 window.gtag1 = 'start';
                             }
-
                         } else {
                             notify.error(data.message);
                         }

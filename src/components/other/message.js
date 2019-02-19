@@ -2,7 +2,7 @@ import React, {Component} from 'react';
 import * as queryString  from 'query-string';
 import "./message.css"
 import {
-    faCheck,faTimes
+    faCheck,faTimes,faToolbox
 } from '@fortawesome/free-solid-svg-icons';
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {Button} from "@shopify/polaris";
@@ -19,6 +19,7 @@ class MessageShow extends Component {
             shop: null,
             failed:'',
             isPlan:true,
+            icon: faCheck,
         };
         globalState.removeLocalStorage('shop');
     }
@@ -29,6 +30,10 @@ class MessageShow extends Component {
                queryParams.success = 'BG-danger';
            } else {
                queryParams.success = 'BG-success';
+           }
+           if ( queryParams.icon !== null && typeof queryParams.icon !== "undefined") {
+               this.setState({icon: faToolbox });
+               queryParams.success = 'BG-info';
            }
            this.setState({
                message: queryParams.message,
@@ -77,7 +82,8 @@ class MessageShow extends Component {
                     <div className="CARD w-100">
                         <div className={`CARD-title-small text-center ${this.state.success}`}>
                             {this.state.success === 'BG-success'?
-                                <FontAwesomeIcon icon={faCheck} size="5x"/>
+                                <FontAwesomeIcon icon={this.state.icon} size="5x"/>:this.state.success === 'BG-info' ?
+                                    <FontAwesomeIcon icon={this.state.icon} size="5x"/>
                                 : <FontAwesomeIcon icon={faTimes} size="5x"/>
                             }
                         </div>
