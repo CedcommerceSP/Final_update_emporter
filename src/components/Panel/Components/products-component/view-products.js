@@ -24,6 +24,7 @@ class ViewProducts extends Component {
                 quantity:'',
                 weight:'',
                 weight_unit: '',
+                tags:'',
             },
             products_middle_additional:{
             },
@@ -53,6 +54,8 @@ class ViewProducts extends Component {
                         quantity:data.data.variants.quantity,
                         weight:data.data.variants.weight,
                         weight_unit: data.data.variants.weight_unit,
+                        tags: data.data.details.tags,
+
                     };
                     if (!isUndefined(data.data.variant_attributes)) {
                         data.data.variant_attributes.forEach(e => {
@@ -123,6 +126,11 @@ class ViewProducts extends Component {
                                         <h4><b>Weight</b></h4>
                                         <h5>{this.state.products_middle.weight}&nbsp;/&nbsp;<i>{this.state.products_middle.weight_unit}</i></h5>
                                     </div>:null}
+                                    {this.state.products_middle.tags !== ''?
+                                        <div className="mb-5 col-sm-6 col-12">
+                                            <h4><b>Tags</b></h4>
+                                            <h5>{this.state.products_middle.tags}</h5>
+                                        </div>:null}
                                     {Object.keys(this.state.products_middle_additional).map((key,index) => {
                                         if (this.state.products_middle_additional[key] !=='' ) {
                                             return (

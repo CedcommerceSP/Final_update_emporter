@@ -187,7 +187,7 @@ class PlanBody extends Component {
                                         <p className="price-tag">
                                             <span className="price-tag_small">$</span>
                                             {this.state.perProductCharge}
-                                            <span className="price-tag_small">/ per product</span>
+                                            <span className="price-tag_small">/ product</span>
                                         </p>
                                     </div>
                                 </div>

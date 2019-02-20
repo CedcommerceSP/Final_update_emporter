@@ -1114,7 +1114,7 @@ export class CreateProfile extends Component {
                     if (data.success) {
                         this.filteredProducts = {
                             runQuery: true,
-                            totalProducts: data.data
+                            totalProducts: data.data === null?0:data.data
                         };
                     } else {
                         notify.error(data.message);

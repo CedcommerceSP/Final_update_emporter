@@ -236,6 +236,10 @@ export class Products extends Component {
 
     getProducts() {
         window.showGridLoader = true;
+        this.setState({
+            showLoaderBar:true,
+            hideLoader:false,
+        });
         this.prepareFilterObject();
         const pageSettings = Object.assign({}, this.gridSettings);
         requests.getRequest('connector/product/getProducts', Object.assign( pageSettings, this.state.appliedFilters),false,true)

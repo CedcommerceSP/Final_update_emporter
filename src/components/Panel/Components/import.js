@@ -26,7 +26,7 @@ export class Import extends Component {
     constructor() {
         super();
         this.state = {
-            listing_type: 'all',
+            listing_type: 'active',
             importServicesList: [],
             importerShopLists: [],
             uploadServicesList: [],
@@ -225,7 +225,7 @@ export class Import extends Component {
                         setTimeout(() => {
                             this.redirect('/panel/accounts');
                         }, 1000);
-                        notify.info('Credit Not Available.');
+                        notify.info('User Account Not Found. Please Connect The Account First.');
                     } else {
                         notify.error(data.message);
                     }
@@ -507,7 +507,7 @@ export class Import extends Component {
                        notify.success(data.message);
                    }
                } else {
-                   notify.error(data.message);
+                   // notify.error(data.message);
                    if (data.code === 'link_your_account') {
                        setTimeout(() => {
                            this.redirect('/panel/accounts');

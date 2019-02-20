@@ -45,7 +45,7 @@ class AppsShared extends Component {
                 <div className="col-12 mb-5">
                     <Banner title="Note" status="info">
                         <Label id={"trial"}>
-                            You can upload 10 product for free.
+                            You can upload 10 products free.
                         </Label>
                     </Banner>
                 </div>
@@ -101,10 +101,10 @@ class AppsShared extends Component {
                 label={''}/>;
         } else if ( code === 'etsyimporter' ) {
             return <TextField
-                label={"Shop URL"}
+                label={"Shop Name"}
                 value={this.state.etsy}
                 onChange={this.handleChange.bind(this,'etsy')}
-                placeholder={"Etsy URL"} labelHidden={true}/>
+                placeholder={"Etsy Shop Name"} labelHidden={true}/>
         }
         return null;
     };
@@ -119,7 +119,7 @@ class AppsShared extends Component {
             if ( this.state.etsy !== undefined && this.state.etsy !== '' ) {
                 this.props.redirectResult(code, {code:code, shop_name:this.state.etsy});
             } else {
-                notify.info('Please Provide The Valid URL.');
+                notify.info('Please Provide The Valid Shop Name.');
             }
         } else {
             this.props.redirectResult(code, '');
