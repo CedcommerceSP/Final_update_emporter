@@ -128,7 +128,7 @@ export class Import extends Component {
                                     <Select
                                         label="Product Listing Type"
                                         options={[{label:'Active Products',value:'active'},
-                                            {label:'Inactive Products',value:'inactive'},
+                                            {label:'Inactive Products',value:'edit'},
                                             // {label:'All Products',value:'all'},
                                             {label:'Expire Products',value:'expire'},
                                             {label:'Draft Products',value:'draft'}]}

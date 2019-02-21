@@ -1,25 +1,15 @@
 import React, { Component } from 'react';
 import {isUndefined} from "util";
-import {NavLink} from "react-router-dom";
-import {
-    Page,
-    Card,
-    Select,
-    Pagination,
-    Label,
-    ResourceList,
-    Modal,
-    TextContainer,
-    Tabs, Banner, Button
+import {Page, Card, Select, Pagination, Label, ResourceList,
+    Modal, TextContainer, Tabs, Banner, Button, Badge, Collapsible,DataTable
 } from '@shopify/polaris';
 
 import { requests } from '../../../services/request';
 import { notify } from '../../../services/notify';
-import {globalState} from "../../../services/globalstate";
 
 import SmartDataTable from '../../../shared/smartTable';
 
-import {capitalizeWord, paginationShow, validateImporter} from "./static-functions";
+import {paginationShow, validateImporter} from "./static-functions";
 
 import {environment} from "../../../environments/environment";
 
@@ -31,10 +21,12 @@ export class Products extends Component {
         single_column_filter: [],
         column_filters: {}
     };
+
     gridSettings = {
-      variantsCount: "10",
+      count: "10",
       activePage: 1
     };
+
     pageLimits = [
         {label: 10, value: "10"},
         {label: 20, value: "20"},
@@ -42,30 +34,30 @@ export class Products extends Component {
         {label: 40, value: "40"},
         {label: 50, value: "50"}
     ];
+
     massActions = [
         // {label: 'Delete', value: 'delete'},
         {label: 'Upload', value: 'upload'},
         // {label: 'Upload All', value: 'upload_all'}
     ];
-    visibleColumns = ['main_image', 'title', 'sku', 'price','quantity', 'upload_status'];
-    imageColumns = ['main_image'];
-    hideFilters = ['main_image' ,'long_description','type', 'asin', 'upload_status'];
-    customButton = ['asin1']; // button
+
+    visibleColumns = ['main_image', 'title', 'sku', 'inventory','quantity', 'upload_status'];
+
+    hideFilters = ['main_image' ,'long_description','type', 'upload_status','inventory'];
+
     columnTitles = {
         main_image: {
             title: 'Image',
-            sortable: false
+            sortable: false,
+            type:'image'
         },
         title: {
             title: 'Title',
-            sortable: true
+            sortable: true,
+            type:'string',
         },
-        sku: {
-            title: 'Sku',
-            sortable: true
-        },
-        price: {
-            title: 'Price',
+        inventory: {
+            title: 'Inventory',
             type: 'int',
             sortable: false
         },
@@ -73,24 +65,17 @@ export class Products extends Component {
             title: 'Type',
             sortable: true
         },
-        quantity: {
-            title: 'Quantity',
-            type: 'int',
-            sortable: false
-        },
         source_variant_id: {
             title: 'Parent Id',
-            sortable:false,
-        },
-        asin: {
-            title: 'Unique ID',
             sortable:false,
         },
         upload_status: {
             title: 'Status',
             sortable: false,
+            type:'react'
         },
     };
+
     totalProductCount = 0;
 
     constructor() {
@@ -172,11 +157,6 @@ export class Products extends Component {
             });
     }
 
-    handleProfileSelect(profile) {
-        this.state.uploadProductDetails.selected_profile = profile;
-        this.updateState();
-    }
-
     handleSelectedUpload = (arg,val) => {
         console.log(this.filters.marketplace);
         switch (arg) {
@@ -236,10 +216,6 @@ export class Products extends Component {
 
     getProducts() {
         window.showGridLoader = true;
-        this.setState({
-            showLoaderBar:true,
-            hideLoader:false,
-        });
         this.prepareFilterObject();
         const pageSettings = Object.assign({}, this.gridSettings);
         requests.getRequest('connector/product/getProducts', Object.assign( pageSettings, this.state.appliedFilters),false,true)
@@ -253,9 +229,9 @@ export class Products extends Component {
                     const products = this.modifyProductsData(data.data.rows);
                     this.totalProductCount = data.data.count;
                     this.state['products'] = products;
-                    this.state.showLoaderBar = data.success;
-                    this.state.hideLoader = !data.success;
-                    this.state.pagination_show = paginationShow(this.gridSettings.activePage,this.gridSettings.variantsCount,data.data.count,true);
+                    this.state.showLoaderBar = !data.success;
+                    this.state.hideLoader = data.success;
+                    this.state.pagination_show = paginationShow(this.gridSettings.activePage,this.gridSettings.count,data.data.count,true);
                     this.updateState();
                 } else {
                     this.setState({
@@ -270,63 +246,6 @@ export class Products extends Component {
                     notify.error('No products found');
                     this.updateState();
                 }
-            });
-    }
-
-    getMatchingProfiles() {
-        this.profilesList = [];
-        const data = {
-            source: this.state.uploadProductDetails.source,
-            target: this.state.uploadProductDetails.target
-        };
-        if (this.state.uploadProductDetails.source_shop !== '' &&
-            this.state.uploadProductDetails.source_shop !== null) {
-            data['source_shop'] = this.state.uploadProductDetails.source_shop;
-        }
-        if (this.state.uploadProductDetails.target_shop !== '' &&
-            this.state.uploadProductDetails.target_shop !== null) {
-            data['target_shop'] = this.state.uploadProductDetails.target_shop;
-        }
-        requests.getRequest('connector/profile/getMatchingProfiles', data)
-            .then(data => {
-                if (data.success) {
-                    for (let i = 0; i < data.data.length; i++) {
-                        this.profilesList.push({
-                            label: data.data[i].name,
-                            value: data.data[i].id
-                        });
-                    }
-                    this.updateState();
-                } else {
-                    notify.error(data.message);
-                }
-            });
-    }
-
-    uploadProducts() {
-        const data = Object.assign({}, this.state.uploadProductDetails);
-        data['marketplace'] = data['target'];
-        requests.postRequest('connector/product/upload', data)
-            .then(data => {
-                this.state.showUploadProducts = false;
-                if (data.success) {
-                    if (data.code === 'product_upload_started') {
-                        notify.info('Upload process started. Check progress in activities section.');
-                        setTimeout(() => {
-                            this.redirect('/panel/queuedtasks');
-                        }, 1000);
-                    } else {
-                        notify.success(data.message);
-                    }
-                } else {
-                    notify.error(data.message);
-                    if (data.code === 'link_your_account') {
-                        setTimeout(() => {
-                            this.redirect('/panel/accounts');
-                        }, 1200);
-                    }
-                }
-                this.updateState();
             });
     }
 
@@ -406,24 +325,75 @@ export class Products extends Component {
                     str = 'https://www.csd.uwo.ca/people/gradstudents/zwang688/empty.png';
                 }
                 rowData['main_image'] = str;
-                rowData['title'] = data[i].details.title;
-                rowData['sku'] = data[i].variants['sku'].toString();
-                rowData['price'] = data[i].variants['price'].toString();
+
+                if ( data[i]['details']['type'] === 'simple' ) {
+                    rowData['title'] = <div>
+                        <Label id={i}>
+                            <h3>{data[i].details.title}</h3>
+                        </Label>
+                        <Label id={i + i}>
+                            <h2 style={{color:"#868686"}}>{data[i].variants[0]['sku']}</h2>
+                        </Label>
+                    </div>;
+                    rowData['inventory'] = data[i].variants[0]['quantity'] + ' in Stock';
+                } else {
+                    let quantity = 0;
+                    let rows = [];
+                    Object.keys(data[i].variants).forEach((key,index) => {
+                        if ( data[i].variants[key]['quantity'] > 0 ) {
+                            quantity += data[i].variants[key]['quantity'];
+                        }
+                        if ( data[i].variants[key]['sku'] !== undefined ) {
+                            rows.push([
+                                data[i].variants[key]['sku'],
+                                data[i].variants[key]['quantity'],
+                                data[i].variants[key]['price']
+                            ]);
+                        }
+                    });
+                    rowData['title'] = <div>
+                        <Label id={i}>
+                            <h3>{data[i].details.title}</h3>
+                        </Label>
+                        <Label id={i + i}>
+                            <h2 style={{color:"#868686"}}>{rows.length} Variants</h2>
+                        </Label>
+                        <Collapsible open={this.state.open11} id="basic-collapsible">
+                            <DataTable
+                                columnContentTypes={['text','text','text']}
+                                headings={['Sku','Quantity','Price']}
+                                rows={rows}/>
+                        </Collapsible>
+                    </div>;
+                    rowData['inventory'] = quantity + ' in Stock';
+                }
                 rowData['type'] = data[i].details.type;
-                rowData['quantity'] = data[i].variants['quantity'] !== null?data[i].variants['quantity'].toString():'0';
                 rowData['source_variant_id'] = data[i].details.source_product_id.toString();
-                rowData['upload_status'] = !isUndefined(data[i].upload_status) && data[i].upload_status? 'success':'warning';
-                // rowData['source_variant_id'] =data[i].variants.source_variant_id.toString();
-                rowData['asin'] = data[i].variants.source_variant_id.toString();
+                if ( !isUndefined(data[i].upload_status) && data[i].upload_status ) {
+                    rowData['upload_status'] = <React.Fragment>
+                        <Badge status="success">Uploaded</Badge>
+                        <br/>
+                        <Badge status="attention">Imported</Badge>
+                    </React.Fragment>
+                } else {
+                    rowData['upload_status'] = <React.Fragment>
+                        <Badge status="attention">Imported</Badge>
+                    </React.Fragment>
+                }
                 products.push(rowData);
             }
         }
         return products;
     }
 
+    handleToggleClick = () => {
+        console.log('sss');
+        this.setState({open11: true});
+    };
+
     operations = (event, id) => {
         switch (id) {
-            case 'grid':this.redirect('/panel/products/view/' + event['asin']);break;
+            case 'grid':this.redirect('/panel/products/view/' + event['source_variant_id']);break;
             default:console.log('Default Case');
         }
     };
@@ -491,7 +461,10 @@ export class Products extends Component {
                         />
                         <div className="row">
                             <div className="col-12">
-                                <Tabs tabs={this.state.installedApps} selected={this.state.selectedApp} onSelect={this.handleMarketplaceChange.bind(this)}/>
+                                <Tabs
+                                    tabs={this.state.installedApps}
+                                    selected={this.state.selectedApp}
+                                    onSelect={this.handleMarketplaceChange.bind(this)}/>
                             </div>
                             <div className="col-12 p-3 text-right">
                                 <Label>{this.state.pagination_show} SKU</Label>
@@ -502,13 +475,12 @@ export class Products extends Component {
                                     data={this.state.products}
                                     uniqueKey="source_variant_id"
                                     showLoaderBar={this.state.showLoaderBar}
-                                    count={this.gridSettings.variantsCount}
+                                    count={this.gridSettings.count}
                                     activePage={this.gridSettings.activePage}
                                     hideFilters={this.hideFilters}
                                     columnTitles={this.columnTitles}
                                     datePicker={this.filters.marketplace === 'amazonimporter'}
                                     multiSelect={this.filters.marketplace !== 'all'}
-                                    customButton={this.customButton} // button
                                     operations={this.operations} //button
                                     selected={this.state.selectedProducts}
                                     className='ui compact selectable table'
@@ -517,7 +489,6 @@ export class Products extends Component {
                                     actions={this.massActions}
                                     showColumnFilters={false}
                                     showButtonFilter={true}
-                                    imageColumns={this.imageColumns}
                                     rowActions={{
                                         edit: false,
                                         delete: false
@@ -598,13 +569,13 @@ export class Products extends Component {
                                             this.getProducts();
                                         }
                                     }}
-                                    hasNext={this.state.totalPage/this.gridSettings.variantsCount > this.gridSettings.activePage}
+                                    hasNext={this.state.totalPage/this.gridSettings.count > this.gridSettings.activePage}
                                     nextKeys={[39]}
                                     previousKeys={[37]}
                                     previousTooltip="use Right Arrow"
                                     nextTooltip="use Left Arrow"
                                     onNext={() => {
-                                        if (this.state.totalPage/this.gridSettings.variantsCount > this.gridSettings.activePage ) {
+                                        if (this.state.totalPage/this.gridSettings.count > this.gridSettings.activePage ) {
                                             this.gridSettings.activePage++;
                                             this.getProducts();
                                         }
@@ -614,8 +585,10 @@ export class Products extends Component {
                             <div className="col-md-2 col-sm-2 col-6">
                                 <Select
                                     options={this.pageLimits}
-                                    value={this.gridSettings.variantsCount}
-                                    onChange={this.pageSettingsChange.bind(this)}>
+                                    value={this.gridSettings.count}
+                                    onChange={this.pageSettingsChange.bind(this)}
+                                    label={""}
+                                    labelHidden={true}>
                                 </Select>
                             </div>
                         </div>
@@ -644,241 +617,11 @@ export class Products extends Component {
                                     <h5>SKU: <b>{this.state.child_sku}</b></h5>
                                 </Label>
                             </Banner>
-                            {/*<Select*/}
-                                {/*label={'Profile'}*/}
-                                {/*options={this.state.selectUpload.option}*/}
-                                {/*onChange={this.handleSelectedUpload.bind(this,'select')}*/}
-                                {/*value={this.state.selectUpload.value}*/}
-                            {/*/>*/}
                         </div>
                     </Modal.Section>
                 </Modal>
                 {this.state.deleteProductData && this.deleteProductModal()}
-                {/*{this.renderUploadProductsModal()}*/}
             </Page>
-        );
-    }
-
-    handleUploadChange(key, value) {
-        switch (key) {
-            case 'selected_profile':
-                if (value === 'custom_profile') {
-                    if (this.state.uploadProductDetails.source === '' ||
-                        this.state.uploadProductDetails.target === '') {
-                        notify.info('Please choose product import source and product upload target first');
-                    } else {
-                        this.getMatchingProfiles();
-                        this.state.uploadProductDetails.profile_type = 'custom';
-                        this.state.uploadProductDetails[key] = '';
-                    }
-                } else {
-                    this.state.uploadProductDetails.profile_type = '';
-                    this.state.uploadProductDetails[key] = value;
-                }
-                break;
-            case 'source':
-                this.state.importerShopLists = [];
-                this.state.uploadProductDetails.source = value;
-                this.state.uploadProductDetails.profile_type = '';
-                this.state.uploadProductDetails.selected_profile = 'default_profile';
-                this.state.uploadProductDetails.source_shop = '';
-                this.state.uploadProductDetails.source_shop_id = '';
-                for (let i = 0; i < this.state.importServicesList.length; i++) {
-                    if (this.state.importServicesList[i].value === value) {
-                        for (let j = 0; j < this.state.importServicesList[i].shops.length; j++) {
-                            this.state.importerShopLists.push({
-                                label: this.state.importServicesList[i].shops[j].shop_url,
-                                value: this.state.importServicesList[i].shops[j].shop_url,
-                                shop_id: this.state.importServicesList[i].shops[j].id
-                            });
-                        }
-                        break;
-                    }
-                }
-                if (this.state.importerShopLists.length > 0) {
-                    this.state.uploadProductDetails.source_shop = this.state.importerShopLists[0].value;
-                    this.state.uploadProductDetails.source_shop_id = this.state.importerShopLists[0].shop_id;
-                }
-                break;
-            case 'target':
-                this.state.uploaderShopLists = [];
-                this.state.uploadProductDetails.target = value;
-                this.state.uploadProductDetails.profile_type = '';
-                this.state.uploadProductDetails.selected_profile = 'default_profile';
-                this.state.uploadProductDetails.target_shop = '';
-                this.state.uploadProductDetails.target_shop_id = '';
-                for (let i = 0; i < this.state.uploadServicesList.length; i++) {
-                    if (this.state.uploadServicesList[i].value === value) {
-                        for (let j = 0; j < this.state.uploadServicesList[i].shops.length; j++) {
-                            this.state.uploaderShopLists.push({
-                                label: this.state.uploadServicesList[i].shops[j].shop_url,
-                                value: this.state.uploadServicesList[i].shops[j].shop_url,
-                                shop_id: this.state.uploadServicesList[i].shops[j].id
-                            });
-                        }
-                        break;
-                    }
-                }
-                if (this.state.uploaderShopLists.length > 0) {
-                    this.state.uploadProductDetails.target_shop = this.state.uploaderShopLists[0].value;
-                    this.state.uploadProductDetails.target_shop_id = this.state.uploaderShopLists[0].shop_id;
-                }
-                break;
-            case 'source_shop':
-                this.state.uploadProductDetails.profile_type = '';
-                this.state.uploadProductDetails.selected_profile = 'default_profile';
-                for (let i = 0; i < this.state.importerShopLists.length; i++) {
-                    if (this.state.importerShopLists[i].value === value) {
-                        this.state.uploadProductDetails.source_shop_id = this.state.importerShopLists[i].shop_id;
-                        this.state.uploadProductDetails.source_shop = this.state.importerShopLists[i].value;
-                        break;
-                    }
-                }
-                break;
-            case 'target_shop':
-                this.state.uploadProductDetails.profile_type = '';
-                this.state.uploadProductDetails.selected_profile = 'default_profile';
-                for (let i = 0; i < this.state.uploaderShopLists.length; i++) {
-                    if (this.state.uploaderShopLists[i].value === value) {
-                        this.state.uploadProductDetails.target_shop_id = this.state.uploaderShopLists[i].shop_id;
-                        this.state.uploadProductDetails.target_shop = this.state.uploaderShopLists[i].value;
-                        break;
-                    }
-                }
-                break;
-        }
-        this.updateState();
-    }
-
-    renderUploadProductsModal() {
-        return (
-            <Modal
-                open={this.state.showUploadProducts}
-                onClose={() => {
-                    this.state.showUploadProducts = false;
-                    this.updateState();
-                }}
-                title="Upload Products"
-            >
-                <Modal.Section>
-                    <div className="row">
-                        <div className="col-12 pt-1 pb-1 mt-2 mb-2">
-                            <Select
-                                label="Upload Products Of"
-                                placeholder="Product Source"
-                                options={this.state.importServicesList}
-                                onChange={this.handleUploadChange.bind(this, 'source')}
-                                value={this.state.uploadProductDetails.source}
-                            />
-                        </div>
-                        {
-                            this.state.uploadProductDetails.source !== '' &&
-                            this.state.importerShopLists.length > 1 &&
-                            <div className="col-12 pt-1 pb-1 mt-2 mb-2">
-                                <Select
-                                    label={"Amazon Shop"}
-                                    placeholder="Source Shop"
-                                    options={this.state.importerShopLists}
-                                    onChange={this.handleUploadChange.bind(this, 'source_shop')}
-                                    value={this.state.uploadProductDetails.source_shop}
-                                />
-                            </div>
-                        }
-                        <div className="col-12 pt-1 pb-1 mt-2 mb-2">
-                            <Select
-                                label="Upload Products To"
-                                placeholder="Target"
-                                disabled={true}
-                                options={this.state.uploadServicesList}
-                                onChange={this.handleUploadChange.bind(this, 'target')}
-                                value={this.state.uploadProductDetails.target}
-                            />
-                        </div>
-                        {
-                            this.state.uploadProductDetails.target !== '' &&
-                            this.state.uploaderShopLists.length > 1 &&
-                            <div className="col-12 pt-1 pb-1 mt-2 mb-2">
-                                <Select
-                                    label={"Shopify Shop"}
-                                    placeholder="Target Shop"
-                                    options={this.state.uploaderShopLists}
-                                    onChange={this.handleUploadChange.bind(this, 'target_shop')}
-                                    value={this.state.uploadProductDetails.target_shop}
-                                />
-                            </div>
-                        }
-                        <div className="col-12 pt-1 pb-1">
-                            <Banner status="info">
-                                <Label>You can upload products from the source to target either through our default profile or you can create <NavLink to="/panel/profiling/create">custom profile</NavLink> for products upload.</Label>
-                            </Banner>
-                        </div>
-                        <div className="col-12 pt-1 pb-1">
-                            {
-                                this.state.uploadProductDetails.profile_type !== 'custom' &&
-                                <Select
-                                    label="Upload Through"
-                                    placeholder="Choose Profile"
-                                    options={[
-                                        { label: 'Default Profile(Upload products with default attribute mapping)', value: 'default_profile' },
-                                        { label: 'Custom Profile(Upload products by providing attribute mapping details by yourself)', value: 'custom_profile' }
-                                    ]}
-                                    onChange={this.handleUploadChange.bind(this, 'selected_profile')}
-                                    value={this.state.uploadProductDetails.selected_profile}
-                                />
-                            }
-                        </div>
-                        {
-                            this.state.uploadProductDetails.profile_type === 'custom' &&
-                            <div className="col-12 pt-1 pb-1">
-                                {
-                                    this.profilesList.length > 0 &&
-                                    <Select
-                                        label="Select Custom Profile"
-                                        options={this.profilesList}
-                                        placeholder="Custom Profile"
-                                        onChange={this.handleProfileSelect.bind(this)}
-                                        value={this.state.uploadProductDetails.selected_profile}
-                                    />
-                                }
-                                {
-                                    this.profilesList.length === 0 &&
-                                    <div className="text-center">
-                                        <Banner status="warning">
-                                            <Label>No profiles for {this.state.uploadProductDetails.source === 'amazonimporter'?'Amazon':capitalizeWord(this.state.uploadProductDetails.source)} and {this.state.uploadProductDetails.target === 'shopifygql'?'Shopify':capitalizeWord(this.state.uploadProductDetails.target)}</Label>
-                                        </Banner>
-                                        <div className="text-center mt-2 mb-2">
-                                            <Button onClick={() => {
-                                                this.redirect('/panel/profiling/create');
-                                            }} primary>
-                                                Create Profile
-                                            </Button>
-                                        </div>
-                                        <div className="text-center mt-2 mb-2">
-                                            <Button onClick={() => {
-                                                this.state.uploadProductDetails.profile_type = '';
-                                                this.state.uploadProductDetails.selected_profile = 'default_profile';
-                                                this.updateState();
-                                            }} primary>
-                                                Select Default Profile
-                                            </Button>
-                                        </div>
-                                    </div>
-                                }
-                            </div>
-
-                        }
-                        <div className="col-12 text-center pt-3 pb-3">
-                            <Button onClick={() => {
-                                this.uploadProducts();
-                            }}
-                                    disabled={!(this.state.uploadProductDetails.source !== '')}
-                                    primary>
-                                Upload Products
-                            </Button>
-                        </div>
-                    </div>
-                </Modal.Section>
-            </Modal>
         );
     }
 
@@ -892,7 +635,7 @@ export class Products extends Component {
     }
 
     pageSettingsChange(event) {
-        this.gridSettings.variantsCount = event;
+        this.gridSettings.count = event;
         this.gridSettings.activePage = 1;
         this.getProducts();
     }

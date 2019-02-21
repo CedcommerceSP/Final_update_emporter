@@ -78,3 +78,38 @@
         width: 15% !important;
     }
 }
+
+.demo-editor {
+    border-bottom-left-radius: 0.5em;
+    border-bottom-right-radius: 0.5em;
+    /*background: #fefcfc;*/
+}
+
+/* Snow Theme */
+.demo-editor {
+    display: block;
+    padding: 0 20px;
+    /*font-size: 13px;*/
+    background: #ffffff;
+    border: 1px solid #e7e7e7;
+    border-top-left-radius: 0.3em;
+    border-top-right-radius: 0.3em;
+}
+
+/* Bubble Theme */
+.demo-editor {
+    border-radius: 0.3em;
+}
+
+.demo-editor {
+    min-height: 20em;
+    max-height: 20em;
+}
+
+.rdw-editor-toolbar {
+    border: 1px solid #e7e7e7;
+}
+
+.Polaris-TextField__Input {
+    min-width: 100px !important;
+}

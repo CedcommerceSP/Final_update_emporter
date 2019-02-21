@@ -1,6 +1,7 @@
 // Import modules
-import React from 'react'
+import React, {Component} from 'react';
 import PropTypes from 'prop-types'
+import ReadMoreReact from 'read-more-react';
 // Import components
 import ErrorBoundary from './ErrorBoundary'
 import TableCell from './TableCell'
@@ -31,12 +32,11 @@ import {
     Button,
     Label,
     Icon, SkeletonBodyText, Spinner, SkeletonDisplayText,
-    EmptyState, Card, FormLayout, Popover, Tag, DatePicker,Badge,Thumbnail
+    EmptyState, Card, FormLayout, Popover, Tag,Thumbnail,Badge
 } from '@shopify/polaris';
 
 import {FontAwesomeIcon} from '@fortawesome/react-fontawesome';
 import {faEdit, faTrash} from '@fortawesome/free-solid-svg-icons';
-import {PageLoader} from "../loader";
 import Loader from "react-loader-spinner";
 
 class SmartDataTablePlain extends React.Component {
@@ -57,9 +57,10 @@ class SmartDataTablePlain extends React.Component {
     defaultFilters = {};
     totalSelected = 0;
     stopinterval = '';
+    filterKey = 3;
+
     constructor(props) {
         super(props);
-        let today_date = new Date();
         this.state = {
             asyncData: [],
             colProperties: {},
@@ -73,35 +74,25 @@ class SmartDataTablePlain extends React.Component {
             count: isUndefined(props.count) ? false : props.multiSelect,
             hideResetFilter: isUndefined(props.hideResetFilter) ? false : props.hideResetFilter,
             activePage: isUndefined(props.activePage) ? false : props.multiSelect,
-            datePicker: isUndefined(props.datePicker) ? false : props.datePicker,
             vieworderaction: isUndefined(props.vieworderaction) ? false : props.vieworderaction,
             multiSelect: isUndefined(props.multiSelect) ? false : props.multiSelect,
             selected: isUndefined(props.selected) ? [] : props.selected,
             columnTitles: isUndefined(props.columnTitles) ? {} : props.columnTitles,
-            imageColumns: isUndefined(props.imageColumns) ? [] : props.imageColumns,
             uniqueKey: isUndefined(props.uniqueKey) ? 'id' : props.uniqueKey,
             actions: isUndefined(props.actions) ? [] : props.actions,
-            read_more: isUndefined(props.read_more) ? [] : props.read_more,
-            customButton: isUndefined(props.customButton) ? [] : props.customButton,
             hideFilters: isUndefined(props.hideFilters) ? [] : props.hideFilters,
             visibleColumns: isUndefined(props.visibleColumns) ? false : props.visibleColumns,
             rowActions: isUndefined(props.rowActions) ? {
                 edit: false,
                 delete: false
             } : props.rowActions,
-            columnFilters: {},
+            columnFilters: isUndefined(props.columnFiltersValue)?{}:props.columnFiltersValue,
             showColumnFilters: isUndefined(props.showColumnFilters) ? false : props.showColumnFilters,
             showButtonFilter: isUndefined(props.showButtonFilter) ? false : props.showButtonFilter,
-            columnFilterName: columnFilterName(props.columnTitles, props.hideFilters, !isUndefined(props.datePicker)),
+            columnFilterName: columnFilterName(props.columnTitles, props.hideFilters),
+            predefineFilters:isUndefined(props.predefineFilters)?undefined:props.predefineFilters,
             columnFilterNameValue:{name:'',condition:'',value:''},
             columnFilterNameArray:[],
-            today: {
-                end:new Date(),
-                start:new Date(),
-            },
-            dd: today_date.getDate(),
-            mm: today_date.getMonth(), //January is 0!
-            yyyy: today_date.getFullYear(),
         };
         this.prepareDefaultColumns();
         this.handleColumnToggle = this.handleColumnToggle.bind(this);
@@ -113,10 +104,16 @@ class SmartDataTablePlain extends React.Component {
             }
         },1000);
     }
+
     componentWillUnmount() {
         clearInterval(this.stopinterval);
     }
+
     componentWillUpdate(nextProps, nextState, nextContext) {
+        if (!isUndefined(nextProps.selected)) {
+            this.state.selected = nextProps.selected;
+            this.totalSelected = nextProps.selected.length;
+        }
         if (!isUndefined(nextProps.count) && !isUndefined(nextProps.activePage)) {
             if (nextProps.count !== this.props.count || nextProps.activePage !== this.props.activePage) {
                 this.allSelected = false;
@@ -126,23 +123,13 @@ class SmartDataTablePlain extends React.Component {
             }
         }
     }
+
     componentWillReceiveProps(nextProps) {
-        if ( !isUndefined(nextProps.datePicker) ) {
-            let columnFilterNameValue = {name:'', condition:'', value:'', isInt: false};
+        if ( this.state.columnFilters !==  nextProps.columnFiltersValue) {
             this.setState({
-                columnFilterName: columnFilterName(nextProps.columnTitles, nextProps.hideFilters, nextProps.datePicker),
-                columnFilterNameValue: columnFilterNameValue
+                columnFilters:Object.assign({}, nextProps.columnFiltersValue)
             });
-        }
-        if ( !isUndefined(nextProps.multiSelect) ) {
-            this.setState({multiSelect: nextProps.multiSelect});
-            // setTimeout(() => {
-            //     this.setState({showLoaderBar: false});
-            // },1000);
-        }
-        if (!isUndefined(nextProps.selected)) {
-            this.state.selected = nextProps.selected;
-            this.totalSelected = nextProps.selected.length;
+            this.defaultFilters = Object.assign({}, nextProps.columnFiltersValue);
         }
         if ( !isUndefined(nextProps.data) ) {
             if ( this.props.data !== nextProps.data ) {
@@ -193,24 +180,44 @@ class SmartDataTablePlain extends React.Component {
     }
 
     fetchData() {
-        const {data, dataKey} = this.props
+        const {data, dataKey} = this.props;
         if (typeof data === 'string') {
             this.setState({isLoading: true})
             fetchData(data, dataKey)
-                .then(asyncData => this.setState({asyncData, isLoading: false}))
+                .then(asyncData => {
+                    this.setState({asyncData, isLoading: false});
+                })
                 .catch(console.log)
         }
     }
 
     applyColumnFilters(field, key, value) {
-        this.state.columnFilters[key][field] = value;
-        const state = this.state;
-        this.setState(state);
+        // this.state.columnFilters[key][field] = value;
+        // const state = this.state;
+        // this.setState(state);
+        // if ( !isUndefined(this.props.showLoaderBar) ) {
+        //     this.setState({showLoaderBar:this.props.showLoaderBar});
+        // }
+        // this.defaultFilters = Object.assign({}, this.state.columnFilters);
+        // this.props.columnFilters(this.state.columnFilters);
         if ( !isUndefined(this.props.showLoaderBar) ) {
             this.setState({showLoaderBar:this.props.showLoaderBar});
         }
         this.defaultFilters = Object.assign({}, this.state.columnFilters);
         this.props.columnFilters(this.state.columnFilters);
+    }
+
+    applyDelayForColumnFilter(field, key, value) {
+        this.state.columnFilters[key][field] = value;
+        const state = this.state;
+        this.setState(state);
+        this.filtersChanged = true;
+        setTimeout(() => {
+            if (this.filtersChanged) {
+                this.applyColumnFilters(field, key, value);
+                this.filtersChanged = false;
+            }
+        }, 2000);
     }
 
     showWarnings() {
@@ -343,62 +350,71 @@ class SmartDataTablePlain extends React.Component {
     }
 
     renderRow(columns, row, i) {
-        const {colProperties} = this.state;
-        const {withLinks, filterValue} = this.props;
         const columnWithoutColumns = columns.map((column, j) => {
-            const thisColProps = colProperties[column.key]
             const showCol = column.visible;
+            const type = column.type;
+            if ( this.state.showLoaderBar && showCol ) {
+                switch (type) {
+                    case 'image' : return <td key={`row-${i}-column-${j}`} style={{cursor:'pointer'}}>
+                        <div className="row">
+                            <div className="col-12 text-center">
+                                <Spinner size="small" color="teal" />
+                            </div>
+                        </div>
+                    </td>;
+                    case 'button' : return <td key={`row-${i}-column-${j}`}>
+                        <div>
+                            <SkeletonDisplayText size="large" />
+                        </div>
+                    </td>;
+                    default : return <td key={`row-${i}-column-${j}`}>
+                        <SkeletonBodyText size="small" lines={3}/>
+                    </td>;
+                }
+            }
             if (showCol) {
-                return (
-                    this.state.showLoaderBar
-                        ?<td key={`row-${i}-column-${j}`}>
-                            {this.state.imageColumns.indexOf(column.key) !== -1?
-                                <div className="row">
-                                    <div className="col-12 text-center">
-                                        <Spinner size="small" color="teal" />
-                                    </div>
-                                </div>
-                            :this.state.imageColumns.indexOf(column.key) === -1 && this.state.customButton.indexOf(column.key) !== -1?
-                                    <SkeletonDisplayText size="small"/>:
-                                    <SkeletonBodyText size="small" lines={2}/>}
-                        </td>:
-                            this.state.imageColumns.indexOf(column.key) === -1 && this.state.customButton.indexOf(column.key) !== -1 ?<td key={`row-${i}-column-${j}`} className="table-filers">
-                                <Button primary
-                                        onClick={this.props.operations.bind(this, row[column.key], this.state.columnTitles[column.key].id)}>
-                                    {this.state.columnTitles[column.key].label}
-                                </Button>
-                        </td>:<td key={`row-${i}-column-${j}`} className="table-filers" onClick={this.props.operations.bind(this, row, 'grid')}>
-                        {
-                            this.state.imageColumns.indexOf(column.key) !== -1 &&
-                                <Thumbnail source={row[column.key]} alt={"UnAvailable"} />
-                            // <img src={row[column.key]} style={{width: '50px'}}/>
-                        }
-                        {
-                            this.state.imageColumns.indexOf(column.key) === -1 && this.state.read_more.indexOf(column.key) !== -1 &&
-                            this.state.customButton.indexOf(column.key) === -1 &&
-                            typeof row[column.key] === 'string' ?
-                                <div className="scroll">
-                                    <span dangerouslySetInnerHTML={{__html: row[column.key]}}/>
-                                </div> :
-                                this.state.imageColumns.indexOf(column.key) === -1 && this.state.customButton.indexOf(column.key) === -1 ?
-                                    column.key === 'upload_status'? <div className="text-center">
-                                        {row[column.key] === 'success' && <Badge status={"success"}>Uploaded</Badge>}
-                                            <Badge status={"attention"}>Imported</Badge>
-                                        </div>:
-                                <Label><ErrorBoundary>
-                                    {/*<TableCell withLinks={withLinks} filterValue={filterValue}>*/}
-                                    <p style={{overflow: 'hidden',
-                                        display: '-webkit-box',
-                                        'WebkitLineClamp': '1',
-                                        'WebkitBoxOrient': 'vertical'}}
-                                    >
-                                        {row[column.key]}
-                                    </p>
-                                    {/*</TableCell>*/}
-                                </ErrorBoundary></Label>:null
-                        }
+                switch(type) {
+                    case 'image':return <td key={`row-${i}-column-${j}`} className="table-filers" onClick={this.props.operations.bind(this, row, 'grid')} style={{cursor:'pointer'}}>
+                        <Thumbnail source={row[column.key]} alt={'Image'}/>
+                    </td>;
+                    case 'html':return <td key={`row-${i}-column-${j}`} className="table-filers">
+                        <div className="scroll">
+                            <span dangerouslySetInnerHTML={{__html: row[column.key]}}/>
+                        </div>
+                    </td>;
+                    case 'int': return <td key={`row-${i}-column-${j}`} className="table-filers">
+                        <Label>{row[column.key]}</Label>
+                    </td>;
+                    case 'read-more':return <td key={`row-${i}-column-${j}`} className="table-filers">
+                        <Label>
+                            <ErrorBoundary>
+                                <ReadMoreReact
+                                    text={row[column.key]}
+                                    min={40}
+                                    ideal={40}
+                                    max={100} />
+                            </ErrorBoundary>
+                        </Label>
+                    </td>;
+                    case 'string':return <td key={`row-${i}-column-${j}`} className="table-filers">
+                        <Label>
+                            {row[column.key]}
+                        </Label>
+                    </td>;
+                    case "button":return <td key={`row-${i}-column-${j}`} className="table-filers">
+                        <Button primary
+                                onClick={this.props.operations.bind(this, row[column.key], this.state.columnTitles[column.key].id)
+                                } size={"slim"} disabled={row[column.key] === 'disable_button'}>
+                            {this.state.columnTitles[column.key].label}
+                        </Button>
+                    </td>;
+                    case 'react': return <td key={`row-${i}-column-${j}`} className="table-filers">
+                        {row[column.key]}
+                    </td>;
+                    default :return <td key={`row-${i}-column-${j}`} className="table-filers" onClick={this.props.operations.bind(this, row, 'grid')}>
+                        {row[column.key]}
                     </td>
-                )
+                }
             }
             return null
         });
@@ -483,13 +499,13 @@ class SmartDataTablePlain extends React.Component {
                     <TextField
                         placeholder={column.title}
                         value={this.state.columnFilters[column.key].value}
-                        onChange={this.applyColumnFilters.bind(this, 'value', column.key)}/>
+                        onChange={this.applyDelayForColumnFilter.bind(this, 'value', column.key)}/>
                 </div>
                 <div className="mt-1 col-5 p-0" style={{maxWidth:'35px',marginRight:'3px'}}>
                     <Select
                         options={column.type === 'int'?this.filterInt:this.filterConditions}
                         value={this.state.columnFilters[column.key].operator}
-                        onChange={this.applyColumnFilters.bind(this, 'operator', column.key)}
+                        onChange={this.applyDelayForColumnFilter.bind(this, 'operator', column.key)}
                     />
                 </div>
             </div>
@@ -606,14 +622,14 @@ class SmartDataTablePlain extends React.Component {
             if (this.state.visibleColumns) {
                 columns = updateColumnVisibility(columns, this.state.visibleColumns);
             }
-            this.state.columnFilters = getColumnFilters(columns, this.state.columnFilters);
+            this.state.columnFilters = getColumnFilters(columns, this.state.columnFilters,this.filterKey);
             return columns;
         }
         let columns = parseDataForColumns(data, this.state.columnTitles);
         if (this.state.visibleColumns) {
             columns = updateColumnVisibility(columns, this.state.visibleColumns);
         }
-        this.state.columnFilters = getColumnFilters(columns, this.state.columnFilters);
+        this.state.columnFilters = getColumnFilters(columns, this.state.columnFilters,this.filterKey);
         if (columns.length <= 0) {
             Object.keys(this.state.columnTitles).forEach(e => {
                 if (this.state.visibleColumns.indexOf(e) !== -1) {
@@ -648,15 +664,21 @@ class SmartDataTablePlain extends React.Component {
         }
         return sortData(filterValue, sorting, parseDataForRows(data))
     }
+
     togglePopover = () => {
         this.setState(({active}) => {
             return {active: !active};
         });
     };
+
     handleButtonFilterChange = (fieldName, value) => {
         let { columnFilterNameValue } = this.state;
-        let { columnFilterName } = this.state;
-        console.log(columnFilterName);
+        let columnFilterName = [];
+        if ( isUndefined(this.state.predefineFilters) ) {
+            columnFilterName = this.state.columnFilterName;
+        } else {
+            columnFilterName = this.state.predefineFilters;
+        }
         columnFilterName.forEach(key => {
             if ( key.value === value ) {
                 if ( key.type === 'int' && fieldName === 'name') {
@@ -670,12 +692,13 @@ class SmartDataTablePlain extends React.Component {
         columnFilterNameValue[fieldName] = value;
         this.setState({columnFilterNameValue: columnFilterNameValue});
     };
+
     handleButtonFilterSubmit = () => {
         let { columnFilterNameValue } = this.state;
         let { columnFilterNameArray } = this.state;
         columnFilterNameArray.push(columnFilterNameValue);
-        this.props.singleButtonColumnFilter(columnFilterNameArray);
         columnFilterNameValue = {name:'', condition:'', value:'', isInt: false};
+        this.props.singleButtonColumnFilter(columnFilterNameArray);
         this.setState({
             columnFilterNameValue: columnFilterNameValue,
             columnFilterNameArray: columnFilterNameArray
@@ -685,6 +708,7 @@ class SmartDataTablePlain extends React.Component {
         }
         this.togglePopover();
     };
+
     handleFilterRemove = (data) => {
         let { columnFilterNameArray } = this.state;
         columnFilterNameArray.splice(columnFilterNameArray.indexOf(data),1);
@@ -694,41 +718,7 @@ class SmartDataTablePlain extends React.Component {
             this.setState({showLoaderBar:this.props.showLoaderBar});
         }
     };
-    handleChange = value => {
-        let { columnFilterNameValue } = this.state;
-        let start = new Date(value.start);
-        let end = new Date(value.end);
-        let month_start = start.getMonth() + 1;
-        let day_start = start.getDate();
-        let month_end = end.getMonth() + 1;
-        let day_end = end.getDate();
-        if ( month_start < 10 ) {
-            month_start = '0' + month_start;
-        }
-        if ( day_start < 10 ) {
-            day_start = '0' + day_start;
-        }
-        if ( month_end < 10 ) {
-            month_end = '0' + month_end;
-        }
-        if ( day_end < 10 ) {
-            day_end = '0' + day_end;
-        }
-        start = start.getFullYear() + '-' + month_start + '-' + day_start;
-        end = end.getFullYear() + '-' + month_end + '-' + day_end;
-        let query = 'date from ' + start + ' to ' + end;
-        columnFilterNameValue['condition'] = start;
-        columnFilterNameValue['value'] = end;
-        console.log(query);
-        this.setState({ today: value ,columnFilterNameValue:columnFilterNameValue});
-    };
 
-    handleMonthChange = (month, year) => {
-        this.setState({
-            mm:month,
-            yyyy: year
-        });
-    };
     render() {
         const {
             name, className, withHeaders, loader,
@@ -765,19 +755,11 @@ class SmartDataTablePlain extends React.Component {
                                         <Select
                                             label="Title"
                                             placeholder={"Please Select"}
-                                            options={this.state.columnFilterName}
+                                            options={this.state.predefineFilters !== undefined? this.state.predefineFilters:this.state.columnFilterName}
                                             value={this.state.columnFilterNameValue.name}
                                             onChange={this.handleButtonFilterChange.bind(this,'name')}
                                         />
-                                        {this.state.columnFilterNameValue.name === 'datePicker' ? <DatePicker
-                                            month={this.state.mm}
-                                            year={this.state.yyyy}
-                                            multiMonth={false}
-                                            allowRange={true}
-                                            selected={this.state.today}
-                                            onChange={this.handleChange}
-                                            onMonthChange={this.handleMonthChange}
-                                        /> :this.state.columnFilterNameValue.name !== '' && <Select
+                                        {this.state.columnFilterNameValue.name !== '' && <Select
                                             label="Condition"
                                             disabled={this.state.columnFilterNameValue.name === ''}
                                             placeholder={"select contains"}
@@ -785,7 +767,7 @@ class SmartDataTablePlain extends React.Component {
                                             value={this.state.columnFilterNameValue.condition}
                                             onChange={this.handleButtonFilterChange.bind(this,'condition')}
                                         />}
-                                        {this.state.columnFilterNameValue.name !== 'datePicker' && this.state.columnFilterNameValue.condition !== '' && <TextField
+                                        {this.state.columnFilterNameValue.condition !== '' && <TextField
                                             label="Value"
                                             disabled={this.state.columnFilterNameValue.condition === ''}
                                             placeholder={"Enter Value"}
@@ -794,11 +776,9 @@ class SmartDataTablePlain extends React.Component {
                                             readOnly={false}/>}
                                         <Button size="slim"
                                                 primary
-                                                disabled={
-                                                this.state.columnFilterNameValue.name === '' ||
+                                                disabled={this.state.columnFilterNameValue.name === '' ||
                                                 this.state.columnFilterNameValue.condition === '' ||
-                                                this.state.columnFilterNameValue.value.trim() === ''
-                                                }
+                                                this.state.columnFilterNameValue.value.trim() === ''}
                                                 onClick={this.handleButtonFilterSubmit}
                                         >
                                             Add filter
@@ -810,17 +790,30 @@ class SmartDataTablePlain extends React.Component {
                     </div>
                     <div className="col order-1 order-sm-2 d-flex justify-content-sm-end justify-content-start mb-sm-0 mb-4">
                         {this.state.showColumnFilters ? <Button onClick={() => {
-                            for (let i = 0; i < Object.keys(this.state.columnFilters).length; i++) {
-                                const key = Object.keys(this.state.columnFilters)[i];
-                                this.state.columnFilters[key] = {
-                                    operator: 1,
-                                    value: ''
-                                };
-                                this.defaultFilters[key] = {
-                                    operator: 1,
-                                    value: ''
-                                };
-                            }
+                            // for (let i = 0; i < Object.keys(this.state.columnFilters).length; i++) {
+                            //     const key = Object.keys(this.state.columnFilters)[i];
+                            columns.forEach(e => {
+                                if ( e.type === 'int' ) {
+                                    this.state.columnFilters[e.key] = {
+                                        operator: 1,
+                                        value: ''
+                                    };
+                                    this.defaultFilters[e.key] = {
+                                        operator: 1,
+                                        value: ''
+                                    };
+                                } else {
+                                    this.state.columnFilters[e.key] = {
+                                        operator: this.filterKey,
+                                        value: ''
+                                    };
+                                    this.defaultFilters[e.key] = {
+                                        operator: this.filterKey,
+                                        value: ''
+                                    };
+                                }
+                            });
+                            // }
                             const state = this.state;
                             this.setState(state);
                             if ( !isUndefined(this.props.showLoaderBar) ) {
@@ -833,7 +826,7 @@ class SmartDataTablePlain extends React.Component {
                             <div className="ml-2">
                                 <Button onClick={() => {
                                     document.getElementById('data-toggle-button').click();
-                                }} primary>View Columns</Button>
+                                }} primary icon={"view"}>Columns</Button>
                                 <button id="data-toggle-button" data-toggle="collapse" data-target="#column-section"
                                         hidden/>
                             </div>
@@ -851,9 +844,6 @@ class SmartDataTablePlain extends React.Component {
                             case '6' : condition = 'end with';break;
                             default : condition = 'equals';
                         }
-                        if ( e.name === 'datePicker' ) {
-                            condition = 'from ' + e.condition;
-                        }
                         return (<React.Fragment key={i}>
                             <span className="mr-3"><Tag onRemove={this.handleFilterRemove.bind(this,e)}>{e.name} {condition} to {e.value}</Tag></span>
                         </React.Fragment>)
@@ -867,7 +857,7 @@ class SmartDataTablePlain extends React.Component {
                 </div>
                 <div className='rsdt rsdt-container'>
                     {this.renderToggles(columns)}
-                    <table data-table-name={name} className={ ` ${className} table-sm table-hover`  } style={{cursor:'pointer'}}>
+                    <table data-table-name={name} className={ ` ${className} table-sm table-hover`  } /*style={{cursor:'pointer'}}*/>
                         {withHeaders && (
                             <thead>
                             {this.renderHeader(columns)}
@@ -881,37 +871,51 @@ class SmartDataTablePlain extends React.Component {
                     <div className="w-75 m-auto">
                         {
                             rows.length === 0 && window.showGridLoader ?
-                            <div className="row mt-5 mb-5 p-5">
-                                <div className="col-12 mt-5 text-center">
-                                    <Loader height="100" width="100" type="Bars" color="#3f4eae" />
-                                </div>
-                            </div>:
+                                <div className="row mt-5 mb-5 p-5">
+                                    <div className="col-12 mt-5 text-center">
+                                        <Loader height="100" width="100" type="Bars" color="#3f4eae" />
+                                    </div>
+                                </div>:
                                 rows.length === 0 &&
-                            <EmptyState
-                                heading="No Data Found"
-                                action={{
-                                    content: 'Reset Filters', onAction: () => {
-                                        for (let i = 0; i < Object.keys(this.state.columnFilters).length; i++) {
-                                            const key = Object.keys(this.state.columnFilters)[i];
-                                            this.state.columnFilters[key] = {
-                                                operator: 1,
-                                                value: ''
-                                            };
-                                            this.defaultFilters[key] = {
-                                                operator: 1,
-                                                value: ''
-                                            };
+                                <EmptyState
+                                    heading="No Data Found"
+                                    action={{
+                                        content: 'Reset Filters', onAction: () => {
+                                            for (let i = 0; i < Object.keys(this.state.columnFilters).length; i++) {
+                                                const key = Object.keys(this.state.columnFilters)[i];
+                                                columns.forEach(e => {
+                                                    if ( e.key === key && e.key === 'int' ) {
+                                                        this.state.columnFilters[key] = {
+                                                            operator: 1,
+                                                            value: ''
+                                                        };
+                                                        this.defaultFilters[key] = {
+                                                            operator: 1,
+                                                            value: ''
+                                                        };
+                                                    } else {
+                                                        this.state.columnFilters[key] = {
+                                                            operator: this.filterKey,
+                                                            value: ''
+                                                        };
+                                                        this.defaultFilters[key] = {
+                                                            operator: this.filterKey,
+                                                            value: ''
+                                                        };
+                                                    }
+                                                });
+                                            }
+                                            if ( !isUndefined(this.props.singleButtonColumnFilter) )
+                                                this.props.singleButtonColumnFilter([]);
+                                            this.setState({columnFilterNameArray: []});
+                                            const state = this.state;
+                                            this.setState(state);
+                                            this.props.columnFilters(this.state.columnFilters);
                                         }
-                                        this.props.singleButtonColumnFilter([]);
-                                        this.setState({columnFilterNameArray: []});
-                                        const state = this.state;
-                                        this.setState(state);
-                                        this.props.columnFilters(this.state.columnFilters);
-                                    }
-                                }}
-                                image="https://cdn.shopify.com/s/files/1/0757/9955/files/empty-state.svg"
-                            >
-                            </EmptyState>
+                                    }}
+                                    image="https://cdn.shopify.com/s/files/1/0757/9955/files/empty-state.svg"
+                                >
+                                </EmptyState>
                         }
                     </div>
                     {this.renderPagination(rows)}
@@ -919,6 +923,7 @@ class SmartDataTablePlain extends React.Component {
             </div>
         ) : loader
     }
+
 }
 
 // Wrap the component with an Error Boundary
