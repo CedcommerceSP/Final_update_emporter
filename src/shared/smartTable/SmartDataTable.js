@@ -31,7 +31,7 @@ import {
     TextField,
     Button,
     Label,
-    Icon, SkeletonBodyText, Spinner, SkeletonDisplayText,
+    Icon, SkeletonBodyText, Spinner, SkeletonDisplayText,Stack,
     EmptyState, Card, FormLayout, Popover, Tag,Thumbnail,Badge
 } from '@shopify/polaris';
 
@@ -101,6 +101,9 @@ class SmartDataTablePlain extends React.Component {
             if ( !isUndefined(window.handleOutOfControlLoader) && window.handleOutOfControlLoader ) {
                 window.handleOutOfControlLoader = false;
                 this.setState({showLoaderBar: false});
+            }
+            if ( !isUndefined(window.showGridLoader) && window.showGridLoader ) {
+                this.setState({showLoaderBar: window.showGridLoader});
             }
         },1000);
     }
@@ -741,7 +744,7 @@ class SmartDataTablePlain extends React.Component {
                         </div>
 
                     }
-                    <div className="col-6 col-sm-3 order-2 order-sm-1">
+                    <div className="col-6 col-sm-6 order-2 order-sm-1">
                         {this.state.showButtonFilter?<Popover
                             active={this.state.active}
                             activator={<Button onClick={this.togglePopover} disclosure>
@@ -751,7 +754,7 @@ class SmartDataTablePlain extends React.Component {
                         >
                             <Card>
                                 <div className="p-3">
-                                    <FormLayout>
+                                    <Stack wrap={true}>
                                         <Select
                                             label="Title"
                                             placeholder={"Please Select"}
@@ -762,7 +765,7 @@ class SmartDataTablePlain extends React.Component {
                                         {this.state.columnFilterNameValue.name !== '' && <Select
                                             label="Condition"
                                             disabled={this.state.columnFilterNameValue.name === ''}
-                                            placeholder={"select contains"}
+                                            placeholder={"select Condition"}
                                             options={!this.state.columnFilterNameValue.isInt?this.filterConditions:this.filterInt}
                                             value={this.state.columnFilterNameValue.condition}
                                             onChange={this.handleButtonFilterChange.bind(this,'condition')}
@@ -774,6 +777,9 @@ class SmartDataTablePlain extends React.Component {
                                             value={this.state.columnFilterNameValue.value}
                                             onChange={this.handleButtonFilterChange.bind(this,'value')}
                                             readOnly={false}/>}
+                                    </Stack>
+                                    <br/>
+                                    <Stack>
                                         <Button size="slim"
                                                 primary
                                                 disabled={this.state.columnFilterNameValue.name === '' ||
@@ -783,7 +789,7 @@ class SmartDataTablePlain extends React.Component {
                                         >
                                             Add filter
                                         </Button>
-                                    </FormLayout>
+                                    </Stack>
                                 </div>
                             </Card>
                         </Popover>:null}

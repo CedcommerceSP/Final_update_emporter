@@ -43,6 +43,14 @@ export class Products extends Component {
 
     visibleColumns = ['main_image', 'title', 'sku', 'inventory','quantity', 'upload_status'];
 
+    predefineFilters = [
+        {label:'Title',value:'title',type:'string',special_case:''},
+        {label:'SKU',value:'sku',type:'string',special_case:''},
+        {label:'Price',value:'price',type:'int',special_case:''},
+        {label:'Quantity',value:'quantity',type:'int',special_case:''},
+        // {label:'Type',value:'type',type:'string',special_case:''},
+    ];
+
     hideFilters = ['main_image' ,'long_description','type', 'upload_status','inventory'];
 
     columnTitles = {
@@ -78,12 +86,15 @@ export class Products extends Component {
 
     totalProductCount = 0;
 
-    constructor() {
-        super();
+    constructor(props) {
+        super(props);
+        console.log(props);
         this.state = {
             uploadServicesList: [],
             uploaderShopLists: [],
             showUploadProducts: false,
+            product_grid_collapsible:'',
+            tempProductData: [],
             uploadProductDetails: {
                 source: '',
                 source_shop: '',
@@ -222,17 +233,23 @@ export class Products extends Component {
             .then(data => {
                 if (data.success) {
                     window.showGridLoader = false;
-                    this.setState({totalPage:data.data.count});
+                    this.setState({
+                        totalPage:data.data.count,
+                        tempProductData: data.data.rows,
+                    });
                     if ( !isUndefined(data.data.mainCount) ) {
                         this.setState({totalMainCount:data.data.mainCount});
                     }
-                    const products = this.modifyProductsData(data.data.rows);
+                    const products = this.modifyProductsData(data.data.rows, '');
                     this.totalProductCount = data.data.count;
                     this.state['products'] = products;
                     this.state.showLoaderBar = !data.success;
                     this.state.hideLoader = data.success;
                     this.state.pagination_show = paginationShow(this.gridSettings.activePage,this.gridSettings.count,data.data.count,true);
                     this.updateState();
+                    if ( !isUndefined(this.props.location) && !isUndefined(this.props.location.state) && Object.keys(this.props.location.state).length > 0  ) {
+                        this.manageStateChange(this.props.location.state['parent_props']);
+                    }
                 } else {
                     this.setState({
                         showLoaderBar:false,
@@ -308,7 +325,7 @@ export class Products extends Component {
         this.updateState();
     }
 
-    modifyProductsData(data) {
+    modifyProductsData(data, product_grid_collapsible) {
         let products = [];
         let re = new RegExp("^(https)://", "i");
         let str = '';
@@ -351,19 +368,21 @@ export class Products extends Component {
                             ]);
                         }
                     });
-                    rowData['title'] = <div>
+                    rowData['title'] = <div onClick={this.handleToggleClick.bind(this,i)}>
                         <Label id={i}>
                             <h3>{data[i].details.title}</h3>
                         </Label>
                         <Label id={i + i}>
                             <h2 style={{color:"#868686"}}>{rows.length} Variants</h2>
                         </Label>
-                        <Collapsible open={this.state.open11} id="basic-collapsible">
-                            <DataTable
-                                columnContentTypes={['text','text','text']}
-                                headings={['Sku','Quantity','Price']}
-                                rows={rows}/>
-                        </Collapsible>
+                        {product_grid_collapsible === i && this.state.product_grid_collapsible !== i &&
+                            <Card>
+                                <DataTable
+                                    columnContentTypes={['text','numeric','numeric']}
+                                    headings={['Sku','Quantity','Price']}
+                                    rows={rows}/>
+                            </Card>
+                        }
                     </div>;
                     rowData['inventory'] = quantity + ' in Stock';
                 }
@@ -386,14 +405,24 @@ export class Products extends Component {
         return products;
     }
 
-    handleToggleClick = () => {
-        console.log('sss');
-        this.setState({open11: true});
+    handleToggleClick = (product_grid_collapsible) => {
+        if ( this.state.product_grid_collapsible === product_grid_collapsible ) {
+            this.setState({product_grid_collapsible:''});
+        } else {
+            this.setState({product_grid_collapsible:product_grid_collapsible});
+        }
+        const products = this.modifyProductsData(this.state.tempProductData, product_grid_collapsible);
+        this.setState({products:products});
     };
 
     operations = (event, id) => {
         switch (id) {
-            case 'grid':this.redirect('/panel/products/view/' + event['source_variant_id']);break;
+            case 'grid':
+                let parent_props = {
+                    gridSettings:this.gridSettings,
+                    filters: this.filters,
+                };
+                this.redirect('/panel/products/view/' + event['source_variant_id'], {parent_props:parent_props});break;
             default:console.log('Default Case');
         }
     };
@@ -480,7 +509,7 @@ export class Products extends Component {
                                     hideFilters={this.hideFilters}
                                     columnTitles={this.columnTitles}
                                     datePicker={this.filters.marketplace === 'amazonimporter'}
-                                    multiSelect={this.filters.marketplace !== 'all'}
+                                    multiSelect={true}
                                     operations={this.operations} //button
                                     selected={this.state.selectedProducts}
                                     className='ui compact selectable table'
@@ -488,6 +517,7 @@ export class Products extends Component {
                                     visibleColumns={this.visibleColumns}
                                     actions={this.massActions}
                                     showColumnFilters={false}
+                                    predefineFilters={this.predefineFilters}
                                     showButtonFilter={true}
                                     rowActions={{
                                         edit: false,
@@ -640,14 +670,22 @@ export class Products extends Component {
         this.getProducts();
     }
 
+    manageStateChange = (old_state) => {
+        console.log(old_state['filters']['marketplace']);
+        this.filters = Object.assign({}, old_state['filters']);
+        this.gridSettings = Object.assign({}, old_state['gridSettings']);
+        this.props.location.state = undefined;
+        this.getProducts();
+    };
+
     redirect(url, data) {
         if ( !isUndefined(data) ) {
-            this.props.parentProps.history.push(
-                '/show/progress',
-                {data: data,marketPlace:'amazon',chunk:1}
+            this.props.history.push(
+                url,
+                JSON.parse(JSON.stringify(data))
             );
         } else {
-            this.props.parentProps.history.push(url);
+            this.props.history.push(url);
         }
     }
 }

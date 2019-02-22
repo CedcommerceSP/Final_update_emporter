@@ -113,7 +113,7 @@ export class Panel extends Component {
                                     <Redirect to="/panel/dashboard"/>
                                 )}/>
                                 <Route exact path='/panel/products'  render={() => {
-                                    return <Products parentProps={this.props} history={this.props.history}/>
+                                    return <Products {...this.props}/>
                                 }}/>
                                 <Route exact path='/panel/products/view/:id' component={ViewProducts}/>
                                 <Route exact path='/panel/products/analysis' component={AnalyticsReporting}/>

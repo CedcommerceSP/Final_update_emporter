@@ -94,11 +94,11 @@ class ViewProducts extends Component {
                     }
                     temp.img = [];
                     if ( !isUndefined(data.data.details['additional_image']) )
-                    Object.keys(data.data.details['additional_image']).forEach(e => {
-                        if ( !isUndefined(data.data.details['additional_image'][e]) ) {
-                            temp.img.push(data.data.details['additional_image'][e]);
-                        }
-                    });
+                        Object.keys(data.data.details['additional_image']).forEach(e => {
+                            if ( !isUndefined(data.data.details['additional_image'][e]) ) {
+                                temp.img.push(data.data.details['additional_image'][e]);
+                            }
+                        });
                     // console.clear();
                     this.setState(temp);
                 } else {
