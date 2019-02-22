@@ -224,8 +224,10 @@ class PlanBody extends Component {
                                                         {this.state.oneTimePaymentDetails.totalAmount}
                                                     </p>
                                                 </div>
-                                                <Label>Payable Amount</Label>
-                                                <p style={{color:'#7d7d7d'}}><Label>( should be more than 0.5$ )</Label></p>
+                                                <Label id="payable_amount">Payable Amount</Label>
+                                                <div>
+                                                    <span style={{color:'#7d7d7d'}}><Label>( should be more than 0.5$ )</Label></span>
+                                                </div>
                                             </div>
                                         </div>
                                     </Card>
@@ -259,7 +261,7 @@ class PlanBody extends Component {
                     </div>
                     {this.state.data.map((data, index) => {
                         return (
-                            <div className="col-sm-4 col-12" key={index}>{/* Starting Of Plan Card */}
+                            <div className="col-sm-4 col-12 mb-4" key={index}>{/* Starting Of Plan Card */}
                                 <Card>
                                     <div className="d-flex justify-content-center p-5">
                                         <div className="pt-5" >

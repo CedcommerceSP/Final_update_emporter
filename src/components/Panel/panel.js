@@ -37,7 +37,7 @@ import {globalState} from '../../services/globalstate';
 import ViewProducts from "./Components/products-component/view-products";
 import * as queryString from "query-string";
 import {isUndefined} from "util";
-import {getActivePlan} from "./Components/static-functions";
+import {getActivePlan, modifyAccountConnectedInfo} from "./Components/static-functions";
 
 
 const style = {
@@ -56,9 +56,14 @@ const style = {
 export class Panel extends Component {
     constructor(props) {
         super(props);
+        this.state = {
+            header: true,
+            necessaryInfo: {},
+        };
         this.disableHeader = this.disableHeader.bind(this);
-        // this.trialActive();
+        this.getNecessaryInfo();
     }
+
     componentWillMount() {
         const params = queryString.parse(this.props.location.search);
         if ( !isUndefined(params.hmac) && !isUndefined(params.shop)) {
@@ -73,16 +78,23 @@ export class Panel extends Component {
         }
         getActivePlan();
     }
-    state = {
-        showLoader: false,
-        header: true,
-        isTrialActive: false,
-        isTrialActiveClose: true, // when user close the notify
-        daysLeft: '',
-    };
-    trialActive = () => {
 
+    getNecessaryInfo = () => {
+        requests.postRequest('frontend/app/getNecessaryDetails').then(e => {
+           if ( e.success ) {
+               let account_connected = e['account_connected'].map(e => (e.code));
+               account_connected = modifyAccountConnectedInfo(account_connected);
+               let user_necessary_details = {
+                   account_connected: account_connected,
+                   services: e['services']
+               };
+               this.setState({
+                   necessaryInfo: user_necessary_details
+               });
+           }
+        });
     };
+
     componentWillUpdate() {
         if ( environment.isLive ) {
             console.clear();
@@ -113,7 +125,7 @@ export class Panel extends Component {
                                     <Redirect to="/panel/dashboard"/>
                                 )}/>
                                 <Route exact path='/panel/products'  render={() => {
-                                    return <Products {...this.props}/>
+                                    return <Products {...this.props} necessaryInfo={this.state.necessaryInfo}/>
                                 }}/>
                                 <Route exact path='/panel/products/view/:id' component={ViewProducts}/>
                                 <Route exact path='/panel/products/analysis' component={AnalyticsReporting}/>
@@ -126,18 +138,20 @@ export class Panel extends Component {
                                 <Route exact path='/panel/profiling' component={Profiling}/>
                                 <Route exact path='/panel/profiling/view' component={ViewProfile}/>
                                 <Route exact path='/panel/profiling/create' component={CreateProfile}/>
-                                <Route exact path='/panel/configuration' component={Configuration}/>
+                                <Route exact path='/panel/configuration' render={() => {
+                                    return <Configuration {...this.props} necessaryInfo={this.state.necessaryInfo}/>
+                                }}/>
                                 <Route exact path='/panel/plans' component={Plans}/>
                                 <Route exact path='/panel/plans/current' component={CurrentPlan}/>
                                 <Route exact path='/panel/plans/history' component={BillingHistory}/>
                                 <Route exact path='/panel/queuedtasks' component={QueuedTask}/>
                                 <Route exact path='/panel/queuedtasks/activities' component={Activities}/>
                                 <Route exact path='/panel/help' render={() => {
-                                    return <FAQPage parentProps={this.props} history={this.props.history} disableHeader={this.disableHeader}/>
+                                    return <FAQPage {...this.props} necessaryInfo={this.state.necessaryInfo} disableHeader={this.disableHeader}/>
                                 }}/>
                                 <Route exact path='/panel/help/report' component={ReportAnIssue}/>
                                 <Route exact path='/panel/dashboard' render={() => {
-                                    return <Dashboard disableHeader={this.disableHeader} parentProps={this.props} history={this.props.history}/>
+                                    return <Dashboard disableHeader={this.disableHeader} necessaryInfo={this.state.necessaryInfo} {...this.props}/>
                                 }}/>
                                 <Route exact path="**" render={() => (
                                     <Redirect to="/panel/dashboard"/>

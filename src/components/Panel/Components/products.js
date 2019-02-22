@@ -129,6 +129,12 @@ export class Products extends Component {
 
     }
 
+    componentWillReceiveProps(nextPorps) {
+        if ( nextPorps.necessaryInfo !== undefined ) {
+            console.log(nextPorps.necessaryInfo);
+        }
+    }
+
     getAllImporterServices() {
         requests.getRequest('connector/get/services', { 'filters[type]': 'importer' }, false, true)
             .then(data => {
@@ -339,7 +345,7 @@ export class Products extends Component {
                     && !isUndefined(data[i]['details']['additional_images'][0])) {
                     str = data[i]['details']['additional_images'][0];
                 } else {
-                    str = 'https://www.csd.uwo.ca/people/gradstudents/zwang688/empty.png';
+                    str = 'https://apps.cedcommerce.com/importer/image_not_found.jpg';
                 }
                 rowData['main_image'] = str;
 
@@ -541,7 +547,6 @@ export class Products extends Component {
                                         this.setState(state);
                                     }}
                                     allRowSelected={(event, rows) => {
-                                        // this.state.selectedProducts = [];
                                         let data = this.state.selectedProducts.slice(0);
                                         if (event) {
                                             for (let i = 0; i < rows.length; i++) {

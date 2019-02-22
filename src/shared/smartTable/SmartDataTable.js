@@ -378,7 +378,7 @@ class SmartDataTablePlain extends React.Component {
             if (showCol) {
                 switch(type) {
                     case 'image':return <td key={`row-${i}-column-${j}`} className="table-filers" onClick={this.props.operations.bind(this, row, 'grid')} style={{cursor:'pointer'}}>
-                        <Thumbnail source={row[column.key]} alt={'Image'}/>
+                        <Thumbnail source={row[column.key]} alt={''}/>
                     </td>;
                     case 'html':return <td key={`row-${i}-column-${j}`} className="table-filers">
                         <div className="scroll">

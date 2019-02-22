@@ -54,3 +54,25 @@ export function validateImporter(code) {
     }
     return true;
 }
+
+export function modifyAccountConnectedInfo(accounts) {
+    let value = [];
+    accounts.forEach((e) => {
+        let title  = e;
+        switch (e) {
+            case 'amazonimporter':
+            case 'amazon_importer': title = 'Amazon';break;
+            case 'ebayimporter':
+            case 'ebay_importer': title = 'Ebay';break;
+            case 'walmartimporter':
+            case 'walmart_importer': title = 'Walmart';break;
+            case 'etsyimporter': title = 'Etsy';break;
+            default: title = e;
+        }
+        value.push({
+            title: title,
+            code: e
+        })
+    });
+    return value;
+}
