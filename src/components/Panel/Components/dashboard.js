@@ -346,7 +346,7 @@ class Dashboard extends Component {
                     otpCheck.status = true;
                     otpCheck.number_change = false;
                     this.setState({otpCheck:otpCheck});
-                    notify.info("You will shortly recieve OTP to your register mobile number");
+                    notify.info("You will shortly recieve an OTP on your registered mobile number");
                 } else {
                     notify.error(data.message);
                 }
@@ -610,7 +610,7 @@ class Dashboard extends Component {
                                 <Checkbox
                                     checked={this.state.info.term_and_condition}
                                     label="Accept Terms & Conditions"
-                                    error={this.state.info_error.term_and_condition?'Please Check The Terms & Conditions':''}
+                                    error={this.state.info_error.term_and_condition?'Please Accept Terms & Conditions':''}
                                     onChange={this.handleFormChange.bind(this,'term_and_condition')}
                                 />
                                 <Button submit primary>Submit</Button>
@@ -636,7 +636,7 @@ class Dashboard extends Component {
                     });
                     globalState.setLocalStorage('activePlan', JSON.stringify(tempPlan));
                 } catch (e) {
-                    
+
                 }
                 this.changeStep(2);
             } else {

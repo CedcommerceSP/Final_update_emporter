@@ -835,7 +835,7 @@ export class CreateProfile extends Component {
                     <div className="text-center bs-wizard-stepnum">Step 1</div>
                     <div className="progress"><div className="progress-bar"/></div>
                     <a className="bs-wizard-dot"/>
-                    <div className="bs-wizard-info text-center">Select product source and Destination</div>
+                    <div className="bs-wizard-info text-center">Select product source</div>
                 </div>
 
                 <div className={(this.state.activeStep === 2) ? 'col-6 bs-wizard-step active' : (this.state.activeStep > 2) ? ' col-6 bs-wizard-step complete' : 'col-3 bs-wizard-step disabled'}>
@@ -1048,9 +1048,16 @@ export class CreateProfile extends Component {
                 {
                     this.filteredProducts.runQuery &&
                     <div className="col-12 pt-2 pb-2">
-                        <Banner title="Selected Products Count" status="success">
-                            <Label>Total {this.filteredProducts.totalProducts} products selected under this query : {this.state.products_select.query}</Label>
-                        </Banner>
+                        {this.filteredProducts.totalProducts ?
+                            <Banner title="Selected Products Count" status="success">
+                                <Label>Total {this.filteredProducts.totalProducts} products are selected under this query
+                                    : {this.state.products_select.query}</Label>
+                            </Banner> :
+                            <Banner title="Selected Products Count" status="success">
+                                <Label>No products are selected under this query
+                                    : {this.state.products_select.query}</Label>
+                            </Banner>
+                        }
                     </div>
                 }
             </div>
