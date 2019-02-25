@@ -138,6 +138,13 @@ class Dashboard extends Component {
         this.autoFillDetails();
     }
 
+    componentWillReceiveProps(nextPorps) {
+        if ( nextPorps.necessaryInfo !== undefined ) {
+            this.setState({necessaryInfo:nextPorps.necessaryInfo});
+            console.log(nextPorps.necessaryInfo);
+        }
+    }
+
     autoFillDetails(){
         requests.getRequest('frontend/app/getShopDetails').then(data=>{
             if(data.success) {
@@ -629,9 +636,9 @@ class Dashboard extends Component {
                 try {
                     let tempPlan = [];
                     status.data.services.forEach(e => {
-                        if ( e.code === 'amazon_importer' )
+                        if ( e.code === 'amazonimporter' )
                             tempPlan.push('amazonimporter', 'amazon_importer');
-                        if ( e.code === 'ebay_importer' )
+                        if ( e.code === 'ebayimporter' )
                             tempPlan.push('ebayimporter', 'ebay_importer');
                     });
                     globalState.setLocalStorage('activePlan', JSON.stringify(tempPlan));

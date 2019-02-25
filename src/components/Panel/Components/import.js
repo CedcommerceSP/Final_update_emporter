@@ -226,6 +226,12 @@ export class Import extends Component {
                             this.redirect('/panel/accounts');
                         }, 1000);
                         notify.info('User Account Not Found. Please Connect The Account First.');
+                    }
+                    if ( data.code === 'already_in_progress' ) {
+                        setTimeout(() => {
+                            this.redirect('/panel/accounts');
+                        }, 1000);
+                        notify.info(data.message);
                     } else {
                         notify.error(data.message);
                     }

@@ -61,6 +61,13 @@ export class Configuration extends Component {
         // this.getEtsyConfig();
     }
 
+    componentWillReceiveProps(nextPorps) {
+        if ( nextPorps.necessaryInfo !== undefined ) {
+            this.setState({necessaryInfo:nextPorps.necessaryInfo});
+            console.log(nextPorps.necessaryInfo);
+        }
+    }
+
     getUserDetails() {
         requests.getRequest('user/getDetails')
             .then(data => {
@@ -170,10 +177,10 @@ export class Configuration extends Component {
     renderUserConfigurationSection() {
         return (
             <div className="row">
-                <div className="col-md-6 col-sm-6 col-12 text-md-left text-sm-left text-center">
+                <div className="col-sm-4 col-12 text-md-left text-sm-left text-center">
                     <Heading>Account Information</Heading>
                 </div>
-                <div className="col-md-6 col-sm-6 col-12">
+                <div className="col-sm-8 col-12">
                     <Card>
                         <div className="row p-5">
                             <div className="col-12 pt-2 pb-2">
@@ -235,14 +242,17 @@ export class Configuration extends Component {
     renderAmazonCredentials() {
         return (
             <div className="row">
-                <div className="col-md-6 col-sm-6 col-12 text-md-left text-sm-left text-center">
+                <div className="col-md-6 col-sm-3 col-12 text-md-left text-sm-left text-center">
                     <Heading>Amazon Credentials</Heading>
                 </div>
-                <div className="col-md-6 col-sm-6 col-12">
+                <div className="col-md-6 col-sm-9 col-12">
                     <Card>
                         <div className="p-4">
-                            {isUndefined(this.state.amazon_data) ? <Button primary fullWidth onClick={this.redirect.bind(this, '/panel/accounts')}>Connect Now</Button>:
-                            <AmazonInstallationForm page={'config'} amazon_data={this.state.amazon_data}/>}
+                            {
+                                isUndefined(this.state.amazon_data) ?
+                                    <Button primary fullWidth onClick={this.redirect.bind(this, '/panel/accounts')}>Connect Now</Button>:
+                                    <AmazonInstallationForm page={'config'} amazon_data={this.state.amazon_data}/>
+                            }
                         </div>
                     </Card>
                 </div>
@@ -253,10 +263,10 @@ export class Configuration extends Component {
     renderShopifyConfigurationSection() {
         return (
             <div className="row">
-                <div className="col-md-6 col-sm-6 col-12 text-md-left text-sm-left text-center">
+                <div className="col-sm-4 col-12 text-md-left text-sm-left text-center">
                     <Heading>Shopify Configuration</Heading>
                 </div>
-                <div className="col-md-6 col-sm-6 col-12">
+                <div className="col-sm-8 col-12">
                     <Card>
                         <div className="row p-5">
                             {
@@ -331,10 +341,10 @@ export class Configuration extends Component {
     renderAmazonImporterConfigurationSection() {
         return (
             <div className="row">
-                <div className="col-md-6 col-sm-6 col-12 text-md-left text-sm-left text-center">
+                <div className="col-sm-4 col-12 text-md-left text-sm-left text-center">
                     <Heading>Amazon Importer Sync Settings</Heading>
                 </div>
-                <div className="col-md-6 col-sm-6 col-12">
+                <div className="col-sm-8 col-12">
                     <Card>
                         <div className="row p-5">
                             {

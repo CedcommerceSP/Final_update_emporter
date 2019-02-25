@@ -28,29 +28,24 @@ class AmazonInstallationForm extends Component {
             },
             dev:[]
         };
-        if ( isUndefined(props.page) ) {
-            this.getAppInstallationForm();
-        }
+        this.amazonCredentials();
     }
 
-    componentWillReceiveProps(nextProps) {
-        if ( !isUndefined(nextProps.amazon_data) && this.state.schema.length <= 0 ) {
-            if ( typeof nextProps.amazon_data === 'object') {
-                let schema = this.modifySchemaData(nextProps.amazon_data);
-                this.setState({schema: schema});
+    amazonCredentials() {
+        requests.getRequest('amazonimporter/config/getCredentials').then(data => {
+            if ( data.success ) {
+                let schema = this.modifySchemaData(data.data);
+                this.setState({schema: schema,page:'config'});
+            } else {
+                this.getAppInstallationForm();
             }
-        }
+        })
     }
 
     render() {
         return (
             <React.Fragment>
                 <div className="row">
-                    {/*{this.state.page !== 'config' &&  <div className="col-12 mt-4 mb-4">*/}
-                        {/*<Banner status="info">*/}
-                            {/*<Heading>{'Connect Amazon Importer'}</Heading>*/}
-                        {/*</Banner>*/}
-                    {/*</div>}*/}
                     <div className="col-12 text-right">
                         <Button onClick={() => {window.open('http://apps.cedcommerce.com/importer/amazon_UK_IN.pdf' )}} size={"slim"}>
                             Help PDF
@@ -249,6 +244,7 @@ class AmazonInstallationForm extends Component {
                             } else {
                                 notify.error(data.message);
                             }
+                            this.redirect();
                         });
                 } else {
                     requests.postRequest(url, data, true)

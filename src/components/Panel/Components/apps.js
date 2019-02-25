@@ -129,7 +129,7 @@ export class Apps extends Component {
     //     //                     if ( data.data[key].code !== 'shopify_importer' ) {
     //     //                         if ( data.data[key].code === 'amazon_importer' )
     //     //                             this.state.code_usable.push('amazonimporter');
-    //     //                         if ( data.data[key].code === 'ebay_importer' )
+    //     //                         if ( data.data[key].code === 'ebayimporter' )
     //     //                             this.state.code_usable.push('ebayimporter');
     //     //                     }
     //     //                 }
@@ -147,7 +147,7 @@ export class Apps extends Component {
     //                     console.log(e.code);
     //                     if ( e.code === 'amazon_importer' )
     //                         this.state.code_usable.push('amazonimporter');
-    //                     if ( e.code === 'ebay_importer' )
+    //                     if ( e.code === 'ebayimporter' )
     //                         this.state.code_usable.push('ebayimporter');
     //                 });
     //                 this.setState(this.state);

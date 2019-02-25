@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import {isUndefined} from "util";
 import {Page, Card, Select, Pagination, Label, ResourceList,
-    Modal, TextContainer, Tabs, Banner, Button, Badge, Collapsible,DataTable
+    Modal, TextContainer, Tabs, Banner, Badge
 } from '@shopify/polaris';
 
 import { requests } from '../../../services/request';
@@ -9,9 +9,7 @@ import { notify } from '../../../services/notify';
 
 import SmartDataTable from '../../../shared/smartTable';
 
-import {paginationShow, validateImporter} from "./static-functions";
-
-import {environment} from "../../../environments/environment";
+import {paginationShow} from "./static-functions";
 
 export class Products extends Component {
 
@@ -36,9 +34,7 @@ export class Products extends Component {
     ];
 
     massActions = [
-        // {label: 'Delete', value: 'delete'},
         {label: 'Upload', value: 'upload'},
-        // {label: 'Upload All', value: 'upload_all'}
     ];
 
     visibleColumns = ['main_image', 'title', 'sku', 'inventory','quantity', 'upload_status'];
@@ -84,32 +80,15 @@ export class Products extends Component {
         },
     };
 
-    totalProductCount = 0;
-
     constructor(props) {
         super(props);
-        console.log(props);
         this.state = {
-            uploadServicesList: [],
-            uploaderShopLists: [],
-            showUploadProducts: false,
             product_grid_collapsible:'',
             tempProductData: [],
-            uploadProductDetails: {
-                source: '',
-                source_shop: '',
-                source_shop_id: '',
-                target: '',
-                target_shop: '',
-                target_shop_id: '',
-                selected_profile: '',
-                profile_type: ''
-            },
             products: [],
             appliedFilters: {},
             installedApps: [],
             selectedApp: 0,
-            searchValue: '',
             selectedProducts: [],
             deleteProductData: false,
             toDeleteRow: {},
@@ -120,62 +99,56 @@ export class Products extends Component {
             pagination_show:0,
             selectedUploadModal: false,
             selectUpload:{option:[],value:''},
-            selectImporterService:[],
             parent_sku: 0,
             child_sku:0,
+            requiredParamNotRecieved: true,
         };
-        this.getAllImporterServices();
-        this.getProducts();
-
-    }
-
-    componentWillReceiveProps(nextPorps) {
-        if ( nextPorps.necessaryInfo !== undefined ) {
-            console.log(nextPorps.necessaryInfo);
+        if ( props.necessaryInfo.account_connected !== undefined && props.necessaryInfo.account_connected.length > 0) {
+            setTimeout(() => {this.prepareHeader(JSON.parse(JSON.stringify(props))); console.log('construtor');})
+        }  else {
+            setTimeout(() => {
+                if ( this.state.requiredParamNotRecieved ) {
+                    this.prepareHeader(JSON.parse(JSON.stringify(props))); console.log('construtor2');
+                }
+             },2000);
         }
     }
 
-    getAllImporterServices() {
-        requests.getRequest('connector/get/services', { 'filters[type]': 'importer' }, false, true)
-            .then(data => {
-                this.state.installedApps = [
-                    {
-                        id: 'all',
-                        content: 'All',
-                        accessibilityLabel: 'All',
-                        panelID: 'all'
-                    }
-                ];
-                if (data.success) {
-                    this.state.importServicesList = [];
-                    for (let i = 0; i < Object.keys(data.data).length; i++) {
-                        let key = Object.keys(data.data)[i];
-                        if (data.data[key].usable || !environment.isLive) {
-                            if ( validateImporter(data.data[key].code) ) {
-                                this.state.importServicesList.push({
-                                    label: data.data[key].title,
-                                    value: data.data[key].marketplace,
-                                    shops: []//data.data[key].shops
-                                });
-                                let title = data.data[key].title;
-                                this.state.installedApps.push({
-                                    id: data.data[key].code,
-                                    content: title,
-                                    accessibilityLabel: title,
-                                    panelID: data.data[key].code
-                                });
-                            }
-                        }
-                    }
-                    this.updateState();
-                } else {
-                    notify.error(data.message);
-                }
-            });
+    componentWillReceiveProps(nextPorps) {
+        if ( nextPorps.necessaryInfo !== undefined
+            && this.state.requiredParamNotRecieved
+            && nextPorps.necessaryInfo.account_connected !== undefined ) {
+            this.setState({necessaryInfo:nextPorps.necessaryInfo});
+            this.prepareHeader(JSON.parse(JSON.stringify(nextPorps)));
+            this.setState({requiredParamNotRecieved: false});
+            console.log('reciede');
+        }
     }
 
+    prepareHeader = ( props ) => {
+        console.log('prepare', props);
+        if ( !isUndefined(this.props.location) && !isUndefined(this.props.location.state) && Object.keys(this.props.location.state).length > 0  ) {
+            this.manageStateChange(this.props.location.state['parent_props']);
+        } else if ( props.necessaryInfo.account_connected !== undefined && props.necessaryInfo.account_connected.length > 0) {
+            let installedApps = [];
+            props.necessaryInfo.account_connected.forEach(e => {
+                installedApps.push({
+                    id: e.code,
+                    content: e.title,
+                    accessibilityLabel: e.title,
+                    panelID: e.code
+                });
+            });
+            this.setState({installedApps:installedApps,requiredParamNotRecieved: false});
+        }
+
+        setTimeout(() => {
+            this.handleMarketplaceStateChange(this.state.selectedApp);
+        });
+    };
+
     handleSelectedUpload = (arg,val) => {
-        console.log(this.filters.marketplace);
+        console.log('handle', arg);
         switch (arg) {
             case 'modalClose': this.setState({selectedUploadModal: false}); break;
             case 'profile':
@@ -186,13 +159,15 @@ export class Products extends Component {
                 requests.postRequest('frontend/app/getSKUCount', data)
                     .then(data => {
                         if (data.success) {
-                            console.log(data);
                             if ( !isUndefined(data.data.parent) && !isUndefined(data.data.child) ) {
-                                this.setState({selectedUploadModal: true, parent_sku: data.data.parent, child_sku: data.data.child});
+                                this.setState({
+                                    selectedUploadModal: true,
+                                    parent_sku: data.data.parent,
+                                    child_sku: data.data.child
+                                });
                             } else {
-                                notify.warn('Something Went Wrong');
+                                notify.warn('Something Went Wrong.Not Found');
                             }
-                            this.updateState();
                         } else {
                             notify.error(data.message);
                         }
@@ -225,13 +200,14 @@ export class Products extends Component {
                     }
                 });
             break;
-            case 'select': this.state.selectUpload.value = val;
-                            this.setState(this.state);break;
+            case 'select': let selectUpload = this.state.selectUpload;
+                            selectUpload.value = val;
+                            this.setState({selectUpload:selectUpload});break;
             default:notify.info('Case Not Exits');
         }
     };
 
-    getProducts() {
+    getProducts = () => {
         window.showGridLoader = true;
         this.prepareFilterObject();
         const pageSettings = Object.assign({}, this.gridSettings);
@@ -247,15 +223,11 @@ export class Products extends Component {
                         this.setState({totalMainCount:data.data.mainCount});
                     }
                     const products = this.modifyProductsData(data.data.rows, '');
-                    this.totalProductCount = data.data.count;
                     this.state['products'] = products;
                     this.state.showLoaderBar = !data.success;
                     this.state.hideLoader = data.success;
                     this.state.pagination_show = paginationShow(this.gridSettings.activePage,this.gridSettings.count,data.data.count,true);
                     this.updateState();
-                    if ( !isUndefined(this.props.location) && !isUndefined(this.props.location.state) && Object.keys(this.props.location.state).length > 0  ) {
-                        this.manageStateChange(this.props.location.state['parent_props']);
-                    }
                 } else {
                     this.setState({
                         showLoaderBar:false,
@@ -270,17 +242,12 @@ export class Products extends Component {
                     this.updateState();
                 }
             });
-    }
+    };
 
     prepareFilterObject() {
         this.state.appliedFilters = {};
         if (this.filters.marketplace !== 'all') {
-            switch (this.filters.marketplace) {
-                case 'ebay_importer' : this.state.appliedFilters['filter[source_marketplace][1]'] = 'ebayimporter'; break;
-                case 'amazon_importer' : this.state.appliedFilters['filter[source_marketplace][1]'] = 'amazonimporter'; break;
-                case 'walmart_importer' : this.state.appliedFilters['filter[source_marketplace][1]'] = 'walmartimporter'; break;
-                default : this.state.appliedFilters['filter[source_marketplace][1]'] = this.filters.marketplace; break;
-            }
+            this.state.appliedFilters['filter[source_marketplace][1]'] = this.filters.marketplace;
         }
         if (this.filters.full_text_search !== '') {
             this.state.appliedFilters['search'] = this.filters.full_text_search;
@@ -376,17 +343,25 @@ export class Products extends Component {
                     });
                     rowData['title'] = <div onClick={this.handleToggleClick.bind(this,i)}>
                         <Label id={i}>
-                            <h3>{data[i].details.title}</h3>
+                            <h3 style={{cursor:"pointer"}}>{data[i].details.title}</h3>
                         </Label>
                         <Label id={i + i}>
-                            <h2 style={{color:"#868686"}}>{rows.length} Variants</h2>
+                            <h2 style={{color:"#868686", cursor:"pointer"}}>{rows.length} Variants</h2>
                         </Label>
                         {product_grid_collapsible === i && this.state.product_grid_collapsible !== i &&
                             <Card>
-                                <DataTable
-                                    columnContentTypes={['text','numeric','numeric']}
-                                    headings={['Sku','Quantity','Price']}
-                                    rows={rows}/>
+                                <table className="table table-responsive-lg">
+                                    <tr>
+                                        <th> SKU </th>
+                                        <th> Price </th>
+                                        <th> Quantity </th>
+                                    </tr>
+                                    {rows.map(e => (<tr>
+                                        <td> {e[0]} </td>
+                                        <td> {e[1]} </td>
+                                        <td> {e[2]} </td>
+                                    </tr>))}
+                                </table>
                             </Card>
                         }
                     </div>;
@@ -427,6 +402,7 @@ export class Products extends Component {
                 let parent_props = {
                     gridSettings:this.gridSettings,
                     filters: this.filters,
+                    position:this.state.selectedApp,
                 };
                 this.redirect('/panel/products/view/' + event['source_variant_id'], {parent_props:parent_props});break;
             default:console.log('Default Case');
@@ -568,7 +544,7 @@ export class Products extends Component {
                                         switch (event) {
                                             case 'upload':
                                                 this.state.selectedProducts.length > 0?
-                                                this.handleSelectedUpload('profile'):notify.info('No Product Selected');
+                                                    this.handleSelectedUpload('profile'):notify.info('No Product Selected');
                                                 break;
                                             default:console.log(event,this.state.selectedProducts);
                                         }
@@ -663,7 +639,20 @@ export class Products extends Component {
     handleMarketplaceChange(event) {
         this.state.selectedProducts = [];
         window.showGridLoader = true;
-        this.filters.marketplace = this.state.installedApps[event].id;
+        if ( this.state.installedApps[event] !== undefined && this.state.installedApps[event].id !== undefined )
+            this.filters.marketplace = this.state.installedApps[event].id;
+        this.state.selectedApp = event;
+        this.gridSettings.count = 10;
+        this.gridSettings.activePage = 1;
+        this.updateState();
+        this.getProducts();
+    }
+
+    handleMarketplaceStateChange(event) {
+        this.state.selectedProducts = [];
+        window.showGridLoader = true;
+        if ( this.state.installedApps[event] !== undefined && this.state.installedApps[event].id !== undefined )
+            this.filters.marketplace = this.state.installedApps[event].id;
         this.state.selectedApp = event;
         this.updateState();
         this.getProducts();
@@ -676,11 +665,12 @@ export class Products extends Component {
     }
 
     manageStateChange = (old_state) => {
-        console.log(old_state['filters']['marketplace']);
         this.filters = Object.assign({}, old_state['filters']);
         this.gridSettings = Object.assign({}, old_state['gridSettings']);
+        this.state.selectedApp = old_state['position'];
         this.props.location.state = undefined;
-        this.getProducts();
+        this.updateState();
+        this.prepareHeader(this.props);
     };
 
     redirect(url, data) {

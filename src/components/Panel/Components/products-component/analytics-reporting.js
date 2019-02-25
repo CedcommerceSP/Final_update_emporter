@@ -131,10 +131,10 @@ class AnalyticsReporting extends Component {
                 uploader = data1.data;
                 let temp = [];
                 this.state.activePlan.forEach(e => {
-                    if (e === 'amazon_importer') {
+                    if (e === 'amazonimporter') {
                         temp.push('Amazon');
                     }
-                    if ( e === 'ebay_importer' ) {
+                    if ( e === 'ebayimporter' ) {
                         temp.push('Ebay');
                     }
                 })

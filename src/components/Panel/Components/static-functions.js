@@ -36,10 +36,10 @@ export function getActivePlan() {
         .then(data => {
             if (data.success) {
                 data.data.services.forEach(e => {
-                    if ( e.code === 'amazon_importer' )
+                    if ( e.code === 'amazonimporter' )
                         tempPlan.push('amazonimporter', 'amazon_importer');
-                    if ( e.code === 'ebay_importer' )
-                        tempPlan.push('ebayimporter', 'ebay_importer');
+                    if ( e.code === 'ebayimporter' )
+                        tempPlan.push('ebayimporter', 'ebayimporter');
                 });
                 globalState.setLocalStorage('activePlan', JSON.stringify(tempPlan));
             }
@@ -49,7 +49,8 @@ export function getActivePlan() {
 export function validateImporter(code) {
     if ( code === 'product_sync'
         || code === 'product_import'
-        || code === 'shopify_importer' ) {
+        || code === 'shopify_importer'
+        ||  code === 'amazon_affiliate') {
         return false;
     }
     return true;
@@ -69,10 +70,12 @@ export function modifyAccountConnectedInfo(accounts) {
             case 'etsyimporter': title = 'Etsy';break;
             default: title = e;
         }
-        value.push({
-            title: title,
-            code: e
-        })
+        if ( e !== 'shopify' ) {
+            value.push({
+                title: title,
+                code: e
+            })
+        }
     });
     return value;
 }
