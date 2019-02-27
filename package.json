@@ -17,6 +17,7 @@
     "glamor": "2.20.40",
     "history": "4.7.2",
     "html-to-draftjs": "^1.4.0",
+    "image-exists": "^1.1.0",
     "jquery": "3.3.1",
     "linkifyjs": "2.1.4",
     "lodash": "4.17.10",

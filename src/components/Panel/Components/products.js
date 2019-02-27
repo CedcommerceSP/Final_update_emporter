@@ -10,6 +10,7 @@ import { notify } from '../../../services/notify';
 import SmartDataTable from '../../../shared/smartTable';
 
 import {paginationShow} from "./static-functions";
+const imageExists = require('image-exists');
 
 export class Products extends Component {
 
@@ -300,29 +301,33 @@ export class Products extends Component {
 
     modifyProductsData(data, product_grid_collapsible) {
         let products = [];
-        let re = new RegExp("^(https)://", "i");
         let str = '';
         for (let i = 0; i < data.length; i++) {
             let rowData = {};
             if ( data[i].variants !== {} && !isUndefined(data[i].variants) ) {
-                str = data[i].variants['main_image'];
-                if ( re.test(str) ) {
-                    str = data[i].variants['main_image'];
-                } else if ( data[i]['source_marketplace'] === 'ebayimporter' && typeof data[i]['details']['additional_images'] === 'object'
-                    && !isUndefined(data[i]['details']['additional_images'][0])) {
-                    str = data[i]['details']['additional_images'][0];
-                } else {
-                    str = 'https://apps.cedcommerce.com/importer/image_not_found.jpg';
-                }
-                rowData['main_image'] = str;
 
                 if ( data[i]['details']['type'] === 'simple' ) {
+                    str = data[i].variants[0]['main_image'];
+                    if ( str !== undefined && this.checkImage(str) ) {
+                        str = data[i].variants[0]['main_image'];
+                    } else if ( data[i]['source_marketplace'] === 'ebayimporter' && typeof data[i]['details']['additional_images'] === 'object'
+                        && !isUndefined(data[i]['details']['additional_images'][0])) {
+                        str = data[i]['details']['additional_images'][0];
+                    } else {
+                        str = 'https://apps.cedcommerce.com/importer/image_not_found.jpg';
+                    }
+                    rowData['main_image'] = str;
+                    let price = parseFloat(data[i].variants[0]['price']);
+                    if ( data[i].variants[0]['price_currency'] !== undefined && data[i].variants[0]['price_currency'] !== '' ) {
+                        price = price + ' ' + data[i].variants[0]['price_currency'];
+                    }
                     rowData['title'] = <div>
                         <Label id={i}>
                             <h3>{data[i].details.title}</h3>
                         </Label>
                         <Label id={i + i}>
-                            <h2 style={{color:"#868686"}}>{data[i].variants[0]['sku']}</h2>
+                            <h2 style={{color:"#868686"}}>{data[i].variants[0]['sku'] === ''?'-':data[i].variants[0]['sku']}</h2>
+                            <h2 style={{color:"#868686"}}>{price}</h2>
                         </Label>
                     </div>;
                     rowData['inventory'] = data[i].variants[0]['quantity'] + ' in Stock';
@@ -333,14 +338,21 @@ export class Products extends Component {
                         if ( data[i].variants[key]['quantity'] > 0 ) {
                             quantity += data[i].variants[key]['quantity'];
                         }
+                        if ( data[i].variants[key]['main_image'] !== undefined && this.checkImage(data[i].variants[key]['main_image']) ) {
+                            str = data[i].variants[key]['main_image'];
+                        }
                         if ( data[i].variants[key]['sku'] !== undefined ) {
                             rows.push([
                                 data[i].variants[key]['sku'],
-                                data[i].variants[key]['quantity'],
-                                data[i].variants[key]['price']
+                                data[i].variants[key]['price'],
+                                data[i].variants[key]['quantity']
                             ]);
                         }
                     });
+                    if ( str === '' ) {
+                        str = 'https://apps.cedcommerce.com/importer/image_not_found.jpg';
+                    }
+                    rowData['main_image'] = str;
                     rowData['title'] = <div onClick={this.handleToggleClick.bind(this,i)}>
                         <Label id={i}>
                             <h3 style={{cursor:"pointer"}}>{data[i].details.title}</h3>
@@ -386,6 +398,16 @@ export class Products extends Component {
         return products;
     }
 
+    checkImage = (src) => {
+        let flag = true;
+        imageExists(src, (exists) => {
+            if (!exists) {
+                flag = false;
+            }
+        });
+        return flag;
+    };
+
     handleToggleClick = (product_grid_collapsible) => {
         if ( this.state.product_grid_collapsible === product_grid_collapsible ) {
             this.setState({product_grid_collapsible:''});
@@ -413,7 +435,6 @@ export class Products extends Component {
         const state = this.state;
         this.setState(state);
     }
-
     closeDeleteProductModal() {
         this.state.toDeleteRow = {};
         this.state.deleteProductData = false;
@@ -478,8 +499,8 @@ export class Products extends Component {
                                     onSelect={this.handleMarketplaceChange.bind(this)}/>
                             </div>
                             <div className="col-12 p-3 text-right">
-                                <Label>{this.state.pagination_show} SKU</Label>
-                                <Label>{this.state.totalMainCount && Object.keys(this.filters.column_filters).length <= 0?`Total Main Product ${this.state.totalMainCount}`:''}</Label>
+                                <Label>{this.state.pagination_show} products</Label>
+                                {/*<Label>{this.state.totalMainCount && Object.keys(this.filters.column_filters).length <= 0?`Total Main Product ${this.state.totalMainCount}`:''}</Label>*/}
                             </div>
                             <div className="col-12">
                                 <SmartDataTable
@@ -501,6 +522,7 @@ export class Products extends Component {
                                     showColumnFilters={false}
                                     predefineFilters={this.predefineFilters}
                                     showButtonFilter={true}
+                                    columnFilterNameArray={this.filters.single_column_filter}
                                     rowActions={{
                                         edit: false,
                                         delete: false

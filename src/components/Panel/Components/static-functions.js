@@ -1,10 +1,21 @@
 import React  from 'react';
-import {requests} from "../../../services/request";
-import {globalState} from "../../../services/globalstate";
 
 export function capitalizeWord(string) {
+    string = modifyName(string);
     string = string.toLowerCase();
     return string.charAt(0).toUpperCase() + string.slice(1);
+}
+
+export function modifyName(string) {
+    console.log(string);
+    switch (string.toLowerCase()) {
+        case 'shopifygql': return 'Shopify';
+        case 'amazonimporter': return 'Amazon';
+        case 'ebayimporter': return 'Ebay';
+        case 'walmartimporter': return 'Walmart';
+        case 'etsyimporter': return 'Etsy';
+        default: return string;
+    }
 }
 
 export function modifyOptionsData(data) {
@@ -27,23 +38,6 @@ export function paginationShow(activePage, count, totalData, success) {
     } else {
         return <span>{totalData}</span>;
     }
-}
-
-export function getActivePlan() {
-    let tempPlan = [];
-    globalState.removeLocalStorage('activePlan');
-    requests.getRequest('plan/plan/getActive')
-        .then(data => {
-            if (data.success) {
-                data.data.services.forEach(e => {
-                    if ( e.code === 'amazonimporter' )
-                        tempPlan.push('amazonimporter', 'amazon_importer');
-                    if ( e.code === 'ebayimporter' )
-                        tempPlan.push('ebayimporter', 'ebayimporter');
-                });
-                globalState.setLocalStorage('activePlan', JSON.stringify(tempPlan));
-            }
-        });
 }
 
 export function validateImporter(code) {

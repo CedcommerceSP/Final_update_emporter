@@ -140,9 +140,17 @@
     .common {
         width: 30% !important;
     }
+    .guide-plan {
+        float: left;
+        width: 100%;
+    }
 }
 @media screen and (min-width: 576px) {
     .common {
         width: 15% !important;
+    }
+    .guide-plan {
+        float: left;
+        width: 49%;
     }
 }

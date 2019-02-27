@@ -892,29 +892,29 @@ export class CreateProfile extends Component {
                         />
                     </div>
                 }
-                <div className="col-12 pt-1 pb-1">
-                    <Select
-                        label="Upload Products To"
-                        options={this.uploadServices}
-                        placeholder="Product Target"
-                        disabled={true}
-                        onChange={this.handleBasicDetailsChange.bind(this, 'target')}
-                        value={this.state.basicDetails.target}
-                    />
-                </div>
-                {
-                    this.state.basicDetails.target !== '' &&
-                    this.uploadShopLists.length > 1 &&
-                    <div className="col-12 pt-1 pb-1">
-                        <Select
-                            label="Shop In Which Products Will Be Uploaded"
-                            options={this.uploadShopLists}
-                            placeholder="Target Shop"
-                            onChange={this.handleBasicDetailsChange.bind(this, 'targetShop')}
-                            value={this.state.basicDetails.targetShop}
-                        />
-                    </div>
-                }
+                {/*<div className="col-12 pt-1 pb-1">*/}
+                    {/*<Select*/}
+                        {/*label="Upload Products To"*/}
+                        {/*options={this.uploadServices}*/}
+                        {/*placeholder="Product Target"*/}
+                        {/*disabled={true}*/}
+                        {/*onChange={this.handleBasicDetailsChange.bind(this, 'target')}*/}
+                        {/*value={this.state.basicDetails.target}*/}
+                    {/*/>*/}
+                {/*</div>*/}
+                {/*{*/}
+                    {/*this.state.basicDetails.target !== '' &&*/}
+                    {/*this.uploadShopLists.length > 1 &&*/}
+                    {/*<div className="col-12 pt-1 pb-1">*/}
+                        {/*<Select*/}
+                            {/*label="Shop In Which Products Will Be Uploaded"*/}
+                            {/*options={this.uploadShopLists}*/}
+                            {/*placeholder="Target Shop"*/}
+                            {/*onChange={this.handleBasicDetailsChange.bind(this, 'targetShop')}*/}
+                            {/*value={this.state.basicDetails.targetShop}*/}
+                        {/*/>*/}
+                    {/*</div>*/}
+                {/*}*/}
             </div>
         );
     }
@@ -1050,7 +1050,9 @@ export class CreateProfile extends Component {
                     <div className="col-12 pt-2 pb-2">
                         {this.filteredProducts.totalProducts ?
                             <Banner title="Selected Products Count" status="success">
-                                <Label>Total {this.filteredProducts.totalProducts} products are selected under this query
+                                <Label>{this.filteredProducts.totalProducts !== 0 ?
+                                    'Total ' + this.filteredProducts.totalProducts + ' SKU are selected under this query' :
+                                    'No Product Found'}
                                     : {this.state.products_select.query}</Label>
                             </Banner> :
                             <Banner title="Selected Products Count" status="success">

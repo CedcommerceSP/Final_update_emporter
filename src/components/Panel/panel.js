@@ -33,11 +33,11 @@ import ReportAnIssue from "./Components/help-component/report-issue";
 import ViewProfile from "./Components/profile-component/view-profile";
 import {requests} from "../../services/request";
 
-import {globalState} from '../../services/globalstate';
 import ViewProducts from "./Components/products-component/view-products";
 import * as queryString from "query-string";
 import {isUndefined} from "util";
-import {getActivePlan, modifyAccountConnectedInfo} from "./Components/static-functions";
+import { modifyAccountConnectedInfo} from "./Components/static-functions";
+import Guide from "./Components/dashboard/guide";
 
 
 const style = {
@@ -76,7 +76,6 @@ export class Panel extends Component {
             }
             window.location = url;
         }
-        getActivePlan();
     }
 
     getNecessaryInfo = () => {
@@ -150,6 +149,7 @@ export class Panel extends Component {
                                     return <FAQPage {...this.props} necessaryInfo={this.state.necessaryInfo} disableHeader={this.disableHeader}/>
                                 }}/>
                                 <Route exact path='/panel/help/report' component={ReportAnIssue}/>
+                                <Route exact path='/panel/dashboard/guide' component={Guide}/>
                                 <Route exact path='/panel/dashboard' render={() => {
                                     return <Dashboard disableHeader={this.disableHeader} necessaryInfo={this.state.necessaryInfo} {...this.props}/>
                                 }}/>

@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {Select, Button, Card, TextField, Banner, Label} from "@shopify/polaris";
+import {Select, Button, Card, TextField, Banner, Label, Tooltip,Icon} from "@shopify/polaris";
 import {requests} from "../../services/request";
 import {notify} from "../../services/notify";
 import {json} from "../../environments/static-json";
@@ -82,14 +82,39 @@ class AppsShared extends Component {
                         }
                     })
                 }
+                <input type={"hidden"} data-toggle="modal" data-target="#exampleModal" id={"openEtsyHelp"}/>
+
+                <div className="modal fade" id="exampleModal" tabIndex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                    <div className="modal-dialog" role="document">
+                        <div className="modal-content">
+                            <div className="modal-header">
+                                <h5 className="modal-title" id="exampleModalLabel">Etsy Help</h5>
+                                <button type="button" className="close" data-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+                            <div className="modal-body">
+                                <img src={require("../../assets/img/etsy_help.png")} width={"100%"}/>
+                            </div>
+                            {/*<div class="modal-footer">*/}
+                                {/*<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>*/}
+                                {/*<button type="button" class="btn btn-primary">Save changes</button>*/}
+                            {/*</div>*/}
+                        </div>
+                    </div>
+                </div>
             </div>
         );
     }
     validateCode = (code) => {
-        if ( code === 'shopifygql' || code === 'shopify'  || code === 'opensky' || code === 'oberlosupply' || code === 'ebay' ) {
-            return false;
-        }
-        return true;
+        return !(code === 'shopifygql'
+            || code === 'shopify'
+            || code === 'opensky'
+            || code === 'oberlosupply'
+            || code === 'ebay'
+            || code === 'amazonaffiliate'
+            || code === 'google');
+
     };
     additionalInput = (code) => {
         if ( code === 'ebayimporter' ) {
@@ -103,6 +128,11 @@ class AppsShared extends Component {
             return <TextField
                 label={"Shop Name"}
                 value={this.state.etsy}
+                connectedRight={<span onClick={() => {document.getElementById("openEtsyHelp").click()}}>
+                    <Tooltip content={"Help"} light={true}>
+                    <Icon source="help" color="inkLighter" backdrop={true}/>
+                </Tooltip>
+                </span>}
                 onChange={this.handleChange.bind(this,'etsy')}
                 placeholder={"Etsy Shop Name"} labelHidden={true}/>
         }

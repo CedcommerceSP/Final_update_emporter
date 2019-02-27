@@ -134,6 +134,9 @@ class SmartDataTablePlain extends React.Component {
             });
             this.defaultFilters = Object.assign({}, nextProps.columnFiltersValue);
         }
+        if ( nextProps.columnFilterNameArray !== undefined && nextProps.columnFilterNameArray !== this.state.columnFilterNameArray ) {
+            this.setState({columnFilterNameArray:nextProps.columnFilterNameArray});
+        }
         if ( !isUndefined(nextProps.data) ) {
             if ( this.props.data !== nextProps.data ) {
                 this.setState({showLoaderBar:false});
@@ -699,6 +702,11 @@ class SmartDataTablePlain extends React.Component {
     handleButtonFilterSubmit = () => {
         let { columnFilterNameValue } = this.state;
         let { columnFilterNameArray } = this.state;
+        columnFilterNameArray.forEach((e,i) => {
+            if ( e.name === columnFilterNameValue['name']) {
+                columnFilterNameArray.splice(i,1);
+            }
+        });
         columnFilterNameArray.push(columnFilterNameValue);
         columnFilterNameValue = {name:'', condition:'', value:'', isInt: false};
         this.props.singleButtonColumnFilter(columnFilterNameArray);

@@ -5,7 +5,7 @@ import {Page,
         Label,
         ProgressBar,
         DisplayText} from "@shopify/polaris";
-import {faDollarSign, faCalendarCheck, faCalendarTimes, faHeadphones, faCogs, faQuoteLeft, faQuoteRight} from '@fortawesome/free-solid-svg-icons';
+import {faQuoteLeft, faQuoteRight} from '@fortawesome/free-solid-svg-icons';
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {displayArray} from './current-plan-func';
 import { requests } from '../../../../services/request';

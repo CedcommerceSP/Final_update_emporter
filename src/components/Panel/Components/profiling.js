@@ -9,6 +9,7 @@ import { Page,
 import { requests } from '../../../services/request';
 import { notify } from '../../../services/notify';
 import SmartDataTable from '../../../shared/smart-table';
+import {capitalizeWord} from "./static-functions";
 
 export class Profiling extends Component {
 
@@ -28,7 +29,7 @@ export class Profiling extends Component {
     ];
     visibleColumns = ['name', 'source', 'target', 'query','profile_id'];
     customButton = ['profile_id']; // button
-    hideFilters= ['profile_id'];
+    hideFilters= ['profile_id','query','source'];
     columnTitles = {
         name: {
             title: 'Name',
@@ -36,10 +37,6 @@ export class Profiling extends Component {
         },
         source: {
             title: 'Source',
-            sortable: true
-        },
-        target: {
-            title: 'Target',
             sortable: true
         },
         targetCategory: {
@@ -94,8 +91,8 @@ export class Profiling extends Component {
         for (let i = 0; i < profiles.length; i++) {
             profilesList.push({
                 name: profiles[i].name,
-                source: profiles[i].source === 'amazonimporter'?'Amazon':profiles[i].source,
-                target: profiles[i].target === 'shopifygql'?'Shopify':profiles[i].target,
+                source: capitalizeWord(profiles[i].source),
+                // target: profiles[i].target === 'shopifygql'?'Shopify':profiles[i].target,
                 targetCategory: profiles[i].targetCategory,
                 query: this.preapreUser(profiles[i].query),
                 profile_id: profiles[i].profile_id
