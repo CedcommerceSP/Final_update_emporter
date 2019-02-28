@@ -113,3 +113,7 @@
 .Polaris-TextField__Input {
     min-width: 100px !important;
 }
+
+.Polaris-TextField--disabled {
+    color: #333333 !important;
+}

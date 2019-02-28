@@ -7,7 +7,6 @@ export function capitalizeWord(string) {
 }
 
 export function modifyName(string) {
-    console.log(string);
     switch (string.toLowerCase()) {
         case 'shopifygql': return 'Shopify';
         case 'amazonimporter': return 'Amazon';

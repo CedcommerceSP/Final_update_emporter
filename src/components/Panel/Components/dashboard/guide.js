@@ -134,12 +134,12 @@ class Guide extends Component {
                 <div className="mb-5">
                     <TextStyle>Recurring is manage by Shopify ,and will charge every 30 day (Plan Lifetime)</TextStyle>
                 </div>
-                <div className="mt-5">
-                    <TextStyle variation="strong">why pay recurring when i already paid for import charges?</TextStyle>
-                </div>
-                <div className="mb-5">
-                    <TextStyle>One time payment is required to upload products on shopify, but to sync price and inventory daily.</TextStyle>
-                </div>
+                {/*<div className="mt-5">*/}
+                    {/*<TextStyle variation="strong">why pay recurring when i already paid for import charges?</TextStyle>*/}
+                {/*</div>*/}
+                {/*<div className="mb-5">*/}
+                    {/*<TextStyle>One time payment is required to upload products on shopify, but to sync price and inventory daily.</TextStyle>*/}
+                {/*</div>*/}
             </div>
         </Card>
     };

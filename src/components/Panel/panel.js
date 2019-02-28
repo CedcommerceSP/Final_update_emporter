@@ -81,11 +81,12 @@ export class Panel extends Component {
     getNecessaryInfo = () => {
         requests.postRequest('frontend/app/getNecessaryDetails').then(e => {
            if ( e.success ) {
-               let account_connected = e['account_connected'].map(e => (e.code));
-               account_connected = modifyAccountConnectedInfo(account_connected);
+               let account_connected_array = e['account_connected'].map(e => (e.code));
+               let account_connected = modifyAccountConnectedInfo(account_connected_array);
                let user_necessary_details = {
                    account_connected: account_connected,
-                   services: e['services']
+                   services: e['services'],
+                   account_connected_array:account_connected_array
                };
                this.setState({
                    necessaryInfo: user_necessary_details

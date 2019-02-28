@@ -58,13 +58,12 @@ export class Configuration extends Component {
         this.getAmazonImporterConfigurations();
         // this.amazonCredentials();
         // this.getEbayConfig();
-        // this.getEtsyConfig();
+        this.getEtsyConfig();
     }
 
     componentWillReceiveProps(nextPorps) {
         if ( nextPorps.necessaryInfo !== undefined ) {
             this.setState({necessaryInfo:nextPorps.necessaryInfo});
-            console.log(nextPorps.necessaryInfo);
         }
     }
 
@@ -498,10 +497,10 @@ export class Configuration extends Component {
     renderEtsyConfig() {
         return (
             <div className="row">
-                <div className="col-md-6 col-sm-6 col-12 text-md-left text-sm-left text-center">
+                <div className="col-sm-4 col-12 text-md-left text-sm-left text-center">
                     <Heading>Etsy Configuration</Heading>
                 </div>
-                <div className="col-md-6 col-sm-6 col-12">
+                <div className="col-sm-8 col-12">
                     <Card>
                         <div className="row p-5">
                             {
@@ -574,6 +573,9 @@ export class Configuration extends Component {
     }
 
     render() {
+        let accounts = [];
+        if ( this.state.necessaryInfo !== undefined )
+            accounts = this.state.necessaryInfo.account_connected_array;
         return (
             <Page
                 title="Configuration">
@@ -587,14 +589,11 @@ export class Configuration extends Component {
                     {/*<Layout.Section>*/}
                         {/*{this.renderEbayConfig()}*/}
                     {/*</Layout.Section>*/}
-                    {/*<Layout.Section>*/}
-                        {/*{this.renderEtsyConfig()}*/}
-                    {/*</Layout.Section>*/}
-                    {/*<Layout.Section>*/}
-                        {/*{this.renderAmazonCredentials()}*/}
-                    {/*</Layout.Section>*/}
                     <Layout.Section>
-                        {this.renderAmazonImporterConfigurationSection()}
+                        {accounts !== undefined && accounts.indexOf('etsyimporter') !== -1 ? this.renderEtsyConfig():null}
+                    </Layout.Section>
+                    <Layout.Section>
+                        {accounts !== undefined && accounts.indexOf('amazonimporter') !== -1 ? this.renderAmazonImporterConfigurationSection():null}
                     </Layout.Section>
                 </Layout>
             </Page>
@@ -645,7 +644,6 @@ export class Configuration extends Component {
     }
 
     shopifyConfigurationCheckboxChange(index, optionIndex, value) {
-        console.log(index, optionIndex, value, this.state.shopify_configuration, this.shopifyConfigurationData[index].code);
         this.state.shopify_configuration_updated = true;
         const option = this.shopifyConfigurationData[index].options[optionIndex].value;
         const valueIndex = this.state.shopify_configuration[this.shopifyConfigurationData[index].code].indexOf(option);
@@ -683,7 +681,6 @@ export class Configuration extends Component {
     }
 
     ebayConfigurationCheckboxChange(index, optionIndex, value) {
-        console.log(index, optionIndex, value, this.state.ebay_configuration, this.ebayConfigurationData[index].code);
         this.state.ebay_configuration_updated = true;
         const option = this.ebayConfigurationData[index].options[optionIndex].value;
         const valueIndex = this.state.ebay_configuration[this.ebayConfigurationData[index].code].indexOf(option);
@@ -710,7 +707,6 @@ export class Configuration extends Component {
     }
 
     etsyConfigurationCheckboxChange(index, optionIndex, value) {
-        console.log(index, optionIndex, value, this.state.etsy_configuration, this.etsyConfigurationData[index].code);
         this.state.etsy_configuration_updated = true;
         const option = this.etsyConfigurationData[index].options[optionIndex].value;
         const valueIndex = this.state.etsy_configuration[this.etsyConfigurationData[index].code].indexOf(option);

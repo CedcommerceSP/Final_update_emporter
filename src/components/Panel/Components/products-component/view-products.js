@@ -1,13 +1,15 @@
 import React, {Component} from 'react';
-import {Page, Label, Card,TextContainer, Collapsible,
+import {Page, Label, Card,TextContainer, Scrollable,
     Select, Button, TextField, ButtonGroup, DataTable, Thumbnail} from "@shopify/polaris";
 import { isUndefined } from 'util';
-import './analytics.css';
 import { EditorState, convertToRaw, ContentState } from 'draft-js';
 import { Editor } from 'react-draft-wysiwyg';
 import draftToHtml from 'draftjs-to-html';
 import htmlToDraft from 'html-to-draftjs';
+
+import './analytics.css';
 import 'react-draft-wysiwyg/dist/react-draft-wysiwyg.css';
+
 import {requests} from "../../../../services/request";
 import {notify} from "../../../../services/notify";
 
@@ -175,13 +177,13 @@ class ViewProducts extends Component {
                                 <Button onClick={this.handleSyncAction} icon={"refresh"}> Sync With MArketPlace</Button>
                             </ButtonGroup>
                         </div> }
-                        <div className="col-12 mb-5 d-flex justify-content-end">
+                        { !this.editDisable && <div className="col-12 mb-5 d-flex justify-content-end">
                             <ButtonGroup>
                                 <Button onClick={this.handleSaveAction} primary disabled={this.state.buttonDisable.save}> Save </Button>
                                 <Button onClick={this.handleSaveUploadAction} disabled={this.state.buttonDisable.save}> Save & Upload </Button>
                                 <Button onClick={this.handleDiscardAction} destructive disabled={this.state.buttonDisable.save}> Discard </Button>
                             </ButtonGroup>
-                        </div>
+                        </div>}
                         <div className="col-12 mb-5">
                             <Card>
                                 <div className="p-5" /*style={{height:'200px',overflow:'auto'}}*/>
@@ -197,35 +199,40 @@ class ViewProducts extends Component {
                                         </TextContainer>
                                     </div>
                                     <div className="react_quill_app_class">
-                                        <h4><b>Description</b></h4>
+                                        {/*<h4><b>Description</b></h4>*/}
                                         <div id="editor">
-                                            <Editor
-                                                editorState={this.state.editorState}
-                                                wrapperClhandleDetailChangeassName="demo-wrapper"
-                                                readOnly={this.editDisable}
-                                                editorClassName="demo-editor"
-                                                toolbar={{
-                                                    options: ['inline', 'blockType', 'fontSize', 'fontFamily', 'history', 'textAlign','list'],
-                                                    inline: {
-                                                        options: ['bold', 'italic', 'underline', 'strikethrough', 'monospace'],
-                                                        bold: { className: 'bordered-option-classname' },
-                                                        italic: { className: 'bordered-option-classname' },
-                                                        underline: { className: 'bordered-option-classname' },
-                                                        strikethrough: { className: 'bordered-option-classname' },
-                                                        code: { className: 'bordered-option-classname' },
-                                                    },
-                                                    blockType: {
-                                                        className: 'bordered-option-classname',
-                                                    },
-                                                    fontSize: {
-                                                        className: 'bordered-option-classname',
-                                                    },
-                                                    fontFamily: {
-                                                        className: 'bordered-option-classname',
-                                                    },
-                                                }}
-                                                onEditorStateChange={this.handleDraftJS}
-                                            />
+                                            <Card title="Description" sectioned>
+                                                <Scrollable shadow style={{ height: '300px' }} hint={false}>
+                                                    <div dangerouslySetInnerHTML={{__html:this.state.products_top.description}}/>
+                                                </Scrollable>
+                                            </Card>
+                                            {/*<Editor*/}
+                                                {/*editorState={this.state.editorState}*/}
+                                                {/*wrapperClhandleDetailChangeassName="demo-wrapper"*/}
+                                                {/*readOnly={this.editDisable}*/}
+                                                {/*editorClassName="demo-editor"*/}
+                                                {/*toolbar={{*/}
+                                                    {/*options: ['inline', 'blockType', 'fontSize', 'fontFamily', 'history', 'textAlign','list'],*/}
+                                                    {/*inline: {*/}
+                                                        {/*options: ['bold', 'italic', 'underline', 'strikethrough', 'monospace'],*/}
+                                                        {/*bold: { className: 'bordered-option-classname' },*/}
+                                                        {/*italic: { className: 'bordered-option-classname' },*/}
+                                                        {/*underline: { className: 'bordered-option-classname' },*/}
+                                                        {/*strikethrough: { className: 'bordered-option-classname' },*/}
+                                                        {/*code: { className: 'bordered-option-classname' },*/}
+                                                    {/*},*/}
+                                                    {/*blockType: {*/}
+                                                        {/*className: 'bordered-option-classname',*/}
+                                                    {/*},*/}
+                                                    {/*fontSize: {*/}
+                                                        {/*className: 'bordered-option-classname',*/}
+                                                    {/*},*/}
+                                                    {/*fontFamily: {*/}
+                                                        {/*className: 'bordered-option-classname',*/}
+                                                    {/*},*/}
+                                                {/*}}*/}
+                                                {/*onEditorStateChange={this.handleDraftJS}*/}
+                                            {/*/>*/}
                                         </div>
                                     </div>
                                 </div>
@@ -281,13 +288,13 @@ class ViewProducts extends Component {
                                 </div>
                             </Card>
                         </div>
-                        <div className="col-12 d-flex justify-content-end">
+                        { !this.editDisable && <div className="col-12 d-flex justify-content-end">
                             <ButtonGroup>
                                 <Button onClick={this.handleSaveAction} primary disabled={this.state.buttonDisable.save}> Save </Button>
                                 <Button onClick={this.handleSaveUploadAction} disabled={this.state.buttonDisable.save}> Save & Upload </Button>
                                 <Button onClick={this.handleDiscardAction} destructive disabled={this.state.buttonDisable.save}> Discard </Button>
                             </ButtonGroup>
-                        </div>
+                        </div>}
                     </div>
                 </Card>
             </Page>

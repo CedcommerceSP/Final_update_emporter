@@ -105,11 +105,11 @@ export class Products extends Component {
             requiredParamNotRecieved: true,
         };
         if ( props.necessaryInfo.account_connected !== undefined && props.necessaryInfo.account_connected.length > 0) {
-            setTimeout(() => {this.prepareHeader(JSON.parse(JSON.stringify(props))); console.log('construtor');})
+            setTimeout(() => {this.prepareHeader(JSON.parse(JSON.stringify(props)));})
         }  else {
             setTimeout(() => {
                 if ( this.state.requiredParamNotRecieved ) {
-                    this.prepareHeader(JSON.parse(JSON.stringify(props))); console.log('construtor2');
+                    this.prepareHeader(JSON.parse(JSON.stringify(props)));
                 }
              },2000);
         }
@@ -122,12 +122,10 @@ export class Products extends Component {
             this.setState({necessaryInfo:nextPorps.necessaryInfo});
             this.prepareHeader(JSON.parse(JSON.stringify(nextPorps)));
             this.setState({requiredParamNotRecieved: false});
-            console.log('reciede');
         }
     }
 
     prepareHeader = ( props ) => {
-        console.log('prepare', props);
         if ( !isUndefined(this.props.location) && !isUndefined(this.props.location.state) && Object.keys(this.props.location.state).length > 0  ) {
             this.manageStateChange(this.props.location.state['parent_props']);
         } else if ( props.necessaryInfo.account_connected !== undefined && props.necessaryInfo.account_connected.length > 0) {
@@ -149,7 +147,6 @@ export class Products extends Component {
     };
 
     handleSelectedUpload = (arg,val) => {
-        console.log('handle', arg);
         switch (arg) {
             case 'modalClose': this.setState({selectedUploadModal: false}); break;
             case 'profile':

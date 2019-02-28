@@ -141,7 +141,6 @@ class Dashboard extends Component {
     componentWillReceiveProps(nextPorps) {
         if ( nextPorps.necessaryInfo !== undefined ) {
             this.setState({necessaryInfo:nextPorps.necessaryInfo});
-            console.log(nextPorps.necessaryInfo);
         }
     }
 
@@ -792,7 +791,7 @@ class Dashboard extends Component {
     render() {
         return (
             <Page
-                title={this.state.stepStart ? "Registration" : 'Dashboard'}>
+                title={this.state.stepStart ? "Registration" : 'Dashboard'} primaryAction={{"content":"Pricing Guide", onClick:() => {this.redirect('/panel/dashboard/guide')}}}>
                 {this.state.welcome_screen?
                     <div>
                         <AnalyticsReporting history={this.props.history}/>
