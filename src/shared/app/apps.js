@@ -112,7 +112,6 @@ class AppsShared extends Component {
             || code === 'opensky'
             || code === 'oberlosupply'
             || code === 'ebay'
-            || code === 'amazonaffiliate'
             || code === 'google');
 
     };

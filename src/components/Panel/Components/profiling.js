@@ -27,7 +27,7 @@ export class Profiling extends Component {
         {label: 40, value: 40},
         {label: 50, value: 50}
     ];
-    visibleColumns = ['name', 'source', 'target', 'query','profile_id'];
+    visibleColumns = ['name', 'source', 'target', 'query','profile_id','product_count'];
     customButton = ['profile_id']; // button
     hideFilters= ['profile_id','query','source'];
     columnTitles = {
@@ -45,6 +45,10 @@ export class Profiling extends Component {
         },
         query: {
             title: 'Query',
+            sortable: true
+        },
+        product_count: {
+            title: 'Items',
             sortable: true
         },
         profile_id: {
@@ -92,7 +96,7 @@ export class Profiling extends Component {
             profilesList.push({
                 name: profiles[i].name,
                 source: capitalizeWord(profiles[i].source),
-                // target: profiles[i].target === 'shopifygql'?'Shopify':profiles[i].target,
+                product_count: profiles[i]['product_count'] !== undefined? profiles[i]['product_count'] :"N/A",
                 targetCategory: profiles[i].targetCategory,
                 query: this.preapreUser(profiles[i].query),
                 profile_id: profiles[i].profile_id

@@ -20,6 +20,7 @@ import {globalState} from "../../../services/globalstate";
 import {json} from "../../../environments/static-json";
 
 import './dashboard/dashboard.css';
+import PricingGuide from "../../../shared/pricing_guide";
 
 class Dashboard extends Component {
     constructor(props) {
@@ -94,16 +95,16 @@ class Dashboard extends Component {
                         anchor: 'U-INFO', // Which Function to call e.g : 'U-INFO' then call div which take User basic Information
                         stepperActive: false, // used in stepper Check either Completed or not and also help in deciding with step to go
                     }, // step 1
-                    // {
-                    //     message: <p>Grab the early mover advantage and get first 3 days free. There are only two prerequisites for using this app, a valid Shopify store and either Ebay or Amazon Seller Account.</p>,
-                    //     stepperMessage: 'Choose a plan', // stepper Small Message
-                    //     API_endpoint: '', // Api End Point is used to check to send data or get data
-                    //     data: '', // Data additional Field
-                    //     method: 'GET', // Method Type
-                    //     redirectTo: '/panel/plans', // After Completion Where To Redirect
-                    //     anchor: 'PLANS', // Which Function to call e.g : 'U-INFO' then call div which take User basic Information
-                    //     stepperActive: false, // used in stepper Check either Completed or not
-                    // }, // step 2
+                    {
+                        message: <p>Pricing Overview.</p>,
+                        stepperMessage: 'Pricing Plan', // stepper Small Message
+                        API_endpoint: '', // Api End Point is used to check to send data or get data
+                        data: '', // Data additional Field
+                        method: 'GET', // Method Type
+                        redirectTo: '/panel/dashboard/guide', // After Completion Where To Redirect
+                        anchor: 'PRICING_GUIDE', // Which Function to call e.g : 'U-INFO' then call div which take User basic Information
+                        stepperActive: false, // used in stepper Check either Completed or not
+                    }, // step 2
                     // {
                     //     message: <p> Link your <b>Account</b></p>,
                     //     stepperMessage: 'Account linked',
@@ -231,7 +232,7 @@ class Dashboard extends Component {
                         step: arg + 1,
                     }
                 });
-                if ( arg >= 1 ) {
+                if ( arg >= 2 ) {
                     this.props.disableHeader(true);
                     setTimeout(() => {
                         this.redirect('/panel/accounts');
@@ -243,32 +244,32 @@ class Dashboard extends Component {
 
     renderStepper() {
         return null;
-        // let flag = 1;
-        // return (
-        //     <div className="container">
-        //         <div className="row bs-wizard" style={{borderBottom:"0"}}>
-        //             {this.state.stepData.map((data, index) => {
-        //                 let css = 'disabled '; // when Previous Step is not Completed
-        //                 if (data.stepperActive) {
-        //                     css = 'complete'; // When Step Is completed
-        //                 } else if (flag === 1) {
-        //                     css = 'active'; // which Step Is Active
-        //                     flag++;
-        //                 }
-        //                 return(<React.Fragment key={index}>
-        //                     <div className={`col-4 bs-wizard-step ${css}`}>
-        //                         <div className="text-center bs-wizard-stepnum">Step {index + 1}</div>
-        //                         <div className="progress">
-        //                             <div className="progress-bar"/>
-        //                         </div>
-        //                         <a href="javascript:void(0)" className="bs-wizard-dot"/>
-        //                         <div className="bs-wizard-info text-center">{data.stepperMessage}</div>
-        //                     </div>
-        //                 </React.Fragment>);
-        //             })}
-        //         </div>
-        //     </div>
-        // );
+        let flag = 1;
+        return (
+            <div className="container">
+                <div className="row bs-wizard" style={{borderBottom:"0"}}>
+                    {this.state.stepData.map((data, index) => {
+                        let css = 'disabled '; // when Previous Step is not Completed
+                        if (data.stepperActive) {
+                            css = 'complete'; // When Step Is completed
+                        } else if (flag === 1) {
+                            css = 'active'; // which Step Is Active
+                            flag++;
+                        }
+                        return(<React.Fragment key={index}>
+                            <div className={`col-4 bs-wizard-step ${css}`}>
+                                <div className="text-center bs-wizard-stepnum">Step {index + 1}</div>
+                                <div className="progress">
+                                    <div className="progress-bar"/>
+                                </div>
+                                <a href="javascript:void(0)" className="bs-wizard-dot"/>
+                                <div className="bs-wizard-info text-center">{data.stepperMessage}</div>
+                            </div>
+                        </React.Fragment>);
+                    })}
+                </div>
+            </div>
+        );
     }
 
     handleModalChange(event) {
@@ -331,6 +332,7 @@ class Dashboard extends Component {
             switch (data.anchor) {
                 case 'U-INFO':
                     return this.renderGetUserInfo();
+                case 'PRICING_GUIDE': return this.renderPricingGuide();
                 case 'PLANS': return this.renderPlan();
                 case 'LINKED': return this.renderLinkedAccount();
                 case 'CONFIG': return this.renderConfig();
@@ -627,7 +629,26 @@ class Dashboard extends Component {
         );
     }
 
-    /****************************** step 2 Plans Start Here *****************************/
+    /***************************** Step 2 Pricing Plan *************************************************/
+
+    handlePricingSubmit = () => {
+        this.changeStep(2);
+    };
+
+    renderPricingGuide = () => {
+        return <React.Fragment>
+            <div className="pt-5 pb-5">
+                <PricingGuide/>
+            </div>
+            <div className="p-5 mt-5 text-center">
+                <Button onClick={this.handlePricingSubmit} primary>
+                    Move To Next Step
+                </Button>
+            </div>
+        </React.Fragment>
+    };
+
+    /****************************** step 2 Out Dated Plans Start Here *****************************/
     checkPayment = () => {
         requests.getRequest('plan/plan/getActive').then(status => {
             if ( status.success ) {
@@ -791,7 +812,8 @@ class Dashboard extends Component {
     render() {
         return (
             <Page
-                title={this.state.stepStart ? "Registration" : 'Dashboard'} primaryAction={{"content":"Pricing Guide", onClick:() => {this.redirect('/panel/dashboard/guide')}}}>
+                title={this.state.stepStart ? "Registration" : 'Dashboard'}
+                primaryAction={{"content":"Pricing Guide", onClick:() => {this.redirect('/panel/dashboard/guide')}}}>
                 {this.state.welcome_screen?
                     <div>
                         <AnalyticsReporting history={this.props.history}/>

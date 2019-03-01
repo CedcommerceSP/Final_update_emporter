@@ -13,6 +13,7 @@ export function modifyName(string) {
         case 'ebayimporter': return 'Ebay';
         case 'walmartimporter': return 'Walmart';
         case 'etsyimporter': return 'Etsy';
+        case 'amazonaffiliate': return 'Amazon Affiliate';
         default: return string;
     }
 }
@@ -40,13 +41,9 @@ export function paginationShow(activePage, count, totalData, success) {
 }
 
 export function validateImporter(code) {
-    if ( code === 'product_sync'
+    return !(code === 'product_sync'
         || code === 'product_import'
-        || code === 'shopify_importer'
-        ||  code === 'amazon_affiliate') {
-        return false;
-    }
-    return true;
+        || code === 'shopify_importer');
 }
 
 export function modifyAccountConnectedInfo(accounts) {
@@ -55,12 +52,13 @@ export function modifyAccountConnectedInfo(accounts) {
         let title  = e;
         switch (e) {
             case 'amazonimporter':
-            case 'amazon_importer': title = 'Amazon';break;
+            case 'amazon_importer': title = 'Amazon'; break;
             case 'ebayimporter':
-            case 'ebay_importer': title = 'Ebay';break;
+            case 'ebay_importer': title = 'Ebay'; break;
             case 'walmartimporter':
-            case 'walmart_importer': title = 'Walmart';break;
-            case 'etsyimporter': title = 'Etsy';break;
+            case 'walmart_importer': title = 'Walmart'; break;
+            case 'etsyimporter': title = 'Etsy'; break;
+            case 'amazonaffiliate': title = 'Amazon Affiliate'; break;
             default: title = e;
         }
         if ( e !== 'shopify' ) {

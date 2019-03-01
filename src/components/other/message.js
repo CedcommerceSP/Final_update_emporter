@@ -8,6 +8,7 @@ import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {Button} from "@shopify/polaris";
 import Loader from "react-loader-spinner";
 import {globalState} from "../../services/globalstate";
+import {environment} from "../../environments/environment";
 
 class MessageShow extends Component {
     constructor(props) {
@@ -52,9 +53,11 @@ class MessageShow extends Component {
            }));
            let win = window.open('','_parent','location=yes,width=20px,height=10px,scrollbars=yes,status=yes');
            setTimeout(() => {
-               if ( queryParams.shop !== undefined ) {
+               if ( queryParams.shop !== undefined && environment.isLive ) {
                    globalState.setLocalStorage('shop',queryParams.shop);
                    win.location = 'https://' + queryParams.shop + '/admin/apps/importer-5';
+               } else {
+                   this.redirect('/panel/dashboard')
                }
            },500);
        }
@@ -62,9 +65,11 @@ class MessageShow extends Component {
        {
            let win = window.open('','_parent','location=yes,width=200px,height=500px,scrollbars=yes,status=yes');
            setTimeout(() => {
-               if ( queryParams.shop !== undefined ) {
+               if ( queryParams.shop !== undefined && environment.isLive ) {
                    globalState.setLocalStorage('shop',queryParams.shop);
                    win.location = 'https://' + queryParams.shop + '/admin/apps/importer-5';
+               } else {
+                   this.redirect('/panel/dashboard')
                }
            },3000);
        }

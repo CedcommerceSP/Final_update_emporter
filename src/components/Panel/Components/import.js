@@ -7,7 +7,7 @@ import { Page,
     Select,
     Button,
     Label,
-    Modal,
+    Modal, TextField,
     Banner } from '@shopify/polaris';
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -38,6 +38,11 @@ export class Import extends Component {
                 shop: '',
                 shop_id: ''
             },
+            affiliate : {
+                type: 'asin',
+                value:''
+            },
+            ebay_list_type: 'active',
             uploadProductDetails: {
                 source: '',
                 source_shop: '',
@@ -124,18 +129,7 @@ export class Import extends Component {
                                         value={this.state.importProductsDetails.source}
                                     />
                                 </div>
-                                {this.state.importProductsDetails.source.toLowerCase() === 'etsyimporter' && <div className="col-12 pt-1 pb-1">
-                                    <Select
-                                        label="Product Listing Type"
-                                        options={[{label:'Active Products',value:'active'},
-                                            {label:'Inactive Products',value:'edit'},
-                                            // {label:'All Products',value:'all'},
-                                            {label:'Expire Products',value:'expire'},
-                                            {label:'Draft Products',value:'draft'}]}
-                                        onChange={this.handleImportChange.bind(this, 'listing_type')}
-                                        value={this.state.listing_type}
-                                    />
-                                </div>}
+                                {this.handleMarketplaceAdditionalInput(this.state.importProductsDetails.source.toLowerCase())}
                                 <div className="col-12 pt-1 pb-1">
                                     {
                                         this.state.importProductsDetails.source !== '' &&
@@ -164,6 +158,52 @@ export class Import extends Component {
             </div>
         );
     }
+
+    handleMarketplaceAdditionalInput = (marketplace) => {
+        switch (marketplace) {
+            case 'etsyimporter': return <div className="col-12 pt-1 pb-1">
+                <Select
+                    label="Product Listing Type"
+                    options={[{label:'Active Products',value:'active'},
+                        {label:'Inactive Products',value:'edit'},
+                        // {label:'All Products',value:'all'},
+                        {label:'Expired Products',value:'expired'},
+                        {label:'Draft Products',value:'draft'}]}
+                    onChange={this.handleImportChange.bind(this, 'listing_type')}
+                    value={this.state.listing_type}
+                />
+            </div>;
+            case 'amazonaffiliate' : return <div className="col-12 pt-1 pb-1">
+                <Select
+                    label="Product Type"
+                    options={[{label:'ASIN',value:'asin'},
+                        {label:'Product URL',value:'product_url'}]}
+                    onChange={this.handleImportChange.bind(this, 'affiliate_type')}
+                    value={this.state.affiliate.type}
+                />
+                <TextField
+                    label={"Value"}
+                    onChange={this.handleImportChange.bind(this, 'affiliate_value')}
+                    value={this.state.affiliate.value}
+                    helpText={"You can enter Comma separated e.g :- BF123RRSF,BGTR45WSD"}
+                />
+            </div>;
+            case 'ebayimporter' : return <div className="col-12 pt-1 pb-1">
+                <Select
+                    label="Product Type"
+                    options={
+                        [
+                            {label:'Active Listing',value:'active'},
+                            {label:'Unsold Listing',value:'unsold'}
+                        ]
+                    }
+                    onChange={(e) => {
+                        this.setState({ebay_list_type:e});}}
+                    value={this.state.ebay_list_type}
+                />
+            </div>
+        }
+    };
 
     handleImportChange(key, value) {
         this.state.importProductsDetails[key] = value;
@@ -196,18 +236,31 @@ export class Import extends Component {
             }
         } else if ( key === 'listing_type' ) {
             this.state.listing_type =  value;
+        } else if ( key === 'affiliate_type' ) {
+            this.state.affiliate.type = value;
+        } else if ( key === 'affiliate_value' ) {
+            this.state.affiliate.value = value;
         }
         this.updateState();
     }
 
     importProducts() {
-        requests.getRequest('connector/product/import',
-            {
-                marketplace: this.state.importProductsDetails.source,
-                shop: this.state.importProductsDetails.shop,
-                shop_id: this.state.importProductsDetails.shop_id,
-                listing_type: this.state.listing_type
-            })
+        let sendData = {
+            marketplace: this.state.importProductsDetails.source,
+            shop: this.state.importProductsDetails.shop,
+            shop_id: this.state.importProductsDetails.shop_id
+        };
+        if ( this.state.importProductsDetails.source === 'etsyimporter' ) {
+            sendData['listing_type'] = this.state.listing_type;
+        }
+        if ( this.state.importProductsDetails.source === 'amazonaffiliate' ) {
+            sendData['import_identifier'] = this.state.affiliate.type;
+            sendData['identifier_value'] = this.state.affiliate.value;
+        }
+        if ( this.state.importProductsDetails.source === 'ebayimporter' ) {
+            sendData['list_type'] = this.state.ebay_list_type;
+        }
+        requests.getRequest('connector/product/import', sendData)
             .then(data => {
                 this.state.showImportProducts = false;
                 this.updateState();

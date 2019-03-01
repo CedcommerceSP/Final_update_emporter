@@ -30,6 +30,13 @@ export class Login extends Component {
         this.autoredirect();
     }
 
+    handleEnter = (event) => {
+        const enterKeyPressed = event.keyCode === 13;
+        if (enterKeyPressed) {
+            this.submitLogin();
+        }
+    };
+
     render() {
         return (
             <div className="row pt-5">
@@ -49,7 +56,7 @@ export class Login extends Component {
                                 onChange={this.handleChange.bind(this, 'username')}
                             />
                         </div>
-                        <div className="col-12 mt-1 mb-1">
+                        <div className="col-12 mt-1 mb-1" onKeyDown={this.handleEnter}>
                             <TextField
                                 label="Password"
                                 type="password"
@@ -59,7 +66,7 @@ export class Login extends Component {
                                 onChange={this.handleChange.bind(this, 'password')}
                             />
                         </div>
-                        <div className="col-12 text-center mt-2 mb-4">
+                        <div className="col-12 text-center mt-2 mb-4" >
                             <Button onClick={() => {
                                 this.submitLogin();
                             }}>Login</Button>

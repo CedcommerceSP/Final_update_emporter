@@ -287,7 +287,7 @@ export class CreateProfile extends Component {
                         !isUndefined(data.data[i].options)?this.sourceAttributes.push({
                             label: data.data[i].title,
                             value: data.data[i].code,
-                            options: data.data[i].options,
+                            options_exists: data.data[i].options,
                         }):this.sourceAttributes.push({
                             label: data.data[i].title,
                             value: data.data[i].code,
@@ -799,8 +799,8 @@ export class CreateProfile extends Component {
         let temp = false;
         this.sourceAttributes.forEach(data => {
             if (data.value === value) {
-                if ( !isUndefined(data.options) ) {
-                    temp = data.options;
+                if ( !isUndefined(data.options_exists) ) {
+                    temp = data.options_exists;
                 }
             }
         });

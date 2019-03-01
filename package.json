@@ -8,7 +8,7 @@
     "@fortawesome/fontawesome-svg-core": "1.2.0-14",
     "@fortawesome/free-solid-svg-icons": "5.1.0-11",
     "@fortawesome/react-fontawesome": "0.1.0-11",
-    "@shopify/polaris": "2.3.1",
+    "@shopify/polaris": "^3.1.1",
     "bootstrap": "4.1.1",
     "chart.js": "^2.7.2",
     "draft-js": "^0.10.5",
@@ -41,7 +41,7 @@
     "segmentize": "0.4.1"
   },
   "scripts": {
-    "start": "react-scripts start",
+    "start": "PORT=3010 react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test --env=jsdom",
     "eject": "react-scripts eject"
