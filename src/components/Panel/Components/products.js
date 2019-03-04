@@ -41,11 +41,11 @@ export class Products extends Component {
     visibleColumns = ['main_image', 'title', 'sku', 'inventory','quantity', 'upload_status'];
 
     predefineFilters = [
-        {label:'Title',value:'title',type:'string',special_case:''},
-        {label:'SKU',value:'sku',type:'string',special_case:''},
-        {label:'Price',value:'price',type:'int',special_case:''},
-        {label:'Quantity',value:'quantity',type:'int',special_case:''},
-        // {label:'Type',value:'type',type:'string',special_case:''},
+        {label:'Title',value:'title',type:'string',special_case:"no"},
+        {label:'SKU',value:'sku',type:'string',special_case:"no"},
+        {label:'Price',value:'price',type:'int',special_case:"no"},
+        {label:'Quantity',value:'quantity',type:'int',special_case:"no"},
+        {label:'Date Picker',value:'datePicker',type:'date-picker',special_case:"yes"},
     ];
 
     hideFilters = ['main_image' ,'long_description','type', 'upload_status','inventory'];
@@ -508,7 +508,7 @@ export class Products extends Component {
                                     activePage={this.gridSettings.activePage}
                                     hideFilters={this.hideFilters}
                                     columnTitles={this.columnTitles}
-                                    datePicker={this.filters.marketplace === 'amazonimporter'}
+                                    marketplace={this.filters.marketplace}
                                     multiSelect={true}
                                     operations={this.operations} //button
                                     selected={this.state.selectedProducts}
@@ -663,6 +663,7 @@ export class Products extends Component {
         this.state.selectedApp = event;
         this.gridSettings.count = 10;
         this.gridSettings.activePage = 1;
+        this.filters.single_column_filter = [];
         this.updateState();
         this.getProducts();
     }

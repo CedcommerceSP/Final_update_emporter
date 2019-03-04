@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {Button, Select, Stack, TextField, Modal} from "@shopify/polaris";
+import {Button, Select, Stack, TextField, Modal, DatePicker} from "@shopify/polaris";
 import {isUndefined} from "util";
 
 class Filter extends Component {
@@ -19,14 +19,43 @@ class Filter extends Component {
 
     constructor(props) {
         super(props);
+        let today_date = new Date();
         this.state = {
             active: false,
             columnFilterName: props.columnFilterName,
-            columnFilterNameValue:{name:'',condition:'',value:''},
+            columnFilterNameValue:{name:'',condition:'',value:'',special_case: "no"},
             columnFilterNameArray:[],
-            predefineFilters:props.predefineFilters
+            predefineFilters: this.modifiedPredefineFilter(props.predefineFilters, props.marketplace),
+            today: {
+                end:new Date(),
+                start:new Date(),
+            },
+            dd: today_date.getDate(),
+            mm: today_date.getMonth(), //January is 0!
+            yyyy: today_date.getFullYear(),
+            marketplace: props.marketplace
         };
     }
+
+    componentWillReceiveProps(nextProps) {
+        if ( nextProps.marketplace !== this.state.marketplace ) {
+            this.setState({
+                predefineFilters: this.modifiedPredefineFilter(nextProps.predefineFilters, nextProps.marketplace),
+            });
+        }
+    }
+
+    modifiedPredefineFilter = (filter, marketplace) => {
+        if ( filter === undefined )
+            return undefined;
+        filter = JSON.parse(JSON.stringify(filter));
+        filter.forEach((e,i) => {
+            if ( e.value === 'datePicker' && marketplace !== 'amazonimporter' ) {
+                filter.splice(i,1);
+            }
+        });
+        return filter;
+    };
 
 
     render() {
@@ -36,9 +65,9 @@ class Filter extends Component {
                     Filter
                 </Button>
                 <Modal
-                    title={"Filter"}
+                    title={"Prepare Filter"}
                     open={this.state.active}
-                    primaryAction={{content:"filter",onClick:() => {
+                    primaryAction={{content:"Add Filter",onClick:() => {
                             this.handleButtonFilterSubmit();
                         } ,disabled:this.state.columnFilterNameValue.name === '' ||
                             this.state.columnFilterNameValue.condition === '' ||
@@ -54,7 +83,9 @@ class Filter extends Component {
                                     value={this.state.columnFilterNameValue.name}
                                     onChange={this.handleButtonFilterChange.bind(this,'name')}
                                 />
-                                {this.state.columnFilterNameValue.name !== '' && <Select
+                                {this.state.columnFilterNameValue.special_case === 'yes'
+                                && this.specialCaseHandle(this.state.columnFilterNameValue.name)}
+                                {this.state.columnFilterNameValue.name !== '' && this.state.columnFilterNameValue.special_case === "no" && <Select
                                     label="Condition"
                                     disabled={this.state.columnFilterNameValue.name === ''}
                                     placeholder={"select Condition"}
@@ -62,7 +93,7 @@ class Filter extends Component {
                                     value={this.state.columnFilterNameValue.condition}
                                     onChange={this.handleButtonFilterChange.bind(this,'condition')}
                                 />}
-                                {this.state.columnFilterNameValue.condition !== '' && <div onKeyUp={this.handleEnterPress}>
+                                {this.state.columnFilterNameValue.condition !== '' && this.state.columnFilterNameValue.special_case === "no" && <div onKeyUp={this.handleEnterPress}>
                                     <TextField
                                         label="Value"
                                         disabled={this.state.columnFilterNameValue.condition === ''}
@@ -78,6 +109,25 @@ class Filter extends Component {
             </div>
         );
     }
+
+    specialCaseHandle = (arg) => {
+        switch (arg) {
+            case 'datePicker' : return <React.Fragment>
+                <DatePicker
+                    month={this.state.mm}
+                    year={this.state.yyyy}
+                    multiMonth={true}
+                    allowRange={true}
+                    selected={this.state.today}
+                    onChange={this.handleChange}
+                    onMonthChange={this.handleMonthChange}
+                />
+            </React.Fragment>;
+            default: let val = this.state.columnFilterNameValue;
+            val.special_case = "no";
+            this.setState({columnFilterNameValue:val});
+        }
+    };
 
     handleEnterPress = (event) => {
         const enterKeyPressed = event.keyCode === 13;
@@ -106,8 +156,13 @@ class Filter extends Component {
             if ( key.value === value ) {
                 if ( key.type === 'int' && fieldName === 'name') {
                     columnFilterNameValue.isInt = true;
+                    columnFilterNameValue.special_case = "no";
                     columnFilterNameValue.condition = '';
+                } else if (key.special_case === "yes") {
+                    columnFilterNameValue.special_case = "yes";
+                    columnFilterNameValue.isInt = false;
                 } else {
+                    columnFilterNameValue.special_case = "no";
                     columnFilterNameValue.isInt = false;
                 }
             }
@@ -125,13 +180,48 @@ class Filter extends Component {
             }
         });
         columnFilterNameArray.push(columnFilterNameValue);
-        columnFilterNameValue = {name:'', condition:'', value:'', isInt: false};
+        columnFilterNameValue = {name:'', condition:'', value:'', isInt: false,special_case:"no"};
         this.props.handleFilterEvent(columnFilterNameArray);
         this.setState({
             columnFilterNameValue: columnFilterNameValue,
             columnFilterNameArray: columnFilterNameArray
         });
         this.togglePopover();
+    };
+
+    handleChange = value => {
+        let { columnFilterNameValue } = this.state;
+        let start = new Date(value.start);
+        let end = new Date(value.end);
+        let month_start = start.getMonth() + 1;
+        let day_start = start.getDate();
+        let month_end = end.getMonth() + 1;
+        let day_end = end.getDate();
+        if ( month_start < 10 ) {
+            month_start = '0' + month_start;
+        }
+        if ( day_start < 10 ) {
+            day_start = '0' + day_start;
+        }
+        if ( month_end < 10 ) {
+            month_end = '0' + month_end;
+        }
+        if ( day_end < 10 ) {
+            day_end = '0' + day_end;
+        }
+        start = start.getFullYear() + '-' + month_start + '-' + day_start;
+        end = end.getFullYear() + '-' + month_end + '-' + day_end;
+        let query = 'date from ' + start + ' to ' + end;
+        columnFilterNameValue['condition'] = start;
+        columnFilterNameValue['value'] = end;
+        this.setState({ today: value ,columnFilterNameValue:columnFilterNameValue});
+    };
+
+    handleMonthChange = (month, year) => {
+        this.setState({
+            mm:month,
+            yyyy: year
+        });
     };
 
 }

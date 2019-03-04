@@ -83,6 +83,7 @@ class SmartDataTablePlain extends React.Component {
             actions: isUndefined(props.actions) ? [] : props.actions,
             hideFilters: isUndefined(props.hideFilters) ? [] : props.hideFilters,
             visibleColumns: isUndefined(props.visibleColumns) ? false : props.visibleColumns,
+            marketplace: isUndefined(props.marketplace) ? 'all' : props.marketplace,
             rowActions: isUndefined(props.rowActions) ? {
                 edit: false,
                 delete: false
@@ -135,6 +136,11 @@ class SmartDataTablePlain extends React.Component {
             });
             this.defaultFilters = Object.assign({}, nextProps.columnFiltersValue);
         }
+
+        if ( !isUndefined(nextProps.marketplace) ) {
+            this.setState({marketplace:nextProps.marketplace});
+        }
+
         if ( nextProps.columnFilterNameArray !== undefined && nextProps.columnFilterNameArray !== this.state.columnFilterNameArray ) {
             this.setState({columnFilterNameArray:nextProps.columnFilterNameArray});
         }
@@ -714,6 +720,7 @@ class SmartDataTablePlain extends React.Component {
                     }
                     <div className="col-6 col-sm-6 order-2 order-sm-1">
                         {this.state.showButtonFilter?<Filter
+                            marketplace={this.state.marketplace}
                             columnFilterName={this.state.columnFilterName}
                             predefineFilters={this.state.predefineFilters}
                             handleFilterEvent={this.handleFilterEvent}/>:null}
@@ -773,6 +780,9 @@ class SmartDataTablePlain extends React.Component {
                             case '5' : condition = 'start with';break;
                             case '6' : condition = 'end with';break;
                             default : condition = 'equals';
+                        }
+                        if ( e.name === 'datePicker' ) {
+                            condition = 'from ' + e.condition;
                         }
                         return (<React.Fragment key={i}>
                             <span className="mr-3"><Tag onRemove={this.handleFilterRemove.bind(this,e)}>{e.name} {condition} to {e.value}</Tag></span>
