@@ -6,7 +6,7 @@ import {
 } from 'react-router-dom';
 import 'react-toastify/dist/ReactToastify.css';
 
-import { AppProvider } from '@shopify/polaris';
+import { AppProvider, Loading } from '@shopify/polaris';
 
 import { Auth } from './components/Auth/auth';
 import { Panel } from './components/Panel/panel';
@@ -98,12 +98,16 @@ export class App extends Component {
   }
 
   render() {
+
+      const loadingMarkup = this.state.showLoader && <Loading />;
+
       if (this.state.shopOrigin !== '') {
           return (
               <AppProvider
                   apiKey={environment.APP_API_KEY}
-                  shopOrigin={"https://" + this.state.shopOrigin}
+                  shopOrigin={this.state.shopOrigin}
                   forceRedirect={true}>
+                  {loadingMarkup}
                   {this.renderApp()}
               </AppProvider>
           );

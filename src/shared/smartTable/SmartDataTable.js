@@ -38,6 +38,7 @@ import {
 import {FontAwesomeIcon} from '@fortawesome/react-fontawesome';
 import {faEdit, faTrash} from '@fortawesome/free-solid-svg-icons';
 import Loader from "react-loader-spinner";
+import Filter from "./filter";
 
 class SmartDataTablePlain extends React.Component {
     allSelected = false;
@@ -671,53 +672,12 @@ class SmartDataTablePlain extends React.Component {
         return sortData(filterValue, sorting, parseDataForRows(data))
     }
 
-    togglePopover = () => {
-        this.setState(({active}) => {
-            return {active: !active};
-        });
-    };
-
-    handleButtonFilterChange = (fieldName, value) => {
-        let { columnFilterNameValue } = this.state;
-        let columnFilterName = [];
-        if ( isUndefined(this.state.predefineFilters) ) {
-            columnFilterName = this.state.columnFilterName;
-        } else {
-            columnFilterName = this.state.predefineFilters;
-        }
-        columnFilterName.forEach(key => {
-            if ( key.value === value ) {
-                if ( key.type === 'int' && fieldName === 'name') {
-                    columnFilterNameValue.isInt = true;
-                    columnFilterNameValue.condition = '';
-                } else {
-                    columnFilterNameValue.isInt = false;
-                }
-            }
-        });
-        columnFilterNameValue[fieldName] = value;
-        this.setState({columnFilterNameValue: columnFilterNameValue});
-    };
-
-    handleButtonFilterSubmit = () => {
-        let { columnFilterNameValue } = this.state;
-        let { columnFilterNameArray } = this.state;
-        columnFilterNameArray.forEach((e,i) => {
-            if ( e.name === columnFilterNameValue['name']) {
-                columnFilterNameArray.splice(i,1);
-            }
-        });
-        columnFilterNameArray.push(columnFilterNameValue);
-        columnFilterNameValue = {name:'', condition:'', value:'', isInt: false};
-        this.props.singleButtonColumnFilter(columnFilterNameArray);
-        this.setState({
-            columnFilterNameValue: columnFilterNameValue,
-            columnFilterNameArray: columnFilterNameArray
-        });
+    handleFilterEvent = (event) => {
+        this.props.singleButtonColumnFilter(event);
         if ( !isUndefined(this.props.showLoaderBar) ) {
             this.setState({showLoaderBar:this.props.showLoaderBar});
         }
-        this.togglePopover();
+        this.setState({columnFilterNameArray: event});
     };
 
     handleFilterRemove = (data) => {
@@ -753,54 +713,10 @@ class SmartDataTablePlain extends React.Component {
 
                     }
                     <div className="col-6 col-sm-6 order-2 order-sm-1">
-                        {this.state.showButtonFilter?<Popover
-                            active={this.state.active}
-                            activator={<Button onClick={this.togglePopover} disclosure>
-                                Filter
-                            </Button>}
-                            onClose={this.togglePopover}
-                        >
-                            <Card>
-                                <div className="p-3">
-                                    <Stack wrap={true}>
-                                        <Select
-                                            label="Title"
-                                            placeholder={"Please Select"}
-                                            options={this.state.predefineFilters !== undefined? this.state.predefineFilters:this.state.columnFilterName}
-                                            value={this.state.columnFilterNameValue.name}
-                                            onChange={this.handleButtonFilterChange.bind(this,'name')}
-                                        />
-                                        {this.state.columnFilterNameValue.name !== '' && <Select
-                                            label="Condition"
-                                            disabled={this.state.columnFilterNameValue.name === ''}
-                                            placeholder={"select Condition"}
-                                            options={!this.state.columnFilterNameValue.isInt?this.filterConditions:this.filterInt}
-                                            value={this.state.columnFilterNameValue.condition}
-                                            onChange={this.handleButtonFilterChange.bind(this,'condition')}
-                                        />}
-                                        {this.state.columnFilterNameValue.condition !== '' && <TextField
-                                            label="Value"
-                                            disabled={this.state.columnFilterNameValue.condition === ''}
-                                            placeholder={"Enter Value"}
-                                            value={this.state.columnFilterNameValue.value}
-                                            onChange={this.handleButtonFilterChange.bind(this,'value')}
-                                            readOnly={false}/>}
-                                    </Stack>
-                                    <br/>
-                                    <Stack>
-                                        <Button size="slim"
-                                                primary
-                                                disabled={this.state.columnFilterNameValue.name === '' ||
-                                                this.state.columnFilterNameValue.condition === '' ||
-                                                this.state.columnFilterNameValue.value.trim() === ''}
-                                                onClick={this.handleButtonFilterSubmit}
-                                        >
-                                            Add filter
-                                        </Button>
-                                    </Stack>
-                                </div>
-                            </Card>
-                        </Popover>:null}
+                        {this.state.showButtonFilter?<Filter
+                            columnFilterName={this.state.columnFilterName}
+                            predefineFilters={this.state.predefineFilters}
+                            handleFilterEvent={this.handleFilterEvent}/>:null}
                     </div>
                     <div className="col order-1 order-sm-2 d-flex justify-content-sm-end justify-content-start mb-sm-0 mb-4">
                         {this.state.showColumnFilters ? <Button onClick={() => {
