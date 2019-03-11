@@ -3,9 +3,10 @@ import {
     Route,
     Switch,
     Redirect,
-    Router,
-    BrowserRouter
 } from 'react-router-dom';
+import * as queryString from "query-string";
+import {isUndefined} from "util";
+import { Modal, Label, Banner } from '@shopify/polaris';
 
 import { Products } from './Components/products';
 import { Apps } from './Components/apps';
@@ -23,36 +24,20 @@ import Dashboard from './Components/dashboard';
 import FAQPage from './Components/faq';
 import { environment } from '../../environments/environment';
 import { panelFunctions } from './functions';
-
-import './panel.css';
+import Guide from "./Components/dashboard/guide";
 import CurrentPlan from "./Components/plans-component/current-plan";
 import AnalyticsReporting from "./Components/products-component/analytics-reporting";
 import BillingHistory from "./Components/plans-component/billing-history";
 import ConnectedAccounts from "./Components/apps-component/connected-accounts";
 import ReportAnIssue from "./Components/help-component/report-issue";
 import ViewProfile from "./Components/profile-component/view-profile";
+import ViewProducts from "./Components/products-component/view-products";
+import { modifyAccountConnectedInfo} from "./Components/static-functions";
+
 import {requests} from "../../services/request";
 
-import ViewProducts from "./Components/products-component/view-products";
-import * as queryString from "query-string";
-import {isUndefined} from "util";
-import { modifyAccountConnectedInfo} from "./Components/static-functions";
-import Guide from "./Components/dashboard/guide";
+import './panel.css';
 
-
-const style = {
-    trial: {
-        height:'70px',
-        backgroundColor:'#858585',
-        color:'#fff',
-        paddingTop:'48px',
-        paddingRight:'10px'
-    },
-    close: {
-        cursor:'pointer',
-        float:'right'
-    }
-};
 export class Panel extends Component {
     constructor(props) {
         super(props);
@@ -91,6 +76,9 @@ export class Panel extends Component {
                            credits = e;
                        }
                    });
+                   if ( credits['available_credits'] < 5 ) {
+                       this.setState({creditsExpired:true});
+                   }
                }
                let user_necessary_details = {
                    account_connected: account_connected,
@@ -173,9 +161,25 @@ export class Panel extends Component {
                             </Switch>
                         </div>
                     </div>
+                    <Modal title={"Low Credits"} open={this.state.creditsExpired} onClose={() => {
+                        this.setState({creditsExpired:false});}} primaryAction={{content:"Plan Section", onClick:() => {
+                            this.redirect('/panel/plans');
+                            this.setState({creditsExpired:false});
+                        }}}>
+                        <Modal.Section>
+                            <Banner title={"Alert"} status="warning">
+                                <Label id={123}>
+                                    You Almost Exhausted Your Credits. Kindly Buy Some Credits From Plan Section.
+                                </Label>
+                            </Banner>
+                        </Modal.Section>
+                    </Modal>
                 </div>
         );
     }
+    redirect = (url) => {
+        this.props.history.push(url);
+    };
 }
 
 
