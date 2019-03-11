@@ -95,12 +95,19 @@ class ViewProducts extends Component {
                         temp.rows = this.handleTableChange(temp.variants);
                     }
                     temp.img = [];
-                    if ( !isUndefined(data.data.details['additional_image']) )
+                    if ( !isUndefined(data.data.details['additional_image']) ){
                         Object.keys(data.data.details['additional_image']).forEach(e => {
                             if ( !isUndefined(data.data.details['additional_image'][e]) ) {
                                 temp.img.push(data.data.details['additional_image'][e]);
                             }
                         });
+                    } else if ( !isUndefined(data.data.details['additional_images']) ){
+                        Object.keys(data.data.details['additional_images']).forEach(e => {
+                            if ( !isUndefined(data.data.details['additional_images'][e]) ) {
+                                temp.img.push(data.data.details['additional_images'][e]);
+                            }
+                        });
+                    }
                     // console.clear();
                     this.setState(temp);
                 } else {
@@ -149,16 +156,19 @@ class ViewProducts extends Component {
                     onChange={this.handleVariantsChange.bind(this,'weight',e)}/>
                 ,
                 <div style={{minWidth:'80px'}}>
-                    <Select
-                        label={"Unit"}
-                        labelHidden={true}
-                        disabled={this.editDisable}
-                        options={[
-                            {label:'lb', value:'lb'},
-                            {label:'kg', value:'kg'},
-                            {label:'oz', value:'oz'}]}
-                        value={this.state.variants[e].weight_unit}
-                        onChange={this.handleVariantsChange.bind(this,'weight_unit',e)}/>
+                    <Label id={"ddd"}>
+                        {this.state.variants[e].weight_unit}
+                    </Label>
+                    {/*<Select*/}
+                        {/*label={"Unit"}*/}
+                        {/*labelHidden={true}*/}
+                        {/*disabled={this.editDisable}*/}
+                        {/*options={[*/}
+                            {/*{label:'lb', value:'lb'},*/}
+                            {/*{label:'kg', value:'kg'},*/}
+                            {/*{label:'oz', value:'oz'}]}*/}
+                        {/*value={this.state.variants[e].weight_unit}*/}
+                        {/*onChange={this.handleVariantsChange.bind(this,'weight_unit',e)}/>*/}
                 </div>
             ]);
         });

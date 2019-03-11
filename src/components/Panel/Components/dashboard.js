@@ -533,7 +533,7 @@ class Dashboard extends Component {
                                     </div>
                                 </div>
                                 <div className='row'>
-                                    <div className="col-3">
+                                    <div className="col-sm-3 col-6">
                                         <Select
                                             label="Country"
                                             placeholder="Select"
@@ -542,10 +542,10 @@ class Dashboard extends Component {
                                             value={this.state.info.country_code}
                                         />
                                     </div>
-                                    <div className="col-2">
+                                    <div className="col-sm-2 col-6">
                                         <TextField label={'Code'} readOnly={true} value={this.state.info.mobile_code}/>
                                     </div>
-                                    <div className="col-7">
+                                    <div className="col-sm-7 col-12">
                                         <TextField
                                             value={this.state.info.mobile}
                                             minLength={5}
@@ -555,7 +555,7 @@ class Dashboard extends Component {
                                             helpText={"OTP will sent to this number for verification"}
                                             label="Phone Number:"
                                             type="number"
-                                        />
+                                            readOnly={false}/>
                                     </div>
                                     <div className="col-12 col-md-12 text-left">
                                         {this.state.info.mobile==='' && this.state.info_error.mobile!==true?

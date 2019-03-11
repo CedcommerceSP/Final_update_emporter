@@ -61,6 +61,7 @@ export class Panel extends Component {
             necessaryInfo: {},
         };
         this.disableHeader = this.disableHeader.bind(this);
+        this.getNecessaryInfo = this.getNecessaryInfo.bind(this);
         this.getNecessaryInfo();
     }
 
@@ -78,22 +79,32 @@ export class Panel extends Component {
         }
     }
 
-    getNecessaryInfo = () => {
+    getNecessaryInfo(){
         requests.postRequest('frontend/app/getNecessaryDetails').then(e => {
            if ( e.success ) {
                let account_connected_array = e['account_connected'].map(e => (e.code));
                let account_connected = modifyAccountConnectedInfo(account_connected_array);
+               let credits = {};
+               if ( typeof e['services'] === 'object' ) {
+                   e['services'].forEach(e => {
+                       if ( e.code === 'product_import' ) {
+                           credits = e;
+                       }
+                   });
+               }
                let user_necessary_details = {
                    account_connected: account_connected,
                    services: e['services'],
+                   credits : credits,
                    account_connected_array:account_connected_array
                };
+               console.log(user_necessary_details);
                this.setState({
                    necessaryInfo: user_necessary_details
                });
            }
         });
-    };
+    }
 
     componentWillUpdate() {
         if ( environment.isLive ) {
@@ -129,7 +140,9 @@ export class Panel extends Component {
                                 }}/>
                                 <Route exact path='/panel/products/view/:id' component={ViewProducts}/>
                                 <Route exact path='/panel/products/analysis' component={AnalyticsReporting}/>
-                                <Route exact path='/panel/accounts' component={Apps}/>
+                                <Route exact path='/panel/accounts' render={() => {
+                                    return <Apps {...this.props} getNecessaryInfo={this.getNecessaryInfo} necessaryInfo={this.state.necessaryInfo}/>
+                                }}/>
                                 <Route exact path='/panel/accounts/connect' component={ConnectedAccounts}/>
                                 <Route exact path='/panel/plans' component={Plans}/>
                                 <Route path='/panel/accounts/install' component={InstallApp}/>

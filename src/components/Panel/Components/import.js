@@ -40,7 +40,7 @@ export class Import extends Component {
             },
             affiliate : {
                 type: 'asin',
-                value:''
+                value: 'B07DFJJ7HL'
             },
             ebay_list_type: 'active',
             uploadProductDetails: {
@@ -185,6 +185,7 @@ export class Import extends Component {
                     label={"Value"}
                     onChange={this.handleImportChange.bind(this, 'affiliate_value')}
                     value={this.state.affiliate.value}
+                    multiline
                     helpText={"You can enter Comma separated e.g :- BF123RRSF,BGTR45WSD"}
                 />
             </div>;

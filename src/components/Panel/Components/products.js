@@ -46,6 +46,7 @@ export class Products extends Component {
         {label:'Price',value:'price',type:'int',special_case:"no"},
         {label:'Quantity',value:'quantity',type:'int',special_case:"no"},
         {label:'Date Picker',value:'datePicker',type:'date-picker',special_case:"yes"},
+        {label:'Uploaded',value:'uploaded',type:'uploaded',special_case:"yes"},
     ];
 
     hideFilters = ['main_image' ,'long_description','type', 'upload_status','inventory'];
@@ -270,6 +271,9 @@ export class Products extends Component {
                     this.state.appliedFilters['filter[details.created_at][7][from]'] = e.condition; // start date
                     this.state.appliedFilters['filter[details.created_at][7][to]'] = e.value;// end date
                     break;
+                case 'uploaded' :
+                    this.state.appliedFilters['uploaded'] = e.value;
+                    break;
             }
         });
         for (let i = 0; i < Object.keys(this.filters.column_filters).length; i++) {
@@ -338,13 +342,13 @@ export class Products extends Component {
                         if ( data[i].variants[key]['main_image'] !== undefined && this.checkImage(data[i].variants[key]['main_image']) ) {
                             str = data[i].variants[key]['main_image'];
                         }
-                        if ( data[i].variants[key]['sku'] !== undefined ) {
+                        // if ( data[i].variants[key]['sku'] !== undefined ) {
                             rows.push([
                                 data[i].variants[key]['sku'],
                                 data[i].variants[key]['price'],
                                 data[i].variants[key]['quantity']
                             ]);
-                        }
+                        // }
                     });
                     if ( str === '' ) {
                         str = 'https://apps.cedcommerce.com/importer/image_not_found.jpg';

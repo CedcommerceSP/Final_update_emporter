@@ -784,6 +784,19 @@ class SmartDataTablePlain extends React.Component {
                         if ( e.name === 'datePicker' ) {
                             condition = 'from ' + e.condition;
                         }
+                        if ( e.name === 'uploaded' ) {
+                            if ( e.value === '1' ) {
+                                condition = "Uploaded products";
+                                return (<React.Fragment key={i}>
+                                    <span className="mr-3"><Tag onRemove={this.handleFilterRemove.bind(this,e)}>{condition}</Tag></span>
+                                </React.Fragment>)
+                            } else {
+                                condition = "Not Uploaded Products";
+                                return (<React.Fragment key={i}>
+                                    <span className="mr-3"><Tag onRemove={this.handleFilterRemove.bind(this,e)}>{condition}</Tag></span>
+                                </React.Fragment>)
+                            }
+                        }
                         return (<React.Fragment key={i}>
                             <span className="mr-3"><Tag onRemove={this.handleFilterRemove.bind(this,e)}>{e.name} {condition} to {e.value}</Tag></span>
                         </React.Fragment>)

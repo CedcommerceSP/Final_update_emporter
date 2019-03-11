@@ -123,9 +123,27 @@ class Filter extends Component {
                     onMonthChange={this.handleMonthChange}
                 />
             </React.Fragment>;
+            case "uploaded" : return <React.Fragment>
+                <Select
+                    label={"Status"}
+                    options={
+                        [
+                            {label:"Uploaded",value:"1"},
+                            {label:"Not Uploaded",value:"0"},
+                        ]
+                    }
+                    placeholder={"Choose"}
+                    value={this.state.columnFilterNameValue.value}
+                    onChange={(e) => {
+                        let columnFilterNameValue = this.state.columnFilterNameValue;
+                        columnFilterNameValue.condition = 'upload_status';
+                        columnFilterNameValue.value = e;
+                        this.setState({columnFilterNameValue: columnFilterNameValue});}}
+                />
+            </React.Fragment>;
             default: let val = this.state.columnFilterNameValue;
-            val.special_case = "no";
-            this.setState({columnFilterNameValue:val});
+                val.special_case = "no";
+                this.setState({columnFilterNameValue:val});
         }
     };
 

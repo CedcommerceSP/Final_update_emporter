@@ -8,7 +8,19 @@ import {environment} from "../../environments/environment";
 class AppsShared extends Component {
     constructor(props) {
         super(props);
+        this.state = {
+            show_banner: false
+        };
         this.getConnectors();
+    }
+
+    componentDidMount() {
+        if ( this.props.necessaryInfo !== undefined && Object.keys(this.props.necessaryInfo.credits).length > 0 ) {
+            let credits = this.props.necessaryInfo.credits.available_credits + this.props.necessaryInfo.credits['total_used_credits'];
+            if ( credits < 11 ) {
+                this.setState({show_banner: true});
+            }
+        }
     }
 
     getConnectors() {
@@ -42,13 +54,13 @@ class AppsShared extends Component {
     render() {
         return (
             <div className="row">
-                <div className="col-12 mb-5">
+                {this.state.show_banner && <div className="col-12 mb-5">
                     <Banner title="Note" status="info">
                         <Label id={"trial"}>
                             You can upload 10 products free.
                         </Label>
                     </Banner>
-                </div>
+                </div>}
                 {
                     this.state.apps.map(app => {
                         if (this.validateCode(app.code)) {
@@ -70,7 +82,7 @@ class AppsShared extends Component {
                                                             onClick={() => {
                                                                 this.installApp(app.code);
                                                             }} primary fullWidth={true}>
-                                                                {app['installed']!==0?'ReConnect':'Connect'}
+                                                                {this.props.success.code === app.code || app['installed']!==0?'ReConnect':'Connect'}
                                                             </Button>
                                                     </div>
                                                 </div>
