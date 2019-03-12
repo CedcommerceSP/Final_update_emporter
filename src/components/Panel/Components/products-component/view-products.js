@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 import {Page, Label, Card,TextContainer, Scrollable,
-    Select, Button, TextField, ButtonGroup, DataTable, Thumbnail} from "@shopify/polaris";
+    Select, Button, TextField, ButtonGroup, DataTable, Thumbnail, DisplayText, Modal} from "@shopify/polaris";
 import { isUndefined } from 'util';
 import { EditorState, convertToRaw, ContentState } from 'draft-js';
 import { Editor } from 'react-draft-wysiwyg';
@@ -22,6 +22,8 @@ class ViewProducts extends Component {
         this.state = {
             id:props.match.params.id,
             open: 1,
+            openvariantDetail:false,
+            variantArrayDetails: [],
             img:[],
             buttonDisable: {
                 save:true,
@@ -80,16 +82,7 @@ class ViewProducts extends Component {
                         temp.variants = [];
                         Object.keys(variant).forEach((e) => {
                             if ( !isUndefined(variant[e]) ) {
-                                temp.variants.push(
-                                    {
-                                        main_image: variant[e]['main_image'],
-                                        sku: variant[e]['sku'],
-                                        price: variant[e]['price'],
-                                        quantity: variant[e]['quantity'],
-                                        weight: variant[e]['weight'],
-                                        weight_unit: variant[e]['weight_unit']
-                                    }
-                                );
+                                temp.variants.push(variant[e]);
                             }
                         });
                         temp.rows = this.handleTableChange(temp.variants);
@@ -120,7 +113,15 @@ class ViewProducts extends Component {
         let rows = [];
         Object.keys(variant).forEach(e => {
             rows.push([
-                <Thumbnail source={variant[e]['main_image']} alt={''}/>,
+                <span
+                    style={{cursor:"pointer"}}
+                    onClick={() => {
+                        this.setState({
+                            openvariantDetail:true,
+                            variantArrayDetails: variant[e],
+                        });}}>
+                    <Thumbnail source={variant[e]['main_image']} alt={''}/>
+                </span>,
                 <TextField
                     label={'sku'}
                     readOnly={false}
@@ -160,15 +161,15 @@ class ViewProducts extends Component {
                         {this.state.variants[e].weight_unit}
                     </Label>
                     {/*<Select*/}
-                        {/*label={"Unit"}*/}
-                        {/*labelHidden={true}*/}
-                        {/*disabled={this.editDisable}*/}
-                        {/*options={[*/}
-                            {/*{label:'lb', value:'lb'},*/}
-                            {/*{label:'kg', value:'kg'},*/}
-                            {/*{label:'oz', value:'oz'}]}*/}
-                        {/*value={this.state.variants[e].weight_unit}*/}
-                        {/*onChange={this.handleVariantsChange.bind(this,'weight_unit',e)}/>*/}
+                    {/*label={"Unit"}*/}
+                    {/*labelHidden={true}*/}
+                    {/*disabled={this.editDisable}*/}
+                    {/*options={[*/}
+                    {/*{label:'lb', value:'lb'},*/}
+                    {/*{label:'kg', value:'kg'},*/}
+                    {/*{label:'oz', value:'oz'}]}*/}
+                    {/*value={this.state.variants[e].weight_unit}*/}
+                    {/*onChange={this.handleVariantsChange.bind(this,'weight_unit',e)}/>*/}
                 </div>
             ]);
         });
@@ -199,52 +200,55 @@ class ViewProducts extends Component {
                                 <div className="p-5" /*style={{height:'200px',overflow:'auto'}}*/>
                                     <div className="mb-5">
                                         <TextContainer>
-                                            <TextField
+                                            <DisplayText size="large">
+                                                {this.state.products_top.title}
+                                            </DisplayText>
+                                            {/*<TextField
                                                 label={'Title'}
                                                 readOnly={false}
                                                 disabled={this.editDisable}
                                                 value={this.state.products_top.title}
                                                 onChange={this.handleDetailChange.bind(this,'title')}
-                                            />
+                                            />*/}
                                         </TextContainer>
                                     </div>
-                                    <div className="react_quill_app_class">
+                                    {this.state.products_top.description === "" ? null : <div className="react_quill_app_class">
                                         {/*<h4><b>Description</b></h4>*/}
                                         <div id="editor">
-                                            <Card title="Description" sectioned>
+                                            <Card sectioned>
                                                 <Scrollable shadow style={{ height: '300px' }} hint={false}>
                                                     <div dangerouslySetInnerHTML={{__html:this.state.products_top.description}}/>
                                                 </Scrollable>
                                             </Card>
                                             {/*<Editor*/}
-                                                {/*editorState={this.state.editorState}*/}
-                                                {/*wrapperClhandleDetailChangeassName="demo-wrapper"*/}
-                                                {/*readOnly={this.editDisable}*/}
-                                                {/*editorClassName="demo-editor"*/}
-                                                {/*toolbar={{*/}
-                                                    {/*options: ['inline', 'blockType', 'fontSize', 'fontFamily', 'history', 'textAlign','list'],*/}
-                                                    {/*inline: {*/}
-                                                        {/*options: ['bold', 'italic', 'underline', 'strikethrough', 'monospace'],*/}
-                                                        {/*bold: { className: 'bordered-option-classname' },*/}
-                                                        {/*italic: { className: 'bordered-option-classname' },*/}
-                                                        {/*underline: { className: 'bordered-option-classname' },*/}
-                                                        {/*strikethrough: { className: 'bordered-option-classname' },*/}
-                                                        {/*code: { className: 'bordered-option-classname' },*/}
-                                                    {/*},*/}
-                                                    {/*blockType: {*/}
-                                                        {/*className: 'bordered-option-classname',*/}
-                                                    {/*},*/}
-                                                    {/*fontSize: {*/}
-                                                        {/*className: 'bordered-option-classname',*/}
-                                                    {/*},*/}
-                                                    {/*fontFamily: {*/}
-                                                        {/*className: 'bordered-option-classname',*/}
-                                                    {/*},*/}
-                                                {/*}}*/}
-                                                {/*onEditorStateChange={this.handleDraftJS}*/}
+                                            {/*editorState={this.state.editorState}*/}
+                                            {/*wrapperClhandleDetailChangeassName="demo-wrapper"*/}
+                                            {/*readOnly={this.editDisable}*/}
+                                            {/*editorClassName="demo-editor"*/}
+                                            {/*toolbar={{*/}
+                                            {/*options: ['inline', 'blockType', 'fontSize', 'fontFamily', 'history', 'textAlign','list'],*/}
+                                            {/*inline: {*/}
+                                            {/*options: ['bold', 'italic', 'underline', 'strikethrough', 'monospace'],*/}
+                                            {/*bold: { className: 'bordered-option-classname' },*/}
+                                            {/*italic: { className: 'bordered-option-classname' },*/}
+                                            {/*underline: { className: 'bordered-option-classname' },*/}
+                                            {/*strikethrough: { className: 'bordered-option-classname' },*/}
+                                            {/*code: { className: 'bordered-option-classname' },*/}
+                                            {/*},*/}
+                                            {/*blockType: {*/}
+                                            {/*className: 'bordered-option-classname',*/}
+                                            {/*},*/}
+                                            {/*fontSize: {*/}
+                                            {/*className: 'bordered-option-classname',*/}
+                                            {/*},*/}
+                                            {/*fontFamily: {*/}
+                                            {/*className: 'bordered-option-classname',*/}
+                                            {/*},*/}
+                                            {/*}}*/}
+                                            {/*onEditorStateChange={this.handleDraftJS}*/}
                                             {/*/>*/}
                                         </div>
-                                    </div>
+                                    </div>}
                                 </div>
                             </Card>
                         </div>
@@ -255,18 +259,28 @@ class ViewProducts extends Component {
                                         <div className="pb-5 pr-5">
                                             <Thumbnail source={this.state.img[this.state.imagePosition]} alt={''}
                                                        size={"extralarge"}/>
+                                            <div className="text-center">
+                                            <p style={{color:"#585858"}}>
+                                                ({this.state.img.length} images)
+                                            </p>
+                                        </div>
                                         </div>
                                     </div>
                                     <div className={"col-12"}>
                                         <div className="row d-flex justify-content-center">
                                             {this.state.img.map((e, i) => {
-                                                return <div key={i} className="col-3 col-sm-1 mb-1"
-                                                            onPointerOver={this.handleImageChange.bind(this, i)}>
-                                                    <span
-                                                        className={`pr-4 ${this.state.imagePosition === i ? 'bg-info' : ''}`}>
+                                                if ( this.state.imagePosition < i +5 && this.state.imagePosition > i-5 ) {
+                                                    return <div
+                                                        key={i}
+                                                        style={{cursor:"pointer"}}
+                                                        className="col-3 col-sm-1 mb-1"
+                                                        onClick={this.handleImageChange.bind(this, i)}>
+                                                    <span>
                                                         <Thumbnail source={e} alt={''}/>
                                                     </span>
-                                                </div>
+                                                        {this.state.imagePosition === i && <div className="mt-1 bg-info p-1"/>}
+                                                    </div>
+                                                }
                                             })}
                                         </div>
                                     </div>
@@ -307,6 +321,19 @@ class ViewProducts extends Component {
                         </div>}
                     </div>
                 </Card>
+                <Modal title={"Details"} open={this.state.openvariantDetail} onClose={() => {
+                    this.setState({openvariantDetail:false});}}>
+                    <Modal.Section>
+                        <div className="row">
+                            {Object.keys(this.state.variantArrayDetails).map(e => {
+                                return <div className="col-12 col-sm-6 mb-4">
+                                    <b>{e}</b>:<br/>
+                                    {this.state.variantArrayDetails[e]}
+                                </div>;
+                            })}
+                        </div>
+                    </Modal.Section>
+                </Modal>
             </Page>
         );
     }
