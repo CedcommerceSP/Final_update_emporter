@@ -40,6 +40,9 @@ class Filter extends Component {
     componentWillReceiveProps(nextProps) {
         if ( nextProps.marketplace !== this.state.marketplace ) {
             this.setState({
+                columnFilterNameValue:{name:'',condition:'',value:'',special_case: "no"},
+                columnFilterNameArray:[],
+                columnFilterName: nextProps.columnFilterName,
                 predefineFilters: this.modifiedPredefineFilter(nextProps.predefineFilters, nextProps.marketplace),
             });
         }

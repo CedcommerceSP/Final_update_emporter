@@ -239,14 +239,14 @@ class AnalyticsReporting extends Component {
                     '#a3c2c2'
                 ],
                 hoverBackgroundColor: [
-                    '#e7ff6f',
-                    '#ebc883',
-                    '#ff9f2c',
-                    '#b4cc28',
-                    '#ff2a5f',
-                    '#ff99ff',
+                    '#5d8deb',
+                    '#36A2EB',
+                    '#7bf5ff',
+                    '#776fcc',
+                    '#494eff',
+                    '#3742ff',
                     '#000066',
-                    '#990033',
+                    '#27997c',
                     '#9900cc',
                     '#a3c2c2'
                 ]
