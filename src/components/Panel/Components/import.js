@@ -40,7 +40,7 @@ export class Import extends Component {
             },
             affiliate : {
                 type: 'asin',
-                value: 'B07DFJJ7HL'
+                value: ''
             },
             ebay_list_type: 'active',
             uploadProductDetails: {

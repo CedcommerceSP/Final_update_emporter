@@ -8,17 +8,16 @@ import {faArrowAltCircleDown,faArrowAltCircleUp} from '@fortawesome/free-solid-s
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import { validateImporter } from '../static-functions.js';
 import {globalState} from "../../../../services/globalstate";
+import {capitalizeWord} from "../static-functions";
 const options = [
     // {label: 'Line Chart', value: 'line'},
     {label: 'Bar Chart', value: 'bar'},
     {label: 'Pie Chart', value: 'pie'},
 ];
 
-let uploaderoptions=[];
-
 class AnalyticsReporting extends Component {
-    constructor(props)
-    {
+
+    constructor(props) {
         super(props);
         this.state = {
             selectedimporter: "bar",
@@ -42,11 +41,10 @@ class AnalyticsReporting extends Component {
             imported_product: false,
             activePlan: globalState.getLocalStorage('activePlan')?JSON.parse(globalState.getLocalStorage('activePlan')):[],
         };
-
-        this.preparedata();
+        this.getallimporter();
     }
-    componentDidUpdate()
-    {
+
+    componentDidUpdate() {
         if ( localStorage.getItem('plan_status') ) {
             let data = JSON.parse(localStorage.getItem('plan_status'));
             if ( data.shop === globalState.getLocalStorage('shop') ) {
@@ -68,8 +66,8 @@ class AnalyticsReporting extends Component {
             }
         }
     }
-    getallimporter()
-    {
+
+    getallimporter(){
         let importertitlearray=[];
         let importer={};
         let importer_marketplacearray=[];
@@ -92,8 +90,8 @@ class AnalyticsReporting extends Component {
             }
         })
     }
-    get_y_axis_importer(importer_marketplace_array,importer_title_array,entiredata_importer)
-    {
+
+    get_y_axis_importer(importer_marketplace_array,importer_title_array,entiredata_importer){
         let total_products_importer=[];
         let importer_data_recieved={};
         requests.postRequest('frontend/app/getImportedProductCount',{importers:importer_marketplace_array}).then(data=> {
@@ -121,42 +119,6 @@ class AnalyticsReporting extends Component {
         })
     }
 
-    getalluploader()
-    {
-        let uploaderarray=[];
-        let uploader={};
-        let uploaderoptionsTemp = [];
-        requests.getRequest('connector/get/services?filters[type]=uploader').then(data1 => {
-            if (data1.success) {
-                uploader = data1.data;
-                let temp = [];
-                this.state.activePlan.forEach(e => {
-                    if (e === 'amazonimporter') {
-                        temp.push('Amazon');
-                    }
-                    if ( e === 'ebayimporter' ) {
-                        temp.push('Ebay');
-                    }
-                })
-                if ( temp.length > 0 ) {
-                    Object.keys(uploader).map(uploaderkey => {
-                        uploaderarray.push(uploader[uploaderkey]['marketplace']);
-                        uploaderoptionsTemp.push({label:uploader[uploaderkey]['title'],value:uploader[uploaderkey]['marketplace']})
-                    });
-                    uploaderoptions = uploaderoptionsTemp.slice(0);
-                    this.setState({
-                        selecteduploadermarketplace:uploaderarray[0],
-                        uploader: temp
-                    });
-                    this.get_y_axis_uploader(uploaderarray[0]);
-                }
-            }
-            else {
-                notify.error(data1.message);
-            }
-        })
-    }
-
     get_y_axis_uploader(uploader_marketplce, title, data) {
         let uploaderarray = [];
         let uploader = [];
@@ -164,38 +126,122 @@ class AnalyticsReporting extends Component {
         requests.postRequest('frontend/app/getUploadedProductsCount', {marketplace: title}).then(data1 => {
             if (data1.success) {
                 Object.keys(data1.data).forEach(e => {
-                    if ( data1.data[e] !== 0 ) {
-                        uploader.push(e);
-                        uploaderarray.push(data1.data[e]);
-                        show = true;
+                    if ( data1.data[e] !== undefined ) {
+                        if ( data1.data[e]['_id'] === null ) {
+                            uploader.push('Shopify Matched Product');
+                            uploaderarray.push(data1.data[e]['count']);
+                            show = true;
+                        } else {
+                            uploader.push(capitalizeWord(data1.data[e]['_id']));
+                            uploaderarray.push(data1.data[e]['count']);
+                            show = true;
+                        }
                     }
                 });
                 uploaderarray.push(0);
                 this.setState({yaxisuploader:uploaderarray, uploaded_product: show,uploader:uploader})
-            } else {
-                // this.setState({:true})
             }
         })
-    }
-    preparedata(){
-        this.getallimporter();
-        // this.getalluploader();
     }
 
     handleChangeimporter = (newValue) => {
         this.setState({selectedimporter: newValue});
     };
+
     handleChangeuploader = (newValue) => {
         this.setState({selecteduploader: newValue});
     };
 
-    handleChangeuploadermarketplace = (newValue) => {
-        this.get_y_axis_uploader(newValue);
-        this.setState({selecteduploadermarketplace: newValue});
+    render() {
+        return (
+            <Page
+                title="Product Analytics" titleHidden={true}>
+                {/*<Card title="Products Imported">*/}
+                <Modal title={this.state.payment.title} open={this.state.payment_show} onClose={() => {
+                    this.setState({payment_show:false});}}
+                       secondaryActions={{content:'OK', onClick:() => {
+                               this.setState({payment_show:false});
+                           }}}>
+                    <Modal.Section>
+                        <div className="text-center">
+                            <h3>{this.state.payment.message}</h3>
+                            {this.state.payment.body}
+                        </div>
+                    </Modal.Section>
+                </Modal>
+                <div className="CARD w-100" style={{marginTop:75}}>
+                    <div className='CARD-title-small text-center BG-primary common'>
+                            <FontAwesomeIcon icon={faArrowAltCircleDown} size="5x"/>
+                    </div>
+                    <div className="col-12 mt-5" >
+                        <h3 className="font-weight-bold" style={{paddingTop:20}}>Products Imported</h3>
+                    </div>
+                    <div className="CARD-body">
+                        <div className="col-12 p-0">
+                            <Card>
+                    <div className="p-4">
+                        <div className="row">
+                            <div className="col-md-8"/>
+                            <div className="col-12 col-md-4">
+                                <Select
+                                    label=""
+                                    options={options}
+                                    onChange={this.handleChangeimporter}
+                                    value={this.state.selectedimporter}
+                                />
+                            </div>
+                        </div>
+                        <div>{
+                            this.importerreports()
+                        }
+                        </div>
+                    </div>
+                        </Card>
+                        </div>
+                    </div>
+                </div>
+                {/*</Card>*/}
+                {this.state.uploaded_product && <div className="CARD w-100" style={{marginTop:75}}>
+                    <div className={`CARD-title-small text-center BG-primary common`}>
+                            <FontAwesomeIcon icon={faArrowAltCircleUp} size="5x"/>
+                            {/*// <h1 className="mt-2 font-weight-bold pt-2" style={{fontSize:20}}>Uploader</h1>*/}
+                    </div>
+                    <div className="col-12 mt-5" >
+                        <h3 className="font-weight-bold" style={{paddingTop:20}}>Products Upload Status</h3>
+                    </div>
+                    <div className="CARD-body">
+                        <div className="col-12 p-0">
+                            <Card>
+                                <div className="p-4">
+                                    <div className="row">
+                                        <div className="col-md-4 pt-1 pb-1"></div>
+                                        <div className="col-12 col-md-4 pt-1 pb-1">
+                                            <Select
+                                                label=""
+                                                options={options}
+                                                onChange={this.handleChangeuploader}
+                                                value={this.state.selecteduploader}
+                                            />
+                                        </div>
+                                    </div>
 
-    };
-    importerreports()
-    {
+                                    <div className="row">
+                                        <div className="col-md-12">
+                                            {
+                                                this.uploaderreports()
+                                            }
+                                        </div>
+                                    </div>
+                                </div>
+                            </Card>
+                        </div>
+                    </div>
+                </div>}
+            </Page>
+        );
+    }
+
+    importerreports() {
         const line = {
             labels: this.state.importer,
             datasets: [
@@ -331,8 +377,8 @@ class AnalyticsReporting extends Component {
                 return <Pie height={150} data={pie}/>
         }
     }
-    uploaderreports()
-    {
+
+    uploaderreports() {
         const line = {
             labels: this.state.uploader,
             datasets: [
@@ -472,94 +518,6 @@ class AnalyticsReporting extends Component {
         }
     }
 
-    render() {
-        return (
-            <Page
-                title="Product Analytics" titleHidden={true}>
-                {/*<Card title="Products Imported">*/}
-                <Modal title={this.state.payment.title} open={this.state.payment_show} onClose={() => {
-                    this.setState({payment_show:false});}}
-                       secondaryActions={{content:'OK', onClick:() => {
-                               this.setState({payment_show:false});
-                           }}}>
-                    <Modal.Section>
-                        <div className="text-center">
-                            <h3>{this.state.payment.message}</h3>
-                            {this.state.payment.body}
-                        </div>
-                    </Modal.Section>
-                </Modal>
-                <div className="CARD w-100" style={{marginTop:75}}>
-                    <div className='CARD-title-small text-center BG-primary common'>
-                            <FontAwesomeIcon icon={faArrowAltCircleDown} size="5x"/>
-                    </div>
-                    <div className="col-12 mt-5" >
-                        <h3 className="font-weight-bold" style={{paddingTop:20}}>Products Imported</h3>
-                    </div>
-                    <div className="CARD-body">
-                        <div className="col-12 p-0">
-                            <Card>
-                    <div className="p-4">
-                        <div className="row">
-                            <div className="col-md-8"/>
-                            <div className="col-12 col-md-4">
-                                <Select
-                                    label=""
-                                    options={options}
-                                    onChange={this.handleChangeimporter}
-                                    value={this.state.selectedimporter}
-                                />
-                            </div>
-                        </div>
-                        <div>{
-                            this.importerreports()
-                        }
-                        </div>
-                    </div>
-                        </Card>
-                        </div>
-                    </div>
-                </div>
-                {/*</Card>*/}
-                {this.state.uploaded_product && <div className="CARD w-100" style={{marginTop:75}}>
-                    <div className={`CARD-title-small text-center BG-primary common`}>
-                            <FontAwesomeIcon icon={faArrowAltCircleUp} size="5x"/>
-                            {/*// <h1 className="mt-2 font-weight-bold pt-2" style={{fontSize:20}}>Uploader</h1>*/}
-                    </div>
-                    <div className="col-12 mt-5" >
-                        <h3 className="font-weight-bold" style={{paddingTop:20}}>Products Upload Status</h3>
-                    </div>
-                    <div className="CARD-body">
-                        <div className="col-12 p-0">
-                            <Card>
-                                <div className="p-4">
-                                    <div className="row">
-                                        <div className="col-md-4 pt-1 pb-1"></div>
-                                        <div className="col-12 col-md-4 pt-1 pb-1">
-                                            <Select
-                                                label=""
-                                                options={options}
-                                                onChange={this.handleChangeuploader}
-                                                value={this.state.selecteduploader}
-                                            />
-                                        </div>
-                                    </div>
-
-                                    <div className="row">
-                                        <div className="col-md-12">
-                                            {
-                                                this.uploaderreports()
-                                            }
-                                        </div>
-                                    </div>
-                                </div>
-                            </Card>
-                        </div>
-                    </div>
-                </div>}
-            </Page>
-        );
-    }
     redirect(url) {
         this.props.history.push(url);
     }

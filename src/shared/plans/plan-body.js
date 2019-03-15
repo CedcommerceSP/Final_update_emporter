@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 import { Button, Card, Checkbox, Icon, Label, Link, Modal,
-           RadioButton, Select, Stack, TextField, Tooltip, DisplayText } from "@shopify/polaris";
+           RadioButton, Select, Stack, TextField, Tooltip, DisplayText , Collapsible} from "@shopify/polaris";
 import {isUndefined} from "util";
 
 import {requests} from "../../services/request";
@@ -294,10 +294,10 @@ class PlanBody extends Component {
                                                         <p className="service-body mb-5">
                                                             <span className="service-description mb-3" style={{fontWeight:'bold'}}><b>{data.services[keys].title}</b></span>
                                                             <span>
-                                                                <Tooltip content={data.services[keys].description} preferredPosition="above">
-                                                                    <Link><Icon source="help" color="inkLighter" backdrop={true} /></Link>
-                                                                </Tooltip>
-                                                            </span>
+                                                            <Tooltip content={data.services[keys].description} preferredPosition="above">
+                                                                <Link><Icon source="help" color="inkLighter" backdrop={true} /></Link>
+                                                            </Tooltip>
+                                                        </span>
                                                         </p>
                                                         {Object.keys(data.services[keys].services).map(key1 => {
                                                             if ( data.services[keys].services[key1].required === 1 ) {
@@ -351,7 +351,7 @@ class PlanBody extends Component {
                                 </Card>
                             </div>
                         );
-                    })}
+            })}
                 </div>
                 <Modal
                     title={this.state.schemaModal.title}

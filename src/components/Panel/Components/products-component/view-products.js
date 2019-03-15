@@ -278,7 +278,8 @@ class ViewProducts extends Component {
                                                     <span>
                                                         <Thumbnail source={e} alt={''}/>
                                                     </span>
-                                                        {this.state.imagePosition === i && <div className="mt-1 bg-info p-1"/>}
+                                                        {this.state.imagePosition === i ? <div className="mt-1 bg-info p-1"/>:
+                                                            <div style={{color:"#585858"}} className="text-center">{i + 1}</div>}
                                                     </div>
                                                 }
                                             })}

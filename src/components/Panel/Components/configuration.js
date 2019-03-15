@@ -51,7 +51,7 @@ export class Configuration extends Component {
         this.getUserDetails();
         this.getShopifyConfigurations();
         this.getAmazonImporterConfigurations();
-        this.getAmazonAffiliateConfigurations();
+        // this.getAmazonAffiliateConfigurations();
         this.getEbayConfig();
         this.getEtsyConfig();
     }
@@ -638,9 +638,9 @@ export class Configuration extends Component {
                     <Layout.Section>
                         {accounts !== undefined && accounts.indexOf('amazonimporter') !== -1 ? this.renderAmazonImporterConfigurationSection():null}
                     </Layout.Section>
-                    <Layout.Section>
-                        {accounts !== undefined && accounts.indexOf('amazonaffiliate') !== -1 ? this.renderAmazonAffiliateConfigurationSection():null}
-                    </Layout.Section>
+                    {/*<Layout.Section>*/}
+                        {/*{accounts !== undefined && accounts.indexOf('amazonaffiliate') !== -1 ? this.renderAmazonAffiliateConfigurationSection():null}*/}
+                    {/*</Layout.Section>*/}
                 </Layout>
             </Page>
         );
@@ -715,7 +715,7 @@ export class Configuration extends Component {
     }
 
     shopifyConfigurationChange(index, value) {
-        if ( value === 'disable' || value === 'enable' ) {
+        if ( this.shopifyConfigurationData[index].code === 'product_sync' ) {
             this.state.show_shopify_child_component['sync_field'] = value !== 'enable';
         }
         this.state.shopify_configuration_updated = true;
