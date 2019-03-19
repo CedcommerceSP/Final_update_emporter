@@ -19,6 +19,7 @@ import { requests } from '../../../services/request';
 import { environment } from '../../../environments/environment';
 import { capitalizeWord, validateImporter } from './static-functions';
  import {globalState} from "../../../services/globalstate";
+ import FileImporter from "./import-component/fileimporter";
 
 export class Import extends Component {
 
@@ -638,6 +639,9 @@ export class Import extends Component {
                             </div>
                         </Card>
                     </div>
+                    <div className="col-12">
+                        <FileImporter {...this.props}/>
+                    </div>
                 </div>
                 {this.renderImportProductsModal()}
                 {this.renderUploadProductsModal()}
@@ -647,7 +651,9 @@ export class Import extends Component {
             </Page>
         );
     }
+
     /*******************       *********************/
+
     renderHelpModal() {
         return (
             <React.Fragment>
@@ -738,6 +744,7 @@ export class Import extends Component {
             </React.Fragment>
         );
     }
+
     handleModalChange() {
        // this.setState({openModal: !this.state.openModal});
         document.getElementById('openHelpModal').click();
@@ -748,7 +755,10 @@ export class Import extends Component {
         this.setState(state);
     }
 
-    redirect(url) {
+    redirect(url, data) {
+        if ( data !== undefined ) {
+            this.props.history.push(url, data)
+        } else
         this.props.history.push(url);
     }
 }

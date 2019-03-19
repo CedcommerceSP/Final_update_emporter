@@ -37,6 +37,7 @@ import { modifyAccountConnectedInfo} from "./Components/static-functions";
 import {requests} from "../../services/request";
 
 import './panel.css';
+import FileMapping from "./Components/import-component/FileMapping";
 
 export class Panel extends Component {
     constructor(props) {
@@ -136,6 +137,7 @@ export class Panel extends Component {
                                 <Route path='/panel/accounts/install' component={InstallApp}/>
                                 <Route path='/panel/accounts/success' component={AppInstalled}/>
                                 <Route exact path='/panel/import' component={Import}/>
+                                <Route exact path='/panel/import/mapping' component={FileMapping}/>
                                 <Route exact path='/panel/profiling' component={Profiling}/>
                                 <Route exact path='/panel/profiling/view' component={ViewProfile}/>
                                 <Route exact path='/panel/profiling/create' component={CreateProfile}/>

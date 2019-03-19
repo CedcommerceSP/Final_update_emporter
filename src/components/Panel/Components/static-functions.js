@@ -43,7 +43,8 @@ export function paginationShow(activePage, count, totalData, success) {
 export function validateImporter(code) {
     return !(code === 'product_sync'
         || code === 'product_import'
-        || code === 'shopify_importer');
+        || code === 'shopify_importer'
+        || code === 'fileimporter');
 }
 
 export function modifyAccountConnectedInfo(accounts) {
