@@ -39,7 +39,7 @@ export class CreateProfile extends Component {
         { label: 'Greater Then', value: '>' },
         { label: 'Less Then', value: '<' },
         { label: 'Greater Then Equal To', value: '>=' },
-        { label: 'Less Then Equal To', value: '<=' }
+        { label: 'Less Then Equal To', value: '<=' },
     ];
     optionMapping = {};
     showOptionMapping = false;

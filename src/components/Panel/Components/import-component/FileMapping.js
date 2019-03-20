@@ -3,8 +3,10 @@ import { Card, Select, Page, TextStyle, Stack, Button, Tag, Scrollable } from '@
 import {faArrowsAltH, faMinus, faTimes, faPlus, faExclamation, faCheck} from '@fortawesome/free-solid-svg-icons';
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {notify} from "../../../../services/notify";
+import {requests} from "../../../../services/request";
 
 class FileMapping extends Component {
+
     constructor(props) {
         super(props);
         this.state = {
@@ -241,11 +243,36 @@ class FileMapping extends Component {
 
     onSubmit = () => {
         if ( this.validateData() ) {
-            console.log(this.state.mappedObject);
+            let newData = this.changeSubmitData(JSON.parse(JSON.stringify(this.state.mappedObject)));
+            console.log(newData);
+            requests.postRequest('fileimporter/request/getMapping', {mappedObject : newData}).then(e => {
+                if ( e.success ) {
+                    notify.success(e.message);
+                } else {
+                    notify.error(e.message);
+                }
+            });
         } else {
             notify.warn("Please Fill All The Required (*) Field.");
         }
     };
+
+    changeSubmitData(data) {
+        let newData = [];
+        Object.keys(data).forEach(e => {
+            let keys = e.split('.');
+            if ( keys[1] === undefined ) {
+                keys[1] = keys[0];
+                keys[0] = "";
+            }
+            newData.push({
+                key: keys[1],
+                prefix: keys[0],
+                value: data[e]
+            });
+        });
+        return newData;
+    }
 
     modifyMappingArray(arg) {
         let obj = {

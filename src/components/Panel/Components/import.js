@@ -34,6 +34,7 @@ export class Import extends Component {
                 type: 'asin',
                 value: ''
             },
+            amazon_list_type:'all',
             ebay_list_type: 'active',
             uploadProductDetails: {
                 source: '',
@@ -156,11 +157,12 @@ export class Import extends Component {
             case 'etsyimporter': return <div className="col-12 pt-1 pb-1">
                 <Select
                     label="Product Listing Type"
-                    options={[{label:'Active Products',value:'active'},
-                        {label:'Inactive Products',value:'edit'},
-                        // {label:'All Products',value:'all'},
-                        {label:'Expired Products',value:'expired'},
-                        {label:'Draft Products',value:'draft'}]}
+                    options={[
+                            {label:'Active Products',value:'active'},
+                            {label:'Inactive Products',value:'edit'},
+                            {label:'Expired Products',value:'expired'},
+                            {label:'Draft Products',value:'draft'}
+                         ]}
                     onChange={this.handleImportChange.bind(this, 'listing_type')}
                     value={this.state.listing_type}
                 />
@@ -168,8 +170,10 @@ export class Import extends Component {
             case 'amazonaffiliate' : return <div className="col-12 pt-1 pb-1">
                 <Select
                     label="Product Type"
-                    options={[{label:'ASIN',value:'asin'},
-                        {label:'Product URL',value:'product_url'}]}
+                    options={[
+                            {label:'ASIN',value:'asin'},
+                            {label:'Product URL',value:'product_url'}
+                        ]}
                     onChange={this.handleImportChange.bind(this, 'affiliate_type')}
                     value={this.state.affiliate.type}
                 />
@@ -184,17 +188,27 @@ export class Import extends Component {
             case 'ebayimporter' : return <div className="col-12 pt-1 pb-1">
                 <Select
                     label="Product Type"
-                    options={
-                        [
+                    options={[
                             {label:'Active Listing',value:'active'},
                             {label:'Unsold Listing',value:'unsold'}
-                        ]
-                    }
+                        ]}
                     onChange={(e) => {
                         this.setState({ebay_list_type:e});}}
                     value={this.state.ebay_list_type}
                 />
-            </div>
+            </div>;
+            case 'amazonimporter' : return <div className="col-12 pt-1 pb-1">
+                <Select
+                    label="Product Type"
+                    options={[
+                            {label:'All Products',value:'all'},
+                            {label:'Active Products',value:'active'},
+                            {label:'Inactive Products',value:'inactive'}
+                        ]}
+                    onChange={(e) => {this.setState({amazon_list_type:e})}}
+                    value={this.state.amazon_list_type}
+                />
+            </div>;
         }
     };
 
@@ -252,6 +266,9 @@ export class Import extends Component {
         }
         if ( this.state.importProductsDetails.source === 'ebayimporter' ) {
             sendData['list_type'] = this.state.ebay_list_type;
+        }
+        if ( this.state.importProductsDetails.source === 'amazonimporter' ) {
+            sendData['listing_type'] = this.state.amazon_list_type;
         }
         requests.getRequest('connector/product/import', sendData)
             .then(data => {
