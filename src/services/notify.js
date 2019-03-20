@@ -25,7 +25,7 @@ export const notify = {
     warn: (msg) => {
         toast(msg, {
             hideProgressBar: true,
-            type: 'warn',
+            type: 'warning',
             bodyClassName: css({
                 fontSize: "14px"
             }),

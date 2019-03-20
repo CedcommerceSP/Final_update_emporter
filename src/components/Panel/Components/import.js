@@ -1,24 +1,15 @@
  import React, { Component } from 'react';
-import { NavLink } from 'react-router-dom';
-import './import-component/import.css';
-
-import { Page,
-    Card,
-    Select,
-    Button,
-    Label,
-    Modal, TextField,
-    Banner } from '@shopify/polaris';
-
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faArrowAltCircleDown,
+ import { NavLink } from 'react-router-dom';
+ import './import-component/import.css';
+ import { Page, Card, Select, Button, Label, Modal, TextField, Collapsible, Banner } from '@shopify/polaris';
+ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+ import { faArrowAltCircleDown,
     faArrowAltCircleUp } from '@fortawesome/free-solid-svg-icons';
 
-import { notify } from '../../../services/notify';
-import { requests } from '../../../services/request';
-import { environment } from '../../../environments/environment';
-import { capitalizeWord, validateImporter } from './static-functions';
- import {globalState} from "../../../services/globalstate";
+ import { notify } from '../../../services/notify';
+ import { requests } from '../../../services/request';
+ import { environment } from '../../../environments/environment';
+ import { capitalizeWord, validateImporter } from './static-functions';
  import FileImporter from "./import-component/fileimporter";
 
 export class Import extends Component {
@@ -598,6 +589,15 @@ export class Import extends Component {
                             <Label>In order to upload your products from source marketplace to Shopify, kindly import your products from the source by clicking on 'Import Products', and then upload your products on Shopify by clicking on 'Upload Products'.<a href="javascript:void(0)" onClick={this.handleModalChange}>Click Here</a></Label>
                         </Banner>
                     </div>
+                    <div className="col-12">
+                        <Button fullWidth={true} onClick={() => {
+                            this.setState({openFileUpload:!this.state.openFileUpload});}}>
+                            Have .CSV
+                        </Button>
+                        <Collapsible id={"ddd"} open={this.state.openFileUpload}>
+                            <FileImporter {...this.props}/>
+                        </Collapsible>
+                    </div>
                     <div className="col-md-6 col-sm-6 col-12 p-3">
                         <Card>
                             <div onClick={() => {
@@ -638,9 +638,6 @@ export class Import extends Component {
                                 </div>
                             </div>
                         </Card>
-                    </div>
-                    <div className="col-12">
-                        <FileImporter {...this.props}/>
                     </div>
                 </div>
                 {this.renderImportProductsModal()}
