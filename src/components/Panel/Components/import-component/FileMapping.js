@@ -148,7 +148,16 @@ class FileMapping extends Component {
                     </Scrollable>
                 </React.Fragment>
             );
-
+            case "select" : return <React.Fragment>
+                <Select
+                    label={""}
+                    labelHidden={true}
+                    placeholder={arg.label}
+                    value={this.state.mappedObject[arg.value]}
+                    onChange={this.handleMappingChange.bind(this,arg, arg.value)}
+                    options={arg['select_options']}
+                />
+            </React.Fragment>;
             default : return (
                 <React.Fragment>
                     <Select
@@ -194,6 +203,7 @@ class FileMapping extends Component {
     }
 
     handleMappingChange = (obj, key, value) => {
+        console.log(obj, key, value);
         let { mappedObject } = this.state;
         switch (obj.type) {
             case "multi" :

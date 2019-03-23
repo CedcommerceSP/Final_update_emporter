@@ -383,11 +383,19 @@ export class Products extends Component {
                 rowData['type'] = data[i].details.type;
                 rowData['source_variant_id'] = data[i].details.source_product_id.toString();
                 if ( !isUndefined(data[i].upload_status) && data[i].upload_status ) {
-                    rowData['upload_status'] = <React.Fragment>
-                        <Badge status="success">Uploaded</Badge>
-                        <br/>
-                        <Badge status="attention">Imported</Badge>
-                    </React.Fragment>
+                    if ( data[i].source === undefined ) {
+                        rowData['upload_status'] = <React.Fragment>
+                            <Badge status="info">Matched</Badge>
+                            <br/>
+                            <Badge status="attention">Imported</Badge>
+                        </React.Fragment>
+                    } else {
+                        rowData['upload_status'] = <React.Fragment>
+                            <Badge status="success">Uploaded</Badge>
+                            <br/>
+                            <Badge status="attention">Imported</Badge>
+                        </React.Fragment>
+                    }
                 } else {
                     rowData['upload_status'] = <React.Fragment>
                         <Badge status="attention">Imported</Badge>
@@ -436,6 +444,7 @@ export class Products extends Component {
         const state = this.state;
         this.setState(state);
     }
+
     closeDeleteProductModal() {
         this.state.toDeleteRow = {};
         this.state.deleteProductData = false;
