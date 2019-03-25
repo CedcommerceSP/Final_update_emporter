@@ -4,6 +4,7 @@ import { isUndefined } from 'util';
 
 import {requests} from "../../../../services/request";
 import {notify} from "../../../../services/notify";
+import {capitalizeWord} from "../static-functions";
 
 class FileImporter extends Component {
 
@@ -20,29 +21,23 @@ class FileImporter extends Component {
             mapping_status:false,
             upload_new:false,
             response:{}
-        }
+        };
+        console.clear();
         this.status();
     }
     status() {
         requests.getRequest("fileimporter/request/getStatus").then(response => {
             console.log(response);
-
-            if (response.data.file_uploaded == 0) {
-                this.setState({
-                    upload_status: true
-                })
+            if (!response.data['file_uploaded']) {
+                this.setState({upload_status: true});
             }
             else {
                 this.setState({
                     response:response['data'],
                     mapping_status: true,
                     upload_new: true,
-
-                })
-                console.log("in else")
+                });
             }
-
-
         })
     }
     uploadFile = (file) => {
@@ -54,13 +49,11 @@ class FileImporter extends Component {
                         field: e['data']['fields'],
                         header: e['data']['header'],
                         mapped:e['data']['mapped']
-
                     });
                     this.setState({
                         openMapping: true,
                         container_field: e['data']['fields'],
                         csv_fields :e['data']['header'],
-
                     });
                     notify.success(e.message);
                 } else {
@@ -98,8 +91,7 @@ class FileImporter extends Component {
                                         Upload
                                     </Button>
                                     &nbsp;&nbsp;
-                                    <Button onClick={() => {
-                                        this.setState({files:[]});}}>
+                                    <Button onClick={() => {this.setState({files:[]});}}>
                                         Cancel
                                     </Button>
                                 </div>
@@ -125,9 +117,9 @@ class FileImporter extends Component {
 
         return (
             <Card>
-                <Stack  distribution="center" >
+                <Stack  distribution="fillEvenly" >
                     {errorMessage}
-                    {fileUpload && this.to_check_status_and_render()}
+                    {fileUpload && this.toCheckStatusAndRender()}
                     {
                         uploadedFiles && <Card>
                             <div className="text-center p-5">
@@ -139,16 +131,8 @@ class FileImporter extends Component {
             </Card>
         );
     }
-    to_redirect(){
-        let e = this.state.response;
-        console.log("dem_responde",e)
-        this.redirect('/panel/import/mapping', {
-            field: e['field'],
-            header: e['header'],
-            mapped:e['mapped']['mappedObject']
-        });
-    }
-    to_check_status_and_render(){
+    toCheckStatusAndRender(){
+        let mapped = this.state.response['mapped'];
         const fileUpload = <DropZone.FileUpload />;
         if(this.state.upload_status){
             return(<DropZone
@@ -164,14 +148,43 @@ class FileImporter extends Component {
             >
                 {fileUpload}
             </DropZone>)
-        }
-        else{
-
-            return ( <ButtonGroup>
-                    <Button primary onClick={this.to_redirect.bind(this)}>Mapping</Button>
-                     <Button>Upload new CSV</Button>
-                </ButtonGroup>
-            )
+        } else {
+            return <Card>
+                <Stack vertical={true} alignment="center">
+                    <div className="p-2 text-center mt-4">
+                        <Stack distribution="center" spacing="extraLoose" alignment="center">
+                            <Thumbnail
+                                size="medium"
+                                alt={""}
+                                source={'https://cdn.shopify.com/s/files/1/0757/9955/files/New_Post.png?12678548500147524304'}
+                            />
+                            <Stack vertical spacing="none">
+                                <p style={{color:"#333333"}}>
+                                    ({this.state.response['file_uploaded']} Items)
+                                </p>
+                                <p style={{color:"#333333"}}>
+                                    {mapped !== undefined && mapped['marketplace'] && capitalizeWord(mapped['marketplace'])}
+                                </p>
+                            </Stack>
+                        </Stack>
+                    </div>
+                    <div className="mb-4">
+                        <ButtonGroup>
+                            <Button primary onClick={() => {
+                                this.redirect('/panel/import/mapping', {
+                                    field: this.state.response['field'],
+                                    header: this.state.response['header'],
+                                    mapped:mapped['mappedObject'],
+                                    marketplace: mapped['marketplace']
+                                });
+                            }}>
+                                {mapped !== undefined && mapped['errorFlag']? "Mapping" : "Edit Mapping"}
+                            </Button>
+                            <Button onClick={() => {this.setState({upload_status: true});}}>Upload new CSV</Button>
+                        </ButtonGroup>
+                    </div>
+                </Stack>
+            </Card>
         }
     }
     getBase64(file) {

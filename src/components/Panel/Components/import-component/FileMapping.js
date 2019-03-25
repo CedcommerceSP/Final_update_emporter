@@ -9,17 +9,13 @@ class FileMapping extends Component {
 
     constructor(props) {
         super(props);
-        setTimeout(() => {
-            console.log(props.location.state.mapped)
-        })
-
-
-
         this.state = {
             openMapping: false,
-            mappedObject:this.set_value(),
+            mappedObject:this.setValue(),
             canSubmit: false,
-            container_field: this.modifyMappingArray(props.location.state["field"], props.location.state["key"]),
+            marketPlace: props.location.state['marketplace'] ?props.location.state['marketplace']:'default',
+            key: props.location.state["key"],
+            container_field: this.modifyMappingArray(props.location.state["field"]),
             csv_fields: Object.keys(props.location.state["header"]).map((e) => ({
                 label: props.location.state["header"][e],
                 value: props.location.state["header"][e]
@@ -27,23 +23,32 @@ class FileMapping extends Component {
         };
     }
 
-    set_value() {
-        if (this.props.location.state.mapped === undefined ){
-            return (
-                { }
-            )
-        }
-        else {
+    setValue() {
+        if (this.props.location.state.mapped !== undefined ){
             let mapped = {};
-            for (let i = 0; i < Object.keys(this.props.location.state["mapped"]).length; i++) {
-                let key = this.props.location.state["mapped"][i]["original_value"]
-                mapped[key] = this.props.location.state["mapped"][i]["value"]
-            }
-            return (mapped)
-            console.log(mapped)
+            let propsMapped = this.props.location.state["mapped"];
+            Object.keys(propsMapped).forEach((e) => {
+                mapped[propsMapped[e]["original_value"]] = propsMapped[e]["value"];
+            });
+            return mapped;
         }
+        return {};
     }
 
+    componentDidMount() {
+        let addField = [];
+        let { mappedObject, container_field } = this.state;
+        Object.keys(container_field['non_required']).forEach((e) => {
+            if (  mappedObject[container_field['non_required'][e]['value']] !== undefined )
+                addField.push({
+                    field:container_field['non_required'],
+                    value:container_field['non_required'][e]['value']
+                });
+        });
+        addField.forEach(e => {
+            this.addMoreMappingOption(e['field'],e['value']);
+        })
+    }
 
     renderRequired = (arg) => {
         return arg.map((e,i) => {
@@ -80,6 +85,7 @@ class FileMapping extends Component {
             );
         });
     };
+
     renderNonRequired = (arg) => {
         return (
             <React.Fragment>
@@ -164,8 +170,10 @@ class FileMapping extends Component {
                     <Scrollable style={{maxHeight:'100px'}}>
                         <Stack spacing="tight">
                             {this.state.mappedObject[arg.value] !== undefined &&
-                            this.state.mappedObject[arg.value].map(((eve, index) => (
-                                <Tag key={index} onRemove={this.removeMultiSelected.bind(this,arg.value, eve)}>{eve}</Tag>
+                            Object.keys(this.state.mappedObject[arg.value]).map(((eve, index) => (
+                                <Tag key={index} onRemove={this.removeMultiSelected.bind(this,arg.value, this.state.mappedObject[arg.value][eve])}>
+                                    {this.state.mappedObject[arg.value][eve]}
+                                </Tag>
                             )))}
                         </Stack>
                     </Scrollable>
@@ -199,6 +207,19 @@ class FileMapping extends Component {
     render() {
         let { container_field } = this.state;
         let buttons = <Stack distribution="trailing" spacing="extraLoose">
+            <Select
+                label={"Marketplace"}
+                labelInline
+                options={[
+                    {label:"Bonanza",value:"bonanza"},
+                    {label:"Morecommerce",value:"morecommerce"},
+                    {label:"Shopify",value:"shopify"},
+                    {label:"Wish",value:"wish"},
+                    {label:"Default",value:"default"},
+                ]}
+                value={this.state.marketPlace}
+                onChange={(e) => {this.setState({marketPlace:e})}}
+            />
             <Button primary>
                 Need Help?
             </Button>
@@ -278,7 +299,10 @@ class FileMapping extends Component {
         if ( this.validateData() ) {
             let newData = this.changeSubmitData(JSON.parse(JSON.stringify(this.state.mappedObject)));
             console.log(newData);
-            requests.postRequest('fileimporter/request/getMapping', {mappedObject : newData}).then(e => {
+            requests.postRequest('fileimporter/request/getMapping', {
+                mappedObject : newData,
+                marketplace: this.state.marketPlace
+            }).then(e => {
                 if ( e.success ) {
                     notify.success(e.message);
                 } else {
@@ -308,7 +332,7 @@ class FileMapping extends Component {
         return newData;
     }
 
-    modifyMappingArray(arg, key) {
+    modifyMappingArray(arg) {
         let obj = {
             required: [],
             non_required: [],
