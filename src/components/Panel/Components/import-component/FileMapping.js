@@ -9,17 +9,41 @@ class FileMapping extends Component {
 
     constructor(props) {
         super(props);
+        setTimeout(() => {
+            console.log(props.location.state.mapped)
+        })
+
+
+
         this.state = {
             openMapping: false,
-            mappedObject: {},
+            mappedObject:this.set_value(),
             canSubmit: false,
-            container_field: this.modifyMappingArray(props.location.state[0]),
-            csv_fields: Object.keys(props.location.state[1]).map((e) => ({
-                    label: props.location.state[1][e],
-                    value: props.location.state[1][e]
-                })),
+            container_field: this.modifyMappingArray(props.location.state["field"], props.location.state["key"]),
+            csv_fields: Object.keys(props.location.state["header"]).map((e) => ({
+                label: props.location.state["header"][e],
+                value: props.location.state["header"][e]
+            })),
         };
     }
+
+    set_value() {
+        if (this.props.location.state.mapped === undefined ){
+            return (
+                { }
+            )
+        }
+        else {
+            let mapped = {};
+            for (let i = 0; i < Object.keys(this.props.location.state["mapped"]).length; i++) {
+                let key = this.props.location.state["mapped"][i]["original_value"]
+                mapped[key] = this.props.location.state["mapped"][i]["value"]
+            }
+            return (mapped)
+            console.log(mapped)
+        }
+    }
+
 
     renderRequired = (arg) => {
         return arg.map((e,i) => {
@@ -48,7 +72,7 @@ class FileMapping extends Component {
                                 {this.state.mappedObject[e.value] === undefined
                                 || this.state.mappedObject[e.value].length <= 0?
                                     <FontAwesomeIcon icon={faExclamation} size="1x" color="#FF7D4D"/>:
-                                <FontAwesomeIcon icon={faCheck} size="1x" color="#4fdc35"/>}
+                                    <FontAwesomeIcon icon={faCheck} size="1x" color="#4fdc35"/>}
                             </div>
                         </div>
                     </Card>
@@ -56,7 +80,6 @@ class FileMapping extends Component {
             );
         });
     };
-
     renderNonRequired = (arg) => {
         return (
             <React.Fragment>
@@ -278,21 +301,21 @@ class FileMapping extends Component {
             newData.push({
                 key: keys[1],
                 prefix: keys[0],
-                value: data[e]
+                value: data[e],
+                original_value:e
             });
         });
         return newData;
     }
 
-    modifyMappingArray(arg) {
+    modifyMappingArray(arg, key) {
         let obj = {
             required: [],
             non_required: [],
             show_non_required:[],
         };
-        console.clear();
         Object.keys(arg).forEach((e) => {
-             arg[e].required ?
+            arg[e].required ?
                 obj['required'].push(arg[e]) :
                 obj['non_required'].push(arg[e])
         });
@@ -303,9 +326,9 @@ class FileMapping extends Component {
         let { mappedObject, container_field } = this.state;
         let canSubmit = true;
         Object.keys(container_field['required']).forEach(e => {
-           if ( mappedObject[container_field['required'][e]['value']] === undefined ) {
-               canSubmit = false;
-           }
+            if ( mappedObject[container_field['required'][e]['value']] === undefined ) {
+                canSubmit = false;
+            }
         });
         return canSubmit;
     };
