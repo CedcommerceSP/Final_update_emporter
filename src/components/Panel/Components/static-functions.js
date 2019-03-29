@@ -43,8 +43,7 @@ export function paginationShow(activePage, count, totalData, success) {
 export function validateImporter(code) {
     return !(code === 'product_sync'
         || code === 'product_import'
-        || code === 'shopify_importer'
-        || code === 'fileimporter');
+        || code === 'shopify_importer');
 }
 
 export function modifyAccountConnectedInfo(accounts) {
@@ -67,7 +66,12 @@ export function modifyAccountConnectedInfo(accounts) {
                 title: title,
                 code: e
             })
-        }
+        } /*else {
+            value.push({
+                title: 'CSV',
+                code: 'fileimporter'
+            })
+        }*/
     });
     return value;
 }

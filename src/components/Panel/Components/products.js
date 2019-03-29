@@ -207,6 +207,7 @@ export class Products extends Component {
     };
 
     getProducts = () => {
+        // const controller = new AbortController();
         window.showGridLoader = true;
         this.prepareFilterObject();
         const pageSettings = Object.assign({}, this.gridSettings);
@@ -237,7 +238,7 @@ export class Products extends Component {
                     setTimeout(() => {
                         window.handleOutOfControlLoader = true;
                     },3000);
-                    notify.error('No products found');
+                    notify.error(data.message);
                     this.updateState();
                 }
             });
@@ -306,8 +307,7 @@ export class Products extends Component {
         for (let i = 0; i < data.length; i++) {
             let rowData = {};
             if ( data[i].variants !== {} && !isUndefined(data[i].variants) ) {
-
-                if ( data[i]['details']['type'] === 'simple' ) {
+                if ( data[i]['details']['type'] === 'simple' || Object.keys(data[i]['variants']).length === 1 ) {
                     str = data[i].variants[0]['main_image'];
                     if ( str !== undefined && this.checkImage(str) ) {
                         str = data[i].variants[0]['main_image'];

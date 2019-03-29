@@ -606,15 +606,15 @@ export class Import extends Component {
                             <Label>In order to upload your products from source marketplace to Shopify, kindly import your products from the source by clicking on 'Import Products', and then upload your products on Shopify by clicking on 'Upload Products'.<a href="javascript:void(0)" onClick={this.handleModalChange}>Click Here</a></Label>
                         </Banner>
                     </div>
-                    <div className="col-12">
-                        <Button fullWidth={true} onClick={() => {
-                            this.setState({openFileUpload:!this.state.openFileUpload});}}>
-                            Have .CSV
-                        </Button>
-                        <Collapsible id={"ddd"} open={this.state.openFileUpload}>
-                            <FileImporter {...this.props}/>
-                        </Collapsible>
-                    </div>
+                    {/*<div className="col-12">*/}
+                        {/*<Button fullWidth={true} onClick={() => {*/}
+                            {/*this.setState({openFileUpload:!this.state.openFileUpload});}}>*/}
+                            {/*Have .CSV*/}
+                        {/*</Button>*/}
+                        {/*<Collapsible id={"ddd"} open={this.state.openFileUpload}>*/}
+                            {/*<FileImporter {...this.props}/>*/}
+                        {/*</Collapsible>*/}
+                    {/*</div>*/}
                     <div className="col-md-6 col-sm-6 col-12 p-3">
                         <Card>
                             <div onClick={() => {

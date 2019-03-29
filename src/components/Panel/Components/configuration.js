@@ -88,7 +88,6 @@ export class Configuration extends Component {
             .then(data => {
                 if (data.success) {
                     this.amazonImporterConfigurationData = this.modifyConfigData(data.data, 'amazon_importer_configuration');
-                    console.log(this.amazonImporterConfigurationData);
                     this.updateState();
                 } else {
                     notify.error(data.message);
@@ -617,8 +616,12 @@ export class Configuration extends Component {
 
     render() {
         let accounts = [];
-        if ( this.state.necessaryInfo !== undefined )
+        let sync = false;
+        if ( this.state.necessaryInfo !== undefined && this.state.necessaryInfo.sync != undefined ) {
             accounts = this.state.necessaryInfo.account_connected_array;
+            if ( Object.keys(this.state.necessaryInfo.sync).length > 0 )
+                sync = true;
+        }
         return (
             <Page
                 title="Configuration">
@@ -630,13 +633,13 @@ export class Configuration extends Component {
                         {this.renderShopifyConfigurationSection()}
                     </Layout.Section>
                     <Layout.Section>
-                        {accounts !== undefined && accounts.indexOf('ebayimporter') !== -1 ?this.renderEbayConfig():null}
+                        {sync && accounts !== undefined && accounts.indexOf('ebayimporter') !== -1 ?this.renderEbayConfig():null}
                     </Layout.Section>
                     <Layout.Section>
-                        {accounts !== undefined && accounts.indexOf('etsyimporter') !== -1 ? this.renderEtsyConfig():null}
+                        {sync && accounts !== undefined && accounts.indexOf('etsyimporter') !== -1 ? this.renderEtsyConfig():null}
                     </Layout.Section>
                     <Layout.Section>
-                        {accounts !== undefined && accounts.indexOf('amazonimporter') !== -1 ? this.renderAmazonImporterConfigurationSection():null}
+                        {sync && accounts !== undefined && accounts.indexOf('amazonimporter') !== -1 ? this.renderAmazonImporterConfigurationSection():null}
                     </Layout.Section>
                     {/*<Layout.Section>*/}
                         {/*{accounts !== undefined && accounts.indexOf('amazonaffiliate') !== -1 ? this.renderAmazonAffiliateConfigurationSection():null}*/}

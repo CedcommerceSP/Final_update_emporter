@@ -71,10 +71,13 @@ export class Panel extends Component {
                let account_connected_array = e['account_connected'].map(e => (e.code));
                let account_connected = modifyAccountConnectedInfo(account_connected_array);
                let credits = {};
+               let sync = {};
                if ( typeof e['services'] === 'object' ) {
                    e['services'].forEach(e => {
                        if ( e.code === 'product_import' ) {
                            credits = e;
+                       } else if ( e.code === 'product_sync' ) {
+                           sync = e;
                        }
                    });
                    if ( credits['available_credits'] < 5 ) {
@@ -85,9 +88,9 @@ export class Panel extends Component {
                    account_connected: account_connected,
                    services: e['services'],
                    credits : credits,
+                   sync : sync,
                    account_connected_array:account_connected_array
                };
-               console.log(user_necessary_details);
                this.setState({
                    necessaryInfo: user_necessary_details
                });
