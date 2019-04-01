@@ -31,22 +31,8 @@
         window.dataLayer = window.dataLayer || [];
         function gtag(){dataLayer.push(arguments);}
         gtag('js', new Date());
-
         gtag('config', 'UA-107828020-1');
         gtag('config', 'AW-944073096');
-        window.gtag1= 'not_init';
-        var interval  = setInterval(() => {
-            if ( window.gtag1 === 'start' ) {
-                window.gtag1 = 'init';
-                clearInterval(interval);
-                fbq('track', 'Lead');
-                gtag('event', 'conversion', {
-                    'send_to': 'AW-944073096/6IJiCIyK8Y8BEIjTlcID',
-                    'value': 1.0,
-                    'currency': 'USD',
-                });
-            }
-        },1000);
     </script>
     <!-- Facebook Pixel Code -->
     <script>

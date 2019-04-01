@@ -402,12 +402,15 @@ class Dashboard extends Component {
                     tempInfo.mobile = tempInfo.mobile_code + '-' + tempInfo.mobile;
                     requests.getRequest('core/user/updateuser', tempInfo).then(data => {
                         if (data.success) {
+                            window.fbq('track', 'Lead');
+                            window.gtag('event', 'conversion', {
+                                'send_to': 'AW-944073096/6IJiCIyK8Y8BEIjTlcID',
+                                'value': 1.0,
+                                'currency': 'USD',
+                            });
                             requests.getRequest('shopifygql/setup/shopifydetails').then();
                             notify.success(data.message);
                             this.changeStep(1);
-                            if ( window.gtag1 === 'not_init' ) {
-                                window.gtag1 = 'start';
-                            }
                         } else {
                             notify.error(data.message);
                         }
