@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import { Card, Select, Page, TextStyle, Stack, Button, Tag, Scrollable } from '@shopify/polaris';
+import { Card, Select, Page, TextStyle, Stack, Button, Tag, Scrollable, Modal } from '@shopify/polaris';
 import {faArrowsAltH, faMinus, faTimes, faPlus, faExclamation, faCheck} from '@fortawesome/free-solid-svg-icons';
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {notify} from "../../../../services/notify";
@@ -223,10 +223,11 @@ class FileMapping extends Component {
             <Button primary>
                 Need Help?
             </Button>
-            <Button>
-                extra btn
-            </Button>
-            <Button primary onClick={this.onSubmit}>
+            <Button
+                primary
+                onClick={() => {
+                    this.setState({canSubmit:this.validateData()});
+                }}>
                 Submit
             </Button>
         </Stack>;
@@ -242,6 +243,33 @@ class FileMapping extends Component {
                         {buttons}
                     </div>
                 </Card>
+                <Modal
+                    open={this.state.canSubmit}
+                    title={"Action"}
+                    onClose={() =>{this.setState({canSubmit:false})}}>
+                    <Modal.Section>
+                        <Card>
+                            <div className="p-5">
+                                <Stack spacing="extraLoose" distribution="fill">
+                                    <Button destructive onClick={() =>{this.setState({canSubmit:false})}}>
+                                        Cancel
+                                    </Button>
+                                    <Button onClick={() => {
+                                        this.onSubmit(false);
+                                        this.redirect('/panel/import');
+                                    }}>
+                                        Save
+                                    </Button>
+                                    <Button primary onClick={() => {
+                                        this.onSubmit(true);
+                                    }}>
+                                        Save & Import
+                                    </Button>
+                                </Stack>
+                            </div>
+                        </Card>
+                    </Modal.Section>
+                </Modal>
             </Page>
         );
     }
@@ -295,7 +323,7 @@ class FileMapping extends Component {
         this.setState({container_field:container_field, mappedObject:mappedObject});
     };
 
-    onSubmit = () => {
+    onSubmit = (importNow) => {
         if ( this.validateData() ) {
             let newData = this.changeSubmitData(JSON.parse(JSON.stringify(this.state.mappedObject)));
             console.log(newData);
@@ -304,6 +332,9 @@ class FileMapping extends Component {
                 marketplace: this.state.marketPlace
             }).then(e => {
                 if ( e.success ) {
+                    if ( importNow ) {
+                        this.importProduct();
+                    }
                     notify.success(e.message);
                 } else {
                     notify.error(e.message);
@@ -355,6 +386,35 @@ class FileMapping extends Component {
             }
         });
         return canSubmit;
+    };
+
+    importProduct = () => {
+        let sendData = {
+            marketplace: 'fileimporter',
+        };
+        requests.getRequest('connector/product/import', sendData)
+            .then(data => {
+                if (data.success === true) {
+                    setTimeout(() => {
+                        this.redirect('/panel/queuedtasks');
+                    }, 1000);
+                } else {
+                    if ( data.code === 'account_not_connected' ) {
+                        setTimeout(() => {
+                            this.redirect('/panel/accounts');
+                        }, 1000);
+                        notify.info('User Account Not Found. Please Connect The Account First.');
+                    }
+                    if ( data.code === 'already_in_progress' ) {
+                        setTimeout(() => {
+                            this.redirect('/panel/accounts');
+                        }, 1000);
+                        notify.info(data.message);
+                    } else {
+                        notify.error(data.message);
+                    }
+                }
+            });
     };
 
     redirect(url) {

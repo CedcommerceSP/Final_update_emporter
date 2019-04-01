@@ -66,12 +66,12 @@ export function modifyAccountConnectedInfo(accounts) {
                 title: title,
                 code: e
             })
-        } /*else {
+        } else {
             value.push({
                 title: 'CSV',
                 code: 'fileimporter'
             })
-        }*/
+        }
     });
     return value;
 }

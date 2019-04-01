@@ -170,7 +170,10 @@ class FileImporter extends Component {
                     </div>
                     <div className="mb-4">
                         <ButtonGroup>
-                            <Button primary onClick={() => {
+                            <Button onClick={() => {this.setState({upload_status: true});}}>Upload new CSV</Button>
+                            <Button
+                                primary={mapped !== undefined && mapped['errorFlag']}
+                                onClick={() => {
                                 this.redirect('/panel/import/mapping', {
                                     field: this.state.response['field'],
                                     header: this.state.response['header'],
@@ -180,13 +183,53 @@ class FileImporter extends Component {
                             }}>
                                 {mapped !== undefined && mapped['errorFlag']? "Mapping" : "Edit Mapping"}
                             </Button>
-                            <Button onClick={() => {this.setState({upload_status: true});}}>Upload new CSV</Button>
+                            <Button
+                                primary
+                                onClick={this.importProduct}
+                                disabled={mapped !== undefined && mapped['errorFlag']}>
+                                Import
+                            </Button>
                         </ButtonGroup>
                     </div>
                 </Stack>
             </Card>
         }
     }
+
+    importProduct = () => {
+        let sendData = {
+            marketplace: 'fileimporter',
+        };
+        requests.getRequest('connector/product/import', sendData)
+            .then(data => {
+                if (data.success === true) {
+                    if (data.code === 'product_import_started' || data.code === 'import_started') {
+                        notify.info('Import process started. Check progress in activities section.');
+                        setTimeout(() => {
+                            this.redirect('/panel/queuedtasks');
+                        }, 1000);
+                    } else {
+                        notify.success(data.message);
+                    }
+                } else {
+                    if ( data.code === 'account_not_connected' ) {
+                        setTimeout(() => {
+                            this.redirect('/panel/accounts');
+                        }, 1000);
+                        notify.info('User Account Not Found. Please Connect The Account First.');
+                    }
+                    if ( data.code === 'already_in_progress' ) {
+                        setTimeout(() => {
+                            this.redirect('/panel/accounts');
+                        }, 1000);
+                        notify.info(data.message);
+                    } else {
+                        notify.error(data.message);
+                    }
+                }
+            });
+    };
+
     getBase64(file) {
         if(!isUndefined(file) ) {
             return new Promise((resolve, reject) => {
