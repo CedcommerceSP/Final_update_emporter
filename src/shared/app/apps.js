@@ -124,7 +124,8 @@ class AppsShared extends Component {
             || code === 'opensky'
             || code === 'oberlosupply'
             || code === 'ebay'
-            || code === 'google');
+            || code === 'google'
+            || code === 'fileimporter');
 
     };
     additionalInput = (code) => {

@@ -40,6 +40,7 @@ class Filter extends Component {
     componentWillReceiveProps(nextProps) {
         if ( nextProps.marketplace !== this.state.marketplace ) {
             this.setState({
+                marketplace:nextProps.marketplace,
                 columnFilterNameValue:{name:'',condition:'',value:'',special_case: "no"},
                 columnFilterNameArray:[],
                 columnFilterName: nextProps.columnFilterName,
@@ -59,7 +60,6 @@ class Filter extends Component {
         });
         return filter;
     };
-
 
     render() {
         return (
@@ -202,11 +202,11 @@ class Filter extends Component {
         });
         columnFilterNameArray.push(columnFilterNameValue);
         columnFilterNameValue = {name:'', condition:'', value:'', isInt: false,special_case:"no"};
-        this.props.handleFilterEvent(columnFilterNameArray);
         this.setState({
             columnFilterNameValue: columnFilterNameValue,
             columnFilterNameArray: columnFilterNameArray
         });
+        this.props.handleFilterEvent(columnFilterNameArray);
         this.togglePopover();
     };
 
