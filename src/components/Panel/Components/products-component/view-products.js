@@ -148,13 +148,16 @@ class ViewProducts extends Component {
                     type={"number"}
                     onChange={this.handleVariantsChange.bind(this,'quantity',e)}
                 />,
-                <TextField
-                    label={'Weight'}
-                    readOnly={false}
-                    disabled={this.editDisable}
-                    labelHidden={true}
-                    value={this.state.variants[e].weight}
-                    onChange={this.handleVariantsChange.bind(this,'weight',e)}/>
+                <Label id={"ddd11"}>
+                    {this.state.variants[e].weight}
+                </Label>
+                // <TextField
+                //     label={'Weight'}
+                //     readOnly={false}
+                //     disabled={this.editDisable}
+                //     labelHidden={true}
+                //     value={this.state.variants[e].weight}
+                //     onChange={this.handleVariantsChange.bind(this,'weight',e)}/>
                 ,
                 <div style={{minWidth:'80px'}}>
                     <Label id={"ddd"}>
@@ -216,7 +219,7 @@ class ViewProducts extends Component {
                                         {/*<h4><b>Description</b></h4>*/}
                                         <div id="editor">
                                             <Card sectioned>
-                                                <Scrollable shadow style={{ height: '300px' }} hint={false}>
+                                                <Scrollable shadow style={{ maxHeight: '300px' }} hint={false}>
                                                     <div dangerouslySetInnerHTML={{__html:this.state.products_top.description}}/>
                                                 </Scrollable>
                                             </Card>
@@ -328,8 +331,14 @@ class ViewProducts extends Component {
                         <div className="row">
                             {Object.keys(this.state.variantArrayDetails).map(e => {
                                 return <div className="col-12 col-sm-6 mb-4">
-                                    <b>{e}</b>:<br/>
-                                    {this.state.variantArrayDetails[e]}
+                                    { e === "main_image" ? <React.Fragment>
+                                            <b>{e}</b>:<br/>
+                                            <Thumbnail source={this.state.variantArrayDetails[e]} alt={""}/>
+                                        </React.Fragment> :
+                                        <React.Fragment>
+                                            <b>{e}</b>:<br/>
+                                            {this.state.variantArrayDetails[e]}
+                                        </React.Fragment>}
                                 </div>;
                             })}
                         </div>

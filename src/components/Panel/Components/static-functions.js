@@ -59,6 +59,7 @@ export function modifyAccountConnectedInfo(accounts) {
             case 'walmart_importer': title = 'Walmart'; break;
             case 'etsyimporter': title = 'Etsy'; break;
             case 'amazonaffiliate': title = 'Amazon Affiliate'; break;
+            case 'fileimporter': title = 'Csv'; break;
             default: title = e;
         }
         if ( e !== 'shopify' ) {
@@ -66,12 +67,7 @@ export function modifyAccountConnectedInfo(accounts) {
                 title: title,
                 code: e
             })
-        } /*else {
-            value.push({
-                title: 'CSV',
-                code: 'fileimporter'
-            })
-        }*/
+        }
     });
     return value;
 }
