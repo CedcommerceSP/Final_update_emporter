@@ -116,11 +116,38 @@ class PlanBody extends Component {
 
     handleCreditsChange(credits) {
         let creditCount = parseInt(credits);
+        let cost;
         if (isNaN(creditCount)) {
             creditCount = 0;
         }
+        cost = Math.round((creditCount * this.state.perProductCharge) * 100) / 100;
+        this.state.oneTimePaymentDetails.original_price = cost.toFixed(2);
+        if ( credits <= 300 ) {
+            this.state.oneTimePaymentDetails.discount_percentage = 0;
+        }else if ( credits <= 500 ) {
+            cost = cost - (cost*30)/100;
+            this.state.oneTimePaymentDetails.discount_percentage = 30;
+        }else if ( credits <= 600 ) {
+            cost = cost - (cost*40)/100;
+            this.state.oneTimePaymentDetails.discount_percentage = 40;
+        } else if ( credits <= 2000 ) {
+            cost = cost - (cost*50)/100;
+            this.state.oneTimePaymentDetails.discount_percentage = 50;
+        }  else if ( credits <= 3000 ) {
+            cost = cost - (cost*65)/100;
+            this.state.oneTimePaymentDetails.discount_percentage = 65;
+        }else if ( credits <= 5000 ) {
+            cost = cost - (cost*70)/100;
+            this.state.oneTimePaymentDetails.discount_percentage = 70;
+        }  else if ( credits <= 10000 ) {
+            cost = cost - (cost*75)/100;
+            this.state.oneTimePaymentDetails.discount_percentage = 75;
+        } else {
+            cost = cost - (cost*80)/100;
+            this.state.oneTimePaymentDetails.discount_percentage = 80;
+        }
         this.state.oneTimePaymentDetails.totalCredits = creditCount;
-        this.state.oneTimePaymentDetails.totalAmount = Math.round((creditCount * this.state.perProductCharge) * 100) / 100;
+        this.state.oneTimePaymentDetails.totalAmount = cost.toFixed(2);
         this.setState(this.state);
     }
 
@@ -221,12 +248,22 @@ class PlanBody extends Component {
                                                 <div className="mb-5 text-center">
                                                     <p className="price-tag">
                                                         <span className="price-tag_small">$</span>
+                                                        {
+                                                            this.state.oneTimePaymentDetails.original_price
+                                                            !== this.state.oneTimePaymentDetails.totalAmount
+                                                            && <span className="price-tag_small">
+                                                            <strike>{this.state.oneTimePaymentDetails.original_price}</strike>
+                                                        </span>
+                                                        }
                                                         {this.state.oneTimePaymentDetails.totalAmount}
                                                     </p>
                                                 </div>
                                                 <Label id="payable_amount">Payable Amount</Label>
                                                 <div>
                                                     <span style={{color:'#7d7d7d'}}><Label>( should be more than 0.5$ )</Label></span>
+                                                </div>
+                                                <div>
+                                                    <span style={{color:'#7d7d7d'}}><Label>( {this.state.oneTimePaymentDetails.discount_percentage} % )</Label></span>
                                                 </div>
                                             </div>
                                         </div>
