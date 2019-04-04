@@ -1,36 +1,33 @@
 // Import modules
-import React from 'react'
-import PropTypes from 'prop-types'
-import './css/toggles.css'
+import React from "react";
+import PropTypes from "prop-types";
+import "./css/toggles.css";
 
 class Toggles extends React.Component {
   constructor(props) {
-    super(props)
+    super(props);
 
-    this.handleToggleClick = this.handleToggleClick.bind(this)
+    this.handleToggleClick = this.handleToggleClick.bind(this);
   }
 
   handleToggleClick({ target }) {
-    const { handleColumnToggle } = this.props
-    handleColumnToggle(target.value)
+    const { handleColumnToggle } = this.props;
+    handleColumnToggle(target.value);
   }
 
   isColumnVisible(key) {
-    const { colProperties } = this.props
-    const thisColProps = colProperties[key]
-    return !thisColProps || !thisColProps.invisible
+    const { colProperties } = this.props;
+    const thisColProps = colProperties[key];
+    return !thisColProps || !thisColProps.invisible;
   }
 
   renderToggles() {
-    const { columns } = this.props
+    const { columns } = this.props;
     return columns.map(column => (
-      <span
-        className='rsdt rsdt-column-toggles toggle'
-        key={column.key}
-      >
+      <span className="rsdt rsdt-column-toggles toggle" key={column.key}>
         <label htmlFor={column.key}>
           <input
-            type='checkbox'
+            type="checkbox"
             id={column.key}
             value={column.key}
             name={column.title}
@@ -40,15 +37,13 @@ class Toggles extends React.Component {
           {column.title}
         </label>
       </span>
-    ))
+    ));
   }
 
   render() {
     return (
-      <div className='rsdt rsdt-column-toggles'>
-        {this.renderToggles()}
-      </div>
-    )
+      <div className="rsdt rsdt-column-toggles">{this.renderToggles()}</div>
+    );
   }
 }
 
@@ -56,7 +51,7 @@ class Toggles extends React.Component {
 Toggles.propTypes = {
   columns: PropTypes.array.isRequired,
   colProperties: PropTypes.object,
-  handleColumnToggle: PropTypes.func.isRequired,
-}
+  handleColumnToggle: PropTypes.func.isRequired
+};
 
-export default Toggles
+export default Toggles;

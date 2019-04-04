@@ -1,151 +1,169 @@
 // Import modules
-import flatten from 'flat'
-import capitalize from 'lodash/capitalize'
-import isString from 'lodash/isString'
-import camelCase from 'lodash/camelCase'
-import filter from 'lodash/filter'
-import forOwn from 'lodash/forOwn'
-import isEmpty from 'lodash/isEmpty'
-import isArray from 'lodash/isArray'
-import isPlainObject from 'lodash/isPlainObject'
-import sortBy from 'lodash/sortBy'
-import reverse from 'lodash/reverse'
+import flatten from "flat";
+import capitalize from "lodash/capitalize";
+import isString from "lodash/isString";
+import camelCase from "lodash/camelCase";
+import filter from "lodash/filter";
+import forOwn from "lodash/forOwn";
+import isEmpty from "lodash/isEmpty";
+import isArray from "lodash/isArray";
+import isPlainObject from "lodash/isPlainObject";
+import sortBy from "lodash/sortBy";
+import reverse from "lodash/reverse";
 
-import { isUndefined } from 'util';
+import { isUndefined } from "util";
 
-export function fetchData(data, key = 'data') {
+export function fetchData(data, key = "data") {
   return new Promise((resolve, reject) => {
     if (Array.isArray(data)) {
-      resolve(data)
-    } else if (typeof data === 'string') {
-      fetch(data).then((response) => {
-        if (response.ok || response.status === 200 || response.statusText === 'OK') {
-          return response.json()
-        }
-        reject(new Error(`${response.status} - ${response.statusText} - ${data}`))
-      }).then((json) => {
-        resolve(key ? json[key] : json)
-      }).catch(reason => reject(reason))
+      resolve(data);
+    } else if (typeof data === "string") {
+      fetch(data)
+        .then(response => {
+          if (
+            response.ok ||
+            response.status === 200 ||
+            response.statusText === "OK"
+          ) {
+            return response.json();
+          }
+          reject(
+            new Error(`${response.status} - ${response.statusText} - ${data}`)
+          );
+        })
+        .then(json => {
+          resolve(key ? json[key] : json);
+        })
+        .catch(reason => reject(reason));
     } else {
-      reject(new Error('data type is invalid'))
+      reject(new Error("data type is invalid"));
     }
-  })
+  });
 }
 
 export function capitalizeAll(arr) {
-  return arr.map(m => (m ? capitalize(m) : '')).join(' ').trim()
+  return arr
+    .map(m => (m ? capitalize(m) : ""))
+    .join(" ")
+    .trim();
 }
 
 export function parseHeader(val) {
   if (isString(val)) {
-    const toCamelCase = camelCase(val)
-    const parser = /^[a-z]+|[A-Z][a-z]*/g
-    return capitalizeAll(toCamelCase.match(parser))
+    const toCamelCase = camelCase(val);
+    const parser = /^[a-z]+|[A-Z][a-z]*/g;
+    return capitalizeAll(toCamelCase.match(parser));
   }
-  return ''
+  return "";
 }
 
 export function columnObject(key, columnTitles) {
   return {
     key,
-    title: isUndefined(columnTitles[key]) ? parseHeader(key) : columnTitles[key].title,
+    title: isUndefined(columnTitles[key])
+      ? parseHeader(key)
+      : columnTitles[key].title,
     visible: true,
-    sortable: isUndefined(columnTitles[key]) ? true : columnTitles[key].sortable,
-    type:isUndefined(columnTitles[key].type) ? 'string' : columnTitles[key].type,
-    filterable: true,
-  }
+    sortable: isUndefined(columnTitles[key])
+      ? true
+      : columnTitles[key].sortable,
+    type: isUndefined(columnTitles[key].type)
+      ? "string"
+      : columnTitles[key].type,
+    filterable: true
+  };
 }
 
 export function parseDataForColumns(_data, columnTitles) {
-  const columns = []
+  const columns = [];
   if (_data && isArray(_data) && !isEmpty(_data)) {
-    const data = _data.filter(row => !!row)
-    const firstElemnt = flatten(data[0])
+    const data = _data.filter(row => !!row);
+    const firstElemnt = flatten(data[0]);
     if (isPlainObject(firstElemnt)) {
       const keys = Object.keys(firstElemnt);
-      keys.forEach((key) => {
-        columns.push(columnObject(key, columnTitles))
-      })
+      keys.forEach(key => {
+        columns.push(columnObject(key, columnTitles));
+      });
     }
   }
-  return columns
+  return columns;
 }
 
 export function getColumnFilters(columns, columnFilters) {
-    for (let i = 0; i < columns.length; i++) {
-        if (isUndefined(columnFilters[columns[i].key])) {
-            columnFilters[columns[i].key] = {
-              operator: 1,
-              value: ''
-            };
-        }
+  for (let i = 0; i < columns.length; i++) {
+    if (isUndefined(columnFilters[columns[i].key])) {
+      columnFilters[columns[i].key] = {
+        operator: 1,
+        value: ""
+      };
     }
-    return columnFilters;
+  }
+  return columnFilters;
 }
 
 export function updateColumnVisibility(allColumns, visibleColumns) {
   for (let i = 0; i < allColumns.length; i++) {
     if (visibleColumns.indexOf(allColumns[i].key) === -1) {
-        allColumns[i].visible = false;
+      allColumns[i].visible = false;
     } else {
-        allColumns[i].visible = true;
+      allColumns[i].visible = true;
     }
   }
   return allColumns;
 }
 
 export function parseDataForRows(_data) {
-  let rows = []
+  let rows = [];
   if (_data && isArray(_data) && !isEmpty(_data)) {
-    const data = _data.filter(row => !!row)
-    rows = data.map(row => flatten(row))
+    const data = _data.filter(row => !!row);
+    rows = data.map(row => flatten(row));
   }
-  return rows
+  return rows;
 }
 
 export function parseCell(val) {
-  return val || JSON.stringify(val)
+  return val || JSON.stringify(val);
 }
 
 export function filterRowsByValue(value, rows) {
-  return filter(rows, (row) => {
-    const regex = new RegExp(`.*?${value}.*?`, 'i')
-    let hasMatch = false
-    forOwn(row, (val) => {
-      hasMatch = hasMatch || regex.test(val)
-    })
-    return hasMatch
-  })
+  return filter(rows, row => {
+    const regex = new RegExp(`.*?${value}.*?`, "i");
+    let hasMatch = false;
+    forOwn(row, val => {
+      hasMatch = hasMatch || regex.test(val);
+    });
+    return hasMatch;
+  });
 }
 
 export function filterRows(value, rows) {
   if (!value) {
-    return rows
+    return rows;
   }
-  return filterRowsByValue(value, rows)
+  return filterRowsByValue(value, rows);
 }
 
 export function sliceRowsPerPage(rows, currentPage, perPage) {
   if (perPage && perPage > 0) {
     // const numRows = rows.length
     // const numPages = Math.ceil(numRows / perPage)
-    const start = perPage * (currentPage - 1)
-    const end = perPage * currentPage
-    return rows.slice(start, end)
+    const start = perPage * (currentPage - 1);
+    const end = perPage * currentPage;
+    return rows.slice(start, end);
   }
-  return rows
+  return rows;
 }
 
 export function sortData(filterValue, sorting, data) {
-  let sortedRows = []
+  let sortedRows = [];
   if (sorting.dir) {
-    if (sorting.dir === 'ASC') {
-      sortedRows = sortBy(data, [sorting.key])
+    if (sorting.dir === "ASC") {
+      sortedRows = sortBy(data, [sorting.key]);
     } else {
-      sortedRows = reverse(sortBy(data, [sorting.key]))
+      sortedRows = reverse(sortBy(data, [sorting.key]));
     }
   } else {
-    sortedRows = data.slice(0)
+    sortedRows = data.slice(0);
   }
-  return filterRows(filterValue, sortedRows)
+  return filterRows(filterValue, sortedRows);
 }

@@ -1050,7 +1050,6 @@
   color: #5fd400;
 }
 
-
 .c100.polaris-green .bar,
 .c100.polaris-green .fill {
   border-color: #47c1bf !important;
@@ -1065,8 +1064,6 @@
 .c100.polaris-green.dark:hover > span {
   color: #80e6e5;
 }
-
-
 
 .c100.orange .bar,
 .c100.orange .fill {

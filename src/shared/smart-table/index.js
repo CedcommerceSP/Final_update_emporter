@@ -1,5 +1,5 @@
 // Main imports
-import SmartDataTable from './SmartDataTable'
+import SmartDataTable from "./SmartDataTable";
 
 // Main exports
-export default SmartDataTable
+export default SmartDataTable;
