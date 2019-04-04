@@ -263,7 +263,9 @@ class PlanBody extends Component {
                                                     <span style={{color:'#7d7d7d'}}><Label>( should be more than 0.5$ )</Label></span>
                                                 </div>
                                                 <div>
-                                                    <span style={{color:'#7d7d7d'}}><Label>( {this.state.oneTimePaymentDetails.discount_percentage} % )</Label></span>
+                                                    <span style={{color:'#7d7d7d'}}><Label>
+                                                        ( Discount {this.state.oneTimePaymentDetails.discount_percentage} % )
+                                                    </Label></span>
                                                 </div>
                                             </div>
                                         </div>
