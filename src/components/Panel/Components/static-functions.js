@@ -20,6 +20,10 @@ export function modifyName(string) {
 			return "Etsy";
 		case "amazonaffiliate":
 			return "Amazon Affiliate";
+		case "fileimporter":
+			return "Csv";
+		case "shopifydelete":
+			return "Deleted";
 		default:
 			return string;
 	}

@@ -1,5 +1,4 @@
 import React, { Component } from "react";
-import { NavLink } from "react-router-dom";
 import {
 	Button,
 	Card,
@@ -9,25 +8,17 @@ import {
 	Page,
 	Select,
 	TextField,
-	Modal,
 	Label,
-	Banner
 } from "@shopify/polaris";
 import { isUndefined } from "util";
 import { faCheck } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-
-import PlanBody from "../../../shared/plans/plan-body";
-import AppsShared from "../../../shared/app/apps";
-import InstallAppsShared from "../../../shared/app/install-apps";
-import ConfigShared from "../../../shared/config/config-shared";
 
 import { term_and_condition } from "./dashboard/term&condition";
 import AnalyticsReporting from "./products-component/analytics-reporting";
 
 import { requests } from "../../../services/request";
 import { notify } from "../../../services/notify";
-import { globalState } from "../../../services/globalstate";
 
 import { json } from "../../../environments/static-json";
 
@@ -68,22 +59,6 @@ class Dashboard extends Component {
 				error: false,
 				number_change: false
 			}, // step 1
-			plans: [], // step 2
-			/****** step 3 ********/
-			API_code: ["google"], // connector/get/installationForm, method -> get, eg: { code : 'google' }
-			account_linked: [], // merchant center account. linked type
-			modalOpen: false,
-			data3Check: {},
-			importerServices: [],
-			/********* Step 3 ends **********/
-			/*********** 4 ***************/
-			payment_show: false,
-			payment: {
-				message: "",
-				title: "",
-				body: ""
-			},
-			/*********** 4 ***************/
 			active_step: {
 				name: "", // anchor name
 				step: 0 // step number
@@ -91,11 +66,9 @@ class Dashboard extends Component {
 			welcome_screen: false,
 			stepData: [], // this will store the current showing step, which is selected from data object e.g Shopify_Google []
 			selected: "",
-			open_init_modal: true, // this is used to open modal one time when user visit dashboard
 			// stepStart:true,
 			data: {
 				data: [
-					//Shopify_Google old Name
 					{
 						message: <p>Enter Your Basic Information</p>, // step data
 						stepperMessage: "Basic Information", // stepper Small Message
@@ -116,37 +89,10 @@ class Dashboard extends Component {
 						anchor: "PRICING_GUIDE", // Which Function to call e.g : 'U-INFO' then call div which take User basic Information
 						stepperActive: false // used in stepper Check either Completed or not
 					} // step 2
-					// {
-					//     message: <p> Link your <b>Account</b></p>,
-					//     stepperMessage: 'Account linked',
-					//     API_endpoint: '', // Api End Point is used to check to send data or get data
-					//     data: '', // Data additional Field
-					//     method: 'GET', // Method Type
-					//     redirectTo: '/panel/accounts', // After Completion Where To Redirect
-					//     anchor: 'LINKED', // Which Function to call e.g : 'U-INFO' then call div which take User basic Information
-					//     stepperActive: false, // used in stepper Check either Completed or not
-					// }, // step 3
-					// {
-					//     message: <span>Enter default configurations</span>,
-					//     stepperMessage: 'Default Configurations',
-					//     API_endpoint: '', // Api End Point is used to check to send data or get data
-					//     data: <p>Now goto <NavLink  to="/panel/import">Upload Products</NavLink> section, first import products from shopify.  <br/>When import completed upload your products on google. </p>, // Data additional Field
-					//     method: 'GET', // Method Type
-					//     redirectTo: '/panel/configuration', // After Completion Where To Redirect
-					//     anchor: 'CONFIG', // Which Function to call e.g : 'U-INFO' then call div which take User basic Information
-					//     stepperActive: false, // used in stepper Check either Completed or not
-					// }, // step 4
 				]
 			}
 		};
 		this.checkStepCompleted = this.checkStepCompleted.bind(this);
-		this.handleModalChange = this.handleModalChange.bind(this);
-		this.paymentStatus = this.paymentStatus.bind(this);
-		this.checkPayment = this.checkPayment.bind(this);
-		this.checkLinkedAccount = this.checkLinkedAccount.bind(this);
-		this.openNewWindow = this.openNewWindow.bind(this);
-		this.redirectResult = this.redirectResult.bind(this);
-		this.checkConfig = this.checkConfig.bind(this);
 		this.autoFillDetails();
 	}
 
@@ -172,15 +118,6 @@ class Dashboard extends Component {
 		this.setState({ stepData: this.state.data.data });
 		this.checkStepCompleted();
 	}
-
-	handleChange = newValue => {
-		this.setState({
-			selected: newValue,
-			stepData: this.state.data[newValue],
-			open_init_modal: false
-		});
-		this.checkStepCompleted(newValue);
-	}; // This Function Used for dropdown Selection
 
 	checkStepCompleted() {
 		let path = "/App/User/Step";
@@ -264,7 +201,7 @@ class Dashboard extends Component {
 	} // change stage just pass the completed step here in arg
 
 	renderStepper() {
-		return null;
+		// return null;
 		let flag = 1;
 		return (
 			<div className="container">
@@ -298,15 +235,6 @@ class Dashboard extends Component {
 			</div>
 		);
 	}
-
-	handleModalChange(event) {
-		if (event === "init_modal") {
-			notify.info("Please Select A Integration First");
-		} else {
-			this.setState({ modalOpen: !this.state.modalOpen });
-		} // if he/she cancel or close the modal
-	} // all operation perform on modal of step 3 and step 2 (plan) and also responsible for not closing the init modal comes here
-
 	/********************************** MAIN BODY ***************************************/
 	renderBody() {
 		let flag = 1;
@@ -387,12 +315,6 @@ class Dashboard extends Component {
 					return this.renderGetUserInfo();
 				case "PRICING_GUIDE":
 					return this.renderPricingGuide();
-				case "PLANS":
-					return this.renderPlan();
-				case "LINKED":
-					return this.renderLinkedAccount();
-				case "CONFIG":
-					return this.renderConfig();
 				default:
 					console.log("This Is default");
 			}
@@ -419,7 +341,7 @@ class Dashboard extends Component {
 						otpCheck.number_change = false;
 						this.setState({ otpCheck: otpCheck });
 						notify.info(
-							"You will shortly recieve an OTP on your registered mobile number"
+							"You will shortly receive an OTP on your registered mobile number"
 						);
 					} else {
 						notify.error(data.message);
@@ -818,213 +740,22 @@ class Dashboard extends Component {
 	renderPricingGuide = () => {
 		return (
 			<React.Fragment>
+                <div className="p-5 mt-5 text-center">
+                    <Button onClick={this.handlePricingSubmit} primary>
+                        Continue
+                    </Button>
+                </div>
 				<div className="pt-5 pb-5">
 					<PricingGuide />
 				</div>
 				<div className="p-5 mt-5 text-center">
 					<Button onClick={this.handlePricingSubmit} primary>
-						Move To Next Step
+                        Continue
 					</Button>
 				</div>
 			</React.Fragment>
 		);
 	};
-
-	/****************************** step 2 Out Dated Plans Start Here *****************************/
-	checkPayment = () => {
-		requests.getRequest("plan/plan/getActive").then(status => {
-			if (status.success) {
-				notify.success("Your Plan is Activated");
-				try {
-					let tempPlan = [];
-					status.data.services.forEach(e => {
-						if (e.code === "amazonimporter")
-							tempPlan.push("amazonimporter", "amazon_importer");
-						if (e.code === "ebayimporter")
-							tempPlan.push("ebayimporter", "ebay_importer");
-					});
-					globalState.setLocalStorage("activePlan", JSON.stringify(tempPlan));
-				} catch (e) {}
-				this.changeStep(2);
-			} else {
-				notify.error("Kindly Buy A Plan First, Then Move To Next Step.");
-			}
-		});
-	};
-
-	paymentStatus(event) {
-		if (event === "Confirmation") {
-			// this.setState({modalOpen: !this.state.modalOpen});
-		} else if (event === "trial") {
-			requests.getRequest("amazonimporter/config/activateTrial").then(data => {
-				if (data.success) {
-					if (data.code === "UNDER_TRIAL") {
-						notify.success(data.message);
-					} else {
-						notify.info(data.message);
-					}
-				} else {
-					notify.error(data.message);
-				}
-			});
-		} else {
-			notify.info(event);
-			this.checkPayment();
-		}
-	}
-
-	renderPlan = () => {
-		if (localStorage.getItem("plan_status")) {
-			let data = JSON.parse(localStorage.getItem("plan_status"));
-			if (data.shop === globalState.getLocalStorage("shop")) {
-				if (!data.success) {
-					let temp = {
-						title: "Payment Status",
-						temp: data,
-						message: data.message,
-						body: (
-							<div className="text-left mt-5">
-								<h4>You Can uninstall:-</h4>
-								<ul>
-									<li>
-										<h5>Go to Apps Section from your Shopify dashboard</h5>
-									</li>
-									<li>
-										<h5>
-											You can Un-install the App by clicking the Bin Icon right
-											to App
-										</h5>
-									</li>
-								</ul>
-							</div>
-						)
-					};
-					this.setState({
-						payment_show: true,
-						payment: temp
-					});
-				} else {
-					this.checkPayment();
-				}
-				localStorage.removeItem("plan_status");
-			}
-		}
-		return (
-			<React.Fragment>
-				<Banner status="info">
-					<div className="row">
-						<div className="col-12 text-center">
-							<Label id={1324461}>
-								<h4>
-									Do you want to start your own Shopify store? We can guide you
-									through it.{" "}
-									<a
-										href="https://docs.google.com/forms/d/1YPIZ-S3Q_5EwjGWSpgScR-OU0R9YKQQDsdxSXIKPrO4/edit"
-										target="_blank"
-									>
-										Contact us!
-									</a>
-								</h4>
-							</Label>
-						</div>
-					</div>
-				</Banner>
-				<PlanBody paymentStatus={this.paymentStatus} />;
-				<div className="p-5 text-center">
-					<Button onClick={this.checkPayment} primary>
-						Move To Next Step
-					</Button>
-				</div>
-			</React.Fragment>
-		);
-	};
-
-	/**************************  Step 3 linked you account start Here  ******************/
-	checkLinkedAccount() {
-		if (this.state.importerServices.length > 0) {
-			requests
-				.postRequest("frontend/app/checkAccount", {
-					code: this.state.importerServices
-				})
-				.then(data => {
-					if (data.success) {
-						if (data.data.account_connected) {
-							notify.success("Account Connected Successfully");
-							this.changeStep(3);
-						} else {
-							notify.info("Please Connect Your Account First");
-						}
-					} else {
-						notify.error(data.message);
-					}
-				});
-		}
-	}
-
-	openNewWindow(code, val) {
-		this.setState({
-			modalOpen: !this.state.modalOpen,
-			code: code,
-			additional_data: val
-		});
-	} // Open Modal And A new Small Window For User
-
-	handleImporterService = arg => {
-		this.setState({ importerServices: arg });
-	};
-
-	renderLinkedAccount = () => {
-		return (
-			<div>
-				<AppsShared
-					history={this.props.history}
-					importerServices={this.handleImporterService}
-					redirectResult={this.redirectResult}
-					success={this.state.data3Check}
-				/>
-				<div className="p-5 text-center">
-					<Button onClick={this.checkLinkedAccount} primary>
-						Continue to next step
-					</Button>
-				</div>
-			</div>
-		);
-	};
-
-	redirectResult(code, val) {
-		if (isUndefined(val)) {
-			val = "";
-		}
-		this.openNewWindow(code, val);
-	} // used in step 3 to get child data and send back to new child
-
-	/********************** step 4 Configurations start here ****************************/
-	checkConfig(val) {
-		requests
-			.getRequest("frontend/app/checkDefaultConfiguration?code=" + val)
-			.then(data => {
-				if (data.success) {
-					if (data.data.configFilled) {
-						this.changeStep(4);
-					} else {
-						notify.info("Please Fill The Form");
-					}
-				} else {
-					notify.error(data.message);
-				}
-			});
-	}
-
-	renderConfig() {
-		return (
-			<React.Fragment>
-				<ConfigShared
-					history={this.props.history}
-					checkConfig={this.checkConfig}
-				/>
-			</React.Fragment>
-		);
-	}
 
 	/************************************  Render()   ***********************************/
 	render() {
@@ -1046,46 +777,7 @@ class Dashboard extends Component {
 					<React.Fragment>
 						<Card>{this.renderStepper()}</Card> {/* Stepper */}
 						{this.renderBody()} {/* Main Body Function Call Here */}
-						<Modal
-							open={this.state.modalOpen}
-							onClose={this.handleModalChange.bind(
-								this,
-								"no",
-								this.state.active_step
-							)}
-							title="Connect Account"
-						>
-							<Modal.Section>
-								<InstallAppsShared
-									history={this.props.history}
-									redirect={this.redirectResult}
-									code={this.state.code}
-									additional_data={this.state.additional_data}
-									success3={this.handleLinkedAccount}
-								/>
-							</Modal.Section>
-						</Modal>{" "}
 						{/* Open For Step 3 to see Connected Account */}
-						<Modal
-							title={this.state.payment.title}
-							open={this.state.payment_show}
-							onClose={() => {
-								this.setState({ payment_show: false });
-							}}
-							secondaryActions={{
-								content: "OK",
-								onClick: () => {
-									this.setState({ payment_show: false });
-								}
-							}}
-						>
-							<Modal.Section>
-								<div className="text-center">
-									<h3>{this.state.payment.message}</h3>
-									{this.state.payment.body}
-								</div>
-							</Modal.Section>
-						</Modal>
 					</React.Fragment>
 				) : (
 					<div>
@@ -1102,10 +794,6 @@ class Dashboard extends Component {
 			</Page>
 		);
 	}
-
-	handleLinkedAccount = event => {
-		this.setState({ data3Check: event });
-	};
 
 	redirect(url) {
 		this.props.history.push(url);

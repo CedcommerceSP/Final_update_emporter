@@ -13,43 +13,46 @@ export class Formbuilder extends Component {
 	constructor(props) {
 		super(props);
 		this.state = {
-			form: props.form
+			form: props.form,
+			updated: false,
+            sync: props.sync !== undefined? props.sync:false
 		};
 	}
 
 	render() {
 		return (
 			<div className="row">
-				{this.state.form.map(field => {
+				{this.state.form.map((field, index) => {
 					switch (field.type) {
 						case "textfield":
 							return (
 								<div
 									className="col-12 mt-1 mb-1"
-									key={this.state.form.indexOf(field)}
+									key={index}
 								>
 									<TextField
 										label={field.title}
 										value={field.value}
 										onChange={this.handleChange.bind(
 											this,
-											this.state.form.indexOf(field)
+											index
 										)}
-									/>
+									 readOnly={false}/>
 								</div>
 							);
 						case "select":
-							return (
+                            return (
 								<div
 									className="col-12 mt-1 mb-1"
-									key={this.state.form.indexOf(field)}
+									key={index}
 								>
 									<Select
 										label={field.title}
 										options={field.options}
+										disabled={this.state.sync && (field.code === 'auto_sync' || field.code === 'auto_sync_code')}
 										onChange={this.handleChange.bind(
 											this,
-											this.state.form.indexOf(field)
+											index
 										)}
 										value={field.value}
 									/>
@@ -59,7 +62,7 @@ export class Formbuilder extends Component {
 							return (
 								<div
 									className="col-12 mt-1 mb-1"
-									key={this.state.form.indexOf(field)}
+									key={index}
 								>
 									<Label>{field.title}</Label>
 									<div className="row">
@@ -74,7 +77,7 @@ export class Formbuilder extends Component {
 														label={option.label}
 														onChange={this.handleOptionsChange.bind(
 															this,
-															this.state.form.indexOf(field),
+															index,
 															field.options.indexOf(option)
 														)}
 													/>
@@ -88,7 +91,7 @@ export class Formbuilder extends Component {
 							return (
 								<div
 									className="col-12 mt-1 mb-1"
-									key={this.state.form.indexOf(field)}
+									key={index}
 								>
 									<Label>{field.title}</Label>
 									<div className="row">
@@ -105,7 +108,7 @@ export class Formbuilder extends Component {
 														name={option.key}
 														onChange={this.handleOptionsChange.bind(
 															this,
-															this.state.form.indexOf(field),
+															index,
 															field.options.indexOf(option)
 														)}
 													/>
@@ -122,6 +125,7 @@ export class Formbuilder extends Component {
 						onClick={() => {
 							this.submitForm();
 						}}
+						disabled={!this.state.updated}
 						primary
 					>
 						Save
@@ -138,18 +142,26 @@ export class Formbuilder extends Component {
 	}
 
 	submitForm() {
-		this.props.onSubmit(this.state);
+		let { form } = this.state;
+		let submitObj = {};
+		Object.keys(form).forEach(e => {
+            submitObj[form[e]['code']] = form[e]['value'];
+		});
+        this.setState({updated:false});
+		this.props.onSubmit(submitObj);
 	}
 
 	handleChange(fieldIndex, value) {
 		this.state.form[fieldIndex].value = value;
+		this.state.updated = true;
 		const state = this.state;
 		this.setState(state);
 	}
 
 	handleOptionsChange(fieldIndex, optionIndex, value) {
 		const keyValue = this.state.form[fieldIndex].options[optionIndex].value;
-		switch (this.state.form[fieldIndex].type) {
+        this.state.updated = true;
+        switch (this.state.form[fieldIndex].type) {
 			case "checkbox":
 				const keyIndex = this.state.form[fieldIndex].value.indexOf(keyValue);
 				if (value) {

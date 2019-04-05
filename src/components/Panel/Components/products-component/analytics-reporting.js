@@ -22,7 +22,7 @@ class AnalyticsReporting extends Component {
 	constructor(props) {
 		super(props);
 		this.state = {
-			selectedimporter: "bar",
+			selected_importer: "bar",
 			selecteduploader: "bar",
 			selecteduploadermarketplace: "",
 			importer: [],
@@ -38,14 +38,14 @@ class AnalyticsReporting extends Component {
 				title: "",
 				body: ""
 			},
-			yaxisimporter: [],
+			y_axis_importer: [],
 			uploaded_product: false,
 			imported_product: false,
 			activePlan: globalState.getLocalStorage("activePlan")
 				? JSON.parse(globalState.getLocalStorage("activePlan"))
 				: []
 		};
-		this.getallimporter();
+		this.getAllImporter();
 	}
 
 	componentDidUpdate() {
@@ -73,10 +73,10 @@ class AnalyticsReporting extends Component {
 		}
 	}
 
-	getallimporter() {
-		let importertitlearray = [];
+	getAllImporter() {
+		let importer_title = [];
 		let importer = {};
-		let importer_marketplacearray = [];
+		let importer_marketplace = [];
 		requests
 			.getRequest("connector/get/services?filters[type]=importer")
 			.then(data => {
@@ -84,55 +84,51 @@ class AnalyticsReporting extends Component {
 					importer = data.data;
 					Object.keys(importer).map(importerkey => {
 						if (validateImporter(importerkey)) {
-							importertitlearray.push(importer[importerkey]["title"]);
-							importer_marketplacearray.push(
-								importer[importerkey]["marketplace"]
-							);
+							importer_title.push(importer[importerkey]["title"]);
+							importer_marketplace.push(importer[importerkey]["marketplace"]);
 						}
 					});
-					this.get_y_axis_importer(
-						importer_marketplacearray,
-						importertitlearray,
+					this.getYAxisImporter(
+						importer_marketplace,
+						importer_title,
 						importer
 					);
-					this.get_y_axis_uploader(
-						importer_marketplacearray,
-						importertitlearray,
+					this.getYAxisUploader(
+						importer_marketplace,
+						importer_title,
 						importer
 					);
-					this.setState({ importer: importertitlearray });
+					this.setState({ importer: importer_title });
 				} else {
 					notify.error(data.message);
 				}
 			});
 	}
 
-	get_y_axis_importer(
+	getYAxisImporter(
 		importer_marketplace_array,
 		importer_title_array,
-		entiredata_importer
+		entire_data_importer
 	) {
 		let total_products_importer = [];
-		let importer_data_recieved = {};
+		let importer_data_rec = {};
 		requests
 			.postRequest("frontend/app/getImportedProductCount", {
 				importers: importer_marketplace_array
 			})
 			.then(data => {
 				if (data.success) {
-					importer_data_recieved = data.data;
-					Object.keys(importer_data_recieved).map(importer_recieved_mp => {
+					importer_data_rec = data.data;
+					Object.keys(importer_data_rec).map(importer_recieved_mp => {
 						for (let i = 0; i < importer_marketplace_array.length; i++) {
-							Object.keys(entiredata_importer).map(master_key => {
+							Object.keys(entire_data_importer).map(master_key => {
 								if (
-									importer_marketplace_array[i] ==
-										entiredata_importer[master_key]["marketplace"] &&
-									importer_title_array[i] ==
-										entiredata_importer[master_key]["title"] &&
-									importer_marketplace_array[i] == importer_recieved_mp
+									importer_marketplace_array[i] === entire_data_importer[master_key]["marketplace"] &&
+									importer_title_array[i] === entire_data_importer[master_key]["title"] &&
+									importer_marketplace_array[i] === importer_recieved_mp
 								) {
-									total_products_importer.push(
-										importer_data_recieved[importer_recieved_mp]
+                                    total_products_importer.push(
+										importer_data_rec[importer_recieved_mp]
 									);
 								}
 							});
@@ -140,7 +136,7 @@ class AnalyticsReporting extends Component {
 					});
 					total_products_importer.push(0);
 					this.setState({
-						yaxisimporter: total_products_importer
+						y_axis_importer: total_products_importer
 					});
 				} else {
 					notify.error(data.message);
@@ -148,7 +144,7 @@ class AnalyticsReporting extends Component {
 			});
 	}
 
-	get_y_axis_uploader(uploader_marketplce, title, data) {
+	getYAxisUploader(uploader_marketplce, title, data) {
 		let uploaderarray = [];
 		let uploader = [];
 		let show = false;
@@ -181,11 +177,11 @@ class AnalyticsReporting extends Component {
 			});
 	}
 
-	handleChangeimporter = newValue => {
-		this.setState({ selectedimporter: newValue });
+	handleChangeImporter = newValue => {
+		this.setState({ selected_importer: newValue });
 	};
 
-	handleChangeuploader = newValue => {
+	handleChangeUploader = newValue => {
 		this.setState({ selecteduploader: newValue });
 	};
 
@@ -232,12 +228,12 @@ class AnalyticsReporting extends Component {
 											<Select
 												label=""
 												options={options}
-												onChange={this.handleChangeimporter}
-												value={this.state.selectedimporter}
+												onChange={this.handleChangeImporter}
+												value={this.state.selected_importer}
 											/>
 										</div>
 									</div>
-									<div>{this.importerreports()}</div>
+									<div>{this.importerReports()}</div>
 								</div>
 							</Card>
 						</div>
@@ -265,14 +261,14 @@ class AnalyticsReporting extends Component {
 												<Select
 													label=""
 													options={options}
-													onChange={this.handleChangeuploader}
+													onChange={this.handleChangeUploader}
 													value={this.state.selecteduploader}
 												/>
 											</div>
 										</div>
 
 										<div className="row">
-											<div className="col-md-12">{this.uploaderreports()}</div>
+											<div className="col-md-12">{this.uploaderReports()}</div>
 										</div>
 									</div>
 								</Card>
@@ -284,7 +280,7 @@ class AnalyticsReporting extends Component {
 		);
 	}
 
-	importerreports() {
+	importerReports() {
 		const line = {
 			labels: this.state.importer,
 			datasets: [
@@ -307,7 +303,7 @@ class AnalyticsReporting extends Component {
 					pointHoverBorderWidth: 2,
 					pointRadius: 1,
 					pointHitRadius: 10,
-					data: this.state.yaxisimporter
+					data: this.state.y_axis_importer
 				}
 			]
 		};
@@ -315,7 +311,7 @@ class AnalyticsReporting extends Component {
 			labels: this.state.importer,
 			datasets: [
 				{
-					data: this.state.yaxisimporter,
+					data: this.state.y_axis_importer,
 					backgroundColor: [
 						"#5d8deb",
 						"#36A2EB",
@@ -397,12 +393,12 @@ class AnalyticsReporting extends Component {
 						"#9900cc",
 						"#a3c2c2"
 					],
-					data: this.state.yaxisimporter
+					data: this.state.y_axis_importer
 				}
 			]
 		};
 
-		switch (this.state.selectedimporter) {
+		switch (this.state.selected_importer) {
 			case "line":
 				return (
 					<Line
@@ -428,7 +424,7 @@ class AnalyticsReporting extends Component {
 		}
 	}
 
-	uploaderreports() {
+	uploaderReports() {
 		const line = {
 			labels: this.state.uploader,
 			datasets: [

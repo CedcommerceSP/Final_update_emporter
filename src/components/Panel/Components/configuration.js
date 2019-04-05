@@ -17,12 +17,12 @@ import { requests } from "../../../services/request";
 import { modifyOptionsData } from "./static-functions";
 
 import { isUndefined } from "util";
-import AmazonInstallationForm from "../../../shared/app/amazon-form";
+import {environment} from "../../../environments/environment";
+import { Formbuilder }  from '../../../shared/formbuilder';
 
 export class Configuration extends Component {
 	shopifyConfigurationData = [];
 	amazonImporterConfigurationData = [];
-	amazonAffiliateConfigurationData = [];
 	ebayConfigurationData = [];
 	etsyConfigurationData = [];
 
@@ -39,20 +39,11 @@ export class Configuration extends Component {
 			shopify_configuration: {},
 			show_shopify_child_component: {},
 			shopify_configuration_updated: false,
-			amazon_importer_configuration: {},
-			amazon_importer_configuration_updated: false,
-			amazon_affiliate_configuration: {},
-			amazon_affiliate_configuration_updated: false,
 			account_information_updated: false,
-			ebay_configuration: {},
-			ebay_configuration_updated: false,
-			show_ebay_child_component: {},
-			etsy_configuration_updated: false
 		};
 		this.getUserDetails();
 		this.getShopifyConfigurations();
 		this.getAmazonImporterConfigurations();
-		// this.getAmazonAffiliateConfigurations();
 		this.getEbayConfig();
 		this.getEtsyConfig();
 	}
@@ -92,23 +83,6 @@ export class Configuration extends Component {
 						data.data,
 						"amazon_importer_configuration"
 					);
-					this.updateState();
-				} else {
-					notify.error(data.message);
-				}
-			});
-	}
-
-	getAmazonAffiliateConfigurations() {
-		requests
-			.getRequest("connector/get/config", { marketplace: "amazonaffiliate" })
-			.then(data => {
-				if (data.success) {
-					this.amazonAffiliateConfigurationData = this.modifyConfigData(
-						data.data,
-						"amazon_affiliate_configuration"
-					);
-					console.log(this.amazonAffiliateConfigurationData);
 					this.updateState();
 				} else {
 					notify.error(data.message);
@@ -189,15 +163,15 @@ export class Configuration extends Component {
 					<Card>
 						<div className="row p-5">
 							<div className="col-12 pt-2 pb-2">
-								<Label>Username</Label>
-								<Label>{this.state.account_information.username}</Label>
+								<Label id={"dew"}>Username</Label>
+								<Label id={"ert"}>{this.state.account_information.username}</Label>
 							</div>
 							<div className="col-12 pt-2 pb-2">
 								<TextField
 									label="Email"
 									onChange={this.accountInfoChange.bind(this, "email")}
 									value={this.state.account_information.email}
-								/>
+								 readOnly={false}/>
 							</div>
 							{!isUndefined(this.state.account_information.full_name) && (
 								<div className="col-12 pt-2 pb-2">
@@ -205,13 +179,15 @@ export class Configuration extends Component {
 										label="Full name"
 										onChange={this.accountInfoChange.bind(this, "full_name")}
 										value={this.state.account_information.full_name}
-									/>
+									 readOnly={false}/>
 								</div>
 							)}
 							{!isUndefined(this.state.account_information.mobile) && (
 								<div className="col-12 pt-2 pb-2">
 									<TextField
 										label="Phone no."
+                                        disabled={true}
+                                        readOnly={false}
 										onChange={this.accountInfoChange.bind(this, "mobile")}
 										value={this.state.account_information.mobile}
 									/>
@@ -223,7 +199,7 @@ export class Configuration extends Component {
 										label="Skype ID"
 										onChange={this.accountInfoChange.bind(this, "skype_id")}
 										value={this.state.account_information.skype_id}
-									/>
+									 readOnly={false}/>
 								</div>
 							)}
 							<div className="col-12 text-right pt-2 pb-2">
@@ -244,7 +220,7 @@ export class Configuration extends Component {
 		);
 	}
 
-	renderShopifyConfigurationSection() {
+	renderShopifyConfigurationSection(sync) {
 		return (
 			<div className="row">
 				<div className="col-sm-4 col-12 text-md-left text-sm-left text-center">
@@ -268,6 +244,7 @@ export class Configuration extends Component {
 														options={config.options}
 														label={config.title}
 														placeholder={config.title}
+                                                        disabled={!sync && ( config.code === 'inventory_sync' || config.code === 'price_sync' )}
 														value={
 															this.state.shopify_configuration[config.code]
 														}
@@ -278,14 +255,13 @@ export class Configuration extends Component {
 													/>
 												</div>
 											);
-											break;
 										case "checkbox":
 											return (
 												<div
 													className="col-12 pt-2 pb-2"
 													key={this.shopifyConfigurationData.indexOf(config)}
 												>
-													<Label>{config.title}</Label>
+													<Label id={"sss"}>{config.title}</Label>
 													<div className="row">
 														{config.options.map(option => {
 															return (
@@ -314,7 +290,6 @@ export class Configuration extends Component {
 													</div>
 												</div>
 											);
-											break;
 										default:
 											return (
 												<div
@@ -331,10 +306,9 @@ export class Configuration extends Component {
 															this,
 															this.shopifyConfigurationData.indexOf(config)
 														)}
-													/>
+													 readOnly={false}/>
 												</div>
 											);
-											break;
 									}
 							})}
 							<div className="col-12 text-right pt-2 pb-1">
@@ -355,7 +329,7 @@ export class Configuration extends Component {
 		);
 	}
 
-	renderAmazonImporterConfigurationSection() {
+	renderAmazonImporterConfigurationSection(sync) {
 		return (
 			<div className="row">
 				<div className="col-sm-4 col-12 text-md-left text-sm-left text-center">
@@ -363,117 +337,30 @@ export class Configuration extends Component {
 				</div>
 				<div className="col-sm-8 col-12">
 					<Card>
-						<div className="row p-5">
-							{this.amazonImporterConfigurationData.map(config => {
-								switch (config.type) {
-									case "select":
-										return (
-											<div
-												className="col-12 pt-2 pb-2"
-												key={this.amazonImporterConfigurationData.indexOf(
-													config
-												)}
-											>
-												<Select
-													options={config.options}
-													label={config.title}
-													placeholder={config.title}
-													value={
-														this.state.amazon_importer_configuration[
-															config.code
-														]
-													}
-													onChange={this.amazonImporterConfigurationChange.bind(
-														this,
-														this.amazonImporterConfigurationData.indexOf(config)
-													)}
-												/>
-											</div>
-										);
-										break;
-									case "checkbox":
-										return (
-											<div
-												className="col-12 pt-2 pb-2"
-												key={this.amazonImporterConfigurationData.indexOf(
-													config
-												)}
-											>
-												<Label>{config.title}</Label>
-												<div className="row">
-													{config.options.map(option => {
-														return (
-															<div
-																className="col-md-6 col-sm-6 col-12 p-1"
-																key={config.options.indexOf(option)}
-															>
-																<Checkbox
-																	checked={
-																		this.state.amazon_importer_configuration[
-																			config.code
-																		].indexOf(option.value) !== -1
-																	}
-																	label={option.label}
-																	onChange={this.amazonImporterConfigurationCheckboxChange.bind(
-																		this,
-																		this.amazonImporterConfigurationData.indexOf(
-																			config
-																		),
-																		config.options.indexOf(option)
-																	)}
-																/>
-															</div>
-														);
-													})}
-												</div>
-											</div>
-										);
-										break;
-									default:
-										return (
-											<div
-												className="col-12 pt-2 pb-2"
-												key={this.amazonImporterConfigurationData.indexOf(
-													config
-												)}
-											>
-												<TextField
-													label={config.title}
-													placeholder={config.title}
-													value={
-														this.state.amazon_importer_configuration[
-															config.code
-														]
-													}
-													onChange={this.amazonImporterConfigurationChange.bind(
-														this,
-														this.amazonImporterConfigurationData.indexOf(config)
-													)}
-												/>
-											</div>
-										);
-										break;
-								}
-							})}
-							<div className="col-12 text-right pt-2 pb-1">
-								<Button
-									disabled={!this.state.amazon_importer_configuration_updated}
-									onClick={() => {
-										this.saveAmazonImporterConfigData();
-									}}
-									primary
-								>
-									Save
-								</Button>
-							</div>
-						</div>
+                        <div className="p-5">
+                            <Formbuilder
+                                form={this.amazonImporterConfigurationData}
+                                sync={sync}
+                                onSubmit={this.onSubmit.bind(this,'amazonimporter')}/>
+                        </div>
 					</Card>
 				</div>
 			</div>
 		);
 	}
 
-	renderEbayConfig() {
+    onSubmit = (marketplace,data) => {
+	    switch (marketplace) {
+            case 'ebayimporter': this.saveEbayConfigData(data);break;
+            case 'etsyimporter': this.saveEtsyConfigData(data);break;
+            case 'amazonimporter': this.saveAmazonImporterConfigData(data);break;
+            case 'walmartimporter':console.log("Walmart");break;
+            default:
+                console.log("Wrong Choice");
+        }
+    };
+
+	renderEbayConfig(sync) {
 		return (
 			<div className="row">
 				<div className="col-sm-4 col-12 text-md-left text-sm-left text-center">
@@ -481,96 +368,11 @@ export class Configuration extends Component {
 				</div>
 				<div className="col-sm-8 col-12">
 					<Card>
-						<div className="row p-5">
-							{this.ebayConfigurationData.map(config => {
-								if (!this.state.show_ebay_child_component[config["is_child"]])
-									switch (config.type) {
-										case "select":
-											return (
-												<div
-													className="col-12 pt-2 pb-2"
-													key={this.ebayConfigurationData.indexOf(config)}
-												>
-													<Select
-														options={config.options}
-														label={config.title}
-														placeholder={config.title}
-														value={this.state.ebay_configuration[config.code]}
-														onChange={this.ebayConfigurationChange.bind(
-															this,
-															this.ebayConfigurationData.indexOf(config)
-														)}
-													/>
-												</div>
-											);
-											break;
-										case "checkbox":
-											return (
-												<div
-													className="col-12 pt-2 pb-2"
-													key={this.ebayConfigurationData.indexOf(config)}
-												>
-													<Label>{config.title}</Label>
-													<div className="row">
-														{config.options.map(option => {
-															return (
-																<div
-																	className="col-md-6 col-sm-6 col-12 p-1"
-																	key={config.options.indexOf(option)}
-																>
-																	<Checkbox
-																		checked={
-																			this.state.ebay_configuration[
-																				config.code
-																			].indexOf(option.value) !== -1
-																		}
-																		label={option.label}
-																		onChange={this.ebayConfigurationCheckboxChange.bind(
-																			this,
-																			this.ebayConfigurationData.indexOf(
-																				config
-																			),
-																			config.options.indexOf(option)
-																		)}
-																	/>
-																</div>
-															);
-														})}
-													</div>
-												</div>
-											);
-											break;
-										default:
-											return (
-												<div
-													className="col-12 pt-2 pb-2"
-													key={this.ebayConfigurationData.indexOf(config)}
-												>
-													<TextField
-														label={config.title}
-														placeholder={config.title}
-														value={this.state.ebay_configuration[config.code]}
-														onChange={this.ebayConfigurationChange.bind(
-															this,
-															this.ebayConfigurationData.indexOf(config)
-														)}
-													/>
-												</div>
-											);
-											break;
-									}
-							})}
-							<div className="col-12 text-right pt-2 pb-1">
-								<Button
-									disabled={!this.state.ebay_configuration_updated}
-									onClick={() => {
-										this.saveEbayConfigData();
-									}}
-									primary
-								>
-									Save
-								</Button>
-							</div>
+						<div className="p-5">
+                            <Formbuilder
+                                form={this.ebayConfigurationData}
+                                sync={sync}
+                                onSubmit={this.onSubmit.bind(this,'ebayimporter')}/>
 						</div>
 					</Card>
 				</div>
@@ -578,7 +380,7 @@ export class Configuration extends Component {
 		);
 	}
 
-	renderEtsyConfig() {
+	renderEtsyConfig(sync) {
 		return (
 			<div className="row">
 				<div className="col-sm-4 col-12 text-md-left text-sm-left text-center">
@@ -586,217 +388,12 @@ export class Configuration extends Component {
 				</div>
 				<div className="col-sm-8 col-12">
 					<Card>
-						<div className="row p-5">
-							{this.etsyConfigurationData.map(config => {
-								switch (config.type) {
-									case "select":
-										return (
-											<div
-												className="col-12 pt-2 pb-2"
-												key={this.etsyConfigurationData.indexOf(config)}
-											>
-												<Select
-													options={config.options}
-													label={config.title}
-													placeholder={config.title}
-													value={this.state.etsy_configuration[config.code]}
-													onChange={this.etsyConfigurationChange.bind(
-														this,
-														this.etsyConfigurationData.indexOf(config)
-													)}
-												/>
-											</div>
-										);
-										break;
-									case "checkbox":
-										return (
-											<div
-												className="col-12 pt-2 pb-2"
-												key={this.etsyConfigurationData.indexOf(config)}
-											>
-												<Label>{config.title}</Label>
-												<div className="row">
-													{config.options.map(option => {
-														return (
-															<div
-																className="col-md-6 col-sm-6 col-12 p-1"
-																key={config.options.indexOf(option)}
-															>
-																<Checkbox
-																	checked={
-																		this.state.etsy_configuration[
-																			config.code
-																		].indexOf(option.value) !== -1
-																	}
-																	label={option.label}
-																	onChange={this.etsyConfigurationCheckboxChange.bind(
-																		this,
-																		this.etsyConfigurationData.indexOf(config),
-																		config.options.indexOf(option)
-																	)}
-																/>
-															</div>
-														);
-													})}
-												</div>
-											</div>
-										);
-										break;
-									default:
-										return (
-											<div
-												className="col-12 pt-2 pb-2"
-												key={this.etsyConfigurationData.indexOf(config)}
-											>
-												<TextField
-													label={config.title}
-													placeholder={config.title}
-													value={this.state.etsy_configuration[config.code]}
-													onChange={this.etsyConfigurationChange.bind(
-														this,
-														this.etsyConfigurationData.indexOf(config)
-													)}
-												/>
-											</div>
-										);
-										break;
-								}
-							})}
-							<div className="col-12 text-right pt-2 pb-1">
-								<Button
-									disabled={!this.state.etsy_configuration_updated}
-									onClick={() => {
-										this.saveEtsyConfigData();
-									}}
-									primary
-								>
-									Save
-								</Button>
-							</div>
-						</div>
-					</Card>
-				</div>
-			</div>
-		);
-	}
-
-	renderAmazonAffiliateConfigurationSection() {
-		return (
-			<div className="row">
-				<div className="col-sm-4 col-12 text-md-left text-sm-left text-center">
-					<Heading>Amazon Affiliate Configuration</Heading>
-				</div>
-				<div className="col-sm-8 col-12">
-					<Card>
-						<div className="row p-5">
-							{this.amazonAffiliateConfigurationData.map(config => {
-								switch (config.type) {
-									case "select":
-										return (
-											<div
-												className="col-12 pt-2 pb-2"
-												key={this.amazonAffiliateConfigurationData.indexOf(
-													config
-												)}
-											>
-												<Select
-													options={config.options}
-													label={config.title}
-													placeholder={config.title}
-													value={
-														this.state.amazon_affiliate_configuration[
-															config.code
-														]
-													}
-													onChange={this.amazonAffiliateConfigurationChange.bind(
-														this,
-														this.amazonAffiliateConfigurationData.indexOf(
-															config
-														)
-													)}
-												/>
-											</div>
-										);
-										break;
-									case "checkbox":
-										return (
-											<div
-												className="col-12 pt-2 pb-2"
-												key={this.amazonAffiliateConfigurationData.indexOf(
-													config
-												)}
-											>
-												<Label>{config.title}</Label>
-												<div className="row">
-													{config.options.map(option => {
-														return (
-															<div
-																className="col-md-6 col-sm-6 col-12 p-1"
-																key={config.options.indexOf(option)}
-															>
-																<Checkbox
-																	checked={
-																		this.state.amazon_affiliate_configuration[
-																			config.code
-																		].indexOf(option.value) !== -1
-																	}
-																	label={option.label}
-																	onChange={this.amazonAffiliateConfigurationCheckboxChange.bind(
-																		this,
-																		this.amazonAffiliateConfigurationData.indexOf(
-																			config
-																		),
-																		config.options.indexOf(option)
-																	)}
-																/>
-															</div>
-														);
-													})}
-												</div>
-											</div>
-										);
-										break;
-									default:
-										return (
-											<div
-												className="col-12 pt-2 pb-2"
-												key={this.amazonAffiliateConfigurationData.indexOf(
-													config
-												)}
-											>
-												<TextField
-													label={config.title}
-													type={config.type === "int" ? "number" : ""}
-													placeholder={config.title}
-													value={
-														this.state.amazon_affiliate_configuration[
-															config.code
-														]
-													}
-													onChange={this.amazonAffiliateConfigurationChange.bind(
-														this,
-														this.amazonAffiliateConfigurationData.indexOf(
-															config
-														)
-													)}
-												/>
-											</div>
-										);
-										break;
-								}
-							})}
-							<div className="col-12 text-right pt-2 pb-1">
-								<Button
-									disabled={!this.state.amazon_affiliate_configuration_updated}
-									onClick={() => {
-										this.saveAmazonAffiliateConfigData();
-									}}
-									primary
-								>
-									Save
-								</Button>
-							</div>
-						</div>
+                        <div className="p-5">
+                            <Formbuilder
+                                form={this.etsyConfigurationData}
+                                sync={sync}
+                                onSubmit={this.onSubmit.bind(this,'etsyimporter')}/>
+                        </div>
 					</Card>
 				</div>
 			</div>
@@ -807,11 +404,10 @@ export class Configuration extends Component {
 		let accounts = [];
 		let sync = false;
 		if (
-			this.state.necessaryInfo !== undefined &&
-			this.state.necessaryInfo.sync != undefined
+			this.state.necessaryInfo !== undefined && ( this.state.necessaryInfo.sync !== undefined || !environment.isLive )
 		) {
 			accounts = this.state.necessaryInfo.account_connected_array;
-			if (Object.keys(this.state.necessaryInfo.sync).length > 0) sync = true;
+			if (!environment.isLive || Object.keys(this.state.necessaryInfo.sync).length > 0) sync = true;
 		}
 		return (
 			<Page title="Configuration">
@@ -820,74 +416,37 @@ export class Configuration extends Component {
 						{this.renderUserConfigurationSection()}
 					</Layout.Section>
 					<Layout.Section>
-						{this.renderShopifyConfigurationSection()}
+						{this.renderShopifyConfigurationSection(sync)}
 					</Layout.Section>
 					<Layout.Section>
-						{sync &&
-						accounts !== undefined &&
+						{accounts !== undefined &&
 						accounts.indexOf("ebayimporter") !== -1
-							? this.renderEbayConfig()
+							? this.renderEbayConfig(!sync)
 							: null}
 					</Layout.Section>
 					<Layout.Section>
-						{sync &&
-						accounts !== undefined &&
+						{accounts !== undefined &&
 						accounts.indexOf("etsyimporter") !== -1
-							? this.renderEtsyConfig()
+							? this.renderEtsyConfig(!sync)
 							: null}
 					</Layout.Section>
 					<Layout.Section>
-						{sync &&
-						accounts !== undefined &&
+						{accounts !== undefined &&
 						accounts.indexOf("amazonimporter") !== -1
-							? this.renderAmazonImporterConfigurationSection()
+							? this.renderAmazonImporterConfigurationSection(!sync)
 							: null}
 					</Layout.Section>
-					{/*<Layout.Section>*/}
-					{/*{accounts !== undefined && accounts.indexOf('amazonaffiliate') !== -1 ? this.renderAmazonAffiliateConfigurationSection():null}*/}
-					{/*</Layout.Section>*/}
 				</Layout>
 			</Page>
 		);
 	}
 
-	amazonImporterConfigurationChange(index, value) {
-		this.state.amazon_importer_configuration_updated = true;
-		this.state.amazon_importer_configuration[
-			this.amazonImporterConfigurationData[index].code
-		] = value;
-		this.updateState();
-	}
 
-	amazonImporterConfigurationCheckboxChange(index, optionIndex, value) {
-		this.state.amazon_importer_configuration_updated = true;
-		const option = this.amazonImporterConfigurationData[index].options[
-			optionIndex
-		].value;
-		const valueIndex = this.state.amazon_importer_configuration[
-			this.amazonImporterConfigurationData[index].code
-		].indexOf(option);
-		if (value) {
-			if (valueIndex === -1) {
-				this.state.amazon_importer_configuration[
-					this.amazonImporterConfigurationData[index].code
-				].push(option);
-			}
-		} else {
-			if (valueIndex !== -1) {
-				this.state.amazon_importer_configuration[
-					this.amazonImporterConfigurationData[index].code
-				].splice(valueIndex, 1);
-			}
-		}
-		this.updateState();
-	}
-
-	saveAmazonImporterConfigData() {
+	saveAmazonImporterConfigData(amazon_importer_configuration) {
 		requests
 			.postRequest("connector/get/saveConfig", {
 				marketplace: "amazonimporter",
-				data: this.state.amazon_importer_configuration
+				data: amazon_importer_configuration
 			})
 			.then(data => {
 				if (data.success) {
@@ -896,54 +455,6 @@ export class Configuration extends Component {
 					notify.error(data.message);
 				}
 				this.getAmazonImporterConfigurations();
-			});
-	}
-
-	amazonAffiliateConfigurationChange(index, value) {
-		this.state.amazon_affiliate_configuration_updated = true;
-		this.state.amazon_affiliate_configuration[
-			this.amazonAffiliateConfigurationData[index].code
-		] = value;
-		this.updateState();
-	}
-
-	amazonAffiliateConfigurationCheckboxChange(index, optionIndex, value) {
-		this.state.amazon_affiliate_configuration_updated = true;
-		const option = this.amazonAffiliateConfigurationData[index].options[
-			optionIndex
-		].value;
-		const valueIndex = this.state.amazon_affiliate_configuration[
-			this.amazonAffiliateConfigurationData[index].code
-		].indexOf(option);
-		if (value) {
-			if (valueIndex === -1) {
-				this.state.amazon_affiliate_configuration[
-					this.amazonAffiliateConfigurationData[index].code
-				].push(option);
-			}
-		} else {
-			if (valueIndex !== -1) {
-				this.state.amazon_affiliate_configuration[
-					this.amazonAffiliateConfigurationData[index].code
-				].splice(valueIndex, 1);
-			}
-		}
-		this.updateState();
-	}
-
-	saveAmazonAffiliateConfigData() {
-		requests
-			.postRequest("connector/get/saveConfig", {
-				marketplace: "amazonaffiliate",
-				data: this.state.amazon_affiliate_configuration
-			})
-			.then(data => {
-				if (data.success) {
-					notify.success(data.message);
-				} else {
-					notify.error(data.message);
-				}
-				this.getAmazonAffiliateConfigurations();
 			});
 	}
 
@@ -998,77 +509,11 @@ export class Configuration extends Component {
 			});
 	}
 
-	ebayConfigurationChange(index, value) {
-		if (value === "disable" || value === "enable") {
-			this.state.show_ebay_child_component["sync_field"] = value !== "enable";
-		}
-		this.state.ebay_configuration_updated = true;
-		this.state.ebay_configuration[
-			this.ebayConfigurationData[index].code
-		] = value;
-		this.updateState();
-	}
-
-	ebayConfigurationCheckboxChange(index, optionIndex, value) {
-		this.state.ebay_configuration_updated = true;
-		const option = this.ebayConfigurationData[index].options[optionIndex].value;
-		const valueIndex = this.state.ebay_configuration[
-			this.ebayConfigurationData[index].code
-		].indexOf(option);
-		if (value) {
-			if (valueIndex === -1) {
-				this.state.ebay_configuration[
-					this.ebayConfigurationData[index].code
-				].push(option);
-			}
-		} else {
-			if (valueIndex !== -1) {
-				this.state.ebay_configuration[
-					this.ebayConfigurationData[index].code
-				].splice(valueIndex, 1);
-			}
-		}
-		this.updateState();
-	}
-
-	etsyConfigurationChange(index, value) {
-		if (value === "disable" || value === "enable") {
-			this.state.show_etsy_child_component["sync_field"] = value !== "enable";
-		}
-		this.state.etsy_configuration_updated = true;
-		this.state.etsy_configuration[
-			this.etsyConfigurationData[index].code
-		] = value;
-		this.updateState();
-	}
-
-	etsyConfigurationCheckboxChange(index, optionIndex, value) {
-		this.state.etsy_configuration_updated = true;
-		const option = this.etsyConfigurationData[index].options[optionIndex].value;
-		const valueIndex = this.state.etsy_configuration[
-			this.etsyConfigurationData[index].code
-		].indexOf(option);
-		if (value) {
-			if (valueIndex === -1) {
-				this.state.etsy_configuration[
-					this.etsyConfigurationData[index].code
-				].push(option);
-			}
-		} else {
-			if (valueIndex !== -1) {
-				this.state.etsy_configuration[
-					this.etsyConfigurationData[index].code
-				].splice(valueIndex, 1);
-			}
-		}
-		this.updateState();
-	}
-
-	saveEbayConfigData() {
-		requests
+	saveEbayConfigData(ebay_configuration) {
+        requests
 			.postRequest("connector/get/saveConfig", {
 				marketplace: "ebayimporter",
-				data: this.state.ebay_configuration
+				data: ebay_configuration
 			})
 			.then(data => {
 				if (data.success) {
@@ -1081,11 +526,11 @@ export class Configuration extends Component {
 			});
 	}
 
-	saveEtsyConfigData() {
+	saveEtsyConfigData(etsy_configuration) {
 		requests
 			.postRequest("connector/get/saveConfig", {
 				marketplace: "etsyimporter",
-				data: this.state.etsy_configuration
+				data: etsy_configuration
 			})
 			.then(data => {
 				if (data.success) {
