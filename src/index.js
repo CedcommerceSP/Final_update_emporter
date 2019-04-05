@@ -15,12 +15,12 @@ import { ToastContainer } from "react-toastify";
 import registerServiceWorker from "./registerServiceWorker";
 
 ReactDOM.render(
-  <div style={{ height: "100%" }}>
-    <BrowserRouter basename="/importer/app">
-      <App />
-    </BrowserRouter>
-    <ToastContainer />
-  </div>,
-  document.getElementById("root")
+	<div style={{ height: "100%" }}>
+		<BrowserRouter basename="/importer/app">
+			<App />
+		</BrowserRouter>
+		<ToastContainer />
+	</div>,
+	document.getElementById("root")
 );
 registerServiceWorker();
