@@ -90,7 +90,7 @@ class MessageShow extends Component {
 		}
 	}
 	redirect(url) {
-		this.props.history.push(url);
+		// this.props.history.push(url);
 	}
 	handle = () => {
 		window.open(

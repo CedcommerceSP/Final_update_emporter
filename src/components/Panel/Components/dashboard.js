@@ -154,7 +154,7 @@ class Dashboard extends Component {
 				} else {
 					if (data.code === "under_maintenance") {
 						this.redirect(
-							"/show/message?success=sucess&message=" +
+							"/show/message?success=success&message=" +
 								data.message +
 								"&icon=faToolbox"
 						);

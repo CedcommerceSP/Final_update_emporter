@@ -184,6 +184,7 @@ class PlanBody extends Component {
 			const paymentData = {
 				connectors: "shopify",
 				total_credits: this.state.oneTimePaymentDetails.totalCredits,
+				total_amount: this.state.oneTimePaymentDetails.totalAmount,
 				services: [this.state.oneTimePaymentDetails.service]
 			};
 			let win = window.open(
