@@ -171,7 +171,8 @@ export class Configuration extends Component {
 									label="Email"
 									onChange={this.accountInfoChange.bind(this, "email")}
 									value={this.state.account_information.email}
-								 readOnly={false}/>
+								 	readOnly={false}
+								/>
 							</div>
 							{!isUndefined(this.state.account_information.full_name) && (
 								<div className="col-12 pt-2 pb-2">
@@ -179,7 +180,7 @@ export class Configuration extends Component {
 										label="Full name"
 										onChange={this.accountInfoChange.bind(this, "full_name")}
 										value={this.state.account_information.full_name}
-									 readOnly={false}/>
+									 	readOnly={false}/>
 								</div>
 							)}
 							{!isUndefined(this.state.account_information.mobile) && (
