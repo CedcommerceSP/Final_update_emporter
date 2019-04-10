@@ -3,10 +3,13 @@ import {
 	Card,
 	Select,
 	Page,
+    Banner,
+    Label,
 	TextStyle,
 	Stack,
 	Button,
 	Tag,
+    TextField,
 	Scrollable,
 	Modal
 } from "@shopify/polaris";
@@ -23,6 +26,7 @@ import { notify } from "../../../../services/notify";
 import { requests } from "../../../../services/request";
 
 class FileMapping extends Component {
+
 	constructor(props) {
 		super(props);
 		this.state = {
@@ -279,8 +283,6 @@ class FileMapping extends Component {
 					options={[
 						{ label: "Bonanza", value: "bonanza" },
 						{ label: "Morecommerce", value: "morecommerce" },
-						{ label: "Shopify", value: "shopify" },
-						{ label: "Wish", value: "wish" },
 						{ label: "Default", value: "default" }
 					]}
 					value={this.state.marketPlace}
@@ -288,7 +290,8 @@ class FileMapping extends Component {
 						this.setState({ marketPlace: e });
 					}}
 				/>
-				<Button primary>Need Help?</Button>
+				<Button onClick={() => {
+                    this.setState({needHelpModal:true});}} primary>Need Help?</Button>
 				<Button
 					primary
 					onClick={() => {
@@ -359,6 +362,7 @@ class FileMapping extends Component {
 						</Card>
 					</Modal.Section>
 				</Modal>
+                <NeedHelp needHelpModal={this.state.needHelpModal}/>
 			</Page>
 		);
 	}
@@ -518,6 +522,70 @@ class FileMapping extends Component {
 	redirect(url) {
 		this.props.history.push(url);
 	}
+}
+
+class NeedHelp extends Component{
+    constructor(props) {
+        super(props);
+        this.state = {
+            needHelpModal:props.needHelpModal
+        };
+    }
+
+    componentWillReceiveProps(nextprops) {
+        if (this.state.needHelpModal !== nextprops.needHelpModal  ) {
+            this.setState({
+                needHelpModal:nextprops.needHelpModal,
+                marketplace:'',
+                message:'',
+            });
+        }
+    }
+
+    render() {
+        return <Modal
+            title={"Need help"}
+            open={this.state.needHelpModal}
+            onClose={() => {
+                this.setState({needHelpModal:false});}}>
+            <Modal.Section>
+                <Banner title="Note" icon="notification" status="info">
+                    <Label>
+                        One of are support team will contact you within 24 hr.
+                    </Label>
+                </Banner>
+                <TextField label={"MarketPlace"}/>
+                <TextField label={"Message"}/>
+                <Stack>
+                    <Button>
+                        Cancel
+                    </Button>
+                    <Button onClick={this.needHelp} primary>
+                        Submit
+                    </Button>
+                </Stack>
+            </Modal.Section>
+        </Modal>
+    }
+
+    needHelp = () => {
+        if ( this.state.marketPlace === "" || this.state.message === ""  ) {
+            notify.info("Validation Error: Field's can not be null.");
+            return true;
+        }
+        let sendData = {
+            marketPlace:this.state.marketPlace,
+            message: this.state.message
+        };
+        requests.postRequest('fileimporter/request/needHelp',sendData).then(e => {
+           if ( e.success ) {
+               notify.success(e.message);
+           }  else {
+               notify.error(e.message);
+           }
+        });
+    };
+
 }
 
 export default FileMapping;

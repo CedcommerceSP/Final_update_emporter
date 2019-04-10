@@ -9,7 +9,8 @@ import {
 	Button,
 	TextField,
 	Checkbox,
-	Layout
+	Layout,
+    Banner
 } from "@shopify/polaris";
 
 import { notify } from "../../../services/notify";
@@ -414,6 +415,14 @@ export class Configuration extends Component {
 			<Page title="Configuration">
 				<Layout>
 					<Layout.Section>
+						{ !sync && <Banner title="Note" status="info" icon="notification">
+                            <Label id={123}>
+                                If you want to sync your products inventory or price kindly go for the recurring
+								<span style={{color:"blue", cursor:"pointer"}} onClick={this.redirect.bind(this,'/panel/plans')}> plan</span>.
+                            </Label>
+                        </Banner> }
+					</Layout.Section>
+					<Layout.Section>
 						{this.renderUserConfigurationSection()}
 					</Layout.Section>
 					<Layout.Section>
@@ -441,7 +450,6 @@ export class Configuration extends Component {
 			</Page>
 		);
 	}
-
 
 	saveAmazonImporterConfigData(amazon_importer_configuration) {
 		requests

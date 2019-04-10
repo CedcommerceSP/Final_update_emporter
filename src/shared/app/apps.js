@@ -84,7 +84,7 @@ class AppsShared extends Component {
 								<Card title={app.title}>
 									<div className="row p-5">
 										<div className="col-12">
-											<img src={app.image} alt={app.title} height={"160px"} />
+											<img src={app.image} alt={app.title} style={{maxWidth:"100%", height:"160px"}} />
 										</div>
 										<div className="col-12 mt-4 mb-4">
 											<div className="row">
@@ -161,14 +161,13 @@ class AppsShared extends Component {
 		);
 	}
 	validateCode = code => {
-		return !(
-			code === "shopifygql" ||
-			code === "shopify" ||
-			code === "opensky" ||
-			code === "oberlosupply" ||
-			code === "ebay" ||
-			code === "google" ||
-			code === "fileimporter"
+		return (
+			code === "amazonimporter" ||
+			code === "ebayimporter" ||
+			code === "walmartimporter" ||
+			code === "wishimporter" ||
+			code === "etsyimporter" ||
+			code === "amazonaffiliate"
 		);
 	};
 	additionalInput = code => {
@@ -201,7 +200,8 @@ class AppsShared extends Component {
 					onChange={this.handleChange.bind(this, "etsy")}
 					placeholder={"Etsy Shop Name"}
 					labelHidden={true}
-				/>
+				    readOnly={false}
+                />
 			);
 		}
 		return null;

@@ -34,7 +34,7 @@ class ViewProducts extends Component {
 		this.state = {
 			id: props.match.params.id,
 			open: 1,
-			openvariantDetail: false,
+			openVariantDetail: false,
 			variantArrayDetails: [],
 			img: [],
 			buttonDisable: {
@@ -146,7 +146,7 @@ class ViewProducts extends Component {
 					style={{ cursor: "pointer" }}
 					onClick={() => {
 						this.setState({
-							openvariantDetail: true,
+							openVariantDetail: true,
 							variantArrayDetails: variant[e]
 						});
 					}}
@@ -292,6 +292,9 @@ class ViewProducts extends Component {
 															}}
 														/>
 													</Scrollable>
+													<p style={{color:"#c7c7c7"}}>
+														Description string count : {this.state.products_top.description.length}
+													</p>
 												</Card>
 												{/*<Editor*/}
 												{/*editorState={this.state.editorState}*/}
@@ -439,9 +442,9 @@ class ViewProducts extends Component {
 				</Card>
 				<Modal
 					title={"Details"}
-					open={this.state.openvariantDetail}
+					open={this.state.openVariantDetail}
 					onClose={() => {
-						this.setState({ openvariantDetail: false });
+						this.setState({ openVariantDetail: false });
 					}}
 				>
 					<Modal.Section>
