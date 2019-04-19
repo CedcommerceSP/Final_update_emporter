@@ -136,9 +136,7 @@ export class QueuedTask extends Component {
 											View Report
 										</a>
 									) : (
-										<a href={"https://www.google.com/"} target={"_blank"}>
-											View Report
-										</a>
+										null
 									)}
 									<Label id={123}>
 										{this.manageTheCreatedAtTime(activity.created_at)}

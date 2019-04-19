@@ -98,15 +98,15 @@ class FileMapping extends Component {
 							</div>
 							<div className="col-1 text-center">
 								{this.state.mappedObject[e.value] === undefined ||
-								this.state.mappedObject[e.value].length <= 0 ? (
+								this.state.mappedObject[e.value].length <= 0 ?
 									<FontAwesomeIcon
 										icon={faExclamation}
 										size="1x"
 										color="#FF7D4D"
 									/>
-								) : (
+								 :
 									<FontAwesomeIcon icon={faCheck} size="1x" color="#4fdc35" />
-								)}
+								}
 							</div>
 						</div>
 					</Card>
@@ -228,8 +228,7 @@ class FileMapping extends Component {
 								{this.state.mappedObject[arg.value] !== undefined &&
 									Object.keys(this.state.mappedObject[arg.value]).map(
 										(eve, index) => (
-											<Tag
-												key={index}
+											<Tag key={index}
 												onRemove={this.removeMultiSelected.bind(
 													this,
 													arg.value,
@@ -273,6 +272,10 @@ class FileMapping extends Component {
 		}
 	};
 
+	handleNeedHelpModal = () => {
+        this.setState({needHelpModal:!this.state.needHelpModal});
+	};
+
 	render() {
 		let { container_field } = this.state;
 		let buttons = (
@@ -291,7 +294,8 @@ class FileMapping extends Component {
 					}}
 				/>
 				<Button onClick={() => {
-                    this.setState({needHelpModal:true});}} primary>Need Help?</Button>
+                    this.setState({needHelpModal:true});
+				}} primary>Need Help?</Button>
 				<Button
 					primary
 					onClick={() => {
@@ -362,7 +366,7 @@ class FileMapping extends Component {
 						</Card>
 					</Modal.Section>
 				</Modal>
-                <NeedHelp needHelpModal={this.state.needHelpModal}/>
+                <NeedHelp needHelpModal={this.state.needHelpModal} handleNeedHelpModal={this.handleNeedHelpModal}/>
 			</Page>
 		);
 	}
@@ -536,11 +540,15 @@ class NeedHelp extends Component{
         if (this.state.needHelpModal !== nextprops.needHelpModal  ) {
             this.setState({
                 needHelpModal:nextprops.needHelpModal,
-                marketplace:'',
+                marketPlace:'',
                 message:'',
             });
         }
     }
+
+    closeModal() {
+    	this.props.handleNeedHelpModal();
+	}
 
     render() {
         return <Modal
@@ -548,25 +556,35 @@ class NeedHelp extends Component{
             open={this.state.needHelpModal}
             onClose={() => {
                 this.setState({needHelpModal:false});}}>
-            <Modal.Section>
+            <Card
+				secondaryFooterAction={{content:"cancel", onClick:() => {this.closeModal()}}}
+				sectioned
+				  primaryFooterAction={{content:"Submit", onClick:() => {this.needHelp()}}}>
                 <Banner title="Note" icon="notification" status="info">
-                    <Label>
+                    <Label id="123">
                         One of are support team will contact you within 24 hr.
                     </Label>
                 </Banner>
-                <TextField label={"MarketPlace"}/>
-                <TextField label={"Message"}/>
-                <Stack>
-                    <Button>
-                        Cancel
-                    </Button>
-                    <Button onClick={this.needHelp} primary>
-                        Submit
-                    </Button>
-                </Stack>
-            </Modal.Section>
+                <TextField
+                    label={"MarketPlace"}
+                    onChange={(e) => this.handleChange('marketPlace', e)}
+                    value={this.state['marketPlace']}
+                    readOnly={false}/>
+                <TextField
+                    label={"Message"}
+                    onChange={(e) => this.handleChange('message', e)}
+                    readOnly={false}
+                    value={this.state['message']}
+                />
+			</Card>
         </Modal>
     }
+
+    handleChange = ( key, value ) => {
+        this.setState({
+			[key]:value
+		});
+	};
 
     needHelp = () => {
         if ( this.state.marketPlace === "" || this.state.message === ""  ) {
@@ -577,13 +595,15 @@ class NeedHelp extends Component{
             marketPlace:this.state.marketPlace,
             message: this.state.message
         };
-        requests.postRequest('fileimporter/request/needHelp',sendData).then(e => {
-           if ( e.success ) {
-               notify.success(e.message);
-           }  else {
-               notify.error(e.message);
-           }
-        });
+        console.log(sendData);
+        // requests.postRequest('fileimporter/request/needHelp',sendData).then(e => {
+        //    if ( e.success ) {
+        //        notify.success(e.message);
+        //    }  else {
+        //        notify.error(e.message);
+        //    }
+        //    this.closeModal();
+        // });
     };
 
 }
