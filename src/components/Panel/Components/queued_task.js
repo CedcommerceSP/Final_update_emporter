@@ -1,5 +1,4 @@
 import React, { Component } from "react";
-import { isUndefined } from "util";
 
 import {
 	Page,
@@ -10,13 +9,16 @@ import {
 	ProgressBar,
 	Label,
 	Banner,
-	Modal
+	Modal,
+	Stack,
+	FormLayout
 } from "@shopify/polaris";
 
 import { requests } from "../../../services/request";
 import { notify } from "../../../services/notify";
 
 import "./circle.css";
+import {environment} from "../../../environments/environment";
 let intervalRunning;
 export class QueuedTask extends Component {
 	constructor(props) {
@@ -75,15 +77,6 @@ export class QueuedTask extends Component {
 					this.state.totalRecentActivities = data.data.count;
 					this.updateState();
 				}
-				// if ( !isUndefined(data.data.rows[1]['message']) && this.state.isAlreadyActive) {
-				//     if ( data.data.rows[1]['message'] === 'You can upload upto 50 products on Shopify during your trial period' ) {
-				//         // this.redirect('/panel/plans');
-				//         this.setState({
-				//             isAlreadyActive: false,
-				//             modalOpen: true,
-				//         });
-				//     }
-				// }
 			});
 	}
 	handleClearAllActivity = () => {
@@ -95,116 +88,125 @@ export class QueuedTask extends Component {
 			}
 		});
 	};
+
+    manageTheCreatedAtTime(time) {
+        // create Date object for current location
+        let offsetTime = -4;
+
+        if ( !environment.isLive ) {
+            offsetTime = 5.5;
+		}
+
+        let serverTimeThen = new Date(time);
+        let localTimeNow = new Date();
+        // convert to msec
+        // add local time zone offset
+        // get UTC time in msec
+        let localUTC = localTimeNow.getTime() + (localTimeNow.getTimezoneOffset() * 60000);
+        // create new Date object for different city
+        // using supplied offset
+        let serverTimeNow = new Date(localUTC + (3600000*(offsetTime)));
+        if ( serverTimeThen.getMonth() === serverTimeNow.getMonth()
+			&&  serverTimeThen.getDate() ===  serverTimeNow.getDate()
+			&& serverTimeThen.getHours() ===  serverTimeNow.getHours()
+			&& serverTimeThen.getMinutes() ===  serverTimeNow.getMinutes()
+		) {
+        	let SecRem = serverTimeThen.getSeconds() -  serverTimeNow.getSeconds();
+        	if ( SecRem < 20 ) return 'Just Now';
+        	let minRem = serverTimeThen.getMinutes() - serverTimeNow.getMinutes();
+            return minRem > 0 ? minRem + ' min ago' : SecRem > 0 ? SecRem + ' sec ago' : time;
+		}
+        return time;
+    }
+
 	render() {
 		return (
 			<Page title="Queued Tasks">
-				<div className="row p-sm-5 p-0">
-					<div className="col-12">
-						<Card>
-							<Card title="Recent Activities">
-								<div className="row p-5">
-									<div className="col-12 p-5">
-										{this.state.recentActivities.map(activity => {
-											return (
-												<Banner
-													status={activity.severity}
-													key={this.state.recentActivities.indexOf(activity)}
-												>
-													<div className="row">
-														<div className="col-12">
-															<Label>{activity.message}</Label>
-														</div>
-														<div className="col-6 pt-2">
-															{activity.url !== null ? (
-																<a href={activity.url} target={"_blank"}>
-																	View Report
-																</a>
-															) : (
-																""
-															)}
-														</div>
-														<div className="col-6 text-right pt-2">
-															<p>{activity.created_at}</p>
-														</div>
-													</div>
-												</Banner>
-											);
-										})}
-										{this.state.recentActivities.length === 0 && (
-											<Banner status="info">
-												<Label>No Recent Activities</Label>
-											</Banner>
-										)}
-									</div>
-									{this.state.totalRecentActivities > 3 && (
-										<div className="col-12 pb-0 pl-5 pr-5 pt-5 text-right">
-											<span className="pr-4">
-												<Button onClick={this.handleClearAllActivity}>
-													Clear All Activities
-												</Button>
-											</span>
-											<Button
-												onClick={() => {
-													this.redirect("/panel/queuedtasks/activities");
-												}}
-												primary
-											>
-												View All Activities
-											</Button>
-										</div>
+				<Card title="Recent Activities" sectioned>
+					{this.state.recentActivities.map(activity => {
+						return (
+							<Banner
+								status={activity.severity}
+								title={activity.message}
+								key={this.state.recentActivities.indexOf(activity)}
+							>
+								<Stack distribution="trailing" spacing="extraLoose" alignment="center">
+									{activity.url !== null ? (
+										<a href={activity.url} target={"_blank"}>
+											View Report
+										</a>
+									) : (
+										<a href={"https://www.google.com/"} target={"_blank"}>
+											View Report
+										</a>
 									)}
-								</div>
-							</Card>
-						</Card>
-					</div>
-					<div className="col-12 mt-4">
-						<Card title="Currently Running Processes">
-							<div className="p-5">
-								{this.state.queuedTasks.length === 0 && (
-									<Banner status="info">
-										<Label>All Processes Completed</Label>
-									</Banner>
-								)}
-								{this.state.queuedTasks.length > 0 && (
-									<ResourceList
-										resourceName={{ singular: "customer", plural: "customers" }}
-										items={this.state.queuedTasks}
-										renderItem={item => {
-											const { id, message, progress } = item;
-											const progressClass =
-												"c100 p" + progress + " small polaris-green";
-											return (
-												<ResourceList.Item id={id} accessibilityLabel={message}>
-													<div className="row">
-														<div className="col-md-2 col-sm-2 col-12">
-															<div className={progressClass}>
-																<span>{progress}%</span>
-																<div className="slice">
-																	<div className="bar" />
-																	<div className="fill" />
-																</div>
-															</div>
-														</div>
-														<div className="col-md-10 col-sm-10 col-12">
-															<h5>
-																<TextStyle variation="strong">
-																	{message}
-																</TextStyle>
-															</h5>
-															<div>
-																<ProgressBar progress={progress} />
-															</div>
-														</div>
-													</div>
-												</ResourceList.Item>
-											);
-										}}
-									/>
-								)}
-							</div>
-						</Card>
-					</div>
-				</div>
+									<Label id={123}>
+										{this.manageTheCreatedAtTime(activity.created_at)}
+									</Label>
+								</Stack>
+							</Banner>
+						);
+					})}
+					{this.state.recentActivities.length === 0 && (
+						<Banner status="info">
+							<Label>No Recent Activities</Label>
+						</Banner>
+					)}
+					{this.state.totalRecentActivities > 3 && (
+						<div className="col-12 pb-0 pl-5 pr-5 pt-5 text-right">
+							<span className="pr-4">
+								<Button onClick={this.handleClearAllActivity}>
+									Clear All Activities
+								</Button>
+							</span>
+							<Button
+								onClick={() => {
+									this.redirect("/panel/queuedtasks/activities");
+								}}
+								primary
+							>
+								View All Activities
+							</Button>
+						</div>
+					)}
+				</Card>
+				<Card title="Currently Running Processes" sectioned>
+						{this.state.queuedTasks.length === 0 && (
+							<Banner status="info">
+								<Label>All Processes Completed</Label>
+							</Banner>
+						)}
+						{this.state.queuedTasks.length > 0 && (
+						<ResourceList
+							resourceName={{ singular: "customer", plural: "customers" }}
+							items={this.state.queuedTasks}
+							renderItem={item => {
+								const { id, message, progress } = item;
+								const progressClass =
+									"c100 p" + progress + " small polaris-green";
+								return (
+									<ResourceList.Item id={id} accessibilityLabel={message}>
+										<FormLayout>
+                                            <div className={progressClass}>
+                                                <span>{progress}%</span>
+                                                <div className="slice">
+                                                    <div className="bar" />
+                                                    <div className="fill" />
+                                                </div>
+                                            </div>
+                                            <Stack vertical distribution="fill">
+												<TextStyle variation="strong">
+													{message}
+												</TextStyle>
+												<ProgressBar progress={progress} />
+											</Stack>
+										</FormLayout>
+									</ResourceList.Item>
+								);
+							}}
+						/>
+					)}
+				</Card>
 				<Modal
 					onClose={() => {
 						this.setState({ modalOpen: false });
@@ -226,8 +228,7 @@ export class QueuedTask extends Component {
 				>
 					<Modal.Section>
 						<div className="text-center">
-							<Label>During Trial Period You Can Only Upload 50 Product.</Label>
-							{/*<Label>Buy A Plan?</Label>*/}
+							<Label>During Trial Period You Can Only Upload 10 Product.</Label>
 						</div>
 					</Modal.Section>
 				</Modal>
