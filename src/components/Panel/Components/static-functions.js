@@ -93,6 +93,9 @@ export function modifyAccountConnectedInfo(accounts) {
 			case "fileimporter":
 				title = "Csv";
 				break;
+			case "wishimporter":
+				title = "Wish";
+				break;
 			default:
 				title = e;
 		}
