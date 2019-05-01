@@ -18,6 +18,8 @@ export function modifyName(string) {
 			return "Walmart";
 		case "etsyimporter":
 			return "Etsy";
+		case "wishimporter":
+			return "Wish";
 		case "amazonaffiliate":
 			return "Amazon Affiliate";
 		case "fileimporter":

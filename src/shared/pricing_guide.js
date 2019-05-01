@@ -35,17 +35,17 @@ class PricingGuide extends Component {
 				</div>
 				<div className="p-5">
 					<Label id={"2"}>
-						<p className="mt-4">Say, you got 910 products to Import</p>
+						<p className="mt-4">Say, you got 310 products to Import</p>
 					</Label>
 					<Label id={"3"}>
 						<ul className="mt-4">
 							<li>10 products are free to check your listing.</li>
-							<li>Afterwards, pricing is 0.05 per product</li>
+							<li>Afterwards, pricing is 0.1 per product</li>
 							<li>So, one-time estimated charge will be :-</li>
 						</ul>
 					</Label>
 					<div className="text-center m-5">
-						<DisplayText size="medium">900*0.05 = $45</DisplayText>
+						<DisplayText size="medium">300*0.1 = $30</DisplayText>
 					</div>
 					<div className="m-sm-5 p-sm-5 m-0 p-0">
 						<img
@@ -96,17 +96,17 @@ class PricingGuide extends Component {
 				</div>
 				<div className="p-5">
 					<Label id={"2"}>
-						<p className="mt-4">Say, you got 910 products to Import</p>
+						<p className="mt-4">Say, you got 310 products to Import</p>
 					</Label>
 					<Label id={"3"}>
 						<ul className="mt-4">
 							<li>10 products are free to check your listing.</li>
-							<li>Afterwards, pricing is 0.05 per product</li>
+							<li>Afterwards, pricing is 0.1 per product</li>
 							<li>So, one-time estimated charge will be :-</li>
 						</ul>
 					</Label>
 					<div className="text-center m-5">
-						<DisplayText size="medium">900*0.05 = $45</DisplayText>
+						<DisplayText size="medium">300*0.1 = $30</DisplayText>
 					</div>
 					<div className="mt-5">
 						<TextStyle>

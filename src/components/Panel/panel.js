@@ -173,11 +173,19 @@ export class Panel extends Component {
 							<Route path="/panel/accounts/install" component={InstallApp} />
 							<Route path="/panel/accounts/success" component={AppInstalled} />
 							<Route exact path="/panel/import" component={Import} />
-							<Route
-								exact
-								path="/panel/import/mapping"
-								component={FileMapping}
-							/>
+                            <Route
+                                exact
+                                path="/panel/import/mapping"
+                                render={() => {
+                                    return (
+                                        <FileMapping
+                                            {...this.props}
+                                            getNecessaryInfo={this.getNecessaryInfo}
+                                            necessaryInfo={this.state.necessaryInfo}
+                                        />
+                                    );
+                                }}
+                            />
 							<Route exact path="/panel/profiling" component={Profiling} />
 							<Route
 								exact

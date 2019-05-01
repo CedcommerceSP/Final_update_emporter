@@ -317,9 +317,7 @@ export class Import extends Component {
 					data.code === "product_import_started" ||
 					data.code === "import_started"
 				) {
-					notify.info(
-						"Import process started. Check progress in activities section."
-					);
+					notify.info("Import process started. Check progress in activities section.");
 					setTimeout(() => {
 						this.redirect("/panel/queuedtasks");
 					}, 1000);
@@ -328,14 +326,9 @@ export class Import extends Component {
 				}
 			} else {
 				if (data.code === "account_not_connected") {
-					setTimeout(() => {
-						this.redirect("/panel/accounts");
-					}, 1000);
-					notify.info(
-						"User Account Not Found. Please Connect The Account First."
-					);
-				}
-				if (data.code === "already_in_progress") {
+					setTimeout(() => {this.redirect("/panel/accounts");}, 1000);
+					notify.info("User Account Not Found. Please Connect The Account First.");
+				} else if (data.code === "already_in_progress") {
 					setTimeout(() => {
 						this.redirect("/panel/accounts");
 					}, 1000);
@@ -723,7 +716,7 @@ export class Import extends Component {
 								this.setState({ openFileUpload: !this.state.openFileUpload });
 							}}
 						>
-							Have .CSV
+							CSV Import
 						</Button>
 						<Collapsible id={"ddd"} open={this.state.openFileUpload}>
 							<FileImporter {...this.props} />

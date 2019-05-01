@@ -500,6 +500,7 @@ class FileMapping extends Component {
 		requests.getRequest("connector/product/import", sendData).then(data => {
 			if (data.success === true) {
 				setTimeout(() => {
+                    this.props.getNecessaryInfo();
 					this.redirect("/panel/queuedtasks");
 				}, 1000);
 			} else {
@@ -595,15 +596,14 @@ class NeedHelp extends Component{
             marketPlace:this.state.marketPlace,
             message: this.state.message
         };
-        console.log(sendData);
-        // requests.postRequest('fileimporter/request/needHelp',sendData).then(e => {
-        //    if ( e.success ) {
-        //        notify.success(e.message);
-        //    }  else {
-        //        notify.error(e.message);
-        //    }
-        //    this.closeModal();
-        // });
+        requests.postRequest('fileimporter/request/needHelp',sendData).then(e => {
+           if ( e.success ) {
+               notify.success(e.message);
+           }  else {
+               notify.error(e.message);
+           }
+           this.closeModal();
+        });
     };
 
 }

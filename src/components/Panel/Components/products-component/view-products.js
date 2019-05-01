@@ -47,7 +47,7 @@ class ViewProducts extends Component {
 			imagePosition: 0,
 			products_top: {
 				title: "",
-				description: EditorState.createEmpty()
+				description: ''/*EditorState.createEmpty()*/
 			},
 			product_data: {
 				details: {},

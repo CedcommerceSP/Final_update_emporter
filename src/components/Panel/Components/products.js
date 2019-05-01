@@ -409,7 +409,6 @@ export class Products extends Component {
 					if (str !== undefined && this.checkImage(str)) {
 						str = data[i].variants[0]["main_image"];
 					} else if (
-						data[i]["source_marketplace"] === "ebayimporter" &&
 						typeof data[i]["details"]["additional_images"] === "object" &&
 						!isUndefined(data[i]["details"]["additional_images"][0])
 					) {
