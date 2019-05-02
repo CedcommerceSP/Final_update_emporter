@@ -329,7 +329,7 @@ class ViewProducts extends Component {
 								</div>
 							</Card>
 						</div>
-						{this.state.img.length > 0 && (
+						{this.state.img.length > 1 && (
 							<div className="col-12 mb-5">
 								<span>
 									<div className="row p-5 d-flex justify-content-center">
@@ -384,6 +384,62 @@ class ViewProducts extends Component {
 								</span>
 							</div>
 						)}
+                        {this.state.img.length == 1 && (
+							<div className="col-12 mb-5">
+								<span>
+									<div className="row p-5 d-flex justify-content-center">
+										<div className="col-12 col-sm-5">
+											<div className="pb-5 pr-5">
+												<Thumbnail
+													source={this.state.img[this.state.imagePosition]}
+													alt={""}
+													size={"extralarge"}
+												/>
+												<div className="text-center">
+													<p style={{ color: "#585858" }}>
+														({this.state.img.length} image)
+													</p>
+												</div>
+											</div>
+										</div>
+										<div className={"col-12"}>
+											<div className="row d-flex justify-content-center">
+												{this.state.img.map((e, i) => {
+                                                    if (
+                                                        this.state.imagePosition < i + 5 &&
+                                                        this.state.imagePosition > i - 5
+                                                    ) {
+                                                        return (
+															<div
+																key={i}
+																style={{ cursor: "pointer" }}
+																className="col-3 col-sm-1 mb-1"
+																onClick={this.handleImageChange.bind(this, i)}
+															>
+																<span>
+																	<Thumbnail source={e} alt={""} />
+																</span>
+                                                                {this.state.imagePosition === i ? (
+																	<div className="mt-1 bg-info p-1" />
+                                                                ) : (
+																	<div
+																		style={{ color: "#585858" }}
+																		className="text-center"
+																	>
+                                                                        {i + 1}
+																	</div>
+                                                                )}
+															</div>
+                                                        );
+                                                    }
+                                                })}
+											</div>
+										</div>
+									</div>
+								</span>
+							</div>
+                        )}
+
 						<div className="col-12 mb-5">
 							<Card>
 								<div className="pb-5">
