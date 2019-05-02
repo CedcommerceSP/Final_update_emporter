@@ -25,6 +25,7 @@ export class Configuration extends Component {
 	shopifyConfigurationData = [];
 	amazonImporterConfigurationData = [];
 	ebayConfigurationData = [];
+	wishConfigurationData = [];
 	etsyConfigurationData = [];
 
 	constructor(props) {
@@ -47,6 +48,7 @@ export class Configuration extends Component {
 		this.getAmazonImporterConfigurations();
 		this.getEbayConfig();
 		this.getEtsyConfig();
+		this.getWishConfig();
 	}
 
 	componentWillReceiveProps(nextPorps) {
@@ -99,6 +101,22 @@ export class Configuration extends Component {
 					this.ebayConfigurationData = this.modifyConfigData(
 						data.data,
 						"ebay_configuration"
+					);
+					this.updateState();
+				} else {
+					// notify.error(data.message);
+				}
+			});
+	}
+
+	getWishConfig() {
+		requests
+			.getRequest("connector/get/config", { marketplace: "wishimporter" })
+			.then(data => {
+				if (data.success) {
+					this.wishConfigurationData = this.modifyConfigData(
+						data.data,
+						"wish_configuration"
 					);
 					this.updateState();
 				} else {
@@ -356,6 +374,7 @@ export class Configuration extends Component {
             case 'ebayimporter': this.saveEbayConfigData(data);break;
             case 'etsyimporter': this.saveEtsyConfigData(data);break;
             case 'amazonimporter': this.saveAmazonImporterConfigData(data);break;
+            case 'wishimporter': this.saveWishImporterConfigData(data);break;
             case 'walmartimporter':console.log("Walmart");break;
             default:
                 console.log("Wrong Choice");
@@ -375,6 +394,26 @@ export class Configuration extends Component {
                                 form={this.ebayConfigurationData}
                                 sync={sync}
                                 onSubmit={this.onSubmit.bind(this,'ebayimporter')}/>
+						</div>
+					</Card>
+				</div>
+			</div>
+		);
+	}
+
+	renderWishConfig(sync) {
+		return (
+			<div className="row">
+				<div className="col-sm-4 col-12 text-md-left text-sm-left text-center">
+					<Heading>Wish Configuration</Heading>
+				</div>
+				<div className="col-sm-8 col-12">
+					<Card>
+						<div className="p-5">
+                            <Formbuilder
+                                form={this.wishConfigurationData}
+                                sync={sync}
+                                onSubmit={this.onSubmit.bind(this,'wishimporter')}/>
 						</div>
 					</Card>
 				</div>
@@ -446,6 +485,12 @@ export class Configuration extends Component {
 							? this.renderAmazonImporterConfigurationSection(!sync)
 							: null}
 					</Layout.Section>
+                    <Layout.Section>
+                        {accounts !== undefined &&
+                        accounts.indexOf("wishimporter") !== -1
+                            ? this.renderWishConfig(!sync)
+                            : null}
+                    </Layout.Section>
 				</Layout>
 			</Page>
 		);
@@ -464,6 +509,22 @@ export class Configuration extends Component {
 					notify.error(data.message);
 				}
 				this.getAmazonImporterConfigurations();
+			});
+	}
+
+    saveWishImporterConfigData(amazon_importer_configuration) {
+		requests
+			.postRequest("connector/get/saveConfig", {
+				marketplace: "wishimporter",
+				data: amazon_importer_configuration
+			})
+			.then(data => {
+				if (data.success) {
+					notify.success(data.message);
+				} else {
+					notify.error(data.message);
+				}
+				this.getWishConfig();
 			});
 	}
 
