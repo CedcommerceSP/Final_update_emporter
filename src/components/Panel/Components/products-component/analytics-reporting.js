@@ -57,11 +57,6 @@ class AnalyticsReporting extends Component {
 						title: "Status",
 						temp: data,
 						message: data.message,
-						body: (
-							<div className="text-center mt-5">
-								<h4>Congrats!</h4>
-							</div>
-						)
 					};
 					this.setState({
 						payment_show: true,
