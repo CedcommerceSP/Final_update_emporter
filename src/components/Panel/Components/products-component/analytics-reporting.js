@@ -110,7 +110,7 @@ class AnalyticsReporting extends Component {
 		requests
 			.postRequest("frontend/app/getImportedProductCount", {
 				importers: importer_marketplace_array
-			})
+			},false,true)
 			.then(data => {
 				if (data.success) {
 					importer_data_rec = data.data;

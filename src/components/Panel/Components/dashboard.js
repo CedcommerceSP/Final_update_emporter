@@ -15,7 +15,7 @@ import { faCheck } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 import { term_and_condition } from "./dashboard/term&condition";
-import AnalyticsReporting from "./products-component/analytics-reporting";
+import AnalyticsReporting from "./products-component/new-analytics-reporting";
 
 import { requests } from "../../../services/request";
 import { notify } from "../../../services/notify";
@@ -761,13 +761,14 @@ class Dashboard extends Component {
 	render() {
 		return (
 			<Page
+				fullWidth={true}
 				title={this.state.stepStart ? "Registration" : "Dashboard"}
-				primaryAction={{
+				/*primaryAction={{
 					content: "Pricing Guide",
 					onClick: () => {
 						this.redirect("/panel/dashboard/guide");
 					}
-				}}
+				}}*/
 			>
 				{this.state.welcome_screen ? (
 					<div>

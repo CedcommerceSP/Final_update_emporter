@@ -645,7 +645,7 @@ export class Import extends Component {
 					for (let i = 0; i < data.data.length; i++) {
 						this.profilesList.push({
 							label: data.data[i].name,
-							value: data.data[i].id
+							value: data.data[i].id.toString()
 						});
 					}
 					this.updateState();

@@ -1,9 +1,9 @@
 import React from "react";
 
 export function capitalizeWord(string) {
-	string = modifyName(string);
 	string = string.toLowerCase();
-	return string.charAt(0).toUpperCase() + string.slice(1);
+    string = modifyName(string);
+    return string.charAt(0).toUpperCase() + string.slice(1);
 }
 
 export function modifyName(string) {
@@ -24,7 +24,7 @@ export function modifyName(string) {
 			return "Amazon Affiliate";
 		case "fileimporter":
 			return "Csv";
-		case "shopifydelete":
+		case "shopify_delete":
 			return "Deleted";
 		default:
 			return string;
