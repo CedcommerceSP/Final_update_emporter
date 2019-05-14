@@ -66,6 +66,9 @@ class Demo_analytics_reporting extends Component {
             content_data:{
                 datanews:[],
                 datablog:[],
+                no_news_data:false,
+                no_blog_data:false,
+                doughnut_data:false,
             },
 
         }
@@ -79,6 +82,7 @@ class Demo_analytics_reporting extends Component {
         this.getActiveRecurrying();
         this.newsdatafrombackend();
         this.tableBlogData();
+        this.getOrderAnalytics();
     }
 
     getallNotifications() {
@@ -88,6 +92,42 @@ class Demo_analytics_reporting extends Component {
                 this.state.totalRecentActivities = response.data.count;
                 this.state.recentactivityskeleton = false
                 this.updateState();
+            }
+        })
+    }
+    getOrderAnalytics() {
+        requests.getRequest('frontend/app/getOrderAnalytics',undefined,false,true).then(response => {
+            if (response.success && (response.data.length > 0))
+            {
+
+                this.setState({
+                    data1: {
+                        labels: [],
+                        datasets: [{
+                            data: [response.data.fulfilled_orders, response.data.unfulfilled_orders, response.data.cancelled_orders],
+                            backgroundColor: this.state.backgroundColor,
+                            hoverBackgroundColor: this.state.hoverBackgroundColor,
+                        }],
+                        title: "Uploads",
+                    },
+                    no_getOrderAnalytics: false
+                })
+                this.state.skeleton[0]=false;
+                this.setState(
+                    this.state
+
+                )
+
+            }
+            else if (response.success && response.data.length < 0) {
+
+                this.setState({
+                    no_getOrderAnalytics: true
+                })
+            } else {
+                this.setState({
+                    no_getOrderAnalytics: true
+                })
             }
         })
     }
@@ -300,7 +340,7 @@ class Demo_analytics_reporting extends Component {
             });
     }
 
-    to_render_or_not() {
+/*    to_render_or_not() {
         const legend = {
             display: false,
         };
@@ -316,7 +356,7 @@ class Demo_analytics_reporting extends Component {
                 <Line data={this.state.graph_to_show} legend={legend}/>))
         }
 
-    }
+    }*/
 
     to_final_render_Doughnut() {
         const legendOpts = {
@@ -335,10 +375,10 @@ class Demo_analytics_reporting extends Component {
             let yourVariable = "data" + (i + 1);
             let title = this.state[yourVariable]
             if (temp_order && i == 0) {
-
+                    console.log("kakaka1");
                 arr.push(<div className="col-sm-12 col-md-12 col-lg-4" key={yourVariable}>
                         <Card
-                            title="Orders Details"
+                            title="Uploads"
                             sectioned
                             actions={{
                                 content: <Link><Icon source="help" color="inkLighter" backdrop={true}/></Link>,
@@ -357,9 +397,10 @@ class Demo_analytics_reporting extends Component {
                 continue;
             }
             else if (temp_products && i == 1) {
+                console.log("kakaka1");
                 arr.push(<div className=" col-sm-12 col-md-12 col-lg-4" key={yourVariable}>
                         <Card
-                            title="Products Details "
+                            title="Imported "
                             sectioned
                             actions={{
                                 content: <Link><Icon source="help" color="inkLighter" backdrop={true}/></Link>,
@@ -466,7 +507,7 @@ class Demo_analytics_reporting extends Component {
                 this.setState(this.state);
             }
             else {
-                console.log("error hai koi bhai");
+                console.log("news","error hai koi bhai");
             }
         })
     }
@@ -485,7 +526,7 @@ class Demo_analytics_reporting extends Component {
                 this.setState(this.state);
             }
             else {
-                console.log("error hai koi bhai");
+                console.log("blog","error hai koi bhai");
             }
         })
 
@@ -507,6 +548,13 @@ class Demo_analytics_reporting extends Component {
                         />)
                 }
             );
+            if (rows.length == 0){
+                console.log(rows.length);
+                this.state.content_data.no_news_data = true,
+                this.setState(this.state.content_data.no_news_data
+                    );
+                console.log(this.state.content_data.no_news_data);
+            }
         }
         for(let i = 0; i< this.state.content_data.datablog.length; i++) {
             rows_blog.push(
@@ -521,6 +569,13 @@ class Demo_analytics_reporting extends Component {
                         />)
                 }
             );
+            if (rows_blog.length == 0){
+                console.log(rows_blog.length);
+                this.state.content_data.no_blog_data = true,
+                    this.setState(this.state.content_data.no_blog_data
+                    );
+                console.log(this.state.content_data.no_blog_data);
+            }
 
         }
         return (
@@ -620,6 +675,7 @@ class Demo_analytics_reporting extends Component {
                     <Layout.Section oneThird>
                         <Card title="News">
                             <Card.Section>
+                                {this.state.content_data.no_news_data?
                                 <ResourceList
                                     items={rows}
                                     renderItem={(item) => {
@@ -639,13 +695,16 @@ class Demo_analytics_reporting extends Component {
                                             </ResourceList.Item></a>
                                         );
                                     }}
-                                />
+                                />:<Layout.Section>
+                                        <img className='img-fluid' src={require("../../../../assets/img/320x260.png")}/>
+                                    </Layout.Section>}
                             </Card.Section>
                         </Card>
                     </Layout.Section>
                     <Layout.Section oneThird>
                         <Card title="Blogs">
                             <Card.Section>
+                                {this.state.content_data.no_blog_data?
                                 <ResourceList
                                     items={rows_blog}
                                     renderItem={(item) => {
@@ -665,7 +724,9 @@ class Demo_analytics_reporting extends Component {
                                             </ResourceList.Item></a>
                                         );
                                     }}
-                                />
+                                />:<Layout.Section>
+                                        <img className='img-fluid' src={require("../../../../assets/img/320x260.png")}/>
+                                    </Layout.Section>}
                             </Card.Section>
                         </Card>
                     </Layout.Section>
