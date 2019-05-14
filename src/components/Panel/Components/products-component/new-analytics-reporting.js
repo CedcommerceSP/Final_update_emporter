@@ -45,8 +45,8 @@ class Demo_analytics_reporting extends Component {
             recurring_planskeleton: true,
             datewiseskeleton: true,
             recentactivityskeleton: true,
-            backgroundColor: ['#0b4044', '#47C1BF', '#B7ECEC', '#00ffff', '#0088ef', '#007575'],
-            hoverBackgroundColor: ['#0b4044', '#47C1BF', '#B7ECEC', '#00ffff', '#0088ef', '#007575'],
+            backgroundColor: ['#0b4044', '#47C1BF', '#ecb3be', '#00ffff', '#0088ef', '#007575'],
+            hoverBackgroundColor: ['#0b4044', '#47C1BF', '#ecb3be', '#00ffff', '#0088ef', '#007575'],
             data1: {datasets: [{data: [0, 0, 0],}], title: "Loading Details....."},
             data2: {datasets: [{data: [0, 0, 0],}], title: "Loading Details....."},
             data3: {datasets: [{data: [0, 0, 0],}], title: "Loading Details....."},
@@ -453,7 +453,7 @@ class Demo_analytics_reporting extends Component {
 
     newsdatafrombackend() {
         let temparr = [];
-        requests.getRequest('frontend/importer/test').then(data => {
+        requests.getRequest('frontend/importer/addNews').then(data => {
             if (data.success) {
                 for (let i = 0; i < data.data.length; i++) {
                     temparr.push({
@@ -472,7 +472,7 @@ class Demo_analytics_reporting extends Component {
     }
     tableBlogData(){
         let temparr=[];
-        requests.getRequest('frontend/importer/test1').then(data=>{
+        requests.getRequest('frontend/importer/addBlog').then(data=>{
             if (data.success) {
                 for (let i = 0; i < data.data.length; i++) {
                     temparr.push({
@@ -503,7 +503,7 @@ class Demo_analytics_reporting extends Component {
                     media: (
                         <Thumbnail
                             source={this.state.content_data.datanews[i]['label']['image_url']}
-                            alt="Google Express logo"
+                            alt="News Logo"
                         />)
                 }
             );
@@ -517,7 +517,7 @@ class Demo_analytics_reporting extends Component {
                     media: (
                         <Thumbnail
                             source={this.state.content_data.datablog[i]['label']['image_url']}
-                            alt="Google Express logo"
+                            alt="News Logo"
                         />)
                 }
             );
@@ -557,7 +557,7 @@ class Demo_analytics_reporting extends Component {
                     <Layout.Section oneThird>
                         {/*----------------------------Recommended Apps-----------------------*/}
                         <Card title="Recommended Apps"
-                              actions={[{content: 'See all', url: 'https://apps.shopify.com/partners/cedcommerce'}]}>
+                              actions={[{content: 'See all', url: 'https://apps.shopify.com/partners/cedcommerce',external:true}]}>
                             <Card.Section>
                                 <ResourceList
                                     items={[
@@ -599,8 +599,7 @@ class Demo_analytics_reporting extends Component {
                                         const {url, name, media, description} = item;
 
                                         return (
-                                            <ResourceList.Item
-                                                url={url}
+                                        <a href={url} target="_blank" style={{textDecoration:"none", color:"#000"}}><ResourceList.Item
                                                 media={media}
                                                 accessibilityLabel={`View details for ${name}`}
                                             >
@@ -610,7 +609,7 @@ class Demo_analytics_reporting extends Component {
                                                 <Label>
                                                     {description}
                                                 </Label>
-                                            </ResourceList.Item>
+                                            </ResourceList.Item></a>
                                         );
                                     }}
                                 />
@@ -627,8 +626,7 @@ class Demo_analytics_reporting extends Component {
                                         const {url,name,description,media} = item;
 
                                         return (
-                                            <ResourceList.Item
-                                                url={url}
+                                            <a href={url} target="_blank" style={{textDecoration:"none", color:"#000"}}><ResourceList.Item
                                                 media={media}
                                                 accessibilityLabel={`View details for ${name}`}
                                             >
@@ -638,7 +636,7 @@ class Demo_analytics_reporting extends Component {
                                                 <label>
                                                     {description}
                                                 </label>
-                                            </ResourceList.Item>
+                                            </ResourceList.Item></a>
                                         );
                                     }}
                                 />
@@ -654,8 +652,7 @@ class Demo_analytics_reporting extends Component {
                                         const {url, name,media,description} = item;
 
                                         return (
-                                            <ResourceList.Item
-                                                url={url}
+                                            <a href={url} target="_blank" style={{textDecoration:"none", color:"#000"}}><ResourceList.Item
                                                 media={media}
                                                 accessibilityLabel={`View details for ${name}`}
                                             >
@@ -665,7 +662,7 @@ class Demo_analytics_reporting extends Component {
                                                 <label>
                                                     {description}
                                                 </label>
-                                            </ResourceList.Item>
+                                            </ResourceList.Item></a>
                                         );
                                     }}
                                 />
