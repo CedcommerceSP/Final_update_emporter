@@ -68,7 +68,6 @@ class Demo_analytics_reporting extends Component {
                 datablog:[],
                 no_news_data:false,
                 no_blog_data:false,
-                doughnut_data:false,
             },
 
         }
@@ -96,7 +95,7 @@ class Demo_analytics_reporting extends Component {
         })
     }
     getOrderAnalytics() {
-        requests.getRequest('frontend/app/getOrderAnalytics',undefined,false,true).then(response => {
+        requests.getRequest('frontend/app/getUploadedProductsCount',undefined,false,true).then(response => {
             if (response.success && (response.data.length > 0))
             {
 
@@ -104,7 +103,7 @@ class Demo_analytics_reporting extends Component {
                     data1: {
                         labels: [],
                         datasets: [{
-                            data: [response.data.fulfilled_orders, response.data.unfulfilled_orders, response.data.cancelled_orders],
+                            data: [0,0,0],
                             backgroundColor: this.state.backgroundColor,
                             hoverBackgroundColor: this.state.hoverBackgroundColor,
                         }],
