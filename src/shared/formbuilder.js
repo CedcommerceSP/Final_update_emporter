@@ -49,10 +49,11 @@ export class Formbuilder extends Component {
 									<Select
 										label={field.title}
 										options={field.options}
-										disabled={this.state.sync && (
+                                        labelInline
+                                        disabled={this.state.sync && (
 											field.code === 'auto_sync' ||
-											field.code === 'inventorySync' ||
-											field.code === 'priceSync' ||
+											field.code === 'inventory_sync' ||
+											field.code === 'price_sync' ||
 											field.code === 'auto_sync_code')}
 										onChange={this.handleChange.bind(
 											this,

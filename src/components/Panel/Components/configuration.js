@@ -5,6 +5,9 @@ import {
 	Heading,
 	Card,
 	Select,
+	FormLayout,
+	ButtonGroup,
+	Stack,
 	Label,
 	Button,
 	TextField,
@@ -20,6 +23,13 @@ import { modifyOptionsData } from "./static-functions";
 import { isUndefined } from "util";
 import {environment} from "../../../environments/environment";
 import { Formbuilder }  from '../../../shared/formbuilder';
+
+const defaultCurrencyConverter = {
+	label: '',
+	value:0,
+	action:'mul',
+	additional:'',
+};
 
 export class Configuration extends Component {
 	shopifyConfigurationData = [];
@@ -240,6 +250,101 @@ export class Configuration extends Component {
 		);
 	}
 
+    renderLevelComponent = (data, parentIndex) => {
+		let value = [JSON.parse(JSON.stringify(defaultCurrencyConverter))];
+        let custom_option = [];
+        if ( typeof this.state.shopify_configuration[data.code] === 'object'
+			&& Object.keys(this.state.shopify_configuration[data.code]).length > 0) {
+            value = this.state.shopify_configuration[data.code];
+        }
+        // value.push(JSON.parse(JSON.stringify(defaultCurrencyConverter)));
+        Object.keys(data['custom_options']).map(e => {
+        	let flag = true;
+        	// value.forEach(key => {
+        	// 	if ( key.label === e ) flag = false;
+			// });
+        	if ( flag ) custom_option.push({label:e, value: e, additional: data['custom_options'][e]});
+		});
+        let increaseIn = [
+			{label:"Multiply",value:"mul"},
+			{label:"Percentage Inc",value:"percentage_inc"},
+			// {label:"Fixed Inc",value:"fixed_inc"},
+			{label:"Percentage Dsc",value:"percentage_dsc"},
+			// {label:"Fixed Dsc",value:"fixed_dsc"},
+		];
+        console.log(value);
+        console.log(custom_option);
+        return <div className="col-12 pt-2 pb-2" key={parentIndex}>
+			<Label>Currency Converter / Price Updater</Label>
+			{value.map((e,i) => {
+				return (
+                    <React.Fragment>
+                        <Stack>
+                            <Stack>
+                                <ButtonGroup>
+                                    <Select
+                                        options={custom_option}
+                                        label={data.title}
+                                        labelHidden
+                                        placeholder={data.title}
+                                        value={e.label}
+                                        onChange={this.handleMultiLevelChange.bind(this, i,parentIndex, custom_option, value, 'label')}
+                                    />
+                                    <Select
+                                        options={increaseIn}
+                                        label={""}
+                                        labelInline
+                                        value={e.action}
+                                        onChange={this.handleMultiLevelChange.bind(this, i,parentIndex, custom_option, value, 'action')}
+                                    />
+                                </ButtonGroup>
+                            </Stack>
+                            <Stack>
+                                <TextField
+                                    key={i}
+                                    label={"Currency"}
+                                    type="number"
+                                    min={0}
+                                    labelHidden
+                                    onChange={this.handleMultiLevelChange.bind(this, i,parentIndex, custom_option, value, 'value')}
+                                    value={e.value}
+                                    connectedRight={<ButtonGroup segmented>
+                                        <Button icon="add" onClick={this.handleAddMore.bind(this, value, parentIndex, value)} primary/>
+                                        <Button icon="subtract" onClick={this.handleRemove.bind(this, i, parentIndex, value)} destructive/>
+                                    </ButtonGroup>}
+                                    readOnly={false}/>
+                            </Stack>
+                        </Stack>
+						<br/>
+					</React.Fragment>
+				);
+			})}
+		</div>
+    };
+
+    handleAddMore = (value, mainIndex) => {
+    	value.push(JSON.parse(JSON.stringify(defaultCurrencyConverter)));
+        this.shopifyConfigurationChange(mainIndex, value);
+    };
+    handleRemove = (index, mainIndex,value) => {
+    	value.splice(index,1);
+        this.shopifyConfigurationChange(index, value);
+    };
+
+	handleMultiLevelChange = (index, mainIndex, custom_option, prevVal, key, value) => {
+		if ( prevVal[index] === undefined ) prevVal.push(JSON.parse(JSON.stringify(defaultCurrencyConverter)));
+		if ( key === 'value' && value <= 0 ) value = 0;
+		if ( key === 'label' ) {
+            custom_option.forEach(e => {
+            	if ( e.value === value ) {
+                    prevVal[index]['value'] = e.additional;
+				}
+			})
+		}
+		prevVal[index][key] = value;
+		this.shopifyConfigurationChange(mainIndex, prevVal);
+	};
+
 	renderShopifyConfigurationSection(sync) {
 		return (
 			<div className="row">
@@ -263,6 +368,7 @@ export class Configuration extends Component {
 													<Select
 														options={config.options}
 														label={config.title}
+														labelInline={false}
 														placeholder={config.title}
                                                         disabled={!sync && ( config.code === 'inventory_sync' || config.code === 'price_sync' )}
 														value={
@@ -310,6 +416,7 @@ export class Configuration extends Component {
 													</div>
 												</div>
 											);
+										case "multi_level_select_textbox": return this.renderLevelComponent(config, this.shopifyConfigurationData.indexOf(config));
 										default:
 											return (
 												<div
@@ -529,7 +636,7 @@ export class Configuration extends Component {
 	}
 
 	shopifyConfigurationChange(index, value) {
-		if (this.shopifyConfigurationData[index].code === "product_sync") {
+        if (this.shopifyConfigurationData[index].code === "product_sync") {
 			this.state.show_shopify_child_component["sync_field"] =
 				value !== "enable";
 		}
@@ -571,6 +678,7 @@ export class Configuration extends Component {
 			})
 			.then(data => {
 				if (data.success) {
+                    this.setState({shopify_configuration_updated:false});
 					notify.success(data.message);
 				} else {
 					notify.error(data.message);
