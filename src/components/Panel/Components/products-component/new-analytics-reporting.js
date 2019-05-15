@@ -45,13 +45,14 @@ class Demo_analytics_reporting extends Component {
             recurring_planskeleton: true,
             datewiseskeleton: true,
             recentactivityskeleton: true,
-            backgroundColor: ['#0b4044', '#47C1BF', '#ecb3be', '#00ffff', '#0088ef', '#007575'],
-            hoverBackgroundColor: ['#0b4044', '#47C1BF', '#ecb3be', '#00ffff', '#0088ef', '#007575'],
+            backgroundColor: ['#9575cd', '#5c6bc0', '#64b5f6', '#673ab7', '#3f51b5', '#0d47a1'],
+            hoverBackgroundColor: ['#9575cd', '#5c6bc0', '#64b5f6', '#673ab7', '#3f51b5', '#0d47a1'],
             data1: {datasets: [{data: [0, 0, 0],}], title: "Loading Details....."},
             data2: {datasets: [{data: [0, 0, 0],}], title: "Loading Details....."},
             data3: {datasets: [{data: [0, 0, 0],}], title: "Loading Details....."},
             legend: {display: true},
             no_getOrderAnalytics: false,
+            no_news_data_present:false,
             no_getOrderDatewise: false,
             no_getOrderRevenueRangewise: false,
             no_getProductsUploadedData_and_ImportedData: false,
@@ -66,8 +67,6 @@ class Demo_analytics_reporting extends Component {
             content_data:{
                 datanews:[],
                 datablog:[],
-                no_news_data:false,
-                no_blog_data:false,
             },
 
         }
@@ -79,9 +78,8 @@ class Demo_analytics_reporting extends Component {
         this.getServiceCredits();
         this.getallNotifications();
         this.getActiveRecurrying();
-        this.newsdatafrombackend();
         this.tableBlogData();
-        this.getOrderAnalytics();
+        this.newsdatafrombackend();
     }
 
     getallNotifications() {
@@ -94,49 +92,29 @@ class Demo_analytics_reporting extends Component {
             }
         })
     }
-    getOrderAnalytics() {
-        requests.getRequest('frontend/app/getUploadedProductsCount',undefined,false,true).then(response => {
-            if (response.success && (response.data.length > 0))
-            {
-
-                this.setState({
-                    data1: {
-                        labels: [],
-                        datasets: [{
-                            data: [0,0,0],
-                            backgroundColor: this.state.backgroundColor,
-                            hoverBackgroundColor: this.state.hoverBackgroundColor,
-                        }],
-                        title: "Uploads",
-                    },
-                    no_getOrderAnalytics: false
-                })
-                this.state.skeleton[0]=false;
-                this.setState(
-                    this.state
-
-                )
-
-            }
-            else if (response.success && response.data.length < 0) {
-
-                this.setState({
-                    no_getOrderAnalytics: true
-                })
-            } else {
-                this.setState({
-                    no_getOrderAnalytics: true
-                })
-            }
-        })
-    }
-
+    monthDiff(d1, d2) {
+    var months;
+    months = (d2.getFullYear() - d1.getFullYear()) * 12;
+    months -= d1.getMonth() + 1;
+    months += d2.getMonth();
+    return months <= 0 ? 0 : months;
+}
     getActiveRecurrying() {
+        let plan_to_be_end = "";
         requests.getRequest('plan/plan/getActive', undefined, false, true)
             .then(response => {
                 if (response.success) {
+                    var current_date = new Date();
                     var add_on_date = new Date(response.data.activated_at);
-                    let plan_to_be_end = new Date(new Date(add_on_date).setMonth(add_on_date.getMonth() + 1));
+                    let difference = this.monthDiff(add_on_date,current_date);
+                    if (new Date(new Date(add_on_date).setMonth(add_on_date.getMonth() + difference+1)) <=   current_date) {
+                        console.log("in if");
+                        plan_to_be_end = new Date(new Date(add_on_date).setMonth(add_on_date.getMonth() + difference + 2));
+                    }
+                    else {
+                        console.log("in else");
+                         plan_to_be_end = new Date(new Date(add_on_date).setMonth(add_on_date.getMonth() + difference + 1));
+                    }
                     this.setState({
                         Recurrying: true,
                         plan: response.data.description,
@@ -226,7 +204,9 @@ class Demo_analytics_reporting extends Component {
                 importers: importer_marketplace_array
             }, false, true)
             .then(data => {
-                if (data.success) {
+                if (data.success && data['data']['amazonaffiliate'] != 0 || data['data']['amazonimporter'] != 0 || data['data']['ebayimporter'] != 0 ||
+                    data['data']['etsyimporter'] != 0 || data['data']['walmartimporter'] != 0 || data['data']['wishimporter'] != 0)
+                {
                     importer_data_rec = data.data;
 
                     Object.keys(importer_data_rec).map(importer_recieved_mp => {
@@ -264,7 +244,7 @@ class Demo_analytics_reporting extends Component {
                                 hoverBackgroundColor: this.state.hoverBackgroundColor,
                             }], title: "Imported"
                         },
-                        no_getProductsUploadedData_and_ImportedData: false,
+
 
                     })
                     this.state.skeleton[1] = false;
@@ -272,8 +252,16 @@ class Demo_analytics_reporting extends Component {
                         this.state
                     )
 
+                }  else if (data.success && data['data']['amazonaffiliate'] === 0 && data['data']['amazonimporter'] === 0 && data['data']['ebayimporter'] === 0 &&
+                    data['data']['etsyimporter'] === 0 && data['data']['walmartimporter'] === 0 && data['data']['wishimporter'] === 0) {
+
+                    this.setState({
+                        no_getProductsUploadedData_and_ImportedData: true
+                    })
                 } else {
-                    notify.error(data.message);
+                    this.setState({
+                        no_getProductsUploadedData_and_ImportedData: true
+                    })
                 }
             });
     }
@@ -287,7 +275,8 @@ class Demo_analytics_reporting extends Component {
                 marketplace: title
             })
             .then(data1 => {
-                if (data1.success) {
+                if (data1.success && (data1.data.length > 0))
+                {
                     Object.keys(data1.data).forEach(e => {
                         if (data1.data[e] !== undefined) {
                             if (data1.data[e]["_id"] === null) {
@@ -335,6 +324,16 @@ class Demo_analytics_reporting extends Component {
                      uploaded_product: show,
                      uploader: uploader
                      });*/
+                }
+                else if (data1.success && data1.data.length < 0) {
+
+                    this.setState({
+                        no_getOrderAnalytics: true
+                    })
+                } else {
+                    this.setState({
+                        no_getOrderAnalytics: true
+                    })
                 }
             });
     }
@@ -536,24 +535,18 @@ class Demo_analytics_reporting extends Component {
         var rows_blog = [];
         for (let i = 0; i < this.state.content_data.datanews.length; i++) {
             rows.push(
-                {
-                    url: this.state.content_data.datanews[i]['label']['content_link'],
-                    name: this.state.content_data.datanews[i]['label']['title'],
-                    description: this.state.content_data.datanews[i]['label']['description'],
-                    media: (
-                        <Thumbnail
-                            source={this.state.content_data.datanews[i]['label']['image_url']}
-                            alt="News Logo"
-                        />)
-                }
-            );
-            if (rows.length == 0){
-                console.log(rows.length);
-                this.state.content_data.no_news_data = true,
-                this.setState(this.state.content_data.no_news_data
-                    );
-                console.log(this.state.content_data.no_news_data);
-            }
+                    {
+                        url: this.state.content_data.datanews[i]['label']['content_link'],
+                        name: this.state.content_data.datanews[i]['label']['title'],
+                        description: this.state.content_data.datanews[i]['label']['description'],
+                        media: (
+                            <Thumbnail
+                                source={this.state.content_data.datanews[i]['label']['image_url']}
+                                alt="News Logo"
+                            />)
+                    }
+                );
+
         }
         for(let i = 0; i< this.state.content_data.datablog.length; i++) {
             rows_blog.push(
@@ -568,7 +561,7 @@ class Demo_analytics_reporting extends Component {
                         />)
                 }
             );
-            if (rows_blog.length == 0){
+            if (rows_blog.length <= 0){
                 console.log(rows_blog.length);
                 this.state.content_data.no_blog_data = true,
                     this.setState(this.state.content_data.no_blog_data
@@ -671,10 +664,10 @@ class Demo_analytics_reporting extends Component {
                         </Card>
                         {/*----------------------------End Of Recommended Apps-----------------------*/}
                     </Layout.Section>
+                    {rows.length > 0 ?
                     <Layout.Section oneThird>
                         <Card title="News">
                             <Card.Section>
-                                {this.state.content_data.no_news_data?
                                 <ResourceList
                                     items={rows}
                                     renderItem={(item) => {
@@ -694,16 +687,22 @@ class Demo_analytics_reporting extends Component {
                                             </ResourceList.Item></a>
                                         );
                                     }}
-                                />:<Layout.Section>
-                                        <img className='img-fluid' src={require("../../../../assets/img/320x260.png")}/>
-                                    </Layout.Section>}
+                                />
                             </Card.Section>
                         </Card>
-                    </Layout.Section>
+                    </Layout.Section> : <Layout.Section oneThird>
+                            <Card title="News">
+                                <Card.Section>
+                                    <Stack distribution="center">
+                                        <img className='img-fluid pt-5 mt-2' src={require("../../../../assets/img/data_nahi.png")}/>
+                                    </Stack>
+                                </Card.Section>
+                            </Card>
+                        </Layout.Section>}
                     <Layout.Section oneThird>
+                        {rows_blog.length > 0?
                         <Card title="Blogs">
                             <Card.Section>
-                                {this.state.content_data.no_blog_data?
                                 <ResourceList
                                     items={rows_blog}
                                     renderItem={(item) => {
@@ -723,11 +722,17 @@ class Demo_analytics_reporting extends Component {
                                             </ResourceList.Item></a>
                                         );
                                     }}
-                                />:<Layout.Section>
-                                        <img className='img-fluid' src={require("../../../../assets/img/320x260.png")}/>
-                                    </Layout.Section>}
+                                />
                             </Card.Section>
-                        </Card>
+                        </Card>: <Layout.Section oneThird>
+                                <Card title="Blogs">
+                                    <Card.Section>
+                                        <Stack distribution="center">
+                                            <img className='img-fluid pt-5 mt-2' src={require("../../../../assets/img/data_nahi.png")}/>
+                                        </Stack>
+                                    </Card.Section>
+                                </Card>
+                            </Layout.Section>}
                     </Layout.Section>
                 </Layout>
             </React.Fragment>
