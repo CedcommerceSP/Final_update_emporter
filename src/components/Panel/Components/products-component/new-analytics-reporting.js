@@ -108,11 +108,13 @@ class Demo_analytics_reporting extends Component {
                     var add_on_date = new Date(response.data.activated_at);
                     let difference = this.monthDiff(add_on_date,current_date);
                     if (new Date(new Date(add_on_date).setMonth(add_on_date.getMonth() + difference+1)) <=   current_date) {
+                        console.log(new Date(new Date(add_on_date).setMonth(add_on_date.getMonth() + difference+1)));
                         console.log("in if");
                         plan_to_be_end = new Date(new Date(add_on_date).setMonth(add_on_date.getMonth() + difference + 2));
                     }
                     else {
                         console.log("in else");
+                        console.log(new Date(new Date(add_on_date).setMonth(add_on_date.getMonth() + difference+1)));
                          plan_to_be_end = new Date(new Date(add_on_date).setMonth(add_on_date.getMonth() + difference + 1));
                     }
                     this.setState({

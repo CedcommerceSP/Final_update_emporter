@@ -15,6 +15,7 @@ import { Configuration } from "./Components/configuration";
 import { QueuedTask } from "./Components/queued_task";
 import { Activities } from "./Components/queued-tasks-component/activities";
 import { Plans } from "./Components/plans";
+import {Orders} from "./Components/orders"
 import { Header } from "./Layout/header";
 import Dashboard from "./Components/dashboard";
 import FAQPage from "./Components/faq";
@@ -102,13 +103,16 @@ export class Panel extends Component {
 			console.info("Welcome To OMNI-Importer");
 		}
 	}
+
 	disableHeader(value) {
 		if (!value) {
 			console.clear();
 		}
 		this.setState({ header: value });
 	}
+
 	menu = panelFunctions.getMenu();
+
 	render() {
 		return (
 			<div className="container-fluid app-panel-container">
@@ -143,6 +147,18 @@ export class Panel extends Component {
 							/>
 							<Route
 								exact
+								path="/panel/orders"
+								render={() => {
+                                    return (
+										<Orders
+                                            {...this.props}
+											necessaryInfo={this.state.necessaryInfo}
+										/>
+                                    );
+                                }}
+							/>
+							<Route
+								exact
 								path="/panel/products/view/:id"
 								component={ViewProducts}
 							/>
@@ -172,8 +188,20 @@ export class Panel extends Component {
 							<Route exact path="/panel/plans" component={Plans} />
 							<Route path="/panel/accounts/install" component={InstallApp} />
 							<Route path="/panel/accounts/success" component={AppInstalled} />
-							<Route exact path="/panel/import" component={Import} />
                             <Route
+                                exact
+                                path="/panel/import"
+                                render={() => {
+                                    return (
+                                        <Import
+                                            {...this.props}
+                                            getNecessaryInfo={this.getNecessaryInfo}
+                                            necessaryInfo={this.state.necessaryInfo}
+                                        />
+                                    );
+                                }}
+                            />
+							<Route
                                 exact
                                 path="/panel/import/mapping"
                                 render={() => {
@@ -292,6 +320,7 @@ export class Panel extends Component {
 			</div>
 		);
 	}
+
 	redirect = url => {
 		this.props.history.push(url);
 	};
