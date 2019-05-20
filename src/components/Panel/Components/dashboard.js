@@ -80,7 +80,7 @@ class Dashboard extends Component {
 						stepperActive: false // used in stepper Check either Completed or not and also help in deciding with step to go
 					}, // step 1
 					{
-						message: <p>Pricing Overview.</p>,
+						message: <p><strong>Pricing Guide</strong></p>,
 						stepperMessage: "Pricing Plan", // stepper Small Message
 						API_endpoint: "", // Api End Point is used to check to send data or get data
 						data: "", // Data additional Field
@@ -740,17 +740,12 @@ class Dashboard extends Component {
 	renderPricingGuide = () => {
 		return (
 			<React.Fragment>
-                <div className="p-5 mt-5 text-center">
-                    <Button onClick={this.handlePricingSubmit} primary>
-                        Continue
-                    </Button>
-                </div>
 				<div className="pt-5 pb-5">
 					<PricingGuide />
 				</div>
-				<div className="p-5 mt-5 text-center">
+				<div className="p-5 mt-5">
 					<Button onClick={this.handlePricingSubmit} primary>
-                        Continue
+                        Next
 					</Button>
 				</div>
 			</React.Fragment>

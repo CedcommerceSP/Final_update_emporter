@@ -61,7 +61,6 @@ class AppsShared extends Component {
 		});
 	}
 	handleChange = (obj, val) => {
-		console.log(val, obj);
 		this.setState({ [obj]: val });
 	};
 	render() {
@@ -103,7 +102,7 @@ class AppsShared extends Component {
 														{this.props.success.code === app.code ||
 														app["installed"] !== 0
 															? "ReConnect"
-															: "Connect"}
+															: "Link your Account"}
 													</Button>
 												</div>
 											</div>

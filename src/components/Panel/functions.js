@@ -45,7 +45,7 @@ export const panelFunctions = {
             },
 			{
 				id: "configuration",
-				content: "Configuration",
+				content: "Settings",
 				accessibilityLabel: "Configuration",
 				link: "/panel/configuration",
 				panelID: "configuration"

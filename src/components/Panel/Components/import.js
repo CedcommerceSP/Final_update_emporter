@@ -65,9 +65,7 @@ export class Import extends Component {
 		this.handleModalChange = this.handleModalChange.bind(this);
 	}
     componentWillReceiveProps(nextPorps) {
-		console.log("next props",nextPorps);
         if (nextPorps.necessaryInfo !== undefined) {
-            console.log(nextPorps);
             this.setState({ necessaryInfo: nextPorps.necessaryInfo });
         }
     }
@@ -137,7 +135,7 @@ export class Import extends Component {
 							<div className="col-12 pt-1 pb-1">
 								<Select
 									label="Import From"
-									placeholder="Source"
+									placeholder="Marketplace"
 									options={this.state.importServicesList}
 									onChange={this.handleImportChange.bind(this, "source")}
 									value={this.state.importProductsDetails.source}
@@ -697,11 +695,9 @@ export class Import extends Component {
 	}
 
 	render() {
-		console.log(this.state.necessaryInfo['account_connected_array'])
 		let magento_present = false
 		let data = this.state.necessaryInfo['account_connected_array'];
 		if ( data != undefined ) {
-			console.log("in if magento")
 			for (let i=0; i < this.state.necessaryInfo['account_connected_array'].length ; i++){
 				if (this.state.necessaryInfo['account_connected_array'][i] == "magento"){
 				   magento_present = true;
@@ -760,7 +756,7 @@ export class Import extends Component {
 									<span className="h2" style={{ color: "#3f4eae" }}>
 										Import Products
 									</span>
-									<Label>(Import From Source To App)</Label>
+									<Label>(Import from marketplace to app)</Label>
 								</div>
 							</div>
 						</Card>

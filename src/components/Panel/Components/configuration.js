@@ -272,9 +272,7 @@ export class Configuration extends Component {
 			{label:"Percentage Dsc",value:"percentage_dsc"},
 			// {label:"Fixed Dsc",value:"fixed_dsc"},
 		];
-        console.log(value);
-        console.log(custom_option);
-        return <div className="col-12 pt-2 pb-2" key={parentIndex}>
+		return <div className="col-12 pt-2 pb-2" key={parentIndex}>
 			<Label>Currency Converter / Price Updater</Label>
 			{value.map((e,i) => {
 				return (
@@ -349,7 +347,7 @@ export class Configuration extends Component {
 		return (
 			<div className="row">
 				<div className="col-sm-4 col-12 text-md-left text-sm-left text-center">
-					<Heading>Shopify Configuration</Heading>
+					<Heading>Shopify Settings</Heading>
 				</div>
 				<div className="col-sm-8 col-12">
 					<Card>
@@ -460,7 +458,7 @@ export class Configuration extends Component {
 		return (
 			<div className="row">
 				<div className="col-sm-4 col-12 text-md-left text-sm-left text-center">
-					<Heading>Amazon Configuration</Heading>
+					<Heading>Amazon Settings</Heading>
 				</div>
 				<div className="col-sm-8 col-12">
 					<Card>
@@ -492,7 +490,7 @@ export class Configuration extends Component {
 		return (
 			<div className="row">
 				<div className="col-sm-4 col-12 text-md-left text-sm-left text-center">
-					<Heading>Ebay Configuration</Heading>
+					<Heading>Ebay Settings</Heading>
 				</div>
 				<div className="col-sm-8 col-12">
 					<Card>
@@ -512,7 +510,7 @@ export class Configuration extends Component {
 		return (
 			<div className="row">
 				<div className="col-sm-4 col-12 text-md-left text-sm-left text-center">
-					<Heading>Wish Configuration</Heading>
+					<Heading>Wish Settings</Heading>
 				</div>
 				<div className="col-sm-8 col-12">
 					<Card>
@@ -532,7 +530,7 @@ export class Configuration extends Component {
 		return (
 			<div className="row">
 				<div className="col-sm-4 col-12 text-md-left text-sm-left text-center">
-					<Heading>Etsy Configuration</Heading>
+					<Heading>Etsy Settings</Heading>
 				</div>
 				<div className="col-sm-8 col-12">
 					<Card>
@@ -558,7 +556,7 @@ export class Configuration extends Component {
 			if (!environment.isLive || Object.keys(this.state.necessaryInfo.sync).length > 0) sync = true;
 		}
 		return (
-			<Page title="Configuration">
+			<Page title="Settings">
 				<Layout>
 					<Layout.Section>
 						{ !sync && <Banner title="Note" status="info" icon="notification">
@@ -567,9 +565,6 @@ export class Configuration extends Component {
 								<span style={{color:"blue", cursor:"pointer"}} onClick={this.redirect.bind(this,'/panel/plans')}> plan</span>.
                             </Label>
                         </Banner> }
-					</Layout.Section>
-					<Layout.Section>
-						{this.renderUserConfigurationSection()}
 					</Layout.Section>
 					<Layout.Section>
 						{this.renderShopifyConfigurationSection(sync)}
