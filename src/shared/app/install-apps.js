@@ -17,6 +17,8 @@ import { isUndefined } from "util";
 import { requests } from "../../services/request";
 import { notify } from "../../services/notify";
 import AmazonInstallationForm from "./amazon-form";
+import FbaAmazonInstallationForm from "./fba-form";
+
 
 class InstallAppsShared extends Component {
 	queryParams;
@@ -52,7 +54,9 @@ class InstallAppsShared extends Component {
 			<React.Fragment>
 				{this.state.code === "amazonimporter" ? (
 					<AmazonInstallationForm {...this.state} {...this.props} />
-				) : (
+				) :this.state.code === "fba" ? (
+					<FbaAmazonInstallationForm {...this.state} {...this.props} />
+                ): (
 					!isUndefined(this.state.schema) && (
 						<div className="row">
 							<div className="col-12 mt-4 mb-4">

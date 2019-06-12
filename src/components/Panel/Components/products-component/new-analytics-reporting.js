@@ -1,7 +1,5 @@
 
-/**
- * Created by @Author Priyanshu on 18/3/19.
- */
+
 import React, {Component} from "react"
 import {requests} from "../../../../services/request";
 import {notify} from "../../../../services/notify";
@@ -139,7 +137,8 @@ class Demo_analytics_reporting extends Component {
         requests.getRequest('shopifygql/payment/getCreditsSettings', undefined, false, true)
             .then(response => {
                 if (response.success) {
-                    /*let total_credit = response.data.available_credits + response.data.total_used_credits
+                    /*let total_credit = response.d
+                    ata.available_credits + response.data.total_used_credits
                      let In_Ratio = response.data.available_credits / total_credit * 100;
                      let In_Ratio1 = 100 - In_Ratio;*/
                     this.setState({

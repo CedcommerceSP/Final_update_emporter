@@ -73,6 +73,12 @@ class AppsShared extends Component {
                     }
                 }
                 for (let i = 0; i < Object.keys(data.data).length; i++) {
+                    if (data.data[Object.keys(data.data)[i]]['code'] == "fba") {
+                        installedApps.push(data.data[Object.keys(data.data)[i]]);
+                        code.push(data.data[Object.keys(data.data)[i]]["code"]);
+                    }
+                }
+                for (let i = 0; i < Object.keys(data.data).length; i++) {
                     if (data.data[Object.keys(data.data)[i]]['code'] == "amazonaffiliate") {
                         installedApps.push(data.data[Object.keys(data.data)[i]]);
                         code.push(data.data[Object.keys(data.data)[i]]["code"]);
@@ -200,7 +206,9 @@ class AppsShared extends Component {
         return (
             code === "amazonimporter" ||
             code === "ebayimporter" ||
+            code === "fba" ||
             code === "walmartimporter" ||
+            code === "wishimporter" ||
             code === "wishimporter" ||
             code === "etsyimporter" ||
             code === "amazonaffiliate"

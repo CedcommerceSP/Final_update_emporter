@@ -47,6 +47,11 @@ class PricingGuide extends Component {
 					<div className="text-center m-5">
 						<DisplayText size="medium">15000*0.1 = $300</DisplayText>
 					</div>
+					<div className="mt-5">
+						<TextStyle>
+							Depending upon the no.of products, you will be getting a discount of up to 80%
+						</TextStyle>
+					</div>
 					<div className="m-sm-5 p-sm-5 m-0 p-0">
 						<img
 							src={"https://apps.cedcommerce.com/importer/image_one_time.png"}
@@ -122,10 +127,10 @@ class PricingGuide extends Component {
 					{/*</div>*/}
 					<div className="m-sm-5 p-sm-5 m-0 p-0">
 						<img
-							src={"https://apps.cedcommerce.com/importer/image_sync.png"}
+							src={"https://apps.cedcommerce.com/importer/one_time.png"}
 							onClick={() => {
 								this.handleImageShow(
-									"https://apps.cedcommerce.com/importer/image_sync.png"
+									"https://apps.cedcommerce.com/importer/sync.png"
 								);
 							}}
 							alt={"image here"}

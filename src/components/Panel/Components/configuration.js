@@ -36,6 +36,7 @@ export class Configuration extends Component {
 	amazonImporterConfigurationData = [];
 	ebayConfigurationData = [];
 	wishConfigurationData = [];
+	fbaConfigurationData = [];
 	etsyConfigurationData = [];
 
 	constructor(props) {
@@ -52,6 +53,7 @@ export class Configuration extends Component {
 			show_shopify_child_component: {},
 			shopify_configuration_updated: false,
 			account_information_updated: false,
+            fba_configuration:{}
 		};
 		this.getUserDetails();
 		this.getShopifyConfigurations();
@@ -59,6 +61,7 @@ export class Configuration extends Component {
 		this.getEbayConfig();
 		this.getEtsyConfig();
 		this.getWishConfig();
+		this.getFbaConfig();
 	}
 
 	componentWillReceiveProps(nextPorps) {
@@ -123,17 +126,34 @@ export class Configuration extends Component {
 		requests
 			.getRequest("connector/get/config", { marketplace: "wishimporter" })
 			.then(data => {
+				console.log(data);
 				if (data.success) {
 					this.wishConfigurationData = this.modifyConfigData(
 						data.data,
 						"wish_configuration"
 					);
-					this.updateState();
+                    this.updateState();
 				} else {
 					// notify.error(data.message);
 				}
 			});
 	}
+    getFbaConfig() {
+        requests
+            .getRequest("connector/get/config", { marketplace: "fba" })
+            .then(data => {
+            	console.log("data in fba",data)
+                if (data.success) {
+                    this.fbaConfigurationData = this.modifyConfigData(
+                        data.data,
+                        "fba_configuration"
+                    );
+                    this.updateState();
+                } else {
+                    // notify.error(data.message);
+                }
+            });
+    }
 
 	getEtsyConfig() {
 		requests
@@ -160,7 +180,7 @@ export class Configuration extends Component {
 						data.data,
 						"shopify_configuration"
 					);
-					this.updateState();
+                    this.updateState();
 				} else {
 					notify.error(data.message);
 				}
@@ -179,7 +199,7 @@ export class Configuration extends Component {
 					data[i].value !== "enable";
 			}
 		}
-		return data;
+        return data;
 	}
 
 	renderUserConfigurationSection() {
@@ -480,6 +500,7 @@ export class Configuration extends Component {
             case 'etsyimporter': this.saveEtsyConfigData(data);break;
             case 'amazonimporter': this.saveAmazonImporterConfigData(data);break;
             case 'wishimporter': this.saveWishImporterConfigData(data);break;
+			case 'fba':this.saveFbaImporterConfigData(data);break;
             case 'walmartimporter':console.log("Walmart");break;
             default:
                 console.log("Wrong Choice");
@@ -525,6 +546,25 @@ export class Configuration extends Component {
 			</div>
 		);
 	}
+    renderfbaConfig(sync) {
+        return (
+			<div className="row">
+				<div className="col-sm-4 col-12 text-md-left text-sm-left text-center">
+					<Heading>Fba Settings</Heading>
+				</div>
+				<div className="col-sm-8 col-12">
+					<Card>
+						<div className="p-5">
+							<Formbuilder
+								form={this.fbaConfigurationData}
+								sync={sync}
+								onSubmit={this.onSubmit.bind(this,'fba')}/>
+						</div>
+					</Card>
+				</div>
+			</div>
+        );
+    }
 
 	renderEtsyConfig(sync) {
 		return (
@@ -548,14 +588,14 @@ export class Configuration extends Component {
 
 	render() {
 		let accounts = [];
-		let sync = false;
-		if (
+        let sync = false;
+        if (
 			this.state.necessaryInfo !== undefined && ( this.state.necessaryInfo.sync !== undefined || !environment.isLive )
 		) {
-			accounts = this.state.necessaryInfo.account_connected_array;
-			if (!environment.isLive || Object.keys(this.state.necessaryInfo.sync).length > 0) sync = true;
-		}
-		return (
+            accounts = this.state.necessaryInfo.account_connected_array;
+            if (!environment.isLive || Object.keys(this.state.necessaryInfo.sync).length > 0) sync = true;
+        }
+        return (
 			<Page title="Settings">
 				<Layout>
 					<Layout.Section>
@@ -593,6 +633,12 @@ export class Configuration extends Component {
                             ? this.renderWishConfig(!sync)
                             : null}
                     </Layout.Section>
+					<Layout.Section>
+                        {accounts !== undefined &&
+                        accounts.indexOf("fba") !== -1
+                            ? this.renderfbaConfig(!sync)
+                            : null}
+					</Layout.Section>
 				</Layout>
 			</Page>
 		);
@@ -629,6 +675,21 @@ export class Configuration extends Component {
 				this.getWishConfig();
 			});
 	}
+    saveFbaImporterConfigData(amazon_importer_configuration) {
+        requests
+            .postRequest("connector/get/saveConfig", {
+                marketplace: "fba",
+                data: amazon_importer_configuration
+            })
+            .then(data => {
+                if (data.success) {
+                    notify.success(data.message);
+                } else {
+                    notify.error(data.message);
+                }
+                this.getFbaConfig();
+            });
+    }
 
 	shopifyConfigurationChange(index, value) {
         if (this.shopifyConfigurationData[index].code === "product_sync") {
