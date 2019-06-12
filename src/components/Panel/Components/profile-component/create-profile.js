@@ -1070,8 +1070,7 @@ export class CreateProfile extends Component {
 				<div className="col-12 pt-1 pb-1">
 					<Banner title="General Info" status="info">
 						<Label>
-							Before creating a profile please make sure that you have imported
-							products from the source first. To import your products goto{" "}
+							Before creating a profile please make sure that you have imported products from your selected Marketplace. To import your products go to{" "}
 							<NavLink to="/panel/import">Import Products</NavLink>
 						</Label>
 					</Banner>
@@ -1079,7 +1078,7 @@ export class CreateProfile extends Component {
 				<div className="col-12 pt-1 pb-1">
 					<TextField
 						label="Profile Name"
-						placeholder="Enter Profile Name"
+						placeholder="Anything you can type in Profile Name"
 						onChange={this.handleBasicDetailsChange.bind(this, "name")}
 						value={this.state.basicDetails.name}
 					/>

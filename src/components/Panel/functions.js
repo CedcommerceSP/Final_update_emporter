@@ -36,9 +36,16 @@ export const panelFunctions = {
 				link: "/panel/products",
 				panelID: "products"
 			},
+            {
+                id: "orders",
+                content: "Orders",
+                accessibilityLabel: "Orders",
+                link: "/panel/orders",
+                panelID: "orders"
+            },
 			{
 				id: "configuration",
-				content: "Configuration",
+				content: "Settings",
 				accessibilityLabel: "Configuration",
 				link: "/panel/configuration",
 				panelID: "configuration"

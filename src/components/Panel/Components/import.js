@@ -23,12 +23,12 @@ import { requests } from "../../../services/request";
 import { environment } from "../../../environments/environment";
 import { capitalizeWord, validateImporter } from "./static-functions";
 import FileImporter from "./import-component/fileimporter";
-
+import { MagnetoImport } from "./import-component/MagnetoImport";
 export class Import extends Component {
 	profilesList = [];
-	constructor() {
-		super();
-		this.state = {
+	constructor(props) {
+		super(props);
+        this.state = {
 			listing_type: "active",
 			importServicesList: [],
 			importerShopLists: [],
@@ -57,12 +57,18 @@ export class Import extends Component {
 				selected_profile: "",
 				profile_type: ""
 			},
-			openModal: false
+			openModal: false,
+            necessaryInfo:{},
 		};
 		this.getAllImporterServices();
 		this.getAllUploaderServices();
 		this.handleModalChange = this.handleModalChange.bind(this);
 	}
+    componentWillReceiveProps(nextPorps) {
+        if (nextPorps.necessaryInfo !== undefined) {
+            this.setState({ necessaryInfo: nextPorps.necessaryInfo });
+        }
+    }
 
 	getAllImporterServices() {
 		requests
@@ -129,7 +135,7 @@ export class Import extends Component {
 							<div className="col-12 pt-1 pb-1">
 								<Select
 									label="Import From"
-									placeholder="Source"
+									placeholder="Marketplace"
 									options={this.state.importServicesList}
 									onChange={this.handleImportChange.bind(this, "source")}
 									value={this.state.importProductsDetails.source}
@@ -247,7 +253,7 @@ export class Import extends Component {
 
 	handleImportChange(key, value) {
 		this.state.importProductsDetails[key] = value;
-		if (key === "source") {
+		if (key === "--Customer Action--") {
 			this.state.importerShopLists = [];
 			this.state.importProductsDetails.shop = "";
 			this.state.importProductsDetails.shop_id = "";
@@ -271,7 +277,7 @@ export class Import extends Component {
 				this.state.importProductsDetails.shop = this.state.importerShopLists[0].value;
 				this.state.importProductsDetails.shop_id = this.state.importerShopLists[0].shop_id;
 			}
-		} else if (key === "shop") {
+		} else if (key === "Import") {
 			for (let i = 0; i < this.state.importerShopLists.length; i++) {
 				if (this.state.importerShopLists[i].value === value) {
 					this.state.importProductsDetails.shop_id = this.state.importerShopLists[
@@ -280,12 +286,8 @@ export class Import extends Component {
 					break;
 				}
 			}
-		} else if (key === "listing_type") {
+		} else if (key === "Upload") {
 			this.state.listing_type = value;
-		} else if (key === "affiliate_type") {
-			this.state.affiliate.type = value;
-		} else if (key === "affiliate_value") {
-			this.state.affiliate.value = value;
 		}
 		this.updateState();
 	}
@@ -693,6 +695,15 @@ export class Import extends Component {
 	}
 
 	render() {
+		let magento_present = false
+		let data = this.state.necessaryInfo['account_connected_array'];
+		if ( data != undefined ) {
+			for (let i=0; i < this.state.necessaryInfo['account_connected_array'].length ; i++){
+				if (this.state.necessaryInfo['account_connected_array'][i] == "magento"){
+				   magento_present = true;
+				}
+			}
+		}
 		return (
 			<Page title="Manage Products">
 				<div className="row">
@@ -745,7 +756,7 @@ export class Import extends Component {
 									<span className="h2" style={{ color: "#3f4eae" }}>
 										Import Products
 									</span>
-									<Label>(Import From Source To App)</Label>
+									<Label>(Import from marketplace to app)</Label>
 								</div>
 							</div>
 						</Card>
@@ -785,6 +796,7 @@ export class Import extends Component {
 						</Card>
 					</div>
 				</div>
+				{magento_present?<MagnetoImport {...this.props}/>:null}
 				{this.renderImportProductsModal()}
 				{this.renderUploadProductsModal()}
 				{this.renderHelpModal()}

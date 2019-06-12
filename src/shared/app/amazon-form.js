@@ -85,6 +85,7 @@ class AmazonInstallationForm extends Component {
 						<div className="row">
 							{!isUndefined(this.state.schema) &&
 								this.state.schema.map(field => {
+									console.log(field);
 									if (this.state.hide.indexOf(field.key) === -1)
 										if (
 											this.state.init_array_show.indexOf(field.key) !== -1 ||
