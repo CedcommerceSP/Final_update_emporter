@@ -1,3 +1,6 @@
+/**
+ * Created by cedcoss on 13/6/19.
+ */
 
 
 import React, {Component} from "react"
@@ -91,12 +94,12 @@ class Demo_analytics_reporting extends Component {
         })
     }
     monthDiff(d1, d2) {
-    var months;
-    months = (d2.getFullYear() - d1.getFullYear()) * 12;
-    months -= d1.getMonth() + 1;
-    months += d2.getMonth();
-    return months <= 0 ? 0 : months;
-}
+        var months;
+        months = (d2.getFullYear() - d1.getFullYear()) * 12;
+        months -= d1.getMonth() + 1;
+        months += d2.getMonth();
+        return months <= 0 ? 0 : months;
+    }
     getActiveRecurrying() {
         let plan_to_be_end = "";
         requests.getRequest('plan/plan/getActive', undefined, false, true)
@@ -113,7 +116,7 @@ class Demo_analytics_reporting extends Component {
                     else {
                         console.log("in else");
                         console.log(new Date(new Date(add_on_date).setMonth(add_on_date.getMonth() + difference+1)));
-                         plan_to_be_end = new Date(new Date(add_on_date).setMonth(add_on_date.getMonth() + difference + 1));
+                        plan_to_be_end = new Date(new Date(add_on_date).setMonth(add_on_date.getMonth() + difference + 1));
                     }
                     this.setState({
                         Recurrying: true,
@@ -134,30 +137,41 @@ class Demo_analytics_reporting extends Component {
     }
 
     getServiceCredits() {
-        requests.getRequest('shopifygql/payment/getCreditsSettings', undefined, false, true)
-            .then(response => {
-                if (response.success) {
-                    /*let total_credit = response.d
-                    ata.available_credits + response.data.total_used_credits
-                     let In_Ratio = response.data.available_credits / total_credit * 100;
-                     let In_Ratio1 = 100 - In_Ratio;*/
+        let uploaderarray = [];
+        let uploader = [];
+        let show = false;
+        requests.getRequest('frontend/app/getMigrationAnalytics')
+            .then(data1 => {
+                console.log("aaaaa",data1)
+                if (data1.success && (Object.keys(data1.data.product).length > 0))
+                {
+                    Object.keys(data1.data.product).forEach(e => {
+                        if (data1.data.product[e][0]['_id'] !== undefined) {
+                            uploader.push(e);
+                            uploaderarray.push(data1.data.product[e][0]["count"]);
+                            show = true;
+                        }
+                    });
                     this.setState({
                         data3: {
-                            labels: ["Available", "Used"],
+                            labels: uploader,
                             datasets: [{
-                                data: [response.data.available_credits, response.data.used_credits],
+                                data: uploaderarray,
                                 backgroundColor: this.state.backgroundColor,
                                 hoverBackgroundColor: this.state.hoverBackgroundColor,
                             }],
-                            title: "Available Credits",
+                            title: "Magento Product",
                         },
                     })
-                    this.state.skeleton[2] = false;
+                    this.state.skeleton[1] = false;
+                    this.setState(this.state)
+                }
+                this.state.skeleton[2] = false;
                     this.setState(
                         this.state
                     )
 
-                }
+
 
             });
     }
@@ -197,72 +211,56 @@ class Demo_analytics_reporting extends Component {
     getYAxisImporter(importer_marketplace_array,
                      importer_title_array,
                      entire_data_importer) {
-        let total_products_importer = [];
-        let label_mp_array = [];
-        let importer_data_rec = {};
+        let uploaderarray = [];
+        let uploader = [];
+        let show = false;
         requests
-            .postRequest("frontend/app/getImportedProductCount", {
+            .postRequest("frontend/app/getMigrationAnalytics", {
                 importers: importer_marketplace_array
             }, false, true)
-            .then(data => {
-                if (data.success && data['data']['amazonaffiliate'] != 0 || data['data']['amazonimporter'] != 0 || data['data']['ebayimporter'] != 0 ||
-                    data['data']['etsyimporter'] != 0 || data['data']['walmartimporter'] != 0 || data['data']['wishimporter'] != 0)
+            .then(data1 => {
+                if (data1.success && (Object.keys(data1.data.customer).length > 0))
                 {
-                    importer_data_rec = data.data;
-
-                    Object.keys(importer_data_rec).map(importer_recieved_mp => {
-                        for (let i = 0; i < importer_marketplace_array.length; i++) {
-                            Object.keys(entire_data_importer).map(master_key => {
-
-                                if (
-                                    importer_marketplace_array[i] === entire_data_importer[master_key]["marketplace"] &&
-                                    importer_title_array[i] === entire_data_importer[master_key]["title"] &&
-                                    importer_marketplace_array[i] === importer_recieved_mp
-                                ) {
-                                    if (data.data[importer_recieved_mp]>0) {
-                                        total_products_importer.push(
-                                            importer_data_rec[importer_recieved_mp]
-                                        );
-                                        label_mp_array.push(
-                                            importer_recieved_mp
-                                        )
-
-                                    }
-                                }
-                            });
+                    Object.keys(data1.data.customer).forEach(e => {
+                        if (data1.data.customer[e][0]['_id'] !== undefined) {
+                            uploader.push(e);
+                            uploaderarray.push(data1.data.customer[e][0]["count"]);
+                            show = true;
                         }
                     });
-                    label_mp_array = label_mp_array
-                        .map(e1 => (capitalizeWord(e1)));
-
-                    total_products_importer.push(0);
                     this.setState({
                         data2: {
-                            labels: label_mp_array,
+                            labels: uploader,
                             datasets: [{
-                                data: total_products_importer,
+                                data: uploaderarray,
                                 backgroundColor: this.state.backgroundColor,
                                 hoverBackgroundColor: this.state.hoverBackgroundColor,
-                            }], title: "Imported"
+                            }],
+                            title: "Magento Customer",
                         },
-
-
                     })
+                    // this.state.skeleton[0] = false;
                     this.state.skeleton[1] = false;
-                    this.setState(
-                        this.state
-                    )
-
-                }  else if (data.success && data['data']['amazonaffiliate'] === 0 && data['data']['amazonimporter'] === 0 && data['data']['ebayimporter'] === 0 &&
-                    data['data']['etsyimporter'] === 0 && data['data']['walmartimporter'] === 0 && data['data']['wishimporter'] === 0) {
-
-                    this.setState({
-                        no_getProductsUploadedData_and_ImportedData: true
-                    })
-                } else {
-                    this.setState({
-                        no_getProductsUploadedData_and_ImportedData: true
-                    })
+                    this.setState(this.state)
+                    /* Object.keys(data1.data).forEach(e => {
+                     if (data1.data[e] !== undefined) {
+                     if (data1.data[e]["_id"] === null) {
+                     uploader.push("Shopify Matched Product");
+                     uploaderarray.push(data1.data[e]["count"]);
+                     show = true;
+                     } else {
+                     uploader.push(capitalizeWord(data1.data[e]["_id"]));
+                     uploaderarray.push(data1.data[e]["count"]);
+                     show = true;
+                     }
+                     }
+                     });
+                     uploaderarray.push(0);
+                     this.setState({
+                     yaxisuploader: uploaderarray,
+                     uploaded_product: show,
+                     uploader: uploader
+                     });*/
                 }
             });
     }
@@ -272,23 +270,17 @@ class Demo_analytics_reporting extends Component {
         let uploader = [];
         let show = false;
         requests
-            .postRequest("frontend/app/getUploadedProductsCount", {
+            .postRequest("frontend/app/getMigrationAnalytics", {
                 marketplace: title
             })
             .then(data1 => {
-                if (data1.success && (data1.data.length > 0))
+                if (data1.success && (Object.keys(data1.data.order).length > 0))
                 {
-                    Object.keys(data1.data).forEach(e => {
-                        if (data1.data[e] !== undefined) {
-                            if (data1.data[e]["_id"] === null) {
-                                uploader.push("Shopify Matched");
-                                uploaderarray.push(data1.data[e]["count"]);
+                    Object.keys(data1.data.order).forEach(e => {
+                        if (data1.data.order[e][0]['_id'] !== undefined) {
+                            uploader.push(e);
+                            uploaderarray.push(data1.data.order[e][0]["count"]);
                                 show = true;
-                            } else {
-                                uploader.push(capitalizeWord(data1.data[e]["_id"]));
-                                uploaderarray.push(data1.data[e]["count"]);
-                                show = true;
-                            }
                         }
                     });
                     this.setState({
@@ -299,7 +291,7 @@ class Demo_analytics_reporting extends Component {
                                 backgroundColor: this.state.backgroundColor,
                                 hoverBackgroundColor: this.state.hoverBackgroundColor,
                             }],
-                            title: "Uploaded",
+                            title: "Magento Order",
                         },
                     })
                     this.state.skeleton[0] = false;
@@ -339,23 +331,23 @@ class Demo_analytics_reporting extends Component {
             });
     }
 
-/*    to_render_or_not() {
-        const legend = {
-            display: false,
-        };
-        if (!this.state.no_getOrderDatewise) {
-            return ((this.state.linegraphskeleton ? <Skeleton case="body"/> :
-                <Stack distribution="center">
-                    <img className='img-fluid' src={require("../../../../assets/img/data_nahi.png")}/>
-                </Stack>))
-        }
-        else {
+    /*    to_render_or_not() {
+     const legend = {
+     display: false,
+     };
+     if (!this.state.no_getOrderDatewise) {
+     return ((this.state.linegraphskeleton ? <Skeleton case="body"/> :
+     <Stack distribution="center">
+     <img className='img-fluid' src={require("../../../../assets/img/data_nahi.png")}/>
+     </Stack>))
+     }
+     else {
 
-            return ((this.state.linegraphskeleton ? <Skeleton case="body"/> :
-                <Line data={this.state.graph_to_show} legend={legend}/>))
-        }
+     return ((this.state.linegraphskeleton ? <Skeleton case="body"/> :
+     <Line data={this.state.graph_to_show} legend={legend}/>))
+     }
 
-    }*/
+     }*/
 
     to_final_render_Doughnut() {
         const legendOpts = {
@@ -374,7 +366,6 @@ class Demo_analytics_reporting extends Component {
             let yourVariable = "data" + (i + 1);
             let title = this.state[yourVariable]
             if (temp_order && i == 0) {
-                    console.log("kakaka1");
                 arr.push(<div className="col-sm-12 col-md-12 col-lg-4" key={yourVariable}>
                         <Card
                             title="Uploads"
@@ -396,7 +387,6 @@ class Demo_analytics_reporting extends Component {
                 continue;
             }
             else if (temp_products && i == 1) {
-                console.log("kakaka1");
                 arr.push(<div className=" col-sm-12 col-md-12 col-lg-4" key={yourVariable}>
                         <Card
                             title="Imported "
@@ -536,17 +526,17 @@ class Demo_analytics_reporting extends Component {
         var rows_blog = [];
         for (let i = 0; i < this.state.content_data.datanews.length; i++) {
             rows.push(
-                    {
-                        url: this.state.content_data.datanews[i]['label']['content_link'],
-                        name: this.state.content_data.datanews[i]['label']['title'],
-                        description: this.state.content_data.datanews[i]['label']['description'],
-                        media: (
-                            <Thumbnail
-                                source={this.state.content_data.datanews[i]['label']['image_url']}
-                                alt="News Logo"
-                            />)
-                    }
-                );
+                {
+                    url: this.state.content_data.datanews[i]['label']['content_link'],
+                    name: this.state.content_data.datanews[i]['label']['title'],
+                    description: this.state.content_data.datanews[i]['label']['description'],
+                    media: (
+                        <Thumbnail
+                            source={this.state.content_data.datanews[i]['label']['image_url']}
+                            alt="News Logo"
+                        />)
+                }
+            );
 
         }
         for(let i = 0; i< this.state.content_data.datablog.length; i++) {
@@ -565,8 +555,8 @@ class Demo_analytics_reporting extends Component {
             if (rows_blog.length <= 0){
                 console.log(rows_blog.length);
                 this.state.content_data.no_blog_data = true;
-                    this.setState(this.state.content_data.no_blog_data
-                    );
+                this.setState(this.state.content_data.no_blog_data
+                );
                 console.log(this.state.content_data.no_blog_data);
             }
 
@@ -647,7 +637,7 @@ class Demo_analytics_reporting extends Component {
                                         const {url, name, media, description} = item;
 
                                         return (
-                                        <a href={url} target="_blank" style={{textDecoration:"none", color:"#000"}}><ResourceList.Item
+                                            <a href={url} target="_blank" style={{textDecoration:"none", color:"#000"}}><ResourceList.Item
                                                 media={media}
                                                 accessibilityLabel={`View details for ${name}`}
                                             >
@@ -666,32 +656,32 @@ class Demo_analytics_reporting extends Component {
                         {/*----------------------------End Of Recommended Apps-----------------------*/}
                     </Layout.Section>
                     {rows.length > 0 ?
-                    <Layout.Section oneThird>
-                        <Card title="News">
-                            <Card.Section>
-                                <ResourceList
-                                    items={rows}
-                                    renderItem={(item) => {
-                                        const {url,name,description,media} = item;
+                        <Layout.Section oneThird>
+                            <Card title="News">
+                                <Card.Section>
+                                    <ResourceList
+                                        items={rows}
+                                        renderItem={(item) => {
+                                            const {url,name,description,media} = item;
 
-                                        return (
-                                            <a href={url} target="_blank" style={{textDecoration:"none", color:"#000"}}><ResourceList.Item
-                                                media={media}
-                                                accessibilityLabel={`View details for ${name}`}
-                                            >
-                                                <h3>
-                                                    <TextStyle variation="strong">{name}</TextStyle>
-                                                </h3>
-                                                <label>
-                                                    {description}
-                                                </label>
-                                            </ResourceList.Item></a>
-                                        );
-                                    }}
-                                />
-                            </Card.Section>
-                        </Card>
-                    </Layout.Section> : <Layout.Section oneThird>
+                                            return (
+                                                <a href={url} target="_blank" style={{textDecoration:"none", color:"#000"}}><ResourceList.Item
+                                                    media={media}
+                                                    accessibilityLabel={`View details for ${name}`}
+                                                >
+                                                    <h3>
+                                                        <TextStyle variation="strong">{name}</TextStyle>
+                                                    </h3>
+                                                    <label>
+                                                        {description}
+                                                    </label>
+                                                </ResourceList.Item></a>
+                                            );
+                                        }}
+                                    />
+                                </Card.Section>
+                            </Card>
+                        </Layout.Section> : <Layout.Section oneThird>
                             <Card title="News">
                                 <Card.Section>
                                     <Stack distribution="center">
@@ -702,30 +692,30 @@ class Demo_analytics_reporting extends Component {
                         </Layout.Section>}
                     <Layout.Section oneThird>
                         {rows_blog.length > 0?
-                        <Card title="Blogs">
-                            <Card.Section>
-                                <ResourceList
-                                    items={rows_blog}
-                                    renderItem={(item) => {
-                                        const {url, name,media,description} = item;
+                            <Card title="Blogs">
+                                <Card.Section>
+                                    <ResourceList
+                                        items={rows_blog}
+                                        renderItem={(item) => {
+                                            const {url, name,media,description} = item;
 
-                                        return (
-                                            <a href={url} target="_blank" style={{textDecoration:"none", color:"#000"}}><ResourceList.Item
-                                                media={media}
-                                                accessibilityLabel={`View details for ${name}`}
-                                            >
-                                                <h3>
-                                                    <TextStyle variation="strong">{name}</TextStyle>
-                                                </h3>
-                                                <label>
-                                                    {description}
-                                                </label>
-                                            </ResourceList.Item></a>
-                                        );
-                                    }}
-                                />
-                            </Card.Section>
-                        </Card>: <Layout.Section oneThird>
+                                            return (
+                                                <a href={url} target="_blank" style={{textDecoration:"none", color:"#000"}}><ResourceList.Item
+                                                    media={media}
+                                                    accessibilityLabel={`View details for ${name}`}
+                                                >
+                                                    <h3>
+                                                        <TextStyle variation="strong">{name}</TextStyle>
+                                                    </h3>
+                                                    <label>
+                                                        {description}
+                                                    </label>
+                                                </ResourceList.Item></a>
+                                            );
+                                        }}
+                                    />
+                                </Card.Section>
+                            </Card>: <Layout.Section oneThird>
                                 <Card title="Blogs">
                                     <Card.Section>
                                         <Stack distribution="center">

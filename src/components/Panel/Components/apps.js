@@ -81,7 +81,7 @@ export class Apps extends Component {
 			notify.info("Please Select A Integration First");
 		} else {
 			this.setState({ modalOpen: !this.state.modalOpen });
-		} // if he/she cancel or close the modal
+		} // if he/she cancel or close the modalpanel/dashboard
 	};
 	render() {
 		return (

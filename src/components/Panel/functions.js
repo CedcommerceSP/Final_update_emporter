@@ -37,11 +37,11 @@ export const panelFunctions = {
 				panelID: "products"
 			},
             {
-                id: "orders",
-                content: "Orders",
-                accessibilityLabel: "Orders",
-                link: "/panel/orders",
-                panelID: "orders"
+                id: "fbaorders",
+                content: "FBA_Orders",
+                accessibilityLabel: "fbaOrders",
+                link: "/panel/fbaOrders",
+                panelID: "fbaOrders"
             },
 			{
 				id: "configuration",

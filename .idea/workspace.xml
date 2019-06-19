@@ -3,12 +3,11 @@
   <component name="ChangeListManager">
     <list default="true" id="2e099004-80b0-4101-b90f-7275c6e6533a" name="Default" comment="">
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/components/Panel/Components/apps.js" afterPath="$PROJECT_DIR$/src/components/Panel/Components/apps.js" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/components/Panel/Components/configuration.js" afterPath="$PROJECT_DIR$/src/components/Panel/Components/configuration.js" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/components/Panel/Components/products-component/new-analytics-reporting.js" afterPath="$PROJECT_DIR$/src/components/Panel/Components/products-component/new-analytics-reporting.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/shared/app/amazon-form.js" afterPath="$PROJECT_DIR$/src/shared/app/amazon-form.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/shared/app/apps.js" afterPath="$PROJECT_DIR$/src/shared/app/apps.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/shared/app/install-apps.js" afterPath="$PROJECT_DIR$/src/shared/app/install-apps.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/shared/pricing_guide.js" afterPath="$PROJECT_DIR$/src/shared/pricing_guide.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/components/Panel/functions.js" afterPath="$PROJECT_DIR$/src/components/Panel/functions.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/components/Panel/panel.js" afterPath="$PROJECT_DIR$/src/components/Panel/panel.js" />
     </list>
     <ignored path="$PROJECT_DIR$/.tmp/" />
     <ignored path="$PROJECT_DIR$/temp/" />
@@ -124,14 +123,45 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file leaf-file-name="queued_task.js" pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/src/components/Panel/Components/queued_task.js">
+      <file leaf-file-name="functions.js" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/shared/smartTable/functions.js">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="2018">
+              <caret line="191" column="27" lean-forward="false" selection-start-line="191" selection-start-column="27" selection-end-line="191" selection-end-column="27" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="fbaOrder.js" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/src/components/Panel/Components/fbaOrder.js">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="364">
+              <caret line="90" column="65" lean-forward="false" selection-start-line="90" selection-start-column="65" selection-end-line="90" selection-end-column="65" />
+              <folding>
+                <element signature="e#42#81#0" expanded="true" />
+                <element signature="e#714#814#0" expanded="false" />
+                <element signature="e#846#956#0" expanded="false" />
+                <element signature="e#987#1068#0" expanded="false" />
+                <element signature="e#2940#3027#0" expanded="false" />
+                <element signature="e#5853#6305#0" expanded="false" />
+                <element signature="e#6760#7393#0" expanded="false" />
+                <element signature="e#7960#8000#0" expanded="false" />
+                <element signature="e#9041#9149#0" expanded="false" />
+                <element signature="e#11192#11666#0" expanded="false" />
+                <element signature="e#11294#11620#0" expanded="false" />
+                <element signature="e#11829#13609#0" expanded="false" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="static-functions.js" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/components/Panel/Components/static-functions.js">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="188">
-              <caret line="107" column="12" lean-forward="false" selection-start-line="107" selection-start-column="12" selection-end-line="107" selection-end-column="12" />
-              <folding>
-                <element signature="e#0#41#0" expanded="true" />
-              </folding>
+              <caret line="47" column="16" lean-forward="false" selection-start-line="47" selection-start-column="16" selection-end-line="47" selection-end-column="16" />
+              <folding />
             </state>
           </provider>
         </entry>
@@ -147,36 +177,36 @@
   </component>
   <component name="FindInProjectRecents">
     <findStrings>
-      <find>Configuration</find>
-      <find>Amazon Configuration</find>
-      <find>Walmart Importer</find>
-      <find>I only want to import products on Shopify</find>
-      <find>back</find>
-      <find>consol</find>
-      <find>dashb</find>
-      <find>dashboa</find>
-      <find>pr</find>
-      <find>0.1</find>
-      <find>0</find>
-      <find>Product Import Charges</find>
-      <find>console</find>
-      <find>step</find>
-      <find>To Sync Inventory and price of Uploaded products, you ha</find>
-      <find>price</find>
-      <find>get</find>
-      <find>field</find>
-      <find>AMAZON</find>
-      <find>amazon</find>
-      <find>setAmazonCredentials</find>
-      <find>requests</find>
-      <find>AmazonInstallationForm</find>
+      <find>FbaOrder</find>
+      <find>visibleColumns</find>
+      <find>sortedRows</find>
+      <find>columnTitles</find>
       <find>request</find>
-      <find>redirectResul</find>
-      <find>render\</find>
+      <find>appliedFilters</find>
+      <find>datata</find>
+      <find>this.state.products</find>
+      <find>products</find>
+      <find>updateState</find>
+      <find>datatab</find>
+      <find>requests</find>
+      <find>prepare</find>
+      <find>tr</find>
+      <find>&lt;tr&gt;</find>
+      <find>handleToggleClick</find>
+      <find>pagination_show</find>
+      <find>filter</find>
       <find>render</find>
-      <find>fbaConfigurationData</find>
-      <find>fba_configuration</find>
-      <find>render(</find>
+      <find>selectedProducts</find>
+      <find>source_variant_id</find>
+      <find>single_column_filter</find>
+      <find>necessaryInfo</find>
+      <find>const</find>
+      <find>account_con</find>
+      <find>s</find>
+      <find>showing</find>
+      <find>account_connected</find>
+      <find>checkingFba</find>
+      <find>Showing</find>
     </findStrings>
   </component>
   <component name="Git.Settings">
@@ -185,10 +215,6 @@
   <component name="IdeDocumentHistory">
     <option name="CHANGED_PATHS">
       <list>
-        <option value="&lt;8af2c238-37ba-4b7d-ba35-ab56131d85ae&gt;/src/app/panel/hubspot/custom-properties/custom-properties.component.html" />
-        <option value="&lt;8af2c238-37ba-4b7d-ba35-ab56131d85ae&gt;/src/app/panel/hubspot/smart-lists/smart-list.component.html" />
-        <option value="&lt;8af2c238-37ba-4b7d-ba35-ab56131d85ae&gt;/src/app/panel/hubspot/workflows/workflow.component.html" />
-        <option value="&lt;8af2c238-37ba-4b7d-ba35-ab56131d85ae&gt;/src/app/panel/hubspot/one-click-sync/one-click-sync.component.ts" />
         <option value="&lt;8af2c238-37ba-4b7d-ba35-ab56131d85ae&gt;/src/app/panel/hubspot/one-click-sync/connect.component.html" />
         <option value="$PROJECT_DIR$/src/components/other/message.js" />
         <option value="&lt;8af2c238-37ba-4b7d-ba35-ab56131d85ae&gt;/src/app/panel/apps/install_app/install-app.component.html" />
@@ -219,23 +245,27 @@
         <option value="$PROJECT_DIR$/src/components/Panel/Components/plans.js" />
         <option value="$PROJECT_DIR$/src/components/Panel/Components/products.js" />
         <option value="$PROJECT_DIR$/src/components/Panel/Layout/header.js" />
-        <option value="$PROJECT_DIR$/src/components/Panel/Components/orders.js" />
-        <option value="$PROJECT_DIR$/src/components/Panel/panel.js" />
         <option value="$PROJECT_DIR$/src/components/Panel/Components/apps-component/connected-accounts.js" />
-        <option value="$PROJECT_DIR$/src/components/Panel/Components/apps.js" />
         <option value="$PROJECT_DIR$/src/components/Panel/Components/profile-component/create-profile.js" />
-        <option value="$PROJECT_DIR$/src/components/Panel/functions.js" />
         <option value="$PROJECT_DIR$/src/components/Panel/Components/import.js" />
-        <option value="$PROJECT_DIR$/src/components/Panel/Components/dashboard.js" />
         <option value="$PROJECT_DIR$/src/environments/environment.js" />
         <option value="$PROJECT_DIR$/src/shared/pricing_guide.js" />
         <option value="$PROJECT_DIR$/src/shared/app/amazon-form.js" />
         <option value="$PROJECT_DIR$/src/shared/app/fba-install-apps.js" />
         <option value="$PROJECT_DIR$/src/shared/app/install-apps.js" />
-        <option value="$PROJECT_DIR$/src/components/Panel/Components/products-component/new-analytics-reporting.js" />
         <option value="$PROJECT_DIR$/src/shared/app/fba-form.js" />
         <option value="$PROJECT_DIR$/src/shared/app/apps.js" />
+        <option value="$PROJECT_DIR$/src/components/Panel/Components/products-component/new-analytics-reporting.js" />
+        <option value="$PROJECT_DIR$/src/components/Panel/Components/products-component/analytics-reporting-cart.js" />
+        <option value="$PROJECT_DIR$/src/components/Panel/Components/dashboard.js" />
         <option value="$PROJECT_DIR$/src/components/Panel/Components/configuration.js" />
+        <option value="$PROJECT_DIR$/src/shared/smartTable/SmartDataTable.js" />
+        <option value="$PROJECT_DIR$/src/shared/smartTable/functions.js" />
+        <option value="$PROJECT_DIR$/src/components/Panel/Components/orders.js" />
+        <option value="$PROJECT_DIR$/src/components/Panel/Components/apps.js" />
+        <option value="$PROJECT_DIR$/src/components/Panel/functions.js" />
+        <option value="$PROJECT_DIR$/src/components/Panel/panel.js" />
+        <option value="$PROJECT_DIR$/src/components/Panel/Components/fbaOrder.js" />
       </list>
     </option>
   </component>
@@ -279,8 +309,8 @@
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
-      <pane id="Scope" />
       <pane id="Scratches" />
+      <pane id="Scope" />
       <pane id="ProjectPane">
         <subPane>
           <PATH>
@@ -321,55 +351,7 @@
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
             <PATH_ELEMENT>
-              <option name="myItemId" value="components" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="Panel" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="omni-importer" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="omni-importer" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="src" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="components" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="Panel" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="Components" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="omni-importer" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="omni-importer" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="src" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="components" />
+              <option name="myItemId" value="shared" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
           </PATH>
@@ -527,12 +509,13 @@
       <workItem from="1559376636080" duration="839000" />
       <workItem from="1559884839422" duration="20000" />
       <workItem from="1559885091804" duration="21760000" />
-      <workItem from="1560141194242" duration="12716000" />
+      <workItem from="1560141194242" duration="51417000" />
+      <workItem from="1560834122586" duration="25185000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="437904000" />
+    <option name="totallyTimeSpent" value="501790000" />
   </component>
   <component name="TodoView">
     <todo-panel id="selected-file">
@@ -545,17 +528,16 @@
   </component>
   <component name="ToolWindowManager">
     <frame x="-3" y="0" width="1286" height="770" extended-state="6" />
-    <editor active="true" />
     <layout>
-      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.23595506" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.2199037" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="true" content_ui="tabs" />
-      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32919255" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
+      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.24959871" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
-      <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32943144" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" x="0" y="24" width="1280" height="743" />
-      <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
+      <window_info id="Terminal" active="true" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.32943144" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" x="0" y="24" width="1280" height="743" />
       <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="true" content_ui="tabs" />
+      <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
       <window_info id="Message" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="Commander" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
@@ -579,97 +561,6 @@
     <watches-manager />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/src/shared/smart-table/SmartDataTable.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-330">
-          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/components/Panel/Components/profiling.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="44">
-          <caret line="9" column="13" lean-forward="false" selection-start-line="9" selection-start-column="13" selection-end-line="9" selection-end-column="13" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/components/Auth/auth.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="0">
-          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/components/other/progress.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="0">
-          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/components/other/private_policy.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-11748">
-          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/node_modules/@types/node/index.d.ts">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-1528">
-          <caret line="5553" column="20" lean-forward="false" selection-start-line="5553" selection-start-column="20" selection-end-line="5553" selection-end-column="20" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/shared/smartTable/SmartDataTable.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="2657">
-          <caret line="1083" column="6" lean-forward="false" selection-start-line="1083" selection-start-column="6" selection-end-line="1083" selection-end-column="6" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/node_modules/@types/react/index.d.ts">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="188">
-          <caret line="424" column="17" lean-forward="false" selection-start-line="424" selection-start-column="17" selection-end-line="424" selection-end-column="17" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/components/Panel/Layout/header.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="88">
-          <caret line="4" column="11" lean-forward="true" selection-start-line="4" selection-start-column="11" selection-end-line="4" selection-end-column="11" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/components/Panel/Components/products.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="0">
-          <caret line="0" column="30" lean-forward="false" selection-start-line="0" selection-start-column="30" selection-end-line="0" selection-end-column="30" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/components/Panel/Components/orders.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-2466">
-          <caret line="628" column="10" lean-forward="false" selection-start-line="628" selection-start-column="4" selection-end-line="628" selection-end-column="10" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/public/.htaccess">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="0">
-          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/node_modules/@shopify/polaris/types/components/Button/Button.d.ts">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="368">
-          <caret line="67" column="14" lean-forward="false" selection-start-line="67" selection-start-column="14" selection-end-line="67" selection-end-column="14" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/components/Panel/Components/import-component/fileimporter.js">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="85">
@@ -698,20 +589,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/components/Panel/functions.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="374">
-          <caret line="47" column="34" lean-forward="false" selection-start-line="47" selection-start-column="34" selection-end-line="47" selection-end-column="34" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/components/Panel/Components/apps.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="42">
-          <caret line="69" column="22" lean-forward="false" selection-start-line="69" selection-start-column="22" selection-end-line="69" selection-end-column="22" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/components/Panel/Components/apps-component/install-app.js">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="-858">
@@ -730,13 +607,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="0">
           <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/components/Panel/Components/import.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="924">
-          <caret line="67" column="52" lean-forward="false" selection-start-line="67" selection-start-column="52" selection-end-line="67" selection-end-column="52" />
         </state>
       </provider>
     </entry>
@@ -808,19 +678,10 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/components/Panel/Components/dashboard.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="0">
-          <caret line="0" column="7" lean-forward="false" selection-start-line="0" selection-start-column="7" selection-end-line="0" selection-end-column="7" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/environments/environment.js">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="88">
           <caret line="4" column="6" lean-forward="false" selection-start-line="4" selection-start-column="6" selection-end-line="4" selection-end-column="6" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -848,10 +709,173 @@
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/shared/app/fba-install-apps.js" />
+    <entry file="file://$PROJECT_DIR$/src/shared/app/install-apps.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-2382">
+          <caret line="20" column="0" lean-forward="true" selection-start-line="20" selection-start-column="0" selection-end-line="20" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/index.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="0">
+          <caret line="0" column="7" lean-forward="false" selection-start-line="0" selection-start-column="7" selection-end-line="0" selection-end-column="7" />
+          <folding>
+            <element signature="e#0#26#0" expanded="false" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/components/Panel/Components/queued_task.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="188">
+          <caret line="107" column="12" lean-forward="false" selection-start-line="107" selection-start-column="12" selection-end-line="107" selection-end-column="12" />
+          <folding>
+            <element signature="e#0#41#0" expanded="false" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/components/Panel/Components/dashboard.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="110">
+          <caret line="17" column="76" lean-forward="false" selection-start-line="17" selection-start-column="76" selection-end-line="17" selection-end-column="76" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/components/Panel/Components/products-component/analytics-reporting-cart.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="78">
+          <caret line="150" column="35" lean-forward="true" selection-start-line="150" selection-start-column="35" selection-end-line="150" selection-end-column="35" />
+          <folding>
+            <element signature="n#!!doc" expanded="false" />
+            <element signature="e#44#82#0" expanded="false" />
+            <element signature="e#2174#2247#0" expanded="false" />
+            <element signature="n#!!block;n#getallNotifications#0;n#Demo_analytics_reporting#0" expanded="false" />
+            <element signature="e#2672#2965#0" expanded="false" />
+            <element signature="e#2708#2955#0" expanded="false" />
+            <element signature="n#!!block;n#monthDiff#0;n#Demo_analytics_reporting#0" expanded="false" />
+            <element signature="n#!!block;n#getActiveRecurrying#0;n#Demo_analytics_reporting#0" expanded="false" />
+            <element signature="e#3361#5016#0" expanded="false" />
+            <element signature="e#3401#4805#0" expanded="false" />
+            <element signature="e#3732#4043#0" expanded="false" />
+            <element signature="e#4069#4382#0" expanded="false" />
+            <element signature="e#4417#4785#0" expanded="false" />
+            <element signature="e#4827#5002#0" expanded="false" />
+            <element signature="e#4863#4983#0" expanded="false" />
+            <element signature="n#!!block;n#getAllImporter#0;n#Demo_analytics_reporting#0" expanded="false" />
+            <element signature="e#6768#7733#0" expanded="false" />
+            <element signature="e#6804#7646#0" expanded="false" />
+            <element signature="e#6909#7193#0" expanded="false" />
+            <element signature="e#6970#7171#0" expanded="false" />
+            <element signature="e#7652#7719#0" expanded="false" />
+            <element signature="e#9310#10145#0" expanded="false" />
+            <element signature="e#10409#10459#0" expanded="false" />
+            <element signature="e#11622#12457#0" expanded="false" />
+            <element signature="e#12834#13336#0" expanded="false" />
+            <element signature="e#13962#14788#0" expanded="false" />
+            <element signature="e#14052#14761#0" expanded="false" />
+            <element signature="e#14177#14489#0" expanded="false" />
+            <element signature="e#14338#14459#0" expanded="false" />
+            <element signature="e#14549#14729#0" expanded="false" />
+            <element signature="e#15856#16450#0" expanded="false" />
+            <element signature="e#15947#16027#0" expanded="false" />
+            <element signature="e#16149#16399#0" expanded="false" />
+            <element signature="e#16222#16359#0" expanded="false" />
+            <element signature="e#16756#17588#0" expanded="false" />
+            <element signature="e#16790#16946#0" expanded="false" />
+            <element signature="e#16980#17150#0" expanded="false" />
+            <element signature="e#17184#17353#0" expanded="false" />
+            <element signature="e#17387#17557#0" expanded="false" />
+            <element signature="e#17976#18119#0" expanded="false" />
+            <element signature="n#!!block;n#newsdatafrombackend#0;n#Demo_analytics_reporting#0" expanded="false" />
+            <element signature="e#19129#19601#0" expanded="false" />
+            <element signature="e#19161#19500#0" expanded="false" />
+            <element signature="e#19222#19442#0" expanded="false" />
+            <element signature="e#19257#19358#0" expanded="false" />
+            <element signature="e#19518#19591#0" expanded="false" />
+            <element signature="n#!!block;n#tableBlogData#0;n#Demo_analytics_reporting#0" expanded="false" />
+            <element signature="e#19722#20194#0" expanded="false" />
+            <element signature="e#19754#20093#0" expanded="false" />
+            <element signature="e#19815#20035#0" expanded="false" />
+            <element signature="e#19850#19951#0" expanded="false" />
+            <element signature="e#20111#20184#0" expanded="false" />
+            <element signature="e#20385#20897#0" expanded="false" />
+            <element signature="e#20702#20878#0" expanded="false" />
+            <element signature="e#21042#21554#0" expanded="false" />
+            <element signature="e#21359#21535#0" expanded="false" />
+            <element signature="e#22210#22910#0" expanded="false" />
+            <element signature="e#22319#22736#0" expanded="false" />
+            <element signature="e#22372#22634#0" expanded="false" />
+            <element signature="e#22485#22604#0" expanded="false" />
+            <element signature="e#22739#22871#0" expanded="false" />
+            <element signature="e#22931#23143#0" expanded="false" />
+            <element signature="e#22982#23105#0" expanded="false" />
+            <element signature="e#23230#32105#0" expanded="false" />
+            <element signature="e#23259#27872#0" expanded="false" />
+            <element signature="e#23310#23381#0" expanded="false" />
+            <element signature="e#23407#27729#0" expanded="false" />
+            <element signature="e#23598#27697#0" expanded="false" />
+            <element signature="e#23645#27653#0" expanded="false" />
+            <element signature="e#23702#26540#0" expanded="false" />
+            <element signature="e#23744#24553#0" expanded="false" />
+            <element signature="e#24137#24464#0" expanded="false" />
+            <element signature="e#24595#25532#0" expanded="false" />
+            <element signature="e#25106#25443#0" expanded="false" />
+            <element signature="e#25574#26501#0" expanded="false" />
+            <element signature="e#26070#26412#0" expanded="false" />
+            <element signature="e#26600#27617#0" expanded="false" />
+            <element signature="e#26782#27536#0" expanded="false" />
+            <element signature="e#26858#27532#0" expanded="false" />
+            <element signature="e#27129#27288#0" expanded="false" />
+            <element signature="e#27337#27467#0" expanded="false" />
+            <element signature="e#27755#27833#0" expanded="false" />
+            <element signature="e#27936#29462#0" expanded="false" />
+            <element signature="e#27990#29420#0" expanded="false" />
+            <element signature="e#28042#29384#0" expanded="false" />
+            <element signature="e#28093#29336#0" expanded="false" />
+            <element signature="e#28222#29296#0" expanded="false" />
+            <element signature="e#28413#29207#0" expanded="false" />
+            <element signature="e#28489#29203#0" expanded="false" />
+            <element signature="e#28776#28943#0" expanded="false" />
+            <element signature="e#28996#29134#0" expanded="false" />
+            <element signature="e#29465#29955#0" expanded="false" />
+            <element signature="e#29519#29913#0" expanded="false" />
+            <element signature="e#29571#29877#0" expanded="false" />
+            <element signature="e#29622#29829#0" expanded="false" />
+            <element signature="e#29977#32079#0" expanded="false" />
+            <element signature="e#30078#31515#0" expanded="false" />
+            <element signature="e#30131#31479#0" expanded="false" />
+            <element signature="e#30182#31431#0" expanded="false" />
+            <element signature="e#30316#31391#0" expanded="false" />
+            <element signature="e#30508#31302#0" expanded="false" />
+            <element signature="e#30584#31298#0" expanded="false" />
+            <element signature="e#30871#31038#0" expanded="false" />
+            <element signature="e#31091#31229#0" expanded="false" />
+            <element signature="e#31517#32040#0" expanded="false" />
+            <element signature="e#31575#31994#0" expanded="false" />
+            <element signature="e#31632#31954#0" expanded="false" />
+            <element signature="e#31687#31902#0" expanded="false" />
+            <element signature="n#!!block;n#render_recent_activity#0;n#Demo_analytics_reporting#0" expanded="false" />
+            <element signature="e#32279#33751#0" expanded="false" />
+            <element signature="e#32393#33373#0" expanded="false" />
+            <element signature="e#32464#33316#0" expanded="false" />
+            <element signature="e#32693#33274#0" expanded="false" />
+            <element signature="e#32757#33229#0" expanded="false" />
+            <element signature="e#32945#33053#0" expanded="false" />
+            <element signature="e#33511#33694#0" expanded="false" />
+            <element signature="n#!!block;n#updateState#0;n#Demo_analytics_reporting#0" expanded="false" />
+            <element signature="n#!!block;n#redirect#0;n#Demo_analytics_reporting#0" expanded="false" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/src/components/Panel/Components/products-component/new-analytics-reporting.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="330">
-          <caret line="73" column="19" lean-forward="true" selection-start-line="73" selection-start-column="19" selection-end-line="73" selection-end-column="19" />
+        <state relative-caret-position="217">
+          <caret line="461" column="62" lean-forward="false" selection-start-line="461" selection-start-column="54" selection-end-line="461" selection-end-column="62" />
           <folding>
             <element signature="e#2132#2205#0" expanded="false" />
             <element signature="n#!!block;n#getallNotifications#0;n#Demo_analytics_reporting#0" expanded="false" />
@@ -880,17 +904,12 @@
             <element signature="e#6563#6847#0" expanded="false" />
             <element signature="e#6624#6825#0" expanded="false" />
             <element signature="e#7306#7373#0" expanded="false" />
-            <element signature="n#!!block;n#getYAxisImporter#0;n#Demo_analytics_reporting#0" expanded="false" />
             <element signature="e#7727#7796#0" expanded="false" />
-            <element signature="e#7837#10857#0" expanded="false" />
-            <element signature="e#8139#10251#0" expanded="false" />
             <element signature="e#8272#9431#0" expanded="false" />
             <element signature="e#8358#9409#0" expanded="false" />
             <element signature="e#8440#9381#0" expanded="false" />
             <element signature="e#8835#9351#0" expanded="false" />
             <element signature="e#8912#9317#0" expanded="false" />
-            <element signature="e#9632#10087#0" expanded="false" />
-            <element signature="e#9665#10062#0" expanded="false" />
             <element signature="e#9757#10017#0" expanded="false" />
             <element signature="e#9758#10016#0" expanded="false" />
             <element signature="e#10532#10685#0" expanded="false" />
@@ -935,16 +954,11 @@
             <element signature="e#17103#17183#0" expanded="false" />
             <element signature="e#17305#17555#0" expanded="false" />
             <element signature="e#17378#17515#0" expanded="false" />
-            <element signature="n#!!block;n#recurring_plan#0;n#Demo_analytics_reporting#0" expanded="false" />
-            <element signature="e#17728#19539#0" expanded="false" />
-            <element signature="e#17832#19515#0" expanded="false" />
-            <element signature="e#17863#19487#0" expanded="false" />
             <element signature="e#17912#18744#0" expanded="false" />
             <element signature="e#17946#18102#0" expanded="false" />
             <element signature="e#18136#18306#0" expanded="false" />
             <element signature="e#18340#18509#0" expanded="false" />
             <element signature="e#18543#18713#0" expanded="false" />
-            <element signature="e#18796#19459#0" expanded="false" />
             <element signature="e#19040#19394#0" expanded="false" />
             <element signature="e#19132#19275#0" expanded="false" />
             <element signature="e#19553#20153#0" expanded="false" />
@@ -964,14 +978,10 @@
             <element signature="e#20971#21191#0" expanded="false" />
             <element signature="e#21006#21107#0" expanded="false" />
             <element signature="e#21267#21340#0" expanded="false" />
-            <element signature="n#!!block;n#render#0;n#Demo_analytics_reporting#0" expanded="false" />
-            <element signature="e#21500#22123#0" expanded="false" />
             <element signature="e#21545#22093#0" expanded="false" />
             <element signature="e#21882#22070#0" expanded="false" />
-            <element signature="e#22196#23103#0" expanded="false" />
             <element signature="e#22242#22754#0" expanded="false" />
             <element signature="e#22559#22735#0" expanded="false" />
-            <element signature="e#22808#23092#0" expanded="false" />
             <element signature="e#23133#33147#0" expanded="false" />
             <element signature="e#23166#24377#0" expanded="false" />
             <element signature="e#23195#23396#0" expanded="false" />
@@ -1042,16 +1052,33 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/shared/app/apps.js">
+    <entry file="file://$PROJECT_DIR$/src/shared/formbuilder.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1232">
-          <caret line="208" column="12" lean-forward="false" selection-start-line="208" selection-start-column="12" selection-end-line="208" selection-end-column="28" />
+        <state relative-caret-position="44">
+          <caret line="11" column="13" lean-forward="false" selection-start-line="11" selection-start-column="13" selection-end-line="11" selection-end-column="13" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/shared/app/fba-form.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-1655">
+          <caret line="279" column="4" lean-forward="false" selection-start-line="279" selection-start-column="4" selection-end-line="279" selection-end-column="4" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/components/Panel/Components/configuration.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="342">
+          <caret line="682" column="34" lean-forward="false" selection-start-line="682" selection-start-column="34" selection-end-line="682" selection-end-column="34" />
+          <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/services/request.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-490">
+        <state relative-caret-position="22">
           <caret line="61" column="47" lean-forward="true" selection-start-line="61" selection-start-column="47" selection-end-line="61" selection-end-column="47" />
         </state>
       </provider>
@@ -1060,81 +1087,170 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="110">
           <caret line="5" column="18" lean-forward="false" selection-start-line="5" selection-start-column="18" selection-end-line="5" selection-end-column="18" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/shared/app/install-apps.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-2382">
-          <caret line="20" column="0" lean-forward="true" selection-start-line="20" selection-start-column="0" selection-end-line="20" selection-end-column="0" />
           <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/shared/app/fba-form.js">
+    <entry file="file://$PROJECT_DIR$/src/shared/app/apps.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="176">
-          <caret line="44" column="25" lean-forward="false" selection-start-line="44" selection-start-column="25" selection-end-line="44" selection-end-column="25" />
+        <state relative-caret-position="1379">
+          <caret line="253" column="4" lean-forward="false" selection-start-line="253" selection-start-column="4" selection-end-line="253" selection-end-column="4" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/components/Panel/Components/apps.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="22">
+          <caret line="83" column="63" lean-forward="false" selection-start-line="83" selection-start-column="63" selection-end-line="83" selection-end-column="63" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/App.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="918">
+          <caret line="65" column="33" lean-forward="false" selection-start-line="65" selection-start-column="33" selection-end-line="65" selection-end-column="33" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/components/Panel/Components/import.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-660">
+          <caret line="0" column="7" lean-forward="true" selection-start-line="0" selection-start-column="7" selection-end-line="0" selection-end-column="7" />
+          <folding>
+            <element signature="e#0#41#0" expanded="false" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/shared/smartTable/SmartDataTable.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="217">
+          <caret line="833" column="37" lean-forward="false" selection-start-line="833" selection-start-column="36" selection-end-line="833" selection-end-column="37" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/components/Panel/Components/orders.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="4897">
+          <caret line="471" column="24" lean-forward="true" selection-start-line="471" selection-start-column="24" selection-end-line="471" selection-end-column="24" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/components/Panel/functions.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="638">
+          <caret line="38" column="11" lean-forward="false" selection-start-line="38" selection-start-column="11" selection-end-line="44" selection-end-column="14" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/components/Panel/Components/products.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="308">
+          <caret line="62" column="33" lean-forward="true" selection-start-line="62" selection-start-column="33" selection-end-line="62" selection-end-column="33" />
           <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/components/Panel/panel.js">
       <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="356">
+          <caret line="146" column="4" lean-forward="false" selection-start-line="146" selection-start-column="4" selection-end-line="146" selection-end-column="4" />
+          <folding>
+            <element signature="e#0#39#0" expanded="true" />
+            <element signature="e#5161#5247#0" expanded="false" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/shared/smartTable/Paginate.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="88">
+          <caret line="4" column="24" lean-forward="false" selection-start-line="4" selection-start-column="23" selection-end-line="4" selection-end-column="24" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/shared/smartTable/Toggles.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-43">
+          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/shared/smartTable/TableCell.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="88">
+          <caret line="4" column="27" lean-forward="false" selection-start-line="4" selection-start-column="27" selection-end-line="4" selection-end-column="27" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/shared/smartTable/index.js">
+      <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="0">
-          <caret line="0" column="7" lean-forward="false" selection-start-line="0" selection-start-column="7" selection-end-line="0" selection-end-column="7" />
+          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/shared/smartTable/ErrorBoundary.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="0">
+          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/shared/smartTable/filter.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="0">
+          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
           <folding>
             <element signature="e#0#41#0" expanded="false" />
           </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/App.js">
+    <entry file="file://$PROJECT_DIR$/src/shared/smartTable/functions.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="22">
-          <caret line="65" column="33" lean-forward="false" selection-start-line="65" selection-start-column="33" selection-end-line="65" selection-end-column="33" />
-          <folding>
-            <element signature="e#0#41#0" expanded="false" />
-          </folding>
+        <state relative-caret-position="2018">
+          <caret line="191" column="27" lean-forward="false" selection-start-line="191" selection-start-column="27" selection-end-line="191" selection-end-column="27" />
+          <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/index.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="0">
-          <caret line="0" column="7" lean-forward="false" selection-start-line="0" selection-start-column="7" selection-end-line="0" selection-end-column="7" />
-          <folding>
-            <element signature="e#0#26#0" expanded="false" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/shared/formbuilder.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-132">
-          <caret line="39" column="24" lean-forward="false" selection-start-line="39" selection-start-column="24" selection-end-line="39" selection-end-column="24" />
-          <folding>
-            <element signature="e#0#41#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/components/Panel/Components/configuration.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="196">
-          <caret line="681" column="51" lean-forward="true" selection-start-line="681" selection-start-column="51" selection-end-line="681" selection-end-column="51" />
-          <folding>
-            <element signature="e#0#41#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/components/Panel/Components/queued_task.js">
+    <entry file="file://$PROJECT_DIR$/src/components/Panel/Components/static-functions.js">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="188">
-          <caret line="107" column="12" lean-forward="false" selection-start-line="107" selection-start-column="12" selection-end-line="107" selection-end-column="12" />
+          <caret line="47" column="16" lean-forward="false" selection-start-line="47" selection-start-column="16" selection-end-line="47" selection-end-column="16" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/components/Panel/Components/fbaOrder.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="364">
+          <caret line="90" column="65" lean-forward="false" selection-start-line="90" selection-start-column="65" selection-end-line="90" selection-end-column="65" />
           <folding>
-            <element signature="e#0#41#0" expanded="true" />
+            <element signature="e#42#81#0" expanded="true" />
+            <element signature="e#714#814#0" expanded="false" />
+            <element signature="e#846#956#0" expanded="false" />
+            <element signature="e#987#1068#0" expanded="false" />
+            <element signature="e#2940#3027#0" expanded="false" />
+            <element signature="e#5853#6305#0" expanded="false" />
+            <element signature="e#6760#7393#0" expanded="false" />
+            <element signature="e#7960#8000#0" expanded="false" />
+            <element signature="e#9041#9149#0" expanded="false" />
+            <element signature="e#11192#11666#0" expanded="false" />
+            <element signature="e#11294#11620#0" expanded="false" />
+            <element signature="e#11829#13609#0" expanded="false" />
           </folding>
         </state>
       </provider>
