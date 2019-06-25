@@ -1,20 +1,58 @@
 import React, { Component } from "react";
 import {
-	DropZone,
-	Stack,
-	Thumbnail,
-	Caption,
-	Banner,
-	List,
 	Card,
 	Button,
-	ButtonGroup
+    ButtonGroup,
+    ProgressBar
 } from "@shopify/polaris";
 import { isUndefined } from "util";
+import FileUploadProgress  from 'react-fileupload-progress';
 
 import { requests } from "../../../../services/request";
 import { notify } from "../../../../services/notify";
+import { globalState } from "../../../../services/globalstate";
+import { environment } from "../../../../environments/environment";
 import { capitalizeWord } from "../static-functions";
+
+const styles = {
+    bslabel: {
+        display: 'inline-block',
+        maxWidth: '100%',
+        marginBottom: '5px',
+        fontWeight: 700
+    },
+    bsHelp: {
+        display: 'block',
+        marginTop: '5px',
+        marginBottom: '10px',
+        color: '#737373'
+    },
+
+    bsButton: {
+        fontSize: '12px',
+        lineHeight: '1.5',
+        borderRadius: '3px',
+        color: '#fff',
+        backgroundColor: '#337ab7',
+        borderColor: '#2e6da4',
+        display: 'inline-block',
+        padding: '6px 12px',
+        marginBottom: 0,
+        fontWeight: 400,
+        textAlign: 'center',
+        whiteSpace: 'nowrap',
+        verticalAlign: 'middle',
+        touchAction: 'manipulation',
+        cursor: 'pointer',
+        WebkitUserSelect: 'none',
+        MozUserSelect: 'none',
+        msUserSelect: 'none',
+        userSelect: 'none',
+        backgroundImage: 'none',
+        border: '1px solid transparent'
+    }
+};
+
 
 class FileImporter extends Component {
 	constructor(props) {
@@ -29,15 +67,17 @@ class FileImporter extends Component {
 			upload_status: false,
 			mapping_status: false,
 			upload_new: false,
-			response: {}
+			response: {},
+            progress: 0
 		};
 		console.clear();
 		this.status();
 	}
+
 	status() {
 		requests.getRequest("fileimporter/request/getStatus").then(response => {
 			console.log(response);
-			if (!response.data["file_uploaded"]) {
+			if (response.data && !response.data["file_uploaded"]) {
 				this.setState({ upload_status: true });
 			} else {
 				this.setState({
@@ -48,243 +88,81 @@ class FileImporter extends Component {
 			}
 		});
 	}
-	uploadFile = file => {
-		this.getBase64(file).then(file_new => {
-			let fileData = file_new.replace(/^data:text\/[a-z]+;base64,/, "");
-			requests
-				.postRequest("fileimporter/request/fileUpload", { file: fileData })
-				.then(e => {
-					if (e.success) {
-						this.redirect("/panel/import/mapping", {
-							field: e["data"]["fields"],
-							header: e["data"]["header"],
-							mapped: e["data"]["mapped"]
-						});
-						this.setState({
-							openMapping: true,
-							container_field: e["data"]["fields"],
-							csv_fields: e["data"]["header"]
-						});
-						notify.success(e.message);
-					} else {
-						notify.error(e.message);
-					}
-				});
-		});
-	};
+
+    formGetter(){
+        return new FormData(document.getElementById('customForm'));
+    }
+
+    customFormRenderer(onSubmit) {
+        let mapped = this.state.response["mapped"];
+        return (
+            <form id='customForm' style={{marginBottom: '15px'}}>
+                <label style={styles.bslabel} htmlFor="exampleInputFile">File input</label>
+                <input style={{display: 'block'}} type="file" name='file' id="exampleInputFile" />
+                <p style={styles.bsHelp}>File Must be in CSV format.</p>
+                <ButtonGroup>
+                    <Button primary onClick={onSubmit}>
+                        Upload
+                    </Button>
+                    {mapped && <ButtonGroup>
+                        <Button
+                            primary={mapped !== undefined && mapped["errorFlag"]}
+                            onClick={() => {
+                                this.redirect("/panel/import/mapping", {
+                                    field: this.state.response["field"],
+                                    header: this.state.response["header"],
+                                    mapped: mapped["mappedObject"],
+                                    marketplace: mapped["marketplace"]
+                                });
+                            }}
+                        >
+                            {mapped !== undefined && mapped["errorFlag"]
+                                ? "Mapping"
+                                : "Edit Mapping"}
+                        </Button>
+                        <Button
+                            primary
+                            onClick={this.importProduct}
+                            disabled={mapped !== undefined && mapped["errorFlag"]}
+                        >
+                            Import
+                        </Button>
+                    </ButtonGroup>}
+                </ButtonGroup>
+            </form>
+        );
+    }
 
 	render() {
-		const { files, rejectedFiles, hasError } = this.state;
-		const validImageTypes = ["text/csv", "text/xlsx"];
-		const fileUpload = !files.length && <DropZone.FileUpload />;
-		const uploadedFiles = files.length > 0 && (
-			<Stack vertical>
-				{files.map((file, index) => {
-					return (
-						<div key={index}>
-							<div className="d-flex justify-content-center mb-4">
-								<Thumbnail
-									size="small"
-									alt={file.name}
-									source={
-										validImageTypes.indexOf(file.type) > 0
-											? window.URL.createObjectURL(file)
-											: "https://cdn.shopify.com/s/files/1/0757/9955/files/New_Post.png?12678548500147524304"
-									}
-								/>
-							</div>
-							<div className="mb-4">
-								{file.name} <Caption>{file.size} bytes</Caption>
-							</div>
-							<div>
-								<Button primary onClick={this.uploadFile.bind(this, file)}>
-									Upload
-								</Button>
-								&nbsp;&nbsp;
-								<Button
-									onClick={() => {
-										this.setState({ files: [] });
-									}}
-								>
-									Cancel
-								</Button>
-							</div>
-						</div>
-					);
-				})}
-			</Stack>
-		);
-		const errorMessage = hasError && (
-			<Banner
-				title="The following file couldn’t be uploaded:"
-				status="critical"
-			>
-				<List type="bullet">
-					{rejectedFiles.map((file, index) => (
-						<List.Item key={index}>
-							{`"${
-								file.name
-							}" is not supported. File type must be .csv, Office Open XML (.xlsx) .`}
-						</List.Item>
-					))}
-				</List>
-			</Banner>
-		);
-
+		let url = environment.API_ENDPOINT + 'fileimporter/request/fileUpload?bearer=' + globalState.getLocalStorage('auth_token');
 		return (
-			<Card>
-				<Stack distribution="fillEvenly">
-					{errorMessage}
-					{fileUpload && this.toCheckStatusAndRender()}
-					{uploadedFiles && (
-						<Card>
-							<div className="text-center p-5">{uploadedFiles}</div>
-						</Card>
-					)}
-				</Stack>
+			<Card sectioned>
+                <FileUploadProgress method="POST" key='ex1' url={url}
+                                    onProgress={(e, request, progress) => {console.log('progress', e, request, progress);}}
+                                    onLoad={ (e, request) => {
+                                        this.setState({progress:100});
+                                        let response = JSON.parse(request.response);
+                                        if ( response.success ) {
+                                            this.redirect("/panel/import/mapping", {
+                                                field: response["data"]["fields"],
+                                                header: response["data"]["header"],
+                                                mapped: response["data"]["mapped"]
+                                            });
+                                        } else {
+                                            notify.error(response.message);
+                                        }
+                                    }}
+                                    onError={ (e, request) => {console.log('error', e, request);}}
+                                    onAbort={ (e, request) => {console.log('abort', e, request);}}
+                                    // progressRenderer={(progress, hasError, cancelHandler) => {
+                                    //     // this.setState({progress:progress - 1});
+                                    // }}
+                                    formGetter={this.formGetter.bind(this)}
+                                    formRenderer={this.customFormRenderer.bind(this)}
+                />
+                {/*{progress !== 0 && <ProgressBar progress={progress}/> }*/}
 			</Card>
 		);
-	}
-	toCheckStatusAndRender() {
-		let mapped = this.state.response["mapped"];
-		const fileUpload = <DropZone.FileUpload />;
-		if (this.state.upload_status) {
-			return (
-				<DropZone
-					accept="text/csv"
-					type="file"
-					onDrop={(files, acceptedFiles, rejectedFiles) => {
-						this.setState({
-							files: [...this.state.files, ...acceptedFiles],
-							rejectedFiles: rejectedFiles,
-							hasError: rejectedFiles.length > 0
-						});
-					}}
-				>
-					{fileUpload}
-				</DropZone>
-			);
-		} else {
-			return (
-				<Card>
-					<Stack vertical={true} alignment="center">
-						<div className="p-2 text-center mt-4">
-							<Stack
-								distribution="center"
-								spacing="extraLoose"
-								alignment="center"
-							>
-								<Thumbnail
-									size="medium"
-									alt={""}
-									source={
-										"https://cdn.shopify.com/s/files/1/0757/9955/files/New_Post.png?12678548500147524304"
-									}
-								/>
-								<Stack vertical spacing="none">
-									<p style={{ color: "#333333" }}>
-										({this.state.response["file_uploaded"]} Items)
-									</p>
-									<p style={{ color: "#333333" }}>
-										{mapped !== undefined &&
-											mapped["marketplace"] &&
-											capitalizeWord(mapped["marketplace"])}
-									</p>
-								</Stack>
-							</Stack>
-						</div>
-						<div className="mb-4">
-							<ButtonGroup>
-								<Button
-									onClick={() => {
-										this.setState({ upload_status: true });
-									}}
-								>
-									Upload new CSV
-								</Button>
-								<Button
-									primary={mapped !== undefined && mapped["errorFlag"]}
-									onClick={() => {
-										this.redirect("/panel/import/mapping", {
-											field: this.state.response["field"],
-											header: this.state.response["header"],
-											mapped: mapped["mappedObject"],
-											marketplace: mapped["marketplace"]
-										});
-									}}
-								>
-									{mapped !== undefined && mapped["errorFlag"]
-										? "Mapping"
-										: "Edit Mapping"}
-								</Button>
-								<Button
-									primary
-									onClick={this.importProduct}
-									disabled={mapped !== undefined && mapped["errorFlag"]}
-								>
-									Import
-								</Button>
-							</ButtonGroup>
-						</div>
-					</Stack>
-				</Card>
-			);
-		}
-	}
-
-	importProduct = () => {
-		let sendData = {
-			marketplace: "fileimporter"
-		};
-		requests.getRequest("connector/product/import", sendData).then(data => {
-			if (data.success === true) {
-				if (
-					data.code === "product_import_started" ||
-					data.code === "import_started"
-				) {
-					notify.info(
-						"Import process started. Check progress in activities section."
-					);
-					setTimeout(() => {
-						this.redirect("/panel/queuedtasks");
-					}, 1000);
-				} else {
-					notify.success(data.message);
-				}
-			} else {
-				if (data.code === "account_not_connected") {
-					setTimeout(() => {
-						this.redirect("/panel/accounts");
-					}, 1000);
-					notify.info(
-						"User Account Not Found. Please Connect The Account First."
-					);
-				}
-				if (data.code === "already_in_progress") {
-					setTimeout(() => {
-						this.redirect("/panel/accounts");
-					}, 1000);
-					notify.info(data.message);
-				} else {
-					notify.error(data.message);
-				}
-			}
-		});
-	};
-
-	getBase64(file) {
-		if (!isUndefined(file)) {
-			return new Promise((resolve, reject) => {
-				const reader = new FileReader();
-				reader.readAsDataURL(file);
-				reader.onload = () => resolve(reader.result);
-				reader.onerror = error => reject(error);
-			});
-		} else {
-			return new Promise((resolve, reject) => {
-				false;
-			});
-		}
 	}
 
 	redirect(url, data) {

@@ -41,6 +41,8 @@ export class Products extends Component {
 		{ label: 30, value: "30" },
 		{ label: 40, value: "40" },
 		{ label: 50, value: "50" },
+		{ label: 500, value: "500" },
+		{ label: 2000, value: "2000" },
 	];
 
 	massActions = [{ label: "Upload", value: "upload" }];

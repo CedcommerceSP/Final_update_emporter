@@ -40,7 +40,6 @@ class Demo_analytics_reporting extends Component {
             y_axis_importer: [],
             skeleton: [true, true, true],
             linegraphskeleton: true,
-            recurring_planskeleton: true,
             datewiseskeleton: true,
             recentactivityskeleton: true,
             backgroundColor: ['#9575cd', '#5c6bc0', '#64b5f6', '#673ab7', '#3f51b5', '#0d47a1'],
@@ -563,11 +562,8 @@ class Demo_analytics_reporting extends Component {
                 }
             );
             if (rows_blog.length <= 0){
-                console.log(rows_blog.length);
-                this.state.content_data.no_blog_data = true,
-                    this.setState(this.state.content_data.no_blog_data
-                    );
-                console.log(this.state.content_data.no_blog_data);
+                this.state.content_data.no_blog_data = true;
+                this.setState(this.state);
             }
 
         }
