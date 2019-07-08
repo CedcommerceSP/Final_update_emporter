@@ -26,6 +26,8 @@ export function modifyName(string) {
 			return "Csv";
 		case "shopify_delete":
 			return "Deleted";
+		case "magento":
+			return "Magento";
 		default:
 			return string;
 	}
@@ -96,6 +98,9 @@ export function modifyAccountConnectedInfo(accounts) {
 			case "wishimporter":
 				title = "Wish";
 				break;
+            case "magento":
+                title = "Magento";
+                break;
 			default:
 				title = e;
 		}

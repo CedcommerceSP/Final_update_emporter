@@ -40,7 +40,9 @@ export class Products extends Component {
 		{ label: 20, value: "20" },
 		{ label: 30, value: "30" },
 		{ label: 40, value: "40" },
-		{ label: 50, value: "50" }
+		{ label: 50, value: "50" },
+		{ label: 500, value: "500" },
+		{ label: 2000, value: "2000" },
 	];
 
 	massActions = [{ label: "Upload", value: "upload" }];
@@ -274,6 +276,7 @@ export class Products extends Component {
 		window.showGridLoader = true;
 		this.prepareFilterObject();
 		const pageSettings = Object.assign({}, this.gridSettings);
+        this.state.appliedFilters['uploaded'] = 0;
 		requests
 			.getRequest(
 				"connector/product/getProducts",

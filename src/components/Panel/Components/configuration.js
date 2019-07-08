@@ -343,8 +343,8 @@ export class Configuration extends Component {
         this.shopifyConfigurationChange(mainIndex, value);
     };
     handleRemove = (index, mainIndex,value) => {
-    	value.splice(index,1);
-        this.shopifyConfigurationChange(index, value);
+        value.splice(index,1);
+        this.shopifyConfigurationChange(mainIndex, value);
     };
 
 	handleMultiLevelChange = (index, mainIndex, custom_option, prevVal, key, value) => {
@@ -544,6 +544,7 @@ export class Configuration extends Component {
 			</div>
 		);
 	}
+
     renderfbaConfig(sync) {
         return (
 			<div className="row">

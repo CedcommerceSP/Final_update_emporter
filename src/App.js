@@ -1,4 +1,4 @@
-import React, { Component } from "react";
+﻿import React, { Component } from "react";
 import { Route, Switch, Redirect } from "react-router-dom";
 import "react-toastify/dist/ReactToastify.css";
 
@@ -11,6 +11,7 @@ import OthersRoutes from "./components/other/routes";
 import { globalState } from "./services/globalstate";
 import { environment } from "./environments/environment";
 import { isUndefined } from "util";
+
 
 export class App extends Component {
 	state = {
