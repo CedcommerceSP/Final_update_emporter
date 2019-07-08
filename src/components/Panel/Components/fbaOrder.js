@@ -73,9 +73,7 @@ export class FbaOrder extends Component {
         requests
             .getRequest("fba/test/cronHitting")
             .then(data => {
-                console.log(data.data.success);
                 if (data.data.success) {
-                    console.log("help!!!!!!!");
                     window.showGridLoader = false;
                     this.setState({
                         totalPage: data.data.count,
@@ -112,8 +110,6 @@ export class FbaOrder extends Component {
         this.setState({
             pagination_show: data.length
         })
-        console.log(data);
-        console.log(data.length);
         let products = [];
         let str = "";
         for (let i = 0; i < data.length; i++) {
@@ -151,7 +147,7 @@ export class FbaOrder extends Component {
                     if (data[i]["processing_status"] === "Processing") {
                         rowData["amazon_order_status"] = (
                             <React.Fragment>
-                                <Badge status="success">Processing</Badge>
+                                <Badge status="success">Shipped</Badge>
                             </React.Fragment>
                         );
                     }
@@ -162,10 +158,25 @@ export class FbaOrder extends Component {
                             </React.Fragment>
                         );
                     }
-                    else {
+                    else if (data[i]['processing_status'] === "Denied"){
+                        rowData["amazon_order_status"] = (
+                            <React.Fragment>
+                                <Badge status="warning">Denied</Badge>
+                            </React.Fragment>
+                        );
+                    }
+                    else if ( data[i]['processing_status'] === 'CANCELLED By Fba' || data[i]['processing_status'] === 'Cancelled'
+                    || data[i]['processing_status'] === 'Canceled'){
                         rowData["amazon_order_status"] = (
                             <React.Fragment>
                                 <Badge status="warning">Cancelled</Badge>
+                            </React.Fragment>
+                        );
+                    }
+                    else {
+                        rowData["amazon_order_status"] = (
+                            <React.Fragment>
+                                <Badge status="warning">Pending</Badge>
                             </React.Fragment>
                         );
                     }
