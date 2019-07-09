@@ -31,7 +31,7 @@ export class Products extends Component {
 	};
 
 	gridSettings = {
-		count: "10",
+		count: "2000",
 		activePage: 1
 	};
 
@@ -276,7 +276,7 @@ export class Products extends Component {
 		window.showGridLoader = true;
 		this.prepareFilterObject();
 		const pageSettings = Object.assign({}, this.gridSettings);
-        this.state.appliedFilters['uploaded'] = 0;
+        // this.state.appliedFilters['uploaded'] = 0;
 		requests
 			.getRequest(
 				"connector/product/getProducts",
