@@ -1,7 +1,7 @@
 /**
  * Created by cedcoss on 7/6/19.
  */
-import React, { Component } from "react";
+import React, {Component} from "react";
 import {
     Banner,
     Button,
@@ -11,10 +11,10 @@ import {
     Select,
     TextField
 } from "@shopify/polaris";
-import { modifyOptionsData } from "../../components/Panel/Components/static-functions";
-import { isUndefined } from "util";
-import { requests } from "../../services/request";
-import { notify } from "../../services/notify";
+import {modifyOptionsData} from "../../components/Panel/Components/static-functions";
+import {isUndefined} from "util";
+import {requests} from "../../services/request";
+import {notify} from "../../services/notify";
 import Dropdown from "react-dropdown";
 import "react-dropdown/style.css";
 
@@ -46,7 +46,7 @@ class FbaInstallationForm extends Component {
         requests.getRequest("Fba/FbaConfig/getCredentials").then(data => {
             if (data.success) {
                 let schema = this.modifySchemaData(data.data);
-                this.setState({ schema: schema, page: "config" });
+                this.setState({schema: schema, page: "config"});
             } else {
                 this.getAppInstallationForm();
             }
@@ -57,18 +57,25 @@ class FbaInstallationForm extends Component {
         return (
             <React.Fragment>
                 <div className="row">
-                    <div className="col-12 text-right">
-                        <Button
-                            onClick={() => {
-                                window.open(
-                                    "http://apps.cedcommerce.com/importer/amazon_UK_IN.pdf"
-                                );
-                            }}
-                            size={"slim"}
-                        >
-                            Help PDF
-                        </Button>
-                    </div>
+                        <div className="col-12">
+                            <Banner status="info">
+                                <Label>
+                                    <b>BETA VERSION</b>
+                                </Label>
+                            </Banner>
+                        </div>
+                        <div className="col-12 text-right mt-2">
+                            <Button
+                                onClick={() => {
+                                    window.open(
+                                        "http://apps.cedcommerce.com/importer/amazon_UK_IN.pdf"
+                                    );
+                                }}
+                                size={"slim"}
+                            >
+                                Help PDF
+                            </Button>
+                        </div>
                     {this.state.init_show &&
                     this.state.page !== "config" &&
                     this.state.dev.length > 0 && (
@@ -110,7 +117,7 @@ class FbaInstallationForm extends Component {
                                                                 this.handleChange(field.key, e);
                                                             }}
                                                         />
-                                                        <p style={{ color: "green" }}>
+                                                        <p style={{color: "green"}}>
                                                             {field.required ? "*required" : null}
                                                         </p>
                                                     </div>
@@ -146,7 +153,7 @@ class FbaInstallationForm extends Component {
                                                             })}
                                                         </div>
                                                         <div className="col-12">
-                                                            <p style={{ color: "green" }}>
+                                                            <p style={{color: "green"}}>
                                                                 {field.required ? "*required" : null}
                                                             </p>
                                                         </div>
@@ -157,7 +164,7 @@ class FbaInstallationForm extends Component {
                                                 return (
                                                     <div
                                                         className="col-12 pt-2 pb-2"
-                                                        style={{ fontSize: "14px" }}
+                                                        style={{fontSize: "14px"}}
                                                         key={this.state.schema.indexOf(field)}
                                                     >
                                                         <Dropdown
@@ -169,7 +176,7 @@ class FbaInstallationForm extends Component {
                                                             value={field.value}
                                                             placeholder="Select an Country"
                                                         />
-                                                        <p style={{ color: "green" }}>
+                                                        <p style={{color: "green"}}>
                                                             {field.required ? "*required" : null}
                                                         </p>
                                                     </div>
@@ -193,7 +200,7 @@ class FbaInstallationForm extends Component {
                                                                 field.key
                                                             )}
                                                         />
-                                                        <p style={{ color: "green" }}>
+                                                        <p style={{color: "green"}}>
                                                             {field.required ? "*required" : null}
                                                         </p>
                                                     </div>
@@ -223,7 +230,7 @@ class FbaInstallationForm extends Component {
         // let win = window.open('', '_blank', 'location=yes,height=600,width=550,scrollbars=yes,status=yes');
         let params = this.props.code;
         requests
-            .getRequest("connector/get/installationForm", { code: params })
+            .getRequest("connector/get/installationForm", {code: params})
             .then(data => {
                 if (data.success === true) {
                     if (data.data.post_type === "redirect") {
@@ -231,7 +238,7 @@ class FbaInstallationForm extends Component {
                             open: true,
                             url: data.data.action
                         };
-                        this.setState({ confirmOpen: tempURL });
+                        this.setState({confirmOpen: tempURL});
                     } else {
                         this.state["schema"] = this.modifySchemaData(data.data.schema);
                         this.state["action"] = data.data.action;
@@ -251,7 +258,7 @@ class FbaInstallationForm extends Component {
             if (this.state.schema[i].key === key) {
                 const state = this.state;
                 if (typeof event === "object" && !isUndefined(event.value)) {
-                    this.setState({ init_show: true });
+                    this.setState({init_show: true});
                     state.schema[i].value = event.value;
                 } else {
                     state.schema[i].value = event;
@@ -324,13 +331,13 @@ class FbaInstallationForm extends Component {
                 data["dev_acc_avail"] = this.state.dev_acc_avail;
             }
             if (flag) {
-                if (this.state.page === "config") {
+                if (this.state.page === "account") {
                     requests
-                        .postRequest("Fba/FbaConfig/setAmazonCredentials", data)
+                        .postRequest("fba/fbaconfig/setAmazonCredentials", data)
                         .then(data => {
                             if (data.success) {
                                 notify.success(data.message);
-                                this.setState({ noChange: true });
+                                this.setState({noChange: true});
                             } else {
                                 notify.error(data.message);
                             }
@@ -339,11 +346,11 @@ class FbaInstallationForm extends Component {
                 } else {
                     requests.postRequest(url, data, true).then(data => {
                         if (data.success) {
-                            this.props.success3({ code: this.props.code });
+                            this.props.success3({code: this.props.code});
                             notify.success(data.message);
                         } else {
                             notify.error(data.message);
-                            this.props.success3({ code: false });
+                            this.props.success3({code: false});
                         }
                         this.redirect();
                     });
@@ -368,9 +375,9 @@ class FbaInstallationForm extends Component {
             });
         });
         if (!isUndefined(this.state.dev_credentials[region])) {
-            this.setState({ dev: this.state.dev_credentials[region] });
+            this.setState({dev: this.state.dev_credentials[region]});
         } else {
-            this.setState({ dev: [] });
+            this.setState({dev: []});
         }
         this.setState({
             hide: hide,
@@ -401,7 +408,7 @@ class FbaInstallationForm extends Component {
                     option.forEach(e => {
                         e.items.forEach(key => {
                             if (key.value === data[i]["value"]) {
-                                this.setState({ hide: e.hide, init_show: true });
+                                this.setState({hide: e.hide, init_show: true});
                             }
                         });
                     });

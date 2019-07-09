@@ -50,7 +50,8 @@ class InstallAppsShared extends Component {
 	}
 
 	render() {
-		return (
+        console.log(this.state.code);
+        return (
 			<React.Fragment>
 				{this.state.code === "amazonimporter" ? (
 					<AmazonInstallationForm {...this.state} {...this.props} />
