@@ -126,7 +126,6 @@ export class Configuration extends Component {
 		requests
 			.getRequest("connector/get/config", { marketplace: "wishimporter" })
 			.then(data => {
-				console.log(data);
 				if (data.success) {
 					this.wishConfigurationData = this.modifyConfigData(
 						data.data,
@@ -142,7 +141,6 @@ export class Configuration extends Component {
         requests
             .getRequest("connector/get/config", { marketplace: "fba" })
             .then(data => {
-            	console.log("data in fba",data)
                 if (data.success) {
                     this.fbaConfigurationData = this.modifyConfigData(
                         data.data,
@@ -683,6 +681,7 @@ export class Configuration extends Component {
                 data: amazon_importer_configuration
             })
             .then(data => {
+            	console.log(data);
                 if (data.success) {
                     notify.success(data.message);
                 } else {

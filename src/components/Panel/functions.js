@@ -36,6 +36,14 @@ export const panelFunctions = {
 				link: "/panel/products",
 				panelID: "products"
 			},
+
+            {
+                id: "fbaorders",
+                content: "FBA_Orders",
+                accessibilityLabel: "fbaOrders",
+                link: "/panel/fbaOrders",
+                panelID: "fbaOrders"
+            },
 			{
 				id: "configuration",
 				content: "Settings",
