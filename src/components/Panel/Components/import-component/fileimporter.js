@@ -133,6 +133,37 @@ class FileImporter extends Component {
         );
     }
 
+    importProduct = () => {
+        let sendData = {
+            marketplace: "fileimporter"
+        };
+        requests.getRequest("connector/product/import", sendData).then(data => {
+            if (data.success === true) {
+                setTimeout(() => {
+                    this.props.getNecessaryInfo();
+                    this.redirect("/panel/queuedtasks");
+                }, 1000);
+            } else {
+                if (data.code === "account_not_connected") {
+                    setTimeout(() => {
+                        this.redirect("/panel/accounts");
+                    }, 1000);
+                    notify.info(
+                        "User Account Not Found. Please Connect The Account First."
+                    );
+                }
+                if (data.code === "already_in_progress") {
+                    setTimeout(() => {
+                        this.redirect("/panel/accounts");
+                    }, 1000);
+                    notify.info(data.message);
+                } else {
+                    notify.error(data.message);
+                }
+            }
+        });
+    };
+
 	render() {
 		let url = environment.API_ENDPOINT + 'fileimporter/request/fileUpload?bearer=' + globalState.getLocalStorage('auth_token');
 		return (

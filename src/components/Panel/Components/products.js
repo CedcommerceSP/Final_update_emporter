@@ -31,7 +31,7 @@ export class Products extends Component {
 	};
 
 	gridSettings = {
-		count: "2000",
+		count: "20",
 		activePage: 1
 	};
 

@@ -43,7 +43,7 @@ class FbaInstallationForm extends Component {
     }
 
     amazonCredentials() {
-        requests.getRequest("Fba/FbaConfig/getCredentials").then(data => {
+        requests.getRequest("fba/fbaconfig/getCredentials").then(data => {
             if (data.success) {
                 let schema = this.modifySchemaData(data.data);
                 this.setState({schema: schema, page: "config"});
@@ -331,7 +331,7 @@ class FbaInstallationForm extends Component {
                 data["dev_acc_avail"] = this.state.dev_acc_avail;
             }
             if (flag) {
-                if (this.state.page === "account") {
+                if (this.state.page === "config") {
                     requests
                         .postRequest("fba/fbaconfig/setAmazonCredentials", data)
                         .then(data => {

@@ -36,6 +36,8 @@
     "react-scripts": "1.1.4",
     "react-scrollbar": "^0.5.4",
     "react-simple-read-more": "^1.1.1",
+    "react-star-rating-component": "^1.4.1",
+    "react-star-ratings": "^2.3.0",
     "react-toastify": "4.1.0",
     "reactstrap": "^6.4.0",
     "read-more-react": "^1.0.6",

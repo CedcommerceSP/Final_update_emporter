@@ -105,13 +105,13 @@ class Demo_analytics_reporting extends Component {
                     var add_on_date = new Date(response.data.activated_at);
                     let difference = this.monthDiff(add_on_date,current_date);
                     if (new Date(new Date(add_on_date).setMonth(add_on_date.getMonth() + difference+1)) <=   current_date) {
-                        console.log(new Date(new Date(add_on_date).setMonth(add_on_date.getMonth() + difference+1)));
-                        console.log("in if");
+                        // console.log(new Date(new Date(add_on_date).setMonth(add_on_date.getMonth() + difference+1)));
+                        // console.log("in if");
                         plan_to_be_end = new Date(new Date(add_on_date).setMonth(add_on_date.getMonth() + difference + 2));
                     }
                     else {
-                        console.log("in else");
-                        console.log(new Date(new Date(add_on_date).setMonth(add_on_date.getMonth() + difference+1)));
+                        // console.log("in else");
+                        // console.log(new Date(new Date(add_on_date).setMonth(add_on_date.getMonth() + difference+1)));
                          plan_to_be_end = new Date(new Date(add_on_date).setMonth(add_on_date.getMonth() + difference + 1));
                     }
                     this.setState({
@@ -204,6 +204,7 @@ class Demo_analytics_reporting extends Component {
                 importers: importer_marketplace_array
             }, false, true)
             .then(data => {
+                // console.log(data);
                 if (data.success && data['data']['amazonaffiliate'] != 0 || data['data']['amazonimporter'] != 0 || data['data']['ebayimporter'] != 0 ||
                     data['data']['etsyimporter'] != 0 || data['data']['walmartimporter'] != 0 || data['data']['wishimporter'] != 0)
                 {
@@ -373,7 +374,6 @@ class Demo_analytics_reporting extends Component {
             let yourVariable = "data" + (i + 1);
             let title = this.state[yourVariable]
             if (temp_order && i == 0) {
-                    console.log("kakaka1");
                 arr.push(<div className="col-sm-12 col-md-12 col-lg-4" key={yourVariable}>
                         <Card
                             title="Uploads"
@@ -395,7 +395,6 @@ class Demo_analytics_reporting extends Component {
                 continue;
             }
             else if (temp_products && i == 1) {
-                console.log("kakaka1");
                 arr.push(<div className=" col-sm-12 col-md-12 col-lg-4" key={yourVariable}>
                         <Card
                             title="Imported "
@@ -504,9 +503,6 @@ class Demo_analytics_reporting extends Component {
 
                 this.setState(this.state);
             }
-            else {
-                console.log("news","error hai koi bhai");
-            }
         })
     }
     tableBlogData(){
@@ -522,9 +518,6 @@ class Demo_analytics_reporting extends Component {
                 }
 
                 this.setState(this.state);
-            }
-            else {
-                console.log("blog","error hai koi bhai");
             }
         })
 
