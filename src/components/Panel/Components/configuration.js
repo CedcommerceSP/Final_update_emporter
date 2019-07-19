@@ -137,6 +137,7 @@ export class Configuration extends Component {
 				}
 			});
 	}
+
     getFbaConfig() {
         requests
             .getRequest("connector/get/config", { marketplace: "fba" })
@@ -342,6 +343,7 @@ export class Configuration extends Component {
     	value.push(JSON.parse(JSON.stringify(defaultCurrencyConverter)));
         this.shopifyConfigurationChange(mainIndex, value);
     };
+
     handleRemove = (index, mainIndex,value) => {
         value.splice(index,1);
         this.shopifyConfigurationChange(mainIndex, value);

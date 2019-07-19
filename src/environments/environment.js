@@ -1,6 +1,6 @@
 export const environment = {
 	production: true,
-	isLive: false,
+	isLive: true,
 	// API_ENDPOINT: 'http://192.168.0.222/phalcon/importer/public/',
 	  // API_ENDPOINT: "http://192.168.0.215/nextgen/public/",
 	   API_ENDPOINT: 'https://importer.sellernext.com/',
