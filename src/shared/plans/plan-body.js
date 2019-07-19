@@ -233,6 +233,7 @@ class PlanBody extends Component {
 							</div>
 							<div className="col-md-6 col-sm-12 col-12 text-center">
 								<DisplayText element="h3">Product Import Charges</DisplayText>
+								<h2><b>One Time Payment</b></h2>
 							</div>
 							<div className="col-3 d-md-block d-sm-none">
 								<hr />

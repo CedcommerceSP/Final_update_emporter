@@ -72,7 +72,9 @@ export class Plans extends Component {
 					</div>
 				</div>
 				<PlanBody paymentStatus={this.paymentStatus} />
+
 			</Page>
+
 		);
 	}
 	redirect(url) {
