@@ -40,7 +40,7 @@ class PricingGuide extends Component {
 					<Label id={"3"}>
 						<ul className="mt-4">
 							<li>10 products are free to check your listing.</li>
-							<li>Afterwards, pricing is 0.1 per product</li>
+							<li>Afterwards, pricing is $0.1 per product</li>
 							<li>So, one-time estimated charge will be :-</li>
 						</ul>
 					</Label>
@@ -106,7 +106,7 @@ class PricingGuide extends Component {
 					<Label id={"3"}>
 						<ul className="mt-4">
 							<li>10 products are free to check your listing.</li>
-							<li>Afterwards, pricing is 0.1 per product</li>
+							<li>Afterwards, pricing is $0.1 per product</li>
 							<li>So, one-time estimated charge will be :-</li>
 						</ul>
 					</Label>
