@@ -164,22 +164,59 @@ class PlanBody extends Component {
             cost = cost - (cost * 30) / 100;
             this.state.oneTimePaymentDetails.discount_percentage = 30;
         } else if (credits <= 600) {
-            cost = cost - (cost * 40) / 100;
+            let cost1 = cost - (cost * 40) / 100;
+            if ( (cost - (cost * 30) / 100) > cost1 ) {
+                cost = cost - (cost * 75) / 100;
+            }
+            else {
+                cost=cost1;
+            }
+
             this.state.oneTimePaymentDetails.discount_percentage = 40;
         } else if (credits <= 2000) {
-            cost = cost - (cost * 50) / 100;
+            let cost1 = cost - (cost * 50) / 100;
+            if ( (cost - (cost * 40) / 100) > cost1 ) {
+                cost = cost - (cost * 75) / 100;
+            }
+            else {
+                cost=cost1;
+            }
             this.state.oneTimePaymentDetails.discount_percentage = 50;
         } else if (credits <= 3000) {
-            cost = cost - (cost * 65) / 100;
+            let cost1 = cost - (cost * 65) / 100;
+            if ( (cost - (cost * 50) / 100) > cost1 ) {
+                cost = cost - (cost * 75) / 100;
+            }
+            else {
+                cost=cost1;
+            }
             this.state.oneTimePaymentDetails.discount_percentage = 65;
         } else if (credits <= 5000) {
-            cost = cost - (cost * 70) / 100;
+            let cost1 = cost - (cost * 70) / 100;
+            if ( (cost - (cost * 65) / 100) > cost1 ) {
+                cost = cost - (cost * 75) / 100;
+            }
+            else {
+                cost=cost1;
+            }
             this.state.oneTimePaymentDetails.discount_percentage = 70;
         } else if (credits <= 10000) {
-            cost = cost - (cost * 75) / 100;
+           let cost1 = cost - (cost * 75) / 100;
+            if ( (cost - (cost * 70) / 100) > cost1 ) {
+                cost = cost - (cost * 75) / 100;
+            }
+            else {
+                cost=cost1;
+            }
             this.state.oneTimePaymentDetails.discount_percentage = 75;
         } else {
-            cost = cost - (cost * 80) / 100;
+            let cost1 = cost - (cost * 80) / 100;
+            if ( (cost - (cost * 75) / 100) > cost1 ) {
+                cost = cost - (cost * 75) / 100;
+            }
+            else {
+                cost=cost1;
+            }
             this.state.oneTimePaymentDetails.discount_percentage = 80;
         }
         this.state.oneTimePaymentDetails.totalCredits = creditCount;
