@@ -571,17 +571,11 @@ class Demo_analytics_reporting extends Component {
                     </Layout.Section>
 
                     <Layout.Section>
-                        {this.state.totalRecentActivities > 3 ?
-                            <Card title="Recent Activities" primaryFooterAction={{
-                                content: 'View All Activities',
-                                onClick: () => {
-                                    this.redirect("/panel/queuedtasks/activities");
-                                }
-                            }}>
+                        <Card title="Store Development">
+                            <div className="m-4">
                                 {this.render_recent_activity()}
-                            </Card> : <Card title="Recent Activities">
-                                {this.render_recent_activity()}
-                            </Card>}
+                            </div>
+                        </Card>
                     </Layout.Section>
                     <Layout.Section secondary>
                         <Card title="Recurring Plan" sectioned>
@@ -731,7 +725,14 @@ class Demo_analytics_reporting extends Component {
     }
 
     render_recent_activity() {
-        return (this.state.recentactivityskeleton ? <Skeleton case="body"/> :
+        return(
+            <Stack  distribution="center">
+                <a href="https://apps.cedcommerce.com/shopify-store-development/"target="_blank"><img className='img-fluid p-3' src={require("../../../../assets/img/store_dev1.png")} alt="Store_Dev"/></a>
+                <hr style={{'border':'none','border-left':'1px solid hsla(200, 10%, 50%,100)','height':'49vh','width':'1px'}}/>
+                <a href="https://apps.cedcommerce.com/digital-marketing-services/"target="_blank"><img className='img-fluid pb-5 pr-5 pl-3' src={require("../../../../assets/img/store_dev2.png")} alt="Digital Marketing"/></a>
+            </Stack>
+        )
+/*        return (this.state.recentactivityskeleton ? <Skeleton case="body"/> :
 
                 <Card.Section>
                     {
@@ -764,7 +765,7 @@ class Demo_analytics_reporting extends Component {
 
                 </Card.Section>
 
-        )
+        )*/
     }
 
     updateState() {
