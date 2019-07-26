@@ -35,7 +35,7 @@ class PricingGuide extends Component {
 				</div>
 				<div className="p-5">
 					<Label id={"2"}>
-						<p className="mt-4">Say, you got 310 products to Import</p>
+						<p className="mt-4">Say, you got 15010 products to Import</p>
 					</Label>
 					<Label id={"3"}>
 						<ul className="mt-4">
@@ -101,7 +101,7 @@ class PricingGuide extends Component {
 				</div>
 				<div className="p-5">
 					<Label id={"2"}>
-						<p className="mt-4">Say, you got 310 products to Import</p>
+						<p className="mt-4">Say, you got 15010 products to Import</p>
 					</Label>
 					<Label id={"3"}>
 						<ul className="mt-4">

@@ -45,6 +45,7 @@ class FbaInstallationForm extends Component {
     amazonCredentials() {
         requests.getRequest("fba/fbaconfig/getCredentials").then(data => {
             if (data.success) {
+                console.log("main data",data);
                 let schema = this.modifySchemaData(data.data);
                 this.setState({schema: schema, page: "config"});
             } else {
@@ -337,6 +338,7 @@ class FbaInstallationForm extends Component {
                         .then(data => {
                             if (data.success) {
                                 notify.success(data.message);
+                                this.props.success3({code: this.props.code});
                                 this.setState({noChange: true});
                             } else {
                                 notify.error(data.message);
@@ -344,6 +346,7 @@ class FbaInstallationForm extends Component {
                             this.redirect();
                         });
                 } else {
+                    console.log("in else of fba form");
                     requests.postRequest(url, data, true).then(data => {
                         if (data.success) {
                             this.props.success3({code: this.props.code});

@@ -21,6 +21,13 @@
         min-height: 380px;
     }
 }
+
+.like:hover{
+    color:#ef595b;
+}
+.dislike:hover{
+    color:#ef595b;
+}
 /*****************************   Card CSS   *******************************************/
 .CARD {
     position:relative;

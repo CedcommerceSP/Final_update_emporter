@@ -151,6 +151,13 @@ export class FbaOrder extends Component {
                             </React.Fragment>
                         );
                     }
+                        else if (data[i]["processing_status"] === "Fulfilled") {
+                            rowData["amazon_order_status"] = (
+                                <React.Fragment>
+                                    <Badge status="success">Complete</Badge>
+                                </React.Fragment>
+                            );
+                        }
                     else if (data[i]['processing_status'] === "Pending") {
                         rowData["amazon_order_status"] = (
                             <React.Fragment>

@@ -61,6 +61,7 @@ export class Products extends Component {
 		{ label: "SKU", value: "sku", type: "string", special_case: "no" },
 		{ label: "Price", value: "price", type: "int", special_case: "no" },
 		{ label: "Quantity", value: "quantity", type: "int", special_case: "no" },
+		{ label:"Type", value:"type", type:"type", special_case:"yes"},
 		{
 			label: "Date Picker",
 			value: "datePicker",
@@ -68,7 +69,7 @@ export class Products extends Component {
 			special_case: "yes"
 		},
 		{
-			label: "Uploaded",
+			label: "Status",
 			value: "uploaded",
 			type: "uploaded",
 			special_case: "yes"
@@ -333,7 +334,6 @@ export class Products extends Component {
 		}
 		this.filters.single_column_filter.forEach((e, i) => {
 			switch (e.name) {
-				case "type":
 				case "title":
 				case "long_description":
 					this.state.appliedFilters[
@@ -360,6 +360,10 @@ export class Products extends Component {
 				case "uploaded":
 					this.state.appliedFilters["uploaded"] = e.value;
 					break;
+				case "type":
+					this.state.appliedFilters["filter[details.type][1]"] = e.value;
+					break;
+
 			}
 		});
 		for (let i = 0; i < Object.keys(this.filters.column_filters).length; i++) {

@@ -168,6 +168,7 @@ class Demo_analytics_reporting extends Component {
         requests
             .getRequest("connector/get/services?filters[type]=importer")
             .then(data => {
+                // console.log(data);
                 if (data.success) {
                     importer = data.data;
                     Object.keys(importer).map(importerkey => {
@@ -204,9 +205,9 @@ class Demo_analytics_reporting extends Component {
                 importers: importer_marketplace_array
             }, false, true)
             .then(data => {
-                // console.log(data);
-                if (data.success && data['data']['amazonaffiliate'] != 0 || data['data']['amazonimporter'] != 0 || data['data']['ebayimporter'] != 0 ||
-                    data['data']['etsyimporter'] != 0 || data['data']['walmartimporter'] != 0 || data['data']['wishimporter'] != 0)
+                 // console.log("importers",data);
+                if (data.success && (data['data']['amazonaffiliate'] != 0 || data['data']['amazonimporter'] != 0 || data['data']['ebayimporter'] != 0 ||
+                    data['data']['etsyimporter'] != 0 || data['data']['walmartimporter'] != 0 || data['data']['wishimporter'] != 0))
                 {
                     importer_data_rec = data.data;
 
@@ -381,9 +382,8 @@ class Demo_analytics_reporting extends Component {
                             actions={{
                                 content: <Link><Icon source="help" color="inkLighter" backdrop={true}/></Link>,
                                 onClick: () => {
-                                    this.redirect('/panel/help?faq=shopping actions')
-                                }
-                            }
+                                    this.redirect('/panel/import')
+                                }}
                             }>
                             <Stack distribution="center">
                                 <img className='img-fluid ' src={require("../../../../assets/img/222x176.png")}/>

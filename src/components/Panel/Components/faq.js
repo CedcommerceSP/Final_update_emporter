@@ -861,6 +861,43 @@ class FAQPage extends Component {
                         </React.Fragment>
                     )
                 },
+                {
+                    id: 40,
+                    show: false, // for collapse div
+                    search: true, // for search, if false then hide the div
+                    ques: "What does “ORDER HOLD on FBA” mean?",
+                    ans: (
+                        <React.Fragment>
+                            <p>
+                                This means that order on FBA will be on HOLD status till the time x.
+                                <br/>
+                                <b>NOTE:</b> x is the time which you will give in the settings section of the app. By default, it's 0.
+                            </p>
+                        </React.Fragment>
+                    )
+                },
+                {
+                    id: 41,
+                    show: false, // for collapse div
+                    search: true, // for search, if false then hide the div
+                    ques: "What does “CANCEL ORDER ON SHOPIFY” means?",
+                    ans: (
+                        <React.Fragment>
+                            <p>
+                                This means that, if the order gets canceled on Amazon, whether you want to cancel it on Shopify store or not.
+                            </p>
+                            <br/>
+                                <ol>
+                                    <li>
+                                        If you want to get it canceled on Shopify, select YES.
+                                    </li>
+                                    <li>
+                                        If you want that it does not get canceled on Shopify, select NO.
+                                    </li>
+                                </ol>
+                        </React.Fragment>
+                    )
+                },
             ]
         };
         if (!globalState.getLocalStorage("auth_token")) {
