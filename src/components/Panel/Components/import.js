@@ -10,6 +10,7 @@ import {
 	Modal,
 	TextField,
 	Collapsible,
+	Tabs,
 	Banner
 } from "@shopify/polaris";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -24,6 +25,7 @@ import { environment } from "../../../environments/environment";
 import { capitalizeWord, validateImporter } from "./static-functions";
 import FileImporter from "./import-component/fileimporter";
 import { MagnetoImport } from "./import-component/MagnetoImport";
+import EbayAffiliate from "./import-component/EbayAffiliate";
 export class Import extends Component {
 	profilesList = [];
 	constructor(props) {
@@ -59,6 +61,7 @@ export class Import extends Component {
 			},
 			openModal: false,
             necessaryInfo:{},
+            mainTab: 1
 		};
 		this.getAllImporterServices();
 		this.getAllUploaderServices();
@@ -694,19 +697,26 @@ export class Import extends Component {
 		});
 	}
 
+    handleTabChange = (event, key = 'mainTab') => {
+        this.setState({[key] : event});
+    };
+
 	render() {
-		let magento_present = false
-		let data = this.state.necessaryInfo['account_connected_array'];
-		if ( data != undefined ) {
-			for (let i=0; i < this.state.necessaryInfo['account_connected_array'].length ; i++){
-				if (this.state.necessaryInfo['account_connected_array'][i] == "magento"){
-				   magento_present = true;
-				}
-			}
-		}
+		let { mainTab } = this.state;
 		return (
 			<Page title="Manage Products">
-				<div className="row">
+				<Tabs name={"hello"} selected={this.state.mainTab} tabs={[{
+                    id: 'Import',
+                    content: 'Import',
+                    accessibilityLabel: 'All',
+                    panelID: 'all',
+                },
+                {
+                    id: 'Ebay Affiliate',
+                    content: 'Ebay Affiliate',
+                    panelID: 'Ebay Affiliate',
+                }]} onSelect={this.handleTabChange}/>
+				{mainTab === 0 ? <div className="row">
 					<div className="col-12 p-3">
 						<Banner title="Please Read" status="info">
 							<Label>
@@ -795,8 +805,7 @@ export class Import extends Component {
 							</div>
 						</Card>
 					</div>
-				</div>
-				{magento_present?<MagnetoImport {...this.props}/>:null}
+				</div>:<EbayAffiliate/>}
 				{this.renderImportProductsModal()}
 				{this.renderUploadProductsModal()}
 				{this.renderHelpModal()}

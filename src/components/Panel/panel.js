@@ -75,25 +75,12 @@ export class Panel extends Component {
     }
     getRatingDataBackend(){
         requests.getRequest('frontend/importer/fetchReviewRatingData').then(data => {
-            if (data.success) {
-                console.log(data.data[0]['is_Done_Rating']);
-                if (data.data[0]['is_Done_Rating'] == 1){
-                    console.log("he did it!!!Good")
-                }
-                else {
-                    this.getAllMarketPlace();
-                }
-
-            }
-            else {
+            if (!data.success || data.data[0]['is_Done_Rating'] !== 1) {
                 this.getAllMarketPlace();
             }
         })
     }
     forReviewDone(){
-        console.log("here i am");
-        console.log(this.state.rating);
-        console.log(this.state.value);
         var data =[
             {"number of stars":this.state.rating},
             {"submit_review":1},
@@ -103,16 +90,13 @@ export class Panel extends Component {
             alert("please Fill Rating Stars")
         }
         else if (this.state.rating >=4){
-
             requests.postRequest('frontend/importer/reviewRatingData', {data: data}, false, true).then(response1 => {
                 if (response1.success) {
                     notify.success(response1.message)
-                }
-                else {
+                } else {
                     notify.error(response1.message)
                 }
             });
-            // window.open('https://apps.shopify.com/omni-importer?surface_detail=webcommerce&surface_inter_position=1&surface_intra_position=4&surface_type=search#reviews', '_blank');
             this.setState({show_rating_popup: false});
         }
         else {
@@ -135,7 +119,6 @@ export class Panel extends Component {
     }
     forButtonCancel(){
         this.setState({show_rating_popup: false});
-        console.log("just cancel the popup");
     }
     forReviewNeverAgain(){
         var data =[
@@ -208,7 +191,6 @@ export class Panel extends Component {
             .postRequest("frontend/app/getUploadedProductsCount", {
             })
             .then(data1 => {
-                // console.log(data1);
                 if (data1.success && (data1.data.length > 0)) {
                     Object.keys(data1.data).forEach(e => {
                         if (data1.data[e] !== undefined) {
@@ -220,10 +202,7 @@ export class Panel extends Component {
                     })
                     if (this.state.product_upload > 10){
                         let partial_import = (this.state.product_import*10)/100;
-                        console.log(partial_import);
-                        console.log(this.state.product_upload);
                         if (this.state.product_upload >= partial_import && this.state.product_upload <= this.state.product_import){
-                            console.log("lala");
                             this.setState({
                                 show_rating_popup:true
                             })
@@ -270,7 +249,6 @@ export class Panel extends Component {
             }, false, true)
             .then(data => {
                 if (data.success){
-                    // console.log(data.data.importers)
                     Object.keys(data.data).forEach(e => {
                         if (data.data[e] !== undefined) {
                             count_of_product = count_of_product + data.data[e];
@@ -310,8 +288,6 @@ export class Panel extends Component {
 
     checkingFba() {
         if (this.state.necessaryInfo.account_connected_array) {
-            // console.log(this.state.necessaryInfo.account_connected_array);
-            let flag = false;
             if ( this.state.necessaryInfo.account_connected_array.indexOf('fba') < 0 ) {
                 for (let i = 0; i < this.menu.length; i++) {
                     if (this.menu[i]['id'] == "fbaorders") {
@@ -319,26 +295,12 @@ export class Panel extends Component {
                     }
                 }
             }
-
-            // for (let j = 0; j < this.state.necessaryInfo.account_connected_array.length; j++) {
-            //     if (this.state.necessaryInfo.account_connected_array[j] === 'fba') {
-            //         flag = true;
-            //     }
-            // }
-            // if ( !flag ) {
-            //     for (let i = 0; i < this.menu.length; i++) {
-            //         if (this.menu[i]['id'] == "fbaorders") {
-            //             this.menu.splice(i, 1);
-            //         }
-            //     }
-            // }
         }
     }
     handleChange = (value) => {
         this.setState({value});
     };
     render() {
-        const { rating } = this.state;
         return (
             <div className="container-fluid app-panel-container">
                 <div className="row">
