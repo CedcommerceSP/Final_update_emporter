@@ -322,7 +322,7 @@ export class Panel extends Component {
 
     checkingFba() {
         if (this.state.necessaryInfo.account_connected_array) {
-            // console.log(this.state.necessaryInfo.account_connected_array);
+             console.log(this.state.necessaryInfo.account_connected_array);
             let flag = false;
             if (this.state.necessaryInfo.account_connected_array.indexOf('fba') < 0) {
                 for (let i = 0; i < this.menu.length; i++) {
