@@ -57,6 +57,7 @@ export class CreateProfile extends Component {
         let today_date = new Date();
         this.state = {
             activeStep: 1,
+            for_profiling:false,
             filterQuery: {
                 primaryQuery: [
                     {
@@ -480,7 +481,6 @@ export class CreateProfile extends Component {
             .getRequest("connector/get/services", {"filters[type]": "importer"})
             .then(data => {
                 if (data.success === true) {
-                    console.log(data);
                     this.importServices = [];
                     let hasService = false;
                     for (let i = 0; i < Object.keys(data.data).length; i++) {
@@ -1838,16 +1838,28 @@ export class CreateProfile extends Component {
     }
 
     saveDataAndMoveToNextStep() {
+
         switch (this.state.activeStep) {
             case 1:
                 if (this.validateStepOne()) {
-                    this.saveProfileData();
-                }
-                else if (this.validateStepOne()==0){
-                    notify.error("Firstly Import the Products of this Marketplace")
-                }
-                    else {
-                    notify.error("Please fill all the required fields.");
+                    console.log("this is here",this.state.array_marketpalce_imported);
+
+                    for (let i = 0; i < this.state.array_marketpalce_imported.length; i++) {
+                        console.log("array wala",this.state.array_marketpalce_imported[i]);
+                        console.log("entered",this.state.basicDetails.source);
+                        if (this.state.basicDetails.source === this.state.array_marketpalce_imported[i])
+                        {
+                            this.saveProfileData();
+                            this.state.for_profiling=true;
+                            break;
+                        }
+                        else {
+                            this.state.for_profiling=false
+                        }
+                    }
+                    if (!this.state.for_profiling){
+                        notify.error("Products not found for this Marketplace")
+                    }
                 }
                 break;
             case 2:
@@ -1876,19 +1888,11 @@ export class CreateProfile extends Component {
             this.state.basicDetails.name === "" ||
             this.state.basicDetails.target === ""
         ) {
+            notify.error("Please fill all the required fields.");
             return false;
-        } else {
-            console.log("lalalaa");
-            for (let i = 0; i < this.state.array_marketpalce_imported.length; i++) {
-                console.log(this.state.array_marketpalce_imported[i])
-                if (this.state.basicDetails.source === this.state.array_marketpalce_imported[i]) {
-                    return true;
-                }
-                else {
-                    return 0;
-                }
-            }
-
+        }
+        else {
+            return true;
         }
     }
 
