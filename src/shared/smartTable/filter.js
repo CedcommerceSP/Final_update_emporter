@@ -201,6 +201,29 @@ class Filter extends Component {
 						/>
 					</React.Fragment>
 				);
+			case "type":
+				return(
+					<React.Fragment>
+						<Select
+							label="Product Type"
+							options={[
+								{label:"Simple",value:"simple"},
+								{label:"Variant",value:"variant"}
+							]}
+							placeholder="Choose"
+							value={this.state.columnFilterNameValue.value}
+							onChange={
+								e=>{
+									let columnFilterNameValue = this.state.columnFilterNameValue;
+                                    columnFilterNameValue.condition = "product_type";
+                                    columnFilterNameValue.value = e;
+                                    this.setState({
+                                        columnFilterNameValue:columnFilterNameValue
+									});
+								}}
+						/>
+					</React.Fragment>
+				)
 			default:
 				let val = this.state.columnFilterNameValue;
 				val.special_case = "no";

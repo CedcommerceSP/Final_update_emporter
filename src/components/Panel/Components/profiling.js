@@ -42,7 +42,7 @@ export class Profiling extends Component {
 			sortable: true
 		},
 		targetCategory: {
-			title: "Category",
+			title: "Collection",
 			sortable: true
 		},
 		query: {

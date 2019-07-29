@@ -2,8 +2,8 @@ import React, {Component} from "react";
 import {Route, Switch, Redirect} from "react-router-dom";
 import * as queryString from "query-string";
 import {isUndefined} from "util";
-import {Modal, Label, Banner,Stack,TextField,Button} from "@shopify/polaris";
-
+import {Modal, Label, Banner, Stack, TextField, Button} from "@shopify/polaris";
+import 'font-awesome/css/font-awesome.min.css';
 import {Products} from "./Components/products";
 import {Apps} from "./Components/apps";
 import {InstallApp} from "./Components/apps-component/install-app";
@@ -16,6 +16,7 @@ import {QueuedTask} from "./Components/queued_task";
 import {Activities} from "./Components/queued-tasks-component/activities";
 import {Plans} from "./Components/plans";
 import {FbaOrder} from "./Components/fbaOrder"
+// import {Orders} from "./Components/migrator-order/orders"
 import {Header} from "./Layout/header";
 import Dashboard from "./Components/dashboard";
 import FAQPage from "./Components/faq";
@@ -35,11 +36,8 @@ import {requests} from "../../services/request";
 import {capitalizeWord} from "./Components/static-functions";
 import {notify} from "../../services/notify";
 import {validateImporter} from "./Components/static-functions.js";
-
 import "./panel.css";
 import FileMapping from "./Components/import-component/FileMapping";
-import StarRatings from 'react-star-ratings';
-// import Button from "reactstrap/src/Button";
 
 export class Panel extends Component {
     constructor(props) {
@@ -49,10 +47,12 @@ export class Panel extends Component {
             header: true,
             necessaryInfo: {},
             fbapresent: false,
-            product_upload : 0,
-            product_import : 0,
-            show_rating_popup:false,
-            rating:0,
+            product_upload: 0,
+            product_import: 0,
+            show_rating_popup: false,
+            /*show_etsy_popup: true,*/
+            show_button_submit:false,
+            // rating: 0,
             value: '',
         };
         this.disableHeader = this.disableHeader.bind(this);
@@ -60,81 +60,110 @@ export class Panel extends Component {
         this.getNecessaryInfo();
         this.getRatingDataBackend();
     }
-    updateState(){
-       let {state}=this.state;
-       this.setState({state})
 
-    }
-    changeRating( newRating, name ) {
-        /*this.state.rating=newRating;
-        this.updateState();*/
-        this.setState({
-            rating:newRating
-        })
+    /*    updateState() {
+     let {state} = this.state;
+     this.setState({state})
 
-    }
-    getRatingDataBackend(){
+     }*/
+    /*
+     changeRating(newRating, name) {
+     /!*this.state.rating=newRating;
+     this.updateState();*!/
+     this.setState({
+     rating: newRating
+     })
+
+     }*/
+
+
+
+    getRatingDataBackend() {
         requests.getRequest('frontend/importer/fetchReviewRatingData').then(data => {
-            if (!data.success || data.data[0]['is_Done_Rating'] !== 1) {
+            if (data.success) {
+                if (data.data[0]['is_Done_Rating'] == 1) {
+                }
+                else {
+                    this.getAllMarketPlace();
+                }
+
+            }
+            else {
                 this.getAllMarketPlace();
             }
         })
     }
-    forReviewDone(){
-        var data =[
-            {"number of stars":this.state.rating},
-            {"submit_review":1},
-            {"textbox_query":this.state.value}
-        ];
-        if (this.state.rating == 0){
-            alert("please Fill Rating Stars")
-        }
-        else if (this.state.rating >=4){
-            requests.postRequest('frontend/importer/reviewRatingData', {data: data}, false, true).then(response1 => {
-                if (response1.success) {
-                    notify.success(response1.message)
-                } else {
-                    notify.error(response1.message)
-                }
-            });
-            this.setState({show_rating_popup: false});
-        }
-        else {
-            if (this.state.value == ''){
-                alert("Add Message in issue Box, If stars is less than 4")
-            }
-            else {
-                requests.postRequest('frontend/importer/reviewRatingData', {data: data}, false, true).then(response1 => {
-                    if (response1.success) {
-                        notify.success(response1.message)
-                    }
-                    else {
-                        notify.error(response1.message)
-                    }
-                });
-                this.setState({show_rating_popup: false});
-            }
-        }
 
-    }
-    forButtonCancel(){
-        this.setState({show_rating_popup: false});
-    }
-    forReviewNeverAgain(){
-        var data =[
-            {"number of stars":0},
-            {"submit_review":1},
-            {"textbox_query":'Clicked on Never Ask Again'}
+    thumbUp() {
+        console.log("thumbs up")
+        var data = [
+            {"thumb_action": 'up'},
+            {"submit_review": 1},
+            {"textbox_query": this.state.value}
         ];
-        requests.postRequest('frontend/importer/neverAskAgainForRating', {data: data}, false, true).then(response1 => {
+
+        requests.postRequest('frontend/importer/reviewRatingData', {data: data}, false, true).then(response1 => {
             if (response1.success) {
+                window.open('https://apps.shopify.com/omni-importer?surface_detail=webcommerce&surface_inter_position=1&surface_intra_position=4&surface_type=search#reviews', '_blank');
+                this.setState({show_rating_popup: false});
                 notify.success(response1.message)
             }
             else {
                 notify.error(response1.message)
             }
         });
+    }
+    thumbDown(){
+        console.log("thumbs down")
+        this.setState({show_button_submit: true});
+
+    }
+
+    forButtonCancel() {
         this.setState({show_rating_popup: false});
+    }
+    forButtonSubmit(){
+        if (this.state.value == ''){
+            alert("Please tell us issue?")
+        }
+        else {
+            var data = [
+                {"thumb_action": 'down'},
+                {"submit_review": 1},
+                {"textbox_query": this.state.value}
+            ];
+
+            requests.postRequest('frontend/importer/reviewRatingData', {data: data}, false, true).then(response1 => {
+                if (response1.success) {
+                    // window.open('https://apps.shopify.com/omni-importer?surface_detail=webcommerce&surface_inter_position=1&surface_intra_position=4&surface_type=search#reviews', '_blank');
+                    this.setState({show_rating_popup: false});
+                    notify.success(response1.message)
+                }
+                else {
+                    notify.error(response1.message)
+                }
+            });
+        }
+
+    }
+
+
+    forReviewNeverAgain() {
+        console.log("never ask again");
+        var data = [
+            {"submit_review": 1},
+            {"textbox_query": 'Clicked on Never Ask Again'}
+        ];
+        requests.postRequest('frontend/importer/neverAskAgainForRating', {data: data}, false, true).then(response1 => {
+            if (response1.success) {
+                this.setState({show_rating_popup: false});
+                notify.success(response1.message)
+            }
+            else {
+                notify.error(response1.message)
+            }
+        });
+
     }
 
     componentWillMount() {
@@ -181,30 +210,34 @@ export class Panel extends Component {
                 };
                 this.setState({
                     necessaryInfo: user_necessary_details
-                },() => {this.checkingFba();});
+                }, () => {
+                    this.checkingFba();
+                });
             }
         });
     }
-    getUploadCount(){
+
+    getUploadCount() {
         let total_product_upload = 0;
         requests
-            .postRequest("frontend/app/getUploadedProductsCount", {
-            })
+            .postRequest("frontend/app/getUploadedProductsCount", {})
             .then(data1 => {
                 if (data1.success && (data1.data.length > 0)) {
                     Object.keys(data1.data).forEach(e => {
                         if (data1.data[e] !== undefined) {
-                             total_product_upload = total_product_upload + data1.data[e]["count"];
+                            total_product_upload = total_product_upload + data1.data[e]["count"];
                         }
                     });
                     this.setState({
-                        product_upload : total_product_upload
+                        product_upload: total_product_upload
                     })
-                    if (this.state.product_upload > 10){
-                        let partial_import = (this.state.product_import*10)/100;
-                        if (this.state.product_upload >= partial_import && this.state.product_upload <= this.state.product_import){
+                    if (this.state.product_upload > 10) {
+                        let partial_import = (this.state.product_import * 10) / 100;
+                        console.log(partial_import);
+                        console.log(this.state.product_upload);
+                        if (this.state.product_upload >= partial_import && this.state.product_upload <= this.state.product_import) {
                             this.setState({
-                                show_rating_popup:true
+                                show_rating_popup: true
                             })
                         }
                     }
@@ -240,15 +273,16 @@ export class Panel extends Component {
     }
 
     importCount(importer_marketplace_array,
-                     importer_title_array,
-                     entire_data_importer) {
-       let count_of_product = 0;
+                importer_title_array,
+                entire_data_importer) {
+        let count_of_product = 0;
         requests
             .postRequest("frontend/app/getImportedProductCount", {
                 importers: importer_marketplace_array
             }, false, true)
             .then(data => {
-                if (data.success){
+                if (data.success) {
+                    // console.log(data.data.importers)
                     Object.keys(data.data).forEach(e => {
                         if (data.data[e] !== undefined) {
                             count_of_product = count_of_product + data.data[e];
@@ -256,9 +290,9 @@ export class Panel extends Component {
                         }
                     });
                     this.setState({
-                        product_import:count_of_product
+                        product_import: count_of_product
                     })
-                    if (this.state.product_import>10){
+                    if (this.state.product_import > 10) {
                         this.getUploadCount();
                     }
                 }
@@ -288,19 +322,25 @@ export class Panel extends Component {
 
     checkingFba() {
         if (this.state.necessaryInfo.account_connected_array) {
-            if ( this.state.necessaryInfo.account_connected_array.indexOf('fba') < 0 ) {
+             console.log(this.state.necessaryInfo.account_connected_array);
+            let flag = false;
+            if (this.state.necessaryInfo.account_connected_array.indexOf('fba') < 0) {
                 for (let i = 0; i < this.menu.length; i++) {
                     if (this.menu[i]['id'] == "fbaorders") {
                         this.menu.splice(i, 1);
                     }
                 }
             }
+
         }
     }
+
     handleChange = (value) => {
         this.setState({value});
     };
+
     render() {
+        const {rating} = this.state;
         return (
             <div className="container-fluid app-panel-container">
                 <div className="row">
@@ -377,6 +417,8 @@ export class Panel extends Component {
                             <Route exact path="/panel/plans" component={Plans}/>
                             <Route path="/panel/accounts/install" component={InstallApp}/>
                             <Route path="/panel/accounts/success" component={AppInstalled}/>
+                            {/*<Route path="/panel/order" component={Orders}/>*/}
+
                             <Route
                                 exact
                                 path="/panel/import"
@@ -515,26 +557,48 @@ export class Panel extends Component {
                 >
                     <Modal.Section>
                         <Stack vertical={true}>
-                        <Banner title={"Rate Us Now"} status="info">
-                            <Label id={123}>
-                                If You are Happy than make us happy by give us review on app store.
-                            </Label>
-                        </Banner>
-                        <Stack vertical={true}  alignment="center" >
-                            <h1 style={{'color':"#000000"}} ><b>RATE US</b></h1>
-                            <StarRatings
-                                rating={this.state.rating}
-                                starRatedColor="#ffd700"
-                                starEmptyColor="#2a2a2a"
-                                starHoverColor="#ffd700"
-                                starSelectingHoverColor="#ffd700"
-                                changeRating={this.changeRating.bind(this)}
-                                numberOfStars={5}
-                                starDimension="40px"
-                                name='rating'
-                            />
-                        </Stack>
-                            <Stack vertical={true}  alignment="center">
+                            <Stack vertical={true} alignment="center">
+                                <h1 style={{'color': "#000000"}}><b>RATE US</b></h1>
+                            </Stack>
+                            <Stack distribution="center" spacing="extraLoose">
+                                <React.Fragment/>
+                                <div className="like">
+                                    <i style={{'font-size': '50px', 'cursor': 'pointer', 'user-select': 'none'}}
+                                       on
+                                       onClick={this.thumbUp.bind(this)}
+                                       class="fa fa-thumbs-up"/>
+                                </div>
+                                {/*<StarRatings
+                                 rating={this.state.rating}
+                                 starRatedColor="#ffd700"
+                                 starEmptyColor="#2a2a2a"
+                                 starHoverColor="#ffd700"
+                                 starSelectingHoverColor="#ffd700"
+                                 changeRating={this.changeRating.bind(this)}
+                                 numberOfStars={5}
+                                 starDimension="40px"
+                                 name='rating'
+                                 />*/}
+                                <div className="dislike">
+                                    <i style={{'font-size': '50px', 'cursor': 'pointer', 'user-select': 'none'}}
+                                       onClick={this.thumbDown.bind(this)}
+                                       class="fa fa-thumbs-down"/>
+                                </div>
+                                {/*<StarRatings
+                                 rating={this.state.rating}
+                                 starRatedColor="#ffd700"
+                                 starEmptyColor="#2a2a2a"
+                                 starHoverColor="#ffd700"
+                                 starSelectingHoverColor="#ffd700"
+                                 changeRating={this.changeRating.bind(this)}
+                                 numberOfStars={5}
+                                 starDimension="40px"
+                                 name='rating'
+                                 />*/}
+                                <React.Fragment/>
+                            </Stack>
+                            {this.state.show_button_submit?
+                            <Stack vertical={true} alignment="center">
                                 <TextField
                                     label="If Any Issue"
                                     value={this.state.value}
@@ -542,7 +606,13 @@ export class Panel extends Component {
                                     placeholder="Optional"
                                     multiline
                                 />
-                            </Stack>
+                                <Button
+                                    primary={true}
+                                    onClick={this.forButtonSubmit.bind(this)}
+                                >
+                                    Submit
+                                </Button>
+                            </Stack>:null}
                             <hr/>
                             <Stack distribution="equalSpacing">
                                 <Button
@@ -553,19 +623,40 @@ export class Panel extends Component {
                                 </Button>
                                 <Button
                                     primary={true}
-                                    onClick={this.forReviewDone.bind(this)}
-                                >
-                                    Submit</Button>
-                                <Button
-                                    primary={true}
                                     onClick={this.forReviewNeverAgain.bind(this)}
                                 >Never Ask Again
                                 </Button>
                             </Stack>
                         </Stack>
                     </Modal.Section>
-
                 </Modal>
+                {/*<Modal
+                    title={"Important Notice"}
+                    open={this.state.show_etsy_popup}
+                    onClose={() => {
+                        this.setState({show_etsy_popup: false});
+                    }}
+                    primaryAction={{
+                        content: "OK",
+                        onClick: () => {
+                            this.setState({show_etsy_popup: false});
+                        }
+                    }}
+                >
+                    <Modal.Section>
+                        <Banner title={"Information"} status="info">
+                            <Label id={123}>
+                                <div class="Polaris-Banner__Content" id="Banner3Content">
+                                    <p>
+                                        System is Schedule for Maintaince from <b>23th July, 2019 11:30 PM(PST)</b> to <b> 24th July, 2019 1:30 AM(PST)</b>
+                                    </p>
+                                    <br/>
+                                    <p>Thank You for your Patience</p>
+                                </div>
+                            </Label>
+                        </Banner>
+                    </Modal.Section>
+                </Modal>*/}
             </div>
         );
     }
