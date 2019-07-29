@@ -1,25 +1,12 @@
-
-
 import React, {Component} from "react"
 import {requests} from "../../../../services/request";
 import {notify} from "../../../../services/notify";
 import {validateImporter} from "../static-functions.js";
 import {
-    AppProvider,
-    Page,
     Card,
-    FormLayout,
-    Select,
-    DisplayText,
-    TextContainer,
-    EmptyState,
-    Button,
-    Tooltip,
     Label,
     Thumbnail,
     Banner,
-    Subheading,
-    Heading,
     TextStyle,
     Layout,
     Stack,
@@ -29,7 +16,7 @@ import {
     Icon,
 } from "@shopify/polaris";
 import '@shopify/polaris/styles.css';
-import {Bar, Doughnut, Line} from 'react-chartjs-2';
+import {Doughnut} from 'react-chartjs-2';
 import Skeleton from "../../../../shared/skeleton";
 import {capitalizeWord} from "../static-functions";
 class Demo_analytics_reporting extends Component {
@@ -89,6 +76,7 @@ class Demo_analytics_reporting extends Component {
             }
         })
     }
+
     monthDiff(d1, d2) {
     var months;
     months = (d2.getFullYear() - d1.getFullYear()) * 12;
@@ -96,6 +84,7 @@ class Demo_analytics_reporting extends Component {
     months += d2.getMonth();
     return months <= 0 ? 0 : months;
 }
+
     getActiveRecurrying() {
         let plan_to_be_end = "";
         requests.getRequest('plan/plan/getActive', undefined, false, true)
@@ -194,20 +183,15 @@ class Demo_analytics_reporting extends Component {
             });
     }
 
-    getYAxisImporter(importer_marketplace_array,
-                     importer_title_array,
-                     entire_data_importer) {
+    getYAxisImporter(importer_marketplace_array, importer_title_array, entire_data_importer) {
         let total_products_importer = [];
         let label_mp_array = [];
         let importer_data_rec = {};
-        requests
-            .postRequest("frontend/app/getImportedProductCount", {
-                importers: importer_marketplace_array
-            }, false, true)
+        requests.postRequest("frontend/app/getImportedProductCount", {importers: importer_marketplace_array}, false, true)
             .then(data => {
-                 // console.log("importers",data);
-                if (data.success && (data['data']['amazonaffiliate'] != 0 || data['data']['amazonimporter'] != 0 || data['data']['ebayimporter'] != 0 ||
-                    data['data']['etsyimporter'] != 0 || data['data']['walmartimporter'] != 0 || data['data']['wishimporter'] != 0))
+                if (data.success && (data['data']['amazonaffiliate'] !== 0 || data['data']['amazonimporter'] !== 0 || data['data']['ebayimporter'] !== 0 ||
+                    data['data']['etsyimporter'] !== 0 || data['data']['walmartimporter'] !== 0 || data['data']['wishimporter'] !== 0))
+
                 {
                     importer_data_rec = data.data;
 
@@ -246,24 +230,14 @@ class Demo_analytics_reporting extends Component {
                                 hoverBackgroundColor: this.state.hoverBackgroundColor,
                             }], title: "Imported"
                         },
-
-
-                    })
+                    });
                     this.state.skeleton[1] = false;
-                    this.setState(
-                        this.state
-                    )
-
+                    this.setState(this.state)
                 }  else if (data.success && data['data']['amazonaffiliate'] === 0 && data['data']['amazonimporter'] === 0 && data['data']['ebayimporter'] === 0 &&
                     data['data']['etsyimporter'] === 0 && data['data']['walmartimporter'] === 0 && data['data']['wishimporter'] === 0) {
-
-                    this.setState({
-                        no_getProductsUploadedData_and_ImportedData: true
-                    })
+                    this.setState({no_getProductsUploadedData_and_ImportedData: true})
                 } else {
-                    this.setState({
-                        no_getProductsUploadedData_and_ImportedData: true
-                    })
+                    this.setState({no_getProductsUploadedData_and_ImportedData: true})
                 }
             });
     }
@@ -340,24 +314,6 @@ class Demo_analytics_reporting extends Component {
             });
     }
 
-/*    to_render_or_not() {
-        const legend = {
-            display: false,
-        };
-        if (!this.state.no_getOrderDatewise) {
-            return ((this.state.linegraphskeleton ? <Skeleton case="body"/> :
-                <Stack distribution="center">
-                    <img className='img-fluid' src={require("../../../../assets/img/data_nahi.png")}/>
-                </Stack>))
-        }
-        else {
-
-            return ((this.state.linegraphskeleton ? <Skeleton case="body"/> :
-                <Line data={this.state.graph_to_show} legend={legend}/>))
-        }
-
-    }*/
-
     to_final_render_Doughnut() {
         const legendOpts = {
             display: true,
@@ -418,13 +374,13 @@ class Demo_analytics_reporting extends Component {
                     this.redirect(this.state.to_redirect[i])
                 }}>
                     {
-                        (this.state.skeleton[i] ? <Skeleton/> :
+                        this.state.skeleton[i] ? <Skeleton/> :
 
                                 <Card title={title.title} sectioned>
                                     <Doughnut data={this.state[yourVariable]} options={this.state.legend}
                                               legend={legendOpts}/>
                                 </Card>
-                        )}
+                        }
                 </div >
             );
         }
@@ -505,6 +461,7 @@ class Demo_analytics_reporting extends Component {
             }
         })
     }
+
     tableBlogData(){
         let temparr=[];
         requests.getRequest('frontend/importer/addBlog').then(data=>{
