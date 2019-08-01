@@ -551,13 +551,13 @@ class Demo_analytics_reporting extends Component {
                                 <ResourceList
                                     items={[
                                         {
-                                            url: 'https://apps.shopify.com/etsy-marketplace-integration',
-                                            name: 'Etsy Marketplace Integration',
-                                            description: 'Sync, Manage, & Automate to sell on Etsy.',
+                                            url: 'https://apps.shopify.com/ebay-integration?surface_detail=ebay&surface_inter_position=1&surface_intra_position=5&surface_type=search',
+                                            name: 'Ebay Marketplace Integration',
+                                            description: 'Easiest way to sell on eBay and manage orders.',
                                             media: (
                                                 <Thumbnail
-                                                    source="https://apps.shopifycdn.com/listing_images/2fa150931ca28a5ed6a17dc69c40477b/icon/51d25ddb1cd498cac3ef8aa418ce9601.png?height=84&width=84"
-                                                    alt="etsy logo"
+                                                    source="https://apps.shopifycdn.com/listing_images/23dc4caf6a03bf29ec864415339a7610/icon/9d1d40ec2690a2fe0a47123990917bc5.png?height=84&width=84"
+                                                    alt="ebay integration logo"
                                                 />
                                             ),
                                         },
@@ -685,7 +685,6 @@ class Demo_analytics_reporting extends Component {
         return(
             <Stack  distribution="center">
                 <a href="https://apps.cedcommerce.com/shopify-store-development/"target="_blank"><img className='img-fluid p-3' src={require("../../../../assets/img/store_dev1.png")} alt="Store_Dev"/></a>
-                <hr style={{'border':'none','border-left':'1px solid hsla(200, 10%, 50%,100)','height':'49vh','width':'1px'}}/>
                 <a href="https://apps.cedcommerce.com/digital-marketing-services/"target="_blank"><img className='img-fluid pb-5 pr-5 pl-3' src={require("../../../../assets/img/store_dev2.png")} alt="Digital Marketing"/></a>
             </Stack>
         )

@@ -162,43 +162,43 @@ class PlanBody extends Component {
             this.state.oneTimePaymentDetails.discount_percentage = 0;
         } else if (credits <= 500) {
             cost = cost - (cost * 30) / 100;
-            if ( 30 > cost ) {
+            if (30 > cost) {
                 cost = 30;
             }
             this.state.oneTimePaymentDetails.discount_percentage = 30;
         } else if (credits <= 600) {
             cost = cost - (cost * 40) / 100;
-            if ( 36 > cost ) {
+            if (36 > cost) {
                 cost = 36;
             }
             this.state.oneTimePaymentDetails.discount_percentage = 40;
         } else if (credits <= 2000) {
             cost = cost - (cost * 50) / 100;
-            if ( 42 > cost ) {
+            if (42 > cost) {
                 cost = 42;
             }
             this.state.oneTimePaymentDetails.discount_percentage = 50;
         } else if (credits <= 3000) {
             cost = cost - (cost * 65) / 100;
-            if ( 100 > cost ) {
+            if (100 > cost) {
                 cost = 100;
             }
             this.state.oneTimePaymentDetails.discount_percentage = 65;
         } else if (credits <= 5000) {
             cost = cost - (cost * 70) / 100;
-            if ( 150 > cost ) {
+            if (150 > cost) {
                 cost = 150;
             }
             this.state.oneTimePaymentDetails.discount_percentage = 70;
         } else if (credits <= 10000) {
             cost = cost - (cost * 75) / 100;
-            if ( 175 > cost ) {
+            if (175 > cost) {
                 cost = 175;
             }
             this.state.oneTimePaymentDetails.discount_percentage = 75;
         } else {
             cost = cost - (cost * 80) / 100;
-            if ( 250 > cost ) {
+            if (250 > cost) {
                 cost = 250;
             }
             this.state.oneTimePaymentDetails.discount_percentage = 80;
@@ -431,69 +431,70 @@ class PlanBody extends Component {
                             <Stack>
                                 <Collapsible open={this.state.sync_plan}
                                              ariaExpanded={this.state.sync_plan}
-                                >
+                                > <Stack vertical={false}>
                                     {this.state.data.map((data, index) => {
                                         console.log("qwerty", data);
                                         console.log("merchant", index);
-                                        if(data.title !== "FBA"){
-                                            return( <div className="col-12 mb-4" key={index}>
-                                                {/* Starting Of Plan Card */}
-                                                <Card>
-                                                    <div className="d-flex justify-content-center p-5">
-                                                        <div className="pt-5">
-                                                            <div className="mb-5 text-center">
-                                                                {" "}
-                                                                {/* Plan Numeric Price */}
-                                                                <p className="price-tag">
-                                                                    <span className="price-tag_small">$</span>
-                                                                    {/*<span className="price-tag_discount"><strike>{data.originalValue}</strike></span>*/}
-                                                                    {data.main_price}
-                                                                    <span className="price-tag_small">
+                                        if (data.title !== "FBA") {
+                                            return (
+                                                <div key={index}>
+                                                    {/* Starting Of Plan Card */}
+                                                        <Card>
+                                                            <div className="d-flex justify-content-center p-5">
+                                                                <div className="pt-5">
+                                                                    <div className="mb-5 text-center">
+                                                                        {" "}
+                                                                        {/* Plan Numeric Price */}
+                                                                        <p className="price-tag">
+                                                                            <span className="price-tag_small">$</span>
+                                                                            {/*<span className="price-tag_discount"><strike>{data.originalValue}</strike></span>*/}
+                                                                            {data.main_price}
+                                                                            <span className="price-tag_small">
                                                                         {data.validity_display}
                                                                     </span>
-                                                                </p>
-                                                            </div>
-                                                            <div className="mb-5">
-                                                                {" "}
-                                                                {/* Button To choose Plan */}
-                                                                <Button
-                                                                    primary={true}
-                                                                    fullWidth={true}
-                                                                    size="large"
-                                                                    disabled={
-                                                                        data.main_price === 0 || data.main_price === "0"
-                                                                    }
-                                                                    onClick={this.onSelectPlan.bind(this, data)}
-                                                                >
-                                                                    {data.main_price === 0 || data.main_price === "0"
-                                                                        ? "Select Marketplace"
-                                                                        : "Choose Plan"}
-                                                                </Button>
-                                                            </div>
-                                                            <div className="mb-5 text-center">
-                                                                {" "}
-                                                                {/* Descriptions For Particular deatails */}
-                                                                <h1 className="mb-4">
-                                                                    <b>{data.title}</b>
-                                                                </h1>
-                                                                <h4>{data.description}</h4>
-                                                            </div>
-                                                            <hr />
-                                                            <div className="text-center mt-5">
-                                                                {" "}
-                                                                {/* Services Data */}
-                                                                {data.services
-                                                                    ? Object.keys(data.services).map(keys => {
-                                                                        return (
-                                                                            <React.Fragment key={keys}>
-                                                                                <p className="service-body mb-5">
+                                                                        </p>
+                                                                    </div>
+                                                                    <div className="mb-5">
+                                                                        {" "}
+                                                                        {/* Button To choose Plan */}
+                                                                        <Button
+                                                                            primary={true}
+                                                                            fullWidth={true}
+                                                                            size="large"
+                                                                            disabled={
+                                                                                data.main_price === 0 || data.main_price === "0"
+                                                                            }
+                                                                            onClick={this.onSelectPlan.bind(this, data)}
+                                                                        >
+                                                                            {data.main_price === 0 || data.main_price === "0"
+                                                                                ? "Select Marketplace"
+                                                                                : "Choose Plan"}
+                                                                        </Button>
+                                                                    </div>
+                                                                    <div className="mb-5 text-center">
+                                                                        {" "}
+                                                                        {/* Descriptions For Particular deatails */}
+                                                                        <h1 className="mb-4">
+                                                                            <b>{data.title}</b>
+                                                                        </h1>
+                                                                        <h4>{data.description}</h4>
+                                                                    </div>
+                                                                    <hr />
+                                                                    <div className="text-center mt-5">
+                                                                        {" "}
+                                                                        {/* Services Data */}
+                                                                        {data.services
+                                                                            ? Object.keys(data.services).map(keys => {
+                                                                                return (
+                                                                                    <React.Fragment key={keys}>
+                                                                                        <p className="service-body mb-5">
                                                                                          <span
                                                                                              className="service-description mb-3"
                                                                                              style={{fontWeight: "bold"}}
                                                                                          >
                                                                                          <b>{data.services[keys].title}</b>
                                                                                          </span>
-                                                                                    <span>
+                                                                                            <span>
                                                                                          <Tooltip
                                                                                              content={
                                                                                                  data.services[keys].description
@@ -509,272 +510,275 @@ class PlanBody extends Component {
                                                                                          </Link>
                                                                                          </Tooltip>
                                                                                          </span>
-                                                                                </p>
-                                                                                {Object.keys(
-                                                                                    data.services[keys].services
-                                                                                ).map(key1 => {
-                                                                                    if (
-                                                                                        data.services[keys].services[key1]
-                                                                                            .required === 1
-                                                                                    ) {
-                                                                                        return (
-                                                                                            <div key={key1}
-                                                                                                 className="text-left">
-                                                                                                <Checkbox
-                                                                                                    checked={true}
-                                                                                                    label={
-                                                                                                        data.services[keys].services[key1]
-                                                                                                            .title
-                                                                                                    }
-                                                                                                    disabled={true}
-                                                                                                />
-                                                                                            </div>
-                                                                                        );
-                                                                                    } else {
-                                                                                        let temp = this.state.checkBox.slice(0);
-                                                                                        let flag = 0;
-                                                                                        temp.forEach(valueData => {
+                                                                                        </p>
+                                                                                        {Object.keys(
+                                                                                            data.services[keys].services
+                                                                                        ).map(key1 => {
                                                                                             if (
-                                                                                                valueData.code ===
                                                                                                 data.services[keys].services[key1]
-                                                                                                    .code
+                                                                                                    .required === 1
                                                                                             ) {
-                                                                                                if (valueData.key === data.id) {
-                                                                                                    flag = 1;
-                                                                                                }
-                                                                                            }
-                                                                                        });
-                                                                                        if (flag === 0) {
-                                                                                            temp.push({
-                                                                                                code: data.services[keys].services[key1]
-                                                                                                    .code,
-                                                                                                isSelected: false,
-                                                                                                key: data.id,
-                                                                                                id: key1
-                                                                                            });
-                                                                                            this.state.checkBox = temp;
-                                                                                        }
-                                                                                        return (
-                                                                                            <div key={key1}
-                                                                                                 className="text-left">
-                                                                                                {this.state.checkBox.map(KEYS => {
+                                                                                                return (
+                                                                                                    <div key={key1}
+                                                                                                         className="text-left">
+                                                                                                        <Checkbox
+                                                                                                            checked={true}
+                                                                                                            label={
+                                                                                                                data.services[keys].services[key1]
+                                                                                                                    .title
+                                                                                                            }
+                                                                                                            disabled={true}
+                                                                                                        />
+                                                                                                    </div>
+                                                                                                );
+                                                                                            } else {
+                                                                                                let temp = this.state.checkBox.slice(0);
+                                                                                                let flag = 0;
+                                                                                                temp.forEach(valueData => {
                                                                                                     if (
-                                                                                                        KEYS.code ===
-                                                                                                        data.services[keys].services[
-                                                                                                            key1
-                                                                                                            ].code &&
-                                                                                                        KEYS.key === data.id
+                                                                                                        valueData.code ===
+                                                                                                        data.services[keys].services[key1]
+                                                                                                            .code
                                                                                                     ) {
-                                                                                                        return (
-                                                                                                            <div
-                                                                                                                className="p-2"
-                                                                                                                key={KEYS.code}
-                                                                                                                style={{
-                                                                                                                    backgroundColor: "#FCF1CD"
-                                                                                                                }}
-                                                                                                            >
-                                                                                                                <Checkbox
-                                                                                                                    checked={KEYS.isSelected}
-                                                                                                                    label={
-                                                                                                                        data.services[keys]
-                                                                                                                            .services[key1].title
-                                                                                                                    }
-                                                                                                                    onChange={this.onCheckBox.bind(
-                                                                                                                        this,
-                                                                                                                        data.services[keys]
-                                                                                                                            .services[key1].code,
-                                                                                                                        data.id
-                                                                                                                    )}
-                                                                                                                />
-                                                                                                            </div>
-                                                                                                        );
+                                                                                                        if (valueData.key === data.id) {
+                                                                                                            flag = 1;
+                                                                                                        }
                                                                                                     }
-                                                                                                })}
-                                                                                            </div>
-                                                                                        );
-                                                                                    }
-                                                                                })}
-                                                                            </React.Fragment>
-                                                                        );
-                                                                    })
-                                                                    : null}
+                                                                                                });
+                                                                                                if (flag === 0) {
+                                                                                                    temp.push({
+                                                                                                        code: data.services[keys].services[key1]
+                                                                                                            .code,
+                                                                                                        isSelected: false,
+                                                                                                        key: data.id,
+                                                                                                        id: key1
+                                                                                                    });
+                                                                                                    this.state.checkBox = temp;
+                                                                                                }
+                                                                                                return (
+                                                                                                    <div key={key1}
+                                                                                                         className="text-left">
+                                                                                                        {this.state.checkBox.map(KEYS => {
+                                                                                                            if (
+                                                                                                                KEYS.code ===
+                                                                                                                data.services[keys].services[
+                                                                                                                    key1
+                                                                                                                    ].code &&
+                                                                                                                KEYS.key === data.id
+                                                                                                            ) {
+                                                                                                                return (
+                                                                                                                    <div
+                                                                                                                        className="p-2"
+                                                                                                                        key={KEYS.code}
+                                                                                                                        style={{
+                                                                                                                            backgroundColor: "#FCF1CD"
+                                                                                                                        }}
+                                                                                                                    >
+                                                                                                                        <Checkbox
+                                                                                                                            checked={KEYS.isSelected}
+                                                                                                                            label={
+                                                                                                                                data.services[keys]
+                                                                                                                                    .services[key1].title
+                                                                                                                            }
+                                                                                                                            onChange={this.onCheckBox.bind(
+                                                                                                                                this,
+                                                                                                                                data.services[keys]
+                                                                                                                                    .services[key1].code,
+                                                                                                                                data.id
+                                                                                                                            )}
+                                                                                                                        />
+                                                                                                                    </div>
+                                                                                                                );
+                                                                                                            }
+                                                                                                        })}
+                                                                                                    </div>
+                                                                                                );
+                                                                                            }
+                                                                                        })}
+                                                                                    </React.Fragment>
+                                                                                );
+                                                                            })
+                                                                            : null}
+                                                                    </div>
+                                                                </div>
                                                             </div>
-                                                        </div>
-                                                    </div>
-                                                </Card>
-                                            </div>)
+                                                        </Card>
+
+                                                </div>
+                                            )
                                         }
-                                       /* return (
-                                            {/!*<div className="col-12 mb-4" key={index}>
-                                                 Starting Of Plan Card
-                                                <Card>
-                                                    <div className="d-flex justify-content-center p-5">
-                                                        <div className="pt-5">
-                                                            <div className="mb-5 text-center">
-                                                                {" "}
-                                                                 Plan Numeric Price
-                                                                <p className="price-tag">
-                                                                    <span className="price-tag_small">$</span>
-                                                                    <span className="price-tag_discount"><strike>{data.originalValue}</strike></span>
-                                                                    {data.main_price}
-                                                                    <span className="price-tag_small">
-                                                                        {data.validity_display}
-                                                                    </span>
-                                                                </p>
-                                                            </div>
-                                                            <div className="mb-5">
-                                                                {" "}
-                                                                 Button To choose Plan
-                                                                <Button
-                                                                    primary={true}
-                                                                    fullWidth={true}
-                                                                    size="large"
-                                                                    disabled={
-                                                                        data.main_price === 0 || data.main_price === "0"
-                                                                    }
-                                                                    onClick={this.onSelectPlan.bind(this, data)}
-                                                                >
-                                                                    {data.main_price === 0 || data.main_price === "0"
-                                                                        ? "Select Marketplace"
-                                                                        : "Choose Plan"}
-                                                                </Button>
-                                                            </div>
-                                                            <div className="mb-5 text-center">
-                                                                {" "}
-                                                                 Descriptions For Particular deatails
-                                                                <h1 className="mb-4">
-                                                                    <b>{data.title}</b>
-                                                                </h1>
-                                                                <h4>{data.description}</h4>
-                                                            </div>
-                                                            <hr />
-                                                            <div className="text-center mt-5">
-                                                                {" "}
-                                                                 Services Data
-                                                                {data.services
-                                                                    ? Object.keys(data.services).map(keys => {
-                                                                        return (
-                                                                            <React.Fragment key={keys}>
-                                                                                <p className="service-body mb-5">
-                                                                                         <span
-                                                                                             className="service-description mb-3"
-                                                                                             style={{fontWeight: "bold"}}
-                                                                                         >
-                                                                                         <b>{data.services[keys].title}</b>
-                                                                                         </span>
-                                                                                    <span>
-                                                                                         <Tooltip
-                                                                                             content={
-                                                                                                 data.services[keys].description
-                                                                                             }
-                                                                                             preferredPosition="above"
-                                                                                         >
-                                                                                         <Link>
-                                                                                         <Icon
-                                                                                             source="help"
-                                                                                             color="inkLighter"
-                                                                                             backdrop={true}
-                                                                                         />
-                                                                                         </Link>
-                                                                                         </Tooltip>
-                                                                                         </span>
-                                                                                </p>
-                                                                                {Object.keys(
-                                                                                    data.services[keys].services
-                                                                                ).map(key1 => {
-                                                                                    if (
-                                                                                        data.services[keys].services[key1]
-                                                                                            .required === 1
-                                                                                    ) {
-                                                                                        return (
-                                                                                            <div key={key1}
-                                                                                                 className="text-left">
-                                                                                                <Checkbox
-                                                                                                    checked={true}
-                                                                                                    label={
-                                                                                                        data.services[keys].services[key1]
-                                                                                                            .title
-                                                                                                    }
-                                                                                                    disabled={true}
-                                                                                                />
-                                                                                            </div>
-                                                                                        );
-                                                                                    } else {
-                                                                                        let temp = this.state.checkBox.slice(0);
-                                                                                        let flag = 0;
-                                                                                        temp.forEach(valueData => {
-                                                                                            if (
-                                                                                                valueData.code ===
-                                                                                                data.services[keys].services[key1]
-                                                                                                    .code
-                                                                                            ) {
-                                                                                                if (valueData.key === data.id) {
-                                                                                                    flag = 1;
-                                                                                                }
-                                                                                            }
-                                                                                        });
-                                                                                        if (flag === 0) {
-                                                                                            temp.push({
-                                                                                                code: data.services[keys].services[key1]
-                                                                                                    .code,
-                                                                                                isSelected: false,
-                                                                                                key: data.id,
-                                                                                                id: key1
-                                                                                            });
-                                                                                            this.state.checkBox = temp;
-                                                                                        }
-                                                                                        return (
-                                                                                            <div key={key1}
-                                                                                                 className="text-left">
-                                                                                                {this.state.checkBox.map(KEYS => {
-                                                                                                    if (
-                                                                                                        KEYS.code ===
-                                                                                                        data.services[keys].services[
-                                                                                                            key1
-                                                                                                            ].code &&
-                                                                                                        KEYS.key === data.id
-                                                                                                    ) {
-                                                                                                        return (
-                                                                                                            <div
-                                                                                                                className="p-2"
-                                                                                                                key={KEYS.code}
-                                                                                                                style={{
-                                                                                                                    backgroundColor: "#FCF1CD"
-                                                                                                                }}
-                                                                                                            >
-                                                                                                                <Checkbox
-                                                                                                                    checked={KEYS.isSelected}
-                                                                                                                    label={
-                                                                                                                        data.services[keys]
-                                                                                                                            .services[key1].title
-                                                                                                                    }
-                                                                                                                    onChange={this.onCheckBox.bind(
-                                                                                                                        this,
-                                                                                                                        data.services[keys]
-                                                                                                                            .services[key1].code,
-                                                                                                                        data.id
-                                                                                                                    )}
-                                                                                                                />
-                                                                                                            </div>
-                                                                                                        );
-                                                                                                    }
-                                                                                                })}
-                                                                                            </div>
-                                                                                        );
-                                                                                    }
-                                                                                })}
-                                                                            </React.Fragment>
-                                                                        );
-                                                                    })
-                                                                    : null}
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </Card>
-                                            </div>*!/}
-                                        );*/
+                                        /* return (
+                                         {/!*<div className="col-12 mb-4" key={index}>
+                                         Starting Of Plan Card
+                                         <Card>
+                                         <div className="d-flex justify-content-center p-5">
+                                         <div className="pt-5">
+                                         <div className="mb-5 text-center">
+                                         {" "}
+                                         Plan Numeric Price
+                                         <p className="price-tag">
+                                         <span className="price-tag_small">$</span>
+                                         <span className="price-tag_discount"><strike>{data.originalValue}</strike></span>
+                                         {data.main_price}
+                                         <span className="price-tag_small">
+                                         {data.validity_display}
+                                         </span>
+                                         </p>
+                                         </div>
+                                         <div className="mb-5">
+                                         {" "}
+                                         Button To choose Plan
+                                         <Button
+                                         primary={true}
+                                         fullWidth={true}
+                                         size="large"
+                                         disabled={
+                                         data.main_price === 0 || data.main_price === "0"
+                                         }
+                                         onClick={this.onSelectPlan.bind(this, data)}
+                                         >
+                                         {data.main_price === 0 || data.main_price === "0"
+                                         ? "Select Marketplace"
+                                         : "Choose Plan"}
+                                         </Button>
+                                         </div>
+                                         <div className="mb-5 text-center">
+                                         {" "}
+                                         Descriptions For Particular deatails
+                                         <h1 className="mb-4">
+                                         <b>{data.title}</b>
+                                         </h1>
+                                         <h4>{data.description}</h4>
+                                         </div>
+                                         <hr />
+                                         <div className="text-center mt-5">
+                                         {" "}
+                                         Services Data
+                                         {data.services
+                                         ? Object.keys(data.services).map(keys => {
+                                         return (
+                                         <React.Fragment key={keys}>
+                                         <p className="service-body mb-5">
+                                         <span
+                                         className="service-description mb-3"
+                                         style={{fontWeight: "bold"}}
+                                         >
+                                         <b>{data.services[keys].title}</b>
+                                         </span>
+                                         <span>
+                                         <Tooltip
+                                         content={
+                                         data.services[keys].description
+                                         }
+                                         preferredPosition="above"
+                                         >
+                                         <Link>
+                                         <Icon
+                                         source="help"
+                                         color="inkLighter"
+                                         backdrop={true}
+                                         />
+                                         </Link>
+                                         </Tooltip>
+                                         </span>
+                                         </p>
+                                         {Object.keys(
+                                         data.services[keys].services
+                                         ).map(key1 => {
+                                         if (
+                                         data.services[keys].services[key1]
+                                         .required === 1
+                                         ) {
+                                         return (
+                                         <div key={key1}
+                                         className="text-left">
+                                         <Checkbox
+                                         checked={true}
+                                         label={
+                                         data.services[keys].services[key1]
+                                         .title
+                                         }
+                                         disabled={true}
+                                         />
+                                         </div>
+                                         );
+                                         } else {
+                                         let temp = this.state.checkBox.slice(0);
+                                         let flag = 0;
+                                         temp.forEach(valueData => {
+                                         if (
+                                         valueData.code ===
+                                         data.services[keys].services[key1]
+                                         .code
+                                         ) {
+                                         if (valueData.key === data.id) {
+                                         flag = 1;
+                                         }
+                                         }
+                                         });
+                                         if (flag === 0) {
+                                         temp.push({
+                                         code: data.services[keys].services[key1]
+                                         .code,
+                                         isSelected: false,
+                                         key: data.id,
+                                         id: key1
+                                         });
+                                         this.state.checkBox = temp;
+                                         }
+                                         return (
+                                         <div key={key1}
+                                         className="text-left">
+                                         {this.state.checkBox.map(KEYS => {
+                                         if (
+                                         KEYS.code ===
+                                         data.services[keys].services[
+                                         key1
+                                         ].code &&
+                                         KEYS.key === data.id
+                                         ) {
+                                         return (
+                                         <div
+                                         className="p-2"
+                                         key={KEYS.code}
+                                         style={{
+                                         backgroundColor: "#FCF1CD"
+                                         }}
+                                         >
+                                         <Checkbox
+                                         checked={KEYS.isSelected}
+                                         label={
+                                         data.services[keys]
+                                         .services[key1].title
+                                         }
+                                         onChange={this.onCheckBox.bind(
+                                         this,
+                                         data.services[keys]
+                                         .services[key1].code,
+                                         data.id
+                                         )}
+                                         />
+                                         </div>
+                                         );
+                                         }
+                                         })}
+                                         </div>
+                                         );
+                                         }
+                                         })}
+                                         </React.Fragment>
+                                         );
+                                         })
+                                         : null}
+                                         </div>
+                                         </div>
+                                         </div>
+                                         </Card>
+                                         </div>*!/}
+                                         );*/
 
                                     })}
+                                </Stack>
                                 </Collapsible>
                             </Stack>
                         </Page>
@@ -788,71 +792,71 @@ class PlanBody extends Component {
                                 <p><b>Fulfillment By Amazon</b></p>
                             </Banner>
                         </div>
-                            <Collapsible open={this.state.fba_plan}
-                                         ariaExpanded={this.state.fba_plan}
-                            >
-                                {this.state.data.map((data, index) => {
-                                    console.log("qwerty", data);
-                                    console.log("merchant", index);
-                                    if(data.title === "FBA"){
-                                        return( <div className="col-12 m-4" key={index}>
-                                            {/* Starting Of Plan Card */}
-                                            <Card>
-                                                <div className="d-flex justify-content-center p-5">
-                                                    <div className="pt-5">
-                                                        <div className="mb-5 text-center">
-                                                            {" "}
-                                                            {/* Plan Numeric Price */}
-                                                            <p className="price-tag">
-                                                                <span className="price-tag_small">$</span>
-                                                                {/*<span className="price-tag_discount"><strike>{data.originalValue}</strike></span>*/}
-                                                                {data.main_price}
-                                                                <span className="price-tag_small">
+                        <Collapsible open={this.state.fba_plan}
+                                     ariaExpanded={this.state.fba_plan}
+                        >
+                            {this.state.data.map((data, index) => {
+                                console.log("qwerty", data);
+                                console.log("merchant", index);
+                                if (data.title === "FBA") {
+                                    return ( <div className="col-12 m-4" key={index}>
+                                        {/* Starting Of Plan Card */}
+                                        <Card>
+                                            <div className="d-flex justify-content-center p-5">
+                                                <div className="pt-5">
+                                                    <div className="mb-5 text-center">
+                                                        {" "}
+                                                        {/* Plan Numeric Price */}
+                                                        <p className="price-tag">
+                                                            <span className="price-tag_small">$</span>
+                                                            {/*<span className="price-tag_discount"><strike>{data.originalValue}</strike></span>*/}
+                                                            {data.main_price}
+                                                            <span className="price-tag_small">
                                                                         {data.validity_display}
                                                                     </span>
-                                                            </p>
-                                                        </div>
-                                                        <div className="mb-5">
-                                                            {" "}
-                                                            {/* Button To choose Plan */}
-                                                            <Button
-                                                                primary={true}
-                                                                fullWidth={true}
-                                                                size="large"
-                                                                disabled={
-                                                                    data.main_price === 0 || data.main_price === "0"
-                                                                }
-                                                                onClick={this.onSelectPlan.bind(this, data)}
-                                                            >
-                                                                {data.main_price === 0 || data.main_price === "0"
-                                                                    ? "Select Marketplace"
-                                                                    : "Choose Plan"}
-                                                            </Button>
-                                                        </div>
-                                                        <div className="mb-5 text-center">
-                                                            {" "}
-                                                            {/* Descriptions For Particular deatails */}
-                                                            <h1 className="mb-4">
-                                                                <b>{data.title}</b>
-                                                            </h1>
-                                                            <h4>{data.description}</h4>
-                                                        </div>
-                                                        <hr />
-                                                        <div className="text-center mt-5">
-                                                            {" "}
-                                                            {/* Services Data */}
-                                                            {data.services
-                                                                ? Object.keys(data.services).map(keys => {
-                                                                    return (
-                                                                        <React.Fragment key={keys}>
-                                                                            <p className="service-body mb-5">
+                                                        </p>
+                                                    </div>
+                                                    <div className="mb-5">
+                                                        {" "}
+                                                        {/* Button To choose Plan */}
+                                                        <Button
+                                                            primary={true}
+                                                            fullWidth={true}
+                                                            size="large"
+                                                            disabled={
+                                                                data.main_price === 0 || data.main_price === "0"
+                                                            }
+                                                            onClick={this.onSelectPlan.bind(this, data)}
+                                                        >
+                                                            {data.main_price === 0 || data.main_price === "0"
+                                                                ? "Select Marketplace"
+                                                                : "Choose Plan"}
+                                                        </Button>
+                                                    </div>
+                                                    <div className="mb-5 text-center">
+                                                        {" "}
+                                                        {/* Descriptions For Particular deatails */}
+                                                        <h1 className="mb-4">
+                                                            <b>{data.title}</b>
+                                                        </h1>
+                                                        <h4>{data.description}</h4>
+                                                    </div>
+                                                    <hr />
+                                                    <div className="text-center mt-5">
+                                                        {" "}
+                                                        {/* Services Data */}
+                                                        {data.services
+                                                            ? Object.keys(data.services).map(keys => {
+                                                                return (
+                                                                    <React.Fragment key={keys}>
+                                                                        <p className="service-body mb-5">
                                                                                          <span
                                                                                              className="service-description mb-3"
                                                                                              style={{fontWeight: "bold"}}
                                                                                          >
                                                                                          <b>{data.services[keys].title}</b>
                                                                                          </span>
-                                                                                <span>
+                                                                            <span>
                                                                                          <Tooltip
                                                                                              content={
                                                                                                  data.services[keys].description
@@ -868,273 +872,273 @@ class PlanBody extends Component {
                                                                                          </Link>
                                                                                          </Tooltip>
                                                                                          </span>
-                                                                            </p>
-                                                                            {Object.keys(
-                                                                                data.services[keys].services
-                                                                            ).map(key1 => {
-                                                                                if (
-                                                                                    data.services[keys].services[key1]
-                                                                                        .required === 1
-                                                                                ) {
-                                                                                    return (
-                                                                                        <div key={key1}
-                                                                                             className="text-left">
-                                                                                            <Checkbox
-                                                                                                checked={true}
-                                                                                                label={
-                                                                                                    data.services[keys].services[key1]
-                                                                                                        .title
-                                                                                                }
-                                                                                                disabled={true}
-                                                                                            />
-                                                                                        </div>
-                                                                                    );
-                                                                                } else {
-                                                                                    let temp = this.state.checkBox.slice(0);
-                                                                                    let flag = 0;
-                                                                                    temp.forEach(valueData => {
-                                                                                        if (
-                                                                                            valueData.code ===
-                                                                                            data.services[keys].services[key1]
-                                                                                                .code
-                                                                                        ) {
-                                                                                            if (valueData.key === data.id) {
-                                                                                                flag = 1;
+                                                                        </p>
+                                                                        {Object.keys(
+                                                                            data.services[keys].services
+                                                                        ).map(key1 => {
+                                                                            if (
+                                                                                data.services[keys].services[key1]
+                                                                                    .required === 1
+                                                                            ) {
+                                                                                return (
+                                                                                    <div key={key1}
+                                                                                         className="text-left">
+                                                                                        <Checkbox
+                                                                                            checked={true}
+                                                                                            label={
+                                                                                                data.services[keys].services[key1]
+                                                                                                    .title
                                                                                             }
+                                                                                            disabled={true}
+                                                                                        />
+                                                                                    </div>
+                                                                                );
+                                                                            } else {
+                                                                                let temp = this.state.checkBox.slice(0);
+                                                                                let flag = 0;
+                                                                                temp.forEach(valueData => {
+                                                                                    if (
+                                                                                        valueData.code ===
+                                                                                        data.services[keys].services[key1]
+                                                                                            .code
+                                                                                    ) {
+                                                                                        if (valueData.key === data.id) {
+                                                                                            flag = 1;
                                                                                         }
-                                                                                    });
-                                                                                    if (flag === 0) {
-                                                                                        temp.push({
-                                                                                            code: data.services[keys].services[key1]
-                                                                                                .code,
-                                                                                            isSelected: false,
-                                                                                            key: data.id,
-                                                                                            id: key1
-                                                                                        });
-                                                                                        this.state.checkBox = temp;
                                                                                     }
-                                                                                    return (
-                                                                                        <div key={key1}
-                                                                                             className="text-left">
-                                                                                            {this.state.checkBox.map(KEYS => {
-                                                                                                if (
-                                                                                                    KEYS.code ===
-                                                                                                    data.services[keys].services[
-                                                                                                        key1
-                                                                                                        ].code &&
-                                                                                                    KEYS.key === data.id
-                                                                                                ) {
-                                                                                                    return (
-                                                                                                        <div
-                                                                                                            className="p-2"
-                                                                                                            key={KEYS.code}
-                                                                                                            style={{
-                                                                                                                backgroundColor: "#FCF1CD"
-                                                                                                            }}
-                                                                                                        >
-                                                                                                            <Checkbox
-                                                                                                                checked={KEYS.isSelected}
-                                                                                                                label={
-                                                                                                                    data.services[keys]
-                                                                                                                        .services[key1].title
-                                                                                                                }
-                                                                                                                onChange={this.onCheckBox.bind(
-                                                                                                                    this,
-                                                                                                                    data.services[keys]
-                                                                                                                        .services[key1].code,
-                                                                                                                    data.id
-                                                                                                                )}
-                                                                                                            />
-                                                                                                        </div>
-                                                                                                    );
-                                                                                                }
-                                                                                            })}
-                                                                                        </div>
-                                                                                    );
+                                                                                });
+                                                                                if (flag === 0) {
+                                                                                    temp.push({
+                                                                                        code: data.services[keys].services[key1]
+                                                                                            .code,
+                                                                                        isSelected: false,
+                                                                                        key: data.id,
+                                                                                        id: key1
+                                                                                    });
+                                                                                    this.state.checkBox = temp;
                                                                                 }
-                                                                            })}
-                                                                        </React.Fragment>
-                                                                    );
-                                                                })
-                                                                : null}
-                                                        </div>
+                                                                                return (
+                                                                                    <div key={key1}
+                                                                                         className="text-left">
+                                                                                        {this.state.checkBox.map(KEYS => {
+                                                                                            if (
+                                                                                                KEYS.code ===
+                                                                                                data.services[keys].services[
+                                                                                                    key1
+                                                                                                    ].code &&
+                                                                                                KEYS.key === data.id
+                                                                                            ) {
+                                                                                                return (
+                                                                                                    <div
+                                                                                                        className="p-2"
+                                                                                                        key={KEYS.code}
+                                                                                                        style={{
+                                                                                                            backgroundColor: "#FCF1CD"
+                                                                                                        }}
+                                                                                                    >
+                                                                                                        <Checkbox
+                                                                                                            checked={KEYS.isSelected}
+                                                                                                            label={
+                                                                                                                data.services[keys]
+                                                                                                                    .services[key1].title
+                                                                                                            }
+                                                                                                            onChange={this.onCheckBox.bind(
+                                                                                                                this,
+                                                                                                                data.services[keys]
+                                                                                                                    .services[key1].code,
+                                                                                                                data.id
+                                                                                                            )}
+                                                                                                        />
+                                                                                                    </div>
+                                                                                                );
+                                                                                            }
+                                                                                        })}
+                                                                                    </div>
+                                                                                );
+                                                                            }
+                                                                        })}
+                                                                    </React.Fragment>
+                                                                );
+                                                            })
+                                                            : null}
                                                     </div>
                                                 </div>
-                                            </Card>
-                                        </div>)
-                                    }
-                                    /* return (
-                                     {/!*<div className="col-12 mb-4" key={index}>
-                                     Starting Of Plan Card
-                                     <Card>
-                                     <div className="d-flex justify-content-center p-5">
-                                     <div className="pt-5">
-                                     <div className="mb-5 text-center">
-                                     {" "}
-                                     Plan Numeric Price
-                                     <p className="price-tag">
-                                     <span className="price-tag_small">$</span>
-                                     <span className="price-tag_discount"><strike>{data.originalValue}</strike></span>
-                                     {data.main_price}
-                                     <span className="price-tag_small">
-                                     {data.validity_display}
-                                     </span>
-                                     </p>
-                                     </div>
-                                     <div className="mb-5">
-                                     {" "}
-                                     Button To choose Plan
-                                     <Button
-                                     primary={true}
-                                     fullWidth={true}
-                                     size="large"
-                                     disabled={
-                                     data.main_price === 0 || data.main_price === "0"
-                                     }
-                                     onClick={this.onSelectPlan.bind(this, data)}
-                                     >
-                                     {data.main_price === 0 || data.main_price === "0"
-                                     ? "Select Marketplace"
-                                     : "Choose Plan"}
-                                     </Button>
-                                     </div>
-                                     <div className="mb-5 text-center">
-                                     {" "}
-                                     Descriptions For Particular deatails
-                                     <h1 className="mb-4">
-                                     <b>{data.title}</b>
-                                     </h1>
-                                     <h4>{data.description}</h4>
-                                     </div>
-                                     <hr />
-                                     <div className="text-center mt-5">
-                                     {" "}
-                                     Services Data
-                                     {data.services
-                                     ? Object.keys(data.services).map(keys => {
-                                     return (
-                                     <React.Fragment key={keys}>
-                                     <p className="service-body mb-5">
-                                     <span
-                                     className="service-description mb-3"
-                                     style={{fontWeight: "bold"}}
-                                     >
-                                     <b>{data.services[keys].title}</b>
-                                     </span>
-                                     <span>
-                                     <Tooltip
-                                     content={
-                                     data.services[keys].description
-                                     }
-                                     preferredPosition="above"
-                                     >
-                                     <Link>
-                                     <Icon
-                                     source="help"
-                                     color="inkLighter"
-                                     backdrop={true}
-                                     />
-                                     </Link>
-                                     </Tooltip>
-                                     </span>
-                                     </p>
-                                     {Object.keys(
-                                     data.services[keys].services
-                                     ).map(key1 => {
-                                     if (
-                                     data.services[keys].services[key1]
-                                     .required === 1
-                                     ) {
-                                     return (
-                                     <div key={key1}
-                                     className="text-left">
-                                     <Checkbox
-                                     checked={true}
-                                     label={
-                                     data.services[keys].services[key1]
-                                     .title
-                                     }
-                                     disabled={true}
-                                     />
-                                     </div>
-                                     );
-                                     } else {
-                                     let temp = this.state.checkBox.slice(0);
-                                     let flag = 0;
-                                     temp.forEach(valueData => {
-                                     if (
-                                     valueData.code ===
-                                     data.services[keys].services[key1]
-                                     .code
-                                     ) {
-                                     if (valueData.key === data.id) {
-                                     flag = 1;
-                                     }
-                                     }
-                                     });
-                                     if (flag === 0) {
-                                     temp.push({
-                                     code: data.services[keys].services[key1]
-                                     .code,
-                                     isSelected: false,
-                                     key: data.id,
-                                     id: key1
-                                     });
-                                     this.state.checkBox = temp;
-                                     }
-                                     return (
-                                     <div key={key1}
-                                     className="text-left">
-                                     {this.state.checkBox.map(KEYS => {
-                                     if (
-                                     KEYS.code ===
-                                     data.services[keys].services[
-                                     key1
-                                     ].code &&
-                                     KEYS.key === data.id
-                                     ) {
-                                     return (
-                                     <div
-                                     className="p-2"
-                                     key={KEYS.code}
-                                     style={{
-                                     backgroundColor: "#FCF1CD"
-                                     }}
-                                     >
-                                     <Checkbox
-                                     checked={KEYS.isSelected}
-                                     label={
-                                     data.services[keys]
-                                     .services[key1].title
-                                     }
-                                     onChange={this.onCheckBox.bind(
-                                     this,
-                                     data.services[keys]
-                                     .services[key1].code,
-                                     data.id
-                                     )}
-                                     />
-                                     </div>
-                                     );
-                                     }
-                                     })}
-                                     </div>
-                                     );
-                                     }
-                                     })}
-                                     </React.Fragment>
-                                     );
-                                     })
-                                     : null}
-                                     </div>
-                                     </div>
-                                     </div>
-                                     </Card>
-                                     </div>*!/}
-                                     );*/
+                                            </div>
+                                        </Card>
+                                    </div>)
+                                }
+                                /* return (
+                                 {/!*<div className="col-12 mb-4" key={index}>
+                                 Starting Of Plan Card
+                                 <Card>
+                                 <div className="d-flex justify-content-center p-5">
+                                 <div className="pt-5">
+                                 <div className="mb-5 text-center">
+                                 {" "}
+                                 Plan Numeric Price
+                                 <p className="price-tag">
+                                 <span className="price-tag_small">$</span>
+                                 <span className="price-tag_discount"><strike>{data.originalValue}</strike></span>
+                                 {data.main_price}
+                                 <span className="price-tag_small">
+                                 {data.validity_display}
+                                 </span>
+                                 </p>
+                                 </div>
+                                 <div className="mb-5">
+                                 {" "}
+                                 Button To choose Plan
+                                 <Button
+                                 primary={true}
+                                 fullWidth={true}
+                                 size="large"
+                                 disabled={
+                                 data.main_price === 0 || data.main_price === "0"
+                                 }
+                                 onClick={this.onSelectPlan.bind(this, data)}
+                                 >
+                                 {data.main_price === 0 || data.main_price === "0"
+                                 ? "Select Marketplace"
+                                 : "Choose Plan"}
+                                 </Button>
+                                 </div>
+                                 <div className="mb-5 text-center">
+                                 {" "}
+                                 Descriptions For Particular deatails
+                                 <h1 className="mb-4">
+                                 <b>{data.title}</b>
+                                 </h1>
+                                 <h4>{data.description}</h4>
+                                 </div>
+                                 <hr />
+                                 <div className="text-center mt-5">
+                                 {" "}
+                                 Services Data
+                                 {data.services
+                                 ? Object.keys(data.services).map(keys => {
+                                 return (
+                                 <React.Fragment key={keys}>
+                                 <p className="service-body mb-5">
+                                 <span
+                                 className="service-description mb-3"
+                                 style={{fontWeight: "bold"}}
+                                 >
+                                 <b>{data.services[keys].title}</b>
+                                 </span>
+                                 <span>
+                                 <Tooltip
+                                 content={
+                                 data.services[keys].description
+                                 }
+                                 preferredPosition="above"
+                                 >
+                                 <Link>
+                                 <Icon
+                                 source="help"
+                                 color="inkLighter"
+                                 backdrop={true}
+                                 />
+                                 </Link>
+                                 </Tooltip>
+                                 </span>
+                                 </p>
+                                 {Object.keys(
+                                 data.services[keys].services
+                                 ).map(key1 => {
+                                 if (
+                                 data.services[keys].services[key1]
+                                 .required === 1
+                                 ) {
+                                 return (
+                                 <div key={key1}
+                                 className="text-left">
+                                 <Checkbox
+                                 checked={true}
+                                 label={
+                                 data.services[keys].services[key1]
+                                 .title
+                                 }
+                                 disabled={true}
+                                 />
+                                 </div>
+                                 );
+                                 } else {
+                                 let temp = this.state.checkBox.slice(0);
+                                 let flag = 0;
+                                 temp.forEach(valueData => {
+                                 if (
+                                 valueData.code ===
+                                 data.services[keys].services[key1]
+                                 .code
+                                 ) {
+                                 if (valueData.key === data.id) {
+                                 flag = 1;
+                                 }
+                                 }
+                                 });
+                                 if (flag === 0) {
+                                 temp.push({
+                                 code: data.services[keys].services[key1]
+                                 .code,
+                                 isSelected: false,
+                                 key: data.id,
+                                 id: key1
+                                 });
+                                 this.state.checkBox = temp;
+                                 }
+                                 return (
+                                 <div key={key1}
+                                 className="text-left">
+                                 {this.state.checkBox.map(KEYS => {
+                                 if (
+                                 KEYS.code ===
+                                 data.services[keys].services[
+                                 key1
+                                 ].code &&
+                                 KEYS.key === data.id
+                                 ) {
+                                 return (
+                                 <div
+                                 className="p-2"
+                                 key={KEYS.code}
+                                 style={{
+                                 backgroundColor: "#FCF1CD"
+                                 }}
+                                 >
+                                 <Checkbox
+                                 checked={KEYS.isSelected}
+                                 label={
+                                 data.services[keys]
+                                 .services[key1].title
+                                 }
+                                 onChange={this.onCheckBox.bind(
+                                 this,
+                                 data.services[keys]
+                                 .services[key1].code,
+                                 data.id
+                                 )}
+                                 />
+                                 </div>
+                                 );
+                                 }
+                                 })}
+                                 </div>
+                                 );
+                                 }
+                                 })}
+                                 </React.Fragment>
+                                 );
+                                 })
+                                 : null}
+                                 </div>
+                                 </div>
+                                 </div>
+                                 </Card>
+                                 </div>*!/}
+                                 );*/
 
-                                })}
-                            </Collapsible>
+                            })}
+                        </Collapsible>
                     </div>
                 </div>
             </React.Fragment>
