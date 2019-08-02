@@ -440,7 +440,7 @@ class PlanBody extends Component {
                                                 <div key={index}>
                                                     {/* Starting Of Plan Card */}
                                                         <Card>
-                                                            <div className="d-flex justify-content-center p-5">
+                                                            <div className="d-flex justify-content-center p-4">
                                                                 <div className="pt-5">
                                                                     <div className="mb-5 text-center">
                                                                         {" "}
@@ -477,7 +477,7 @@ class PlanBody extends Component {
                                                                         <h1 className="mb-4">
                                                                             <b>{data.title}</b>
                                                                         </h1>
-                                                                        <h4>{data.description}</h4>
+                                                                        <p>{data.description}</p>
                                                                     </div>
                                                                     <hr />
                                                                     <div className="text-center mt-5">

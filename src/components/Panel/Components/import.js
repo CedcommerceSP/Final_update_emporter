@@ -711,12 +711,13 @@ export class Import extends Component {
                     accessibilityLabel: 'All',
                     panelID: 'all',
                 },
-                {
-                    id: 'Ebay Affiliate',
-                    content: 'Ebay Affiliate',
-                    panelID: 'Ebay Affiliate',
-                }]} onSelect={this.handleTabChange}/>
-				{mainTab === 0 ? <div className="row">
+                    {
+                        id: 'Ebay Affiliate',
+                        content: 'Ebay Affiliate',
+                        panelID: 'Ebay Affiliate',
+                    }]} onSelect={this.handleTabChange}/>
+                {mainTab === 0 ?
+				<div className="row">
 					<div className="col-12 p-3">
 						<Banner title="Please Read" status="info">
 							<Label>
@@ -819,6 +820,8 @@ export class Import extends Component {
 			</Page>
 		);
 	}
+
+
 
 	/*******************       *********************/
 

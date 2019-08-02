@@ -37,13 +37,15 @@ class FAQPage extends Component {
                             </p>
                             <ol>
                                 <li className="mb-2">
-                                    First you will need to import products from Amazon Marketplace
-                                    to our Omni-Importer app.This is done on the 'Manage Products'
-                                    page.
+                                    Go to Import/Upload section.
                                 </li>
                                 <li className="mb-2">
-                                    Once Products are imported into the Omni-Importer app you will
-                                    be able to upload those products to your Shopify store.
+                                    Click on Import Product. All the products will be listed on the app. You can see the
+                                    products in the Product section.
+                                </li>
+                                <li className="mb-2">
+                                    Then you can select and upload or bulk upload, depending on the seller’s
+                                    requirement.
                                 </li>
                             </ol>
                         </React.Fragment>
@@ -56,11 +58,21 @@ class FAQPage extends Component {
                     ques: "How can I update my product information?",
                     ans: (
                         <React.Fragment>
-                            <p>
-                                If you want to update any product information you can do so by
-                                reuplaoding those items on Shopify through the Omni-Importer
-                                App.
-                            </p>
+                            <ol>
+                                <li className="mb-2">
+                                    Go to the Settings section on the app.
+                                </li>
+                                <li className="mb-2">
+                                    In Shopify settings, enable the manual sync, and select the fields you want to
+                                    update.
+                                </li>
+                                <li className="mb-2">
+                                    Save the changes.
+                                </li>
+                                <li className="mb-2">
+                                    Now, again import and upload the products from Import/Upload section.
+                                </li>
+                            </ol>
                         </React.Fragment>
                     )
                 },
@@ -70,13 +82,17 @@ class FAQPage extends Component {
                     search: true,
                     ques: "What is the difference between custom and default profile?",
                     ans: (
-                        <p>
-                            Profiling converts your data into the correct format and is a way
-                            to only one products from one Marketplace (the source marketplace)
-                            in a specified format to another Marketplace (the destination
-                            marketplace). Where as , a default profile has a mixed format and
-                            is used in a same manner.
-                        </p>
+                        <React.Fragment>
+                            <p>
+                                If you choose the default profile, while uploading products to Shopify, we will upload
+                                all your products in bulk to your Shopify store.
+                                <br/>
+                                <br/>
+                                In the custom profile, you categorize the products on several grounds like quantity,
+                                vendor type, country, etc through profiling and upload that specific profile to Shopify.
+                                Using this, you can also list your products in Shopify’s specific collection.
+                            </p>
+                        </React.Fragment>
                     )
                 },
                 {
@@ -85,10 +101,26 @@ class FAQPage extends Component {
                     search: true,
                     ques: `My products are imported from Amazon. What's next?`,
                     ans: (
-                        <p>
-                            Omni-Importer App sync inventory and price of the products once in
-                            a day.So your products are never out of sync.
-                        </p>
+                        <React.Fragment>
+                            <p>
+                                Now, you can upload your products to Shopify from Import/Upload section in 3 different
+                                ways:
+                            </p>
+                            <br/>
+                            <ul>
+                                <li>
+                                    Bulk Upload
+                                </li>
+                                <li>
+                                    Select and Upload
+                                </li>
+                                <li>
+                                    Through Profiling
+                                </li>
+                            </ul>
+                        </React.Fragment>
+
+
                     )
                 },
                 {
@@ -97,10 +129,14 @@ class FAQPage extends Component {
                     search: true,
                     ques: "Does Omni-Importer handle my product information?",
                     ans: (
-                        <p>
-                            Yes. Along with the main products the app helps you fetch all the
-                            variation of the products.
-                        </p>
+                        <React.Fragment>
+                            <p>
+                                Yes. Along with the main products the app helps you fetch all the
+                                variation of the products,
+                                <br/>
+                                with their description, images, price, inventory, etc.
+                            </p>
+                        </React.Fragment>
                     )
                 },
                 {
@@ -180,11 +216,22 @@ class FAQPage extends Component {
                             <ul>
                                 <li> Go to Profiling section.</li>
                                 <li>
-                                    {" "}
-                                    Select filters according to your need and apply it your
-                                    products and then upload them on Shopify from Import/upload
-                                    and then select the custom profile rather than default
-                                    profiling.
+                                    Click on Create profile
+                                </li>
+                                <li>
+                                    Enter Profile name (ANY)
+                                </li>
+                                <li>
+                                    Enter Product source
+                                </li>
+                                <li>
+                                    Select the Target house (warehouse)
+                                </li>
+                                <li>
+                                    Select attribute on which basis you want to create a profile
+                                </li>
+                                <li>
+                                    Now, from the Import/Upload section, upload products by choosing the Custom profile.
                                 </li>
                             </ul>
                         </div>
@@ -196,60 +243,43 @@ class FAQPage extends Component {
                     search: true,
                     ques: "Stuck on product import/upload process?",
                     ans: (
-                        <div>
-                            To import products go to - ‘Import/Upload’ section
+                        <React.Fragment>
+                            <p>
+                                To import products go to - ‘Import/Upload’ section
+                            </p>
                             <ol>
-                                {" "}
                                 <li>
-                                    {" "}
-                                    Import Products: It helps to get the products from selected
-                                    source marketplace (from where you want to import products) to
-                                    the app.
+                                    <b>Import Products:</b> It helps to get the products from selected source <b>marketplace</b>
+                                    (from where you want to import products) to the <b>app</b>.
                                 </li>
                                 <li>
-                                    {" "}
-                                    Upload Products: It helps to make products uploaded from app
-                                    to Shopify.
+                                    <b>Upload Products:</b> It helps to make products uploaded from <b>app</b> to <b>Shopify</b>.
+                                    This can be done in 3 ways:
+                                </li>
+                                <ul>
+                                    <li>
+                                        Bulk Upload
+                                    </li>
+                                    <li>
+                                        Select and Upload
+                                    </li>
+                                    <li>
+                                        Through Profiling
+                                    </li>
+                                </ul>
+                                <li>
+                                    <b>Bulk Upload:</b> Go to <b>Import/Upload</b> section and click on <b>Upload
+                                    Products</b> and select the default profile.
+                                </li>
+                                <li>
+                                    <b>Select and Upload:</b> Go to the <b>Product</b> section. Select the products you
+                                    want to upload, then click on <b>Actions</b> and then <b>Upload</b>.
+                                </li>
+                                <li>
+                                    Kindly Refer Ques “What is profiling?” to know more about <b>Profiling</b>.
                                 </li>
                             </ol>
-                            <ol>
-                                {" "}
-                                <li>
-                                    {" "}
-                                    To make products visible on Shopify you have 3 option to
-                                    uploaded it:
-                                </li>
-                                <li>
-                                    {" "}
-                                    Bulk Upload: It can be done from Upload Products in
-                                    ‘Import/Upload’ section
-                                </li>
-                                <li>
-                                    {" "}
-                                    Upload Specific product: Can upload selected products by
-                                    creating Profile,
-                                    <br />
-                                    <br />
-                                    Kindly Refer Ques <br />
-                                    <i
-                                        style={{cursor: "pointer"}}
-                                        onClick={this.handleToggleClick.bind(this, {id: 17})}
-                                    >
-                                        <b>What is profiling?</b>
-                                    </i>
-                                    <br />
-                                    to know more about profiling.
-                                    <br />
-                                    <br />
-                                </li>
-                                <li>
-                                    {" "}
-                                    Select and upload: Go to the ‘Products’, select the products
-                                    which need to be uploaded then upload it by clicking on the
-                                    Upload Button.
-                                </li>
-                            </ol>
-                        </div>
+                        </React.Fragment>
                     )
                 },
                 {
@@ -421,7 +451,7 @@ class FAQPage extends Component {
                     ques: "Can I upload selected products on Shopify?",
                     ans: (
                         <div>
-                            Ans. 12. Yes, you can upload selected products on shopify by
+                            Yes, you can upload selected products on shopify by
                             following the steps given below:
                             <ol>
                                 {" "}
@@ -449,7 +479,7 @@ class FAQPage extends Component {
                     ans: (
                         <div>
                             {" "}
-                            Ans.13. To create a profile, follow the steps:
+                            To create a profile, follow the steps:
                             <ol>
                                 {" "}
                                 <li> Go to PROFILING Section</li>
@@ -473,8 +503,8 @@ class FAQPage extends Component {
                     ques: "Will my inventory get synced from Marketplace (like Walmart,eBay, Etsy or Walmart)  to Shopify store?",
                     ans: (
                         <div>
-                            Ans.14. Yes, to enable or disable inventory sync you can go to
-                            CONFIGURATION,
+                            Yes, to enable or disable inventory sync you can go to
+                            Settings,
                             <ol>
                                 <li> then to Shopify configuration,</li>
                                 <li> now to Product Sync.</li>
@@ -871,7 +901,8 @@ class FAQPage extends Component {
                             <p>
                                 This means that order on FBA will be on HOLD status till the time x.
                                 <br/>
-                                <b>NOTE:</b> x is the time which you will give in the settings section of the app. By default, it's 0.
+                                <b>NOTE:</b> x is the time which you will give in the settings section of the app. By
+                                default, it's 0.
                             </p>
                         </React.Fragment>
                     )
@@ -884,17 +915,18 @@ class FAQPage extends Component {
                     ans: (
                         <React.Fragment>
                             <p>
-                                This means that, if the order gets canceled on Amazon, whether you want to cancel it on Shopify store or not.
+                                This means that, if the order gets canceled on Amazon, whether you want to cancel it on
+                                Shopify store or not.
                             </p>
                             <br/>
-                                <ol>
-                                    <li>
-                                        If you want to get it canceled on Shopify, select YES.
-                                    </li>
-                                    <li>
-                                        If you want that it does not get canceled on Shopify, select NO.
-                                    </li>
-                                </ol>
+                            <ol>
+                                <li>
+                                    If you want to get it canceled on Shopify, select YES.
+                                </li>
+                                <li>
+                                    If you want that it does not get canceled on Shopify, select NO.
+                                </li>
+                            </ol>
                         </React.Fragment>
                     )
                 },
