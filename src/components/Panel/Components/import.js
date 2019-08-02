@@ -702,9 +702,21 @@ export class Import extends Component {
     };
 
 	render() {
-		/*let { mainTab } = this.state;*/
+		let { mainTab } = this.state;
 		return (
 			<Page title="Manage Products">
+				<Tabs name={"hello"} selected={this.state.mainTab} tabs={[{
+                    id: 'Import',
+                    content: 'Import',
+                    accessibilityLabel: 'All',
+                    panelID: 'all',
+                },
+                    {
+                        id: 'Ebay Affiliate',
+                        content: 'Ebay Affiliate',
+                        panelID: 'Ebay Affiliate',
+                    }]} onSelect={this.handleTabChange}/>
+                {mainTab === 0 ?
 				<div className="row">
 					<div className="col-12 p-3">
 						<Banner title="Please Read" status="info">
@@ -794,7 +806,7 @@ export class Import extends Component {
 							</div>
 						</Card>
 					</div>
-				</div>{/*:<EbayAffiliate/>*/}
+				</div>:<EbayAffiliate/>}
 				{this.renderImportProductsModal()}
 				{this.renderUploadProductsModal()}
 				{this.renderHelpModal()}
@@ -809,18 +821,7 @@ export class Import extends Component {
 		);
 	}
 
-	/*<Tabs name={"hello"} selected={this.state.mainTab} tabs={[{
-	 id: 'Import',
-	 content: 'Import',
-	 accessibilityLabel: 'All',
-	 panelID: 'all',
-	 },
-	 {
-	 id: 'Ebay Affiliate',
-	 content: 'Ebay Affiliate',
-	 panelID: 'Ebay Affiliate',
-	 }]} onSelect={this.handleTabChange}/>
-	 {mainTab === 0 ?*/
+
 
 	/*******************       *********************/
 

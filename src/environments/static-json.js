@@ -1300,5 +1300,134 @@ export const json = {
 			phone_code: "+263",
 			value: "ZW"
 		}
-	]
+	],
+	ebay_Country:[
+        {
+            label: "eBay United States",
+            value: "EBAY-US"
+        },
+        {
+            label: "eBay Canada (English)",
+            value: "EBAY-ENCA"
+        },
+        {
+            label: "eBay UK	",
+            value: "EBAY-GB"
+        },
+        {
+            label: "eBay Australia	",
+            value: "EBAY-AU"
+        },
+        {
+            label: "eBay Austria",
+            value: "EBAY-AT"
+        },
+        {
+            label: "eBay Belgium (French)",
+            value: "EBAY-FRBE"
+        },
+        {
+            label: "eBay France",
+            value: "EBAY-FR"
+        },
+        {
+            label: "eBay Germany",
+            value: "EBAY-DE"
+        },
+        {
+            label: "eBay Motors",
+            value: "EBAY-MOTOR"
+        },
+        {
+            label: "eBay Italy",
+            value: "EBAY-IT"
+        },
+        {
+            label: "eBay Belgium (Dutch)",
+            value: "EBAY-NLBE"
+        },
+        {
+            label: "eBay Netherlands",
+            value: "EBAY-NL"
+        },
+        {
+            label: "eBay Spain",
+            value: "EBAY-ES"
+        },
+        {
+            label: "eBay Switzerland",
+            value: "EBAY-CH"
+        },
+        {
+            label: "eBay Hong Kong",
+            value: "EBAY-HK"
+        },
+        {
+            label: "eBay India",
+            value: "EBAY-IN"
+        },
+        {
+            label: "eBay Ireland",
+            value: "EBAY-IE"
+        },
+        {
+            label: "eBay Malaysia",
+            value: "EBAY-MY"
+        },
+        {
+            label: "eBay Canada (French)",
+            value: "EBAY-FRCA"
+        },
+        {
+            label: "eBay Philippines",
+            value: "EBAY-PH"
+        },
+        {
+            label: "eBay Poland",
+            value: "EBAY-PL"
+        },
+        {
+            label: "eBay Singapore",
+            value: "EBAY-SG"
+        },
+
+	],
+	listing_type:[
+		{
+            label: "Auction",
+            value: "Auction"
+        },
+        {
+            label: "AuctionWithBIN",
+            value: "AuctionWithBIN"
+        },{
+            label: "Classified",
+            value: "Classified"
+        },
+		{
+            label: "FixedPrice",
+            value: "FixedPrice"
+        },
+		{
+            label: "StoreInventory",
+            value: "StoreInventory"
+		},
+        {
+            label: "All",
+            value: "All"
+        },
+	],
+	condition:[
+        {
+            label: "New",
+            value: "New"
+        },
+        {
+            label: "Used",
+            value: "Used"
+        },{
+            label: "Unspecified",
+            value: "Unspecified"
+        },
+	],
 };
