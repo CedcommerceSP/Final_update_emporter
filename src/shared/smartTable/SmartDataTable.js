@@ -499,7 +499,8 @@ class SmartDataTablePlain extends React.Component {
 									onClick={this.props.operations.bind(
 										this,
 										row[column.key],
-										this.state.columnTitles[column.key].id
+										this.state.columnTitles[column.key].id,
+										row
 									)}
 									size={"slim"}
 									disabled={row[column.key] === "disable_button"}
