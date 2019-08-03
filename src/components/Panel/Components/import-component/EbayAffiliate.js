@@ -5,11 +5,46 @@ import {Card, Collapsible,DisplayText, Icon,
 import {
     CaretDownMinor,CircleChevronDownMinor
 } from '@shopify/polaris-icons';
+import {isUndefined} from "util";
 import { json } from "../../../../environments/static-json";
 import { requests } from "../../../../services/request";
 import SmartDataTable from "../../../../shared/smartTable";
+import {paginationShow} from "../static-functions";
 
 class EbayAffiliate extends Component {
+ /*   columnTitles = {
+        main_image: {
+            title: "Image",
+            sortable: false,
+            type: "image"
+        },
+        product_title: {
+            title: "Product Title",
+            sortable: false,
+            type: "string"
+        },
+        global_id: {
+            title: "Global ID",
+            sortable: false,
+            type: "string"
+        },
+        price: {
+            title: "Price",
+            type: "string",
+            sortable: false
+        },
+        selling_status: {
+            title: "Selling Status",
+            sortable: false
+        }
+    };*/
+    visibleColumns = [
+        "main_image",
+        "product_title",
+        "global_id",
+        "price",
+        "selling_status"
+    ];
     gridSettings = {
         count: "10",
         activePage: 1
@@ -19,6 +54,7 @@ class EbayAffiliate extends Component {
         this.state = {
             search_div: false,
             selected: '',
+            pagination_show: 0,
             options: this.options,
             button_loader:false,
             listing_name:'',
@@ -30,8 +66,11 @@ class EbayAffiliate extends Component {
                 select_condition:[]
             },
 
+
         };
     }
+
+
 
     handleToggleClick = () => {
         this.setState((state) => {
@@ -107,7 +146,8 @@ class EbayAffiliate extends Component {
             });
         return (
             <Card sectioned subdued>
-                <div className="row pt-5">
+                <div>
+                    <Stack vertical={"true"}>
                     <div className="col-12 mb-2">
                         <div className="row p-1" >
                             <div className="pl-4 col-11"
@@ -121,9 +161,7 @@ class EbayAffiliate extends Component {
                             </div>
                         </div>
                         <hr/>
-                        <Collapsible open={this.state.search_div}
-
-                                >
+                        <Collapsible open={this.state.search_div}>
                             <div style={{height: '568px'}}>
                                 <Card>
                                     <ResourceList
@@ -148,19 +186,14 @@ class EbayAffiliate extends Component {
                                         ]}
                                         renderItem={(item) => {}}
                                     />
-                                    <div className="p-3">
-                                        <Button
-                                            primary={true}
-                                            loading={this.state.button_loader}
-                                            onClick={this.onClickSearch}
-                                        >
-                                            Search
-                                        </Button>
-                                    </div>
+                                    {console.log(this.state.products)}
+                                    <RenderSearchGrid filter={this.state.filter}/>
                                 </Card>
                             </div>
                         </Collapsible>
                     </div>
+                    </Stack>
+                    <Stack vertical={"true"}>
                     <div className="col-12 mb-2">
                         <div className="row p-1">
                             <div className="col-11 pl-4 ">
@@ -172,6 +205,8 @@ class EbayAffiliate extends Component {
                         </div>
                         <hr/>
                     </div>
+                    </Stack>
+                    <Stack vertical={"true"}>
                     <div className="col-12">
                         <div className="row p-1">
                             <div className="col-11 pl-4 ">
@@ -181,35 +216,25 @@ class EbayAffiliate extends Component {
                         </div>
                         <hr/>
                     </div>
+                    </Stack>
                 </div>
             </Card>
         );
     }
     handleChange = (key) => (value) => {
-        console.log(key, value);
+        console.log(key,"array")
         this.setState((state) => {
 
             state.filter[key] = value;
             return state;
         });
     };
-    handleChange2 = (key,value) => {
-        console.log(key, value);
-        this.setState((state) => {
-
-            state.filter[key] = value;
-            return state;
-        });
-    };
-   /* handleRemove = key => {
-        this.setState({ [key]: null });
-    };*/
 
     handleQueryClear = () => {
         this.setState({queryValue: ''});
     };
 
-    handleClearAll = () => {
+  /*  handleClearAll = () => {
         this.setState({
             accountStatus: null,
             moneySpent: null,
@@ -217,46 +242,87 @@ class EbayAffiliate extends Component {
             queryValue: null,
         });
     };
+*/
 
 
-    onClickSearch = () => {
-        console.log(this.state.filter.queryValue);
-        console.log(this.state.filter.select_country);
-        console.log(this.state.filter.select_listing_type);
-        console.log(this.state.filter.select_condition);
-        let search_key = this.state.filter.queryValue;
-        let country_globalId = this.state.filter.select_country;
-        let listing_type = this.state.filter.select_listing_type;
-        let condition = this.state.filter.select_condition;
-        let page = 1;
-        let count = 10;
+    /*getOrders = () => {
+        const pageSettings = Object.assign({}, this.gridSettings);
+        requests
+            .getRequest("ebayaffiliate/request/getProducts")
+            .then(data => {
+                if (data.data.success) {
+                    console.log("data of ebayaffiliate",data.data)
+                    window.showGridLoader = false;
+                    this.setState({
+                        totalPage: data.data.count,
+                        tempProductData: data.data.rows
+                    });
+                    /!*if (!isUndefined(data.data.mainCount)) {
+                        this.setState({totalMainCount: data.data.mainCount});
+                    }*!/
+                    const order = this.modifyProductsData(data.data.rows, "");
+                    this.state["order"] = order;
+                    this.state.showLoaderBar = !data.success;
+                    this.state.hideLoader = data.success;
+                    this.state.pagination_show = data.data.count;
+                    ;
+                    this.updateState();
+                } else {
+                    this.setState({
+                        showLoaderBar: false,
+                        hideLoader: true,
+                        pagination_show: paginationShow(0, 0, 0, false)
+                    });
+                    window.showGridLoader = false;
+                    setTimeout(() => {
+                        window.handleOutOfControlLoader = true;
+                    }, 3000);
+                    // notify.error(data.message);
+                    this.updateState();
+                }
+            });
+    };*/
 
-        var data = {
-                "keyword": search_key,
-                "page": page,
-                "count": count,
-                "global_id": country_globalId[0],
-                "itemFilter": Object.keys(this.state.filter)
-                    .filter((key) => !isEmpty(this.state.filter[key]) && key !== 'queryValue' && key !== 'select_country')
-                    .map((key) => {
-                        return {
-                            name:key,
-                            value: disambiguateLabel(key, this.state.filter[key])[0],
-                            // onRemove: this.handleRemove,
-                        };
-                    })
-            };
+    updateState() {
+        const state = this.state;
+        this.setState(state);
+    }
 
-        console.log(data);
-        requests.postRequest('ebayaffiliate/request/getProducts', data, false, true).then(response1 => {
-            if (response1.success) {
-                console.log(response1)
+/*    modifyProductsData(data, product_grid_collapsible) {
+        this.setState({
+            pagination_show: data.length
+        })
+        let products = [];
+        let str = "";
+        for (let i = 0; i < data.length; i++) {
+            let rowData = {};
+            if (data !== {} && !isUndefined(data)) {
+                if (data[i]['galleryURL']!==''){
+                    str=data[i]["galleryURL"];
+                    rowData['main_image']= str;
+                }
+                if (data[i]['title'] !== '') {
+                    str = data[i]["title"];
+                    rowData["product_title"] = str;
+                }
+                if (data[i]['globalId']!==''){
+                    str = data[i]["globalId"];
+                    rowData["global_id"] = str;
+                }
+                if (data[i]['sellingStatus']['convertedCurrentPrice']['_value']!==''){
+                    str = data[i]['sellingStatus']['convertedCurrentPrice']['_value'];
+                    rowData["price"] = str;
+                }
+                if (data[i]['sellingStatus']['sellingState']!==''){
+                    str = data[i]['sellingStatus']['sellingState'];
+                    rowData["selling_status"] = str;
+                }
             }
-            else {
-                console.log("Failed")
-            }
-        });
-    };
+
+            products.push(rowData);
+        }
+        return products;
+    }*/
 
 }
 function isEmpty(value) {
@@ -280,3 +346,281 @@ function disambiguateLabel(key, value) {
 }
 
 export default EbayAffiliate;
+
+class RenderSearchGrid extends Component {
+    columnTitles = {
+        main_image: {
+            title: "Image",
+            sortable: false,
+            type: "image"
+        },
+        product_title: {
+            title: "Product Title",
+            sortable: false,
+            type: "string"
+        },
+        global_id: {
+            title: "Global ID",
+            sortable: false,
+            type: "string"
+        },
+        price: {
+            title: "Price",
+            type: "string",
+            sortable: false
+        },
+        selling_status: {
+            title: "Selling Status",
+            sortable: false
+        }
+    };
+    visibleColumns = [
+        "main_image",
+        "product_title",
+        "global_id",
+        "price",
+        "selling_status"
+    ];
+    gridSettings = {
+        count: "10",
+        activePage: 1
+    };
+    constructor(props) {
+        super(props);
+        this.state = {
+            products:[],
+            filter:{
+                queryValue: '',
+                select_country:[],
+                select_listing_type:[],
+                select_condition:[]
+            },
+        }
+    }
+
+    componentWillReceiveProps(nextProps) {
+        if ( nextProps.filter ) {
+            this.setState({filter:nextProps.filter});
+        }
+    }
+
+    operations = (event, data) => {
+        console.log(event, data);
+    };
+
+    render() {
+        return (
+            <div className="col-12">
+                <div className="p-3">
+                    <Button
+                        primary={true}
+                        loading={this.state.button_loader}
+                        onClick={this.onClickSearch}
+                    >
+                        Search
+                    </Button>
+                </div>
+                {console.log(this.state.products)}
+                <SmartDataTable
+                    data={this.state.products}
+                    uniqueKey="itemId"
+                    showLoaderBar={this.state.showLoaderBar}
+                    count={this.gridSettings.count}
+                    activePage={this.gridSettings.activePage}
+                    // hideFilters={this.hideFilters}
+                    columnTitles={this.columnTitles}
+                    // marketplace={this.filters.marketplace}
+                    // multiSelect={true}
+                    operations={this.operations} //button
+                    selected={this.state.selectedProducts}
+                    className="ui compact selectable table"
+                    withLinks={true}
+                    visibleColumns={this.visibleColumns}
+                    actions={this.massActions}
+                    // showColumnFilters={false}
+                    // predefineFilters={this.predefineFilters}
+                    // showButtonFilter={true}
+                    // columnFilterNameArray={this.filters.single_column_filter}
+                    rowActions={{
+                        edit: false,
+                        delete: false
+                    }}
+                    getVisibleColumns={event => {
+                        this.visibleColumns = event;
+                    }}
+                    userRowSelect={event => {
+                        const itemIndex = this.state.selectedProducts.indexOf(
+                            event.data.item.itemId
+                        );
+                        if (event.isSelected) {
+                            if (itemIndex === -1) {
+                                this.state.selectedProducts.push(
+                                    event.data.item.itemId
+                                );
+                            }
+                        } else {
+                            if (itemIndex !== -1) {
+                                this.state.selectedProducts.splice(itemIndex, 1);
+                            }
+                        }
+                        const state = this.state;
+                        this.setState(state);
+                    }}
+                    /*       allRowSelected={(event, rows) => {
+                     let data = this.state.selectedProducts.slice(0);
+                     if (event) {
+                     for (let i = 0; i < rows.length; i++) {
+                     const itemIndex = this.state.selectedProducts.indexOf(
+                     rows[i].source_variant_id
+                     );
+                     if (itemIndex === -1) {
+                     data.push(rows[i].source_variant_id);
+                     }
+                     }
+                     } else {
+                     for (let i = 0; i < rows.length; i++) {
+                     if (data.indexOf(rows[i].source_variant_id) !== -1) {
+                     data.splice(
+                     data.indexOf(rows[i].source_variant_id),
+                     1
+                     );
+                     }
+                     }
+                     }
+                     this.setState({ selectedProducts: data });
+                     }}*/
+                    /* massAction={event => {
+                     switch (event) {
+                     case "upload":
+                     this.state.selectedProducts.length > 0
+                     ? this.handleSelectedUpload("profile")
+                     :null /!*notify.info("No Product Selected");*!/
+                     break;
+                     default:
+                     console.log(event, this.state.selectedProducts);
+                     }
+                     }}*/
+                    /*   editRow={row => {
+                     this.redirect("/panel/products/edit/" + row.id);
+                     }}
+                     deleteRow={row => {
+                     this.state.toDeleteRow = row;
+                     this.state.deleteProductData = true;
+                     const state = this.state;
+                     this.setState(state);
+                     }}
+                     columnFilters={filters => {
+                     this.filters.column_filters = filters;
+                     this.getProducts();
+                     }}
+                     singleButtonColumnFilter={filter => {
+                     this.filters.single_column_filter = filter;
+                     this.getProducts();
+                     }}*/
+                    sortable
+                />
+            </div>
+        );
+    }
+
+    onClickSearch = () => {
+        this.setState({
+            button_loader:true,
+        })
+        let search_key = this.state.filter.queryValue;
+        let country_globalId = this.state.filter.select_country;
+        let listing_type = this.state.filter.select_listing_type;
+        let condition = this.state.filter.select_condition;
+        let page = 1;
+        let count = 10;
+
+        var data = {
+            "keyword": search_key,
+            "page": page,
+            "count": count,
+            "global_id": country_globalId[0],
+            "itemFilter": Object.keys(this.state.filter)
+                .filter((key) => !isEmpty(this.state.filter[key]) && key !== 'queryValue' && key !== 'select_country')
+                .map((key) => {
+                    return {
+                        name:key,
+                        value: disambiguateLabel(key, this.state.filter[key])[0],
+                        // onRemove: this.handleRemove,
+                    };
+                })
+        };
+
+        requests.postRequest('ebayaffiliate/request/getProducts', data, false, true)
+            .then(data => {
+                if (data.success) {
+                    this.setState({
+                        button_loader:false,
+                    })
+                    console.log("data of ebayaffiliate",data)
+                    window.showGridLoader = false;
+                    this.setState({
+                        totalPage: data.pagination.totalPages,
+                        tempProductData: data.items,
+                    });
+                    /* if (!isUndefined(data.data.mainCount)) {
+                     this.setState({totalMainCount: data.data.mainCount});
+                     }*/
+                    const order = this.modifyProductsData(data.items, "");
+                    this.state["products"] = order;
+                    this.setState({
+                        showLoaderBar : !data.success,
+                        hideLoader : data.success,
+                        pagination_show : data.pagination.entriesPerPage,
+                    });
+                    // this.updateState();
+                } else {
+                    this.setState({
+                        showLoaderBar: false,
+                        hideLoader: true,
+                        pagination_show: paginationShow(0, 0, 0, false)
+                    });
+                    window.showGridLoader = false;
+                    setTimeout(() => {
+                        window.handleOutOfControlLoader = true;
+                    }, 3000);
+                    // notify.error(data.message);
+                    // this.updateState();
+                }
+            });
+    };
+    modifyProductsData(data, product_grid_collapsible) {
+        this.setState({
+            pagination_show: data.length
+        })
+        let products = [];
+        let str = "";
+        for (let i = 0; i < data.length; i++) {
+            let rowData = {};
+            if (data !== {} && !isUndefined(data)) {
+                if (data[i]['galleryURL']!==''){
+                    str=data[i]["galleryURL"];
+                    rowData['main_image']= str;
+                }
+                if (data[i]['title'] !== '') {
+                    str = data[i]["title"];
+                    rowData["product_title"] = str;
+                }
+                if (data[i]['globalId']!==''){
+                    str = data[i]["globalId"];
+                    rowData["global_id"] = str;
+                }
+                if (data[i]['sellingStatus']['convertedCurrentPrice']['_value']!==''){
+                    str = data[i]['sellingStatus']['convertedCurrentPrice']['_value'];
+                    rowData["price"] = str;
+                }
+                if (data[i]['sellingStatus']['sellingState']!==''){
+                    str = data[i]['sellingStatus']['sellingState'];
+                    rowData["selling_status"] = str;
+                }
+            }
+
+            products.push(rowData);
+        }
+        return products;
+    }
+}

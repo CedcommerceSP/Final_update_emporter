@@ -2,12 +2,7 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="2e099004-80b0-4101-b90f-7275c6e6533a" name="Default" comment="">
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/components/Panel/Components/import-component/EbayAffiliate.js" afterPath="$PROJECT_DIR$/src/components/Panel/Components/import-component/EbayAffiliate.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/components/Panel/Components/import.js" afterPath="$PROJECT_DIR$/src/components/Panel/Components/import.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/environments/environment.js" afterPath="$PROJECT_DIR$/src/environments/environment.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/environments/static-json.js" afterPath="$PROJECT_DIR$/src/environments/static-json.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/shared/plans/plan-body.js" afterPath="$PROJECT_DIR$/src/shared/plans/plan-body.js" />
     </list>
     <ignored path="$PROJECT_DIR$/.tmp/" />
     <ignored path="$PROJECT_DIR$/temp/" />
@@ -126,13 +121,112 @@
       <file leaf-file-name="EbayAffiliate.js" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/components/Panel/Components/import-component/EbayAffiliate.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="540">
-              <caret line="242" column="37" lean-forward="true" selection-start-line="242" selection-start-column="37" selection-end-line="242" selection-end-column="37" />
+            <state relative-caret-position="-424">
+              <caret line="422" column="49" lean-forward="false" selection-start-line="422" selection-start-column="49" selection-end-line="422" selection-end-column="49" />
               <folding>
-                <element signature="e#0#39#0" expanded="true" />
-                <element signature="e#1243#1328#0" expanded="false" />
-                <element signature="e#2476#2677#0" expanded="false" />
-                <marker date="1564742547597" expanded="true" signature="9770:9772" ph="{...}" />
+                <element signature="e#602#1209#0" expanded="false" />
+                <element signature="e#1231#1348#0" expanded="false" />
+                <element signature="e#1369#1419#0" expanded="false" />
+                <element signature="e#2370#4095#0" expanded="false" />
+                <element signature="e#2384#2879#0" expanded="false" />
+                <element signature="e#2504#2814#0" expanded="false" />
+                <element signature="e#2893#3612#0" expanded="false" />
+                <element signature="e#3015#3333#0" expanded="false" />
+                <element signature="e#3346#3547#0" expanded="false" />
+                <element signature="e#3626#4084#0" expanded="false" />
+                <element signature="e#3745#4051#0" expanded="false" />
+                <element signature="e#4272#4483#0" expanded="false" />
+                <element signature="e#4297#4468#0" expanded="false" />
+                <element signature="e#4682#5257#0" expanded="false" />
+                <element signature="e#4737#5064#0" expanded="false" />
+                <element signature="e#5093#5226#0" expanded="false" />
+                <element signature="e#5490#6670#0" expanded="false" />
+                <element signature="e#5703#6243#0" expanded="false" />
+                <element signature="e#6160#6196#0" expanded="false" />
+                <element signature="e#6333#6564#0" expanded="false" />
+                <element signature="e#6379#6427#0" expanded="false" />
+                <element signature="e#6473#6521#0" expanded="false" />
+                <element signature="e#7763#7904#0" expanded="false" />
+                <element signature="e#8228#8381#0" expanded="false" />
+                <element signature="e#8296#8373#0" expanded="false" />
+                <element signature="e#8413#8461#0" expanded="false" />
+                <element signature="e#8466#8663#0" expanded="false" />
+                <element signature="e#8670#10297#0" expanded="false" />
+                <element signature="n#!!block;n#updateState#0;n#EbayAffiliate#0" expanded="false" />
+                <element signature="e#10390#11724#0" expanded="false" />
+                <element signature="n#!!block;n#isEmpty#0" expanded="false" />
+                <element signature="e#11784#11826#0" expanded="false" />
+                <element signature="e#11832#11885#0" expanded="false" />
+                <element signature="n#!!block;n#disambiguateLabel#0" expanded="false" />
+                <element signature="e#11933#12267#0" expanded="false" />
+                <element signature="e#11956#12049#0" expanded="false" />
+                <element signature="e#12058#12119#0" expanded="false" />
+                <element signature="e#12128#12218#0" expanded="false" />
+                <element signature="e#12227#12261#0" expanded="false" />
+                <element signature="e#12364#12948#0" expanded="false" />
+                <element signature="e#12386#12480#0" expanded="false" />
+                <element signature="e#12505#12608#0" expanded="false" />
+                <element signature="e#12629#12728#0" expanded="false" />
+                <element signature="e#12745#12840#0" expanded="false" />
+                <element signature="e#12866#12942#0" expanded="false" />
+                <element signature="e#12971#13088#0" expanded="false" />
+                <element signature="e#13109#13159#0" expanded="false" />
+                <element signature="e#13275#13433#0" expanded="false" />
+                <element signature="e#13634#13675#0" expanded="false" />
+                <element signature="e#14541#14582#0" expanded="false" />
+                <element signature="e#14963#14991#0" expanded="false" />
+                <element signature="e#15216#15314#0" expanded="false" />
+                <element signature="e#15364#15440#0" expanded="false" />
+                <element signature="e#15486#16275#0" expanded="false" />
+                <element signature="e#15691#15960#0" expanded="false" />
+                <element signature="e#15743#15934#0" expanded="false" />
+                <element signature="e#15966#16157#0" expanded="false" />
+                <element signature="e#16018#16131#0" expanded="false" />
+                <element signature="e#16297#17270#0" expanded="false" />
+                <element signature="e#17291#17756#0" expanded="false" />
+                <element signature="e#17777#18522#0" expanded="false" />
+                <element signature="n#!!block;n#modifyProductsData#0;n#RenderSearchGrid#0" expanded="false" />
+                <element signature="e#21374#21426#0" expanded="false" />
+                <element signature="e#21523#22594#0" expanded="false" />
+                <element signature="e#21606#22547#0" expanded="false" />
+                <element signature="e#21655#21769#0" expanded="false" />
+                <element signature="e#21815#21930#0" expanded="false" />
+                <element signature="e#21976#22090#0" expanded="false" />
+                <element signature="e#22176#22326#0" expanded="false" />
+                <element signature="e#22393#22533#0" expanded="false" />
+                <marker date="1564818003771" expanded="false" signature="644:738" ph="{&quot;title&quot;: &quot;Image&quot;...}" />
+                <marker date="1564818003771" expanded="false" signature="763:866" ph="{&quot;title&quot;: &quot;Product Title&quot;...}" />
+                <marker date="1564818003771" expanded="false" signature="887:986" ph="{&quot;title&quot;: &quot;Global ID&quot;...}" />
+                <marker date="1564818003771" expanded="false" signature="1003:1098" ph="{&quot;title&quot;: &quot;Price&quot;...}" />
+                <marker date="1564818003771" expanded="false" signature="10471:10523" ph="{&quot;pagination_show&quot;: data.length...}" />
+                <marker date="1564818003771" expanded="false" signature="11725:11727" ph="{...}" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="static-json.js" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/environments/static-json.js">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="110">
+              <caret line="1306" column="24" lean-forward="false" selection-start-line="1306" selection-start-column="20" selection-end-line="1306" selection-end-column="24" />
+              <folding>
+                <element signature="e#32#1191#0" expanded="false" />
+                <element signature="e#1215#18581#0" expanded="false" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="fbaOrder.js" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/components/Panel/Components/fbaOrder.js">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="-3413">
+              <caret line="85" column="26" lean-forward="false" selection-start-line="85" selection-start-column="20" selection-end-line="85" selection-end-column="26" />
+              <folding>
+                <element signature="e#42#81#0" expanded="true" />
+                <element signature="e#7790#8423#0" expanded="false" />
+                <element signature="e#12859#14639#0" expanded="false" />
               </folding>
             </state>
           </provider>
@@ -141,8 +235,8 @@
       <file leaf-file-name="SmartDataTable.js" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/shared/smartTable/SmartDataTable.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="174">
-              <caret line="854" column="26" lean-forward="false" selection-start-line="854" selection-start-column="26" selection-end-line="854" selection-end-column="26" />
+            <state relative-caret-position="2261">
+              <caret line="1113" column="23" lean-forward="true" selection-start-line="1113" selection-start-column="23" selection-end-line="1113" selection-end-column="23" />
               <folding>
                 <element signature="e#18#59#0" expanded="true" />
                 <element signature="e#162#206#0" expanded="true" />
@@ -157,8 +251,8 @@
       <file leaf-file-name="functions.js" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/shared/smartTable/functions.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="220">
-              <caret line="169" column="24" lean-forward="false" selection-start-line="169" selection-start-column="16" selection-end-line="169" selection-end-column="24" />
+            <state relative-caret-position="3388">
+              <caret line="166" column="16" lean-forward="true" selection-start-line="166" selection-start-column="16" selection-end-line="166" selection-end-column="16" />
               <folding />
             </state>
           </provider>
@@ -167,11 +261,9 @@
       <file leaf-file-name="products.js" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/components/Panel/Components/products.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="303">
-              <caret line="758" column="34" lean-forward="false" selection-start-line="659" selection-start-column="28" selection-end-line="758" selection-end-column="34" />
-              <folding>
-                <element signature="e#16975#20302#0" expanded="false" />
-              </folding>
+            <state relative-caret-position="6336">
+              <caret line="540" column="5" lean-forward="true" selection-start-line="540" selection-start-column="5" selection-end-line="540" selection-end-column="5" />
+              <folding />
             </state>
           </provider>
         </entry>
@@ -187,16 +279,6 @@
   </component>
   <component name="FindInProjectRecents">
     <findStrings>
-      <find>console</find>
-      <find>validateStepOne</find>
-      <find>vali</find>
-      <find>serach</find>
-      <find>Collapsible</find>
-      <find>Eba</find>
-      <find>co</find>
-      <find>what is profiling</find>
-      <find>update</find>
-      <find>textFiel</find>
       <find>optionList</find>
       <find>step 1</find>
       <find>rebder</find>
@@ -217,6 +299,16 @@
       <find>render</find>
       <find>sortData</find>
       <find>data</find>
+      <find>badges</find>
+      <find>products</find>
+      <find>itemId</find>
+      <find>sma</find>
+      <find>update</find>
+      <find>setState</find>
+      <find>order</find>
+      <find>source_variant_id</find>
+      <find>setSt</find>
+      <find>select_country</find>
     </findStrings>
   </component>
   <component name="Git.Settings">
@@ -273,8 +365,8 @@
         <option value="$PROJECT_DIR$/src/environments/environment.js" />
         <option value="$PROJECT_DIR$/src/components/Panel/Components/import.js" />
         <option value="$PROJECT_DIR$/src/components/Panel/Components/orders.js" />
-        <option value="$PROJECT_DIR$/src/environments/static-json.js" />
         <option value="$PROJECT_DIR$/src/shared/smartTable/SmartDataTable.js" />
+        <option value="$PROJECT_DIR$/src/environments/static-json.js" />
         <option value="$PROJECT_DIR$/src/components/Panel/Components/import-component/EbayAffiliate.js" />
       </list>
     </option>
@@ -698,12 +790,12 @@
       <workItem from="1563891433890" duration="83000" />
       <workItem from="1563953460280" duration="33472000" />
       <workItem from="1564379008204" duration="82000" />
-      <workItem from="1564664249793" duration="27731000" />
+      <workItem from="1564664249793" duration="51230000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="902360000" />
+    <option name="totallyTimeSpent" value="925859000" />
   </component>
   <component name="TodoView">
     <todo-panel id="selected-file">
@@ -718,6 +810,7 @@
     <frame x="-3" y="0" width="1286" height="770" extended-state="6" />
     <editor active="true" />
     <layout>
+      <window_info id="TypeScript" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.20786516" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="true" content_ui="tabs" />
@@ -731,7 +824,6 @@
       <window_info id="Message" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="Commander" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="Inspection" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
-      <window_info id="TypeScript" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Hierarchy" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="2" side_tool="false" content_ui="combo" />
       <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
@@ -764,18 +856,11 @@
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
-      <option name="time" value="29" />
+      <option name="time" value="31" />
     </breakpoint-manager>
     <watches-manager />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/src/components/Panel/Components/products-component/analytics-reporting.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-9702">
-          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/shared/config/config-shared.js">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="-2376">
@@ -954,6 +1039,44 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="326">
           <caret line="559" column="67" lean-forward="false" selection-start-line="559" selection-start-column="67" selection-end-line="559" selection-end-column="67" />
+          <folding>
+            <marker date="1564379528370" expanded="true" signature="19569:33701" ph="{...}" />
+            <marker date="1564379528370" expanded="true" signature="19589:20072" ph="{...}" />
+            <marker date="1564379528370" expanded="true" signature="19683:20064" ph="{...}" />
+            <marker date="1564379528370" expanded="true" signature="19715:20054" ph="{...}" />
+            <marker date="1564379528370" expanded="true" signature="19776:19996" ph="{...}" />
+            <marker date="1564379528370" expanded="true" signature="19811:19912" ph="{&quot;value&quot;: i...}" />
+            <marker date="1564379528370" expanded="true" signature="20087:23172" ph="{...}" />
+            <marker date="1564379528370" expanded="true" signature="20214:20837" ph="{...}" />
+            <marker date="1564379528370" expanded="true" signature="20259:20807" ph="{...}" />
+            <marker date="1564379528370" expanded="true" signature="20596:20784" ph="&lt;Thumbnail/&gt;" />
+            <marker date="1564379528370" expanded="true" signature="20910:21653" ph="{...}" />
+            <marker date="1564379528370" expanded="true" signature="20956:21468" ph="{...}" />
+            <marker date="1564379528370" expanded="true" signature="21273:21449" ph="&lt;Thumbnail/&gt;" />
+            <marker date="1564379528370" expanded="true" signature="21522:21642" ph="{...}" />
+            <marker date="1564379528370" expanded="true" signature="21683:23172" ph="&lt;React.Fragment/&gt;" />
+            <marker date="1564379528370" expanded="true" signature="21716:22519" ph="&lt;Layout/&gt;" />
+            <marker date="1564379528370" expanded="true" signature="21745:21946" ph="&lt;Layout.Section/&gt;" />
+            <marker date="1564379528370" expanded="true" signature="21786:21908" ph="&lt;Layout/&gt;" />
+            <marker date="1564379528370" expanded="true" signature="21968:22260" ph="&lt;Layout.Section/&gt;" />
+            <marker date="1564379528370" expanded="true" signature="22009:22222" ph="&lt;Card/&gt;" />
+            <marker date="1564379528370" expanded="true" signature="22070:22190" ph="&lt;div/&gt;" />
+            <marker date="1564379528370" expanded="true" signature="22281:22493" ph="&lt;Layout.Section/&gt;" />
+            <marker date="1564379528370" expanded="true" signature="22332:22455" ph="&lt;Card/&gt;" />
+            <marker date="1564379528370" expanded="true" signature="22580:23172" ph="&lt;Layout/&gt;" />
+            <marker date="1564379528370" expanded="true" signature="22609:23172" ph="&lt;Layout.Section/&gt;" />
+            <marker date="1564379528370" expanded="true" signature="22660:22731" ph="/*...*/" />
+            <marker date="1564379528370" expanded="true" signature="22757:23172" ph="&lt;Card/&gt;" />
+            <marker date="1564379528370" expanded="true" signature="22948:23172" ph="&lt;Card.Section/&gt;" />
+            <marker date="1564379528370" expanded="true" signature="22995:23172" ph="&lt;ResourceList/&gt;" />
+            <marker date="1564379528370" expanded="true" signature="23052:23172" ph="[...]" />
+            <marker date="1564379528370" expanded="true" signature="23094:23172" ph="{&quot;name&quot;: 'Ebay Marketplace Integration'...}" />
+            <marker date="1564379528370" expanded="true" signature="31695:31942" ph="&lt;Stack/&gt;" />
+            <marker date="1564379528370" expanded="true" signature="31695:33541" ph="{...}" />
+            <marker date="1564379528370" expanded="false" signature="31953:33535" ph="/*...*/" />
+            <marker date="1564379528370" expanded="true" signature="33561:33632" ph="{...}" />
+            <marker date="1564379528370" expanded="true" signature="33652:33698" ph="{...}" />
+          </folding>
         </state>
       </provider>
     </entry>
@@ -985,6 +1108,7 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="368">
           <caret line="41" column="14" lean-forward="false" selection-start-line="41" selection-start-column="14" selection-end-line="41" selection-end-column="14" />
+          <folding />
         </state>
       </provider>
     </entry>
@@ -1022,6 +1146,7 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="324">
           <caret line="19" column="21" lean-forward="false" selection-start-line="19" selection-start-column="21" selection-end-line="19" selection-end-column="21" />
+          <folding />
         </state>
       </provider>
     </entry>
@@ -1042,30 +1167,11 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/components/Panel/Components/fbaOrder.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="176">
-          <caret line="22" column="56" lean-forward="true" selection-start-line="22" selection-start-column="0" selection-end-line="22" selection-end-column="56" />
-          <folding>
-            <element signature="e#7732#14754#0" expanded="false" />
-            <element signature="e#7790#8423#0" expanded="false" />
-            <element signature="e#12859#14639#0" expanded="false" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/package.json">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="0">
           <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
           <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/components/Panel/Components/static-functions.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="521">
-          <caret line="62" column="21" lean-forward="false" selection-start-line="62" selection-start-column="21" selection-end-line="62" selection-end-column="21" />
         </state>
       </provider>
     </entry>
@@ -1081,6 +1187,7 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="368">
           <caret line="73" column="14" lean-forward="false" selection-start-line="73" selection-start-column="14" selection-end-line="73" selection-end-column="14" />
+          <folding />
         </state>
       </provider>
     </entry>
@@ -1094,22 +1201,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/components/Panel/Components/faq.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="151">
-          <caret line="971" column="10" lean-forward="false" selection-start-line="971" selection-start-column="4" selection-end-line="971" selection-end-column="10" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/components/Panel/Components/dashboard.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="174">
-          <caret line="746" column="27" lean-forward="false" selection-start-line="746" selection-start-column="21" selection-end-line="746" selection-end-column="27" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/components/Panel/Components/configuration.js">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="188">
@@ -1118,48 +1209,78 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/environments/environment.js">
+    <entry file="file://$PROJECT_DIR$/src/components/Panel/Components/faq.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="132">
-          <caret line="6" column="47" lean-forward="false" selection-start-line="6" selection-start-column="47" selection-end-line="6" selection-end-column="47" />
+        <state relative-caret-position="-3149">
+          <caret line="971" column="10" lean-forward="false" selection-start-line="971" selection-start-column="4" selection-end-line="971" selection-end-column="10" />
           <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/environments/static-json.js">
+    <entry file="file://$PROJECT_DIR$/src/environments/environment.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="858">
-          <caret line="1429" column="31" lean-forward="false" selection-start-line="1429" selection-start-column="31" selection-end-line="1429" selection-end-column="31" />
-          <folding>
-            <element signature="e#32#1191#0" expanded="false" />
-            <element signature="e#1215#18581#0" expanded="false" />
-            <element signature="e#18597#20530#0" expanded="false" />
-          </folding>
+        <state relative-caret-position="132">
+          <caret line="6" column="55" lean-forward="false" selection-start-line="6" selection-start-column="40" selection-end-line="6" selection-end-column="55" />
+          <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/shared/smartTable/functions.js">
+    <entry file="file://$PROJECT_DIR$/node_modules/@types/react/index.d.ts">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="220">
-          <caret line="169" column="24" lean-forward="false" selection-start-line="169" selection-start-column="16" selection-end-line="169" selection-end-column="24" />
+        <state relative-caret-position="188">
+          <caret line="458" column="8" lean-forward="false" selection-start-line="458" selection-start-column="8" selection-end-line="458" selection-end-column="8" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/components/Panel/Components/static-functions.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="188">
+          <caret line="49" column="16" lean-forward="false" selection-start-line="49" selection-start-column="16" selection-end-line="49" selection-end-column="16" />
           <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/components/Panel/Components/products.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="303">
-          <caret line="758" column="34" lean-forward="false" selection-start-line="659" selection-start-column="28" selection-end-line="758" selection-end-column="34" />
+        <state relative-caret-position="6336">
+          <caret line="540" column="5" lean-forward="true" selection-start-line="540" selection-start-column="5" selection-end-line="540" selection-end-column="5" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/components/Panel/Components/fbaOrder.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-3413">
+          <caret line="85" column="26" lean-forward="false" selection-start-line="85" selection-start-column="20" selection-end-line="85" selection-end-column="26" />
           <folding>
-            <element signature="e#16975#20302#0" expanded="false" />
+            <element signature="e#42#81#0" expanded="true" />
+            <element signature="e#7790#8423#0" expanded="false" />
+            <element signature="e#12859#14639#0" expanded="false" />
           </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/components/Panel/Components/dashboard.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="17138">
+          <caret line="804" column="0" lean-forward="false" selection-start-line="804" selection-start-column="0" selection-end-line="804" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/shared/smartTable/functions.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="3388">
+          <caret line="166" column="16" lean-forward="true" selection-start-line="166" selection-start-column="16" selection-end-line="166" selection-end-column="16" />
+          <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/shared/smartTable/SmartDataTable.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="174">
-          <caret line="854" column="26" lean-forward="false" selection-start-line="854" selection-start-column="26" selection-end-line="854" selection-end-column="26" />
+        <state relative-caret-position="2261">
+          <caret line="1113" column="23" lean-forward="true" selection-start-line="1113" selection-start-column="23" selection-end-line="1113" selection-end-column="23" />
           <folding>
             <element signature="e#18#59#0" expanded="true" />
             <element signature="e#162#206#0" expanded="true" />
@@ -1170,15 +1291,98 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/src/environments/static-json.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="110">
+          <caret line="1306" column="24" lean-forward="false" selection-start-line="1306" selection-start-column="20" selection-end-line="1306" selection-end-column="24" />
+          <folding>
+            <element signature="e#32#1191#0" expanded="false" />
+            <element signature="e#1215#18581#0" expanded="false" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/src/components/Panel/Components/import-component/EbayAffiliate.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="540">
-          <caret line="242" column="37" lean-forward="true" selection-start-line="242" selection-start-column="37" selection-end-line="242" selection-end-column="37" />
+        <state relative-caret-position="-424">
+          <caret line="422" column="49" lean-forward="false" selection-start-line="422" selection-start-column="49" selection-end-line="422" selection-end-column="49" />
           <folding>
-            <element signature="e#0#39#0" expanded="true" />
-            <element signature="e#1243#1328#0" expanded="false" />
-            <element signature="e#2476#2677#0" expanded="false" />
-            <marker date="1564742547597" expanded="true" signature="9770:9772" ph="{...}" />
+            <element signature="e#602#1209#0" expanded="false" />
+            <element signature="e#1231#1348#0" expanded="false" />
+            <element signature="e#1369#1419#0" expanded="false" />
+            <element signature="e#2370#4095#0" expanded="false" />
+            <element signature="e#2384#2879#0" expanded="false" />
+            <element signature="e#2504#2814#0" expanded="false" />
+            <element signature="e#2893#3612#0" expanded="false" />
+            <element signature="e#3015#3333#0" expanded="false" />
+            <element signature="e#3346#3547#0" expanded="false" />
+            <element signature="e#3626#4084#0" expanded="false" />
+            <element signature="e#3745#4051#0" expanded="false" />
+            <element signature="e#4272#4483#0" expanded="false" />
+            <element signature="e#4297#4468#0" expanded="false" />
+            <element signature="e#4682#5257#0" expanded="false" />
+            <element signature="e#4737#5064#0" expanded="false" />
+            <element signature="e#5093#5226#0" expanded="false" />
+            <element signature="e#5490#6670#0" expanded="false" />
+            <element signature="e#5703#6243#0" expanded="false" />
+            <element signature="e#6160#6196#0" expanded="false" />
+            <element signature="e#6333#6564#0" expanded="false" />
+            <element signature="e#6379#6427#0" expanded="false" />
+            <element signature="e#6473#6521#0" expanded="false" />
+            <element signature="e#7763#7904#0" expanded="false" />
+            <element signature="e#8228#8381#0" expanded="false" />
+            <element signature="e#8296#8373#0" expanded="false" />
+            <element signature="e#8413#8461#0" expanded="false" />
+            <element signature="e#8466#8663#0" expanded="false" />
+            <element signature="e#8670#10297#0" expanded="false" />
+            <element signature="n#!!block;n#updateState#0;n#EbayAffiliate#0" expanded="false" />
+            <element signature="e#10390#11724#0" expanded="false" />
+            <element signature="n#!!block;n#isEmpty#0" expanded="false" />
+            <element signature="e#11784#11826#0" expanded="false" />
+            <element signature="e#11832#11885#0" expanded="false" />
+            <element signature="n#!!block;n#disambiguateLabel#0" expanded="false" />
+            <element signature="e#11933#12267#0" expanded="false" />
+            <element signature="e#11956#12049#0" expanded="false" />
+            <element signature="e#12058#12119#0" expanded="false" />
+            <element signature="e#12128#12218#0" expanded="false" />
+            <element signature="e#12227#12261#0" expanded="false" />
+            <element signature="e#12364#12948#0" expanded="false" />
+            <element signature="e#12386#12480#0" expanded="false" />
+            <element signature="e#12505#12608#0" expanded="false" />
+            <element signature="e#12629#12728#0" expanded="false" />
+            <element signature="e#12745#12840#0" expanded="false" />
+            <element signature="e#12866#12942#0" expanded="false" />
+            <element signature="e#12971#13088#0" expanded="false" />
+            <element signature="e#13109#13159#0" expanded="false" />
+            <element signature="e#13275#13433#0" expanded="false" />
+            <element signature="e#13634#13675#0" expanded="false" />
+            <element signature="e#14541#14582#0" expanded="false" />
+            <element signature="e#14963#14991#0" expanded="false" />
+            <element signature="e#15216#15314#0" expanded="false" />
+            <element signature="e#15364#15440#0" expanded="false" />
+            <element signature="e#15486#16275#0" expanded="false" />
+            <element signature="e#15691#15960#0" expanded="false" />
+            <element signature="e#15743#15934#0" expanded="false" />
+            <element signature="e#15966#16157#0" expanded="false" />
+            <element signature="e#16018#16131#0" expanded="false" />
+            <element signature="e#16297#17270#0" expanded="false" />
+            <element signature="e#17291#17756#0" expanded="false" />
+            <element signature="e#17777#18522#0" expanded="false" />
+            <element signature="n#!!block;n#modifyProductsData#0;n#RenderSearchGrid#0" expanded="false" />
+            <element signature="e#21374#21426#0" expanded="false" />
+            <element signature="e#21523#22594#0" expanded="false" />
+            <element signature="e#21606#22547#0" expanded="false" />
+            <element signature="e#21655#21769#0" expanded="false" />
+            <element signature="e#21815#21930#0" expanded="false" />
+            <element signature="e#21976#22090#0" expanded="false" />
+            <element signature="e#22176#22326#0" expanded="false" />
+            <element signature="e#22393#22533#0" expanded="false" />
+            <marker date="1564818003771" expanded="false" signature="644:738" ph="{&quot;title&quot;: &quot;Image&quot;...}" />
+            <marker date="1564818003771" expanded="false" signature="763:866" ph="{&quot;title&quot;: &quot;Product Title&quot;...}" />
+            <marker date="1564818003771" expanded="false" signature="887:986" ph="{&quot;title&quot;: &quot;Global ID&quot;...}" />
+            <marker date="1564818003771" expanded="false" signature="1003:1098" ph="{&quot;title&quot;: &quot;Price&quot;...}" />
+            <marker date="1564818003771" expanded="false" signature="10471:10523" ph="{&quot;pagination_show&quot;: data.length...}" />
+            <marker date="1564818003771" expanded="false" signature="11725:11727" ph="{...}" />
           </folding>
         </state>
       </provider>
