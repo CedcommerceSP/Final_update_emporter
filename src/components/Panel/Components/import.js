@@ -61,7 +61,7 @@ export class Import extends Component {
 			},
 			openModal: false,
             necessaryInfo:{},
-            mainTab: 1
+            mainTab: 0
 		};
 		this.getAllImporterServices();
 		this.getAllUploaderServices();
@@ -702,10 +702,10 @@ export class Import extends Component {
     };
 
 	render() {
-		let { mainTab } = this.state;
+		let { mainTab, necessaryInfo } = this.state;
 		return (
 			<Page title="Manage Products">
-				<Tabs name={"hello"} selected={this.state.mainTab} tabs={[{
+				{necessaryInfo.account_connected_array && necessaryInfo.account_connected_array.indexOf('ebayaffiliate') > -1 && <Tabs name={"hello"} selected={this.state.mainTab} tabs={[{
                     id: 'Import',
                     content: 'Import',
                     accessibilityLabel: 'All',
@@ -715,7 +715,7 @@ export class Import extends Component {
                         id: 'Ebay Affiliate',
                         content: 'Ebay Affiliate',
                         panelID: 'Ebay Affiliate',
-                    }]} onSelect={this.handleTabChange}/>
+                    }]} onSelect={this.handleTabChange}/>}
                 {mainTab === 0 ?
 				<div className="row">
 					<div className="col-12 p-3">
@@ -806,7 +806,10 @@ export class Import extends Component {
 							</div>
 						</Card>
 					</div>
-				</div>:<EbayAffiliate/>}
+				</div>:<React.Fragment>
+					<br/>
+					<EbayAffiliate {...this.props}/>
+				</React.Fragment>}
 				{this.renderImportProductsModal()}
 				{this.renderUploadProductsModal()}
 				{this.renderHelpModal()}

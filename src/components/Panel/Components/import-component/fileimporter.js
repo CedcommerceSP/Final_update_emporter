@@ -76,16 +76,17 @@ class FileImporter extends Component {
 
 	status() {
 		requests.getRequest("fileimporter/request/getStatus").then(response => {
-			console.log(response);
-			if (response.data && !response.data["file_uploaded"]) {
-				this.setState({ upload_status: true });
-			} else {
-				this.setState({
-					response: response["data"],
-					mapping_status: true,
-					upload_new: true
-				});
-			}
+            if ( response.success ) {
+                if (response.data && !response.data["file_uploaded"]) {
+                    this.setState({ upload_status: true });
+                } else {
+                    this.setState({
+                        response: response["data"],
+                        mapping_status: true,
+                        upload_new: true
+                    });
+                }
+            }
 		});
 	}
 

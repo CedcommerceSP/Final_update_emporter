@@ -164,6 +164,9 @@ class SmartDataTablePlain extends React.Component {
 	}
 
 	componentWillReceiveProps(nextProps) {
+		if (!isUndefined(nextProps.selected)) {
+			this.setState({selected:nextProps.selected,totalSelected:nextProps.selected.length});
+		}
 		if (this.state.columnFilters !== nextProps.columnFiltersValue) {
 			this.setState({
 				columnFilters: Object.assign({}, nextProps.columnFiltersValue)
@@ -1028,45 +1031,45 @@ class SmartDataTablePlain extends React.Component {
 							rows.length === 0 && (
 								<EmptyState
 									heading="No Data Found"
-									action={{
-										content: "Reset Filters",
-										onAction: () => {
-											for (
-												let i = 0;
-												i < Object.keys(this.state.columnFilters).length;
-												i++
-											) {
-												const key = Object.keys(this.state.columnFilters)[i];
-												columns.forEach(e => {
-													if (e.key === key && e.key === "int") {
-														this.state.columnFilters[key] = {
-															operator: 1,
-															value: ""
-														};
-														this.defaultFilters[key] = {
-															operator: 1,
-															value: ""
-														};
-													} else {
-														this.state.columnFilters[key] = {
-															operator: this.filterKey,
-															value: ""
-														};
-														this.defaultFilters[key] = {
-															operator: this.filterKey,
-															value: ""
-														};
-													}
-												});
-											}
-											if (!isUndefined(this.props.singleButtonColumnFilter))
-												this.props.singleButtonColumnFilter([]);
-											this.setState({ columnFilterNameArray: [] });
-											const state = this.state;
-											this.setState(state);
-											this.props.columnFilters(this.state.columnFilters);
-										}
-									}}
+									// action={{
+									// 	content: "Reset Grid",
+									// 	onAction: () => {
+									// 		// for (
+									// 		// 	let i = 0;
+									// 		// 	i < Object.keys(this.state.columnFilters).length;
+									// 		// 	i++
+									// 		// ) {
+									// 		// 	const key = Object.keys(this.state.columnFilters)[i];
+									// 		// 	columns.forEach(e => {
+									// 		// 		if (e.key === key && e.key === "int") {
+									// 		// 			this.state.columnFilters[key] = {
+									// 		// 				operator: 1,
+									// 		// 				value: ""
+									// 		// 			};
+									// 		// 			this.defaultFilters[key] = {
+									// 		// 				operator: 1,
+									// 		// 				value: ""
+									// 		// 			};
+									// 		// 		} else {
+									// 		// 			this.state.columnFilters[key] = {
+									// 		// 				operator: this.filterKey,
+									// 		// 				value: ""
+									// 		// 			};
+									// 		// 			this.defaultFilters[key] = {
+									// 		// 				operator: this.filterKey,
+									// 		// 				value: ""
+									// 		// 			};
+									// 		// 		}
+									// 		// 	});
+									// 		// }
+									// 		// if (!isUndefined(this.props.singleButtonColumnFilter))
+									// 		// 	this.props.singleButtonColumnFilter([]);
+									// 		// this.setState({ columnFilterNameArray: [] });
+									// 		// const state = this.state;
+									// 		// this.setState(state);
+									// 		// this.props.columnFilters(this.state.columnFilters);
+									// 	}
+									// }}
 									image="https://cdn.shopify.com/s/files/1/0757/9955/files/empty-state.svg"
 								/>
 							)

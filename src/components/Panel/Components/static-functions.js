@@ -28,6 +28,8 @@ export function modifyName(string) {
 			return "Deleted";
 		case "magento":
 			return "Magento";
+		case "ebayaffiliate":
+			return "Ebay Affiliate";
 		default:
 			return string;
 	}
@@ -101,6 +103,8 @@ export function modifyAccountConnectedInfo(accounts) {
             case "magento":
                 title = "Magento";
                 break;
+            case "ebayaffiliate":
+				title = "Ebay Affiliate"; break;
 			default:
 				title = e;
 		}

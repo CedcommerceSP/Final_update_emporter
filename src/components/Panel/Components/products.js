@@ -42,7 +42,7 @@ export class Products extends Component {
 		{ label: 40, value: "40" },
 		{ label: 50, value: "50" },
 		{ label: 500, value: "500" },
-		{ label: 2000, value: "2000" },
+		{ label: 2000, value: "2000 *(Slow)" },
 	];
 
 	massActions = [{ label: "Upload", value: "upload" }];
@@ -424,6 +424,7 @@ export class Products extends Component {
 						str = "https://apps.cedcommerce.com/importer/image_not_found.jpg";
 					}
 					rowData["main_image"] = str;
+					// str = '';
 					let price = parseFloat(data[i].variants[0]["price"]);
 					if (
 						data[i].variants[0]["price_currency"] !== undefined &&

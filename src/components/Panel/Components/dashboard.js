@@ -216,7 +216,7 @@ class Dashboard extends Component {
 						}
 						return (
 							<React.Fragment key={index}>
-								<div className={`col-4 bs-wizard-step ${css}`}>
+								<div className={`col-6 bs-wizard-step ${css}`}>
 									<div className="text-center bs-wizard-stepnum">
 										Step {index + 1}
 									</div>

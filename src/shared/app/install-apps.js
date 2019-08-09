@@ -317,6 +317,10 @@ class InstallAppsShared extends Component {
 						url: data.data.action
 					};
 					this.setState({ confirmOpen: tempURL });
+				} else if (data.data && data.data.code === 'account_already_connected') {
+					this.props.success3({ code: this.props.code });
+					notify.success(data.data.message);
+					this.redirect();
 				} else {
 					this.state["schema"] = this.modifySchemaData(data.data.schema);
 					this.state["action"] = data.data.action;

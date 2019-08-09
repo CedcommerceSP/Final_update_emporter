@@ -66,6 +66,12 @@ class AppsShared extends Component {
                         code.push(data.data[Object.keys(data.data)[i]]["code"]);
                     }
                 }
+                 for (let i = 0; i < Object.keys(data.data).length; i++) {
+                    if (data.data[Object.keys(data.data)[i]]['code'] == "ebayaffiliate") {
+                        installedApps.push(data.data[Object.keys(data.data)[i]]);
+                        code.push(data.data[Object.keys(data.data)[i]]["code"]);
+                    }
+                }
                 for (let i = 0; i < Object.keys(data.data).length; i++) {
                     if (data.data[Object.keys(data.data)[i]]['code'] == "wishimporter") {
                         installedApps.push(data.data[Object.keys(data.data)[i]]);
@@ -211,7 +217,8 @@ class AppsShared extends Component {
             code === "wishimporter" ||
             code === "wishimporter" ||
             code === "etsyimporter" ||
-            code === "amazonaffiliate"
+            code === "amazonaffiliate" || 
+            code === "ebayaffiliate"
         );
     };
     additionalInput = code => {
