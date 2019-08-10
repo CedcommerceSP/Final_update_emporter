@@ -18,9 +18,20 @@ export class Auth extends Component {
 	}
 
 	removeLocalStorage() {
-		globalState.removeLocalStorage("user_authenticated");
-		globalState.removeLocalStorage("auth_token");
-		globalState.removeLocalStorage("activePlan");
+        console.log("Checking for Session",sessionStorage);
+        try {
+            if ( sessionStorage && sessionStorage.getItem ) {
+                globalState.removeLocalStorage("user_authenticated");
+                globalState.removeLocalStorage("auth_token");
+                globalState.removeLocalStorage("activePlan");
+            } else {
+                this.setState({failedMessage:"Kindly Enable Third Party Cookies. And Refresh the Page"});
+                console.log("session not found");
+            }
+        } catch (e) {
+            this.setState({failedMessage:"Kindly Enable Third Party Cookies.  And Refresh the Page"});
+            console.log(e);
+        }
 	}
 	componentWillMount() {
 		const params = queryString.parse(this.props.location.search);
@@ -50,6 +61,7 @@ export class Auth extends Component {
 					<Route path="/auth/confirmation" component={ConfirmationPage} />
 					<Route path="/auth/resetpassword" component={ResetPassword} />
 				</Switch>
+				{this.state.failedMessage}
 			</div>
 		);
 	}
