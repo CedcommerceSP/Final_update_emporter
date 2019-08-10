@@ -14,6 +14,7 @@ import { globalState } from "../../services/globalstate";
 export class Auth extends Component {
 	constructor() {
 		super();
+		this.state = {failedMessage:""}
 		this.removeLocalStorage();
 	}
 
