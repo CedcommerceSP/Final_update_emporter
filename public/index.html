@@ -12,7 +12,16 @@
     <link rel="shortcut icon" href="%PUBLIC_URL%/logo.png">
     <!--<link rel="stylesheet" href="https://sdks.shopifycdn.com/polaris/3.0.0/polaris.min.css" />-->
     <!--Start of Zopim Live Chat Script-->
-
+    <script>
+      function test() {
+          if ( sessionStorage.hasOwnProperty('getItem') ) {
+              console.log("Found Session Storage");
+          } else {
+              console.log("Not Found Session Storage");
+          }
+      }
+      test();
+    </script>
     <!--Start of Tawk.to Script-->
     <script type="text/javascript">
         var Tawk_API=Tawk_API||{}, Tawk_LoadStart=new Date();
