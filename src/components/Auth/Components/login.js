@@ -102,6 +102,9 @@ export class Login extends Component {
 							<div className="col-12 text-center">
 								<h1>Please Wait</h1>
 							</div>
+                            <div className="col-12 text-center">
+                                {this.state.failedMessage && ""}
+                            </div>
 						</div>
 					</div>
 				)}
@@ -133,10 +136,24 @@ export class Login extends Component {
 	autoredirect() {
 		const queryParams = queryString.parse(this.props.location.search);
 		if (queryParams["user_token"] != null && queryParams["code"] != null) {
-			globalState.setLocalStorage("user_authenticated", "true");
-			globalState.setLocalStorage("auth_token", queryParams["user_token"]);
-			globalState.setLocalStorage("shop", queryParams["shop"]);
-			this.redirect("/panel/");
+			// globalState.setLocalStorage("user_authenticated", "true");
+			// globalState.setLocalStorage("auth_token", queryParams["user_token"]);
+			// globalState.setLocalStorage("shop", queryParams["shop"]);
+			// this.redirect("/panel/");
+            try {
+                if ( sessionStorage && sessionStorage.getItem ) {
+                    this.globalState.setLocalStorage("user_authenticated", "true");
+                    this.globalState.setLocalStorage("auth_token", queryParams["user_token"]);
+                    this.globalState.setLocalStorage("shop", queryParams["shop"]);
+                    this.redirect("/panel/");
+                } else {
+                    this.setState({failedMessage:"Kindly Enable Third Party Cookies. And Refresh the Page"});
+                    console.log("session not found");
+                }
+            } catch (e) {
+                this.setState({failedMessage:"Kindly Enable Third Party Cookies.  And Refresh the Page"});
+                console.log(e);
+            }
 		} else if (queryParams["admin_user_token"]) {
 			globalState.setLocalStorage("user_authenticated", "true");
 			globalState.setLocalStorage(
