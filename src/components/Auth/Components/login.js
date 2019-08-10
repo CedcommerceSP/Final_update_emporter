@@ -140,6 +140,7 @@ export class Login extends Component {
 			// globalState.setLocalStorage("auth_token", queryParams["user_token"]);
 			// globalState.setLocalStorage("shop", queryParams["shop"]);
 			// this.redirect("/panel/");
+            console.log("Checking for Session");
             try {
                 if ( sessionStorage && sessionStorage.getItem ) {
                     this.globalState.setLocalStorage("user_authenticated", "true");
