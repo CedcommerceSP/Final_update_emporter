@@ -8,7 +8,9 @@ import {
 	Page,
 	Select,
 	TextField,
+    Badge,
 	Label,
+	Stack,
 } from "@shopify/polaris";
 import { isUndefined } from "util";
 import { faCheck } from "@fortawesome/free-solid-svg-icons";
@@ -30,6 +32,7 @@ class Dashboard extends Component {
 		super(props);
 		props.disableHeader(false); // used in disabled header
 		this.state = {
+			shop_url:'',
 			info: {
 				full_name: "",
 				mobile: "",
@@ -108,6 +111,7 @@ class Dashboard extends Component {
 				this.state.info.full_name = data.data.full_name;
 				this.state.info.email = data.data.email;
 				this.state.info.mobile = data.data.mobile;
+				this.state.shop_url = data.data.shop_url;
 				this.handleFormChange("country_code", data.data.country);
 				this.setState(this.state);
 			}
@@ -758,23 +762,22 @@ class Dashboard extends Component {
 			<Page
 				fullWidth={true}
 				title={this.state.stepStart ? "Registration" : "Dashboard"}
-				/*primaryAction={{
-					content: "Pricing Guide",
-					onClick: () => {
-						this.redirect("/panel/dashboard/guide");
-					}
-				}}*/
+				subtitle={<Badge status="success">{this.state.shop_url}</Badge>}
+
+
+				 separator
+
 			>
 				{this.state.welcome_screen ? (
 					<div>
 						<AnalyticsReporting history={this.props.history} />
 					</div>
 				) : this.state.stepStart ? (
-					<React.Fragment>
+					<Stack vertical={true}>
 						<Card>{this.renderStepper()}</Card> {/* Stepper */}
 						{this.renderBody()} {/* Main Body Function Call Here */}
 						{/* Open For Step 3 to see Connected Account */}
-					</React.Fragment>
+					</Stack>
 				) : (
 					<div>
 						<Card>
@@ -787,7 +790,8 @@ class Dashboard extends Component {
 						</Card>
 					</div>
 				)}
-			</Page>
+
+				</Page>
 		);
 	}
 

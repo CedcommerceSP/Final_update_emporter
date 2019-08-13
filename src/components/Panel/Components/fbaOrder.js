@@ -135,6 +135,14 @@ export class FbaOrder extends Component {
                             </React.Fragment>
                         );
                     }
+                    else if (data[i]["financial_status"] === "refunded") {
+                        rowData["order_status_shopify"] = (
+                            <React.Fragment>
+                                <Badge status="info">Refunded</Badge>
+                            </React.Fragment>
+                        );}
+
+
                     else {
                         rowData["order_status_shopify"] = (
                             <React.Fragment>

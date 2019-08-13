@@ -3,12 +3,15 @@ import { isUndefined } from "util";
 
 export const globalState = {
 	setLocalStorage: (key, value) => {
+		// console.log(window);
 		sessionStorage.setItem(key, value);
 	},
 	getLocalStorage: key => {
+        // console.log(window);
 		return sessionStorage.getItem(key);
 	},
 	removeLocalStorage: key => {
+        // console.log(window);
 		return sessionStorage.removeItem(key);
 	},
 	getBearerToken: () => {
