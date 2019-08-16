@@ -179,6 +179,7 @@ export class Products extends Component {
 		) {
 			let installedApps = [];
 			props.necessaryInfo.account_connected.forEach(e => {
+				if (e.code !== 'fba')
 				installedApps.push({
 					id: e.code,
 					content: e.title,

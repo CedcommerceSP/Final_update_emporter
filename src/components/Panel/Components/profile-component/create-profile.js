@@ -361,6 +361,7 @@ export class CreateProfile extends Component {
             })
             .then(data => {
                 if (data.success) {
+                    console.log("namaste",data);
                     this.sourceAttributes = [];
                     for (let i = 0; i < data.data.length; i++) {
                         !isUndefined(data.data[i].options)

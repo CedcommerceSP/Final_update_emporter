@@ -234,7 +234,7 @@ export class Import extends Component {
 						/>
 					</div>
 				);
-			case "amazonimporter":
+			/*case "amazonimporter":
 				return (
 					<div className="col-12 pt-1 pb-1">
 						<Select
@@ -250,7 +250,7 @@ export class Import extends Component {
 							value={this.state.amazon_list_type}
 						/>
 					</div>
-				);
+				);*/
 		}
 	};
 

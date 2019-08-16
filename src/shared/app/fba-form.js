@@ -58,13 +58,13 @@ class FbaInstallationForm extends Component {
         return (
             <React.Fragment>
                 <div className="row">
-                        <div className="col-12">
+                        {/*<div className="col-12">
                             <Banner status="info">
                                 <Label>
                                     <b>BETA VERSION</b>
                                 </Label>
                             </Banner>
-                        </div>
+                        </div>*/}
                         <div className="col-12 text-right mt-2">
                             <Button
                                 onClick={() => {
