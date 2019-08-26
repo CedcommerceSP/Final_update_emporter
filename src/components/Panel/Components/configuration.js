@@ -60,6 +60,7 @@ export class Configuration extends Component {
             shipping_user_code: [],
             shipping_array_category: [],
             initial_array:[],
+            button_loader_fba:false
 
         };
         this.getUserDetails();
@@ -614,6 +615,9 @@ export class Configuration extends Component {
     }
 
     onSubmitOfShippingCategory() {
+        this.setState({
+            button_loader_fba:true
+        })
         var final_sending_array = [];
         console.log("here is the array",this.state.shipping_array_category);
         for (let i = 0; i < this.state.shipping_array_category.length; i++) {
@@ -626,9 +630,14 @@ export class Configuration extends Component {
                     {"fba_code": value_of_codes}]
             );
         }
+
         console.log("final array = ",final_sending_array);
         requests.postRequest('fba/test/shopifyDataRMQ', {data: final_sending_array}, false, true).then(response1 => {
             if (response1.success) {
+                this.setState({
+                    open_modal: false,
+                    button_loader_fba:false
+                })
                 notify.success(response1.message)
             }
             else {
@@ -724,6 +733,7 @@ export class Configuration extends Component {
 
                         <div className="text-right p-3">
                             <Button
+                                loading={this.state.button_loader_fba}
                                 primary
                                 onClick={this.onSubmitOfShippingCategory.bind(this)}
                             >
