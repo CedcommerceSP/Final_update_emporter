@@ -14,6 +14,7 @@ import {
     Avatar,
     Link,
     Icon,
+    Heading,
 } from "@shopify/polaris";
 import '@shopify/polaris/styles.css';
 import {Doughnut} from 'react-chartjs-2';
@@ -40,6 +41,7 @@ class Demo_analytics_reporting extends Component {
             no_getOrderDatewise: false,
             no_getOrderRevenueRangewise: false,
             no_getProductsUploadedData_and_ImportedData: false,
+            credits_available:false,
             Recurrying: false,
             plan: "",
             activated_on: "",
@@ -125,6 +127,11 @@ class Demo_analytics_reporting extends Component {
         requests.getRequest('shopifygql/payment/getCreditsSettings', undefined, false, true)
             .then(response => {
                 if (response.success) {
+                    if (response.data.available_credits === 0 && response.data.used_credits === 0){
+                        this.setState({
+                            credits_available:true
+                        })
+                    }
                     /*let total_credit = response.d
                     ata.available_credits + response.data.total_used_credits
                      let In_Ratio = response.data.available_credits / total_credit * 100;
@@ -190,7 +197,7 @@ class Demo_analytics_reporting extends Component {
         requests.postRequest("frontend/app/getImportedProductCount", {importers: importer_marketplace_array}, false, true)
             .then(data => {
                 if (data.success && (data['data']['amazonaffiliate'] !== 0 || data['data']['amazonimporter'] !== 0 || data['data']['ebayimporter'] !== 0 ||
-                    data['data']['etsyimporter'] !== 0 || data['data']['walmartimporter'] !== 0 || data['data']['wishimporter'] !== 0))
+                    data['data']['etsyimporter'] !== 0 || data['data']['walmartimporter'] !== 0 || data['data']['wishimporter'] !== 0 || data['data']['ebayaffiliate'] !== 0 ))
 
                 {
                     importer_data_rec = data.data;
@@ -234,7 +241,7 @@ class Demo_analytics_reporting extends Component {
                     this.state.skeleton[1] = false;
                     this.setState(this.state)
                 }  else if (data.success && data['data']['amazonaffiliate'] === 0 && data['data']['amazonimporter'] === 0 && data['data']['ebayimporter'] === 0 &&
-                    data['data']['etsyimporter'] === 0 && data['data']['walmartimporter'] === 0 && data['data']['wishimporter'] === 0) {
+                    data['data']['etsyimporter'] === 0 && data['data']['walmartimporter'] === 0 && data['data']['wishimporter'] === 0 && data['data']['ebayaffiliate'] === 0) {
                     this.setState({no_getProductsUploadedData_and_ImportedData: true})
                 } else {
                     this.setState({no_getProductsUploadedData_and_ImportedData: true})
@@ -327,6 +334,7 @@ class Demo_analytics_reporting extends Component {
         let arr = [];
         let temp_order = this.state.no_getOrderAnalytics;
         let temp_products = this.state.no_getProductsUploadedData_and_ImportedData;
+        let temp_credits = this.state.credits_available;
         for (let i = 0; i < 3; i++) {
             let yourVariable = "data" + (i + 1);
             let title = this.state[yourVariable]
@@ -359,6 +367,26 @@ class Demo_analytics_reporting extends Component {
                                 content: <Link><Icon source="help" color="inkLighter" backdrop={true}/></Link>,
                                 onClick: () => {
                                     this.redirect('/panel/import')
+                                }
+                            }}>
+                            <Stack distribution="center">
+                                <img className='img-fluid ' src={require("../../../../assets/img/222x176.png")}/>
+                            </Stack>
+                        </Card>
+                    </div>
+                );
+                temp_products = false
+                continue;
+            }
+            else if (temp_credits && i == 2) {
+                arr.push(<div className=" col-sm-12 col-md-12 col-lg-4" key={yourVariable}>
+                        <Card
+                            title="Credits"
+                            sectioned
+                            actions={{
+                                content: <Link><Icon source="help" color="inkLighter" backdrop={true}/></Link>,
+                                onClick: () => {
+                                    this.redirect('/panel/plans/current')
                                 }
                             }}>
                             <Stack distribution="center">
@@ -528,9 +556,13 @@ class Demo_analytics_reporting extends Component {
                     </Layout.Section>
 
                     <Layout.Section>
-                        <Card title="Store Development">
-                            <div className="m-4">
+                        <Card title="">
+                            <div className="m-4 text-center">
+                                <Heading>Store Development</Heading>
+                                <Label>Get your Shopify Store developed in most reasonable cost.</Label>
+                                <hr style={{marginLeft:"20%", marginRight:"20%"}}/>
                                 {this.render_recent_activity()}
+                                <hr/>
                             </div>
                         </Card>
                     </Layout.Section>

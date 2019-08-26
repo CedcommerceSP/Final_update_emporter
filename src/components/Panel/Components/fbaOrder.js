@@ -155,7 +155,7 @@ export class FbaOrder extends Component {
                     if (data[i]["processing_status"] === "Processing") {
                         rowData["amazon_order_status"] = (
                             <React.Fragment>
-                                <Badge status="success">Shipped</Badge>
+                                <Badge status="success">Processing</Badge>
                             </React.Fragment>
                         );
                     }
@@ -182,6 +182,13 @@ export class FbaOrder extends Component {
                     }
                     else if ( data[i]['processing_status'] === 'CANCELLED By Fba' || data[i]['processing_status'] === 'Cancelled'
                     || data[i]['processing_status'] === 'Canceled'){
+                        rowData["amazon_order_status"] = (
+                            <React.Fragment>
+                                <Badge status="warning">Cancelled</Badge>
+                            </React.Fragment>
+                        );
+                    }
+                    else if ( data[i]['processing_status'] === 'COMPLETE_PARTIALLED'){
                         rowData["amazon_order_status"] = (
                             <React.Fragment>
                                 <Badge status="warning">Cancelled</Badge>

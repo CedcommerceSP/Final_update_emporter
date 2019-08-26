@@ -763,11 +763,8 @@ class Dashboard extends Component {
 				fullWidth={true}
 				title={this.state.stepStart ? "Registration" : "Dashboard"}
 				subtitle={<Badge status="success">{this.state.shop_url}</Badge>}
-
-
-				 separator
-
 			>
+				<div className="p-2"></div>
 				{this.state.welcome_screen ? (
 					<div>
 						<AnalyticsReporting history={this.props.history} />

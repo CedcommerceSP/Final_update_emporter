@@ -83,11 +83,13 @@ export class Import extends Component {
 						let key = Object.keys(data.data)[i];
 						if (data.data[key].usable || !environment.isLive) {
 							if (validateImporter(data.data[key].code)) {
-								this.state.importServicesList.push({
-									label: data.data[key].title,
-									value: data.data[key].marketplace,
-									shops: [] //data.data[key].shops
-								});
+								if (data.data[key].code !== 'fba'&& data.data[key].code !== 'ebayaffiliate') {
+                                    this.state.importServicesList.push({
+                                        label: data.data[key].title,
+                                        value: data.data[key].marketplace,
+                                        shops: [] //data.data[key].shops
+                                    });
+                                }
 							}
 						}
 					}

@@ -75,7 +75,8 @@ export class CreateProfile extends Component {
                 source: "",
                 sourceShop: "",
                 targetShop: "",
-                target: ""
+                target: "",
+                target_location:""
             },
             products_select: {
                 query: "",
@@ -361,7 +362,6 @@ export class CreateProfile extends Component {
             })
             .then(data => {
                 if (data.success) {
-                    console.log("namaste",data);
                     this.sourceAttributes = [];
                     for (let i = 0; i < data.data.length; i++) {
                         !isUndefined(data.data[i].options)
@@ -443,25 +443,35 @@ export class CreateProfile extends Component {
                     this.state.basicDetails,
                     this.state.products_select
                 );
-                requests
-                    .postRequest("connector/profile/set", {
-                        data: data,
-                        step: this.state.activeStep,
-                        saveInTable: true
-                    })
-                    .then(data => {
-                        if (data.success) {
-                            notify.success("Profile created succesfully");
-                            this.redirect("/panel/profiling");
-                            // notify.success('Step ' + this.state.activeStep + ' completed succesfully.');
-                            // this.state.activeStep = 3;
-                            // this.updateState();
-                            // this.fetchDataForStepThree();
-                        } else {
-                            notify.error(data.message);
-                        }
-                    });
-                break;
+
+                this.state.products_select.marketplaceAttributes.map(attribute => {
+                    this.state.basicDetails.target_location=attribute.value;
+
+                })
+                if (this.state.products_select.targetCategory!=='' && this.state.basicDetails.target_location!==''){
+                    requests
+                        .postRequest("connector/profile/set", {
+                            data: data,
+                            step: this.state.activeStep,
+                            saveInTable: true
+                        })
+                        .then(data => {
+                            if (data.success) {
+                                notify.success("Profile created succesfully");
+                                this.redirect("/panel/profiling");
+                                // notify.success('Step ' + this.state.activeStep + ' completed succesfully.');
+                                // this.state.activeStep = 3;
+                                // this.updateState();
+                                // this.fetchDataForStepThree();
+                            } else {
+                                notify.error(data.message);
+                            }
+                        });
+                    break;
+                }
+                else {
+                    notify.error("Please Fill Up All The Field");
+                }
             // case 3:
             //     data = Object.assign({}, this.state.basicDetails, this.state.products_select, { attributeMapping: this.state.targetAttributes });
             //     requests.postRequest('connector/profile/set', {data: data, saveInTable: true})
@@ -489,11 +499,13 @@ export class CreateProfile extends Component {
                         if (data.data[key].usable || !environment.isLive) {
                             hasService = true;
                             if (validateImporter(data.data[key].code)) {
-                                this.importServices.push({
-                                    label: data.data[key].code,
-                                    value: data.data[key].marketplace,
-                                    shops: data.data[key].shops
-                                });
+                                if (data.data[key].code!=='fba') {
+                                    this.importServices.push({
+                                        label: data.data[key].title,
+                                        value: data.data[key].code,
+                                        shops: data.data[key].shops
+                                    });
+                                }
                             }
                         }
                     }
@@ -1843,11 +1855,8 @@ export class CreateProfile extends Component {
         switch (this.state.activeStep) {
             case 1:
                 if (this.validateStepOne()) {
-                    console.log("this is here",this.state.array_marketpalce_imported);
 
                     for (let i = 0; i < this.state.array_marketpalce_imported.length; i++) {
-                        console.log("array wala",this.state.array_marketpalce_imported[i]);
-                        console.log("entered",this.state.basicDetails.source);
                         if (this.state.basicDetails.source === this.state.array_marketpalce_imported[i])
                         {
                             this.saveProfileData();
