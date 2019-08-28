@@ -125,7 +125,9 @@ export class Import extends Component {
 	}
 
 	renderImportProductsModal() {
-		return (
+		console.log(this.state.importProductsDetails.source);
+        console.log("qqqqq = ",this.state.importProductsDetails.source.toLowerCase());
+        return (
 			<div>
 				<Modal
 					open={this.state.showImportProducts}
@@ -192,8 +194,8 @@ export class Import extends Component {
 								{ label: "Expired Products", value: "expired" },
 								{ label: "Draft Products", value: "draft" }
 							]}
-							onChange={this.handleImportChange.bind(this, "listing_type")}
 							value={this.state.listing_type}
+							onChange={this.handleImportChange.bind(this, "listing_type")}
 						/>
 					</div>
 				);
@@ -256,9 +258,13 @@ export class Import extends Component {
 		}
 	};
 
-	handleImportChange(key, value) {
+	/*handleImportChange(key, value) {
+		console.log("value = ",value);
+		console.log("key = ",key);
 		this.state.importProductsDetails[key] = value;
 		if (key === "--Customer Action--") {
+            console.log("aaaa = ",this.state.importServicesList);
+            console.log("in if condition of key ===")
 			this.state.importerShopLists = [];
 			this.state.importProductsDetails.shop = "";
 			this.state.importProductsDetails.shop_id = "";
@@ -278,7 +284,8 @@ export class Import extends Component {
 					break;
 				}
 			}
-			if (this.state.importerShopLists.length > 0) {
+            console.log("aaaaaaaasssssssss = ",this.state.importerShopLists);
+            if (this.state.importerShopLists.length > 0) {
 				this.state.importProductsDetails.shop = this.state.importerShopLists[0].value;
 				this.state.importProductsDetails.shop_id = this.state.importerShopLists[0].shop_id;
 			}
@@ -295,7 +302,51 @@ export class Import extends Component {
 			this.state.listing_type = value;
 		}
 		this.updateState();
-	}
+	}*/
+    handleImportChange(key, value) {
+        this.state.importProductsDetails[key] = value;
+        if (key === "source") {
+            this.state.importerShopLists = [];
+            this.state.importProductsDetails.shop = "";
+            this.state.importProductsDetails.shop_id = "";
+            for (let i = 0; i < this.state.importServicesList.length; i++) {
+                if (this.state.importServicesList[i].value === value) {
+                    for (
+                        let j = 0;
+                        j < this.state.importServicesList[i].shops.length;
+                        j++
+                    ) {
+                        this.state.importerShopLists.push({
+                            label: this.state.importServicesList[i].shops[j].shop_url,
+                            value: this.state.importServicesList[i].shops[j].shop_url,
+                            shop_id: this.state.importServicesList[i].shops[j].id
+                        });
+                    }
+                    break;
+                }
+            }
+            if (this.state.importerShopLists.length > 0) {
+                this.state.importProductsDetails.shop = this.state.importerShopLists[0].value;
+                this.state.importProductsDetails.shop_id = this.state.importerShopLists[0].shop_id;
+            }
+        } else if (key === "shop") {
+            for (let i = 0; i < this.state.importerShopLists.length; i++) {
+                if (this.state.importerShopLists[i].value === value) {
+                    this.state.importProductsDetails.shop_id = this.state.importerShopLists[
+                        i
+                        ].shop_id;
+                    break;
+                }
+            }
+        } else if (key === "listing_type") {
+            this.state.listing_type = value;
+        } else if (key === "affiliate_type") {
+            this.state.affiliate.type = value;
+        } else if (key === "affiliate_value") {
+            this.state.affiliate.value = value;
+        }
+        this.updateState();
+    }
 
 	importProducts() {
 		let sendData = {

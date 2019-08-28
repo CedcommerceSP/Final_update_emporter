@@ -14,7 +14,8 @@ import {
     TextContainer,
     Tabs,
     Banner,
-    Badge
+    Badge,
+    Button
 } from "@shopify/polaris";
 
 import {requests} from "../../../services/request";
@@ -24,6 +25,7 @@ import SmartDataTable from "../../../shared/smartTable";
 
 import {paginationShow} from "./static-functions";
 export class FbaOrder extends Component {
+    customButton = ["button_order"]; // button
     columnTitles = {
         shopify_order: {
             title: "Shopify Order",
@@ -44,6 +46,13 @@ export class FbaOrder extends Component {
             title: "Amazon order status",
             sortable: false
         },
+        button_order: {
+            title: "Create Order on FBA",
+            label: "Create", // button Label
+            id: "button_order",
+            sortable: false
+        }
+
     };
     gridSettings = {
         count: "10",
@@ -54,7 +63,9 @@ export class FbaOrder extends Component {
         "created_at",
         "order_status_shopify",
         "amazon_order_status",
+        "button_order"
     ];
+
 
     constructor(props) {
         super(props);
@@ -63,9 +74,12 @@ export class FbaOrder extends Component {
             order: [],
             selectedProducts: [],
             single_column_filter: [],
+            button_create_disable: false,
+            create_button_loader: false
 
         }
         this.getOrders();
+        this.checkingOrderManuallyCreate();
     }
 
     getOrders = () => {
@@ -105,6 +119,19 @@ export class FbaOrder extends Component {
             });
     };
 
+    createOrderOnFba(ordername) {
+        console.log("hahahaha");
+        console.log(ordername);
+        requests.postRequest('fba/test/manuallyOrderCreateButtonHit', {data: ordername}, false, true).then(response1 => {
+            if (response1.success) {
+                notify.success(response1.message)
+            }
+            else {
+                notify.error(response1.message)
+            }
+        });
+    }
+
 
     modifyProductsData(data, product_grid_collapsible) {
         this.setState({
@@ -140,7 +167,8 @@ export class FbaOrder extends Component {
                             <React.Fragment>
                                 <Badge status="info">Refunded</Badge>
                             </React.Fragment>
-                        );}
+                        );
+                    }
 
 
                     else {
@@ -159,13 +187,13 @@ export class FbaOrder extends Component {
                             </React.Fragment>
                         );
                     }
-                        else if (data[i]["processing_status"] === "Fulfilled") {
-                            rowData["amazon_order_status"] = (
-                                <React.Fragment>
-                                    <Badge status="success">Complete</Badge>
-                                </React.Fragment>
-                            );
-                        }
+                    else if (data[i]["processing_status"] === "Fulfilled") {
+                        rowData["amazon_order_status"] = (
+                            <React.Fragment>
+                                <Badge status="success">Complete</Badge>
+                            </React.Fragment>
+                        );
+                    }
                     else if (data[i]['processing_status'] === "Pending") {
                         rowData["amazon_order_status"] = (
                             <React.Fragment>
@@ -173,25 +201,32 @@ export class FbaOrder extends Component {
                             </React.Fragment>
                         );
                     }
-                    else if (data[i]['processing_status'] === "Denied"){
+                    else if (data[i]['processing_status'] === "Denied") {
                         rowData["amazon_order_status"] = (
                             <React.Fragment>
                                 <Badge status="warning">Denied</Badge>
                             </React.Fragment>
                         );
                     }
-                    else if ( data[i]['processing_status'] === 'CANCELLED By Fba' || data[i]['processing_status'] === 'Cancelled'
-                    || data[i]['processing_status'] === 'Canceled'){
+                    else if (data[i]['processing_status'] === 'CANCELLED By Fba' || data[i]['processing_status'] === 'Cancelled'
+                        || data[i]['processing_status'] === 'Canceled') {
                         rowData["amazon_order_status"] = (
                             <React.Fragment>
                                 <Badge status="warning">Cancelled</Badge>
                             </React.Fragment>
                         );
                     }
-                    else if ( data[i]['processing_status'] === 'COMPLETE_PARTIALLED'){
+                    else if (data[i]['processing_status'] === 'COMPLETE_PARTIALLED') {
                         rowData["amazon_order_status"] = (
                             <React.Fragment>
                                 <Badge status="warning">Cancelled</Badge>
+                            </React.Fragment>
+                        );
+                    }
+                    else if (data[i]['processing_status'] === 'not yet created') {
+                        rowData["amazon_order_status"] = (
+                            <React.Fragment>
+                                <Badge status="info">Not Yet Created</Badge>
                             </React.Fragment>
                         );
                     }
@@ -202,12 +237,65 @@ export class FbaOrder extends Component {
                             </React.Fragment>
                         );
                     }
+
+                }
+                if (data[i]['processing_status'] === 'not yet created') {
+                    console.log("innnnnnnnnnnnnnn");
+                    str = <Button
+                        disabled={false}
+                        primary
+                        onClick={() => {
+                            this.createOrderOnFba(data[i]['shopify_order_name']);
+                        }}
+                    >
+                        Create
+                    </Button>
+                    rowData["button_order"] = str;
+                }
+                else {
+                    console.log("ourtttt");
+                    str = <Button
+                        disabled={true}
+                        primary
+                        onClick={() => {
+                            this.createOrderOnFba(data[i]['shopify_order_name']);
+                        }}
+                    >
+                        Create
+                    </Button>
+                    rowData["button_order"] = str;
                 }
             }
 
             products.push(rowData);
         }
         return products;
+    }
+
+    operations(event, id) {
+        switch (id) {
+            case "button_order":
+                console.log("hitted created")
+                break;
+            default:
+                console.log("Default Case");
+        }
+    }
+
+    checkingOrderManuallyCreate() {
+        requests
+            .getRequest("fba/test/toBeCreateOrderManually")
+            .then(data => {
+                if (data.success) {
+                    console.log("yes it is yes");
+                    console.log("settings", data.data[0]['value']);
+                    if (data.data[0]['value'] === "no") {
+                        this.setState({
+                            button_create_disable: true
+                        })
+                    }
+                }
+            });
     }
 
     /*    handleToggleClick = product_grid_collapsible => {
@@ -253,6 +341,7 @@ export class FbaOrder extends Component {
                                     activePage={this.gridSettings.activePage}
                                     hideFilters={this.hideFilters}
                                     columnTitles={this.columnTitles}
+                                    customButton={this.customButton} // button
                                     //marketplace={this.filters.marketplace}
                                     // multiSelect={true}
                                     operations={this.operations} //button
@@ -313,31 +402,31 @@ export class FbaOrder extends Component {
                                         }
                                         this.setState({selectedProducts: data});
                                     }}
-/*                                    massAction={event => {
-                                        switch (event) {
-                                            case "upload":
-                                                this.state.selectedProducts.length > 0
-                                                    ? this.handleSelectedUpload("profile")
-                                                    : notify.info("No Product Selected");
-                                                break;
-                                            default:
-                                                console.log(event, this.state.selectedProducts);
-                                        }
-                                    }}
-                                    editRow={row => {
-                                        this.redirect("/panel/products/edit/" + row.id);
-                                    }}
-                                    deleteRow={row => {
-                                        this.state.toDeleteRow = row;
-                                        this.state.deleteProductData = true;
-                                        const state = this.state;
-                                        this.setState(state);
-                                    }}
-                                    columnFilters={filters => {
-                                        this.filters.column_filters = filters;
-                                        this.getProducts();
-                                    }}
-                                      singleButtonColumnFilter={filter => {
+                                    /*                                    massAction={event => {
+                                     switch (event) {
+                                     case "upload":
+                                     this.state.selectedProducts.length > 0
+                                     ? this.handleSelectedUpload("profile")
+                                     : notify.info("No Product Selected");
+                                     break;
+                                     default:
+                                     console.log(event, this.state.selectedProducts);
+                                     }
+                                     }}
+                                     editRow={row => {
+                                     this.redirect("/panel/products/edit/" + row.id);
+                                     }}
+                                     deleteRow={row => {
+                                     this.state.toDeleteRow = row;
+                                     this.state.deleteProductData = true;
+                                     const state = this.state;
+                                     this.setState(state);
+                                     }}
+                                     columnFilters={filters => {
+                                     this.filters.column_filters = filters;
+                                     this.getProducts();
+                                     }}
+                                     singleButtonColumnFilter={filter => {
                                      this.filters.single_column_filter = filter;
                                      this.getProducts();
                                      }}*/
