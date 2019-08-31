@@ -66,8 +66,8 @@ export function validateImporter(code) {
 	return !(
 		code === "product_sync" ||
 		code === "product_import" ||
-		code === "shopify_importer" ||
-		code === "fileimporter"
+		code === "shopify_importer"
+		// code === "fileimporter"
 	);
 }
 

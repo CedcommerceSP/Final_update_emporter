@@ -633,7 +633,8 @@ export class Products extends Component {
 	}
 
 	render() {
-		return (
+        console.log(this.state.single_column_filter);
+        return (
 			<Page
 				primaryAction={{
 					content: "Create Profile",

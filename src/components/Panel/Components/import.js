@@ -81,6 +81,7 @@ export class Import extends Component {
 					this.state.importServicesList = [];
 					for (let i = 0; i < Object.keys(data.data).length; i++) {
 						let key = Object.keys(data.data)[i];
+						console.log("key = ",  key)
 						if (data.data[key].usable || !environment.isLive) {
 							if (validateImporter(data.data[key].code)) {
 								if (data.data[key].code !== 'fba'&& data.data[key].code !== 'ebayaffiliate') {
@@ -122,6 +123,7 @@ export class Import extends Component {
 					notify.error(data.message);
 				}
 			});
+		console.log("hello",this.state.uploadServicesList);
 	}
 
 	renderImportProductsModal() {
