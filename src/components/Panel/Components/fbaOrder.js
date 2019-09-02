@@ -31,6 +31,10 @@ export class FbaOrder extends Component {
         single_column_filter: [],
         column_filters: {}
     };
+    gridSettings = {
+        count: "20",
+        activePage: 1
+    };
     customButton = ["button_order"]; // button
     columnTitles = {
         shopify_order_name: {
@@ -71,26 +75,41 @@ export class FbaOrder extends Component {
         "processing_status",
         "button_order"
     ];
+    pageLimits = [
+        { label: 10, value: "10" },
+        { label: 20, value: "20" },
+        { label: 30, value: "30" },
+        { label: 40, value: "40" },
+        { label: 50, value: "50" },
+        { label: 500, value: "500" },
+        { label: 2000, value: "2000 *(Slow)" },
+    ];
 
-    /*predefineFilters = [
-        { label: "Title", value: "title", type: "string", special_case: "no" },
-        { label: "SKU", value: "sku", type: "string", special_case: "no" },
-        { label: "Price", value: "price", type: "int", special_case: "no" },
-        { label: "Quantity", value: "quantity", type: "int", special_case: "no" },
-        { label:"Type", value:"type", type:"type", special_case:"yes"},
+    predefineFilters = [
+     { label: "Shopify Order", value: "shopify_order_name", type: "string", special_case: "no" },
+     /*{ label: "SKU", value: "sku", type: "string", special_case: "no" },
+     { label: "Price", value: "price", type: "int", special_case: "no" },
+     { label: "Quantity", value: "quantity", type: "int", special_case: "no" },
+     { label:"Type", value:"type", type:"type", special_case:"yes"},*/
+     {
+     label: "Created at",
+     value: "created_at",
+     type: "string",
+     special_case: "yes"
+     },
+     {
+     label: "Order Status shopify",
+     value: "financial_status",
+     type: "financial_status",
+     special_case: "yes"
+     },
         {
-            label: "Date Picker",
-            value: "datePicker",
-            type: "date-picker",
-            special_case: "yes"
-        },
-        {
-            label: "Status",
-            value: "uploaded",
-            type: "uploaded",
+            label: "Amazon order status",
+            value: "processing_status",
+            type: "processing_status",
             special_case: "yes"
         }
-    ];*/
+     ];
     constructor(props) {
         super(props);
         this.state = {
@@ -100,7 +119,7 @@ export class FbaOrder extends Component {
             single_column_filter: [],
             button_create_disable: false,
             create_button_loader: false,
-            appliedFilters:{}
+            appliedFilters: {}
 
         }
         this.getOrders();
@@ -126,7 +145,7 @@ export class FbaOrder extends Component {
                     "filter[" + e.name + "][" + e.condition + "]"
                         ] = e.value;
                     break;
-                }
+            }
         });
         for (let i = 0; i < Object.keys(this.filters.column_filters).length; i++) {
             const key = Object.keys(this.filters.column_filters)[i];
@@ -135,29 +154,7 @@ export class FbaOrder extends Component {
                     case "shopify_order_name":
                     case "created_at":
                     case "financial_status":
-                        /*this.state.appliedFilters[
-                        "filter[details." +
-                        key +
-                        "][" +
-                        this.filters.column_filters[key].operator +
-                        "]"
-                            ] = this.filters.column_filters[key].value;
-                        break;*/
                     case "processing_status":
-                    /*case "sku":
-                    case "price":
-                    case "weight":
-                    case "weight_unit":
-                    case "main_image":
-                    case "quantity":
-                        this.state.appliedFilters[
-                        "filter[variants." +
-                        key +
-                        "][" +
-                        this.filters.column_filters[key].operator +
-                        "]"
-                            ] = this.filters.column_filters[key].value;
-                        break;*/
                 }
             }
         }
@@ -165,11 +162,10 @@ export class FbaOrder extends Component {
     }
 
     getOrders = () => {
-        console.log("hello000000000",this.state.appliedFilters);
         this.prepareFilterObject();
-        // const pageSettings = Object.assign({}, this.gridSettings);
+        const pageSettings = Object.assign({}, this.gridSettings);
         requests
-            .getRequest("fba/test/cronHitting",Object.assign(this.state.appliedFilters),
+            .getRequest("fba/test/cronHitting", Object.assign(pageSettings,this.state.appliedFilters),
                 false,
                 true)
             .then(data => {
@@ -186,8 +182,12 @@ export class FbaOrder extends Component {
                     this.state["order"] = order;
                     this.state.showLoaderBar = !data.success;
                     this.state.hideLoader = data.success;
-                    this.state.pagination_show = data.data.count;
-                    ;
+                    this.state.pagination_show = paginationShow(
+                        this.gridSettings.activePage,
+                        this.gridSettings.count,
+                        data.data.count,
+                        true
+                    );
                     this.updateState();
                 } else {
                     this.setState({
@@ -247,6 +247,13 @@ export class FbaOrder extends Component {
                         );
                     }
                     else if (data[i]["financial_status"] === "refunded") {
+                        rowData["financial_status"] = (
+                            <React.Fragment>
+                                <Badge status="info">Refunded</Badge>
+                            </React.Fragment>
+                        );
+                    }
+                    else if (data[i]["financial_status"] === "partially_refunded") {
                         rowData["financial_status"] = (
                             <React.Fragment>
                                 <Badge status="info">Refunded</Badge>
@@ -354,13 +361,30 @@ export class FbaOrder extends Component {
         return products;
     }
 
-    operations(event, id) {
+ /*   operations(event, id) {
         switch (id) {
             case "button_order":
                 break;
             default:
         }
-    }
+    }*/
+
+    operations = (event, id) => {
+        switch (id) {
+            case "grid":
+                let parent_props = {
+                    gridSettings: this.gridSettings,
+                    filters: this.filters,
+                    position: this.state.selectedApp
+                };
+                this.redirect("/panel/products/view/" + event["source_variant_id"], {
+                    parent_props: parent_props
+                });
+                break;
+            default:
+                console.log("Default Case");
+        }
+    };
 
     checkingOrderManuallyCreate() {
         requests
@@ -376,6 +400,15 @@ export class FbaOrder extends Component {
             });
     }
 
+    /*manageStateChange = old_state => {
+        this.filters = Object.assign({}, old_state["filters"]);
+        this.gridSettings = Object.assign({}, old_state["gridSettings"]);
+        this.state.selectedApp = old_state["position"];
+        this.props.location.state = undefined;
+        this.updateState();
+        this.prepareHeader(this.props);
+    };*/
+
     /*    handleToggleClick = product_grid_collapsible => {
      if (this.state.product_grid_collapsible === product_grid_collapsible) {
      this.setState({ product_grid_collapsible: "" });
@@ -390,29 +423,17 @@ export class FbaOrder extends Component {
      };*/
 
     render() {
-        console.log(this.filters.single_column_filter);
-        console.log(this.state.appliedFilters);
         return (
             <Page title="FBA Orders">
                 <Card>
                     <div className="p-5">
                         <div className="row">
                             <div className="col-12 p-3 text-right">
-                                <Label>{this.state.pagination_show} Orders</Label>
+                                {/*<Label>{this.state.totalMainCount && Object.keys(this.filters.column_filters).length <= 0?`Total Main Orders : ${this.state.totalMainCount}`:''}</Label>
+                                <Label>{`Active Page : ${this.gridSettings.activePage}`}</Label>*/}
+                                <Label>{this.state.pagination_show} products</Label>
                             </div>
                             <div className="col-12">
-                                {/*    <SmartDataTable
-                                 data={this.state.order}
-                                 columnTitles={this.columnTitles}
-                                 visibleColumns={this.visibleColumns}
-                                 getVisibleColumns={event => {
-                                 this.visibleColumns = event;
-                                 }}
-                                 columnFilters={filters => {
-                                 this.filters.column_filters = filters;
-                                 this.getOrders();
-                                 }}
-                                 />*/}
                                 <SmartDataTable
                                     data={this.state.order}
                                     uniqueKey="shopify_order_name"
@@ -491,7 +512,7 @@ export class FbaOrder extends Component {
                                         this.getOrders();
                                     }}
 
-                                    /*                                    massAction={event => {
+                                    /*massAction={event => {
                                      switch (event) {
                                      case "upload":
                                      this.state.selectedProducts.length > 0
@@ -523,10 +544,56 @@ export class FbaOrder extends Component {
                                 />
                             </div>
                         </div>
+                        <div className="row mt-3">
+                            <div className="col-6 text-right">
+                                <Pagination
+                                    hasPrevious={1 < this.gridSettings.activePage}
+                                    onPrevious={() => {
+                                        if (1 < this.gridSettings.activePage) {
+                                            this.gridSettings.activePage--;
+                                            this.getOrders();
+                                        }
+                                    }}
+                                    hasNext={
+                                        this.state.totalPage / this.gridSettings.count >
+                                        this.gridSettings.activePage
+                                    }
+                                    nextKeys={[39]}
+                                    previousKeys={[37]}
+                                    previousTooltip="use Right Arrow"
+                                    nextTooltip="use Left Arrow"
+                                    onNext={() => {
+                                        if (
+                                            this.state.totalPage / this.gridSettings.count >
+                                            this.gridSettings.activePage
+                                        ) {
+                                            this.gridSettings.activePage++;
+                                            this.getOrders();
+                                        }
+                                    }}
+                                />
+                            </div>
+                            <div className="col-md-2 col-sm-2 col-6">
+                                <Select
+                                    options={this.pageLimits}
+                                    value={this.gridSettings.count}
+                                    onChange={this.pageSettingsChange.bind(this)}
+                                    label={""}
+                                    labelHidden={true}
+                                />
+                            </div>
+                        </div>
+
                     </div>
                 </Card>
             </Page>
         )
+    }
+
+    pageSettingsChange(event) {
+        this.gridSettings.count = event;
+        this.gridSettings.activePage = 1;
+        this.getOrders();
     }
 
     updateState() {

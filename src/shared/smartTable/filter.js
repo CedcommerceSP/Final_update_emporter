@@ -223,7 +223,57 @@ class Filter extends Component {
 								}}
 						/>
 					</React.Fragment>
-				)
+				);
+            case "financial_status":
+                return(
+					<React.Fragment>
+						<Select
+							label="Select Shopify Status"
+							options={[
+                                {label:"Paid",value:"paid"},
+                                {label:"Unpaid",value:"unpaid"},
+                                {label:"Refunded",value:"refunded"}
+                            ]}
+							placeholder="Choose"
+							value={this.state.columnFilterNameValue.value}
+							onChange={
+                                e=>{
+                                    let columnFilterNameValue = this.state.columnFilterNameValue;
+                                    columnFilterNameValue.condition = "3";
+                                    columnFilterNameValue.value = e;
+                                    this.setState({
+                                        columnFilterNameValue:columnFilterNameValue
+                                    });
+                                }}
+						/>
+					</React.Fragment>
+                );
+            case "processing_status":
+                return(
+					<React.Fragment>
+						<Select
+							label="Select FBA Status"
+							options={[
+                                {label:"Complete",value:"Fulfilled"},
+                                {label:"Cancelled",value:"Cancelled"},
+                                {label:"Processing",value:"Processing"},
+                                {label:"Pending",value:"Pending"},
+
+                            ]}
+							placeholder="Choose"
+							value={this.state.columnFilterNameValue.value}
+							onChange={
+                                e=>{
+                                    let columnFilterNameValue = this.state.columnFilterNameValue;
+                                    columnFilterNameValue.condition = "3";
+                                    columnFilterNameValue.value = e;
+                                    this.setState({
+                                        columnFilterNameValue:columnFilterNameValue
+                                    });
+                                }}
+						/>
+					</React.Fragment>
+                )
 			default:
 				let val = this.state.columnFilterNameValue;
 				val.special_case = "no";

@@ -342,6 +342,13 @@ class RenderSearchGrid extends Component {
             label:'Import',
             id : 'import',
             type: 'button',
+        },
+        productUrl:{
+            title:'Product URL',
+            sortable:false,
+            label:'Show',
+            id:'productUrl',
+            type:'button'
         }
     };
     visibleColumns = [
@@ -349,7 +356,8 @@ class RenderSearchGrid extends Component {
         'product_title',
         'global_id',
         'price',
-        'import'
+        'import',
+        'productUrl'
     ];
     gridSettings = {
         count: '10',
@@ -393,9 +401,19 @@ class RenderSearchGrid extends Component {
             case 'import' : 
             let sendData = {'itemID' : data['itemId']};
             this.importProducts(sendData);break;
+            case 'productUrl':
+                window.open(event);
             default :  console.log(event,  id,data);
         }
     };
+
+    redirect(url, data) {
+        if (!isUndefined(data)) {
+            this.props.history.push(url, JSON.parse(JSON.stringify(data)));
+        } else {
+            this.props.history.push(url);
+        }
+    }
 
     importProducts = (sendData) => {
         if ( !isEmpty(this.state.filter.select_country) ) {
@@ -524,7 +542,11 @@ class RenderSearchGrid extends Component {
 
                                  // this.handleSelectedUpload('profile')
                                 break;
-                            default:
+                                case 'productUrl':
+                                    window.open(event['productUrl'])
+                                    console.log("abcd = ",event['productUrl']);
+                                    break;
+                             default:
                                 console.log(event, this.state.selectedProducts);
                         }
                     }}
@@ -674,6 +696,7 @@ class RenderSearchGrid extends Component {
                 rowData['price'] = data[i]['sellingStatus']['convertedCurrentPrice']['_value'];
                 rowData['selling_status'] = data[i]['sellingStatus']['sellingState'];
                 rowData['import'] =  'Import';
+                rowData['productUrl'] = data[i]['viewItemURL'];
             }
             products.push(rowData);
         }
