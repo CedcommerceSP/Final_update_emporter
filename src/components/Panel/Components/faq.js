@@ -37,7 +37,7 @@ class FAQPage extends Component {
                             <ol>
                                 <li>Go to Import/Upload section.</li>
                                 <li>Click on Import Product. All the products will be listed on the app. You can see the
-                                products in the Product section.</li>
+                                    products in the Product section.</li>
                                 <li>Then you can select and upload or bulk upload, depending on the seller’s requirement.</li>
                             </ol>
                         </React.Fragment>
@@ -48,15 +48,21 @@ class FAQPage extends Component {
                     id: 2,
                     show: false, // for collapse div
                     search: true, // for search, if false then hide the div
-                    ques: "If I changed any field like title or description then, how can I update my product information on Shopify?",
+                    ques: "How to make products uploaded through Profiling?",
                     ans: (
                         <React.Fragment>
+                            <p>
+                                To create a profile, follow the steps:
+                            </p>
                             <ol>
-                                <li>Go to the Settings section on the app.</li>
-                                <li>In Shopify settings, enable the manual sync, and select the fields you want to update.
-                                Save the changes.</li>
-                                <li>Now, again import and upload the products from Import/Upload section.</li>
-
+                                <li>Go to PROFILING Section.</li>
+                                <li>Click on CREATE PROFILE.</li>
+                                <li>Enter a profile name and select the source.</li>
+                                <li>Now, click - <b>save and move to the next step.</b></li>
+                                <li>Select the Target Location and Category.</li>
+                                <li>Select the attributes, enter the filter value and click CREATE PROFILE.
+                                    Then go to Import/Upload section.</li>
+                                <li>Click on Upload products and select the Custom Profile.</li>
                             </ol>
                         </React.Fragment>
                     )
@@ -133,7 +139,7 @@ class FAQPage extends Component {
                             <ol>
                                 <li>Go to the <b>Accounts</b> section.</li>
                                 <li>Click on the <b>Link your Account</b> button in the Amazon section and enter the correct
-                                credentials to connect to the app.</li>
+                                    credentials to connect to the app.</li>
                                 <br/>
                                 For further assistance, you can see the HELP PDF option.
                             </ol>
@@ -157,7 +163,7 @@ class FAQPage extends Component {
                                 <li>Go to Accounts section</li>
                                 <li>Click Reconnect.</li>
                                 <li>Select the country(where your Amazon account is)
-                                Enter your details like Seller Id and Token etc.</li>
+                                    Enter your details like Seller Id and Token etc.</li>
                                 <li>Click on submit button.</li>
                                 <br/>
                                 For further assistance, you can see the HELP PDF option while connecting your Account.
@@ -205,7 +211,7 @@ class FAQPage extends Component {
                                 <li>Enter Product source</li>
                                 <li>Select the Target house (warehouse)</li>
                                 <li>Select attribute on which basis you want to create a profile
-                                Now, from the Import/Upload section, upload products by choosing the Custom profile.</li>
+                                    Now, from the Import/Upload section, upload products by choosing the Custom profile.</li>
                             </ol>
                         </React.Fragment>
                     )
@@ -257,7 +263,7 @@ class FAQPage extends Component {
                                 <li>Enter the correct credentials, click on Submit Button, your account will be
                                     automatically connected to your Amazon marketplace.</li>
                             </ol>
-                                <b>For further assistance, you can see the HELP PDF option.</b>
+                            <b>For further assistance, you can see the HELP PDF option.</b>
                         </React.Fragment>
                     )
                 },
@@ -266,23 +272,22 @@ class FAQPage extends Component {
                     id: 12,
                     show: false, // for collapse div
                     search: true, // for search, if false then hide the div
-                    ques: "What to do while getting the error Failed to import from eBay. Account not Found!",
+                    ques: "Can I upload selected products on Shopify?",
                     ans: (
                         <React.Fragment>
                             <p>
-                                This error means wrong credentials entered, to fix this, you should try to reconnect
-                                your eBay account. To reconnect your account, follow the steps given below:
+                                Yes, you can upload selected products on Shopify by following the steps given below:
                             </p>
                             <ol>
-                                <li>Go to the Accounts section.</li>
-                                <li>Select the country.</li>
-                                <li>Click Reconnect.</li>
-                                <li>Enter the Credentials and get connected to the app.</li>
+                                <li>Go to the Products section.</li>
+                                <li>Select the products you want to upload( you can apply various filters such as- SKU,
+                                    title, price, and quantity).</li>
+                                <li>After selecting, click on ACTIONS and select Upload.</li>
+                                <li>Selected products will be uploaded on Shopify.</li>
                             </ol>
                         </React.Fragment>
                     )
                 },
-
 
                 {
                     id: 13,
@@ -298,11 +303,11 @@ class FAQPage extends Component {
                                 kindly re-connect your Walmart account by following the steps:
                                 <br/>
                                 <ol>
-                                <li>Go to the Accounts section.</li>
-                                <li>Go to Walmart marketplace and click on reconnect option.</li>
-                                <li>Enter the correct credentials, click on Submit Button, your app panel will be
-                                automatically connected to your Walmart marketplace.</li>
-                                <li>For further assistance, you can see the HELP PDF option.</li>
+                                    <li>Go to the Accounts section.</li>
+                                    <li>Go to Walmart marketplace and click on reconnect option.</li>
+                                    <li>Enter the correct credentials, click on Submit Button, your app panel will be
+                                        automatically connected to your Walmart marketplace.</li>
+                                    <li>For further assistance, you can see the HELP PDF option.</li>
                                 </ol>
 
                                 <b>CASE 2:</b> Please try again later, it may be happening because we didn’t get a proper
@@ -357,6 +362,105 @@ class FAQPage extends Component {
                     id: 16,
                     show: false, // for collapse div
                     search: true, // for search, if false then hide the div
+                    ques: "How to manually create your Shopify orders on FBA?",
+                    ans: (
+                        <React.Fragment>
+                            <p>
+                                Go to the Settings section, and follow these steps:
+                            </p>
+                            <ol>
+                                <li>Go to the FBA settings.</li>
+                                <li>Go to the option "Want to create order manually"</li>
+                                <li>Click on it.</li>
+                                <li>Select the option '"YES".</li>
+                                <li>Now go to FBA section of the app</li>
+                                <li>Click "Create" for the orders you want to create manually</li>
+                            </ol>
+                            <b>Now, your selected orders are created on FBA.</b>
+                        </React.Fragment>
+                    )
+                },
+
+
+
+                {
+                    id: 17,
+                    show: false, // for collapse div
+                    search: true, // for search, if false then hide the div
+                    ques: "Will, my inventory gets synced from Marketplace (like Walmart,eBay, Etsy, Amazon or Wish) to Shopify store?",
+                    ans: (
+                        <React.Fragment>
+                            <p>
+                                Yes, you can sync your inventory from marketplace to Shopify. For this, you need to
+                                choose the monthly plans as per your no.of products.
+                            </p>
+                        </React.Fragment>
+                    )
+                },
+
+
+                {
+                    id: 18,
+                    show: false, // for collapse div
+                    search: true, // for search, if false then hide the div
+                    ques: "If I changed any field like title or description then, how can I update my product information on Shopify?",
+                    ans: (
+                        <React.Fragment>
+                            <ol>
+                                <li>Go to the Settings section on the app.</li>
+                                <li>In Shopify settings, enable the manual sync, and select the fields you want to update.
+                                    Save the changes.</li>
+                                <li>Now, again import and upload the products from Import/Upload section.</li>
+
+                            </ol>
+                        </React.Fragment>
+                    )
+                },
+
+                {
+                    id: 19,
+                    show: false, // for collapse div
+                    search: true, // for search, if false then hide the div
+                    ques: "What to do while getting the error Failed to import from eBay. Account not Found!",
+                    ans: (
+                        <React.Fragment>
+                            <p>
+                                This error means wrong credentials entered, to fix this, you should try to reconnect
+                                your eBay account. To reconnect your account, follow the steps given below:
+                            </p>
+                            <ol>
+                                <li>Go to the Accounts section.</li>
+                                <li>Select the country.</li>
+                                <li>Click Reconnect.</li>
+                                <li>Enter the Credentials and get connected to the app.</li>
+                            </ol>
+                        </React.Fragment>
+                    )
+                },
+
+                {
+                    id: 20,
+                    show: false, // for collapse div
+                    search: true, // for search, if false then hide the div
+                    ques: "How to map your Shopify shipping speed category with the FBA shipping speed category?",
+                    ans: (
+                        <React.Fragment>
+                            <p>
+                                Go to the Settings section of the app, and follow the steps:
+                            </p>
+                            <ol>
+                                <li>Go to the FBA section.</li>
+                                <li>Click on the "Manage Shipping Speed Categpry".</li>
+                                <li>And map the Shopify and FBA shipping categories.</li>
+                            </ol>
+                        </React.Fragment>
+                    )
+                },
+
+                {
+                    id: 21,
+                    show: false, // for collapse div
+                    search: true, // for search, if false then hide the div
                     ques: "What is profiling?",
                     ans: (
                         <React.Fragment>
@@ -375,67 +479,12 @@ class FAQPage extends Component {
                     )
                 },
 
-                {
-                    id: 17,
-                    show: false, // for collapse div
-                    search: true, // for search, if false then hide the div
-                    ques: "Can I upload selected products on Shopify?",
-                    ans: (
-                        <React.Fragment>
-                            <p>
-                                Yes, you can upload selected products on Shopify by following the steps given below:
-                            </p>
-                            <ol>
-                                <li>Go to the Products section.</li>
-                                <li>Select the products you want to upload( you can apply various filters such as- SKU,
-                                title, price, and quantity).</li>
-                                <li>After selecting, click on ACTIONS and select Upload.</li>
-                                <li>Selected products will be uploaded on Shopify.</li>
-                            </ol>
-                        </React.Fragment>
-                    )
-                },
 
 
-                {
-                    id: 18,
-                    show: false, // for collapse div
-                    search: true, // for search, if false then hide the div
-                    ques: "How to make products uploaded through Profiling?",
-                    ans: (
-                        <React.Fragment>
-                            <p>
-                                To create a profile, follow the steps:
-                            </p>
-                            <ol>
-                                <li>Go to PROFILING Section.</li>
-                                <li>Click on CREATE PROFILE.</li>
-                                <li>Enter a profile name and select the source.</li>
-                                <li>Now, click - <b>save and move to the next step.</b></li>
-                                <li>Select the Target Location and Category.</li>
-                                <li>Select the attributes, enter the filter value and click CREATE PROFILE.
-                                    Then go to Import/Upload section.</li>
-                                <li>Click on Upload products and select the Custom Profile.</li>
-                            </ol>
-                        </React.Fragment>
-                    )
-                },
 
 
-                {
-                    id: 19,
-                    show: false, // for collapse div
-                    search: true, // for search, if false then hide the div
-                    ques: "Will, my inventory gets synced from Marketplace (like Walmart,eBay, Etsy, Amazon or Wish) to Shopify store?",
-                    ans: (
-                        <React.Fragment>
-                            <p>
-                                Yes, you can sync your inventory from marketplace to Shopify. For this, you need to
-                                choose the monthly plans as per your no.of products.
-                            </p>
-                        </React.Fragment>
-                    )
-                },
+
+
 
             ]
         };
@@ -526,9 +575,11 @@ class FAQPage extends Component {
                                             </Banner>
                                         </div>
                                         <Collapsible open={data.show} id={data.id}>
-                                            <Banner title="Answer" status="info">
-                                                <h4>{data.ans}</h4>
-                                            </Banner>
+                                            <div className="p-3">
+                                                <Banner title="Answer" status="info">
+                                                    <h4>{data.ans}</h4>
+                                                </Banner>
+                                            </div>
                                         </Collapsible>
                                     </div>
                                 ) : null}
@@ -642,7 +693,6 @@ class FAQPage extends Component {
             </Page>
         );
     }
-
     handleToggleClick = event => {
         let data = this.state.faq;
         data.forEach(key => {
@@ -654,16 +704,13 @@ class FAQPage extends Component {
             faq: data
         });
     };
-
     modalOpen() {
         this.setState({
             modal: !this.state.modal
         });
     }
-
     redirect(url) {
         this.props.history.push(url);
     }
 }
-
 export default FAQPage;

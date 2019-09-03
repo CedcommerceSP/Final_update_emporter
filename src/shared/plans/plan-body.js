@@ -15,7 +15,8 @@ import {
     DisplayText,
     Collapsible,
     Banner,
-    Page
+    Page,
+    FormLayout
 } from "@shopify/polaris";
 import {isUndefined} from "util";
 
@@ -428,11 +429,11 @@ class PlanBody extends Component {
                             </Banner>
                         </div>
                         <Page>
-                            <Stack>
                                 <Collapsible open={this.state.sync_plan}
                                              ariaExpanded={this.state.sync_plan}
                                 >
-                                    <Stack vertical={false}>
+                                    <FormLayout>
+                                        <FormLayout.Group condensed>
                                         {this.state.data.map((data, index) => {
                                             if (data.title !== "FBA") {
                                                 return (
@@ -777,9 +778,9 @@ class PlanBody extends Component {
                                              );*/
 
                                         })}
-                                    </Stack>
+                                        </FormLayout.Group>
+                                    </FormLayout>
                                 </Collapsible>
-                            </Stack>
                         </Page>
                     </div>
                     <div className="col-12 mb-2">

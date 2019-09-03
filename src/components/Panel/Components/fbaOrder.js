@@ -48,12 +48,12 @@ export class FbaOrder extends Component {
             type: "string"
         },
         financial_status: {
-            title: "Order Status shopify",
+            title: "Shopify Order Status",
             type: "string",
             sortable: false
         },
         processing_status: {
-            title: "Amazon order status",
+            title: "Amazon Order Status",
             sortable: false
         },
         button_order: {
@@ -91,12 +91,12 @@ export class FbaOrder extends Component {
      { label: "Price", value: "price", type: "int", special_case: "no" },
      { label: "Quantity", value: "quantity", type: "int", special_case: "no" },
      { label:"Type", value:"type", type:"type", special_case:"yes"},*/
-     {
+     /*{
      label: "Created at",
      value: "created_at",
      type: "string",
      special_case: "yes"
-     },
+     },*/
      {
      label: "Order Status shopify",
      value: "financial_status",
@@ -167,7 +167,7 @@ export class FbaOrder extends Component {
         requests
             .getRequest("fba/test/cronHitting", Object.assign(pageSettings,this.state.appliedFilters),
                 false,
-                true)
+                false)
             .then(data => {
                 if (data.success) {
                     window.showGridLoader = false;
@@ -206,7 +206,7 @@ export class FbaOrder extends Component {
     };
 
     createOrderOnFba(ordername) {
-        requests.postRequest('fba/test/manuallyOrderCreateButtonHit', {data: ordername}, false, true).then(response1 => {
+        requests.postRequest('fba/test/manuallyOrderCreateButtonHit', {data: ordername}, false, false).then(response1 => {
             if (response1.success) {
                 notify.success(response1.message)
             }

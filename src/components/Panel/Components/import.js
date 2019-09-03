@@ -36,6 +36,7 @@ export class Import extends Component {
 			importerShopLists: [],
 			uploadServicesList: [],
 			uploaderShopLists: [],
+			finalRenderImporterShopLists:[],
 			showImportProducts: false,
 			showUploadProducts: false,
 			importProductsDetails: {
@@ -84,7 +85,7 @@ export class Import extends Component {
 						console.log("key = ",  key)
 						if (data.data[key].usable || !environment.isLive) {
 							if (validateImporter(data.data[key].code)) {
-								if (data.data[key].code !== 'fba'&& data.data[key].code !== 'ebayaffiliate') {
+								if (data.data[key].code !== 'fba') {
                                     this.state.importServicesList.push({
                                         label: data.data[key].title,
                                         value: data.data[key].marketplace,
@@ -94,7 +95,13 @@ export class Import extends Component {
 							}
 						}
 					}
+					console.log("marketplace = = = ", this.state.importServicesList);
 					this.updateState();
+					for (let i = 0;i<this.state.importServicesList.length;i++){
+						if (this.state.importServicesList[i]['value'] !== 'ebayaffiliate' && this.state.importServicesList[i]['value'] !== 'fileimporter') {
+                            this.state.finalRenderImporterShopLists.push(this.state.importServicesList[i]);
+                        }
+					}
 				} else {
 					notify.error(data.message);
 				}
@@ -145,7 +152,7 @@ export class Import extends Component {
 								<Select
 									label="Import From"
 									placeholder="Marketplace"
-									options={this.state.importServicesList}
+									options={this.state.finalRenderImporterShopLists}
 									onChange={this.handleImportChange.bind(this, "source")}
 									value={this.state.importProductsDetails.source}
 								/>
