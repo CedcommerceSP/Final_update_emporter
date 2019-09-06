@@ -55,6 +55,7 @@ export class Plans extends Component {
 						<span style={{ fontSize: "40px" }}>
 							<b>Choose the best offer</b>
 						</span>
+						<hr/>
 						<h3>
 							If you already have an existing plan you can upgrade or downgrade
 							your plan

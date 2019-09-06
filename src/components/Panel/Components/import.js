@@ -767,7 +767,8 @@ export class Import extends Component {
 		let { mainTab, necessaryInfo } = this.state;
 		return (
 			<Page title="Manage Products">
-				{necessaryInfo.account_connected_array && necessaryInfo.account_connected_array.indexOf('ebayaffiliate') > -1 && <Tabs name={"hello"} selected={this.state.mainTab} tabs={[{
+				{necessaryInfo.account_connected_array && necessaryInfo.account_connected_array.indexOf('ebayaffiliate') > -1 &&
+				<Tabs name={"hello"} selected={this.state.mainTab} tabs={[{
                     id: 'Import',
                     content: 'Import',
                     accessibilityLabel: 'All',
