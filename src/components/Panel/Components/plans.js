@@ -8,7 +8,23 @@ import { globalState } from "../../../services/globalstate";
 export class Plans extends Component {
 	constructor(props) {
 		super(props);
+        this.state = {
+            necessaryInfo:{},
+		};
 	}
+    /*getProps(nextPorps) {
+        console.log("in plan",nextPorps);
+        if (nextPorps.necessaryInfo !== undefined) {
+            this.setState({ necessaryInfo: nextPorps.necessaryInfo });
+        }
+    }*/
+
+    componentWillReceiveProps(nextPorps) {
+        if (nextPorps.necessaryInfo !== undefined) {
+            this.setState({ necessaryInfo: nextPorps.necessaryInfo });
+        }
+    }
+
 	paymentStatus(event) {
 		if (event === "Confirmation") {
 			// this.setState({modalOpen: !this.state.modalOpen});
@@ -72,15 +88,17 @@ export class Plans extends Component {
 						</div>
 					</div>
 				</div>
-				<PlanBody paymentStatus={this.paymentStatus} />
+				<PlanBody {...this.props} paymentStatus={this.paymentStatus} />
 
 			</Page>
 
 		);
 	}
-	redirect(url) {
-		this.props.history.push(url);
-	}
+    redirect(url, data) {
+        if (data !== undefined) {
+            this.props.history.push(url, data);
+        } else this.props.history.push(url);
+    }
 	updateState() {
 		const state = this.state;
 		this.setState(state);

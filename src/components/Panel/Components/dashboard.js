@@ -97,6 +97,7 @@ class Dashboard extends Component {
 		};
 		this.checkStepCompleted = this.checkStepCompleted.bind(this);
 		this.autoFillDetails();
+		console.log("ND",props.necessaryInfo);
 	}
 
 	componentWillReceiveProps(nextPorps) {

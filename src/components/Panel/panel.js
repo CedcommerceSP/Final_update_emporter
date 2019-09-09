@@ -95,7 +95,7 @@ export class Panel extends Component {
     }
 
     thumbUp() {
-        console.log("thumbs up")
+        // console.log("thumbs up")
         var data = [
             {"thumb_action": 'up'},
             {"submit_review": 1},
@@ -114,7 +114,7 @@ export class Panel extends Component {
         });
     }
     thumbDown(){
-        console.log("thumbs down")
+        // console.log("thumbs down")
         this.setState({show_button_submit: true});
 
     }
@@ -149,7 +149,7 @@ export class Panel extends Component {
 
 
     forReviewNeverAgain() {
-        console.log("never ask again");
+        // console.log("never ask again");
         var data = [
             {"submit_review": 1},
             {"textbox_query": 'Clicked on Never Ask Again'}
@@ -183,6 +183,7 @@ export class Panel extends Component {
     getNecessaryInfo() {
         requests.postRequest("frontend/app/getNecessaryDetails").then(e => {
             if (e.success) {
+                console.log("response",e)
                 let account_connected_array = e["account_connected"].map(e => e.code);
                 let account_connected = modifyAccountConnectedInfo(
                     account_connected_array
@@ -206,7 +207,9 @@ export class Panel extends Component {
                     services: e["services"],
                     credits: credits,
                     sync: sync,
-                    account_connected_array: account_connected_array
+                    account_connected_array: account_connected_array,
+                    import_count:e.import_count,
+                    upload_count:e.upload_count,
                 };
                 this.setState({
                     necessaryInfo: user_necessary_details
@@ -233,8 +236,8 @@ export class Panel extends Component {
                     })
                     if (this.state.product_upload > 10) {
                         let partial_import = (this.state.product_import * 10) / 100;
-                        console.log(partial_import);
-                        console.log(this.state.product_upload);
+                        // console.log(partial_import);
+                        // console.log(this.state.product_upload);
                         if (this.state.product_upload >= partial_import && this.state.product_upload <= this.state.product_import) {
                             this.setState({
                                 show_rating_popup: true
@@ -293,6 +296,7 @@ export class Panel extends Component {
                         product_import: count_of_product
                     })
                     if (this.state.product_import > 10) {
+
                         this.getUploadCount();
                     }
                 }
@@ -322,7 +326,7 @@ export class Panel extends Component {
 
     checkingFba() {
         if (this.state.necessaryInfo.account_connected_array) {
-             console.log(this.state.necessaryInfo.account_connected_array);
+             // console.log(this.state.necessaryInfo.account_connected_array);
             let flag = false;
             if (this.state.necessaryInfo.account_connected_array.indexOf('fba') < 0) {
                 for (let i = 0; i < this.menu.length; i++) {
@@ -414,7 +418,21 @@ export class Panel extends Component {
                                 path="/panel/accounts/connect"
                                 component={ConnectedAccounts}
                             />
-                            <Route exact path="/panel/plans" component={Plans}/>
+
+                            <Route
+                                exact
+                                path="/panel/plans"
+                                render={() => {
+                                    return (
+                                        <Plans
+                                            {...this.props}
+                                            getNecessaryInfo={this.getNecessaryInfo}
+                                            necessaryInfo={this.state.necessaryInfo}
+                                        />
+                                    );
+                                }}
+                            />
+
                             <Route path="/panel/accounts/install" component={InstallApp}/>
                             <Route path="/panel/accounts/success" component={AppInstalled}/>
                             {/*<Route path="/panel/order" component={Orders}/>*/}

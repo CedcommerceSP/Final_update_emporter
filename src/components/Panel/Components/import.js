@@ -69,6 +69,7 @@ export class Import extends Component {
 		this.handleModalChange = this.handleModalChange.bind(this);
 	}
     componentWillReceiveProps(nextPorps) {
+		console.log("qwerty",nextPorps);
         if (nextPorps.necessaryInfo !== undefined) {
             this.setState({ necessaryInfo: nextPorps.necessaryInfo });
         }
@@ -134,8 +135,8 @@ export class Import extends Component {
 	}
 
 	renderImportProductsModal() {
-		console.log(this.state.importProductsDetails.source);
-        console.log("qqqqq = ",this.state.importProductsDetails.source.toLowerCase());
+		// console.log(this.state.importProductsDetails.source);
+        // console.log("qqqqq = ",this.state.importProductsDetails.source.toLowerCase());
         return (
 			<div>
 				<Modal

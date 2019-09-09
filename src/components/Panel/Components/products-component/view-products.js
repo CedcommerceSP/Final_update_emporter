@@ -37,6 +37,7 @@ class ViewProducts extends Component {
 			openVariantDetail: false,
 			variantArrayDetails: [],
 			img: [],
+            necessaryInfo:{},
 			buttonDisable: {
 				save: true,
 				save_upload: false,
@@ -62,6 +63,13 @@ class ViewProducts extends Component {
 		};
 		this.getSingleProductData();
 	}
+
+    componentWillReceiveProps(nextPorps) {
+        console.log("in planBody",nextPorps);
+        if (nextPorps.necessaryInfo !== undefined) {
+            this.setState({ necessaryInfo: nextPorps.necessaryInfo });
+        }
+    }
 
 	getSingleProductData = () => {
 		requests
