@@ -362,7 +362,7 @@ class PlanBody extends Component {
                                 <div className="col-12 p-3">
                                     <Card>
                                         <div className="row p-5">
-                                            <div className="col-12 text-center pt-5 pb-2">
+                                            {/*<div className="col-12 text-center pt-5 pb-2">
                                                 <div className="mb-5 text-center">
                                                     <p className="price-tag">
                                                         <span className="price-tag_small">$</span>
@@ -370,7 +370,7 @@ class PlanBody extends Component {
                                                         <span className="price-tag_small">/ product</span>
                                                     </p>
                                                 </div>
-                                            </div>
+                                            </div>*/}
                                             <div className="col-12 p-3">
                                                 <Card>
                                                     <div className="row p-5">

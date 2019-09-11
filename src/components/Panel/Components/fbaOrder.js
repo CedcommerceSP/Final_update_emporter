@@ -15,7 +15,8 @@ import {
     Tabs,
     Banner,
     Badge,
-    Button
+    Button,
+    Stack
 } from "@shopify/polaris";
 
 import {requests} from "../../../services/request";
@@ -114,6 +115,8 @@ export class FbaOrder extends Component {
         super(props);
         this.state = {
             pagination_show: 0,
+            trail_days_left:0,
+            show_trail_banner:false,
             order: [],
             selectedProducts: [],
             single_column_filter: [],
@@ -124,6 +127,7 @@ export class FbaOrder extends Component {
         }
         this.getOrders();
         this.checkingOrderManuallyCreate();
+        this.installedAtFbaDate();
     }
 
     prepareFilterObject() {
@@ -400,27 +404,26 @@ export class FbaOrder extends Component {
             });
     }
 
-    /*manageStateChange = old_state => {
-        this.filters = Object.assign({}, old_state["filters"]);
-        this.gridSettings = Object.assign({}, old_state["gridSettings"]);
-        this.state.selectedApp = old_state["position"];
-        this.props.location.state = undefined;
-        this.updateState();
-        this.prepareHeader(this.props);
-    };*/
-
-    /*    handleToggleClick = product_grid_collapsible => {
-     if (this.state.product_grid_collapsible === product_grid_collapsible) {
-     this.setState({ product_grid_collapsible: "" });
-     } else {
-     this.setState({ product_grid_collapsible: product_grid_collapsible });
-     }
-     const products = this.modifyProductsData(
-     this.state.tempProductData,
-     product_grid_collapsible
-     );
-     this.setState({ order: products });
-     };*/
+    installedAtFbaDate(){
+        requests
+            .getRequest("fba/test/getWebhookCall")
+            .then(data => {
+                if (data.success) {
+                    console.log(data.days);
+                    this.setState({
+                        trail_days_left:3-data.days
+                    })
+                    if (data.days<=3){
+                        this.setState({
+                            show_trail_banner:true
+                        })
+                    }
+                }
+            });
+    }
+    redirect(url) {
+        this.props.history.push(url);
+    }
 
     render() {
         return (
@@ -428,10 +431,39 @@ export class FbaOrder extends Component {
                 <Card>
                     <div className="p-5">
                         <div className="row">
+                            {this.state.show_trail_banner ?<div className="col-4 offset-4 text-center">
+                                <Banner status="warning">
+                                    {this.state.trail_days_left != 0 ?
+                                        <p><b>{this.state.trail_days_left} days trial left </b><Button
+                                            plain
+                                            onClick={() => {
+                                                this.redirect("/panel/plans");
+                                            }}
+                                        >
+                                            Buy Plan Now
+                                        </Button></p> :
+                                        <p><b>last day for trial </b><Button
+                                            plain
+                                            onClick={() => {
+                                                this.redirect("/panel/plans");
+                                            }}
+                                        >
+                                            Buy Plan Now
+                                        </Button></p>}
+                                        {/*<Button
+                                        plain
+                                        onClick={() => {
+                                            this.redirect("/panel/plans");
+                                        }}
+                                        >
+                                            Buy Plan Now
+                                        </Button>*/}
+                                </Banner>
+                            </div>:null}
                             <div className="col-12 p-3 text-right">
                                 {/*<Label>{this.state.totalMainCount && Object.keys(this.filters.column_filters).length <= 0?`Total Main Orders : ${this.state.totalMainCount}`:''}</Label>
                                 <Label>{`Active Page : ${this.gridSettings.activePage}`}</Label>*/}
-                                <Label>{this.state.pagination_show} products</Label>
+                                <Label>{this.state.pagination_show} Orders</Label>
                             </div>
                             <div className="col-12">
                                 <SmartDataTable

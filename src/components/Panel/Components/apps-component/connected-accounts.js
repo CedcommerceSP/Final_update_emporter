@@ -43,7 +43,7 @@ class ConnectedAccounts extends Component {
 				title="Accounts"
 				primaryAction={{
 					content: "Back",
-					onCick: () => {
+					onClick: () => {
 						this.redirect("/panel/accounts");
 					}
 				}}
