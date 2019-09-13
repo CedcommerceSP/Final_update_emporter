@@ -15,8 +15,8 @@ import {Configuration} from "./Components/configuration";
 import {QueuedTask} from "./Components/queued_task";
 import {Activities} from "./Components/queued-tasks-component/activities";
 import {Plans} from "./Components/plans";
-import {FbaOrder} from "./Components/fbaOrder"
-// import {Orders} from "./Components/migrator-order/orders"
+import {FbaOrder} from "./Components/fbaOrder";
+import Order from "./Components/vieworderfba";
 import {Header} from "./Layout/header";
 import Dashboard from "./Components/dashboard";
 import FAQPage from "./Components/faq";
@@ -30,6 +30,8 @@ import ConnectedAccounts from "./Components/apps-component/connected-accounts";
 import ReportAnIssue from "./Components/help-component/report-issue";
 import ViewProfile from "./Components/profile-component/view-profile";
 import ViewProducts from "./Components/products-component/view-products";
+
+// import {FbaOrder} from "./Components/orders/fbaOrder";
 import {modifyAccountConnectedInfo} from "./Components/static-functions";
 
 import {requests} from "../../services/request";
@@ -381,6 +383,7 @@ export class Panel extends Component {
                             <Route
                                 exact
                                 path="/panel/fbaOrders"
+                                // component={FbaOrder}
                                 render={() => {
                                     return (
                                         <FbaOrder
@@ -394,6 +397,11 @@ export class Panel extends Component {
                                 exact
                                 path="/panel/products/view/:id"
                                 component={ViewProducts}
+                            />
+                            <Route
+                                exact
+                                path="/panel/vieworderfba/:id"
+                                component={Order}
                             />
                             <Route
                                 exact

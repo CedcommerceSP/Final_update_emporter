@@ -209,6 +209,7 @@ class SmartDataTablePlain extends React.Component {
 
 	prepareDefaultColumns() {
 		this.defaultColumns = [];
+		console.log(this.state.visibleColumns);
 		for (let i = 0; i < this.state.visibleColumns.length; i++) {
 			this.defaultColumns.push({
 				key: this.state.visibleColumns[i],
@@ -538,7 +539,9 @@ class SmartDataTablePlain extends React.Component {
 	renderBody(columns, rows) {
 		const visibleRows = rows;
 		const tableRows = visibleRows.map((row, i) => (
-			<tr key={`row-${i}`}>
+			<tr key={`row-${i}`}
+				onClick={this.props.operations.bind(this, row, "single_row")}
+				style={{cursor:'pointer'}}>
 				{this.state.multiSelect && (
 					<td style={{ verticalAlign: "middle" }}>
 						<Checkbox
@@ -720,6 +723,7 @@ class SmartDataTablePlain extends React.Component {
 	}
 
 	userRowSelect(row, event) {
+
 		const data = {
 			isSelected: event,
 			data: row
@@ -1009,6 +1013,7 @@ class SmartDataTablePlain extends React.Component {
 					{this.renderToggles(columns)}
 					<table
 						data-table-name={name}
+						// onClick={this.props.operations.bind(this, rows, "grid")}
 						className={` ${className} table-sm table-hover`} /*style={{cursor:'pointer'}}*/
 					>
 						{withHeaders && <thead>{this.renderHeader(columns)}</thead>}

@@ -19,12 +19,12 @@ import {
     Stack
 } from "@shopify/polaris";
 
-import {requests} from "../../../services/request";
-import {notify} from "../../../services/notify";
+import {requests} from "../../../../services/request";
+import {notify} from "../../../../services/notify";
 
-import SmartDataTable from "../../../shared/smartTable";
+import SmartDataTable from "../../../../shared/smartTable";
 
-import {paginationShow} from "./static-functions";
+import {paginationShow} from "../static-functions";
 export class FbaOrder extends Component {
     filters = {
         full_text_search: "",
@@ -77,46 +77,42 @@ export class FbaOrder extends Component {
         "button_order"
     ];
     pageLimits = [
-        { label: 10, value: "10" },
-        { label: 20, value: "20" },
-        { label: 30, value: "30" },
-        { label: 40, value: "40" },
-        { label: 50, value: "50" },
-        { label: 500, value: "500" },
-        { label: 2000, value: "2000 *(Slow)" },
+        {label: 10, value: "10"},
+        {label: 20, value: "20"},
+        {label: 30, value: "30"},
+        {label: 40, value: "40"},
+        {label: 50, value: "50"},
+        {label: 500, value: "500"},
+        {label: 2000, value: "2000 *(Slow)"},
     ];
 
     predefineFilters = [
-     { label: "Shopify Order", value: "shopify_order_name", type: "string", special_case: "no" },
-     /*{ label: "SKU", value: "sku", type: "string", special_case: "no" },
-     { label: "Price", value: "price", type: "int", special_case: "no" },
-     { label: "Quantity", value: "quantity", type: "int", special_case: "no" },
-     { label:"Type", value:"type", type:"type", special_case:"yes"},*/
-     /*{
-     label: "Created at",
-     value: "created_at",
-     type: "string",
-     special_case: "yes"
-     },*/
-     {
-     label: "Order Status shopify",
-     value: "financial_status",
-     type: "financial_status",
-     special_case: "yes"
-     },
+        {
+            label: "Shopify Order",
+            value: "shopify_order_name",
+            type: "string",
+            special_case: "no"
+        },
+        {
+            label: "Order Status shopify",
+            value: "financial_status",
+            type: "financial_status",
+            special_case: "yes"
+        },
         {
             label: "Amazon order status",
             value: "processing_status",
             type: "processing_status",
             special_case: "yes"
         }
-     ];
+    ];
+
     constructor(props) {
         super(props);
         this.state = {
             pagination_show: 0,
-            trail_days_left:0,
-            show_trail_banner:false,
+            trail_days_left: 0,
+            show_trail_banner: false,
             order: [],
             selectedProducts: [],
             single_column_filter: [],
@@ -169,7 +165,7 @@ export class FbaOrder extends Component {
         this.prepareFilterObject();
         const pageSettings = Object.assign({}, this.gridSettings);
         requests
-            .getRequest("fba/test/cronHitting", Object.assign(pageSettings,this.state.appliedFilters),
+            .getRequest("fba/test/cronHitting", Object.assign(pageSettings, this.state.appliedFilters),
                 false,
                 false)
             .then(data => {
@@ -365,25 +361,25 @@ export class FbaOrder extends Component {
         return products;
     }
 
- /*   operations(event, id) {
-        switch (id) {
-            case "button_order":
-                break;
-            default:
-        }
-    }*/
+    /*   operations(event, id) {
+     switch (id) {
+     case "button_order":
+     break;
+     default:
+     }
+     }*/
 
     operations = (event, id) => {
-        console.log("event",event);
+        console.log("event", event);
         console.log(id);
         switch (id) {
-            case "single_row":
+            case "grid":
                 let parent_props = {
                     gridSettings: this.gridSettings,
                     filters: this.filters,
                     position: this.state.selectedApp
                 };
-                this.redirect("/panel/vieworderfba/" + event["shopify_order_name"], {
+                this.redirect("/panel/products/vieworderfba/" + event["shopify_order_name"], {
                     parent_props: parent_props
                 });
                 break;
@@ -406,23 +402,24 @@ export class FbaOrder extends Component {
             });
     }
 
-    installedAtFbaDate(){
+    installedAtFbaDate() {
         requests
             .getRequest("fba/test/getWebhookCall")
             .then(data => {
                 if (data.success) {
                     console.log(data.days);
                     this.setState({
-                        trail_days_left:3-data.days
+                        trail_days_left: 3 - data.days
                     })
-                    if (data.days<=3){
+                    if (data.days <= 3) {
                         this.setState({
-                            show_trail_banner:true
+                            show_trail_banner: true
                         })
                     }
                 }
             });
     }
+
     redirect(url) {
         this.props.history.push(url);
     }
@@ -433,7 +430,7 @@ export class FbaOrder extends Component {
                 <Card>
                     <div className="p-5">
                         <div className="row">
-                            {this.state.show_trail_banner ?<div className="col-4 offset-4 text-center">
+                            {this.state.show_trail_banner ? <div className="col-4 offset-4 text-center">
                                 <Banner status="warning">
                                     {this.state.trail_days_left != 0 ?
                                         <p><b>{this.state.trail_days_left} days trial left </b><Button
@@ -452,19 +449,19 @@ export class FbaOrder extends Component {
                                         >
                                             Buy Plan Now
                                         </Button></p>}
-                                        {/*<Button
-                                        plain
-                                        onClick={() => {
-                                            this.redirect("/panel/plans");
-                                        }}
-                                        >
-                                            Buy Plan Now
-                                        </Button>*/}
+                                    {/*<Button
+                                     plain
+                                     onClick={() => {
+                                     this.redirect("/panel/plans");
+                                     }}
+                                     >
+                                     Buy Plan Now
+                                     </Button>*/}
                                 </Banner>
-                            </div>:null}
+                            </div> : null}
                             <div className="col-12 p-3 text-right">
                                 {/*<Label>{this.state.totalMainCount && Object.keys(this.filters.column_filters).length <= 0?`Total Main Orders : ${this.state.totalMainCount}`:''}</Label>
-                                <Label>{`Active Page : ${this.gridSettings.activePage}`}</Label>*/}
+                                 <Label>{`Active Page : ${this.gridSettings.activePage}`}</Label>*/}
                                 <Label>{this.state.pagination_show} Orders</Label>
                             </div>
                             <div className="col-12">
