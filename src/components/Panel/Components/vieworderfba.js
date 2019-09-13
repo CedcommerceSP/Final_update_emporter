@@ -22,8 +22,10 @@ class Order extends Component {
 
     constructor(props) {
         super(props);
+        // console.log(props.location.state.parent_props.is_hash_order_name)
         this.state = {
             id: props.match.params.id,
+            is_order_trim:props.location.state.parent_props.is_hash_order_name,
             actual_data: {},
             entire_data: {},
             totalPage: 0,
@@ -97,6 +99,10 @@ class Order extends Component {
     }
 
     getOrder() {
+        let str1 = "#";
+        if (this.state.is_order_trim){
+            this.state.id= str1.concat(this.state.id)
+        }
         requests
             .postRequest("fba/test/webhookCall", {
                 shopify_order_name: this.state.id

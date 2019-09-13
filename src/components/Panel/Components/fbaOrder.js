@@ -374,16 +374,27 @@ export class FbaOrder extends Component {
     }*/
 
     operations = (event, id) => {
-        console.log("event",event);
-        console.log(id);
+        // console.log("event",event);
+        let shopify_order_name_trim =  event["shopify_order_name"];
+        let is_order_name = false;
+        // console.log(shopify_order_name_trim[0]);
+        if (shopify_order_name_trim[0] === '#'){
+            is_order_name=true
+            shopify_order_name_trim = shopify_order_name_trim.split('#').join("");
+            // console.log(shopify_order_name_trim);
+        }
+        // console.log(id);
         switch (id) {
             case "single_row":
                 let parent_props = {
-                    gridSettings: this.gridSettings,
-                    filters: this.filters,
-                    position: this.state.selectedApp
+                    is_hash_order_name:is_order_name
                 };
-                this.redirect("/panel/vieworderfba/" + event["shopify_order_name"], {
+                // console.log(parent_props);
+                // console.log("/panel/vieworderfba/" + shopify_order_name_trim);
+                /*this.redirect("/panel/vieworderfba/1139" , {
+                    parent_props: parent_props
+                });*/
+                this.redirect("/panel/vieworderfba/" + shopify_order_name_trim, {
                     parent_props: parent_props
                 });
                 break;
@@ -411,7 +422,7 @@ export class FbaOrder extends Component {
             .getRequest("fba/test/getWebhookCall")
             .then(data => {
                 if (data.success) {
-                    console.log(data.days);
+                    // console.log(data.days);
                     this.setState({
                         trail_days_left:3-data.days
                     })
@@ -423,8 +434,17 @@ export class FbaOrder extends Component {
                 }
             });
     }
-    redirect(url) {
+    /*redirect(url) {
+        console.log(url);
         this.props.history.push(url);
+    }
+*/
+    redirect(url, data) {
+        if (!isUndefined(data)) {
+            this.props.history.push(url, JSON.parse(JSON.stringify(data)));
+        } else {
+            this.props.history.push(url);
+        }
     }
 
     render() {

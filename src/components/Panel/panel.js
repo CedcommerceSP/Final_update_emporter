@@ -185,7 +185,7 @@ export class Panel extends Component {
     getNecessaryInfo() {
         requests.postRequest("frontend/app/getNecessaryDetails").then(e => {
             if (e.success) {
-                console.log("response",e)
+                // console.log("response",e)
                 let account_connected_array = e["account_connected"].map(e => e.code);
                 let account_connected = modifyAccountConnectedInfo(
                     account_connected_array
@@ -546,7 +546,10 @@ export class Panel extends Component {
                             <Route
                                 exact
                                 path="**"
-                                render={() => <Redirect to="/panel/dashboard"/>}
+                                render={() => {
+                                    // console.log('url didnt match');
+                                    return <Redirect to="/panel/dashboard"/>
+                                }}
                             />
                         </Switch>
                     </div>

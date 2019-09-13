@@ -127,6 +127,10 @@ export class CreateProfile extends Component {
                     if (data.data[Object.keys(data.data)[i]]['code'] == "walmartimporter" && data.data[Object.keys(data.data)[i]]['installed'] == 1) {
                         installedApps.push(data.data[Object.keys(data.data)[i]]["code"]);
                     }
+
+                    if (data.data[Object.keys(data.data)[i]]['code'] == "ebayaffiliate" && data.data[Object.keys(data.data)[i]]['installed'] == 1) {
+                        installedApps.push(data.data[Object.keys(data.data)[i]]["code"]);
+                    }
                 }
                 this.getYAxisImporter(installedApps);
             }
@@ -1855,8 +1859,10 @@ export class CreateProfile extends Component {
         switch (this.state.activeStep) {
             case 1:
                 if (this.validateStepOne()) {
+                    // console.log(this.state.basicDetails.source);
 
                     for (let i = 0; i < this.state.array_marketpalce_imported.length; i++) {
+                        // console.log(this.state.array_marketpalce_imported);
                         if (this.state.basicDetails.source === this.state.array_marketpalce_imported[i])
                         {
                             this.saveProfileData();
