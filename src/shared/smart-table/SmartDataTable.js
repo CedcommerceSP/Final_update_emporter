@@ -650,6 +650,7 @@ class SmartDataTablePlain extends React.Component {
 			this.state.columnFilters
 		);
 		if (columns.length <= 0) {
+
 			Object.keys(this.state.columnTitles).forEach(e => {
 				if (this.state.visibleColumns.indexOf(e) !== -1) {
 					columns.push({

@@ -566,6 +566,8 @@ export class Products extends Component {
 	};
 
 	operations = (event, id) => {
+		console.log(event);
+		console.log(id)
 		switch (id) {
 			case "grid":
 				let parent_props = {
@@ -633,7 +635,6 @@ export class Products extends Component {
 	}
 
 	render() {
-        console.log(this.state.single_column_filter);
         return (
 			<Page
 				primaryAction={{

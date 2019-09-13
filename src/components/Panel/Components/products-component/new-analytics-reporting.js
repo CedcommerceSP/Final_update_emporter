@@ -605,12 +605,12 @@ class Demo_analytics_reporting extends Component {
                                             ),
                                         },
                                         {
-                                            url: 'https://apps.shopify.com/walmart-marketplace-integration?surface_detail=walmart&surface_inter_position=1&surface_intra_position=1&surface_type=search',
-                                            name: 'Walmart Integration',
-                                            description: 'List, Sync, Manage, & Automate to boost sales on Walmart.',
+                                            url: 'https://apps.shopify.com/etsy-marketplace-integration',
+                                            name: 'Etsy Marketplace Integration',
+                                            description: 'Sync & Automate to selling process from Shopify to Etsy.',
                                             media: (
                                                 <Thumbnail
-                                                    source="https://apps.shopifycdn.com/listing_images/5eabff626f2420c086bbba243b69d22a/icon/eeffebd6f38b01791b3f83e634983691.png?height=84&width=84"
+                                                    source="https://apps.shopifycdn.com/listing_images/2fa150931ca28a5ed6a17dc69c40477b/icon/51d25ddb1cd498cac3ef8aa418ce9601.png?height=84&width=84"
                                                     alt="Walmart Integration logo"
                                                 />
                                             ),
