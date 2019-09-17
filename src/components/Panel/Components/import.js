@@ -764,10 +764,31 @@ export class Import extends Component {
         this.setState({[key] : event});
     };
 
+    getCollectionAndLocation() {
+		console.log("in function getCollectionAnd Location");
+        requests
+            .getRequest("frontend/importer/getCollectionShopify")
+            .then(data => {
+            	console.log(data);
+                if (data.success) {
+					notify.success(data.message);
+                } else {
+                    notify.error(data.message);
+                }
+            });
+
+	}
+
 	render() {
 		let { mainTab, necessaryInfo } = this.state;
 		return (
-			<Page title="Manage Products">
+			<Page title="Manage Products"
+				  primaryAction={{
+                      content: "Sync Collection",
+                      onClick: () => {
+                          this.getCollectionAndLocation();
+                      }
+                  }}>
 				{necessaryInfo.account_connected_array && necessaryInfo.account_connected_array.indexOf('ebayaffiliate') > -1 &&
 				<Tabs name={"hello"} selected={this.state.mainTab} tabs={[{
                     id: 'Import',
@@ -795,7 +816,7 @@ export class Import extends Component {
 							</Label>
 						</Banner>
 					</div>
-					<div className="col-12">
+					{/*<div className="col-12">
 						<Button
 							fullWidth={true}
 							onClick={() => {
@@ -807,7 +828,7 @@ export class Import extends Component {
 						<Collapsible id={"ddd"} open={this.state.openFileUpload}>
 							<FileImporter {...this.props} />
 						</Collapsible>
-					</div>
+					</div>*/}
 					<div className="col-md-6 col-sm-6 col-12 p-3">
 						<Card>
 							<div

@@ -17,10 +17,11 @@ import {
     Banner,
     Page,
     FormLayout,
-    Tabs
+    Tabs,
+    TextContainer
 } from "@shopify/polaris";
 import {isUndefined} from "util";
-
+import FileImporter from "../../components/Panel/Components/import-component/fileimporter";
 import {requests} from "../../services/request";
 import {notify} from "../../services/notify";
 import {globalState} from "../../services/globalstate";
@@ -38,6 +39,7 @@ class PlanBody extends Component {
         // console.log("namste",props);
         this.state = {
             selected: 0,
+            active: false,
             necessaryInfo: {},
             sync_plan_checkbox: false,
             show_banner_onetime_payment: false,
@@ -77,7 +79,8 @@ class PlanBody extends Component {
             this.planRender()
         }
     }
-    planRender(){
+
+    planRender() {
         if (this.state.necessaryInfo) {
             if (this.state.necessaryInfo.credits) {
                 let available_credits = this.state.necessaryInfo.credits.available_credits;
@@ -85,25 +88,24 @@ class PlanBody extends Component {
                 let total_credits = available_credits + used_credits;
                 if (total_credits > 10) {
                     this.setState({
-                        show_banner_onetime_payment:true
+                        show_banner_onetime_payment: true
                     })
                 }
-                if (this.state.necessaryInfo.import_count === this.state.necessaryInfo.upload_count)
-                {
+                if (this.state.necessaryInfo.import_count === this.state.necessaryInfo.upload_count) {
                     this.setState({
-                        show_banner_onetime_payment:true
+                        show_banner_onetime_payment: true
                     })
                 }
-                if (used_credits > 0){
+                if (used_credits > 0) {
                     this.setState({
-                        show_banner_onetime_payment:true
+                        show_banner_onetime_payment: true
                     })
                 }
 
-                if (this.state.necessaryInfo.import_count <=10 && total_credits > 10){
+                if (this.state.necessaryInfo.import_count <= 10 && total_credits > 10) {
                     this.setState({
-                            show_banner_onetime_payment:true
-                        })
+                        show_banner_onetime_payment: true
+                    })
                 }
             }
 
@@ -363,14 +365,14 @@ class PlanBody extends Component {
                                     <Card>
                                         <div className="row p-5">
                                             {/*<div className="col-12 text-center pt-5 pb-2">
-                                                <div className="mb-5 text-center">
-                                                    <p className="price-tag">
-                                                        <span className="price-tag_small">$</span>
-                                                        {this.state.perProductCharge}
-                                                        <span className="price-tag_small">/ product</span>
-                                                    </p>
-                                                </div>
-                                            </div>*/}
+                                             <div className="mb-5 text-center">
+                                             <p className="price-tag">
+                                             <span className="price-tag_small">$</span>
+                                             {this.state.perProductCharge}
+                                             <span className="price-tag_small">/ product</span>
+                                             </p>
+                                             </div>
+                                             </div>*/}
                                             <div className="col-12 p-3">
                                                 <Card>
                                                     <div className="row p-5">
@@ -863,66 +865,70 @@ class PlanBody extends Component {
                 <Collapsible open={true}
                              ariaExpanded={this.state.fba_plan}
                 >
-                    {this.state.data.map((data, index) => {
-                        if (data.title === "FBA") {
-                            return ( <div className="col-12 m-4" key={index}>
-                                {/* Starting Of Plan Card */}
-                                <Card>
-                                    <div className="d-flex justify-content-center p-5">
-                                        <div className="pt-5">
-                                            <div className="mb-5 text-center">
-                                                {" "}
-                                                {/* Plan Numeric Price */}
-                                                <p className="price-tag">
-                                                    <span className="price-tag_small">$</span>
-                                                    {/*<span className="price-tag_discount"><strike>{data.originalValue}</strike></span>*/}
-                                                    {data.main_price}
-                                                    <span className="price-tag_small">
+                    <FormLayout>
+                        <FormLayout.Group condensed>
+
+                            {this.state.data.map((data, index) => {
+                                if (data.title === "FBA") {
+                                    return (
+                                        <div className="col-12 m-4" key={index}>
+                                            {/* Starting Of Plan Card */}
+                                            <Card>
+                                                <div className="d-flex justify-content-center p-5">
+                                                    <div className="pt-5">
+                                                        <div className="mb-5 text-center">
+                                                            {" "}
+                                                            {/* Plan Numeric Price */}
+                                                            <p className="price-tag">
+                                                                <span className="price-tag_small">$</span>
+                                                                {/*<span className="price-tag_discount"><strike>{data.originalValue}</strike></span>*/}
+                                                                {data.main_price}
+                                                                <span className="price-tag_small">
                                                                         {data.validity_display}
                                                                     </span>
-                                                </p>
-                                            </div>
-                                            <div className="mb-5">
-                                                {" "}
-                                                {/* Button To choose Plan */}
-                                                <Button
-                                                    primary={true}
-                                                    fullWidth={true}
-                                                    size="large"
-                                                    disabled={
-                                                        data.main_price === 0 || data.main_price === "0"
-                                                    }
-                                                    onClick={this.onSelectPlan.bind(this, data)}
-                                                >
-                                                    {data.main_price === 0 || data.main_price === "0"
-                                                        ? "Select Marketplace"
-                                                        : "Choose Plan"}
-                                                </Button>
-                                            </div>
-                                            <div className="mb-5 text-center">
-                                                {" "}
-                                                {/* Descriptions For Particular deatails */}
-                                                <h1 className="mb-4">
-                                                    <b>{data.title}</b>
-                                                </h1>
-                                                <h4>{data.description}</h4>
-                                            </div>
-                                            <hr />
-                                            <div className="text-center mt-5">
-                                                {" "}
-                                                {/* Services Data */}
-                                                {data.services
-                                                    ? Object.keys(data.services).map(keys => {
-                                                        return (
-                                                            <React.Fragment key={keys}>
-                                                                <p className="service-body mb-5">
+                                                            </p>
+                                                        </div>
+                                                        <div className="mb-5">
+                                                            {" "}
+                                                            {/* Button To choose Plan */}
+                                                            <Button
+                                                                primary={true}
+                                                                fullWidth={true}
+                                                                size="large"
+                                                                disabled={
+                                                                    data.main_price === 0 || data.main_price === "0"
+                                                                }
+                                                                onClick={this.onSelectPlan.bind(this, data)}
+                                                            >
+                                                                {data.main_price === 0 || data.main_price === "0"
+                                                                    ? "Select Marketplace"
+                                                                    : "Choose Plan"}
+                                                            </Button>
+                                                        </div>
+                                                        <div className="mb-5 text-center">
+                                                            {" "}
+                                                            {/* Descriptions For Particular deatails */}
+                                                            <h1 className="mb-4">
+                                                                <b>{data.title}</b>
+                                                            </h1>
+                                                            <h4>{data.description}</h4>
+                                                        </div>
+                                                        <hr />
+                                                        <div className="text-center mt-5">
+                                                            {" "}
+                                                            {/* Services Data */}
+                                                            {data.services
+                                                                ? Object.keys(data.services).map(keys => {
+                                                                    return (
+                                                                        <React.Fragment key={keys}>
+                                                                            <p className="service-body mb-5">
                                                                                          <span
                                                                                              className="service-description mb-3"
                                                                                              style={{fontWeight: "bold"}}
                                                                                          >
                                                                                          <b>{data.services[keys].title}</b>
                                                                                          </span>
-                                                                    <span>
+                                                                                <span>
                                                                                          <Tooltip
                                                                                              content={
                                                                                                  data.services[keys].description
@@ -938,274 +944,431 @@ class PlanBody extends Component {
                                                                                          </Link>
                                                                                          </Tooltip>
                                                                                          </span>
-                                                                </p>
-                                                                {Object.keys(
-                                                                    data.services[keys].services
-                                                                ).map(key1 => {
-                                                                    if (
-                                                                        data.services[keys].services[key1]
-                                                                            .required === 1
-                                                                    ) {
-                                                                        return (
-                                                                            <div key={key1}
-                                                                                 className="text-left">
-                                                                                <Checkbox
-                                                                                    checked={true}
-                                                                                    label={
-                                                                                        data.services[keys].services[key1]
-                                                                                            .title
+                                                                            </p>
+                                                                            {Object.keys(
+                                                                                data.services[keys].services
+                                                                            ).map(key1 => {
+                                                                                if (
+                                                                                    data.services[keys].services[key1]
+                                                                                        .required === 1
+                                                                                ) {
+                                                                                    return (
+                                                                                        <div key={key1}
+                                                                                             className="text-left">
+                                                                                            <Checkbox
+                                                                                                checked={true}
+                                                                                                label={
+                                                                                                    data.services[keys].services[key1]
+                                                                                                        .title
+                                                                                                }
+                                                                                                disabled={true}
+                                                                                            />
+                                                                                        </div>
+                                                                                    );
+                                                                                } else {
+                                                                                    let temp = this.state.checkBox.slice(0);
+                                                                                    let flag = 0;
+                                                                                    temp.forEach(valueData => {
+                                                                                        if (
+                                                                                            valueData.code ===
+                                                                                            data.services[keys].services[key1]
+                                                                                                .code
+                                                                                        ) {
+                                                                                            if (valueData.key === data.id) {
+                                                                                                flag = 1;
+                                                                                            }
+                                                                                        }
+                                                                                    });
+                                                                                    if (flag === 0) {
+                                                                                        temp.push({
+                                                                                            code: data.services[keys].services[key1]
+                                                                                                .code,
+                                                                                            isSelected: false,
+                                                                                            key: data.id,
+                                                                                            id: key1
+                                                                                        });
+                                                                                        this.state.checkBox = temp;
                                                                                     }
-                                                                                    disabled={true}
-                                                                                />
-                                                                            </div>
-                                                                        );
-                                                                    } else {
-                                                                        let temp = this.state.checkBox.slice(0);
-                                                                        let flag = 0;
-                                                                        temp.forEach(valueData => {
-                                                                            if (
-                                                                                valueData.code ===
-                                                                                data.services[keys].services[key1]
-                                                                                    .code
-                                                                            ) {
-                                                                                if (valueData.key === data.id) {
-                                                                                    flag = 1;
+                                                                                    return (
+                                                                                        <div key={key1}
+                                                                                             className="text-left">
+                                                                                            {this.state.checkBox.map(KEYS => {
+                                                                                                if (
+                                                                                                    KEYS.code ===
+                                                                                                    data.services[keys].services[
+                                                                                                        key1
+                                                                                                        ].code &&
+                                                                                                    KEYS.key === data.id
+                                                                                                ) {
+                                                                                                    return (
+                                                                                                        <div
+                                                                                                            className="p-2"
+                                                                                                            key={KEYS.code}
+                                                                                                            style={{
+                                                                                                                backgroundColor: "#FCF1CD"
+                                                                                                            }}
+                                                                                                        >
+                                                                                                            <Checkbox
+                                                                                                                checked={KEYS.isSelected}
+                                                                                                                label={
+                                                                                                                    data.services[keys]
+                                                                                                                        .services[key1].title
+                                                                                                                }
+                                                                                                                onChange={this.onCheckBox.bind(
+                                                                                                                    this,
+                                                                                                                    data.services[keys]
+                                                                                                                        .services[key1].code,
+                                                                                                                    data.id
+                                                                                                                )}
+                                                                                                            />
+                                                                                                        </div>
+                                                                                                    );
+                                                                                                }
+                                                                                            })}
+                                                                                        </div>
+                                                                                    );
                                                                                 }
-                                                                            }
-                                                                        });
-                                                                        if (flag === 0) {
-                                                                            temp.push({
-                                                                                code: data.services[keys].services[key1]
-                                                                                    .code,
-                                                                                isSelected: false,
-                                                                                key: data.id,
-                                                                                id: key1
-                                                                            });
-                                                                            this.state.checkBox = temp;
-                                                                        }
-                                                                        return (
-                                                                            <div key={key1}
-                                                                                 className="text-left">
-                                                                                {this.state.checkBox.map(KEYS => {
-                                                                                    if (
-                                                                                        KEYS.code ===
-                                                                                        data.services[keys].services[
-                                                                                            key1
-                                                                                            ].code &&
-                                                                                        KEYS.key === data.id
-                                                                                    ) {
-                                                                                        return (
-                                                                                            <div
-                                                                                                className="p-2"
-                                                                                                key={KEYS.code}
-                                                                                                style={{
-                                                                                                    backgroundColor: "#FCF1CD"
-                                                                                                }}
-                                                                                            >
-                                                                                                <Checkbox
-                                                                                                    checked={KEYS.isSelected}
-                                                                                                    label={
-                                                                                                        data.services[keys]
-                                                                                                            .services[key1].title
-                                                                                                    }
-                                                                                                    onChange={this.onCheckBox.bind(
-                                                                                                        this,
-                                                                                                        data.services[keys]
-                                                                                                            .services[key1].code,
-                                                                                                        data.id
-                                                                                                    )}
-                                                                                                />
-                                                                                            </div>
-                                                                                        );
-                                                                                    }
-                                                                                })}
-                                                                            </div>
-                                                                        );
-                                                                    }
-                                                                })}
-                                                            </React.Fragment>
-                                                        );
-                                                    })
-                                                    : null}
-                                            </div>
+                                                                            })}
+                                                                        </React.Fragment>
+                                                                    );
+                                                                })
+                                                                : null}
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </Card>
                                         </div>
-                                    </div>
-                                </Card>
-                            </div>)
-                        }
-                        /* return (
-                         {/!*<div className="col-12 mb-4" key={index}>
-                         Starting Of Plan Card
-                         <Card>
-                         <div className="d-flex justify-content-center p-5">
-                         <div className="pt-5">
-                         <div className="mb-5 text-center">
-                         {" "}
-                         Plan Numeric Price
-                         <p className="price-tag">
-                         <span className="price-tag_small">$</span>
-                         <span className="price-tag_discount"><strike>{data.originalValue}</strike></span>
-                         {data.main_price}
-                         <span className="price-tag_small">
-                         {data.validity_display}
-                         </span>
-                         </p>
-                         </div>
-                         <div className="mb-5">
-                         {" "}
-                         Button To choose Plan
-                         <Button
-                         primary={true}
-                         fullWidth={true}
-                         size="large"
-                         disabled={
-                         data.main_price === 0 || data.main_price === "0"
-                         }
-                         onClick={this.onSelectPlan.bind(this, data)}
-                         >
-                         {data.main_price === 0 || data.main_price === "0"
-                         ? "Select Marketplace"
-                         : "Choose Plan"}
-                         </Button>
-                         </div>
-                         <div className="mb-5 text-center">
-                         {" "}
-                         Descriptions For Particular deatails
-                         <h1 className="mb-4">
-                         <b>{data.title}</b>
-                         </h1>
-                         <h4>{data.description}</h4>
-                         </div>
-                         <hr />
-                         <div className="text-center mt-5">
-                         {" "}
-                         Services Data
-                         {data.services
-                         ? Object.keys(data.services).map(keys => {
-                         return (
-                         <React.Fragment key={keys}>
-                         <p className="service-body mb-5">
-                         <span
-                         className="service-description mb-3"
-                         style={{fontWeight: "bold"}}
-                         >
-                         <b>{data.services[keys].title}</b>
-                         </span>
-                         <span>
-                         <Tooltip
-                         content={
-                         data.services[keys].description
-                         }
-                         preferredPosition="above"
-                         >
-                         <Link>
-                         <Icon
-                         source="help"
-                         color="inkLighter"
-                         backdrop={true}
-                         />
-                         </Link>
-                         </Tooltip>
-                         </span>
-                         </p>
-                         {Object.keys(
-                         data.services[keys].services
-                         ).map(key1 => {
-                         if (
-                         data.services[keys].services[key1]
-                         .required === 1
-                         ) {
-                         return (
-                         <div key={key1}
-                         className="text-left">
-                         <Checkbox
-                         checked={true}
-                         label={
-                         data.services[keys].services[key1]
-                         .title
-                         }
-                         disabled={true}
-                         />
-                         </div>
-                         );
-                         } else {
-                         let temp = this.state.checkBox.slice(0);
-                         let flag = 0;
-                         temp.forEach(valueData => {
-                         if (
-                         valueData.code ===
-                         data.services[keys].services[key1]
-                         .code
-                         ) {
-                         if (valueData.key === data.id) {
-                         flag = 1;
-                         }
-                         }
-                         });
-                         if (flag === 0) {
-                         temp.push({
-                         code: data.services[keys].services[key1]
-                         .code,
-                         isSelected: false,
-                         key: data.id,
-                         id: key1
-                         });
-                         this.state.checkBox = temp;
-                         }
-                         return (
-                         <div key={key1}
-                         className="text-left">
-                         {this.state.checkBox.map(KEYS => {
-                         if (
-                         KEYS.code ===
-                         data.services[keys].services[
-                         key1
-                         ].code &&
-                         KEYS.key === data.id
-                         ) {
-                         return (
-                         <div
-                         className="p-2"
-                         key={KEYS.code}
-                         style={{
-                         backgroundColor: "#FCF1CD"
-                         }}
-                         >
-                         <Checkbox
-                         checked={KEYS.isSelected}
-                         label={
-                         data.services[keys]
-                         .services[key1].title
-                         }
-                         onChange={this.onCheckBox.bind(
-                         this,
-                         data.services[keys]
-                         .services[key1].code,
-                         data.id
-                         )}
-                         />
-                         </div>
-                         );
-                         }
-                         })}
-                         </div>
-                         );
-                         }
-                         })}
-                         </React.Fragment>
-                         );
-                         })
-                         : null}
-                         </div>
-                         </div>
-                         </div>
-                         </Card>
-                         </div>*!/}
-                         );*/
+                                    )
+                                }
+                                /* return (
+                                 {/!*<div className="col-12 mb-4" key={index}>
+                                 Starting Of Plan Card
+                                 <Card>
+                                 <div className="d-flex justify-content-center p-5">
+                                 <div className="pt-5">
+                                 <div className="mb-5 text-center">
+                                 {" "}
+                                 Plan Numeric Price
+                                 <p className="price-tag">
+                                 <span className="price-tag_small">$</span>
+                                 <span className="price-tag_discount"><strike>{data.originalValue}</strike></span>
+                                 {data.main_price}
+                                 <span className="price-tag_small">
+                                 {data.validity_display}
+                                 </span>
+                                 </p>
+                                 </div>
+                                 <div className="mb-5">
+                                 {" "}
+                                 Button To choose Plan
+                                 <Button
+                                 primary={true}
+                                 fullWidth={true}
+                                 size="large"
+                                 disabled={
+                                 data.main_price === 0 || data.main_price === "0"
+                                 }
+                                 onClick={this.onSelectPlan.bind(this, data)}
+                                 >
+                                 {data.main_price === 0 || data.main_price === "0"
+                                 ? "Select Marketplace"
+                                 : "Choose Plan"}
+                                 </Button>
+                                 </div>
+                                 <div className="mb-5 text-center">
+                                 {" "}
+                                 Descriptions For Particular deatails
+                                 <h1 className="mb-4">
+                                 <b>{data.title}</b>
+                                 </h1>
+                                 <h4>{data.description}</h4>
+                                 </div>
+                                 <hr />
+                                 <div className="text-center mt-5">
+                                 {" "}
+                                 Services Data
+                                 {data.services
+                                 ? Object.keys(data.services).map(keys => {
+                                 return (
+                                 <React.Fragment key={keys}>
+                                 <p className="service-body mb-5">
+                                 <span
+                                 className="service-description mb-3"
+                                 style={{fontWeight: "bold"}}
+                                 >
+                                 <b>{data.services[keys].title}</b>
+                                 </span>
+                                 <span>
+                                 <Tooltip
+                                 content={
+                                 data.services[keys].description
+                                 }
+                                 preferredPosition="above"
+                                 >
+                                 <Link>
+                                 <Icon
+                                 source="help"
+                                 color="inkLighter"
+                                 backdrop={true}
+                                 />
+                                 </Link>
+                                 </Tooltip>
+                                 </span>
+                                 </p>
+                                 {Object.keys(
+                                 data.services[keys].services
+                                 ).map(key1 => {
+                                 if (
+                                 data.services[keys].services[key1]
+                                 .required === 1
+                                 ) {
+                                 return (
+                                 <div key={key1}
+                                 className="text-left">
+                                 <Checkbox
+                                 checked={true}
+                                 label={
+                                 data.services[keys].services[key1]
+                                 .title
+                                 }
+                                 disabled={true}
+                                 />
+                                 </div>
+                                 );
+                                 } else {
+                                 let temp = this.state.checkBox.slice(0);
+                                 let flag = 0;
+                                 temp.forEach(valueData => {
+                                 if (
+                                 valueData.code ===
+                                 data.services[keys].services[key1]
+                                 .code
+                                 ) {
+                                 if (valueData.key === data.id) {
+                                 flag = 1;
+                                 }
+                                 }
+                                 });
+                                 if (flag === 0) {
+                                 temp.push({
+                                 code: data.services[keys].services[key1]
+                                 .code,
+                                 isSelected: false,
+                                 key: data.id,
+                                 id: key1
+                                 });
+                                 this.state.checkBox = temp;
+                                 }
+                                 return (
+                                 <div key={key1}
+                                 className="text-left">
+                                 {this.state.checkBox.map(KEYS => {
+                                 if (
+                                 KEYS.code ===
+                                 data.services[keys].services[
+                                 key1
+                                 ].code &&
+                                 KEYS.key === data.id
+                                 ) {
+                                 return (
+                                 <div
+                                 className="p-2"
+                                 key={KEYS.code}
+                                 style={{
+                                 backgroundColor: "#FCF1CD"
+                                 }}
+                                 >
+                                 <Checkbox
+                                 checked={KEYS.isSelected}
+                                 label={
+                                 data.services[keys]
+                                 .services[key1].title
+                                 }
+                                 onChange={this.onCheckBox.bind(
+                                 this,
+                                 data.services[keys]
+                                 .services[key1].code,
+                                 data.id
+                                 )}
+                                 />
+                                 </div>
+                                 );
+                                 }
+                                 })}
+                                 </div>
+                                 );
+                                 }
+                                 })}
+                                 </React.Fragment>
+                                 );
+                                 })
+                                 : null}
+                                 </div>
+                                 </div>
+                                 </div>
+                                 </Card>
+                                 </div>*!/}
+                                 );*/
 
-                    })}
+                            })}
+                        </FormLayout.Group>
+                    </FormLayout>
                 </Collapsible>
             </div>
+        );
+    }
+
+    handleChangeModakCsv = () => {
+        console.log("qwerty",this.state.active);
+        // this.setState(({active}) => ({active: !active}));
+        this.setState({
+            active : !this.state.active
+        })
+        console.log("asdfgh",this.state.active);
+        // this.csvManagementRender();
+    };
+
+    renderCsvUploadManagement() {
+        const {active} = this.state;
+        return (<React.Fragment>
+                <div className="col-12 mb-3">
+                    <div
+                        style={{cursor: "pointer"}}
+                        onClick={this.handleToggleClick.bind(this.state.banner_paln)}
+                    >
+                        <Banner title="CSV Order Management" icon="view" status="info"
+                        >
+                            <p><b><i>One time payment if Csv not matched according to the offical format</i></b></p>
+                        </Banner>
+                    </div>
+                    <Collapsible open={true}
+                                 ariaExpanded={this.state.fba_plan}
+                    >
+                        <FormLayout>
+                            <FormLayout.Group condensed>
+                                <div className="col-12 m-4">
+                                    {/* Starting Of Plan Card */}
+                                    <Card>
+                                        <div className="d-flex justify-content-center p-5">
+                                            <div className="pt-5">
+                                                <div className="mb-5 text-center">
+                                                    {" "}
+                                                    {/* Plan Numeric Price */}
+                                                    {/*<p className="price-tag">
+                                                     <span className="price-tag_small">$</span>
+                                                     <span className="price-tag_discount"><strike>{data.originalValue}</strike></span>
+                                                     {data.main_price}
+                                                     <span className="price-tag_small">
+                                                     {data.validity_display}
+                                                     </span>
+                                                     </p>*/}
+                                                </div>
+                                                <Stack distribution="center">
+                                                    {" "}
+                                                    {/* Button To choose Plan */}
+                                                    {/*<Button
+                                                     primary={true}
+                                                     fullWidth={true}
+                                                     size="large"
+                                                     disabled={
+                                                     data.main_price === 0 || data.main_price === "0"
+                                                     }
+                                                     onClick={this.onSelectPlan.bind(this, data)}
+                                                     >
+                                                     {data.main_price === 0 || data.main_price === "0"
+                                                     ? "Select Marketplace"
+                                                     : "Choose Plan"}
+                                                     </Button>*/}
+                                                    <img style={{height: '100px', width: '100px', cursor: "pointer"}}
+                                                         src={require("../../assets/img/csv_upload.png")}
+                                                         onClick={this.handleChangeModakCsv.bind(this)}
+                                                    />
+                                                </Stack>
+                                                <div className="mb-5 text-center">
+                                                    {" "}
+                                                    {/* Descriptions For Particular deatails */}
+                                                    <h1 className="mb-4 mt-4">
+                                                        <b>Upload CSV</b>
+                                                    </h1>
+                                                    <h4>Upload Your Products CSV File To import all the products into an
+                                                        App</h4>
+                                                </div>
+                                                <hr />
+                                                <div className="text-center mt-5">
+                                                </div>
+                                            </div>
+                                            {console.log(this.state.active)}
+
+                                        </div>
+                                        {/*<Modal
+                                            open={active}
+                                            onClose={false}
+                                            title="Reach more shoppers with Instagram product tags"
+                                            primaryAction={{
+                                                content: 'Add Instagram',
+                                                onAction: this.handleChange,
+                                            }}
+                                            secondaryActions={[
+                                                {
+                                                    content: 'Learn more',
+                                                    onAction: this.handleChange,
+                                                },
+                                            ]}
+                                        >
+                                            <Modal.Section>
+                                                <TextContainer>
+                                                    <p>
+                                                        Use Instagram posts to share your products with millions of
+                                                        people. Let shoppers buy from your store without leaving
+                                                        Instagram.
+                                                    </p>
+                                                </TextContainer>
+                                            </Modal.Section>
+                                        </Modal>*/}
+                                    </Card>
+                                </div>
+                            </FormLayout.Group>
+                        </FormLayout>
+                    </Collapsible>
+                </div>
+            </React.Fragment>
+        );
+
+    }
+
+    csvManagementRender() {
+        const {active} = this.state;
+        console.log(active);
+        return (
+            <React.Fragment>
+                {/*<div style={{height: '500px'}}>
+                    <Modal
+                        open={active}
+                        onClose={false}
+                        title="Reach more shoppers with Instagram product tags"
+                        primaryAction={{
+                            content: 'Add Instagram',
+                            onAction: this.handleChange,
+                        }}
+                        secondaryActions={[
+                            {
+                                content: 'Learn more',
+                                onAction: this.handleChange,
+                            },
+                        ]}
+                    >
+                        <Modal.Section>
+                            <TextContainer>
+                                <p>
+                                    Use Instagram posts to share your products with millions of
+                                    people. Let shoppers buy from your store without leaving
+                                    Instagram.
+                                </p>
+                            </TextContainer>
+                        </Modal.Section>
+                    </Modal>
+                </div>*/}
+            </React.Fragment>
         );
     }
 
@@ -1227,6 +1390,11 @@ class PlanBody extends Component {
                 content: 'Fba Order Management',
                 panelID: 'order-management',
             },
+            {
+                id: 'cvs_management',
+                content: 'CSV Upload Management',
+                panelID: 'csv-management'
+            }
         ];
         return (
             <React.Fragment>
@@ -1248,10 +1416,20 @@ class PlanBody extends Component {
                         <Card>
                             <Tabs tabs={tabs} selected={selected} onSelect={this.handleTabChange}/>
                             <Card.Section>
-                                {selected === 0 ? this.renderPlanProductSync() : this.renderPlanOrderManagement()}
+                                {selected === 0 ? this.renderPlanProductSync() : selected === 1 ? this.renderPlanOrderManagement() : this.renderCsvUploadManagement()}
                             </Card.Section>
                         </Card>
                     </div>
+                    {console.log("before Model",this.state.active)}
+                    <Modal
+                        open={this.state.active}
+                        onClose={this.handleChangeModakCsv.bind(this)}
+                        title="Upload CSV"
+                    >
+                        <Modal.Section>
+                            <FileImporter {...this.props} />
+                        </Modal.Section>
+                    </Modal>
                 </div>
             </React.Fragment>
         )

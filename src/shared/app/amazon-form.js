@@ -56,7 +56,7 @@ class AmazonInstallationForm extends Component {
         return (
             <React.Fragment>
                 <div className="row">
-                    <div className="col-12 text-right" style={{color: '#bf0711', position:'fixed'}}>
+                    <div className="col-12 text-right" style={{color: '#bf0711'}}>
                         <Button monochrome outline
                                 onClick={() => {
                                     window.open(
