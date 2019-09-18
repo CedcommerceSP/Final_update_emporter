@@ -771,9 +771,9 @@ export class Import extends Component {
             .then(data => {
             	console.log(data);
                 if (data.success) {
-					notify.success(data.message);
+					notify.success(data.code);
                 } else {
-                    notify.error(data.message);
+                    notify.error(data.code);
                 }
             });
 

@@ -4,8 +4,6 @@
     <list default="true" id="2e099004-80b0-4101-b90f-7275c6e6533a" name="Default" comment="">
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/components/Panel/Components/import.js" afterPath="$PROJECT_DIR$/src/components/Panel/Components/import.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/shared/app/amazon-form.js" afterPath="$PROJECT_DIR$/src/shared/app/amazon-form.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/shared/plans/plan-body.js" afterPath="$PROJECT_DIR$/src/shared/plans/plan-body.js" />
     </list>
     <ignored path="$PROJECT_DIR$/.tmp/" />
     <ignored path="$PROJECT_DIR$/temp/" />
@@ -147,7 +145,7 @@
         <entry file="file://$PROJECT_DIR$/src/components/Panel/Components/plans.js">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="331">
-              <caret line="64" column="18" lean-forward="true" selection-start-line="59" selection-start-column="16" selection-end-line="64" selection-end-column="18" />
+              <caret line="64" column="18" lean-forward="false" selection-start-line="59" selection-start-column="16" selection-end-line="64" selection-end-column="18" />
               <folding />
             </state>
           </provider>
@@ -166,13 +164,22 @@
       <file leaf-file-name="import.js" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/components/Panel/Components/import.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="180">
-              <caret line="771" column="34" lean-forward="false" selection-start-line="771" selection-start-column="34" selection-end-line="771" selection-end-column="34" />
+            <state relative-caret-position="378">
+              <caret line="775" column="42" lean-forward="false" selection-start-line="775" selection-start-column="42" selection-end-line="775" selection-end-column="42" />
               <folding>
                 <element signature="e#0#41#0" expanded="true" />
                 <element signature="e#2145#3392#0" expanded="false" />
-                <marker date="1568631583475" expanded="false" signature="26593:26939" ph="&lt;div/&gt;" />
               </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="environment.js" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/environments/environment.js">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="44">
+              <caret line="2" column="17" lean-forward="false" selection-start-line="2" selection-start-column="17" selection-end-line="2" selection-end-column="17" />
+              <folding />
             </state>
           </provider>
         </entry>
@@ -260,7 +267,6 @@
         <option value="$PROJECT_DIR$/src/components/Panel/Components/import-component/EbayAffiliate.js" />
         <option value="$PROJECT_DIR$/src/components/Panel/Components/configuration.js" />
         <option value="$PROJECT_DIR$/src/components/Panel/Components/faq.js" />
-        <option value="$PROJECT_DIR$/src/environments/environment.js" />
         <option value="$PROJECT_DIR$/package.json" />
         <option value="$PROJECT_DIR$/node_modules/react-chartjs-2/es/index.js" />
         <option value="$PROJECT_DIR$/src/components/Panel/Components/dashboard.js" />
@@ -283,6 +289,7 @@
         <option value="$PROJECT_DIR$/src/shared/plans/plan-body.js" />
         <option value="$PROJECT_DIR$/src/App.js" />
         <option value="$PROJECT_DIR$/src/shared/app/amazon-form.js" />
+        <option value="$PROJECT_DIR$/src/environments/environment.js" />
         <option value="$PROJECT_DIR$/src/components/Panel/Components/import.js" />
       </list>
     </option>
@@ -392,6 +399,24 @@
             </PATH_ELEMENT>
             <PATH_ELEMENT>
               <option name="myItemId" value="app" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="omni-importer" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="omni-importer" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="src" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="environments" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
           </PATH>
@@ -750,12 +775,12 @@
       <workItem from="1568109586651" duration="15753000" />
       <workItem from="1568294597536" duration="15824000" />
       <workItem from="1568358636248" duration="9063000" />
-      <workItem from="1568608852160" duration="9487000" />
+      <workItem from="1568608852160" duration="14667000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="1344680000" />
+    <option name="totallyTimeSpent" value="1349860000" />
   </component>
   <component name="TodoView">
     <todo-panel id="selected-file">
@@ -767,10 +792,10 @@
     </todo-panel>
   </component>
   <component name="ToolWindowManager">
-    <frame x="-3" y="0" width="1286" height="770" extended-state="7" />
+    <frame x="-3" y="0" width="1286" height="770" extended-state="6" />
     <editor active="true" />
     <layout>
-      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.21576433" sideWeight="0.49411765" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.22213376" sideWeight="0.49411765" order="0" side_tool="false" content_ui="combo" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32943144" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="true" content_ui="tabs" />
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32919255" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
@@ -844,13 +869,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="288">
           <caret line="19" column="0" lean-forward="false" selection-start-line="19" selection-start-column="0" selection-end-line="19" selection-end-column="0" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/environments/environment.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="0">
-          <caret line="2" column="17" lean-forward="false" selection-start-line="2" selection-start-column="17" selection-end-line="2" selection-end-column="17" />
         </state>
       </provider>
     </entry>
@@ -1219,7 +1237,7 @@
     <entry file="file://$PROJECT_DIR$/src/components/Panel/Components/plans.js">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="331">
-          <caret line="64" column="18" lean-forward="true" selection-start-line="59" selection-start-column="16" selection-end-line="64" selection-end-column="18" />
+          <caret line="64" column="18" lean-forward="false" selection-start-line="59" selection-start-column="16" selection-end-line="64" selection-end-column="18" />
           <folding />
         </state>
       </provider>
@@ -1281,14 +1299,21 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/src/environments/environment.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="44">
+          <caret line="2" column="17" lean-forward="false" selection-start-line="2" selection-start-column="17" selection-end-line="2" selection-end-column="17" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/src/components/Panel/Components/import.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="180">
-          <caret line="771" column="34" lean-forward="false" selection-start-line="771" selection-start-column="34" selection-end-line="771" selection-end-column="34" />
+        <state relative-caret-position="378">
+          <caret line="775" column="42" lean-forward="false" selection-start-line="775" selection-start-column="42" selection-end-line="775" selection-end-column="42" />
           <folding>
             <element signature="e#0#41#0" expanded="true" />
             <element signature="e#2145#3392#0" expanded="false" />
-            <marker date="1568631583475" expanded="false" signature="26593:26939" ph="&lt;div/&gt;" />
           </folding>
         </state>
       </provider>
