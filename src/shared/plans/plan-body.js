@@ -18,6 +18,7 @@ import {
     Page,
     FormLayout,
     Tabs,
+    Badge,
     TextContainer
 } from "@shopify/polaris";
 import {isUndefined} from "util";
@@ -40,6 +41,7 @@ class PlanBody extends Component {
         this.state = {
             selected: 0,
             active: false,
+            plan_title:"",
             necessaryInfo: {},
             sync_plan_checkbox: false,
             show_banner_onetime_payment: false,
@@ -86,23 +88,29 @@ class PlanBody extends Component {
                 let available_credits = this.state.necessaryInfo.credits.available_credits;
                 let used_credits = this.state.necessaryInfo.credits.total_used_credits;
                 let total_credits = available_credits + used_credits;
+                console.log("qwerty",used_credits);
                 if (total_credits > 10) {
+                    console.log("1")
                     this.setState({
                         show_banner_onetime_payment: true
                     })
                 }
-                if (this.state.necessaryInfo.import_count === this.state.necessaryInfo.upload_count) {
+                if (this.state.necessaryInfo.import_count === this.state.necessaryInfo.upload_count &&
+                    this.state.necessaryInfo.import_count !== 0) {
+                    console.log("2")
                     this.setState({
                         show_banner_onetime_payment: true
                     })
                 }
                 if (used_credits > 0) {
+                    console.log("3")
                     this.setState({
                         show_banner_onetime_payment: true
                     })
                 }
 
                 if (this.state.necessaryInfo.import_count <= 10 && total_credits > 10) {
+                    console.log("4")
                     this.setState({
                         show_banner_onetime_payment: true
                     })
@@ -497,11 +505,16 @@ class PlanBody extends Component {
                                 <FormLayout>
                                     <FormLayout.Group condensed>
                                         {this.state.data.map((data, index) => {
-                                            if (data.title !== "FBA") {
+                                            if (data.title !== "FBA" && data.title !== "FBA Annually") {
                                                 return (
                                                     <div key={index}>
                                                         {/* Starting Of Plan Card */}
                                                         <Card>
+                                                            {this.state.plan_title === data.title?
+                                                            <div className="text-center pt-4">
+                                                                <Badge status="success" progress="complete">Activated Plan</Badge>
+                                                                <hr/>
+                                                            </div>:null}
                                                             <div className="d-flex justify-content-center p-4">
                                                                 <div className="pt-5">
                                                                     <div className="mb-5 text-center">
@@ -869,11 +882,16 @@ class PlanBody extends Component {
                         <FormLayout.Group condensed>
 
                             {this.state.data.map((data, index) => {
-                                if (data.title === "FBA") {
+                                if (data.title === "FBA" || data.title === "FBA Annually") {
                                     return (
                                         <div className="col-12 m-4" key={index}>
                                             {/* Starting Of Plan Card */}
                                             <Card>
+                                                {this.state.plan_title === data.title?
+                                                    <div className="text-center pt-4">
+                                                        <Badge status="success" progress="complete">Activated Plan</Badge>
+                                                        <hr/>
+                                                    </div>:null}
                                                 <div className="d-flex justify-content-center p-5">
                                                     <div className="pt-5">
                                                         <div className="mb-5 text-center">
@@ -1253,32 +1271,13 @@ class PlanBody extends Component {
                                             <div className="pt-5">
                                                 <div className="mb-5 text-center">
                                                     {" "}
-                                                    {/* Plan Numeric Price */}
-                                                    {/*<p className="price-tag">
-                                                     <span className="price-tag_small">$</span>
-                                                     <span className="price-tag_discount"><strike>{data.originalValue}</strike></span>
-                                                     {data.main_price}
-                                                     <span className="price-tag_small">
-                                                     {data.validity_display}
-                                                     </span>
-                                                     </p>*/}
+
+
                                                 </div>
                                                 <Stack distribution="center">
                                                     {" "}
-                                                    {/* Button To choose Plan */}
-                                                    {/*<Button
-                                                     primary={true}
-                                                     fullWidth={true}
-                                                     size="large"
-                                                     disabled={
-                                                     data.main_price === 0 || data.main_price === "0"
-                                                     }
-                                                     onClick={this.onSelectPlan.bind(this, data)}
-                                                     >
-                                                     {data.main_price === 0 || data.main_price === "0"
-                                                     ? "Select Marketplace"
-                                                     : "Choose Plan"}
-                                                     </Button>*/}
+
+
                                                     <img style={{height: '100px', width: '100px', cursor: "pointer"}}
                                                          src={require("../../assets/img/csv_upload.png")}
                                                          onClick={this.handleChangeModakCsv.bind(this)}
@@ -1300,31 +1299,6 @@ class PlanBody extends Component {
                                             {console.log(this.state.active)}
 
                                         </div>
-                                        {/*<Modal
-                                            open={active}
-                                            onClose={false}
-                                            title="Reach more shoppers with Instagram product tags"
-                                            primaryAction={{
-                                                content: 'Add Instagram',
-                                                onAction: this.handleChange,
-                                            }}
-                                            secondaryActions={[
-                                                {
-                                                    content: 'Learn more',
-                                                    onAction: this.handleChange,
-                                                },
-                                            ]}
-                                        >
-                                            <Modal.Section>
-                                                <TextContainer>
-                                                    <p>
-                                                        Use Instagram posts to share your products with millions of
-                                                        people. Let shoppers buy from your store without leaving
-                                                        Instagram.
-                                                    </p>
-                                                </TextContainer>
-                                            </Modal.Section>
-                                        </Modal>*/}
                                     </Card>
                                 </div>
                             </FormLayout.Group>
@@ -1376,6 +1350,23 @@ class PlanBody extends Component {
         this.setState({selected: selectedTabIndex});
     };
 
+    componentDidMount() {
+        this.setState({buttonLoading:true});
+        requests.getRequest("plan/plan/getActive").then(data => {
+            console.log("getActive",data);
+            if (data.success && data.data && data.data.title) {
+                this.setState({
+                    plan_title : data.data.title
+                })
+                // this.setState({active_plan_id : data.data.plan_id},() => {this.getAllPlans()});
+                console.log(data.data.title)
+            } else {
+                // this.getAllPlans();
+            }
+        });
+        // this.getImportPaymentSettings();
+    }
+
     render() {
         const {selected} = this.state;
         const tabs = [
@@ -1420,7 +1411,6 @@ class PlanBody extends Component {
                             </Card.Section>
                         </Card>
                     </div>
-                    {console.log("before Model",this.state.active)}
                     <Modal
                         open={this.state.active}
                         onClose={this.handleChangeModakCsv.bind(this)}

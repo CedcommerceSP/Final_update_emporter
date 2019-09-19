@@ -779,6 +779,16 @@ export class Import extends Component {
 
 	}
 
+    handleChangeModakCsv = () => {
+        console.log("qwerty",this.state.active);
+        // this.setState(({active}) => ({active: !active}));
+        this.setState({
+            active : !this.state.active
+        })
+        console.log("asdfgh",this.state.active);
+        // this.csvManagementRender();
+    };
+
 	render() {
 		let { mainTab, necessaryInfo } = this.state;
 		return (
@@ -829,7 +839,7 @@ export class Import extends Component {
 							<FileImporter {...this.props} />
 						</Collapsible>
 					</div>*/}
-					<div className="col-md-6 col-sm-6 col-12 p-3">
+					<div className="col-md-4 col-sm-4 col-12 p-3">
 						<Card>
 							<div
 								onClick={() => {
@@ -857,7 +867,7 @@ export class Import extends Component {
 							</div>
 						</Card>
 					</div>
-					<div className="col-md-6 col-sm-6 col-12 p-3">
+					<div className="col-md-4 col-sm-4 col-12 p-3">
 						<Card>
 							<div
 								onClick={() => {
@@ -891,6 +901,35 @@ export class Import extends Component {
 							</div>
 						</Card>
 					</div>
+					<div className="col-md-4 col-sm-4 col-12 p-3">
+						<Card>
+							<div style={{ cursor: "pointer" }}
+								 onClick={this.handleChangeModakCsv.bind(this)}
+							>
+								<div className="text-center pt-5 pb-5">
+									<img style={{height: '138px', width: '138px', cursor: "pointer"}}
+										 src={require("../../../assets/img/csv_upload.png")}
+										 onClick={this.handleChangeModakCsv.bind(this)}
+									/>
+								</div>
+								<div className="text-center pt-2 pb-4">
+									<span className="h2" style={{ color: "#3f4eae" }}>
+										Upload CSV
+									</span>
+									<Label>(Upload Your CSV To App)</Label>
+								</div>
+							</div>
+						</Card>
+					</div>
+					<Modal
+						open={this.state.active}
+						onClose={this.handleChangeModakCsv.bind(this)}
+						title="Upload CSV"
+					>
+						<Modal.Section>
+							<FileImporter {...this.props} />
+						</Modal.Section>
+					</Modal>
 				</div>:<React.Fragment>
 					<br/>
 					<EbayAffiliate {...this.props}/>
