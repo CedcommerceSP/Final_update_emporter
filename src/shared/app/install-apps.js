@@ -308,9 +308,10 @@ class InstallAppsShared extends Component {
 		) {
 			params = this.props.additional_data;
 		}
-
-		requests.getRequest("connector/get/installationForm", params).then(data => {
+        console.log(params);
+        requests.getRequest("connector/get/installationForm", params).then(data => {
 			if (data.success === true) {
+				console.log("qrty",data.data);
 				if (data.data.post_type === "redirect") {
 					let tempURL = {
 						open: true,
@@ -335,6 +336,7 @@ class InstallAppsShared extends Component {
 	}
 
 	modifySchemaData(data) {
+		console.log("data",data);
 		for (let i = 0; i < data.length; i++) {
 			if (!isUndefined(data[i].options)) {
 				data[i].options = modifyOptionsData(data[i].options);

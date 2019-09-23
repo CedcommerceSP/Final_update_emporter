@@ -84,12 +84,12 @@ class Dashboard extends Component {
 					}, // step 1
 					{
 						message: <p><strong>Pricing Guide</strong></p>,
-						stepperMessage: "Pricing Plan", // stepper Small Message
+						stepperMessage: "Finish", // stepper Small Message
 						API_endpoint: "", // Api End Point is used to check to send data or get data
 						data: "", // Data additional Field
 						method: "GET", // Method Type
-						redirectTo: "/panel/dashboard/guide", // After Completion Where To Redirect
-						anchor: "PRICING_GUIDE", // Which Function to call e.g : 'U-INFO' then call div which take User basic Information
+						redirectTo: "/panel/accounts", // After Completion Where To Redirect
+						anchor: "COMPLETE", // Which Function to call e.g : 'U-INFO' then call div which take User basic Information
 						stepperActive: false // used in stepper Check either Completed or not
 					} // step 2
 				]
@@ -97,7 +97,6 @@ class Dashboard extends Component {
 		};
 		this.checkStepCompleted = this.checkStepCompleted.bind(this);
 		this.autoFillDetails();
-		console.log("ND",props.necessaryInfo);
 	}
 
 	componentWillReceiveProps(nextPorps) {
@@ -152,7 +151,7 @@ class Dashboard extends Component {
 							stepStart: !flag,
 							active_step: {
 								name: anchor,
-								step: parseInt(data.data) + 1
+								step: parseInt(data.data) + 2
 							}
 						});
 					}
@@ -192,7 +191,7 @@ class Dashboard extends Component {
 						stepData: data,
 						active_step: {
 							name: anchor,
-							step: arg + 1
+							step: arg + 2
 						}
 					});
 					if (arg >= 2) {
@@ -403,7 +402,7 @@ class Dashboard extends Component {
 								});
 								requests.getRequest("shopifygql/setup/shopifydetails").then();
 								notify.success(data.message);
-								this.changeStep(1);
+								this.changeStep(2);
 							} else {
 								notify.error(data.message);
 							}
@@ -670,12 +669,12 @@ class Dashboard extends Component {
 										) : null}
 									</div>
 								</div>
-								<TextField
+								{/*<TextField
 									value={this.state.info.skype_id}
 									onChange={this.handleFormChange.bind(this, "skype_id")}
 									label="Skype ID:"
 									type="text"
-								/>
+								/>*/}
 								<Select
 									label="How Do you Know About us"
 									placeholder="Select"

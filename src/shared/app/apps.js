@@ -7,18 +7,20 @@ import {
     Banner,
     Label,
     Tooltip,
-    Icon
+    Icon, Tabs,
+    Collapsible,Stack,FormLayout,Modal,Badge
 } from "@shopify/polaris";
 import {requests} from "../../services/request";
 import {notify} from "../../services/notify";
 import {json} from "../../environments/static-json";
+import FileImporter from "../../components/Panel/Components/import-component/fileimporter";
 import {environment} from "../../environments/environment";
 
 class AppsShared extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            show_banner: false
+            show_banner: false,
         };
         this.getConnectors();
     }
@@ -41,11 +43,13 @@ class AppsShared extends Component {
         this.state = {
             apps: [],
             ebay_county_code: "",
-            code_usable: []
+            code_usable: [],
+            selected:0,
+            banner_paln: false,
         };
         requests.getRequest("connector/get/all").then(data => {
             if (data.success) {
-                console.log(data);
+                // console.log(data);
                 let installedApps = [];
                 let code = [];
                 for (let i = 0; i < Object.keys(data.data).length; i++) {
@@ -66,7 +70,7 @@ class AppsShared extends Component {
                         code.push(data.data[Object.keys(data.data)[i]]["code"]);
                     }
                 }
-                 for (let i = 0; i < Object.keys(data.data).length; i++) {
+                for (let i = 0; i < Object.keys(data.data).length; i++) {
                     if (data.data[Object.keys(data.data)[i]]['code'] == "ebayaffiliate") {
                         installedApps.push(data.data[Object.keys(data.data)[i]]);
                         code.push(data.data[Object.keys(data.data)[i]]["code"]);
@@ -110,7 +114,219 @@ class AppsShared extends Component {
         this.setState({[obj]: val});
     };
 
+    handleTabChange = (selectedTabIndex) => {
+        this.setState({selected: selectedTabIndex});
+    };
+
+
+    renderMarketplace() {
+           return this.state.apps.map(app => {
+               if (app.code !== 'fba') {
+                   if (this.validateCode(app.code)) {
+                       return (
+                           <div
+                               className="col-6 col-sm-6 mb-4"
+                               key={this.state.apps.indexOf(app)}
+                           >
+                               <Card title={app.title}>
+                                   {this.props.success.code === app.code ||
+                                   app["installed"] !== 0
+                                       ?<div className="text-left pt-3 pl-4">
+                                       <Badge progress="complete" status="success">Connected</Badge>
+                                   </div>:null}
+                                   <div className="row p-5">
+                                       <div className="col-12">
+                                           <img src={app.image} alt={app.title}
+                                                style={{maxWidth: "100%", height: "160px"}}/>
+                                       </div>
+                                       <div className="col-12 mt-4 mb-4">
+                                           <div className="row">
+                                               <div className="col-12 col-sm-6">
+                                                   {this.additionalInput(app.code)}
+                                               </div>
+                                               <div className="col-12 col-sm-6">
+                                                   <Button
+                                                       // disabled={this.props.success.code === app.code || app['installed'] !==0 && app.code !== 'ebayimporter'}
+                                                       onClick={() => {
+                                                           this.installApp(app.code);
+                                                       }}
+                                                       primary
+                                                       fullWidth={true}
+                                                   >
+                                                       {this.props.success.code === app.code ||
+                                                       app["installed"] !== 0
+                                                           ? "ReConnect"
+                                                           : "Link your Account"}
+                                                   </Button>
+                                               </div>
+                                           </div>
+                                       </div>
+                                   </div>
+                               </Card>
+                           </div>
+                       );
+                   }
+               }
+            })
+        }
+
+    renderOrderManagement(){
+        return this.state.apps.map(app => {
+            if (app.code === 'fba') {
+                if (this.validateCode(app.code)) {
+                    return (
+                        <div
+                            className="col-6 col-sm-6 mb-4"
+                            key={this.state.apps.indexOf(app)}
+                        >
+                            <Card title={app.title}>
+                                {this.props.success.code === app.code ||
+                                app["installed"] !== 0
+                                    ?<div className="text-left pt-3 pl-4">
+                                        <Badge progress="complete" status="success">Connected</Badge>
+                                    </div>:null}
+                                <div className="row p-5">
+                                    <div className="col-12">
+                                        <img src={app.image} alt={app.title}
+                                             style={{maxWidth: "100%", height: "160px"}}/>
+                                    </div>
+                                    <div className="col-12 mt-4 mb-4">
+                                        <div className="row">
+                                            <div className="col-12 col-sm-6">
+                                                {this.additionalInput(app.code)}
+                                            </div>
+                                            <div className="col-12 col-sm-6">
+                                                <Button
+                                                    // disabled={this.props.success.code === app.code || app['installed'] !==0 && app.code !== 'ebayimporter'}
+                                                    onClick={() => {
+                                                        this.installApp(app.code);
+                                                    }}
+                                                    primary
+                                                    fullWidth={true}
+                                                >
+                                                    {this.props.success.code === app.code ||
+                                                    app["installed"] !== 0
+                                                        ? "ReConnect"
+                                                        : "Link your Account"}
+                                                </Button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </Card>
+                        </div>
+                    );
+                }
+            }
+        })
+    }
+
+    handleToggleClick = () => {
+
+        this.setState((state) => {
+            const banner_plan = !state.banner_plan;
+            return {
+                banner_plan,
+            };
+        });
+    };
+
+    handleChangeModakCsv = () => {
+        // console.log("qwerty",this.state.active);
+        // this.setState(({active}) => ({active: !active}));
+        this.setState({
+            active : !this.state.active
+        })
+        // console.log("asdfgh",this.state.active);
+        // this.csvManagementRender();
+    };
+
+    renderCsvUploadManagement() {
+        const {active} = this.state;
+        return (<React.Fragment>
+                <div className="col-12 mb-3">
+                    <div
+                        style={{cursor: "pointer"}}
+                        onClick={this.handleToggleClick.bind(this.state.banner_paln)}
+                    >
+                        <Banner title="CSV Order Management" icon="view" status="info"
+                        >
+                            <p><b><i>One time payment if Csv not matched according to the offical format</i></b></p>
+                        </Banner>
+                    </div>
+                    <Collapsible open={true}
+                                 ariaExpanded={this.state.fba_plan}
+                    >
+                        <FormLayout>
+                            <FormLayout.Group condensed>
+                                <div className="col-12 m-4">
+                                    {/* Starting Of Plan Card */}
+                                    <Card>
+                                        <div className="d-flex justify-content-center p-5">
+                                            <div className="pt-5">
+                                                <div className="mb-5 text-center">
+                                                    {" "}
+
+
+                                                </div>
+                                                <Stack distribution="center">
+                                                    {" "}
+
+
+                                                    <img style={{height: '100px', width: '100px', cursor: "pointer"}}
+                                                         src={require("../../assets/img/csv_upload.png")}
+                                                         onClick={this.handleChangeModakCsv.bind(this)}
+                                                    />
+                                                </Stack>
+                                                <div className="mb-5 text-center">
+                                                    {" "}
+                                                    {/* Descriptions For Particular deatails */}
+                                                    <h1 className="mb-4 mt-4">
+                                                        <b>Upload CSV</b>
+                                                    </h1>
+                                                    <h4>Upload Your Products CSV File To import all the products into an
+                                                        App</h4>
+                                                </div>
+                                                <hr />
+                                                <div className="text-center mt-5">
+                                                </div>
+                                            </div>
+                                            {/*{console.log(this.state.active)}*/}
+
+                                        </div>
+                                    </Card>
+                                </div>
+                            </FormLayout.Group>
+                        </FormLayout>
+                    </Collapsible>
+                </div>
+            </React.Fragment>
+        );
+
+    }
+
+
     render() {
+
+        const {selected} = this.state;
+        const tabs = [
+            {
+                id: 'account_marketplace',
+                content: 'MarketPlace',
+                accessibilityLabel: 'accountmarketplace',
+                panelID: 'accountmarketplace',
+            },
+            {
+                id: 'order_management',
+                content: 'Order Management',
+                panelID: 'order-management',
+            },
+            {
+                id: 'cvs_management',
+                content: 'CSV Upload Management',
+                panelID: 'csv-management'
+            }
+        ];
         return (
             <div className="row">
                 {this.state.show_banner && (
@@ -120,7 +336,29 @@ class AppsShared extends Component {
                         </Banner>
                     </div>
                 )}
-                {this.state.apps.map(app => {
+
+                <div className="col-12">
+                    <Card>
+                        <Tabs tabs={tabs} selected={selected} onSelect={this.handleTabChange}/>
+                        <Card.Section>
+                            <div className="row">
+                            {selected == 0 ? this.renderMarketplace() : selected === 1 ? this.renderOrderManagement() : this.renderCsvUploadManagement()}
+                            </div>
+                        </Card.Section>
+                    </Card>
+                </div>
+
+                <Modal
+                    open={this.state.active}
+                    onClose={this.handleChangeModakCsv.bind(this)}
+                    title="Upload CSV"
+                >
+                    <Modal.Section>
+                        <FileImporter {...this.props} />
+                    </Modal.Section>
+                </Modal>
+
+                {/*{this.state.apps.map(app => {
                     if (this.validateCode(app.code)) {
                         return (
                             <div
@@ -160,7 +398,7 @@ class AppsShared extends Component {
                             </div>
                         );
                     }
-                })}
+                })}*/}
                 <input
                     type={"hidden"}
                     data-toggle="modal"
@@ -217,7 +455,7 @@ class AppsShared extends Component {
             code === "wishimporter" ||
             code === "wishimporter" ||
             code === "etsyimporter" ||
-            code === "amazonaffiliate" || 
+            code === "amazonaffiliate" ||
             code === "ebayaffiliate"
         );
     };

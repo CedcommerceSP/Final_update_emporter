@@ -46,7 +46,7 @@ export class Header extends Component {
 	}
 
 	render() {
-		if (!this.state.loggedIn) {
+        if (!this.state.loggedIn) {
 			return <Redirect to="/auth/login" />;
 		} else {
 			return (

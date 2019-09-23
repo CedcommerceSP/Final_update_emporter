@@ -399,7 +399,7 @@ export class FbaOrder extends Component {
                 });
                 break;
             default:
-                console.log("Default Case");
+                // console.log("Default Case");
         }
     };
 

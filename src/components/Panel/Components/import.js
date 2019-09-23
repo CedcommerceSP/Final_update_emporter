@@ -69,7 +69,7 @@ export class Import extends Component {
 		this.handleModalChange = this.handleModalChange.bind(this);
 	}
     componentWillReceiveProps(nextPorps) {
-		console.log("qwerty",nextPorps);
+		// console.log("qwerty",nextPorps);
         if (nextPorps.necessaryInfo !== undefined) {
             this.setState({ necessaryInfo: nextPorps.necessaryInfo });
         }
@@ -83,7 +83,7 @@ export class Import extends Component {
 					this.state.importServicesList = [];
 					for (let i = 0; i < Object.keys(data.data).length; i++) {
 						let key = Object.keys(data.data)[i];
-						console.log("key = ",  key)
+						// console.log("key = ",  key)
 						if (data.data[key].usable || !environment.isLive) {
 							if (validateImporter(data.data[key].code)) {
 								if (data.data[key].code !== 'fba') {
@@ -96,7 +96,7 @@ export class Import extends Component {
 							}
 						}
 					}
-					console.log("marketplace = = = ", this.state.importServicesList);
+					// console.log("marketplace = = = ", this.state.importServicesList);
 					this.updateState();
 					for (let i = 0;i<this.state.importServicesList.length;i++){
 						if (this.state.importServicesList[i]['value'] !== 'ebayaffiliate' && this.state.importServicesList[i]['value'] !== 'fileimporter') {
@@ -131,7 +131,7 @@ export class Import extends Component {
 					notify.error(data.message);
 				}
 			});
-		console.log("hello",this.state.uploadServicesList);
+		// console.log("hello",this.state.uploadServicesList);
 	}
 
 	renderImportProductsModal() {
@@ -765,11 +765,11 @@ export class Import extends Component {
     };
 
     getCollectionAndLocation() {
-		console.log("in function getCollectionAnd Location");
+		// console.log("in function getCollectionAnd Location");
         requests
             .getRequest("frontend/importer/getCollectionShopify")
             .then(data => {
-            	console.log(data);
+            	// console.log(data);
                 if (data.success) {
 					notify.success(data.code);
                 } else {
@@ -780,12 +780,12 @@ export class Import extends Component {
 	}
 
     handleChangeModakCsv = () => {
-        console.log("qwerty",this.state.active);
+        // console.log("qwerty",this.state.active);
         // this.setState(({active}) => ({active: !active}));
         this.setState({
             active : !this.state.active
         })
-        console.log("asdfgh",this.state.active);
+        // console.log("asdfgh",this.state.active);
         // this.csvManagementRender();
     };
 

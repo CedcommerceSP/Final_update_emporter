@@ -1,6 +1,4 @@
-export const panelFunctions = {
-	getMenu: () => {
-		const menu = [
+const menu = [
 			{
 				id: "dashboard",
 				content: "Dashboard",
@@ -73,6 +71,3 @@ export const panelFunctions = {
 				panelID: "help"
 			}
 		];
-		return menu;
-	}
-};
