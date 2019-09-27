@@ -23,6 +23,8 @@ class AmazonInstallationForm extends Component {
             schema: [],
             page: isUndefined(props.page) ? "account" : props.page,
             action: [],
+            verification:"",
+            button_submit:true,
             postType: [],
             hide: [],
             region: "",
@@ -90,7 +92,7 @@ class AmazonInstallationForm extends Component {
                         <div className="row">
                             {!isUndefined(this.state.schema) &&
                             this.state.schema.map(field => {
-                                console.log(field);
+                                //console.log(field);
                                 if (this.state.hide.indexOf(field.key) === -1)
                                     if (
                                         this.state.init_array_show.indexOf(field.key) !== -1 ||
@@ -204,12 +206,23 @@ class AmazonInstallationForm extends Component {
                                                 break;
                                         }
                             })}
-                            <div className="col-12 text-right mt-3">
+                            <div className="col-6 text-left mt-3">
+                                <Button
+                                    onClick={() => {
+                                        this.onClickVerify();
+                                    }}
+                                    disabled={this.state.noChange}
+                                    primary
+                                >
+                                    Verify
+                                </Button>
+                            </div>
+                            <div className="col-6 text-right mt-3">
                                 <Button
                                     onClick={() => {
                                         this.onSubmit();
                                     }}
-                                    disabled={this.state.noChange}
+                                    disabled={this.state.button_submit}
                                     primary
                                 >
                                     Submit
@@ -355,6 +368,59 @@ class AmazonInstallationForm extends Component {
                 notify.info("Please Fill Up All Required Field");
             }
         }
+    }
+
+    onClickVerify() {
+        // console.log("in function where i want!!!");
+        let temp = {};
+        let data = {};
+        let flag = true;
+        for (let i = 0; i < this.state.schema.length; i++) {
+            if (
+                this.state.schema[i].value !== "" &&
+                this.state.schema[i].type !== "checkbox"
+            ) {
+                temp[this.state.schema[i].key] = this.state.schema[i].value;
+            } else if (
+                this.state.schema[i].type === "checkbox" &&
+                this.state.schema[i].value.length > 0
+            ) {
+                temp[this.state.schema[i].key] = this.state.schema[i].value;
+            } else if (
+                this.state.schema[i].required !== 0 &&
+                this.state.hide.indexOf(this.state.schema[i].key) === -1
+            ) {
+                flag = false;
+            }
+        }
+        Object.keys(temp).forEach(key => {
+            if (this.state.hide.indexOf(key) === -1) {
+                data[key] = temp[key];
+            }
+        });
+        if (this.state.region !== "") {
+            data["region"] = this.state.region;
+            data["dev_acc_avail"] = this.state.dev_acc_avail;
+        }
+        // console.log("DATA is here",data);
+
+        requests
+            .postRequest("amazonimporter/request/amazonImporterClientDetailsVerification", data)
+            .then(data => {
+                if (data['success']) {
+                    notify.success(data["message"]);
+                    this.setState({
+                        button_submit:false
+                    })
+                } else {
+                    this.setState({
+                        verification:data["message"]+" "+data["code"]
+                    })
+                    notify.error(this.state.verification);
+                }
+            });
+
+
     }
 
     handleHideComponent = (arg, value) => {

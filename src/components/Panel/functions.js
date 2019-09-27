@@ -34,7 +34,7 @@ export const panelFunctions = {
 				content: "Products",
 				accessibilityLabel: "Products",
 				link: "/panel/products",
-				panelID: "products"
+				panelID: "products",
 			},
 
             {

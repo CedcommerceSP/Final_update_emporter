@@ -81,7 +81,7 @@ export class Configuration extends Component {
 
     getUserDetails() {
         requests.getRequest("user/getDetails").then(data => {
-            if (data.success) {
+            if (data.success && data.data !== null) {
                 this.state.account_information = {
                     username: data.data.username,
                     email: data.data.email,

@@ -106,12 +106,12 @@ class PlanBody extends Component {
                         show_banner_onetime_payment: true
                     })
                 }
-                if (used_credits > 0) {
+              /*  if (used_credits > 0) {
                     // console.log("3")
                     this.setState({
                         show_banner_onetime_payment: true
                     })
-                }
+                }*/
 
                 if (this.state.necessaryInfo.import_count <= 10 && total_credits > 10) {
                     // console.log("4")

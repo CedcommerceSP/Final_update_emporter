@@ -317,8 +317,8 @@ class Dashboard extends Component {
 			switch (data.anchor) {
 				case "U-INFO":
 					return this.renderGetUserInfo();
-				case "PRICING_GUIDE":
-					return this.renderPricingGuide();
+				/*case "PRICING_GUIDE":
+					return this.renderPricingGuide();*/
 				default:
 					console.log("This Is default");
 			}
@@ -336,7 +336,8 @@ class Dashboard extends Component {
 		) {
 			requests
 				.postRequest("core/app/sendOtp", {
-					phone: this.state.info.mobile_code + "" + this.state.info.mobile
+					phone: this.state.info.mobile_code + "" + this.state.info.mobile,
+					email:	this.state.info.email
 				})
 				.then(data => {
 					if (data.success) {
@@ -741,7 +742,7 @@ class Dashboard extends Component {
 		this.changeStep(2);
 	};
 
-	renderPricingGuide = () => {
+	/*renderPricingGuide = () => {
 		return (
 			<React.Fragment>
 				<div className="pt-5 pb-5">
@@ -754,7 +755,7 @@ class Dashboard extends Component {
 				</div>
 			</React.Fragment>
 		);
-	};
+	};*/
 
 	/************************************  Render()   ***********************************/
 	render() {
