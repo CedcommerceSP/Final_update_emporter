@@ -23,8 +23,8 @@ class AmazonInstallationForm extends Component {
             schema: [],
             page: isUndefined(props.page) ? "account" : props.page,
             action: [],
-            verification:"",
-            button_submit:true,
+            verification: "",
+            yes_submit: false,
             postType: [],
             hide: [],
             region: "",
@@ -206,23 +206,23 @@ class AmazonInstallationForm extends Component {
                                                 break;
                                         }
                             })}
-                            <div className="col-6 text-left mt-3">
-                                <Button
-                                    onClick={() => {
-                                        this.onClickVerify();
-                                    }}
-                                    disabled={this.state.noChange}
-                                    primary
-                                >
-                                    Verify
-                                </Button>
-                            </div>
-                            <div className="col-6 text-right mt-3">
+                            {/*<div className="col-6 text-left mt-3">
+                             <Button
+                             onClick={() => {
+                             this.onClickVerify();
+                             }}
+                             disabled={this.state.noChange}
+                             primary
+                             >
+                             Verify
+                             </Button>
+                             </div>*/}
+                            <div className="col-12 text-right mt-3">
                                 <Button
                                     onClick={() => {
                                         this.onSubmit();
                                     }}
-                                    disabled={this.state.button_submit}
+                                    disabled={this.state.noChange}
                                     primary
                                 >
                                     Submit
@@ -340,38 +340,39 @@ class AmazonInstallationForm extends Component {
                 data["dev_acc_avail"] = this.state.dev_acc_avail;
             }
             if (flag) {
-                if (this.state.page === "config") {
-                    requests
-                        .postRequest("amazonimporter/request/setAmazonCredentials", data)
-                        .then(data => {
-                            if (data.success) {
-                                notify.success(data.message);
-                                this.setState({noChange: true});
-                            } else {
-                                notify.error(data.message);
-                            }
-                            this.redirect();
-                        });
-                } else {
-                    requests.postRequest(url, data, true).then(data => {
-                        if (data.success) {
-                            this.props.success3({code: this.props.code});
-                            notify.success(data.message);
-                        } else {
-                            notify.error(data.message);
-                            this.props.success3({code: false});
-                        }
-                        this.redirect();
-                    });
-                }
+                this.onClickVerify(url);
+                /*             if (this.state.page === "config") {
+                 requests
+                 .postRequest("amazonimporter/request/setAmazonCredentials", data)
+                 .then(data => {
+                 if (data.success) {
+                 notify.success(data.message);
+                 this.setState({noChange: true});
+                 } else {
+                 notify.error(data.message);
+                 }
+                 this.redirect();
+                 });
+                 } else {
+                 requests.postRequest(url, data, true).then(data => {
+                 if (data.success) {
+                 this.props.success3({code: this.props.code});
+                 notify.success(data.message);
+                 } else {
+                 notify.error(data.message);
+                 this.props.success3({code: false});
+                 }
+                 this.redirect();
+                 });
+                 }*/
             } else {
                 notify.info("Please Fill Up All Required Field");
             }
         }
     }
 
-    onClickVerify() {
-        // console.log("in function where i want!!!");
+    onClickVerify(url) {
+        console.log("in function where i want!!!");
         let temp = {};
         let data = {};
         let flag = true;
@@ -406,20 +407,48 @@ class AmazonInstallationForm extends Component {
 
         requests
             .postRequest("amazonimporter/request/amazonImporterClientDetailsVerification", data)
-            .then(data => {
-                if (data['success']) {
-                    notify.success(data["message"]);
-                    this.setState({
-                        button_submit:false
-                    })
+            .then(data1 => {
+                if (data1['success']) {
+                    this.savingFormData(data, url);
+                    notify.success(data1["message"]);
                 } else {
                     this.setState({
-                        verification:data["message"]+" "+data["code"]
+                        verification: data1["message"] + " " + data1["code"]
                     })
                     notify.error(this.state.verification);
                 }
             });
 
+    }
+
+    savingFormData(data, url) {
+        console.log("saving foe=rm data");
+        console.log("data = ", data);
+        console.log("url = ",url);
+        if (this.state.page === "config") {
+            requests
+                .postRequest("amazonimporter/request/setAmazonCredentials", data)
+                .then(data => {
+                    if (data.success) {
+                        notify.success(data.message);
+                        this.setState({noChange: true});
+                    } else {
+                        notify.error(data.message);
+                    }
+                    this.redirect();
+                });
+        } else {
+            requests.postRequest(url, data, true).then(data => {
+                if (data.success) {
+                    this.props.success3({code: this.props.code});
+                    notify.success(data.message);
+                } else {
+                    notify.error(data.message);
+                    this.props.success3({code: false});
+                }
+                this.redirect();
+            });
+        }
 
     }
 

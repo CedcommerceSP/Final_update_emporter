@@ -5,10 +5,12 @@
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/components/Panel/Components/configuration.js" afterPath="$PROJECT_DIR$/src/components/Panel/Components/configuration.js" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/components/Panel/Components/dashboard.js" afterPath="$PROJECT_DIR$/src/components/Panel/Components/dashboard.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/components/Panel/functions.js" afterPath="$PROJECT_DIR$/src/components/Panel/functions.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/components/Panel/Components/import.js" afterPath="$PROJECT_DIR$/src/components/Panel/Components/import.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/components/Panel/Components/profile-component/create-profile.js" afterPath="$PROJECT_DIR$/src/components/Panel/Components/profile-component/create-profile.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/components/Panel/Components/profile-component/view-profile.js" afterPath="$PROJECT_DIR$/src/components/Panel/Components/profile-component/view-profile.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/components/Panel/Components/static-functions.js" afterPath="$PROJECT_DIR$/src/components/Panel/Components/static-functions.js" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/environments/environment.js" afterPath="$PROJECT_DIR$/src/environments/environment.js" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/shared/app/amazon-form.js" afterPath="$PROJECT_DIR$/src/shared/app/amazon-form.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/shared/plans/plan-body.js" afterPath="$PROJECT_DIR$/src/shared/plans/plan-body.js" />
     </list>
     <ignored path="$PROJECT_DIR$/.tmp/" />
     <ignored path="$PROJECT_DIR$/temp/" />
@@ -124,21 +126,13 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="450">
-      <file leaf-file-name="configuration.js" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/components/Panel/Components/configuration.js">
+      <file leaf-file-name="amazon-form.js" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/src/shared/app/amazon-form.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-63">
-              <caret line="607" column="4" lean-forward="false" selection-start-line="607" selection-start-column="4" selection-end-line="607" selection-end-column="4" />
+            <state relative-caret-position="367">
+              <caret line="408" column="88" lean-forward="false" selection-start-line="408" selection-start-column="49" selection-end-line="408" selection-end-column="88" />
               <folding>
-                <element signature="e#30962#31422#0" expanded="false" />
-                <element signature="e#31527#32078#0" expanded="false" />
-                <element signature="e#35291#35851#0" expanded="false" />
-                <element signature="e#35872#35997#0" expanded="false" />
-                <element signature="e#36018#36282#0" expanded="false" />
-                <element signature="e#36303#36567#0" expanded="false" />
-                <element signature="e#36588#36878#0" expanded="false" />
-                <element signature="e#36899#37163#0" expanded="false" />
-                <element signature="e#37184#37438#0" expanded="false" />
+                <element signature="e#17318#18251#0" expanded="false" />
               </folding>
             </state>
           </provider>
@@ -147,65 +141,53 @@
       <file leaf-file-name="environment.js" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/environments/environment.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="176">
-              <caret line="8" column="25" lean-forward="false" selection-start-line="8" selection-start-column="25" selection-end-line="8" selection-end-column="25" />
+            <state relative-caret-position="110">
+              <caret line="5" column="33" lean-forward="true" selection-start-line="5" selection-start-column="33" selection-end-line="5" selection-end-column="33" />
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="amazon-form.js" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/shared/app/amazon-form.js">
+      <file leaf-file-name="plan-body.js" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/shared/plans/plan-body.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="6947">
-              <caret line="405" column="0" lean-forward="false" selection-start-line="405" selection-start-column="0" selection-end-line="405" selection-end-column="0" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="dashboard.js" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/components/Panel/Components/dashboard.js">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="3557">
-              <caret line="320" column="55" lean-forward="true" selection-start-line="320" selection-start-column="55" selection-end-line="320" selection-end-column="55" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="import.js" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/components/Panel/Components/import.js">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="176">
-              <caret line="801" column="90" lean-forward="false" selection-start-line="801" selection-start-column="90" selection-end-line="801" selection-end-column="90" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="panel.js" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/components/Panel/panel.js">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="289">
-              <caret line="215" column="31" lean-forward="true" selection-start-line="215" selection-start-column="31" selection-end-line="215" selection-end-column="31" />
+            <state relative-caret-position="191">
+              <caret line="1778" column="18" lean-forward="false" selection-start-line="1778" selection-start-column="13" selection-end-line="1778" selection-end-column="18" />
               <folding>
-                <element signature="e#2926#3016#0" expanded="false" />
-                <element signature="e#3021#3187#0" expanded="false" />
+                <element signature="e#0#39#0" expanded="true" />
+                <element signature="e#75570#83015#0" expanded="false" />
               </folding>
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="plan-body.js" pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/src/shared/plans/plan-body.js">
+      <file leaf-file-name="create-profile.js" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/components/Panel/Components/profile-component/create-profile.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="267">
-              <caret line="93" column="26" lean-forward="false" selection-start-line="93" selection-start-column="26" selection-end-line="93" selection-end-column="26" />
+            <state relative-caret-position="279">
+              <caret line="1491" column="63" lean-forward="false" selection-start-line="1491" selection-start-column="43" selection-end-line="1491" selection-end-column="63" />
               <folding>
-                <element signature="e#0#39#0" expanded="true" />
-                <element signature="e#3732#3936#0" expanded="false" />
-                <element signature="e#75570#83015#0" expanded="false" />
+                <element signature="e#17938#17948#0" expanded="false" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="configuration.js" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/components/Panel/Components/configuration.js">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="191">
+              <caret line="451" column="62" lean-forward="false" selection-start-line="451" selection-start-column="56" selection-end-line="451" selection-end-column="62" />
+              <folding>
+                <element signature="e#31036#31496#0" expanded="false" />
+                <element signature="e#31601#32152#0" expanded="false" />
+                <element signature="e#35365#35925#0" expanded="false" />
+                <element signature="e#35946#36071#0" expanded="false" />
+                <element signature="e#36092#36356#0" expanded="false" />
+                <element signature="e#36377#36641#0" expanded="false" />
+                <element signature="e#36662#36952#0" expanded="false" />
+                <element signature="e#36973#37237#0" expanded="false" />
+                <element signature="e#37258#37512#0" expanded="false" />
               </folding>
             </state>
           </provider>
@@ -222,36 +204,36 @@
   </component>
   <component name="FindInProjectRecents">
     <findStrings>
-      <find>handleChangeModakCsv</find>
-      <find>asse</find>
-      <find>Das</find>
-      <find>content</find>
-      <find>step 1</find>
-      <find>redirect</find>
-      <find>ReC</find>
-      <find>Badge</find>
-      <find>menu</find>
-      <find>Want</find>
-      <find>show_banner_onetime_payment</find>
-      <find>consol</find>
-      <find>Smart</find>
-      <find>equals</find>
-      <find>Please note</find>
+      <find>this.state.products_select.marketplaceAttributes</find>
+      <find>getCollectionAndLocation</find>
+      <find>getLoaction</find>
       <find>step</find>
-      <find>otp</find>
-      <find>ver</find>
-      <find>onS</find>
-      <find>button_submit</find>
-      <find>onClickV</find>
-      <find>onClicj</find>
-      <find>onC</find>
-      <find>username</find>
+      <find>Stepper</find>
+      <find>necess</find>
+      <find>getColl</find>
+      <find>fetchCol</find>
+      <find>frontend/importer/getCollectionShopify</find>
+      <find>connector/get/categories</find>
+      <find>fetch</find>
+      <find>getTargetAttributes</find>
+      <find>getLoa</find>
+      <find>getDetails</find>
+      <find>products</find>
+      <find>Shipp</find>
+      <find>Shopify Settings</find>
+      <find>shopifyConfigurationData</find>
+      <find>Shopify</find>
+      <find>view</find>
       <find>console</find>
-      <find>requests</find>
-      <find>step 2</find>
-      <find>renderPricingGuide</find>
-      <find>shipp</find>
-      <find>shipping_user_code</find>
+      <find>tabs</find>
+      <find>selected</find>
+      <find>handleTabChange</find>
+      <find>render</find>
+      <find>componentWill</find>
+      <find>props</find>
+      <find>getCo</find>
+      <find>submit</find>
+      <find>Button</find>
     </findStrings>
     <replaceStrings>
       <replace>processing_status</replace>
@@ -267,7 +249,6 @@
   <component name="IdeDocumentHistory">
     <option name="CHANGED_PATHS">
       <list>
-        <option value="$PROJECT_DIR$/src/components/Panel/Components/import-component/newContentFileImporter.js" />
         <option value="$PROJECT_DIR$/src/components/Panel/Components/import-component/order.js" />
         <option value="$PROJECT_DIR$/src/components/Panel/Components/import-component/MagnetoImport.js" />
         <option value="$PROJECT_DIR$/src/shared/app/fba-install-apps.js" />
@@ -284,7 +265,6 @@
         <option value="$PROJECT_DIR$/src/services/globalstate.js" />
         <option value="$PROJECT_DIR$/src/shared/app/fba-form.js" />
         <option value="$PROJECT_DIR$/src/components/Panel/Components/products-component/analytics-reporting-cart.js" />
-        <option value="$PROJECT_DIR$/src/components/Panel/Components/static-functions.js" />
         <option value="$PROJECT_DIR$/src/shared/smartTable/filter.js" />
         <option value="$PROJECT_DIR$/src/components/Panel/Components/import-component/EbayAffiliate.js" />
         <option value="$PROJECT_DIR$/src/components/Panel/Components/faq.js" />
@@ -302,22 +282,24 @@
         <option value="$PROJECT_DIR$/src/shared/smartTable/SmartDataTable.js" />
         <option value="$PROJECT_DIR$/src/components/Panel/Components/orders/vieworderfba-products.js" />
         <option value="$PROJECT_DIR$/src/components/Panel/Components/products-component/new-analytics-reporting.js" />
-        <option value="$PROJECT_DIR$/src/components/Panel/Components/profile-component/create-profile.js" />
         <option value="$PROJECT_DIR$/src/components/Panel/Components/vieworderfba.js" />
         <option value="$PROJECT_DIR$/src/App.js" />
         <option value="$PROJECT_DIR$/src/components/Panel/Components/apps-component/install-app.js" />
         <option value="$PROJECT_DIR$/src/components/Panel/Layout/header.js" />
         <option value="$PROJECT_DIR$/src/shared/app/apps.js" />
-        <option value="$PROJECT_DIR$/src/components/Panel/Components/import.js" />
         <option value="$PROJECT_DIR$/src/components/Panel/Components/fbaOrder.js" />
         <option value="$PROJECT_DIR$/src/shared/app/install-apps.js" />
-        <option value="$PROJECT_DIR$/src/components/Panel/Components/configuration.js" />
         <option value="$PROJECT_DIR$/src/components/Panel/functions.js" />
-        <option value="$PROJECT_DIR$/src/shared/app/amazon-form.js" />
-        <option value="$PROJECT_DIR$/src/components/Panel/Components/dashboard.js" />
         <option value="$PROJECT_DIR$/src/components/Panel/panel.js" />
-        <option value="$PROJECT_DIR$/src/environments/environment.js" />
         <option value="$PROJECT_DIR$/src/shared/plans/plan-body.js" />
+        <option value="$PROJECT_DIR$/src/shared/app/amazon-form.js" />
+        <option value="$PROJECT_DIR$/src/components/Panel/Components/import.js" />
+        <option value="$PROJECT_DIR$/src/components/Panel/Components/dashboard.js" />
+        <option value="$PROJECT_DIR$/src/components/Panel/Components/profile-component/create-profile.js" />
+        <option value="$PROJECT_DIR$/src/components/Panel/Components/configuration.js" />
+        <option value="$PROJECT_DIR$/src/components/Panel/Components/static-functions.js" />
+        <option value="$PROJECT_DIR$/src/components/Panel/Components/profile-component/view-profile.js" />
+        <option value="$PROJECT_DIR$/src/environments/environment.js" />
       </list>
     </option>
   </component>
@@ -827,11 +809,12 @@
       <workItem from="1568608852160" duration="14667000" />
       <workItem from="1568887296031" duration="34244000" />
       <workItem from="1569490908309" duration="15570000" />
+      <workItem from="1569822318530" duration="43783000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="1438332000" />
+    <option name="totallyTimeSpent" value="1487640000" />
   </component>
   <component name="TodoView">
     <todo-panel id="selected-file">
@@ -844,7 +827,6 @@
   </component>
   <component name="ToolWindowManager">
     <frame x="-3" y="0" width="1286" height="770" extended-state="6" />
-    <editor active="true" />
     <layout>
       <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.22213376" sideWeight="0.49411765" order="0" side_tool="false" content_ui="combo" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32943144" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
@@ -852,7 +834,7 @@
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32919255" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.24920382" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
-      <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.27044025" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" x="0" y="24" width="1280" height="743" />
+      <window_info id="Terminal" active="true" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.27044025" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" x="0" y="24" width="1280" height="743" />
       <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.20853463" sideWeight="0.5058824" order="1" side_tool="true" content_ui="tabs" />
       <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
@@ -899,41 +881,21 @@
           <option name="timeStamp" value="46" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="javascript">
-          <url>file://$PROJECT_DIR$/src/components/Panel/Components/dashboard.js</url>
-          <line>91</line>
-          <option name="timeStamp" value="51" />
+          <url>file://$PROJECT_DIR$/src/components/Panel/Components/profile-component/create-profile.js</url>
+          <line>1301</line>
+          <properties />
+          <option name="timeStamp" value="55" />
         </line-breakpoint>
       </breakpoints>
-      <option name="time" value="52" />
+      <option name="time" value="56" />
     </breakpoint-manager>
     <watches-manager />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/src/services/request.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="308">
-          <caret line="56" column="6" lean-forward="true" selection-start-line="56" selection-start-column="6" selection-end-line="56" selection-end-column="6" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/shared/app/fba-form.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-139">
-          <caret line="56" column="10" lean-forward="false" selection-start-line="56" selection-start-column="4" selection-end-line="56" selection-end-column="10" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/components/Panel/Components/plans-component/billing-history.js">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="317">
           <caret line="67" column="53" lean-forward="true" selection-start-line="67" selection-start-column="24" selection-end-line="67" selection-end-column="53" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/components/Panel/Components/orders.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-13073">
-          <caret line="59" column="4" lean-forward="false" selection-start-line="59" selection-start-column="4" selection-end-line="59" selection-end-column="4" />
         </state>
       </provider>
     </entry>
@@ -966,13 +928,6 @@
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/index.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="0">
-          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/components/Panel/Components/apps.js">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="0">
           <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
@@ -1047,13 +1002,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/App.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="396">
-          <caret line="21" column="24" lean-forward="true" selection-start-line="21" selection-start-column="24" selection-end-line="21" selection-end-column="24" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/components/Auth/Components/confirmation.js">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="286">
@@ -1118,9 +1066,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="0">
           <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-          <folding>
-            <element signature="e#0#41#0" expanded="false" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -1162,13 +1107,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/components/Panel/Components/fbaOrder.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="218">
-          <caret line="568" column="36" lean-forward="false" selection-start-line="568" selection-start-column="36" selection-end-line="568" selection-end-column="36" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/components/Panel/Components/vieworderfba.js">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="221">
@@ -1180,9 +1118,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="59">
           <caret line="949" column="47" lean-forward="false" selection-start-line="949" selection-start-column="41" selection-end-line="949" selection-end-column="47" />
-          <folding>
-            <element signature="e#27680#27692#0" expanded="false" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -1214,54 +1149,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/components/Panel/Components/profiling.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="352">
-          <caret line="210" column="32" lean-forward="false" selection-start-line="210" selection-start-column="32" selection-end-line="210" selection-end-column="32" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/components/Panel/Components/profile-component/create-profile.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="22">
-          <caret line="579" column="51" lean-forward="false" selection-start-line="579" selection-start-column="40" selection-end-line="579" selection-end-column="51" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/components/Panel/functions.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="295">
-          <caret line="36" column="36" lean-forward="false" selection-start-line="36" selection-start-column="36" selection-end-line="36" selection-end-column="36" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/shared/app/amazon-form.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="6947">
-          <caret line="405" column="0" lean-forward="false" selection-start-line="405" selection-start-column="0" selection-end-line="405" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/components/Panel/Components/dashboard.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="3557">
-          <caret line="320" column="55" lean-forward="true" selection-start-line="320" selection-start-column="55" selection-end-line="320" selection-end-column="55" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/components/Panel/Components/import.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="176">
-          <caret line="801" column="90" lean-forward="false" selection-start-line="801" selection-start-column="90" selection-end-line="801" selection-end-column="90" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/components/Panel/panel.js">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="289">
@@ -1273,40 +1160,148 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/src/components/Panel/functions.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="792">
+          <caret line="36" column="36" lean-forward="false" selection-start-line="36" selection-start-column="36" selection-end-line="36" selection-end-column="36" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/components/Panel/Components/apps.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="0">
+          <caret line="0" column="7" lean-forward="true" selection-start-line="0" selection-start-column="7" selection-end-line="0" selection-end-column="7" />
+          <folding>
+            <element signature="e#0#41#0" expanded="false" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/components/Panel/Components/dashboard.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="191">
+          <caret line="92" column="28" lean-forward="false" selection-start-line="92" selection-start-column="22" selection-end-line="92" selection-end-column="28" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/components/Panel/Components/orders.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-9548">
+          <caret line="59" column="4" lean-forward="false" selection-start-line="59" selection-start-column="4" selection-end-line="59" selection-end-column="4" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/components/Panel/Components/profiling.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="191">
+          <caret line="79" column="23" lean-forward="false" selection-start-line="79" selection-start-column="16" selection-end-line="79" selection-end-column="23" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/components/Panel/Components/static-functions.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="180">
+          <caret line="48" column="14" lean-forward="false" selection-start-line="48" selection-start-column="7" selection-end-line="48" selection-end-column="14" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/components/Panel/Components/fbaOrder.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="276">
+          <caret line="390" column="18" lean-forward="true" selection-start-line="390" selection-start-column="18" selection-end-line="390" selection-end-column="18" />
+          <folding>
+            <element signature="e#13885#13914#0" expanded="false" />
+            <element signature="e#14013#14128#0" expanded="false" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/components/Panel/Components/profile-component/view-profile.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="180">
+          <caret line="95" column="30" lean-forward="false" selection-start-line="95" selection-start-column="23" selection-end-line="95" selection-end-column="30" />
+          <folding>
+            <element signature="e#0#41#0" expanded="false" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/App.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="191">
+          <caret line="100" column="12" lean-forward="false" selection-start-line="100" selection-start-column="12" selection-end-line="100" selection-end-column="12" />
+          <folding>
+            <element signature="e#0#41#0" expanded="false" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/components/Panel/Components/import.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="191">
+          <caret line="71" column="18" lean-forward="false" selection-start-line="71" selection-start-column="11" selection-end-line="71" selection-end-column="18" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/src/components/Panel/Components/configuration.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-63">
-          <caret line="607" column="4" lean-forward="false" selection-start-line="607" selection-start-column="4" selection-end-line="607" selection-end-column="4" />
+        <state relative-caret-position="191">
+          <caret line="451" column="62" lean-forward="false" selection-start-line="451" selection-start-column="56" selection-end-line="451" selection-end-column="62" />
           <folding>
-            <element signature="e#30962#31422#0" expanded="false" />
-            <element signature="e#31527#32078#0" expanded="false" />
-            <element signature="e#35291#35851#0" expanded="false" />
-            <element signature="e#35872#35997#0" expanded="false" />
-            <element signature="e#36018#36282#0" expanded="false" />
-            <element signature="e#36303#36567#0" expanded="false" />
-            <element signature="e#36588#36878#0" expanded="false" />
-            <element signature="e#36899#37163#0" expanded="false" />
-            <element signature="e#37184#37438#0" expanded="false" />
+            <element signature="e#31036#31496#0" expanded="false" />
+            <element signature="e#31601#32152#0" expanded="false" />
+            <element signature="e#35365#35925#0" expanded="false" />
+            <element signature="e#35946#36071#0" expanded="false" />
+            <element signature="e#36092#36356#0" expanded="false" />
+            <element signature="e#36377#36641#0" expanded="false" />
+            <element signature="e#36662#36952#0" expanded="false" />
+            <element signature="e#36973#37237#0" expanded="false" />
+            <element signature="e#37258#37512#0" expanded="false" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/shared/plans/plan-body.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="191">
+          <caret line="1778" column="18" lean-forward="false" selection-start-line="1778" selection-start-column="13" selection-end-line="1778" selection-end-column="18" />
+          <folding>
+            <element signature="e#0#39#0" expanded="true" />
+            <element signature="e#75570#83015#0" expanded="false" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/components/Panel/Components/profile-component/create-profile.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="279">
+          <caret line="1491" column="63" lean-forward="false" selection-start-line="1491" selection-start-column="43" selection-end-line="1491" selection-end-column="63" />
+          <folding>
+            <element signature="e#17938#17948#0" expanded="false" />
           </folding>
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/environments/environment.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="176">
-          <caret line="8" column="25" lean-forward="false" selection-start-line="8" selection-start-column="25" selection-end-line="8" selection-end-column="25" />
+        <state relative-caret-position="110">
+          <caret line="5" column="33" lean-forward="true" selection-start-line="5" selection-start-column="33" selection-end-line="5" selection-end-column="33" />
           <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/shared/plans/plan-body.js">
+    <entry file="file://$PROJECT_DIR$/src/shared/app/amazon-form.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="267">
-          <caret line="93" column="26" lean-forward="false" selection-start-line="93" selection-start-column="26" selection-end-line="93" selection-end-column="26" />
+        <state relative-caret-position="367">
+          <caret line="408" column="88" lean-forward="false" selection-start-line="408" selection-start-column="49" selection-end-line="408" selection-end-column="88" />
           <folding>
-            <element signature="e#0#39#0" expanded="true" />
-            <element signature="e#3732#3936#0" expanded="false" />
-            <element signature="e#75570#83015#0" expanded="false" />
+            <element signature="e#17318#18251#0" expanded="false" />
           </folding>
         </state>
       </provider>

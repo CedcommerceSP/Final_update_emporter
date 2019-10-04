@@ -57,7 +57,7 @@ export class CreateProfile extends Component {
         let today_date = new Date();
         this.state = {
             activeStep: 1,
-            for_profiling:false,
+            for_profiling: false,
             filterQuery: {
                 primaryQuery: [
                     {
@@ -76,7 +76,7 @@ export class CreateProfile extends Component {
                 sourceShop: "",
                 targetShop: "",
                 target: "",
-                target_location:""
+                target_location: ""
             },
             products_select: {
                 query: "",
@@ -213,6 +213,7 @@ export class CreateProfile extends Component {
             })
             .then(data => {
                 if (data.success) {
+                    // console.log("namste",data);
                     this.state.targetAttributes = this.modifyAttributesData(data.data);
                     this.updateState();
                 } else {
@@ -228,6 +229,7 @@ export class CreateProfile extends Component {
             })
             .then(data => {
                 if (data.success) {
+                    // console.log("qwerfdsa",data);
                     this.state.products_select.marketplaceAttributes = this.modifyConfigFormData(
                         data.data
                     );
@@ -323,6 +325,7 @@ export class CreateProfile extends Component {
             }
         }
         toReturnAttributes = [...requiredAttributes, ...optionalAttributes];
+        // console.log(toReturnAttributes);
         return toReturnAttributes;
     }
 
@@ -449,10 +452,10 @@ export class CreateProfile extends Component {
                 );
 
                 this.state.products_select.marketplaceAttributes.map(attribute => {
-                    this.state.basicDetails.target_location=attribute.value;
+                    this.state.basicDetails.target_location = attribute.value;
 
                 })
-                if (this.state.products_select.targetCategory!=='' && this.state.basicDetails.target_location!==''){
+                if (this.state.products_select.targetCategory !== '' && this.state.basicDetails.target_location !== '') {
                     requests
                         .postRequest("connector/profile/set", {
                             data: data,
@@ -503,7 +506,7 @@ export class CreateProfile extends Component {
                         if (data.data[key].usable || !environment.isLive) {
                             hasService = true;
                             if (validateImporter(data.data[key].code)) {
-                                if (data.data[key].code!=='fba') {
+                                if (data.data[key].code !== 'fba') {
                                     this.importServices.push({
                                         label: data.data[key].title,
                                         value: data.data[key].code,
@@ -1279,23 +1282,40 @@ export class CreateProfile extends Component {
                             )}
                             {!isUndefined(attribute.options) && attribute.type === "select" && (
                                 <React.Fragment>
-                                    <Select
-                                        options={attribute.options}
-                                        placeholder={attribute.title}
-                                        label={attribute.title}
-                                        onChange={this.handleMarketplaceAttributesChange.bind(
-                                            this,
-                                            this.state.products_select.marketplaceAttributes.indexOf(
-                                                attribute
-                                            )
-                                        )}
-                                        value={attribute.value}
-                                    />
+                                    <div className="col-12">
+                                        <Label>{attribute.title}</Label>
+                                    </div>
+                                    <div className="row">
+                                        <div className="col-6 p-3">
+                                            <Select
+                                                options={attribute.options}
+                                                placeholder={attribute.title}
+                                                onChange={this.handleMarketplaceAttributesChange.bind(
+                                                    this,
+                                                    this.state.products_select.marketplaceAttributes.indexOf(
+                                                        attribute
+                                                    )
+                                                )}
+                                                value={attribute.value}
+                                            />
+                                        </div>
+                                        <div className="col-3 pt-3">
+                                            <Button
+                                                onClick={() => {
+                                                    this.getLocationDetails();
+                                                }}
+                                                primary
+                                            >
+                                                Sync Location
+                                            </Button>
+                                        </div>
+                                    </div>
                                     {attribute.required ? (
                                         <div>
                                             <p style={{color: "green"}}>*Required</p>
                                         </div>
                                     ) : null}
+
                                 </React.Fragment>
                             )}
                             {!isUndefined(attribute.options) &&
@@ -1432,27 +1452,87 @@ export class CreateProfile extends Component {
                 )}
                 {this.categoryList.map(category => {
                     return (
-                        <div
-                            className="col-6 p-3"
-                            key={this.categoryList.indexOf(category)}
-                        >
-                            <Select
-                                options={category.categories}
-                                placeholder="Product Collection"
-                                onChange={this.handleProductsSelectChange.bind(
-                                    this,
-                                    this.categoryList.indexOf(category)
-                                )}
-                                value={category.selected_category}
-                            />
-                            <p style={{color: "green"}}>
-                                {category.required ? "*Required" : null}
-                            </p>
-                        </div>
+                        <React.Fragment>
+                            <div
+                                className="col-6 p-3"
+                                key={this.categoryList.indexOf(category)}
+                            >
+                                <Select
+                                    options={category.categories}
+                                    placeholder="Product Collection"
+                                    onChange={this.handleProductsSelectChange.bind(
+                                        this,
+                                        this.categoryList.indexOf(category)
+                                    )}
+                                    value={category.selected_category}
+                                />
+                                <p style={{color: "green"}}>
+                                    {category.required ? "*Required" : null}
+                                </p>
+                            </div>
+                            <div className="col-3 pt-3">
+                                <Button
+                                    onClick={() => {
+                                        this.getCollection();
+                                    }}
+                                    primary
+                                >
+                                    Sync Collection
+                                </Button>
+                            </div>
+                        </React.Fragment>
                     );
                 })}
             </div>
         );
+    }
+
+    getCollection() {
+        requests
+            .getRequest("frontend/importer/getCollectionShopify")
+            .then(data => {
+                // console.log(data);
+                if (data.success) {
+                    notify.success(data.code);
+                    this.fetchCollection();
+                } else {
+                    notify.error(data.code);
+                }
+            });
+
+    }
+    fetchCollection(){
+        requests
+            .getRequest("connector/get/categories", {
+                marketplace: this.state.basicDetails.target
+            })
+            .then(data => {
+                if (data.success) {
+                    this.categoryList = [
+                        {
+                            parent_catg_id: false,
+                            selected_category: "",
+                            categories: this.addLabelInCategories(data.data)
+                        }
+                    ];
+                    this.updateState();
+                } else {
+                    notify.error(data.message);
+                }
+            });
+    }
+    getLocationDetails(){
+        requests
+            .getRequest("frontend/importer/getLocationShopify")
+            .then(data => {
+                // console.log(data);
+                if (data.success) {
+                    notify.success(data.code);
+                    this.getMarketplaceAttributes();
+                } else {
+                    notify.error(data.code);
+                }
+            });
     }
 
     runFilterQuery() {
@@ -1863,17 +1943,16 @@ export class CreateProfile extends Component {
 
                     for (let i = 0; i < this.state.array_marketpalce_imported.length; i++) {
                         // console.log(this.state.array_marketpalce_imported);
-                        if (this.state.basicDetails.source === this.state.array_marketpalce_imported[i])
-                        {
+                        if (this.state.basicDetails.source === this.state.array_marketpalce_imported[i]) {
                             this.saveProfileData();
-                            this.state.for_profiling=true;
+                            this.state.for_profiling = true;
                             break;
                         }
                         else {
-                            this.state.for_profiling=false
+                            this.state.for_profiling = false
                         }
                     }
-                    if (!this.state.for_profiling){
+                    if (!this.state.for_profiling) {
                         notify.error("Products not found for this Marketplace")
                     }
                 }

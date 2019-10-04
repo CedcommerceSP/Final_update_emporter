@@ -63,7 +63,7 @@ export class Configuration extends Component {
             button_loader_fba:false
 
         };
-        this.getUserDetails();
+        // this.getUserDetails();
         this.getShopifyConfigurations();
         this.getAmazonImporterConfigurations();
         this.getEbayConfig();
@@ -196,6 +196,7 @@ export class Configuration extends Component {
     }
 
     modifyConfigData(data, configKey) {
+        // console.log(data)
         for (let i = 0; i < data.length; i++) {
             if (typeof this.state[configKey] !== "object") this.state[configKey] = {};
             this.state[configKey][data[i].code] = data[i].value;
@@ -264,7 +265,7 @@ export class Configuration extends Component {
                                 <Button
                                     disabled={!this.state.account_information_updated}
                                     onClick={() => {
-                                        this.saveProfileData();
+                                        // this.saveProfileData();
                                     }}
                                     primary
                                 >
@@ -526,7 +527,7 @@ export class Configuration extends Component {
                 this.saveFbaImporterConfigData(data);
                 break;
             case 'walmartimporter':
-                console.log("Walmart");
+                // console.log("Walmart");
                 break;
             default:
                 console.log("Wrong Choice");
@@ -578,7 +579,7 @@ export class Configuration extends Component {
             .getRequest("fba/test/test")
             .then(data => {
                 if (data.success) {
-                    console.log("data_FBA", data.data);
+                    // console.log("data_FBA", data.data);
                     this.setState({
                         open_modal_response: true
                     });
@@ -592,16 +593,16 @@ export class Configuration extends Component {
                          this.state.shipping_user_code.push(data.data[i]['name']);
                          }*/
                     }
-                    console.log("first array = ",this.state.initial_array );
+                    // console.log("first array = ",this.state.initial_array );
 
                     for (let i=0; i< this.state.initial_array.length;i++){
-                        console.log("www",this.state.shipping_array_category.indexOf(this.state.initial_array[i]));
+                        // console.log("www",this.state.shipping_array_category.indexOf(this.state.initial_array[i]));
                         if (this.state.shipping_array_category.indexOf(this.state.initial_array[i])===-1){
-                            console.log("here is code");
+                            // console.log("here is code");
                             this.state.shipping_array_category.push(this.state.initial_array[i]);
                         }
                     }
-                    console.log("final array = ",this.state.shipping_array_category);
+                    // console.log("final array = ",this.state.shipping_array_category);
                 }
             });
     }
@@ -619,19 +620,19 @@ export class Configuration extends Component {
             button_loader_fba:true
         })
         var final_sending_array = [];
-        console.log("here is the array",this.state.shipping_array_category);
+        // console.log("here is the array",this.state.shipping_array_category);
         for (let i = 0; i < this.state.shipping_array_category.length; i++) {
             let my_variable = "code_fba" + (i);
             let value_of_codes = this.state[my_variable];
-            console.log("namaste",value_of_codes);
-            console.log("shopifi_code",this.state.shipping_array_category[i]);
+            // console.log("namaste",value_of_codes);
+            // console.log("shopifi_code",this.state.shipping_array_category[i]);
             final_sending_array.push(
                 [{"shopify_code": this.state.shipping_array_category[i]},
                     {"fba_code": value_of_codes}]
             );
         }
 
-        console.log("final array = ",final_sending_array);
+        // console.log("final array = ",final_sending_array);
         requests.postRequest('fba/test/shopifyDataRMQ', {data: final_sending_array}, false, true).then(response1 => {
             if (response1.success) {
                 this.setState({
@@ -647,10 +648,10 @@ export class Configuration extends Component {
     }
 
     handleChange = (field, e) => {
-        console.log("value =  =",field);
-        console.log("e =  =",e);
+        // console.log("value =  =",field);
+        // console.log("e =  =",e);
         this.setState({[field]: e}, () => {
-            console.log(this.state);
+            // console.log(this.state);
         });
     };
 

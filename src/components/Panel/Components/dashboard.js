@@ -82,16 +82,6 @@ class Dashboard extends Component {
 						anchor: "U-INFO", // Which Function to call e.g : 'U-INFO' then call div which take User basic Information
 						stepperActive: false // used in stepper Check either Completed or not and also help in deciding with step to go
 					}, // step 1
-					{
-						message: <p><strong>Pricing Guide</strong></p>,
-						stepperMessage: "Finish", // stepper Small Message
-						API_endpoint: "", // Api End Point is used to check to send data or get data
-						data: "", // Data additional Field
-						method: "GET", // Method Type
-						redirectTo: "/panel/accounts", // After Completion Where To Redirect
-						anchor: "COMPLETE", // Which Function to call e.g : 'U-INFO' then call div which take User basic Information
-						stepperActive: false // used in stepper Check either Completed or not
-					} // step 2
 				]
 			}
 		};
@@ -772,9 +762,9 @@ class Dashboard extends Component {
 					</div>
 				) : this.state.stepStart ? (
 					<Stack vertical={true}>
-						<Card>{this.renderStepper()}</Card> {/* Stepper */}
-						{this.renderBody()} {/* Main Body Function Call Here */}
-						{/* Open For Step 3 to see Connected Account */}
+						{/*<Card>{this.renderStepper()}</Card>*/}  {/*Stepper*/}
+						{this.renderBody()}  {/*Main Body Function Call Here*/}
+						 {/*Open For Step 3 to see Connected Account*/}
 					</Stack>
 				) : (
 					<div>

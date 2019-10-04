@@ -93,6 +93,7 @@ class ViewProfile extends Component {
 			})
 			.then(data => {
 				if (data.success) {
+					// console.log("data",data)
 					this.prepareData(data.data);
 					const products = this.modifyProductsData(data.data.products_data);
 					this.setState({
