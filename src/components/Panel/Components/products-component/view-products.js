@@ -212,6 +212,45 @@ class ViewProducts extends Component {
 		});
 		return rows;
 	};
+    openModalInDescription(){
+
+    	return(
+    		<Page>
+			<Modal
+				title={"Details"}
+				open={this.state.openVariantDetail}
+				onClose={() => {
+                    this.setState({ openVariantDetail: false });
+                }}
+			>
+				<Modal.Section>
+					<div className="row">
+                        {Object.keys(this.state.variantArrayDetails).map(e => {
+                            return (
+								<div className="col-12 col-sm-6 mb-4">
+                                    {e === "main_image" ? (
+										<React.Fragment>
+											<b>{e}</b>:<br />
+											<Thumbnail
+												source={this.state.variantArrayDetails[e]}
+												alt={""}
+											/>
+										</React.Fragment>
+                                    ) : (
+										<React.Fragment>
+											<b>{e}</b>:<br />
+                                            {this.state.variantArrayDetails[e]}
+										</React.Fragment>
+                                    )}
+								</div>
+                            );
+                        })}
+					</div>
+				</Modal.Section>
+			</Modal>
+			</Page>
+		)
+	}
 
 	render() {
 		return (
@@ -270,10 +309,12 @@ class ViewProducts extends Component {
 								<div
 									className="p-5" /*style={{height:'200px',overflow:'auto'}}*/
 								>
-									<div className="mb-5">
+									<div className="mb-5"
+									/*onClick={this.openModalInDescription.bind(this)}
+										 style={{cursor:'pointer'}}*/>
 										<TextContainer>
 											<DisplayText size="large">
-												{this.state.products_top.title}
+                                                {this.state.products_top.title}
 											</DisplayText>
 											{/*<TextField
                                                 label={'Title'}

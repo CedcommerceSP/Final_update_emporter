@@ -16,13 +16,14 @@ import {
 } from "@shopify/polaris";
 import {isUndefined} from 'util';
 import {requests} from "../../../services/request";
+import {capitalizeWord} from "./static-functions";
 // import {Skeleton} from "../../../../shared/skeleton";
 
 class Order extends Component {
 
     constructor(props) {
         super(props);
-        // console.log(props.location.state.parent_props.is_hash_order_name)
+        // console.log(props.match.params.id)
         this.state = {
             id: props.match.params.id,
             is_order_trim:props.location.state.parent_props.is_hash_order_name,
@@ -30,8 +31,10 @@ class Order extends Component {
             entire_data: {},
             totalPage: 0,
             order_timeline_skeleton: false,
+            reason_for_cancellation : false,
             fulfil: [],
             order: {
+                error_message:'',
                 source_order_id: '',
                 placed_at: '',
                 status: '',
@@ -40,6 +43,7 @@ class Order extends Component {
                 financial_status:'',
                 badge_status:'',
                 badge_progress:'',
+                error_message:"",
             },
             client_details: {
                 customer_name: '',
@@ -103,11 +107,18 @@ class Order extends Component {
         if (this.state.is_order_trim){
             this.state.id= str1.concat(this.state.id)
         }
+        console.log(this.state.id)
         requests
             .postRequest("fba/test/webhookCall", {
                 shopify_order_name: this.state.id
             }).then(data => {
+
             if (data.success) {
+                if (data.data[0]['error_message'] && data.data[0]['error_message'] != '' ){
+                    this.state.reason_for_cancellation = true;
+                    console.log(data.data[0]['error_message'])
+                    this.state.order.error_message = capitalizeWord(data.data[0]['error_message']);
+                }
                 this.state.order_timeline_skeleton = true;
                 this.state.order.placed_at = data.data[0]['created_at']
                 this.state.order.source_order_id = data.data[0]['shopify_order_id']
@@ -221,6 +232,12 @@ class Order extends Component {
                                                 <b><Heading element={"p"}>Line items ordered</Heading></b>
                                                 <p style={{fontSize: '1.5rem'}}>{this.state.order.number_of_line_item}</p>
                                             </Stack>
+                                            {
+                                                this.state.reason_for_cancellation?<Stack distribution={"equalSpacing"}>
+                                                <b><Heading element={"p"}>Reason For cancellation</Heading></b>
+                                                    <Badge status="warning"><p style={{fontSize: '1.5rem'}}>{this.state.order.error_message}</p></Badge>
+
+                                            </Stack>:null}
                                         </FormLayout>
                                     </Card.Section>
                                 </Card> : null} {/*<Skeleton case="body"/>*/}

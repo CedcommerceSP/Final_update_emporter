@@ -45,7 +45,9 @@ export class Products extends Component {
 		{ label: 2000, value: "2000 *(Slow)" },
 	];
 
-	massActions = [{ label: "Upload", value: "upload" }];
+	massActions = [
+		{ label: "Upload", value: "upload" },
+	];
 
 	visibleColumns = [
 		"main_image",
@@ -179,13 +181,26 @@ export class Products extends Component {
 		) {
 			let installedApps = [];
 			props.necessaryInfo.account_connected.forEach(e => {
-				if (e.code !== 'fba')
-				installedApps.push({
-					id: e.code,
-					content: e.title,
-					accessibilityLabel: e.title,
-					panelID: e.code
-				});
+				if (e.code !== 'fba'){
+					if (e.code !== "ebayaffiliate"){
+                        installedApps.push({
+                            id: e.code,
+                            content: e.title,
+                            accessibilityLabel: e.title,
+                            panelID: e.code
+                        });
+					}
+					else {
+                        installedApps.push({
+                            id: e.code,
+                            content: "Ebay Dropshipping",
+                            accessibilityLabel: e.title,
+                            panelID: e.code
+                        });
+                    }
+
+				}
+
 			});
 			this.setState({
 				installedApps: installedApps,
@@ -404,12 +419,14 @@ export class Products extends Component {
 	}
 
 	modifyProductsData(data, product_grid_collapsible) {
-		let products = [];
-		let str = "";
-		for (let i = 0; i < data.length; i++) {
-			let rowData = {};
-			if (data[i].variants !== {} && !isUndefined(data[i].variants)) {
-				if (
+        let products = [];
+        let str = "";
+        for (let i = 0; i < data.length; i++) {
+            console.log(Object.keys(data[i].variants).length);
+            let rowData = {};
+			if (Object.keys( data[i].variants).length > 0 && !isUndefined(data[i].variants)) {
+                console.log(data[i].variants);
+                if (
 					data[i]["details"]["type"] === "simple" ||
 					Object.keys(data[i]["variants"]).length === 1
 				) {
@@ -635,6 +652,7 @@ export class Products extends Component {
 	}
 
 	render() {
+        console.log(this.state.installedApps);
         return (
 			<Page
 				primaryAction={{

@@ -65,8 +65,8 @@ class CurrentPlan extends Component {
 				<Card>
 					<div className="container">
 						<div className="row p-4 p-sm-5">
-							<div className="col-12 mb-5 pb-5 pt-0">
-								<div className="row pt-4 pb-4">
+							<div className="col-12">
+								<div className="row">
 									<div className="col-3 d-md-block d-sm-none">
 										<hr />
 									</div>
@@ -78,9 +78,9 @@ class CurrentPlan extends Component {
 									</div>
 								</div>
 							</div>
-							<div className="col-12 pt-2 pb-5">
+							<div className="col-12">
 								<div className="row">
-									<div className="col-12 pt-2 pb-3">
+									<div className="col-12">
 										<Label>
 											Product Upload Credits -:{" "}
 											<b>{this.state.available_credits}</b>
@@ -98,13 +98,23 @@ class CurrentPlan extends Component {
 										/>
 									</div>
 								</div>
+								{/*<div className="col-12 p-3 text-center">
+									<Button
+										className="d-block"
+										onClick={this.redirect.bind(this, "/panel/plans")}
+									>
+                                        {this.state.card.length > 0
+                                            ? "Upgrade Plan"
+                                            : "Choose a Plan"}
+									</Button>
+								</div>*/}
 							</div>
-							<div className="col-12 mb-5 pb-5 pt-0">
-								<div className="row pt-4 pb-4">
+							<div className="col-12 mb-5">
+								<div className="row">
 									<div className="col-3 d-md-block d-sm-none">
 										<hr />
 									</div>
-									<div className="col-md-6 col-sm-12 col-12 text-center">
+									<div className="col-md-6 col-sm-12 col-12 pt-3 text-center">
 										<DisplayText element="h3">Active Plan</DisplayText>
 									</div>
 									<div className="col-3 d-md-block d-sm-none">
@@ -138,17 +148,8 @@ class CurrentPlan extends Component {
 									</div>
 								);
 							})}
-							<div className="col-12 p-5 text-center">
-								<Button
-									className="d-block"
-									onClick={this.redirect.bind(this, "/panel/plans")}
-								>
-									{this.state.card.length > 0
-										? "Upgrade Plan"
-										: "Choose a Plan"}
-								</Button>
-							</div>
-							<div className="col-12 mt-5">
+
+							{/*<div className="col-12 mt-5">
 								<div className="row">
 									<div className="col-12 col-sm-2 text-center text-sm-left">
 										<FontAwesomeIcon
@@ -170,17 +171,17 @@ class CurrentPlan extends Component {
 										/>
 									</div>
 								</div>
-							</div>
-							<div className="col-12 mt-5 mb-5">
+							</div>*/}
+							{/*<div className="col-12 mt-5 mb-5">
 								<hr />
 							</div>
 							<div className="col-12 mb-5 pb-5 pt-0">
 								<h2>
 									{this.state.card_service.length > 0 ? "My Services" : ""}
 								</h2>
-								{/*Tittle*/}
-							</div>
-							{this.state.card_service.map((key, titleIndex) => {
+								Tittle
+							</div>*/}
+						{/*	{this.state.card_service.map((key, titleIndex) => {
 								return (
 									<React.Fragment key={titleIndex}>
 										<div className="col-12 mb-5">
@@ -196,7 +197,7 @@ class CurrentPlan extends Component {
 										</div>
 									</React.Fragment>
 								);
-							})}
+							})}*/}
 						</div>
 					</div>
 				</Card>

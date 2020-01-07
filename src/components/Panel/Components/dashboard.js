@@ -474,7 +474,7 @@ class Dashboard extends Component {
 																"mobile"
 															)}
 															helpText={
-																"OTP will sent to this number for verification"
+																"OTP will be sent on this number for verification."
 															}
 															label="Phone Number:"
 															type="number"
@@ -667,7 +667,7 @@ class Dashboard extends Component {
 									type="text"
 								/>*/}
 								<Select
-									label="How Do you Know About us"
+									label="How did you come across us?"
 									placeholder="Select"
 									options={[
 										{ label: "Shopify App Store", value: "Shopify App Store" },

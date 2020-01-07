@@ -9,7 +9,8 @@ import {
     Heading,
     Label,
     Select,
-    TextField
+    TextField,
+    DisplayText
 } from "@shopify/polaris";
 import {modifyOptionsData} from "../../components/Panel/Components/static-functions";
 import {isUndefined} from "util";
@@ -192,10 +193,10 @@ class FbaInstallationForm extends Component {
                                                             label={field.title}
                                                             placeholder={field.title}
                                                             value={field.value !== null ? field.value : ""}
-                                                            disabled={
+                                                            /*disabled={
                                                                 field.key === "account_name" &&
                                                                 this.state.page === "config"
-                                                            }
+                                                            }*/
                                                             onChange={this.handleChange.bind(
                                                                 this,
                                                                 field.key
@@ -214,7 +215,7 @@ class FbaInstallationForm extends Component {
                                     onClick={() => {
                                         this.onSubmit();
                                     }}
-                                    disabled={this.state.noChange}
+                                    // disabled={this.state.noChange}
                                     primary
                                 >
                                     Submit

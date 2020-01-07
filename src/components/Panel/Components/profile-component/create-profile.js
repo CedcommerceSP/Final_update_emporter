@@ -582,10 +582,10 @@ export class CreateProfile extends Component {
                     <Card>
                         <Banner title="*Please note" status="info">
                             <Label>
-                                <h4>{"Add rule corresponds to && (AND) condition"}</h4>
+                                <h4>{"Add rule corresponding to && (AND) condition"}</h4>
                             </Label>
                             <Label>
-                                <h4>{"Add rule group corresponds to || (OR) condition"}</h4>
+                                <h4>{"Add rule group corresponding to || (OR) condition"}</h4>
                             </Label>
                         </Banner>
                         {querySet.primaryQuery.map(query => {
@@ -1151,7 +1151,7 @@ export class CreateProfile extends Component {
                 <div className="col-12 pt-1 pb-1">
                     <TextField
                         label="Profile Name"
-                        placeholder="Anything you can type in Profile Name"
+                        placeholder="You can type anything as the Profile Name."
                         onChange={this.handleBasicDetailsChange.bind(this, "name")}
                         value={this.state.basicDetails.name}
                     />
@@ -1940,6 +1940,11 @@ export class CreateProfile extends Component {
             case 1:
                 if (this.validateStepOne()) {
                     // console.log(this.state.basicDetails.source);
+                    if (this.state.basicDetails.source === 'fileimporter'){
+                        this.saveProfileData();
+                        this.state.for_profiling = true;
+                        break;
+                    }
 
                     for (let i = 0; i < this.state.array_marketpalce_imported.length; i++) {
                         // console.log(this.state.array_marketpalce_imported);

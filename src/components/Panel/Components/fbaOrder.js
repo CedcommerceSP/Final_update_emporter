@@ -16,11 +16,15 @@ import {
     Banner,
     Badge,
     Button,
-    Stack
+    Stack,
+    Icon
 } from "@shopify/polaris";
 
 import {requests} from "../../../services/request";
 import {notify} from "../../../services/notify";
+import {
+    ViewMinor
+} from '@shopify/polaris-icons';
 
 import SmartDataTable from "../../../shared/smartTable";
 
@@ -62,6 +66,12 @@ export class FbaOrder extends Component {
             label: "Create", // button Label
             id: "button_order",
             sortable: false
+        },
+        button_order_view: {
+            title: "View Order",
+            label: "View", // button Label
+            id: "button_order_view",
+            sortable: false
         }
 
     };
@@ -74,7 +84,8 @@ export class FbaOrder extends Component {
         "created_at",
         "financial_status",
         "processing_status",
-        "button_order"
+        "button_order",
+        "button_order_view"
     ];
     pageLimits = [
         { label: 10, value: "10" },
@@ -117,6 +128,7 @@ export class FbaOrder extends Component {
             pagination_show: 0,
             trail_days_left:0,
             show_trail_banner:false,
+            show_trail_banner_webhook:false,
             order: [],
             selectedProducts: [],
             single_column_filter: [],
@@ -128,6 +140,7 @@ export class FbaOrder extends Component {
         this.getOrders();
         this.checkingOrderManuallyCreate();
         this.installedAtFbaDate();
+        this.deleteWebhookClient();
     }
 
     prepareFilterObject() {
@@ -335,29 +348,56 @@ export class FbaOrder extends Component {
 
                 }
                 if (data[i]['processing_status'] === 'not yet created') {
-                    str = <Button
-                        disabled={false}
-                        primary
-                        onClick={() => {
-                            this.createOrderOnFba(data[i]['shopify_order_name']);
-                        }}
-                    >
-                        Create
-                    </Button>
+                    str = <div className="text-center">
+                        <Button
+                            disabled={false}
+                            primary
+                            onClick={() => {
+                                this.createOrderOnFba(data[i]['shopify_order_name']);
+                            }}
+                        >
+                            Create
+                        </Button>
+                    </div>
                     rowData["button_order"] = str;
                 }
                 else {
-                    str = <Button
-                        disabled={true}
-                        primary
-                        onClick={() => {
-                            this.createOrderOnFba(data[i]['shopify_order_name']);
-                        }}
-                    >
-                        Create
-                    </Button>
+                    str = <div className="text-center"
+                               style={{cursor:'pointer'}}>
+                        <Button
+                            disabled={true}
+                            primary
+                            onClick={() => {
+                                this.createOrderOnFba(data[i]['shopify_order_name']);
+                            }}
+                        >
+                            Create
+                        </Button>
+                    </div>
                     rowData["button_order"] = str;
                 }
+
+                str =<div
+                    style={{cursor:'pointer'}}
+                    onClick={() => {
+                    this.operations(data[i]['shopify_order_name']);
+                }}>
+                    <Icon
+                        source={ViewMinor}
+                        on
+                    />
+                </div>
+
+                    /*<Button
+                    primary
+                    onClick={() => {
+                        this.operations(data[i]['shopify_order_name']);
+                    }}
+                >
+                    View
+                </Button>*/
+                rowData["button_order_view"] = str;
+
             }
 
             products.push(rowData);
@@ -373,9 +413,9 @@ export class FbaOrder extends Component {
         }
     }*/
 
-    operations = (event, id) => {
+    operations = (order_id) => {
         // console.log("event",event);
-        let shopify_order_name_trim =  event["shopify_order_name"];
+        let shopify_order_name_trim =  order_id;
         let is_order_name = false;
         // console.log(shopify_order_name_trim[0]);
         if (shopify_order_name_trim[0] === '#'){
@@ -384,23 +424,19 @@ export class FbaOrder extends Component {
             // console.log(shopify_order_name_trim);
         }
         // console.log(id);
-        switch (id) {
-            case "single_row":
+
                 let parent_props = {
                     is_hash_order_name:is_order_name
                 };
-                // console.log(parent_props);
-                // console.log("/panel/vieworderfba/" + shopify_order_name_trim);
+                console.log(parent_props);
+                console.log("/panel/vieworderfba/" + shopify_order_name_trim);
                 /*this.redirect("/panel/vieworderfba/1139" , {
                     parent_props: parent_props
                 });*/
                 this.redirect("/panel/vieworderfba/" + shopify_order_name_trim, {
                     parent_props: parent_props
                 });
-                break;
-            default:
-                // console.log("Default Case");
-        }
+
     };
 
     checkingOrderManuallyCreate() {
@@ -421,8 +457,8 @@ export class FbaOrder extends Component {
         requests
             .getRequest("fba/test/getWebhookCall")
             .then(data => {
+                console.log(data.days);
                 if (data.success) {
-                    // console.log(data.days);
                     this.setState({
                         trail_days_left:3-data.days
                     })
@@ -433,6 +469,22 @@ export class FbaOrder extends Component {
                     }
                 }
             });
+    }
+    deleteWebhookClient(){
+        if (this.state.trail_days_left == 0){
+            requests
+                .getRequest("fba/test/getWebhookDetailsAndDelete")
+                .then(data => {
+                    if (data.success) {
+                        if(data.message == "webhook are deleted"){
+                            this.setState({
+                                show_trail_banner_webhook:true
+                            })
+                        }
+                    }
+                });
+
+        }
     }
     /*redirect(url) {
         console.log(url);
@@ -482,6 +534,22 @@ export class FbaOrder extends Component {
                                         </Button>*/}
                                 </Banner>
                             </div>:null}
+                            {this.state.show_trail_banner_webhook?<div className="col-4 offset-4 text-center">
+                                <Banner status="warning">
+                                    <div className="text-center">
+                                        <Badge status="warning">Service Paused</Badge>
+                                    </div>
+
+                                    <p><b>Your trial period has been expired, kindly </b><Button
+                                        plain
+                                        onClick={() => {
+                                            this.redirect("/panel/plans");
+                                        }}
+                                    >
+                                        Buy Plan Now
+                                    </Button></p>
+                                </Banner>
+                                </div>:null}
                             <div className="col-12 p-3 text-right">
                                 {/*<Label>{this.state.totalMainCount && Object.keys(this.filters.column_filters).length <= 0?`Total Main Orders : ${this.state.totalMainCount}`:''}</Label>
                                 <Label>{`Active Page : ${this.gridSettings.activePage}`}</Label>*/}

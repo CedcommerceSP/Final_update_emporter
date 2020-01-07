@@ -540,8 +540,8 @@ class SmartDataTablePlain extends React.Component {
 		const visibleRows = rows;
 		const tableRows = visibleRows.map((row, i) => (
 			<tr key={`row-${i}`}
-				onClick={this.props.operations.bind(this, row, "single_row")}
-				style={{cursor:'pointer'}}>
+				// onClick={this.props.operations.bind(this, row, "single_row")}
+				/*style={{cursor:'pointer'}}*/>
 				{this.state.multiSelect && (
 					<td style={{ verticalAlign: "middle" }}>
 						<Checkbox
@@ -596,7 +596,7 @@ class SmartDataTablePlain extends React.Component {
 		return <tbody>{tableRows}</tbody>;
 	}
 
-	renderGridRowActions(row) {
+			renderGridRowActions(row) {
 		return (
 			<ul className="list-inline actions-list">
 				{this.state.rowActions.edit && (

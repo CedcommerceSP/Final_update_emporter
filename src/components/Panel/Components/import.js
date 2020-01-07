@@ -86,7 +86,8 @@ export class Import extends Component {
 						// console.log("key = ",  key)
 						if (data.data[key].usable || !environment.isLive) {
 							if (validateImporter(data.data[key].code)) {
-								if (data.data[key].code !== 'fba') {
+								// console.log(data.data[key].code)
+								if (data.data[key].code !== 'fba' && data.data[key].code !== 'bigmanager_importer') {
                                     this.state.importServicesList.push({
                                         label: data.data[key].title,
                                         value: data.data[key].marketplace,
@@ -98,8 +99,9 @@ export class Import extends Component {
 					}
 					// console.log("marketplace = = = ", this.state.importServicesList);
 					this.updateState();
-					for (let i = 0;i<this.state.importServicesList.length;i++){
-						if (this.state.importServicesList[i]['value'] !== 'ebayaffiliate' && this.state.importServicesList[i]['value'] !== 'fileimporter') {
+                    // console.log(this.state.importServicesList);
+                    for (let i = 0;i<this.state.importServicesList.length;i++){
+						if (this.state.importServicesList[i]['value'] !== 'ebayaffiliate' && this.state.importServicesList[i]['value'] !== 'fileimporter' && this.state.importServicesList[i]['value'] !== 'bigmanager') {
                             this.state.finalRenderImporterShopLists.push(this.state.importServicesList[i]);
                         }
 					}
@@ -239,7 +241,8 @@ export class Import extends Component {
 							label="Product Type"
 							options={[
 								{ label: "Active Listing", value: "active" },
-								{ label: "Unsold Listing", value: "unsold" }
+								{ label: "Unsold Listing", value: "unsold" },
+                                { label: "Schedule Listing", value: "schedule_listing"}
 							]}
 							onChange={e => {
 								this.setState({ ebay_list_type: e });
@@ -803,7 +806,7 @@ export class Import extends Component {
                 },
                     {
                         id: 'Ebay Affiliate',
-                        content: 'Ebay Affiliate',
+                        content: 'Ebay Dropshipping',
                         panelID: 'Ebay Affiliate',
                     }]} onSelect={this.handleTabChange}/>}
                 {mainTab === 0 ?
@@ -811,10 +814,10 @@ export class Import extends Component {
 					<div className="col-12 p-3">
 						<Banner title="Please Read" status="info">
 							<Label>
-								In order to upload your products from source marketplace to
-								Shopify, kindly import your products from the source by clicking
-								on 'Import Products', and then upload your products on Shopify
-								by clicking on 'Upload Products'.
+								In order to upload your products to Shopify, click on
+								“Import Products”. Further, click on “Upload Products” to convey
+								product details from the app to Shopify. You can transfer the
+								product details from CSV to the app by clicking on “Upload CSV”.
 								<a href="javascript:void(0)" onClick={this.handleModalChange}>
 									Click Here
 								</a>

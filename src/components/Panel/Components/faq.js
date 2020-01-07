@@ -27,17 +27,17 @@ class FAQPage extends Component {
                     id: 1,
                     show: false, // for collapse div
                     search: true, // for search, if false then hide the div
-                    ques: "How do I send my Items from Amazon to Shopify and make sure stock are in sync?",
+                    ques: "How do I send my items from Amazon to Shopify and make sure that my stocks are in sync?",
                     ans: (
                         <React.Fragment>
                             <p>
                                 With the Omni-Importer app, you can send your products from the Amazon seller center to
-                                your Shopify store. The process of transferring the item is very simple. Please see the
+                                your Shopify store. The process of transferring an item is very simple. Please see the
                                 following points-</p>
                             <ol>
-                                <li>Go to Import/Upload section.</li>
-                                <li>Click on Import Product. All the products will be listed on the app. You can see the
-                                    products in the Product section.</li>
+                                <li>Go to the Import/Upload section.</li>
+                                <li>Click on Import Products. All the products will be listed on the app. You can see the
+                                    products in the Products section.</li>
                                 <li>Then you can select and upload or bulk upload, depending on the seller’s requirement.</li>
                             </ol>
                         </React.Fragment>
@@ -48,7 +48,7 @@ class FAQPage extends Component {
                     id: 2,
                     show: false, // for collapse div
                     search: true, // for search, if false then hide the div
-                    ques: "How to make products uploaded through Profiling?",
+                    ques: "How to upload products through Profiling?",
                     ans: (
                         <React.Fragment>
                             <p>
@@ -72,17 +72,13 @@ class FAQPage extends Component {
                     id: 3,
                     show: false, // for collapse div
                     search: true, // for search, if false then hide the div
-                    ques: "What is the difference between custom and default profile?",
+                    ques: "What is the difference between Custom and Default Profile?",
                     ans: (
                         <React.Fragment>
                             <p>
-                                If you choose the default profile, while uploading products to Shopify, we will upload
-                                all your products in bulk to your Shopify store.
-                                <br/>
-                                In the custom profile, you categorize the products on several grounds like quantity,
-                                vendor type, country, etc through profiling and upload that specific profile to Shopify.
-                                <br/>
-                                Using this, you can also list your products in Shopify’s specific collection.
+                                If you choose the Default Profile while uploading the products on Shopify, we will list the products on your Shopify store. In the case of a Custom Profile, you can categorize the products on the basis of product quantity, vendor, type, country, etc. and upload the grouped products to Shopify.
+
+                                Using this, you can also list your products in Shopify’s specific collection(s).
                             </p>
                         </React.Fragment>
                     )
@@ -119,7 +115,7 @@ class FAQPage extends Component {
                             <ol>
                                 <li>Bulk Upload</li>
                                 <li>Select and Upload</li>
-                                <li>Through profiling</li>
+                                <li>Through Profiling</li>
                             </ol>
                         </React.Fragment>
                     )
@@ -165,8 +161,6 @@ class FAQPage extends Component {
                                 <li>Select the country(where your Amazon account is)
                                     Enter your details like Seller Id and Token etc.</li>
                                 <li>Click on submit button.</li>
-                                <br/>
-                                For further assistance, you can see the HELP PDF option while connecting your Account.
                             </ol>
                         </React.Fragment>
                     )
@@ -181,12 +175,12 @@ class FAQPage extends Component {
                     ans: (
                         <React.Fragment>
                             <p>
-                                Steps to upload the products from app to my Shopify store:
+                                Steps to upload the products from app to the Shopify store:
                             </p>
                             <ol>
-                                <li>Go to Import/Upload section.</li>
+                                <li>Go to the Import/Upload section.</li>
                                 <li>Select the Upload Products option.</li>
-                                <li>Or by going to the ‘Products’ section for uploading the selected products.</li>
+                                <li>Or go to the ‘Products’ section for uploading the selected products.</li>
                             </ol>
                         </React.Fragment>
                     )
@@ -197,21 +191,20 @@ class FAQPage extends Component {
                     id: 9,
                     show: false, // for collapse div
                     search: true, // for search, if false then hide the div
-                    ques: "What is profile and how it is used?",
+                    ques: "What is a profile and how it is used?",
                     ans: (
                         <React.Fragment>
                             <p>
-                                You can upload selected products by creating a profile on the basis of selected
-                                attributes such as quantity, title, country or price. Steps of Profiling:
+                                A profile refers to a group of products created on the basis of product quantity, title, country or price.
                             </p>
                             <ol>
                                 <li>Go to Profiling section.</li>
-                                <li>Click on Create profile</li>
-                                <li>Enter Profile name (ANY)</li>
+                                <li>Click on <b>Create Profile</b></li>
+                                <li>Enter Profile Name (ANY)</li>
                                 <li>Enter Product source</li>
-                                <li>Select the Target house (warehouse)</li>
-                                <li>Select attribute on which basis you want to create a profile
-                                    Now, from the Import/Upload section, upload products by choosing the Custom profile.</li>
+                                <li>Select the Target House (warehouse)</li>
+                                <li>Select the attribute on the basis you want to create a profile</li>
+                                <li>Now, from the Import/Upload section, upload products by choosing the Custom profile.</li>
                             </ol>
                         </React.Fragment>
                     )
@@ -222,25 +215,18 @@ class FAQPage extends Component {
                     id: 10,
                     show: false, // for collapse div
                     search: true, // for search, if false then hide the div
-                    ques: "Stuck on product import/upload process?",
+                    ques: "Stuck on product Import/Upload process. What to do?",
                     ans: (
                         <React.Fragment>
                             <p>
                                 To import products go to - <b>Import/Upload</b> section
                                 <br/>
-                                <b>Import Products:</b> It helps to get the products from selected source marketplace (from
-                                where you want to import products) to the app.
-                                <b>Upload Products:</b> It helps to make products uploaded from app to Shopify. This can be
-                                done in 3 ways:
+                                <b>Import Products:</b> It helps to get the products from the source marketplace (from where you want to bring products) to the app.
+                                <b>Upload Products:</b> It helps to upload products from the app to Shopify. This can be done in 3 ways:
                             </p>
                             <ol>
-                                <li>Bulk Upload</li>
-                                <li>Select and Upload Through Profiling</li>
-                                <b>Bulk Upload:</b> Go to Import/Upload section and click on Upload Products and select the
-                                default profile.
-                                <b>Select and Upload:</b> Go to the Product section. Select the products you want to upload,
-                                then click on Actions and then Upload.
-                                Kindly Refer Ques <b>What is profiling?</b> to know more about Profiling.
+                                <li><b>Bulk Upload:</b> Go to Import/Upload section. Then, click on Upload Products and select the Default Profile.</li>
+                                <li><b>Select and Upload:</b>  Go to the Products section. Select the products you want to upload.</li>
                             </ol>
                         </React.Fragment>
                     )
@@ -261,9 +247,9 @@ class FAQPage extends Component {
                                 <li>Go to the Accounts section.</li>
                                 <li>Go to Amazon marketplace and click on reconnect option.</li>
                                 <li>Enter the correct credentials, click on Submit Button, your account will be
-                                    automatically connected to your Amazon marketplace.</li>
+                                    automatically connected to the Amazon marketplace.</li>
                             </ol>
-                            <b>For further assistance, you can see the HELP PDF option.</b>
+                            <b>For further assistance, you can see the HELP PDF</b>
                         </React.Fragment>
                     )
                 },
@@ -293,21 +279,21 @@ class FAQPage extends Component {
                     id: 13,
                     show: false, // for collapse div
                     search: true, // for search, if false then hide the div
-                    ques: "Product Import Process failed: Walmart Refused Report Access Kindly Try later why I am getting this error?",
+                    ques: "Product Import Process Failed: Walmart Refused Report Access, Kindly Try Later”, why am I getting this error?",
                     ans: (
                         <React.Fragment>
                             <p>
                                 This error may be caused due to any of the following cases:
                                 <br/>
                                 <b>CASE 1:</b> The details of the Walmart seller panel that you have provided may be wrong. So
-                                kindly re-connect your Walmart account by following the steps:
+                                kindly reconnect your Walmart account by following the steps:
                                 <br/>
                                 <ol>
                                     <li>Go to the Accounts section.</li>
                                     <li>Go to Walmart marketplace and click on reconnect option.</li>
                                     <li>Enter the correct credentials, click on Submit Button, your app panel will be
-                                        automatically connected to your Walmart marketplace.</li>
-                                    <li>For further assistance, you can see the HELP PDF option.</li>
+                                        automatically connected to the Walmart marketplace.</li>
+                                    <li>For further assistance, you can see the HELP PDF</li>
                                 </ol>
 
                                 <b>CASE 2:</b> Please try again later, it may be happening because we didn’t get a proper
@@ -322,7 +308,7 @@ class FAQPage extends Component {
                     id: 14,
                     show: false, // for collapse div
                     search: true, // for search, if false then hide the div
-                    ques: "Products imported successfully but why not visible on Shopify store? Or why I can't see my products on Shopify?",
+                    ques: "Why can’t I see my products on Shopify despite the successful Product Import?",
                     ans: (
                         <React.Fragment>
                             <p>
@@ -342,17 +328,13 @@ class FAQPage extends Component {
                     id: 15,
                     show: false, // for collapse div
                     search: true, // for search, if false then hide the div
-                    ques: "When import products from the marketplace, will it auto create on my Shopify store?",
+                    ques: "While I import products from the marketplace, will they be auto-created on my Shopify store?",
                     ans: (
                         <React.Fragment>
                             <p>
-                                No, when product imported from the selected marketplace, it will only get imported on
-                                the app, to upload it on Shopify you have to upload them from the Import/Upload section.
+                                No. When a product is imported from the selected marketplace, it will only be listed on the app. To see the product on your Shopify store, you must upload them from the Import/Upload section.
                                 <br/>
-                                Refer Ques “Stuck on product import/upload process?” to know more.
-                                <br/>
-                                <b>Note:</b> First 10 products are uploaded for free as a trial and after that, you need to pay
-                                $0.1/product for uploading on Shopify.
+                                Refer the following FAQ to know more:
                             </p>
                         </React.Fragment>
                     )
@@ -387,7 +369,7 @@ class FAQPage extends Component {
                     id: 17,
                     show: false, // for collapse div
                     search: true, // for search, if false then hide the div
-                    ques: "Will, my inventory gets synced from Marketplace (like Walmart,eBay, Etsy, Amazon or Wish) to Shopify store?",
+                    ques: "Will the app sync my inventory from marketplaces (like Walmart, eBay, Etsy, Amazon, or Wish) to the Shopify store?",
                     ans: (
                         <React.Fragment>
                             <p>
@@ -421,18 +403,17 @@ class FAQPage extends Component {
                     id: 19,
                     show: false, // for collapse div
                     search: true, // for search, if false then hide the div
-                    ques: "What to do while getting the error Failed to import from eBay. Account not Found!",
+                    ques: 'What to do while getting the error, “Failed to import from eBay. Account not found!"',
                     ans: (
                         <React.Fragment>
                             <p>
-                                This error means wrong credentials entered, to fix this, you should try to reconnect
-                                your eBay account. To reconnect your account, follow the steps given below:
+                                This error means that the wrong credentials have been entered. To fix this, you should try to reconnect your eBay account. To reconnect, follow the steps given below:
                             </p>
                             <ol>
                                 <li>Go to the Accounts section.</li>
                                 <li>Select the country.</li>
-                                <li>Click Reconnect.</li>
-                                <li>Enter the Credentials and get connected to the app.</li>
+                                <li>Click reconnect.</li>
+                                <li>Enter the credentials and get connected to the app.</li>
                             </ol>
                         </React.Fragment>
                     )
@@ -451,13 +432,13 @@ class FAQPage extends Component {
                             <ol>
                                 <li>Go to the FBA section.</li>
                                 <li>Click on the "Manage Shipping Speed Categpry".</li>
-                                <li>And map the Shopify and FBA shipping categories.</li>
+                                <li>And Map the Shopify and FBA shipping categories.</li>
                             </ol>
                         </React.Fragment>
                     )
                 },
 
-                {
+              /*  {
                     id: 21,
                     show: false, // for collapse div
                     search: true, // for search, if false then hide the div
@@ -477,7 +458,7 @@ class FAQPage extends Component {
                             </ol>
                         </React.Fragment>
                     )
-                },
+                },*/
 
 
 

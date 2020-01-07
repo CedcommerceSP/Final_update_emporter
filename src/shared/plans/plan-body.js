@@ -1,4 +1,4 @@
-import React, {Component} from "react";
+import React, {Component,useCallback, useState} from "react";
 import {
     Button,
     Card,
@@ -37,10 +37,14 @@ import {
 class PlanBody extends Component {
     constructor(props) {
         super(props);
-        // console.log("namste",props);
+        console.log("naretemste",props);
         this.state = {
             selected: 0,
+            countries:1,
+            buttton_upgrade:false,
             active: false,
+            main_price_temp:19,
+            main_price_temp_anually:199,
             plan_title:"",
             necessaryInfo: {},
             sync_plan_checkbox: false,
@@ -76,10 +80,65 @@ class PlanBody extends Component {
     }
 
     componentWillReceiveProps(nextPorps) {
+        // console.log(nextPorps.myprop_upgrade_button);
         if (nextPorps.necessaryInfo !== undefined) {
             this.setState({necessaryInfo: nextPorps.necessaryInfo});
             this.planRender()
         }
+        if (nextPorps.myprop_upgrade_button !== undefined && nextPorps.myprop_upgrade_button !=false){
+            // console.log(nextPorps.myprop_upgrade_button);
+
+            if (this.state.necessaryInfo) {
+                if (this.state.necessaryInfo.credits) {
+                    let available_credits = this.state.necessaryInfo.credits.available_credits;
+                    // console.log("available credits",available_credits);
+                    let used_credits = this.state.necessaryInfo.credits.total_used_credits;
+                    let total_credits = available_credits + used_credits;
+                    // console.log("used credits",used_credits);
+                    // console.log("total credits",total_credits);
+                    // console.log(total_credits)
+                    if (total_credits > 10) {
+                        // console.log("1")
+                        this.setState({
+                            sync_plan_checkbox: true
+                        })
+                    }
+                    // console.log("import count",this.state.necessaryInfo.import_count);
+                    // console.log("upload count",this.state.necessaryInfo.upload_count);
+                    if (this.state.necessaryInfo.import_count === this.state.necessaryInfo.upload_count &&
+                        this.state.necessaryInfo.import_count !== 0 && this.state.necessaryInfo.upload_count !==0) {
+                        // console.log("2")
+                        this.setState({
+                            sync_plan_checkbox: true
+                        })
+                    }
+                    /*  if (used_credits > 0) {
+                     // console.log("3")
+                     this.setState({
+                     show_banner_onetime_payment: true
+                     })
+                     }*/
+
+                    if (this.state.necessaryInfo.import_count <= 10 && total_credits < 10 ) {
+                        // console.log("4")
+                        this.setState({
+                            sync_plan_checkbox: true
+                        })
+                    }
+                    if (this.state.necessaryInfo.upload_count > 10 ){
+                        // console.log("5")
+                        this.setState({
+                            sync_plan_checkbox: true
+                        })
+                    }
+                }
+
+            }
+            /*this.setState({
+                sync_plan_checkbox: true
+            });*/
+        }
+
     }
 
     planRender() {
@@ -100,7 +159,7 @@ class PlanBody extends Component {
                 // console.log("import count",this.state.necessaryInfo.import_count);
                 // console.log("upload count",this.state.necessaryInfo.upload_count);
                 if (this.state.necessaryInfo.import_count === this.state.necessaryInfo.upload_count &&
-                    this.state.necessaryInfo.import_count !== 0) {
+                    this.state.necessaryInfo.import_count !== 0 && this.state.necessaryInfo.upload_count !==0) {
                     // console.log("2")
                     this.setState({
                         show_banner_onetime_payment: true
@@ -113,7 +172,7 @@ class PlanBody extends Component {
                     })
                 }*/
 
-                if (this.state.necessaryInfo.import_count <= 10 && total_credits > 10) {
+                if (this.state.necessaryInfo.import_count <= 10 && total_credits < 10) {
                     // console.log("4")
                     this.setState({
                         show_banner_onetime_payment: true
@@ -154,8 +213,8 @@ class PlanBody extends Component {
                         data: data,
                         originalData: temp
                     });
-                    // console.log("data", this.state.data);
-                    // console.log("originalData", this.state.originalData);
+                    console.log("data", this.state.data);
+                    console.log("originalData", this.state.originalData);
                 }
             } else {
                 notify.error(data.message);
@@ -163,8 +222,13 @@ class PlanBody extends Component {
         });
     }
 
-    onSelectPlan(arg) {
-        // console.log(arg);
+    onSelectPlan(arg,price) {
+        if (arg.title == "FBA"){
+            arg.main_price = this.state.main_price_temp
+        }
+        if (arg.title == "FBA Annually"){
+            arg.main_price = this.state.main_price_temp_anually
+        }
         let value = [];
         let flag = 0;
         let newArg = Object.assign({}, arg);
@@ -179,6 +243,12 @@ class PlanBody extends Component {
             {},
             RemoveService(Object.assign({}, newArg), value.slice(0))
         ); // Change the plan in Desire Format
+
+        console.log(this.state.countries)
+
+        data1.services[0]['number_of_countries'] = this.state.countries
+        data1['countries'] = this.state.countries;
+        console.log(data1);
         let win = window.open(
             "",
             "_parent",
@@ -186,8 +256,10 @@ class PlanBody extends Component {
         );
         // win.close();
         requests.postRequest("plan/plan/choose", data1).then(data => {
+            console.log(data)
             if (data.success) {
                 if (!isUndefined(data.data.confirmation_url)) {
+                    console.log(data.data.confirmation_url)
                     win.location = data.data.confirmation_url;
                 } else {
                     win.close();
@@ -273,6 +345,10 @@ class PlanBody extends Component {
         this.state.oneTimePaymentDetails.totalCredits = creditCount;
         this.state.oneTimePaymentDetails.totalAmount = cost.toFixed(2);
         this.setState(this.state);
+        if (this.state.oneTimePaymentDetails.totalAmount < 5.00 && this.state.oneTimePaymentDetails.totalAmount !=0 && credits > 0){
+            this.state.oneTimePaymentDetails.totalAmount = 5.00.toFixed(2);
+            this.setState(this.state);
+        }
     }
 
     makePaymentForImporter() {
@@ -400,7 +476,7 @@ class PlanBody extends Component {
                                                                 type="number"
                                                                 value={this.state.oneTimePaymentDetails.totalCredits}
                                                                 onChange={this.handleCreditsChange.bind(this)}
-                                                                helpText="No. of product you want to upload on Shopify"
+                                                                helpText="Number of products you want to upload on Shopify"
                                                             />
                                                         </div>
                                                         <div
@@ -432,12 +508,12 @@ class PlanBody extends Component {
                                                                     {this.state.oneTimePaymentDetails.original_price !==
                                                                     this.state.oneTimePaymentDetails.totalAmount && (
                                                                         <span className="price-tag_small">
-																<strike>
+																{/*<strike>
 																	{
                                                                         this.state.oneTimePaymentDetails
                                                                             .original_price
                                                                     }
-																</strike>
+																</strike>*/}
 															</span>
                                                                     )}
                                                                     {this.state.oneTimePaymentDetails.totalAmount}
@@ -505,7 +581,6 @@ class PlanBody extends Component {
                         >
                             <Banner title="Product Syncing Charges" icon="view" status="info"
                             >
-                                <p><b><i>Monthly Paymemt</i></b></p>
                             </Banner>
                         </div>
                         <Page>
@@ -542,10 +617,11 @@ class PlanBody extends Component {
                                                                     <div className="mb-5">
                                                                         {" "}
                                                                         {/* Button To choose Plan */}
-                                                                        <Button
-                                                                            primary={true}
+                                                                        {data.title == 'Syncing And Order Management'?<Button
+                                                                            destructive
+                                                                            // primary={true}
                                                                             fullWidth={true}
-                                                                            size="large"
+                                                                            size="large"c
                                                                             disabled={
                                                                                 data.main_price === 0 || data.main_price === "0"
                                                                             }
@@ -554,7 +630,19 @@ class PlanBody extends Component {
                                                                             {data.main_price === 0 || data.main_price === "0"
                                                                                 ? "Select Marketplace"
                                                                                 : "Choose Plan"}
-                                                                        </Button>
+                                                                        </Button>:<Button
+                                                                                primary={true}
+                                                                                fullWidth={true}
+                                                                                size="large"
+                                                                                disabled={
+                                                                                    data.main_price === 0 || data.main_price === "0"
+                                                                                }
+                                                                                onClick={this.onSelectPlan.bind(this, data)}
+                                                                            >
+                                                                                {data.main_price === 0 || data.main_price === "0"
+                                                                                    ? "Select Marketplace"
+                                                                                    : "Choose Plan"}
+                                                                            </Button>}
                                                                     </div>
                                                                     <div className="mb-5 text-center">
                                                                         {" "}
@@ -575,7 +663,6 @@ class PlanBody extends Component {
                                                                                         <p className="service-body mb-5">
                                                                                          <span
                                                                                              className="service-description mb-3"
-                                                                                             style={{fontWeight: "bold"}}
                                                                                          >
                                                                                          <b>{data.services[keys].title}</b>
                                                                                          </span>
@@ -702,19 +789,50 @@ class PlanBody extends Component {
             </React.Fragment>
         );
     }
-
+    handleChange=(field,val)=>{
+        this.setState({[field]:val})
+        this.updatePriceInPlan(val);
+    }
+    updatePriceInPlan(value){
+        if (value != "") {
+            for (let i = 0; i < this.state.data.length; i++) {
+                if (this.state.data[i]['title'] == "FBA Annually") {
+                    this.state.main_price_temp_anually = this.state.data[i]['main_price'] * value
+                }
+                if (this.state.data[i]['title'] == "FBA"){
+                    this.state.main_price_temp = this.state.data[i]['main_price'] * value
+                }
+            }
+        }
+        console.log(this.state.main_price_temp);
+        console.log("edited data",this.state.data);
+    }
     renderPlanOrderManagement() {
+
         return (
             <div className="col-12 mb-2">
                 <div
                     style={{cursor: "pointer"}}
                     onClick={this.handleToggleClickFba.bind(this.state.fba_plan)}
                 >
-                    <Banner title="FBA Order Management" icon="view" status="info"
+                    {/*<Banner title="FBA Order Management" icon="view" status="info"
                     >
                         <p><b>Monthly Payment</b></p>
-                    </Banner>
+                    </Banner>*/}
                 </div>
+                {/*<Stack distribution="center">
+                    <div className="pt-3">
+                        <DisplayText size="small">no.of countries</DisplayText>
+                    </div>
+                <div className="pt-3">
+
+                    <TextField
+                        type="number"
+                        value={this.state.countries}
+                        onChange={this.handleChange.bind(this,'countries')}
+                    />
+                </div>
+                </Stack>*/}
                 <Collapsible open={true}
                              ariaExpanded={this.state.fba_plan}
                 >
@@ -740,12 +858,14 @@ class PlanBody extends Component {
                                                             <p className="price-tag">
                                                                 <span className="price-tag_small">$</span>
                                                                 {/*<span className="price-tag_discount"><strike>{data.originalValue}</strike></span>*/}
-                                                                {data.main_price}
+                                                                {/*{data.main_price}*/}
+                                                                {data.title=="FBA"?this.state.main_price_temp:this.state.main_price_temp_anually}
                                                                 <span className="price-tag_small">
                                                                         {data.validity_display}
                                                                     </span>
                                                             </p>
                                                         </div>
+                                                        {/*{console.log("769 :: ",data)}*/}
                                                         <div className="mb-5">
                                                             {" "}
                                                             {/* Button To choose Plan */}
@@ -754,9 +874,10 @@ class PlanBody extends Component {
                                                                 fullWidth={true}
                                                                 size="large"
                                                                 disabled={
-                                                                    data.main_price === 0 || data.main_price === "0"
+                                                                    this.state.main_price_temp === 0 || this.state.main_price_temp === "0"||this.state.main_price_temp < 0 ||
+                                                                    this.state.main_price_temp_anually === 0 || this.state.main_price_temp_anually === "0"||this.state.main_price_temp_anually < 0
                                                                 }
-                                                                onClick={this.onSelectPlan.bind(this, data)}
+                                                                onClick={this.onSelectPlan.bind(this, data,data.main_price)}
                                                             >
                                                                 {data.main_price === 0 || data.main_price === "0"
                                                                     ? "Select Marketplace"
@@ -1094,10 +1215,10 @@ class PlanBody extends Component {
                         style={{cursor: "pointer"}}
                         onClick={this.handleToggleClick.bind(this.state.banner_paln)}
                     >
-                        <Banner title="CSV Order Management" icon="view" status="info"
+                        {/*<Banner title="CSV Order Management" icon="view" status="info"
                         >
                             <p><b><i>One time payment if Csv not matched according to the offical format</i></b></p>
-                        </Banner>
+                        </Banner>*/}
                     </div>
                     <Collapsible open={true}
                                  ariaExpanded={this.state.fba_plan}
@@ -1105,7 +1226,6 @@ class PlanBody extends Component {
                         <FormLayout>
                             <FormLayout.Group condensed>
                                 <div className="col-12 m-4">
-                                    {/* Starting Of Plan Card */}
                                     <Card>
                                         <div className="d-flex justify-content-center p-5">
                                             <div className="pt-5">
@@ -1129,14 +1249,13 @@ class PlanBody extends Component {
                                                     <h1 className="mb-4 mt-4">
                                                         <b>Upload CSV</b>
                                                     </h1>
-                                                    <h4>Upload Your Products CSV File To import all the products into an
-                                                        App</h4>
+                                                    <h4>import all your products to the app in bulk via CSV</h4>
                                                 </div>
                                                 <hr />
                                                 <div className="text-center mt-5">
                                                 </div>
                                             </div>
-                                            /*{console.log(this.state.active)}*/
+                                            {/*console.log(this.state.active)*/}
 
                                         </div>
                                     </Card>
@@ -1217,12 +1336,12 @@ class PlanBody extends Component {
             },
             {
                 id: 'order_management',
-                content: 'Fba Order Management',
+                content: 'FBA Order Management',
                 panelID: 'order-management',
             },
             {
                 id: 'cvs_management',
-                content: 'CSV Upload Management',
+                content: 'CSV Upload',
                 panelID: 'csv-management'
             }
         ];

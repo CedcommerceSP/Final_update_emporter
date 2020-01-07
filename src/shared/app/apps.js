@@ -8,7 +8,7 @@ import {
     Label,
     Tooltip,
     Icon, Tabs,
-    Collapsible,Stack,FormLayout,Modal,Badge
+    Collapsible,Stack,FormLayout,Modal,Badge,DisplayText
 } from "@shopify/polaris";
 import {requests} from "../../services/request";
 import {notify} from "../../services/notify";
@@ -21,8 +21,12 @@ class AppsShared extends Component {
         super(props);
         this.state = {
             show_banner: false,
+            account_details_amazon:[],
+            country_code:"",
+            account_name:"",
         };
         this.getConnectors();
+        // this.getFbaAccountList();
     }
 
     componentDidMount() {
@@ -38,6 +42,29 @@ class AppsShared extends Component {
             }
         }
     }
+    /*getFbaAccountList(){
+         var temp_arry=[];
+         var temp_array_1=[];
+         var account_name="";
+         var country_code="";
+        requests.getRequest("fba/fbaconfig/getAmazonAccountDetials").then(data => {
+            if (data.success) {
+                for (let i=0;i<data.data.length;i++){
+                    console.log(data.data[i]['country_code'])
+                    temp_arry=[
+                         this.state.account_name = data.data[i]['account_name'],
+                         this.state.country_code = data.data[i]['country_code'],
+                    ];
+                    temp_array_1.push(temp_arry);
+                }
+                this.setState({
+                    account_details_amazon:temp_array_1
+                })
+
+            }
+
+        });
+    }*/
 
     getConnectors() {
         this.state = {
@@ -49,7 +76,7 @@ class AppsShared extends Component {
         };
         requests.getRequest("connector/get/all").then(data => {
             if (data.success) {
-                // console.log(data);
+                // console.log("namaste",data);
                 let installedApps = [];
                 let code = [];
                 for (let i = 0; i < Object.keys(data.data).length; i++) {
@@ -171,51 +198,68 @@ class AppsShared extends Component {
         }
 
     renderOrderManagement(){
+
         return this.state.apps.map(app => {
             if (app.code === 'fba') {
                 if (this.validateCode(app.code)) {
-                    return (
-                        <div
-                            className="col-6 col-sm-6 mb-4"
-                            key={this.state.apps.indexOf(app)}
-                        >
-                            <Card title={app.title}>
-                                {this.props.success.code === app.code ||
-                                app["installed"] !== 0
-                                    ?<div className="text-left pt-3 pl-4">
-                                        <Badge progress="complete" status="success">Connected</Badge>
-                                    </div>:null}
-                                <div className="row p-5">
-                                    <div className="col-12">
-                                        <img src={app.image} alt={app.title}
-                                             style={{maxWidth: "100%", height: "160px"}}/>
-                                    </div>
-                                    <div className="col-12 mt-4 mb-4">
-                                        <div className="row">
-                                            <div className="col-12 col-sm-6">
-                                                {this.additionalInput(app.code)}
+                        return (
+                            <React.Fragment>
+                                <div
+                                    className="col-6 col-sm-6 mb-4"
+                                    key={this.state.apps.indexOf(app)}
+                                >
+                                    <Card title={app.title}>
+                                        {this.props.success.code === app.code ||
+                                        app["installed"] !== 0
+                                            ? <div className="text-left pt-3 pl-4">
+                                                <Badge progress="complete" status="success">Connected</Badge>
+                                            </div> : null}
+                                        <div className="row p-5">
+                                            <div className="col-12">
+                                                <img src={app.image} alt={app.title}
+                                                     style={{maxWidth: "100%", height: "160px"}}/>
                                             </div>
-                                            <div className="col-12 col-sm-6">
-                                                <Button
-                                                    // disabled={this.props.success.code === app.code || app['installed'] !==0 && app.code !== 'ebayimporter'}
-                                                    onClick={() => {
-                                                        this.installApp(app.code);
-                                                    }}
-                                                    primary
-                                                    fullWidth={true}
-                                                >
-                                                    {this.props.success.code === app.code ||
-                                                    app["installed"] !== 0
-                                                        ? "ReConnect"
-                                                        : "Link your Account"}
-                                                </Button>
+                                            <div className="col-12 mt-4 mb-4">
+                                                <div className="row">
+                                                    <div className="col-12 col-sm-6">
+                                                        {this.additionalInput(app.code)}
+                                                    </div>
+                                                    <div className="col-12 col-sm-6">
+                                                        <Button
+                                                            // disabled={this.props.success.code === app.code || app['installed'] !==0 && app.code !== 'ebayimporter'}
+                                                            onClick={() => {
+                                                                this.installApp(app.code);
+                                                            }}
+                                                            primary
+                                                            fullWidth={true}
+                                                        >
+                                                            {this.props.success.code === app.code ||
+                                                            app["installed"] !== 0
+                                                                ? "ReConnect"
+                                                                : "Link your Account"}
+                                                        </Button>
+                                                    </div>
+                                                </div>
                                             </div>
                                         </div>
-                                    </div>
+                                    </Card>
                                 </div>
-                            </Card>
-                        </div>
-                    );
+                                {/*<div className="col-6 col-sm-6 mt-5 text-center">
+                                    <img className='img-fluid pt-5 mt-2'
+                                         style={{cursor: 'pointer'}}
+                                         height="100"
+                                         width="100"
+                                         align="middle"
+                                         src={require("../../assets/img/add_account.png")}
+                                         onClick={() => {
+                                             this.installApp(app.code);
+                                         }}
+                                    />
+                                    <DisplayText size="small">Add More Account For FBA</DisplayText>
+                                </div>*/}
+                            </React.Fragment>
+
+                        );
                 }
             }
         })
@@ -323,7 +367,7 @@ class AppsShared extends Component {
             },
             {
                 id: 'cvs_management',
-                content: 'CSV Upload Management',
+                content: 'CSV Upload',
                 panelID: 'csv-management'
             }
         ];

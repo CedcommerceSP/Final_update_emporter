@@ -15,8 +15,10 @@ import {
     Link,
     Icon,
     Heading,
+    Button
 } from "@shopify/polaris";
 import '@shopify/polaris/styles.css';
+import "./new-analytics-reporting.css";
 import {Doughnut} from 'react-chartjs-2';
 import Skeleton from "../../../../shared/skeleton";
 import {capitalizeWord} from "../static-functions";
@@ -197,7 +199,7 @@ class Demo_analytics_reporting extends Component {
         requests.postRequest("frontend/app/getImportedProductCount", {importers: importer_marketplace_array}, false, true)
             .then(data => {
                 if (data.success && (data['data']['amazonaffiliate'] !== 0 || data['data']['amazonimporter'] !== 0 || data['data']['ebayimporter'] !== 0 ||
-                    data['data']['etsyimporter'] !== 0 || data['data']['walmartimporter'] !== 0 || data['data']['wishimporter'] !== 0 || data['data']['ebayaffiliate'] !== 0 ))
+                    data['data']['etsyimporter'] !== 0 || data['data']['walmartimporter'] !== 0 || data['data']['wishimporter'] !== 0 || data['data']['ebayaffiliate'] !== 0 || data['data']['fileimporter'] !== 0 ))
 
                 {
                     importer_data_rec = data.data;
@@ -242,8 +244,10 @@ class Demo_analytics_reporting extends Component {
                     this.setState(this.state)
                 }  else if (data.success && data['data']['amazonaffiliate'] === 0 && data['data']['amazonimporter'] === 0 && data['data']['ebayimporter'] === 0 &&
                     data['data']['etsyimporter'] === 0 && data['data']['walmartimporter'] === 0 && data['data']['wishimporter'] === 0 && data['data']['ebayaffiliate'] === 0) {
+                    console.log("in else iff");
                     this.setState({no_getProductsUploadedData_and_ImportedData: true})
                 } else {
+                    console.log("in else iff 2");
                     this.setState({no_getProductsUploadedData_and_ImportedData: true})
                 }
             });
@@ -557,11 +561,22 @@ class Demo_analytics_reporting extends Component {
 
                     <Layout.Section>
                         <Card title="">
-                            <div className="m-4 text-center">
+                            <div className="text-right p-3">
+                                <Button
+                                    plain
+                                    onClick={() => {
+                                        this.redirect("/panel/help/report");
+                                    }}
+                                >Click Here</Button>
+                            </div>
+                              {/*actions={[{content: 'Click Here', url: 'https://apps.cedcommerce.com/importer/app/panel/help/report',external:true}]}>*/}
+                            <div className="text-center">
                                 <Heading>Store Development</Heading>
-                                <Label>Get your Shopify Store developed in most reasonable cost.</Label>
                                 <hr style={{marginLeft:"20%", marginRight:"20%"}}/>
-                                {this.render_recent_activity()}
+                            </div>
+                            {this.render_recent_activity()}
+                            <div className="text-center">
+                                <Label>Get your Shopify store developed at a reasonable price.</Label>
                                 <hr/>
                             </div>
                         </Card>
@@ -640,7 +655,8 @@ class Demo_analytics_reporting extends Component {
                     </Layout.Section>
                     {rows.length > 0 ?
                     <Layout.Section oneThird>
-                        <Card title="News">
+                        <Card title="News"
+                            actions={[{content: 'See all', url: 'https://apps.shopify.com/partners/cedcommerce',external:true}]}>
                             <Card.Section>
                                 <ResourceList
                                     items={rows}
@@ -675,7 +691,8 @@ class Demo_analytics_reporting extends Component {
                         </Layout.Section>}
                     <Layout.Section oneThird>
                         {rows_blog.length > 0?
-                        <Card title="Blogs">
+                        <Card title="Blogs"
+                              actions={[{content: 'See all', url: 'https://cedcommerce.com/blog/?s=omni+importer',external:true}]}>
                             <Card.Section>
                                 <ResourceList
                                     items={rows_blog}
@@ -715,9 +732,14 @@ class Demo_analytics_reporting extends Component {
 
     render_recent_activity() {
         return(
+            /* class="zoom"*/
             <Stack  distribution="center">
-                <a href="https://apps.cedcommerce.com/shopify-store-development/"target="_blank"><img className='img-fluid p-3' src={require("../../../../assets/img/store_dev1.png")} alt="Store_Dev"/></a>
-                <a href="https://apps.cedcommerce.com/digital-marketing-services/"target="_blank"><img className='img-fluid pb-5 pr-5 pl-3' src={require("../../../../assets/img/store_dev2.png")} alt="Digital Marketing"/></a>
+                <div>
+                    <a href="https://apps.cedcommerce.com/shopify-store-development/"target="_blank"><img className='img-fluid p-3' src={require("../../../../assets/img/store_dev1.png")} alt="Store_Dev"/></a>
+                </div>
+                <div>
+                    <a href="https://apps.cedcommerce.com/digital-marketing-services/"target="_blank"><img className='img-fluid pb-5 pr-5 pl-3' src={require("../../../../assets/img/store_dev2.png")} alt="Digital Marketing"/></a>
+                </div>
             </Stack>
         )
 /*        return (this.state.recentactivityskeleton ? <Skeleton case="body"/> :

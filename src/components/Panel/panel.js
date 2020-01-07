@@ -46,6 +46,9 @@ export class Panel extends Component {
         super(props)
 
         this.state = {
+            trail_days_left:0,
+            show_trail_banner:false,
+            show_trail_banner_webhook:false,
             header: true,
             necessaryInfo: {},
             fbapresent: false,
@@ -53,7 +56,7 @@ export class Panel extends Component {
             product_import: 0,
             show_rating_popup: false,
             /*show_etsy_popup: true,*/
-            show_button_submit:false,
+            show_button_submit: false,
             // rating: 0,
             value: '',
         };
@@ -77,7 +80,6 @@ export class Panel extends Component {
      })
 
      }*/
-
 
 
     getRatingDataBackend() {
@@ -115,7 +117,8 @@ export class Panel extends Component {
             }
         });
     }
-    thumbDown(){
+
+    thumbDown() {
         // console.log("thumbs down")
         this.setState({show_button_submit: true});
 
@@ -124,8 +127,9 @@ export class Panel extends Component {
     forButtonCancel() {
         this.setState({show_rating_popup: false});
     }
-    forButtonSubmit(){
-        if (this.state.value == ''){
+
+    forButtonSubmit() {
+        if (this.state.value == '') {
             alert("Please tell us issue?")
         }
         else {
@@ -210,13 +214,14 @@ export class Panel extends Component {
                     credits: credits,
                     sync: sync,
                     account_connected_array: account_connected_array,
-                    import_count:e.import_count,
-                    upload_count:e.upload_count,
+                    import_count: e.import_count,
+                    upload_count: e.upload_count,
                 };
                 this.setState({
                     necessaryInfo: user_necessary_details
                 }, () => {
                     this.checkingFba();
+                    this.installedAtFbaDate();
                 });
             }
         });
@@ -308,7 +313,7 @@ export class Panel extends Component {
 
     componentWillUpdate() {
         if (environment.isLive) {
-            console.clear();
+            // console.clear();
             console.info("Welcome To OMNI-Importer");
         }
     }
@@ -319,7 +324,7 @@ export class Panel extends Component {
 
     disableHeader(value) {
         if (!value) {
-            console.clear();
+            // console.clear();
         }
         this.setState({header: value});
     }
@@ -328,7 +333,7 @@ export class Panel extends Component {
 
     checkingFba() {
         if (this.state.necessaryInfo.account_connected_array) {
-             // console.log(this.state.necessaryInfo.account_connected_array);
+            // console.log(this.state.necessaryInfo.account_connected_array);
             let flag = false;
             if (this.state.necessaryInfo.account_connected_array.indexOf('fba') < 0) {
                 for (let i = 0; i < this.menu.length; i++) {
@@ -339,6 +344,46 @@ export class Panel extends Component {
             }
 
         }
+    }
+
+    installedAtFbaDate() {
+        console.log("qwerty")
+        console.log(this.state.necessaryInfo.account_connected_array);
+        console.log(this.state.necessaryInfo.account_connected_array.indexOf('fba'));
+        if (this.state.necessaryInfo.account_connected_array.indexOf('fba') > 0) {
+            requests
+                .getRequest("fba/test/getWebhookCall")
+                .then(data => {
+                    if (data.success) {
+                        console.log(data.days);
+                        this.setState({
+                            trail_days_left: 3 - data.days
+                        })
+                        if (data.days > 3) {
+                            this.fbaTrailCheck()
+                        }
+                    }
+                });
+        }
+    }
+
+    fbaTrailCheck() {
+        console.log("my name is rahul")
+        if (this.state.trail_days_left < 0) {
+            console.log("zzzz");
+            requests
+                .getRequest("fba/test/getWebhookDetailsAndDelete")
+                .then(data => {
+                    if (data.success) {
+                        if (data.message == "webhook are deleted") {
+                            this.setState({
+                                show_trail_banner_webhook: true
+                            })
+                        }
+                    }
+                });
+        }
+
     }
 
     handleChange = (value) => {
@@ -587,7 +632,9 @@ export class Panel extends Component {
                     <Modal.Section>
                         <Stack vertical={true}>
                             <Stack vertical={true} alignment="center">
-                                <h1 style={{'color': "#000000"}}><b>RATE US</b></h1>
+                                <p style={{'color': "#000000", 'text-align': "center"}}><b>We will truly appreciate if
+                                    you could take 10 seconds to spread the word out. Your review is our energy to move
+                                    forward.</b></p>
                             </Stack>
                             <Stack distribution="center" spacing="extraLoose">
                                 <React.Fragment/>
@@ -626,22 +673,22 @@ export class Panel extends Component {
                                  />*/}
                                 <React.Fragment/>
                             </Stack>
-                            {this.state.show_button_submit?
-                            <Stack vertical={true} alignment="center">
-                                <TextField
-                                    label="If Any Issue"
-                                    value={this.state.value}
-                                    onChange={this.handleChange}
-                                    placeholder="Optional"
-                                    multiline
-                                />
-                                <Button
-                                    primary={true}
-                                    onClick={this.forButtonSubmit.bind(this)}
-                                >
-                                    Submit
-                                </Button>
-                            </Stack>:null}
+                            {this.state.show_button_submit ?
+                                <Stack vertical={true} alignment="center">
+                                    <TextField
+                                        label="If Any Issue"
+                                        value={this.state.value}
+                                        onChange={this.handleChange}
+                                        placeholder="Optional"
+                                        multiline
+                                    />
+                                    <Button
+                                        primary={true}
+                                        onClick={this.forButtonSubmit.bind(this)}
+                                    >
+                                        Submit
+                                    </Button>
+                                </Stack> : null}
                             <hr/>
                             <Stack distribution="equalSpacing">
                                 <Button
@@ -659,33 +706,61 @@ export class Panel extends Component {
                         </Stack>
                     </Modal.Section>
                 </Modal>
-                {/*<Modal
-                    title={"Important Notice"}
-                    open={this.state.show_etsy_popup}
+
+                {/*FBA MODAL TRAIL PERIOD START*/}
+                <Modal
+                    title={"FBA Order Management"}
+                    open={this.state.show_trail_banner_webhook}
                     onClose={() => {
-                        this.setState({show_etsy_popup: false});
+                        this.setState({show_trail_banner_webhook: false});
                     }}
                     primaryAction={{
-                        content: "OK",
+                        content: "Buy Plan",
                         onClick: () => {
-                            this.setState({show_etsy_popup: false});
+                            this.redirect("/panel/plans");
+                            this.setState({show_trail_banner_webhook: false});
                         }
                     }}
                 >
                     <Modal.Section>
-                        <Banner title={"Information"} status="info">
+                        <Banner title={"Alert"} status="warning">
+                            <div>
+                                <h4><b>Service Paused</b></h4>
+                            </div>
                             <Label id={123}>
-                                <div class="Polaris-Banner__Content" id="Banner3Content">
-                                    <p>
-                                        System is Schedule for Maintaince from <b>23th July, 2019 11:30 PM(PST)</b> to <b> 24th July, 2019 1:30 AM(PST)</b>
-                                    </p>
-                                    <br/>
-                                    <p>Thank You for your Patience</p>
-                                </div>
+                                Your trial period has been expired, kindly buy a plan.
                             </Label>
                         </Banner>
                     </Modal.Section>
-                </Modal>*/}
+                </Modal>
+
+                {/*<Modal
+                 title={"Important Notice"}
+                 open={this.state.show_etsy_popup}
+                 onClose={() => {
+                 this.setState({show_etsy_popup: false});
+                 }}
+                 primaryAction={{
+                 content: "OK",
+                 onClick: () => {
+                 this.setState({show_etsy_popup: false});
+                 }
+                 }}
+                 >
+                 <Modal.Section>
+                 <Banner title={"Information"} status="info">
+                 <Label id={123}>
+                 <div class="Polaris-Banner__Content" id="Banner3Content">
+                 <p>
+                 System is Schedule for Maintaince from <b>23th July, 2019 11:30 PM(PST)</b> to <b> 24th July, 2019 1:30 AM(PST)</b>
+                 </p>
+                 <br/>
+                 <p>Thank You for your Patience</p>
+                 </div>
+                 </Label>
+                 </Banner>
+                 </Modal.Section>
+                 </Modal>*/}
             </div>
         );
     }

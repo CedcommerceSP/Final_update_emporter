@@ -10,6 +10,8 @@ export class Plans extends Component {
 		super(props);
         this.state = {
             necessaryInfo:{},
+			button_press_upgarde:false,
+            sync_plan_checkbox:false,
 		};
 	}
     /*getProps(nextPorps) {
@@ -22,6 +24,51 @@ export class Plans extends Component {
     componentWillReceiveProps(nextPorps) {
         if (nextPorps.necessaryInfo !== undefined) {
             this.setState({ necessaryInfo: nextPorps.necessaryInfo });
+            if (this.state.necessaryInfo) {
+                if (this.state.necessaryInfo.credits) {
+                    let available_credits = this.state.necessaryInfo.credits.available_credits;
+                    // console.log("available credits",available_credits);
+                    let used_credits = this.state.necessaryInfo.credits.total_used_credits;
+                    let total_credits = available_credits + used_credits;
+                    // console.log("used credits",used_credits);
+                    // console.log("total credits",total_credits);
+                    if (total_credits > 10) {
+                        // console.log("1")
+                        this.setState({
+                            sync_plan_checkbox: true
+                        })
+                    }
+                    // console.log("import count",this.state.necessaryInfo.import_count);
+                    // console.log("upload count",this.state.necessaryInfo.upload_count);
+                    if (this.state.necessaryInfo.import_count === this.state.necessaryInfo.upload_count &&
+                        this.state.necessaryInfo.import_count !== 0 && this.state.necessaryInfo.upload_count !==0) {
+                        // console.log("2")
+                        this.setState({
+                            sync_plan_checkbox: true
+                        })
+                    }
+					/*  if (used_credits > 0) {
+					 // console.log("3")
+					 this.setState({
+					 show_banner_onetime_payment: true
+					 })
+					 }*/
+
+                    if (this.state.necessaryInfo.import_count <= 10 && total_credits < 10) {
+                        // console.log("4")
+                        this.setState({
+                            sync_plan_checkbox: true
+                        })
+                    }
+                    if (this.state.necessaryInfo.upload_count > 10 ){
+                        // console.log("5")
+                        this.setState({
+                            sync_plan_checkbox: true
+                        })
+                    }
+                }
+
+            }
         }
     }
 
@@ -53,6 +100,12 @@ export class Plans extends Component {
 		//     });
 		// }
 	}
+	showPlanSectionUpgardePlan(){
+		this.setState({
+            button_press_upgarde:true
+		})
+        window.scrollBy(0,3000);
+	}
 	render() {
 		return (
 			<Page
@@ -65,18 +118,22 @@ export class Plans extends Component {
 				}}
 			>
 				<div className="row">
-					<div className="col-12 text-center mb-5">
+					{this.state.sync_plan_checkbox?<div className="col-12 text-center mb-5">
 						{" "}
 						{/*tittle*/}
 						<span style={{ fontSize: "40px" }}>
 							<b>Choose the best offer</b>
 						</span>
 						<hr/>
-						<h3>
-							If you already have an existing plan you can upgrade or downgrade
-							your plan
-						</h3>
-					</div>
+						<div>
+							To upgrade or downgrade your plan,{' '}
+							<Button plain monochrome
+									onClick={this.showPlanSectionUpgardePlan.bind(this)}
+							>
+								{<b>Click Here</b>}
+							</Button>
+						</div>
+					</div>:null}
 					<div className="col-12 mb-4">
 						<div className="d-flex justify-content-center">
 							<Button
@@ -88,7 +145,7 @@ export class Plans extends Component {
 						</div>
 					</div>
 				</div>
-				<PlanBody {...this.props} paymentStatus={this.paymentStatus} />
+				<PlanBody {...this.props} myprop_upgrade_button={this.state.button_press_upgarde}  paymentStatus={this.paymentStatus} />
 
 			</Page>
 

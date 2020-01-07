@@ -121,13 +121,13 @@ class FileImporter extends Component {
                                 ? "Mapping"
                                 : "Edit Mapping"}
                         </Button>
-                        <Button
+                        {/*<Button
                             primary
                             onClick={this.importProduct}
                             disabled={mapped !== undefined && mapped["errorFlag"]}
                         >
                             Import
-                        </Button>
+                        </Button>*/}
                     </ButtonGroup>}
                 </ButtonGroup>
             </form>

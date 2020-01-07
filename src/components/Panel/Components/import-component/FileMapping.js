@@ -345,14 +345,14 @@ class FileMapping extends Component {
 									>
 										Cancel
 									</Button>
-									<Button
+									{/*<Button
 										onClick={() => {
 											this.onSubmit(false);
 											this.redirect("/panel/import");
 										}}
 									>
 										Save
-									</Button>
+									</Button>*/}
 									<Button
 										primary
 										onClick={() => {

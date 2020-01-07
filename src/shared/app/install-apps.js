@@ -308,10 +308,10 @@ class InstallAppsShared extends Component {
 		) {
 			params = this.props.additional_data;
 		}
-        console.log(params);
+        // console.log(params);
         requests.getRequest("connector/get/installationForm", params).then(data => {
 			if (data.success === true) {
-				console.log("qrty",data.data);
+				console.log("qrty",data.data.message);
 				if (data.data.post_type === "redirect") {
 					let tempURL = {
 						open: true,
@@ -323,10 +323,16 @@ class InstallAppsShared extends Component {
 					notify.success(data.data.message);
 					this.redirect();
 				} else {
-					this.state["schema"] = this.modifySchemaData(data.data.schema);
-					this.state["action"] = data.data.action;
-					this.state["postType"] = data.data.post_type;
-					this.updateState();
+					if (data.data.message == "Call usage limit has been reached."){
+						notify.error("we are facing some issues form eBay side so, please try after sometime")
+					}
+					else {
+
+                        this.state["schema"] = this.modifySchemaData(data.data.schema);
+                        this.state["action"] = data.data.action;
+                        this.state["postType"] = data.data.post_type;
+                        this.updateState();
+					}
 				}
 			} else {
 				notify.error(data.message);
@@ -337,12 +343,15 @@ class InstallAppsShared extends Component {
 
 	modifySchemaData(data) {
 		console.log("data",data);
-		for (let i = 0; i < data.length; i++) {
-			if (!isUndefined(data[i].options)) {
-				data[i].options = modifyOptionsData(data[i].options);
-			}
+		if (data !== undefined){
+            for (let i = 0; i < data.length; i++) {
+                if (!isUndefined(data[i].options)) {
+                    data[i].options = modifyOptionsData(data[i].options);
+                }
+            }
+            return data;
 		}
-		return data;
+
 	}
 
 	updateState() {
