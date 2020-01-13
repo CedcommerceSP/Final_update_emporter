@@ -370,7 +370,7 @@ export class Panel extends Component {
     fbaTrailCheck() {
         console.log("my name is rahul")
         if (this.state.trail_days_left < 0) {
-            console.log("zzzz");
+            // console.log("zzzz");
             requests
                 .getRequest("fba/test/getWebhookDetailsAndDelete")
                 .then(data => {

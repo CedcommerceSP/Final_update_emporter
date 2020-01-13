@@ -429,7 +429,7 @@ export class FbaOrder extends Component {
                     is_hash_order_name:is_order_name
                 };
                 console.log(parent_props);
-                console.log("/panel/vieworderfba/" + shopify_order_name_trim);
+                // console.log("/panel/vieworderfba/" + shopify_order_name_trim);
                 /*this.redirect("/panel/vieworderfba/1139" , {
                     parent_props: parent_props
                 });*/
@@ -457,7 +457,7 @@ export class FbaOrder extends Component {
         requests
             .getRequest("fba/test/getWebhookCall")
             .then(data => {
-                console.log(data.days);
+                // console.log(data.days);
                 if (data.success) {
                     this.setState({
                         trail_days_left:3-data.days
@@ -471,10 +471,13 @@ export class FbaOrder extends Component {
             });
     }
     deleteWebhookClient(){
-        if (this.state.trail_days_left == 0){
+        console.log(this.state.trail_days_left)
+        if (this.state.trail_days_left <= 0){
+            console.log("i m condition")
             requests
                 .getRequest("fba/test/getWebhookDetailsAndDelete")
                 .then(data => {
+                    console.log(data)
                     if (data.success) {
                         if(data.message == "webhook are deleted"){
                             this.setState({

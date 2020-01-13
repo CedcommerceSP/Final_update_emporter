@@ -35,6 +35,7 @@ const defaultCurrencyConverter = {
 export class Configuration extends Component {
     shopifyConfigurationData = [];
     amazonImporterConfigurationData = [];
+    amazonAffiliateConfigurationData = [];
     ebayConfigurationData = [];
     wishConfigurationData = [];
     fbaConfigurationData = [];
@@ -66,6 +67,7 @@ export class Configuration extends Component {
         // this.getUserDetails();
         this.getShopifyConfigurations();
         this.getAmazonImporterConfigurations();
+        this.getAmazonAffiliateConfigurations();
         this.getEbayConfig();
         this.getEtsyConfig();
         this.getWishConfig();
@@ -107,6 +109,21 @@ export class Configuration extends Component {
                     this.amazonImporterConfigurationData = this.modifyConfigData(
                         data.data,
                         "amazon_importer_configuration"
+                    );
+                    this.updateState();
+                } else {
+                    notify.error(data.message);
+                }
+            });
+    }
+    getAmazonAffiliateConfigurations() {
+        requests
+            .getRequest("connector/get/config", {marketplace: "amazonaffiliate"})
+            .then(data => {
+                if (data.success) {
+                    this.amazonAffiliateConfigurationData = this.modifyConfigData(
+                        data.data,
+                        "amazon_affiliate_configuration"
                     );
                     this.updateState();
                 } else {
@@ -508,6 +525,25 @@ export class Configuration extends Component {
             </div>
         );
     }
+    renderAmazonAffiliateConfigurationSection(sync) {
+        return (
+            <div className="row">
+                <div className="col-sm-4 col-12 text-md-left text-sm-left text-center">
+                    <Heading>Amazon Affiliate Settings</Heading>
+                </div>
+                <div className="col-sm-8 col-12">
+                    <Card>
+                        <div className="p-5">
+                            <Formbuilder
+                                form={this.amazonAffiliateConfigurationData}
+                                sync={sync}
+                                onSubmit={this.onSubmit.bind(this, 'amazonaffiliate')}/>
+                        </div>
+                    </Card>
+                </div>
+            </div>
+        );
+    }
 
     onSubmit = (marketplace, data) => {
         switch (marketplace) {
@@ -528,6 +564,9 @@ export class Configuration extends Component {
                 break;
             case 'walmartimporter':
                 // console.log("Walmart");
+                break;
+            case  'amazonaffiliate':
+                this.saveAmazonAffiliateConfigData(data);
                 break;
             default:
                 console.log("Wrong Choice");
@@ -807,6 +846,7 @@ export class Configuration extends Component {
             accounts = this.state.necessaryInfo.account_connected_array;
             if (!environment.isLive || Object.keys(this.state.necessaryInfo.sync).length > 0) sync = true;
         }
+        console.log(accounts)
         return (
             <Page title="Settings">
                 <Layout>
@@ -852,6 +892,12 @@ export class Configuration extends Component {
                             ? this.renderfbaConfig(!sync)
                             : null}
                     </Layout.Section>
+                    <Layout.Section>
+                        {accounts !== undefined &&
+                        accounts.indexOf("amazonaffiliate") !== -1
+                            ? this.renderAmazonAffiliateConfigurationSection(!sync)
+                            : null}
+                    </Layout.Section>
                 </Layout>
             </Page>
         );
@@ -870,6 +916,21 @@ export class Configuration extends Component {
                     notify.error(data.message);
                 }
                 this.getAmazonImporterConfigurations();
+            });
+    }
+    saveAmazonAffiliateConfigData(amazon_affiliate_configuration) {
+        requests
+            .postRequest("connector/get/saveConfig", {
+                marketplace: "amazonaffiliate",
+                data: amazon_affiliate_configuration
+            })
+            .then(data => {
+                if (data.success) {
+                    notify.success(data.message);
+                } else {
+                    notify.error(data.message);
+                }
+                this.getAmazonAffiliateConfigurations();
             });
     }
 
