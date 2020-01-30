@@ -356,7 +356,7 @@ class AppsShared extends Component {
         const tabs = [
             {
                 id: 'account_marketplace',
-                content: 'MarketPlace',
+                content: 'Marketplace',
                 accessibilityLabel: 'accountmarketplace',
                 panelID: 'accountmarketplace',
             },

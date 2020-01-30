@@ -32,6 +32,8 @@ class Order extends Component {
             totalPage: 0,
             order_timeline_skeleton: false,
             reason_for_cancellation : false,
+            tracking_id : false,
+            tracking_name:false,
             fulfil: [],
             order: {
                 error_message:'',
@@ -41,6 +43,8 @@ class Order extends Component {
                 number_of_line_item: 0,
                 order_name:'',
                 financial_status:'',
+                tracking_id:'',
+                tracking_name:'',
                 badge_status:'',
                 badge_progress:'',
                 error_message:"",
@@ -107,16 +111,17 @@ class Order extends Component {
         if (this.state.is_order_trim){
             this.state.id= str1.concat(this.state.id)
         }
-        console.log(this.state.id)
+        // console.log(this.state.id)
         requests
             .postRequest("fba/test/webhookCall", {
                 shopify_order_name: this.state.id
             }).then(data => {
 
             if (data.success) {
+                console.log(data);
                 if (data.data[0]['error_message'] && data.data[0]['error_message'] != '' ){
                     this.state.reason_for_cancellation = true;
-                    console.log(data.data[0]['error_message'])
+                    // console.log(data.data[0]['error_message'])
                     this.state.order.error_message = capitalizeWord(data.data[0]['error_message']);
                 }
                 this.state.order_timeline_skeleton = true;
@@ -125,7 +130,15 @@ class Order extends Component {
                 this.state.order.status = data.data[0]['processing_status']
                 this.state.order.order_name = data.data[0]['shopify_order_name']
                 this.state.order.financial_status = data.data[0]['financial_status']
-
+                if (data.data[0]['Tracking_ID']){
+                    this.state.order.tracking_id = data.data[0]['Tracking_ID']
+                    this.state.tracking_id = true
+                }
+                if (data.data[0]['CarrierCode']){
+                    this.state.order.tracking_name = data.data[0]['CarrierCode']
+                    this.state.tracking_name = true
+                }
+                // console.log(data.data[0]['Tracking_ID'])
                 if (this.state.order.status === 'Fulfilled'){
                     this.state.order.badge_status = 'success'
                     this.state.order.badge_progress = 'complete'
@@ -238,6 +251,18 @@ class Order extends Component {
                                                     <Badge status="warning"><p style={{fontSize: '1.5rem'}}>{this.state.order.error_message}</p></Badge>
 
                                             </Stack>:null}
+                                            {
+                                                this.state.tracking_id?<Stack distribution={"equalSpacing"}>
+                                                    <b><Heading element={"p"}>Tracking ID</Heading></b>
+                                                    <p style={{fontSize: '1.5rem'}}>{this.state.order.tracking_id}</p>
+                                                </Stack>:null
+                                            }
+                                            {
+                                                this.state.tracking_id?<Stack distribution={"equalSpacing"}>
+                                                    <b><Heading element={"p"}>Tracking Company</Heading></b>
+                                                    <p style={{fontSize: '1.5rem'}}>{this.state.order.tracking_name}</p>
+                                                </Stack>:null
+                                            }
                                         </FormLayout>
                                     </Card.Section>
                                 </Card> : null} {/*<Skeleton case="body"/>*/}
