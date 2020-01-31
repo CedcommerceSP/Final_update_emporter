@@ -63,7 +63,7 @@ export class Import extends Component {
 			},
 			openModal: false,
             necessaryInfo:{},
-            mainTab: 2
+            mainTab: 0
 		};
 		this.getAllImporterServices();
 		this.getAllUploaderServices();
