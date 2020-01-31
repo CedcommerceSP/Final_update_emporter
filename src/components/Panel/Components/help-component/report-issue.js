@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { Page, Card, TextField, Select } from "@shopify/polaris";
+import { Page, Card, TextField, Select,Layout,Stack,Thumbnail } from "@shopify/polaris";
 import { requests } from "../../../../services/request";
 import { notify } from "../../../../services/notify";
 
@@ -76,7 +76,7 @@ class ReportAnIssue extends Component {
 					<div className="col-12 col-sm-8 order-2 order-sm-1">
 						<Card
 							primaryFooterAction={{
-								content: "Submit",
+								content: "Send mail",
 								onClick: () => {
 									this.submit();
 								}
@@ -102,7 +102,7 @@ class ReportAnIssue extends Component {
 							</div>
 						</Card>
 					</div>
-					<div className="col-12 col-sm-4 order-1 order-sm-2 mb-4">
+{/*					<div className="col-12 col-sm-4 order-1 order-sm-2 mb-4">
 						<Card>
 							<div className="row">
 								<div className="col-12 p-5 text-center">
@@ -118,12 +118,71 @@ class ReportAnIssue extends Component {
 									<h5>
 										<b>Phone:</b>
 									</h5>
-									<h5>(+1) 888-882-0953</h5>
+									<h5>(+91) 9532100695</h5>
 								</div>
 							</div>
 						</Card>
+					</div>*/}
+					<div className="col-12 col-sm-4 order-1 order-sm-2 mb-3 mt-3">
+						<Card>
+							<Card.Section>
+								<Stack vertical={true} alignment={"center"} spacing={"extraTight"}>
+									<Thumbnail
+										source={require('../../../../assets/img/whatsapp.png')}
+										size="large"
+										alt="WhatsApp"
+									/>
+									<h5><a href={'https://wa.me/+919532100695?text=I have a query regarding the Omni Importer app.'} target={'_blank'}>Contact Us</a></h5>
+								</Stack>
+							</Card.Section>
+						</Card>
+						<Card>
+							<Card.Section>
+								<Stack vertical={true} alignment={"center"} spacing={"extraTight"}>
+									<Thumbnail
+										source={require('../../../../assets/img/skype.png')}
+										size="large"
+										alt="Skype"
+									/>
+									<h5><a href={'skype:live:deeptishukla_1?chat'}>Contact Us</a></h5>
+								</Stack>
+							</Card.Section>
+						</Card>
 					</div>
+					{/*<Layout>
+						<Layout.Section oneThird>
+							<Card>
+								<Card.Section>
+									<Stack vertical={true} alignment={"center"} spacing={"extraTight"}>
+										<Thumbnail
+											source={require('../../../../assets/img/whatsapp.png')}
+											size="large"
+											alt="WhatsApp"
+										/>
+										<h5><a href={'https://wa.me/918765246941?text=eBayAppAssistance'} target={'_blank'}><b>Connect with us on WhatsApp</b></a></h5>
+									</Stack>
+								</Card.Section>
+							</Card>
+						</Layout.Section>
+						<Layout.Section oneThird>
+							<Card>
+								<Card.Section>
+									<Stack vertical={true} alignment={"center"} spacing={"extraTight"}>
+										<Thumbnail
+											source={require('../../../../assets/img/skype.jpg')}
+											size="large"
+											alt="Skype"
+										/>
+										<h5><a href={'skype:live:srajanshukla_2?chat'}><b>Connect with us on Skype</b></a></h5>
+									</Stack>
+								</Card.Section>
+							</Card>
+						</Layout.Section>
+						<Layout.Section oneThird>
+						</Layout.Section>
+					</Layout>*/}
 				</div>
+
 			</Page>
 		);
 	}

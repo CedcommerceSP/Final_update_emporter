@@ -563,11 +563,11 @@ class Demo_analytics_reporting extends Component {
                         <Card title="">
                             <div className="text-right p-3">
                                 <Button
-                                    plain
+                                    primary
                                     onClick={() => {
                                         this.redirect("/panel/help/report");
                                     }}
-                                >Click Here</Button>
+                                >Contact Us</Button>
                             </div>
                               {/*actions={[{content: 'Click Here', url: 'https://apps.cedcommerce.com/importer/app/panel/help/report',external:true}]}>*/}
                             <div className="text-center">
@@ -609,12 +609,12 @@ class Demo_analytics_reporting extends Component {
                                             ),
                                         },
                                         {
-                                            url: 'https://apps.shopify.com/google-express-integration?surface_detail=google+express&surface_inter_position=1&surface_intra_position=2&surface_type=search',
-                                            name: 'Google Express Integration',
-                                            description: 'Manage products & orders on Shopping Actions & Google Shopping.',
+                                            url: 'https://apps.shopify.com/google-express-integration?surface_detail=google+shopping&surface_inter_position=1&surface_intra_position=7&surface_type=search',
+                                            name: 'Google Shopping & Google Ads',
+                                            description: 'Manage Google Shopping Actions, Google Ads & Shopping Feed.',
                                             media: (
                                                 <Thumbnail
-                                                    source="https://apps.shopifycdn.com/listing_images/3a0a9be8bb54bb8cd25cb2f7c6381d19/icon/9349a5d3cdfac6385a06c6a144586a7d.png?height=84&width=84"
+                                                    source="https://apps.shopifycdn.com/listing_images/3a0a9be8bb54bb8cd25cb2f7c6381d19/icon/0cdc8e6f8ee8614bb5a7e45f487de3c3.png?height=84&width=84"
                                                     alt="Google Express logo"
                                                 />
                                             ),

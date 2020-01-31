@@ -472,7 +472,7 @@ export class FbaOrder extends Component {
     }
     deleteWebhookClient(){
         console.log(this.state.trail_days_left)
-        if (this.state.trail_days_left <= 0){
+        if (this.state.trail_days_left < 0){
             console.log("i m condition")
             requests
                 .getRequest("fba/test/getWebhookDetailsAndDelete")

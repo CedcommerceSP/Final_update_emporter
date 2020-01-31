@@ -623,7 +623,7 @@ export class Panel extends Component {
                     </Modal.Section>
                 </Modal>
                 <Modal
-                    title={"Are You Happy"}
+                    title={"We Hear you Loud and Clear"}
                     open={this.state.show_rating_popup}
                     onClose={() => {
                         this.setState({show_rating_popup: false});
