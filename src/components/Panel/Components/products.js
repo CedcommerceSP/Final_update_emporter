@@ -21,7 +21,6 @@ import SmartDataTable from "../../../shared/smartTable";
 
 import { paginationShow } from "./static-functions";
 const imageExists = require("image-exists");
-
 export class Products extends Component {
 	filters = {
 		full_text_search: "",
@@ -438,7 +437,13 @@ export class Products extends Component {
 						!isUndefined(data[i]["details"]["additional_images"][0])
 					) {
 						str = data[i]["details"]["additional_images"][0];
-					} else {
+					}else if (
+                        typeof data[i]["details"]["additional_image"] === "object" &&
+                        !isUndefined(data[i]["details"]["additional_image"][0])
+                    ) {
+                        str = data[i]["details"]["additional_image"][0];
+                    }
+					else {
 						str = "https://apps.cedcommerce.com/importer/image_not_found.jpg";
 					}
 					rowData["main_image"] = str;
@@ -470,7 +475,8 @@ export class Products extends Component {
 					let quantity = 0;
 					let rows = [];
 					Object.keys(data[i].variants).forEach((key, index) => {
-						if (data[i].variants[key]["quantity"] > 0) {
+                        console.log(data[i]);
+                        if (data[i].variants[key]["quantity"] > 0) {
 							quantity += data[i].variants[key]["quantity"];
 						}
 						if (
@@ -479,6 +485,21 @@ export class Products extends Component {
 						) {
 							str = data[i].variants[key]["main_image"];
 						}
+                        else if (
+                            typeof data[i]["details"]["additional_images"] === "object" &&
+                            !isUndefined(data[i]["details"]["additional_images"][0])
+                        ) {
+                            str = data[i]["details"]["additional_images"][0];
+                        }
+                        else if (
+                            typeof data[i]["details"]["additional_image"] === "object" &&
+                            !isUndefined(data[i]["details"]["additional_image"][0])
+                        ) {
+                            str = data[i]["details"]["additional_image"][0];
+                        }
+                        else {
+                            str = "https://apps.cedcommerce.com/importer/image_not_found.jpg";
+                        }
 						// if ( data[i].variants[key]['sku'] !== undefined ) {
 						rows.push([
 							data[i].variants[key]["sku"],

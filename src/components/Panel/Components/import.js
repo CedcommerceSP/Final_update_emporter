@@ -26,6 +26,7 @@ import { capitalizeWord, validateImporter } from "./static-functions";
 import FileImporter from "./import-component/fileimporter";
 import { MagnetoImport } from "./import-component/MagnetoImport";
 import EbayAffiliate from "./import-component/EbayAffiliate";
+import AliExpress from "./import-component/AliExpress";
 export class Import extends Component {
 	profilesList = [];
 	constructor(props) {
@@ -62,11 +63,12 @@ export class Import extends Component {
 			},
 			openModal: false,
             necessaryInfo:{},
-            mainTab: 0
+            mainTab: 2
 		};
 		this.getAllImporterServices();
 		this.getAllUploaderServices();
-		this.handleModalChange = this.handleModalChange.bind(this);
+        this.redirect = this.redirect.bind(this);
+        this.handleModalChange = this.handleModalChange.bind(this);
 	}
     componentWillReceiveProps(nextPorps) {
 		// console.log("qwerty",nextPorps);
@@ -798,7 +800,8 @@ export class Import extends Component {
 			<Page title="Manage Products"
 				  >
 				{necessaryInfo.account_connected_array && necessaryInfo.account_connected_array.indexOf('ebayaffiliate') > -1 &&
-				<Tabs name={"hello"} selected={this.state.mainTab} tabs={[{
+				<Tabs name={"hello"} selected={this.state.mainTab} tabs={[
+					{
                     id: 'Import',
                     content: 'Import',
                     accessibilityLabel: 'All',
@@ -808,7 +811,14 @@ export class Import extends Component {
                         id: 'Ebay Affiliate',
                         content: 'Ebay Dropshipping',
                         panelID: 'Ebay Affiliate',
-                    }]} onSelect={this.handleTabChange}/>}
+                    },
+                    {
+                        id: 'AliExpress',
+                        content: 'AliExpress Dropshipping',
+                        panelID: 'AliExpress',
+                    },
+
+                    ]} onSelect={this.handleTabChange}/>}
                 {mainTab === 0 ?
 				<div className="row">
 					<div className="col-12 p-3">
@@ -928,10 +938,12 @@ export class Import extends Component {
 							<FileImporter {...this.props} />
 						</Modal.Section>
 					</Modal>
-				</div>:<React.Fragment>
+				</div>:mainTab === 1 ? <React.Fragment>
 					<br/>
-					<EbayAffiliate {...this.props}/>
-				</React.Fragment>}
+                        <EbayAffiliate {...this.props}/>
+				</React.Fragment> : <React.Fragment>
+						<AliExpress {...this.props} redirect={this.redirect}/>
+					</React.Fragment>}
 				{this.renderImportProductsModal()}
 				{this.renderUploadProductsModal()}
 				{this.renderHelpModal()}
