@@ -796,29 +796,39 @@ export class Import extends Component {
 
 	render() {
 		let { mainTab, necessaryInfo } = this.state;
-		return (
-			<Page title="Manage Products"
-				  >
-				{necessaryInfo.account_connected_array && necessaryInfo.account_connected_array.indexOf('ebayaffiliate') > -1 &&
-				<Tabs name={"hello"} selected={this.state.mainTab} tabs={[
-					{
+        console.log(necessaryInfo.account_connected_array);
+        const tabs = [
+                {
                     id: 'Import',
                     content: 'Import',
                     accessibilityLabel: 'All',
                     panelID: 'all',
+                }
+		];
+        if( necessaryInfo.account_connected_array && necessaryInfo.account_connected_array.indexOf('aliexpress') > -1){
+            tabs.push(
+                {
+                    id: 'AliExpress',
+                    content: 'AliExpress Dropshipping',
+                    panelID: 'AliExpress',
                 },
-                    {
-                        id: 'Ebay Affiliate',
-                        content: 'Ebay Dropshipping',
-                        panelID: 'Ebay Affiliate',
-                    },
-                    {
-                        id: 'AliExpress',
-                        content: 'AliExpress Dropshipping',
-                        panelID: 'AliExpress',
-                    },
-
-                    ]} onSelect={this.handleTabChange}/>}
+            )
+        }if(  necessaryInfo.account_connected_array && necessaryInfo.account_connected_array.indexOf('ebayaffiliate') > -1 ){
+            tabs.push(
+                {
+                    id: 'Ebay Affiliate',
+                    content: 'Ebay Dropshipping',
+                    panelID: 'Ebay Affiliate',
+                },
+            )
+        }
+        return (
+			<Page title="Manage Products">
+				<Tabs
+					name={"hello"}
+					selected={this.state.mainTab}
+					tabs={tabs}
+					onSelect={this.handleTabChange}/>
                 {mainTab === 0 ?
 				<div className="row">
 					<div className="col-12 p-3">
@@ -938,12 +948,18 @@ export class Import extends Component {
 							<FileImporter {...this.props} />
 						</Modal.Section>
 					</Modal>
-				</div>:mainTab === 1 ? <React.Fragment>
-					<br/>
-                        <EbayAffiliate {...this.props}/>
-				</React.Fragment> : <React.Fragment>
-						<AliExpress {...this.props} redirect={this.redirect}/>
-					</React.Fragment>}
+				</div> : tabs.map( e =>{
+                        console.log(e);
+                        return (
+							<div>
+								{ (mainTab === 1 && e.id === 'AliExpress') ? (<React.Fragment>
+                                    <AliExpress {...this.props} redirect={this.redirect}/>
+                                </React.Fragment>) : (mainTab === 2 && e.id === 'Ebay Affiliate') ? (<React.Fragment>
+                                    <EbayAffiliate {...this.props}/>
+                                </React.Fragment>) : null}
+                            </div>
+						)
+                    } )}
 				{this.renderImportProductsModal()}
 				{this.renderUploadProductsModal()}
 				{this.renderHelpModal()}

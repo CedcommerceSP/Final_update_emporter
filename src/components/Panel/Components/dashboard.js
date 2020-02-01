@@ -535,7 +535,7 @@ class Dashboard extends Component {
 																	"resend"
 																)}
 															>
-																Resent OTP
+																Resend OTP
 															</a>
 														</div>
 													</div>
