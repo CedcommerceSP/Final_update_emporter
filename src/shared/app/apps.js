@@ -127,6 +127,12 @@ class AppsShared extends Component {
                         code.push(data.data[Object.keys(data.data)[i]]["code"]);
                     }
                 }
+                for (let i = 0; i < Object.keys(data.data).length; i++) {
+                    if (data.data[Object.keys(data.data)[i]]['code'] == "aliexpress") {
+                        installedApps.push(data.data[Object.keys(data.data)[i]]);
+                        code.push(data.data[Object.keys(data.data)[i]]["code"]);
+                    }
+                }
                 this.props.importerServices(code);
                 this.setState({
                     apps: installedApps
@@ -500,7 +506,8 @@ class AppsShared extends Component {
             code === "wishimporter" ||
             code === "etsyimporter" ||
             code === "amazonaffiliate" ||
-            code === "ebayaffiliate"
+            code === "ebayaffiliate" ||
+            code === "aliexpress"
         );
     };
     additionalInput = code => {

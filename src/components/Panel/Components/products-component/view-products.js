@@ -65,7 +65,7 @@ class ViewProducts extends Component {
 	}
 
     componentWillReceiveProps(nextPorps) {
-        console.log("in planBody",nextPorps);
+        // console.log("in planBody",nextPorps);
         if (nextPorps.necessaryInfo !== undefined) {
             this.setState({ necessaryInfo: nextPorps.necessaryInfo });
         }
@@ -78,10 +78,11 @@ class ViewProducts extends Component {
 			})
 			.then(data => {
 				if (data.success) {
-					let temp = this.state;
+                    console.log(data);
+                    let temp = this.state;
 					temp.edited_fields = {};
 					temp["product_data"] = {
-						details: Object.assign({}, data.data.details),
+						// details: Object.assign({}, data.data.details),
 						variants: JSON.parse(JSON.stringify(data.data.variants)),
 						created_at: data.data["created_at"],
 						updated_at: data.data["updated_at"]
@@ -213,7 +214,6 @@ class ViewProducts extends Component {
 		return rows;
 	};
     openModalInDescription(){
-
     	return(
     		<Page>
 			<Modal
@@ -225,7 +225,11 @@ class ViewProducts extends Component {
 			>
 				<Modal.Section>
 					<div className="row">
-                        {Object.keys(this.state.variantArrayDetails).map(e => {
+						{Object.keys(this.state.variantArrayDetails).map(e => {
+                            console.log(e);
+                            if (typeof this.state.variantArrayDetails[e] !== 'string' && typeof this.state.variantArrayDetails[e] !== 'number' && typeof this.state.variantArrayDetails[e] !== 'undefined' ) {
+                                return null;
+                            }
                             return (
 								<div className="col-12 col-sm-6 mb-4">
                                     {e === "main_image" ? (
@@ -555,6 +559,9 @@ class ViewProducts extends Component {
 					<Modal.Section>
 						<div className="row">
 							{Object.keys(this.state.variantArrayDetails).map(e => {
+                                if (typeof this.state.variantArrayDetails[e] !== 'string' && typeof this.state.variantArrayDetails[e] !== 'number' && typeof this.state.variantArrayDetails[e] !== 'undefined' ) {
+                                    return null;
+                                }
 								return (
 									<div className="col-12 col-sm-6 mb-4">
 										{e === "main_image" ? (

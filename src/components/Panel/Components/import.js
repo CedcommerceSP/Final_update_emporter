@@ -26,6 +26,7 @@ import { capitalizeWord, validateImporter } from "./static-functions";
 import FileImporter from "./import-component/fileimporter";
 import { MagnetoImport } from "./import-component/MagnetoImport";
 import EbayAffiliate from "./import-component/EbayAffiliate";
+import AliExpress from "./import-component/AliExpress";
 export class Import extends Component {
 	profilesList = [];
 	constructor(props) {
@@ -66,7 +67,8 @@ export class Import extends Component {
 		};
 		this.getAllImporterServices();
 		this.getAllUploaderServices();
-		this.handleModalChange = this.handleModalChange.bind(this);
+        this.redirect = this.redirect.bind(this);
+        this.handleModalChange = this.handleModalChange.bind(this);
 	}
     componentWillReceiveProps(nextPorps) {
 		// console.log("qwerty",nextPorps);
@@ -794,37 +796,55 @@ export class Import extends Component {
 
 	render() {
 		let { mainTab, necessaryInfo } = this.state;
-		return (
-			<Page title="Manage Products"
-				  >
-				{necessaryInfo.account_connected_array && necessaryInfo.account_connected_array.indexOf('ebayaffiliate') > -1 &&
-				<Tabs name={"hello"} selected={this.state.mainTab} tabs={[{
+        const tabs = [
+                {
                     id: 'Import',
                     content: 'Import',
                     accessibilityLabel: 'All',
                     panelID: 'all',
+                }
+		];
+        if( necessaryInfo.account_connected_array && necessaryInfo.account_connected_array.indexOf('aliexpress') > -1){
+            tabs.push(
+                {
+                    id: 'AliExpress',
+                    content: 'AliExpress Dropshipping',
+                    panelID: 'AliExpress',
                 },
-                    {
-                        id: 'Ebay Affiliate',
-                        content: 'Ebay Dropshipping',
-                        panelID: 'Ebay Affiliate',
-                    }]} onSelect={this.handleTabChange}/>}
+            )
+        }if(  necessaryInfo.account_connected_array && necessaryInfo.account_connected_array.indexOf('ebayaffiliate') > -1 ){
+            tabs.push(
+                {
+                    id: 'Ebay Affiliate',
+                    content: 'Ebay Dropshipping',
+                    panelID: 'Ebay Affiliate',
+                },
+            )
+        }
+        console.log(tabs[mainTab]);
+        return (
+			<Page title="Manage Products">
+				<Tabs
+					name={"hello"}
+					selected={this.state.mainTab}
+					tabs={tabs}
+					onSelect={this.handleTabChange}/>
                 {mainTab === 0 ?
-				<div className="row">
-					<div className="col-12 p-3">
-						<Banner title="Please Read" status="info">
-							<Label>
-								In order to upload your products to Shopify, click on
-								“Import Products”. Further, click on “Upload Products” to convey
-								product details from the app to Shopify. You can transfer the
-								product details from CSV to the app by clicking on “Upload CSV”.
-								<a href="javascript:void(0)" onClick={this.handleModalChange}>
-									Click Here
-								</a>
-							</Label>
-						</Banner>
-					</div>
-					{/*<div className="col-12">
+                    <div className="row">
+                        <div className="col-12 p-3">
+                            <Banner title="Please Read" status="info">
+                                <Label>
+                                    In order to upload your products to Shopify, click on
+                                    “Import Products”. Further, click on “Upload Products” to convey
+                                    product details from the app to Shopify. You can transfer the
+                                    product details from CSV to the app by clicking on “Upload CSV”.
+                                    <a href="javascript:void(0)" onClick={this.handleModalChange}>
+                                        Click Here
+                                    </a>
+                                </Label>
+                            </Banner>
+                        </div>
+                        {/*<div className="col-12">
 						<Button
 							fullWidth={true}
 							onClick={() => {
@@ -837,101 +857,103 @@ export class Import extends Component {
 							<FileImporter {...this.props} />
 						</Collapsible>
 					</div>*/}
-					<div className="col-md-4 col-sm-4 col-12 p-3">
-						<Card>
-							<div
-								onClick={() => {
-									this.state.importProductsDetails.source = "";
-									this.state.importProductsDetails.shop = "";
-									this.state.importProductsDetails.shop_id = "";
-									this.state.showImportProducts = true;
-									this.updateState();
-								}}
-								style={{ cursor: "pointer" }}
-							>
-								<div className="text-center pt-5 pb-5">
-									<FontAwesomeIcon
-										icon={faArrowAltCircleDown}
-										color="#3f4eae"
-										size="10x"
-									/>
-								</div>
-								<div className="text-center pt-2 pb-4">
-									<span className="h2" style={{ color: "#3f4eae" }}>
+                        <div className="col-md-4 col-sm-4 col-12 p-3">
+                            <Card>
+                                <div
+                                    onClick={() => {
+                                        this.state.importProductsDetails.source = "";
+                                        this.state.importProductsDetails.shop = "";
+                                        this.state.importProductsDetails.shop_id = "";
+                                        this.state.showImportProducts = true;
+                                        this.updateState();
+                                    }}
+                                    style={{cursor: "pointer"}}
+                                >
+                                    <div className="text-center pt-5 pb-5">
+                                        <FontAwesomeIcon
+                                            icon={faArrowAltCircleDown}
+                                            color="#3f4eae"
+                                            size="10x"
+                                        />
+                                    </div>
+                                    <div className="text-center pt-2 pb-4">
+									<span className="h2" style={{color: "#3f4eae"}}>
 										Import Products
 									</span>
-									<Label>(Import from marketplace to app)</Label>
-								</div>
-							</div>
-						</Card>
-					</div>
-					<div className="col-md-4 col-sm-4 col-12 p-3">
-						<Card>
-							<div
-								onClick={() => {
-									this.state.uploadProductDetails.source = "";
-									this.state.uploadProductDetails.target = "";
-									this.state.uploadProductDetails.selected_profile = "";
-									this.state.uploadProductDetails.profile_type = "";
-									this.state.showUploadProducts = true;
-									this.handleUploadChange("target", "shopifygql");
-									this.handleUploadChange(
-										"selected_profile",
-										"default_profile"
-									);
-									this.updateState();
-								}}
-								style={{ cursor: "pointer" }}
-							>
-								<div className="text-center pt-5 pb-5">
-									<FontAwesomeIcon
-										icon={faArrowAltCircleUp}
-										color="#3f4eae"
-										size="10x"
-									/>
-								</div>
-								<div className="text-center pt-2 pb-4">
-									<span className="h2" style={{ color: "#3f4eae" }}>
+                                        <Label>(Import from marketplace to app)</Label>
+                                    </div>
+                                </div>
+                            </Card>
+                        </div>
+                        <div className="col-md-4 col-sm-4 col-12 p-3">
+                            <Card>
+                                <div
+                                    onClick={() => {
+                                        this.state.uploadProductDetails.source = "";
+                                        this.state.uploadProductDetails.target = "";
+                                        this.state.uploadProductDetails.selected_profile = "";
+                                        this.state.uploadProductDetails.profile_type = "";
+                                        this.state.showUploadProducts = true;
+                                        this.handleUploadChange("target", "shopifygql");
+                                        this.handleUploadChange(
+                                            "selected_profile",
+                                            "default_profile"
+                                        );
+                                        this.updateState();
+                                    }}
+                                    style={{cursor: "pointer"}}
+                                >
+                                    <div className="text-center pt-5 pb-5">
+                                        <FontAwesomeIcon
+                                            icon={faArrowAltCircleUp}
+                                            color="#3f4eae"
+                                            size="10x"
+                                        />
+                                    </div>
+                                    <div className="text-center pt-2 pb-4">
+									<span className="h2" style={{color: "#3f4eae"}}>
 										Upload Products
 									</span>
-									<Label>(Upload From App To Shopify)</Label>
-								</div>
-							</div>
-						</Card>
-					</div>
-					<div className="col-md-4 col-sm-4 col-12 p-3">
-						<Card>
-							<div style={{ cursor: "pointer" }}
-								 onClick={this.handleChangeModakCsv.bind(this)}
-							>
-								<div className="text-center pt-5 pb-5">
-									<img style={{height: '138px', width: '138px', cursor: "pointer"}}
-										 src={require("../../../assets/img/csv_upload.png")}
-										 onClick={this.handleChangeModakCsv.bind(this)}
-									/>
-								</div>
-								<div className="text-center pt-2 pb-4">
-									<span className="h2" style={{ color: "#3f4eae" }}>
+                                        <Label>(Upload From App To Shopify)</Label>
+                                    </div>
+                                </div>
+                            </Card>
+                        </div>
+                        <div className="col-md-4 col-sm-4 col-12 p-3">
+                            <Card>
+                                <div style={{cursor: "pointer"}}
+                                     onClick={this.handleChangeModakCsv.bind(this)}
+                                >
+                                    <div className="text-center pt-5 pb-5">
+                                        <img style={{height: '138px', width: '138px', cursor: "pointer"}}
+                                             src={require("../../../assets/img/csv_upload.png")}
+                                             onClick={this.handleChangeModakCsv.bind(this)}
+                                        />
+                                    </div>
+                                    <div className="text-center pt-2 pb-4">
+									<span className="h2" style={{color: "#3f4eae"}}>
 										Upload CSV
 									</span>
-									<Label>(Upload Your CSV To App)</Label>
-								</div>
-							</div>
-						</Card>
-					</div>
-					<Modal
-						open={this.state.active}
-						onClose={this.handleChangeModakCsv.bind(this)}
-						title="Upload CSV"
-					>
-						<Modal.Section>
-							<FileImporter {...this.props} />
-						</Modal.Section>
-					</Modal>
-				</div>:<React.Fragment>
-					<br/>
-					<EbayAffiliate {...this.props}/>
-				</React.Fragment>}
+                                        <Label>(Upload Your CSV To App)</Label>
+                                    </div>
+                                </div>
+                            </Card>
+                        </div>
+                        <Modal
+                            open={this.state.active}
+                            onClose={this.handleChangeModakCsv.bind(this)}
+                            title="Upload CSV"
+                        >
+                            <Modal.Section>
+                                <FileImporter {...this.props} />
+                            </Modal.Section>
+                        </Modal>
+                    </div> : tabs[mainTab].panelID === "AliExpress" ? (<React.Fragment>
+                        <AliExpress {...this.props} redirect={this.redirect}/>
+                    </React.Fragment>) : (tabs[mainTab].panelID === "Ebay Affiliate") ? (<React.Fragment>
+                        <EbayAffiliate {...this.props}/>
+                    </React.Fragment>) : null
+                }
 				{this.renderImportProductsModal()}
 				{this.renderUploadProductsModal()}
 				{this.renderHelpModal()}

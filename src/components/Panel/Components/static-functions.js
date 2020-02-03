@@ -30,6 +30,12 @@ export function modifyName(string) {
 			return "Magento";
 		case "ebayaffiliate":
 			return "Ebay Dropshipping";
+        case "aliexpress":
+            return "AliExpress";
+        case "wix":
+            return "Wix";
+        case "bigcommerce":
+            return "Bigcommerce";
 		default:
 			return string;
 	}
@@ -106,6 +112,12 @@ export function modifyAccountConnectedInfo(accounts) {
                 break;
             case "ebayaffiliate":
 				title = "Ebay Dropshipping"; break;
+            case "aliexpress":
+                title = "AliExpress"; break;
+            case "wix":
+                title = "Wix"; break;
+            case "bigcommerce":
+                title = "Bigcommerce"; break;
 			default:
 				title = e;
 		}

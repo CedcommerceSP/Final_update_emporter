@@ -1430,4 +1430,28 @@ export const json = {
             value: "Unspecified"
         },
 	],
+    // aliexpress_Country: [
+    // 	{
+    //     value: "0",
+    //     label: "US"
+	// 	},
+	// 	{
+    //         value: "1",
+    //         label: "UK"
+	// 	},
+	// 	{
+    //         value: "2",
+    //         label: "UK"
+	// 	},
+	// ],
+    // category_type: [
+    // 	{
+    //         value: "7",
+    //         label: "Computer & Office"
+	// 	},
+	// 	{
+    //         value: "1503",
+    //         label: "Furniture"
+	// 	},
+	// ],
 };
