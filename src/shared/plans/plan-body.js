@@ -227,6 +227,7 @@ class PlanBody extends Component {
             arg.main_price = this.state.main_price_temp
         }
         if (arg.title == "FBA Annually"){
+            arg.title = 'FBA Yearly';
             arg.main_price = this.state.main_price_temp_anually
         }
         let value = [];
@@ -590,6 +591,7 @@ class PlanBody extends Component {
                                 <FormLayout>
                                     <FormLayout.Group condensed>
                                         {this.state.data.map((data, index) => {
+                                            console.log(data);
                                             if (data.title !== "FBA" && data.title !== "FBA Annually") {
                                                 return (
                                                     <div key={index}>
@@ -838,7 +840,6 @@ class PlanBody extends Component {
                 >
                     <FormLayout>
                         <FormLayout.Group condensed>
-
                             {this.state.data.map((data, index) => {
                                 if (data.title === "FBA" || data.title === "FBA Annually") {
                                     return (
@@ -895,7 +896,7 @@ class PlanBody extends Component {
                                                         <hr />
                                                         <div className="text-center mt-5">
                                                             {" "}
-                                                            {/* Services Data */}
+                                                             Services Data
                                                             {data.services
                                                                 ? Object.keys(data.services).map(keys => {
                                                                     return (
@@ -934,14 +935,10 @@ class PlanBody extends Component {
                                                                                     return (
                                                                                         <div key={key1}
                                                                                              className="text-left">
-                                                                                            <Checkbox
-                                                                                                checked={true}
-                                                                                                label={
-                                                                                                    data.services[keys].services[key1]
-                                                                                                        .title
-                                                                                                }
-                                                                                                disabled={true}
-                                                                                            />
+                                                                                            <ul><li>{
+                                                                                                data.services[keys].services[key1]
+                                                                                                    .title
+                                                                                            }</li></ul>
                                                                                         </div>
                                                                                     );
                                                                                 } else {

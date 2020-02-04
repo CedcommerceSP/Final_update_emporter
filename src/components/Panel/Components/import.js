@@ -471,8 +471,7 @@ export class Import extends Component {
 						<div className="col-12 pt-1 pb-1">
 							<Banner status="info">
 								<Label>
-									You can upload products from the source to target either
-									through our default profile or you can create{" "}
+                                    You can upload products from the marketplace to Shopify either through default profile or you can create{" "}
 									<NavLink to="/panel/profiling/create">custom profile</NavLink>{" "}
 									for products upload.
 								</Label>

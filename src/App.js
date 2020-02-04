@@ -12,7 +12,6 @@ import { globalState } from "./services/globalstate";
 import { environment } from "./environments/environment";
 import { isUndefined } from "util";
 
-
 export class App extends Component {
 	state = {
 		showLoader: false,

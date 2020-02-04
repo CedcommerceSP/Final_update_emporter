@@ -51,7 +51,7 @@ class ReportAnIssue extends Component {
 	render() {
 		const options = [
 			{
-				label: "Issue in regarding Amazon or Ebay seller panel",
+				label: "Issue  regarding Amazon or Ebay seller panel",
 				value: "Amazon/Ebay Seller Panel"
 			},
 			{

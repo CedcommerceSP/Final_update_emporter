@@ -299,10 +299,6 @@ class AppsShared extends Component {
                         style={{cursor: "pointer"}}
                         onClick={this.handleToggleClick.bind(this.state.banner_paln)}
                     >
-                        <Banner title="CSV Order Management" icon="view" status="info"
-                        >
-                            <p><b><i>One time payment if Csv not matched according to the offical format</i></b></p>
-                        </Banner>
                     </div>
                     <Collapsible open={true}
                                  ariaExpanded={this.state.fba_plan}
@@ -316,8 +312,6 @@ class AppsShared extends Component {
                                             <div className="pt-5">
                                                 <div className="mb-5 text-center">
                                                     {" "}
-
-
                                                 </div>
                                                 <Stack distribution="center">
                                                     {" "}
@@ -334,7 +328,7 @@ class AppsShared extends Component {
                                                     <h1 className="mb-4 mt-4">
                                                         <b>Upload CSV</b>
                                                     </h1>
-                                                    <h4>Upload Your Products CSV File To import all the products into an
+                                                    <h4>Upload Your Product's CSV File To import all the products into an
                                                         App</h4>
                                                 </div>
                                                 <hr />
