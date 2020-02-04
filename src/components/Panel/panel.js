@@ -50,6 +50,7 @@ export class Panel extends Component {
             show_trail_banner:false,
             show_trail_banner_webhook:false,
             header: true,
+            button_thumb_down_loader:false,
             necessaryInfo: {},
             fbapresent: false,
             product_upload: 0,
@@ -133,6 +134,9 @@ export class Panel extends Component {
             alert("Please tell us issue?")
         }
         else {
+            this.setState({
+                button_thumb_down_loader:true
+            })
             var data = [
                 {"thumb_action": 'down'},
                 {"submit_review": 1},
@@ -142,7 +146,8 @@ export class Panel extends Component {
             requests.postRequest('frontend/importer/reviewRatingData', {data: data}, false, true).then(response1 => {
                 if (response1.success) {
                     // window.open('https://apps.shopify.com/omni-importer?surface_detail=webcommerce&surface_inter_position=1&surface_intra_position=4&surface_type=search#reviews', '_blank');
-                    this.setState({show_rating_popup: false});
+                    this.setState({show_rating_popup: false,
+                                    button_thumb_down_loader:false});
                     notify.success(response1.message)
                 }
                 else {
@@ -683,6 +688,7 @@ export class Panel extends Component {
                                         multiline
                                     />
                                     <Button
+                                        loading={this.state.button_thumb_down_loader}
                                         primary={true}
                                         onClick={this.forButtonSubmit.bind(this)}
                                     >
