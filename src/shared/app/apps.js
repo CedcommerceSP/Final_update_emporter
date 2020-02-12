@@ -76,7 +76,7 @@ class AppsShared extends Component {
         };
         requests.getRequest("connector/get/all").then(data => {
             if (data.success) {
-                // console.log("namaste",data);
+                console.log("namaste",data);
                 let installedApps = [];
                 let code = [];
                 for (let i = 0; i < Object.keys(data.data).length; i++) {

@@ -434,14 +434,14 @@ export class Products extends Component {
 						str = data[i].variants[0]["main_image"];
 					} else if (
 						typeof data[i]["details"]["additional_images"] === "object" &&
-						!isUndefined(data[i]["details"]["additional_images"][0])
+						!isUndefined(data[i]["details"]["additional_images"])
 					) {
-						str = data[i]["details"]["additional_images"][0];
+						str = data[i]["details"]["additional_images"];
 					}else if (
                         typeof data[i]["details"]["additional_image"] === "object" &&
-                        !isUndefined(data[i]["details"]["additional_image"][0])
+                        !isUndefined(data[i]["details"]["additional_image"])
                     ) {
-                        str = data[i]["details"]["additional_image"][0];
+                        str = data[i]["details"]["additional_image"];
                     }
 					else {
 						str = "https://apps.cedcommerce.com/importer/image_not_found.jpg";
