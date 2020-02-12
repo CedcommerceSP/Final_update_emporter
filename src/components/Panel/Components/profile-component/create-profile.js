@@ -1142,8 +1142,7 @@ export class CreateProfile extends Component {
                 <div className="col-12 pt-1 pb-1">
                     <Banner title="General Info" status="info">
                         <Label>
-                            Before creating a profile please make sure that you have imported products from your
-                            selected Marketplace. To import your products go to{" "}
+                            Before creating profile please make sure that you have imported products on app. Go to import/upload section to Import Products{" "}
                             <NavLink to="/panel/import">Import Products</NavLink>
                         </Label>
                     </Banner>
@@ -1877,7 +1876,7 @@ export class CreateProfile extends Component {
                                         </div>
                                         <div
                                             className="col-md-6 col-sm-6 col-12 text-md-right text-sm-right text-center pt-3 pb-3">
-                                            {this.renderNextStepButton()}
+                                            {/*{this.renderNextStepButton()}*/}
                                         </div>
                                     </div>
                                 </div>

@@ -367,10 +367,6 @@ class AppsShared extends Component {
                         style={{cursor: "pointer"}}
                         onClick={this.handleToggleClick.bind(this.state.banner_paln)}
                     >
-                        <Banner title="CSV Order Management" icon="view" status="info"
-                        >
-                            <p><b><i>One time payment if Csv not matched according to the offical format</i></b></p>
-                        </Banner>
                     </div>
                     <Collapsible open={true}
                                  ariaExpanded={this.state.fba_plan}
@@ -384,8 +380,6 @@ class AppsShared extends Component {
                                             <div className="pt-5">
                                                 <div className="mb-5 text-center">
                                                     {" "}
-
-
                                                 </div>
                                                 <Stack distribution="center">
                                                     {" "}
@@ -402,7 +396,7 @@ class AppsShared extends Component {
                                                     <h1 className="mb-4 mt-4">
                                                         <b>Upload CSV</b>
                                                     </h1>
-                                                    <h4>Upload Your Products CSV File To import all the products into an
+                                                    <h4>Upload Your Product's CSV File To import all the products into an
                                                         App</h4>
                                                 </div>
                                                 <hr />
@@ -435,14 +429,14 @@ class AppsShared extends Component {
                 panelID: 'accountmarketplace',
             },
             {
-                id: 'order_management',
-                content: 'Order Management',
-                panelID: 'order-management',
-            },
-            {
                 id: 'dropshipping',
                 content: 'Dropshipping',
                 panelID: 'dropshipping',
+            },
+            {
+                id: 'order_management',
+                content: 'Order Management',
+                panelID: 'order-management',
             },
             {
                 id: 'cvs_management',
@@ -465,7 +459,7 @@ class AppsShared extends Component {
                         <Tabs tabs={tabs} selected={selected} onSelect={this.handleTabChange}/>
                         <Card.Section>
                             <div className="row">
-                            {selected == 0 ? this.renderMarketplace() : selected === 1 ? this.renderOrderManagement() :selected === 2 ? this.renderDropshipping() : this.renderCsvUploadManagement()}
+                            {selected == 0 ? this.renderMarketplace() : selected === 2 ? this.renderOrderManagement() :selected === 1 ? this.renderDropshipping() : this.renderCsvUploadManagement()}
                             </div>
                         </Card.Section>
                     </Card>
