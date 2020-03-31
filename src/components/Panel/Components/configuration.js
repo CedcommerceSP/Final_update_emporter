@@ -55,6 +55,8 @@ export class Configuration extends Component {
             show_shopify_child_component: {},
             shopify_configuration_updated: false,
             account_information_updated: false,
+            etsy_shop_name:'',
+
             fba_configuration: {},
             open_modal: false,
             open_modal_response: false,
@@ -185,6 +187,7 @@ export class Configuration extends Component {
             .getRequest("connector/get/config", {marketplace: "etsyimporter"})
             .then(data => {
                 if (data.success) {
+                    console.log(data.data)
                     this.etsyConfigurationData = this.modifyConfigData(
                         data.data,
                         "etsy_configuration"
@@ -617,8 +620,8 @@ export class Configuration extends Component {
         requests
             .getRequest("fba/test/test")
             .then(data => {
-                if (data.success) {
-                    // console.log("data_FBA", data.data);
+                if (data.success && data.data!=null) {
+                    console.log("data_FBA", data);
                     this.setState({
                         open_modal_response: true
                     });
@@ -816,8 +819,16 @@ export class Configuration extends Component {
             </div>
         );
     }
-
+    etsyShopName(){
+        if (this.etsyConfigurationData.length > 1){
+            if (this.etsyConfigurationData[1]['title'] === 'Etsy Shop Name'){
+                console.log(this.etsyConfigurationData[1]['value'])
+                this.state.etsy_shop_name = this.etsyConfigurationData[1]['value']
+            }
+        }
+    }
     renderEtsyConfig(sync) {
+       this.etsyShopName()
         return (
             <div className="row">
                 <div className="col-sm-4 col-12 text-md-left text-sm-left text-center">
@@ -826,6 +837,7 @@ export class Configuration extends Component {
                 <div className="col-sm-8 col-12">
                     <Card>
                         <div className="p-5">
+                            <TextField label="Etsy Shop Name" disabled placeholder={this.state.etsy_shop_name}/>
                             <Formbuilder
                                 form={this.etsyConfigurationData}
                                 sync={sync}

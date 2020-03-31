@@ -82,6 +82,7 @@ export class Import extends Component {
 			.getRequest("connector/get/services", { "filters[type]": "importer" })
 			.then(data => {
 				if (data.success) {
+					console.log(data.data);
 					this.state.importServicesList = [];
 					for (let i = 0; i < Object.keys(data.data).length; i++) {
 						let key = Object.keys(data.data)[i];
@@ -103,7 +104,7 @@ export class Import extends Component {
 					this.updateState();
                     // console.log(this.state.importServicesList);
                     for (let i = 0;i<this.state.importServicesList.length;i++){
-						if (this.state.importServicesList[i]['value'] !== 'ebayaffiliate' && this.state.importServicesList[i]['value'] !== 'fileimporter' && this.state.importServicesList[i]['value'] !== 'bigmanager') {
+						if (this.state.importServicesList[i]['value'] !== 'ebayaffiliate' && this.state.importServicesList[i]['value'] !== 'fileimporter' && this.state.importServicesList[i]['value'] !== 'bigmanager' && this.state.importServicesList[i]['value'] !== 'aliexpress') {
                             this.state.finalRenderImporterShopLists.push(this.state.importServicesList[i]);
                         }
 					}
@@ -398,7 +399,7 @@ export class Import extends Component {
 					notify.success(data.message);
 				}
 			} else {
-				if (data.code === "account_not_connected") {
+				if (data.code === "import_failed") {
 					setTimeout(() => {this.redirect("/panel/accounts");}, 1000);
 					notify.info("User Account Not Found. Please Connect The Account First.");
 				} else if (data.code === "already_in_progress") {
@@ -831,15 +832,15 @@ export class Import extends Component {
                 {mainTab === 0 ?
                     <div className="row">
                         <div className="col-12 p-3">
-                            <Banner title="Please Read" status="info">
+                            <Banner title="Information" status="info">
                                 <Label>
                                     In order to upload your products to Shopify, click on
                                     “Import Products”. Further, click on “Upload Products” to convey
                                     product details from the app to Shopify. You can transfer the
                                     product details from CSV to the app by clicking on “Upload CSV”.
-                                    <a href="javascript:void(0)" onClick={this.handleModalChange}>
+                                    {/*<a href="javascript:void(0)" onClick={this.handleModalChange}>
                                         Click Here
-                                    </a>
+                                    </a>*/}
                                 </Label>
                             </Banner>
                         </div>
@@ -879,7 +880,7 @@ export class Import extends Component {
 									<span className="h2" style={{color: "#3f4eae"}}>
 										Import Products
 									</span>
-                                        <Label>(Import from marketplace to app)</Label>
+                                        <Label>(Pull from marketplace to app)</Label>
                                     </div>
                                 </div>
                             </Card>
@@ -913,7 +914,7 @@ export class Import extends Component {
 									<span className="h2" style={{color: "#3f4eae"}}>
 										Upload Products
 									</span>
-                                        <Label>(Upload From App To Shopify)</Label>
+                                        <Label>(Push From App To Shopify)</Label>
                                     </div>
                                 </div>
                             </Card>

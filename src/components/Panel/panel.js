@@ -49,6 +49,7 @@ export class Panel extends Component {
             trail_days_left:0,
             show_trail_banner:false,
             show_trail_banner_webhook:false,
+            show_fba_suspension_message:false,
             header: true,
             button_thumb_down_loader:false,
             necessaryInfo: {},
@@ -352,10 +353,13 @@ export class Panel extends Component {
     }
 
     installedAtFbaDate() {
-        console.log("qwerty")
+       /* console.log("qwerty")
         console.log(this.state.necessaryInfo.account_connected_array);
-        console.log(this.state.necessaryInfo.account_connected_array.indexOf('fba'));
+        console.log(this.state.necessaryInfo.account_connected_array.indexOf('fba'));*/
         if (this.state.necessaryInfo.account_connected_array.indexOf('fba') > 0) {
+            this.setState({
+                show_fba_suspension_message:true
+            })
             requests
                 .getRequest("fba/test/getWebhookCall")
                 .then(data => {
@@ -374,12 +378,13 @@ export class Panel extends Component {
 
     fbaTrailCheck() {
         console.log("my name is rahul")
-        if (this.state.trail_days_left < 0) {
             // console.log("zzzz");
             requests
                 .getRequest("fba/test/getWebhookDetailsAndDelete")
                 .then(data => {
                     if (data.success) {
+                        console
+                            .log(data)
                         if (data.message == "webhook are deleted") {
                             this.setState({
                                 show_trail_banner_webhook: true
@@ -387,7 +392,6 @@ export class Panel extends Component {
                         }
                     }
                 });
-        }
 
     }
 
@@ -627,6 +631,44 @@ export class Panel extends Component {
                         </Banner>
                     </Modal.Section>
                 </Modal>
+
+                <Modal
+                    title={"FBA User's Only"}
+                    open={this.state.show_fba_suspension_message}
+                    onClose={() => {
+                        this.setState({show_fba_suspension_message: false});
+                    }}
+                    primaryAction={{
+                        content: "FBA Section",
+                        onClick: () => {
+                            this.redirect("/panel/fbaOrders");
+                            this.setState({show_fba_suspension_message: false});
+                        }
+                    }}
+                >
+                    <Modal.Section>
+                        <Banner title={"Alert"} status="warning">
+                            <Label id={123}>
+                                <ul>
+                                    <li>
+                                        Amazon stopped accepting inbound shipments, except household staples and medical supplies, categories.
+                                    </li>
+                                    <li>
+                                        Amazon offered tips for sellers switching from FBA to Merchant Fulfilled Network (MFN)
+                                    </li>
+                                    <li>
+                                        Amazon also advised sellers, “Fulfill your orders with Amazon’s Buy Shipping,”
+                                    </li>
+                                    <p>
+                                        <a href="https://www.ecommercebytes.com/2020/03/23/amazon-reminds-fba-sellers-on-proper-fbm-shipping-practices/" target="_blank">know more</a>
+                                    </p>
+                                </ul>
+                                {/*FBA shipment suspended until 5th April,2020, <a href="https://sellercentral.amazon.com/forums/t/all-fba-shipments-suspended-until-april-5th/592285" target="_blank">know more</a>*/}
+                            </Label>
+                        </Banner>
+                    </Modal.Section>
+                </Modal>
+
                 <Modal
                     title={"We Hear you Loud and Clear"}
                     open={this.state.show_rating_popup}

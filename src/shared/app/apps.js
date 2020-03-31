@@ -155,7 +155,7 @@ class AppsShared extends Component {
     renderMarketplace() {
         console.log(this.state.apps)
            return this.state.apps.map(app => {
-               if (app.code !== 'fba' && app.code !== 'ebayaffiliate' && app.code !== 'amazonaffiliate' && app.code !== 'aliexpress') {
+               if (app.code !== 'fba' && app.code !== 'ebayaffiliate' && app.code !== 'amazonaffiliate' && app.code !== 'aliexpress' && app.title !== 'Etsy Dropshipping') {
                    if (this.validateCode(app.code)) {
                        return (
                            <div
@@ -274,7 +274,7 @@ class AppsShared extends Component {
     renderDropshipping(){
 
         return this.state.apps.map(app => {
-            if (app.code === 'aliexpress' || app.code === 'amazonaffiliate' || app.code === 'ebayaffiliate') {
+            if (app.code === 'aliexpress' || app.code === 'amazonaffiliate' || app.code === 'ebayaffiliate' || app.title === 'Etsy Dropshipping') {
                 if (this.validateCode(app.code)) {
                     return (
                         <React.Fragment>

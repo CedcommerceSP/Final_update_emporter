@@ -211,7 +211,8 @@ class FileMapping extends Component {
 	};
 
 	inCaseType = arg => {
-		switch (arg.type) {
+        console.log(this.state.csv_fields);
+        switch (arg.type) {
 			case "multi":
 				return (
 					<React.Fragment>
@@ -251,7 +252,7 @@ class FileMapping extends Component {
 							labelHidden={true}
 							placeholder={arg.label}
 							value={this.state.mappedObject[arg.value]}
-							onChange={this.handleMappingChange.bind(this, arg, arg.value)}
+							onChange={this.handleMappingChange.bind(this, arg, arg.value,)}
 							options={arg["select_options"]}
 						/>
 					</React.Fragment>

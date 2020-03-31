@@ -386,10 +386,21 @@ class ViewProducts extends Component {
 							<div className="col-12 mb-5">
 								<span>
 									<div className="row p-5 d-flex justify-content-center">
-										<div className="col-12 col-sm-5">
-											<div className="pb-5 pr-5">
+										<div className="col-1 mt-5 pt-5 justify-content-center"
+												style={{ cursor: "pointer" }}
+												onClick={this.pressLeftShift.bind(this)}
+											>
+											<span>
+												<img style={{height: '35px', width: '35px'}}
+													 src={require("../../../../assets/img/leftShift.png")}/>
+											</span>
+
+										</div>
+										<div className="col-8 col-sm-4">
+											<div className="pb-5">
 												<Thumbnail
-													source={this.state.img[this.state.imagePosition]}
+													// source={this.state.img[this.state.imagePosition]}
+													source={this.state.img[0][this.state.imagePosition]}
 													alt={""}
 													size={"extralarge"}
 												/>
@@ -400,6 +411,16 @@ class ViewProducts extends Component {
 												</div>
 											</div>
 										</div>
+										<div className="col-1 mt-5 pt-5 justify-content-center"
+											 style={{ cursor: "pointer" }}
+											 onClick={this.pressRightShift.bind(this,this.state.img.length)}
+										>
+											<span>
+												<img style={{height: '35px', width: '35px'}}
+													 src={require("../../../../assets/img/rigthShift.png")}/>
+											</span>
+
+										</div>
 										<div className={"col-12"}>
 											<div className="row d-flex justify-content-center">
 												{this.state.img.map((e, i) => {
@@ -407,6 +428,9 @@ class ViewProducts extends Component {
 														this.state.imagePosition < i + 5 &&
 														this.state.imagePosition > i - 5
 													) {
+														// console.log(e)
+														// console.log(i)
+														console.log(this.state.img[0][0])
 														return (
 															<div
 																key={i}
@@ -415,7 +439,7 @@ class ViewProducts extends Component {
 																onClick={this.handleImageChange.bind(this, i)}
 															>
 																<span>
-																	<Thumbnail source={e} alt={""} />
+																	<Thumbnail source={this.state.img[0][i]} alt={""} />
 																</span>
 																{this.state.imagePosition === i ? (
 																	<div className="mt-1 bg-info p-1" />
@@ -589,8 +613,24 @@ class ViewProducts extends Component {
 	}
 
 	handleImageChange = index => {
-		this.setState({ imagePosition: index });
+        console.log(index);
+        this.setState({ imagePosition: index });
 	};
+    pressLeftShift(){
+    	if (this.state.imagePosition != 0) {
+            this.setState({
+                imagePosition: this.state.imagePosition - 1
+            })
+        }
+
+	}
+    pressRightShift = count =>{
+        if (this.state.imagePosition < count-1) {
+            this.setState({
+                imagePosition: this.state.imagePosition + 1
+            })
+        }
+	}
 
 	handleDraftJS = value => {
 		let html = draftToHtml(convertToRaw(value.getCurrentContent()));

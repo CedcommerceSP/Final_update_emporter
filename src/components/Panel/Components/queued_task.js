@@ -124,26 +124,54 @@ export class QueuedTask extends Component {
 			<Page title="Queued Tasks">
 				<Card title="Recent Activities" sectioned>
 					{this.state.recentActivities.map(activity => {
-						return (
-							<Banner
-								status={activity.severity}
-								title={activity.message}
-								key={this.state.recentActivities.indexOf(activity)}
-							>
-								<Stack distribution="trailing" spacing="extraLoose" alignment="center">
-									{activity.url !== null ? (
-										<a href={activity.url} target={"_blank"}>
-											View Report
-										</a>
-									) : (
-										null
-									)}
-									<Label id={123}>
-										{this.manageTheCreatedAtTime(activity.created_at)}
-									</Label>
-								</Stack>
-							</Banner>
-						);
+						if (activity.message == "Failed to import from Ebay. Account Not Found or No Active Product !!"){
+							return (
+								<Banner
+									status={activity.severity}
+									title={activity.message}
+									key={this.state.recentActivities.indexOf(activity)}
+								>
+									<Stack distribution="trailing" spacing="extraLoose" alignment="center">
+										<div style={{color: '#bf0711'}}>
+											Want Ebay Dropshipping?{' '}
+											<Button plain
+													onClick={() => {
+                                                        this.redirect("/panel/accounts");
+                                                    }}
+											>
+												Click Here
+											</Button>
+										</div>
+										<Label id={123}>
+                                            {this.manageTheCreatedAtTime(activity.created_at)}
+										</Label>
+									</Stack>
+								</Banner>
+
+                            );
+                        }
+                        else {
+                            return (
+								<Banner
+									status={activity.severity}
+									title={activity.message}
+									key={this.state.recentActivities.indexOf(activity)}
+								>
+									<Stack distribution="trailing" spacing="extraLoose" alignment="center">
+                                        {activity.url !== null ? (
+											<a href={activity.url} target={"_blank"}>
+												View Report
+											</a>
+                                        ) : (
+                                            null
+                                        )}
+										<Label id={123}>
+                                            {this.manageTheCreatedAtTime(activity.created_at)}
+										</Label>
+									</Stack>
+								</Banner>
+                            );
+						}
 					})}
 					{this.state.recentActivities.length === 0 && (
 						<Banner status="info">
@@ -243,3 +271,4 @@ export class QueuedTask extends Component {
 		this.setState(state);
 	}
 }
+
