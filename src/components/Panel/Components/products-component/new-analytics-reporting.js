@@ -829,7 +829,8 @@ class Demo_analytics_reporting extends Component {
     render_recent_activity() {
         return(
             <div className="justify-content-center">
-                <a href="https://apps.cedcommerce.com/shopify-store-development/" target="_blank"><img
+                <a href="https://cedcommerce.com/blog/survive-your-way-through-covid-19-start-your-own-online-store/"target="_blank">
+                <img
                     className='img-fluid p-3'
                     src={require("../../../../assets/img/Survive_your_way_through_Covid-19.png")} alt="covid-19"
                     /*height="650" width="650"*//></a>
