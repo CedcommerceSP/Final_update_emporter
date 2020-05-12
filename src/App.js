@@ -96,21 +96,135 @@ export class App extends Component {
 		);
 	}
 
-	render() {
-		const loadingMarkup = this.state.showLoader && <Loading />;
+    verifyCompatibilityofBrowser(){
 
+        var nVer = navigator.appVersion;
+        var nAgt = navigator.userAgent;
+        var browserName = navigator.appName;
+        var fullVersion = ''+parseFloat(navigator.appVersion);
+        var majorVersion = parseInt(navigator.appVersion,10);
+        var nameOffset,verOffset,ix;
+
+// In Opera 15+, the true version is after "OPR/"
+        if ((verOffset=nAgt.indexOf("OPR/"))!=-1) {
+            browserName = "Opera";
+            fullVersion = nAgt.substring(verOffset+4);
+        }
+// In older Opera, the true version is after "Opera" or after "Version"
+        else if ((verOffset=nAgt.indexOf("Opera"))!=-1) {
+            browserName = "Opera";
+            fullVersion = nAgt.substring(verOffset+6);
+            if ((verOffset=nAgt.indexOf("Version"))!=-1)
+                fullVersion = nAgt.substring(verOffset+8);
+        }
+// In MSIE, the true version is after "MSIE" in userAgent
+        else if ((verOffset=nAgt.indexOf("MSIE"))!=-1) {
+            browserName = "Microsoft Internet Explorer";
+            fullVersion = nAgt.substring(verOffset+5);
+        }
+// In Chrome, the true version is after "Chrome"
+        else if ((verOffset=nAgt.indexOf("Chrome"))!=-1) {
+            browserName = "Chrome";
+            fullVersion = nAgt.substring(verOffset+7);
+        }
+// In Safari, the true version is after "Safari" or after "Version"
+        else if ((verOffset=nAgt.indexOf("Safari"))!=-1) {
+            browserName = "Safari";
+            fullVersion = nAgt.substring(verOffset+7);
+            if ((verOffset=nAgt.indexOf("Version"))!=-1)
+                fullVersion = nAgt.substring(verOffset+8);
+        }
+// In Firefox, the true version is after "Firefox"
+        else if ((verOffset=nAgt.indexOf("Firefox"))!=-1) {
+            browserName = "Firefox";
+            fullVersion = nAgt.substring(verOffset+8);
+        }
+// In most other browsers, "name/version" is at the end of userAgent
+        else if ( (nameOffset=nAgt.lastIndexOf(' ')+1) <
+            (verOffset=nAgt.lastIndexOf('/')) )
+        {
+            browserName = nAgt.substring(nameOffset,verOffset);
+            fullVersion = nAgt.substring(verOffset+1);
+            if (browserName.toLowerCase()==browserName.toUpperCase()) {
+                browserName = navigator.appName;
+            }
+        }
+// trim the fullVersion string at semicolon/space if present
+        if ((ix=fullVersion.indexOf(";"))!=-1)
+            fullVersion=fullVersion.substring(0,ix);
+        if ((ix=fullVersion.indexOf(" "))!=-1)
+            fullVersion=fullVersion.substring(0,ix);
+
+        majorVersion = parseInt(''+fullVersion,10);
+        if (isNaN(majorVersion)) {
+            fullVersion = ''+parseFloat(navigator.appVersion);
+            majorVersion = parseInt(navigator.appVersion,10);
+        }
+       /* let compatible=true;
+        console.log(browserName)
+        switch (browserName) {
+            case 'Firefox':
+                if(majorVersion<67){
+                    compatible=false;
+                }
+                break;
+            case 'Opera':
+                if(majorVersion<60){
+                    compatible=false;
+                }
+                break;
+            case 'Chrome':
+                if(majorVersion<74){
+                    compatible=false;
+                }
+                break;
+            case 'Safari':
+                if(majorVersion<12){
+                    compatible=false;
+                }
+                break;
+        }*/
+
+        return browserName;
+
+    }
+
+	render() {
+		var browser = this.verifyCompatibilityofBrowser();
+		console.log(browser)
+		const loadingMarkup = this.state.showLoader && <Loading />;
+		console.log(this.state.shopOrigin)
 		if (this.state.shopOrigin !== "") {
-			return (
-				<AppProvider
-					apiKey={environment.APP_API_KEY}
-					shopOrigin={this.state.shopOrigin}
-					forceRedirect={true}
-				>
-					{loadingMarkup}
-					{this.renderApp()}
-				</AppProvider>
-			);
+			console.log("In first conditon")
+			if (browser == "Firefox"){
+				console.log("In Firefox")
+                return (
+					<AppProvider
+						 // apiKey={environment.APP_API_KEY}
+						 // shopOrigin={this.state.shopOrigin}
+						 // forceRedirect={true}
+					>
+                        {/*{loadingMarkup}*/}
+                        {this.renderApp()}
+					</AppProvider>
+                );
+			}else {
+				console.log("In else")
+                return (
+					<AppProvider
+						 apiKey={environment.APP_API_KEY}
+						 shopOrigin={this.state.shopOrigin}
+						 forceRedirect={true}
+					>
+                        {loadingMarkup}
+                        {this.renderApp()}
+					</AppProvider>
+                );
+			}
+
 		} else {
+			console.log("last else")
+
 			return <AppProvider>{this.renderApp()}</AppProvider>;
 		}
 	}

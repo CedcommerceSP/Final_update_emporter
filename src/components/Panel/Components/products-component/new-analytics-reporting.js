@@ -441,7 +441,7 @@ class Demo_analytics_reporting extends Component {
             if (temp_order && i == 0) {
                 arr.push(<div className="col-sm-12 col-md-12 col-lg-4" key={yourVariable}>
                         <Card
-                            title="Uploads"
+                            title="Uploaded"
                             sectioned
                             actions={{
                                 content: <Link><Icon source="help" color="inkLighter" backdrop={true}/></Link>,

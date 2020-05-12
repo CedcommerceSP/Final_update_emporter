@@ -223,6 +223,7 @@ export class CreateProfile extends Component {
     }
 
     getMarketplaceAttributes() {
+        console.log(this.state.basicDetails.target);
         requests
             .getRequest("connector/get/configForm", {
                 marketplace: this.state.basicDetails.target

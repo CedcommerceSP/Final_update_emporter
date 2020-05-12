@@ -66,6 +66,7 @@ export class Panel extends Component {
         this.getNecessaryInfo = this.getNecessaryInfo.bind(this);
         this.getNecessaryInfo();
         this.getRatingDataBackend();
+        this.getShopifyPlan();
     }
 
     /*    updateState() {
@@ -82,7 +83,16 @@ export class Panel extends Component {
      })
 
      }*/
-
+    getShopifyPlan(){
+        requests.getRequest('frontend/importer/shopifyPlan').then(data => {
+            if (data.success) {
+                console.log(data)
+            }
+            else {
+                console.log("in else")
+            }
+        })
+    }
 
     getRatingDataBackend() {
         requests.getRequest('frontend/importer/fetchReviewRatingData').then(data => {

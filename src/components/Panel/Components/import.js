@@ -33,6 +33,8 @@ export class Import extends Component {
 		super(props);
         this.state = {
 			listing_type: "active",
+			selectedLocation:'NA',
+			isLocationPresent:false,
 			importServicesList: [],
 			importerShopLists: [],
 			uploadServicesList: [],
@@ -69,6 +71,7 @@ export class Import extends Component {
 		this.getAllUploaderServices();
         this.redirect = this.redirect.bind(this);
         this.handleModalChange = this.handleModalChange.bind(this);
+        this.getShopifyConfigurations();
 	}
     componentWillReceiveProps(nextPorps) {
 		// console.log("qwerty",nextPorps);
@@ -414,6 +417,29 @@ export class Import extends Component {
 		});
 	}
 
+    getShopifyConfigurations() {
+        requests
+            .getRequest("connector/get/config", {marketplace: "shopify"})
+            .then(data => {
+                if (data.success) {
+                	console.log(data.data[0]['value'])
+                    if (data.data[0]['value'] !="") {
+                		var locationValue = data.data[0]['value'];
+                        this.setState({
+                            selectedLocation: data.data[0]['options'][locationValue]
+                        })
+                    }
+                    else {
+                		this.setState({
+                            isLocationPresent:true,
+						})
+					}
+                } else {
+                    notify.error(data.message);
+                }
+            });
+    }
+
 	renderUploadProductsModal() {
 		return (
 			<Modal
@@ -502,6 +528,17 @@ export class Import extends Component {
 									value={this.state.uploadProductDetails.selected_profile}
 								/>
 							)}
+						</div>
+						<div className="col-12 pt-1 pb-1">
+                            {this.state.isLocationPresent ?
+                                <TextField label="Selected Warehouse"
+                                           disabled value={this.state.selectedLocation}
+                                           helpText="You can change Warehouse from Setting Section"
+                                           error="Selected Warehouse"/> :
+                                <TextField label="Selected Warehouse"
+                                           disabled value={this.state.selectedLocation}
+                                           helpText="You can change Warehouse from Setting Section"
+                                />}
 						</div>
 						{this.state.uploadProductDetails.profile_type === "custom" && (
 							<div className="col-12 pt-1 pb-1">
@@ -729,40 +766,45 @@ export class Import extends Component {
 	}
 
 	uploadProducts() {
-		const data = Object.assign({}, this.state.uploadProductDetails);
-		data["marketplace"] = data["target"];
-		requests.postRequest("connector/product/upload", data).then(data => {
-			this.state.showUploadProducts = false;
-			if (data.success) {
-				if (data.code === "product_upload_started") {
-					notify.info(
-						"Upload process started. Check progress in activities section."
-					);
-					setTimeout(() => {
-						this.redirect("/panel/queuedtasks");
-					}, 1000);
-				} else {
-					notify.success(data.message);
-				}
-			} else {
-				// notify.error(data.message);
-				if (data.code === "link_your_account") {
-					setTimeout(() => {
-						this.redirect("/panel/accounts");
-					}, 1200);
-					notify.info("Account Not Linked.");
-				}
-				if (data.code === "limit_exhausted") {
-					setTimeout(() => {
-						this.redirect("/panel/plans");
-					}, 1000);
-					notify.info("Credit Not Available.");
-				} else {
-					notify.error(data.message);
-				}
-			}
-			this.updateState();
-		});
+        if (this.state.selectedLocation != "NA") {
+            const data = Object.assign({}, this.state.uploadProductDetails);
+            data["marketplace"] = data["target"];
+            requests.postRequest("connector/product/upload", data).then(data => {
+                this.state.showUploadProducts = false;
+                if (data.success) {
+                    if (data.code === "product_upload_started") {
+                        notify.info(
+                            "Upload process started. Check progress in activities section."
+                        );
+                        setTimeout(() => {
+                            this.redirect("/panel/queuedtasks");
+                        }, 1000);
+                    } else {
+                        notify.success(data.message);
+                    }
+                } else {
+                    // notify.error(data.message);
+                    if (data.code === "link_your_account") {
+                        setTimeout(() => {
+                            this.redirect("/panel/accounts");
+                        }, 1200);
+                        notify.info("Account Not Linked.");
+                    }
+                    if (data.code === "limit_exhausted") {
+                        setTimeout(() => {
+                            this.redirect("/panel/plans");
+                        }, 1000);
+                        notify.info("Credit Not Available.");
+                    } else {
+                        notify.error(data.message);
+                    }
+                }
+                this.updateState();
+            });
+        }
+        else {
+            notify.error("Please select warehouse setting section")
+        }
 	}
 
     handleTabChange = (event, key = 'mainTab') => {

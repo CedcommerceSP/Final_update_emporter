@@ -1336,11 +1336,11 @@ class PlanBody extends Component {
                 content: 'FBA Order Management',
                 panelID: 'order-management',
             },
-            {
+            /*{
                 id: 'cvs_management',
                 content: 'CSV Upload',
                 panelID: 'csv-management'
-            }
+            }*/
         ];
         return (
             <React.Fragment>
@@ -1362,7 +1362,7 @@ class PlanBody extends Component {
                         <Card>
                             <Tabs tabs={tabs} selected={selected} onSelect={this.handleTabChange}/>
                             <Card.Section>
-                                {selected === 0 ? this.renderPlanProductSync() : selected === 1 ? this.renderPlanOrderManagement() : this.renderCsvUploadManagement()}
+                                {selected === 0 ? this.renderPlanProductSync() : this.renderPlanOrderManagement()}
                             </Card.Section>
                         </Card>
                     </div>
