@@ -111,6 +111,7 @@ export class Configuration extends Component {
             .getRequest("connector/get/config", {marketplace: "amazonimporter"})
             .then(data => {
                 if (data.success) {
+                    console.log(data.data)
                     this.amazonImporterConfigurationData = this.modifyConfigData(
                         data.data,
                         "amazon_importer_configuration"
@@ -231,6 +232,8 @@ export class Configuration extends Component {
                     data[i].value !== "enable";
             }
         }
+
+        console.log(data)
         return data;
     }
 
@@ -406,6 +409,7 @@ export class Configuration extends Component {
                 // console.log(data);
                 if (data.success) {
                     notify.success(data.code);
+                    window.location.reload();
                 } else {
                     notify.error(data.code);
                 }
@@ -939,12 +943,12 @@ export class Configuration extends Component {
         );
     }
     etsyShopName(){
-        if (this.etsyConfigurationData.length > 1){
-            if (this.etsyConfigurationData[1]['title'] === 'Etsy Shop Name'){
-                console.log(this.etsyConfigurationData[1]['value'])
-                this.state.etsy_shop_name = this.etsyConfigurationData[1]['value']
+        for (let i = 0 ; i < this.etsyConfigurationData.length; i++){
+            if (this.etsyConfigurationData[i]['title'] === 'Etsy Shop Name'){
+                this.state.etsy_shop_name = this.etsyConfigurationData[i]['value']
             }
         }
+
     }
     renderEtsyConfig(sync) {
        this.etsyShopName()

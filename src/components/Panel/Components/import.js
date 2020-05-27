@@ -533,12 +533,25 @@ export class Import extends Component {
                             {this.state.isLocationPresent ?
                                 <TextField label="Selected Warehouse"
                                            disabled value={this.state.selectedLocation}
-                                           helpText="You can change Warehouse from Setting Section"
-                                           error="Selected Warehouse"/> :
+                                           // helpText="You can change Warehouse from Setting Section"
+                                           error="Selected Warehouse"
+										   // labelAction={{content: 'Settings'}}
+										/>:
                                 <TextField label="Selected Warehouse"
                                            disabled value={this.state.selectedLocation}
-                                           helpText="You can change Warehouse from Setting Section"
+                                           // helpText="You can change Warehouse from Setting Section"
+                                           // labelAction={{content: 'Settings Option'}}
                                 />}
+						</div>
+						<div className="col-12 pt-1 pb-1" style={{color: '#000000'}}>
+							You can change Warehouse from Setting Section By{' '}
+							<Button
+								plain primary
+								onClick={() => {
+                                    this.redirect("/panel/configuration")}}
+							>
+								Checking Here
+							</Button>
 						</div>
 						{this.state.uploadProductDetails.profile_type === "custom" && (
 							<div className="col-12 pt-1 pb-1">
@@ -967,7 +980,7 @@ export class Import extends Component {
                                      onClick={this.handleChangeModakCsv.bind(this)}
                                 >
                                     <div className="text-center pt-5 pb-5">
-                                        <img style={{height: '138px', width: '138px', cursor: "pointer"}}
+                                        <img style={{height: '105px', width: '105px', cursor: "pointer"}}
                                              src={require("../../../assets/img/csv_upload.png")}
                                              onClick={this.handleChangeModakCsv.bind(this)}
                                         />
