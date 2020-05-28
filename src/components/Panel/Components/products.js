@@ -60,6 +60,7 @@ export class Products extends Component {
 	predefineFilters = [
 		{ label: "Title", value: "title", type: "string", special_case: "no" },
 		{ label: "SKU", value: "sku", type: "string", special_case: "no" },
+		{ label: "ASIN", value: "source_variant_id", type: "string", special_case: "no" },
 		{ label: "Price", value: "price", type: "int", special_case: "no" },
 		{ label: "Quantity", value: "quantity", type: "int", special_case: "no" },
 		{ label:"Type", value:"type", type:"type", special_case:"yes"},
@@ -385,6 +386,7 @@ export class Products extends Component {
 			const key = Object.keys(this.filters.column_filters)[i];
 			if (this.filters.column_filters[key].value !== "") {
 				switch (key) {
+					case "asin":
 					case "type":
 					case "title":
 					case "long_description":
