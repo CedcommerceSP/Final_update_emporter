@@ -68,6 +68,7 @@ class PlanBody extends Component {
             }, // more field is added like schema and payment_method below
             schemaShopSelected: false,
             perProductCharge: "NaN",
+            basePriceCharge:1,
             oneTimePaymentDetails: {
                 totalCredits: 0,
                 totalAmount: 0,
@@ -193,6 +194,7 @@ class PlanBody extends Component {
         requests.getRequest("shopifygql/payment/getPaymentSettings").then(data => {
             if (data.success) {
                 this.state.perProductCharge = data["data"]["per_product_cost"];
+                this.state.basePriceCharge = data["data"]["base_price_cost"];
                 this.state.oneTimePaymentDetails.service =
                     data["data"]["import_service"];
                 this.setState(this.state);
@@ -346,8 +348,8 @@ class PlanBody extends Component {
         this.state.oneTimePaymentDetails.totalCredits = creditCount;
         this.state.oneTimePaymentDetails.totalAmount = cost.toFixed(2);
         this.setState(this.state);
-        if (this.state.oneTimePaymentDetails.totalAmount < 5.00 && this.state.oneTimePaymentDetails.totalAmount !=0 && credits > 0){
-            this.state.oneTimePaymentDetails.totalAmount = 5.00.toFixed(2);
+        if (this.state.oneTimePaymentDetails.totalAmount < this.state.basePriceCharge && this.state.oneTimePaymentDetails.totalAmount !=0 && credits > 0){
+            this.state.oneTimePaymentDetails.totalAmount = this.state.basePriceCharge.toFixed(2);
             this.setState(this.state);
         }
     }
@@ -489,7 +491,7 @@ class PlanBody extends Component {
                                                         <div
                                                             className="col-md-3 col-sm-12 col-12 text-center pt-5">
                                                             <div className="mb-5 text-center">
-                                                                <p className="price-tag">
+                                                                <p className="price-tagq">
                                                                     <span className="price-tag_small">$</span>
                                                                     {this.state.perProductCharge}
                                                                 </p>
