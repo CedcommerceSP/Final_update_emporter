@@ -107,7 +107,7 @@ export class Import extends Component {
 					this.updateState();
                     // console.log(this.state.importServicesList);
                     for (let i = 0;i<this.state.importServicesList.length;i++){
-						if (this.state.importServicesList[i]['value'] !== 'ebayaffiliate' && this.state.importServicesList[i]['value'] !== 'fileimporter' && this.state.importServicesList[i]['value'] !== 'bigmanager' && this.state.importServicesList[i]['value'] !== 'aliexpress') {
+						if ( this.state.importServicesList[i]['value'] !== 'fileimporter' && this.state.importServicesList[i]['value'] !== 'bigmanager' && this.state.importServicesList[i]['value'] !== 'aliexpress') {
                             this.state.finalRenderImporterShopLists.push(this.state.importServicesList[i]);
                         }
 					}
@@ -240,6 +240,12 @@ export class Import extends Component {
 						/>
 					</div>
 				);
+            case "ebayaffiliate":
+                return (
+					<div className="col-12 pt-1 pb-1">
+					<EbayAffiliate {...this.props}/>
+					</div>
+                );
 			case "ebayimporter":
 				return (
 					<div className="col-12 pt-1 pb-1">
@@ -867,7 +873,7 @@ export class Import extends Component {
                     panelID: 'AliExpress',
                 },
             )
-        }if(  necessaryInfo.account_connected_array && necessaryInfo.account_connected_array.indexOf('ebayaffiliate') > -1 ){
+        }/*if(  necessaryInfo.account_connected_array && necessaryInfo.account_connected_array.indexOf('ebayaffiliate') > -1 ){
             tabs.push(
                 {
                     id: 'Ebay Affiliate',
@@ -875,7 +881,7 @@ export class Import extends Component {
                     panelID: 'Ebay Affiliate',
                 },
             )
-        }
+        }*/
         console.log(tabs[mainTab]);
         return (
 			<Page title="Manage Products">
