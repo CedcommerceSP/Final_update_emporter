@@ -105,7 +105,7 @@ class FileImporter extends Component {
                     <Button primary onClick={onSubmit}>
                         Upload
                     </Button>
-{/*                    {mapped && <ButtonGroup>
+                    {mapped && <ButtonGroup>
                         <Button
                             primary={mapped !== undefined && mapped["errorFlag"]}
                             onClick={() => {
@@ -128,7 +128,7 @@ class FileImporter extends Component {
                         >
                             Import
                         </Button>
-                    </ButtonGroup>}*/}
+                    </ButtonGroup>}
                 </ButtonGroup>
             </form>
         );

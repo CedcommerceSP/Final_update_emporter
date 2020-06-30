@@ -40,6 +40,7 @@ export class Configuration extends Component {
     amazonImporterConfigurationData = [];
     amazonAffiliateConfigurationData = [];
     ebayConfigurationData = [];
+    ebayAffilaiteConfigurationData = [];
     wishConfigurationData = [];
     fbaConfigurationData = [];
     etsyConfigurationData = [];
@@ -77,6 +78,7 @@ export class Configuration extends Component {
         this.getEtsyConfig();
         this.getWishConfig();
         this.getFbaConfig();
+        this.getEbayAffiliateConfig();
         this.getDataShipping();
     }
 
@@ -137,6 +139,21 @@ export class Configuration extends Component {
                 }
             });
     }
+    getEbayAffiliateConfigurations() {
+        requests
+            .getRequest("connector/get/config", {marketplace: "ebayaffiliate"})
+            .then(data => {
+                if (data.success) {
+                    this.amazonAffiliateConfigurationData = this.modifyConfigData(
+                        data.data,
+                        "amazon_affiliate_configuration"
+                    );
+                    this.updateState();
+                } else {
+                    notify.error(data.message);
+                }
+            });
+    }
 
     getEbayConfig() {
         requests
@@ -146,6 +163,22 @@ export class Configuration extends Component {
                     this.ebayConfigurationData = this.modifyConfigData(
                         data.data,
                         "ebay_configuration"
+                    );
+                    this.updateState();
+                } else {
+                    // notify.error(data.message);
+                }
+            });
+    }
+
+    getEbayAffiliateConfig() {
+        requests
+            .getRequest("connector/get/config", {marketplace: "ebayaffiliate"})
+            .then(data => {
+                if (data.success) {
+                    this.ebayAffilaiteConfigurationData = this.modifyConfigData(
+                        data.data,
+                        "ebayAffiliate_configuration"
                     );
                     this.updateState();
                 } else {
@@ -208,6 +241,7 @@ export class Configuration extends Component {
             .getRequest("connector/get/config", {marketplace: "shopify"})
             .then(data => {
                 if (data.success) {
+                    console.log(data.data);
                     this.shopifyConfigurationData = this.modifyConfigData(
                         data.data,
                         "shopify_configuration"
@@ -694,6 +728,9 @@ export class Configuration extends Component {
             case  'amazonaffiliate':
                 this.saveAmazonAffiliateConfigData(data);
                 break;
+            case  'ebayaffiliate':
+                this.saveEbayAffiliateConfigData(data);
+                break;
             default:
                 console.log("Wrong Choice");
         }
@@ -712,6 +749,25 @@ export class Configuration extends Component {
                                 form={this.ebayConfigurationData}
                                 sync={sync}
                                 onSubmit={this.onSubmit.bind(this, 'ebayimporter')}/>
+                        </div>
+                    </Card>
+                </div>
+            </div>
+        );
+    }
+    renderEbayAffiliateConfig(sync) {
+        return (
+            <div className="row">
+                <div className="col-sm-4 col-12 text-md-left text-sm-left text-center">
+                    <Heading>Ebay Affiliate Settings</Heading>
+                </div>
+                <div className="col-sm-8 col-12">
+                    <Card>
+                        <div className="p-5">
+                            <Formbuilder
+                                form={this.ebayAffilaiteConfigurationData}
+                                sync={sync}
+                                onSubmit={this.onSubmit.bind(this, 'ebayaffiliate')}/>
                         </div>
                     </Card>
                 </div>
@@ -1005,6 +1061,12 @@ export class Configuration extends Component {
                     </Layout.Section>
                     <Layout.Section>
                         {accounts !== undefined &&
+                        accounts.indexOf("ebayaffiliate") !== -1
+                            ? this.renderEbayAffiliateConfig(!sync)
+                            : null}
+                    </Layout.Section>
+                    <Layout.Section>
+                        {accounts !== undefined &&
                         accounts.indexOf("etsyimporter") !== -1
                             ? this.renderEtsyConfig(!sync)
                             : null}
@@ -1066,6 +1128,21 @@ export class Configuration extends Component {
                     notify.error(data.message);
                 }
                 this.getAmazonAffiliateConfigurations();
+            });
+    }
+    saveEbayAffiliateConfigData(amazon_affiliate_configuration) {
+        requests
+            .postRequest("connector/get/saveConfig", {
+                marketplace: "ebayaffiliate",
+                data: amazon_affiliate_configuration
+            })
+            .then(data => {
+                if (data.success) {
+                    notify.success(data.message);
+                } else {
+                    notify.error(data.message);
+                }
+                this.getEbayAffiliateConfigurations();
             });
     }
 

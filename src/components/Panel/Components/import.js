@@ -34,6 +34,7 @@ export class Import extends Component {
         this.state = {
 			listing_type: "active",
 			selectedLocation:'NA',
+			TabToBeRender:'',
 			isLocationPresent:false,
 			importServicesList: [],
 			importerShopLists: [],
@@ -107,7 +108,7 @@ export class Import extends Component {
 					this.updateState();
                     // console.log(this.state.importServicesList);
                     for (let i = 0;i<this.state.importServicesList.length;i++){
-						if ( this.state.importServicesList[i]['value'] !== 'fileimporter' && this.state.importServicesList[i]['value'] !== 'bigmanager' && this.state.importServicesList[i]['value'] !== 'aliexpress') {
+						if ( this.state.importServicesList[i]['value'] !== 'fileimporter' && this.state.importServicesList[i]['value'] !== 'bigmanager' /*&& this.state.importServicesList[i]['value'] !== 'aliexpress'*/) {
                             this.state.finalRenderImporterShopLists.push(this.state.importServicesList[i]);
                         }
 					}
@@ -181,7 +182,7 @@ export class Import extends Component {
 										/>
 									)}
 							</div>
-							<div className="col-12 pt-1 pb-1 text-center">
+							{this.state.importProductsDetails.source !== 'ebayaffiliate' && this.state.importProductsDetails.source !== 'aliexpress'?<div className="col-12 pt-1 pb-1 text-center">
 								<Button
 									disabled={this.state.importProductsDetails.source === ""}
 									onClick={() => {
@@ -191,7 +192,7 @@ export class Import extends Component {
 								>
 									Import Products
 								</Button>
-							</div>
+							</div>:null}
 						</div>
 					</Modal.Section>
 				</Modal>
@@ -242,8 +243,43 @@ export class Import extends Component {
 				);
             case "ebayaffiliate":
                 return (
-					<div className="col-12 pt-1 pb-1">
+					<div className="col-12 pt-2 pb-1">
+						<div className="col-12 text-right" style={{color: '#bf0711'}}>
+							<Button monochrome outline
+									onClick={() => {
+                                        window.open(
+                                            "http://apps.cedcommerce.com/importer/ebaydropshippingImporter.pdf"
+                                        );
+                                    }}
+									size={"slim"}
+							>
+								Help PDF
+							</Button>
+						</div>
+						<div className="pt-3">
 					<EbayAffiliate {...this.props}/>
+						</div>
+					</div>
+                );
+
+			case "aliexpress":
+                return (
+					<div className="col-12 pt-2 pb-1">
+						{/*<div className="col-12 text-right" style={{color: '#bf0711'}}>
+							<Button monochrome outline
+									onClick={() => {
+                                        window.open(
+                                            "http://apps.cedcommerce.com/importer/ebaydropshippingImporter.pdf"
+                                        );
+                                    }}
+									size={"slim"}
+							>
+								Help PDF
+							</Button>
+						</div>*/}
+						<React.Fragment>
+							<AliExpress {...this.props} redirect={this.redirect}/>
+						</React.Fragment>
 					</div>
                 );
 			case "ebayimporter":
@@ -504,9 +540,8 @@ export class Import extends Component {
 						<div className="col-12 pt-1 pb-1">
 							<Banner status="info">
 								<Label>
-                                    You can upload products from the marketplace to Shopify either through default profile or you can create{" "}
-									<NavLink to="/panel/profiling/create">custom profile</NavLink>{" "}
-									for products upload.
+									Upload specific product on Shopify by creating profile{" "}
+									<NavLink to="/panel/profiling/create">click here</NavLink>
 								</Label>
 							</Banner>
 						</div>
@@ -536,11 +571,19 @@ export class Import extends Component {
 							)}
 						</div>
 						<div className="col-12 pt-1 pb-1">
+							<div>
+								<Button plain
+										onClick={() => {
+                                            this.redirect("/panel/configuration")}}>
+									Click Here
+								</Button>
+								{' '}to Select the warehouse
+							</div>
                             {this.state.isLocationPresent ?
-                                <TextField label="Selected Warehouse"
+                                <TextField
                                            disabled value={this.state.selectedLocation}
                                            // helpText="You can change Warehouse from Setting Section"
-                                           error="Selected Warehouse"
+                                           error="Warehouse not selected"
 										   // labelAction={{content: 'Settings'}}
 										/>:
                                 <TextField label="Selected Warehouse"
@@ -549,7 +592,7 @@ export class Import extends Component {
                                            // labelAction={{content: 'Settings Option'}}
                                 />}
 						</div>
-						<div className="col-12 pt-1 pb-1" style={{color: '#000000'}}>
+						{/*<div className="col-12 pt-1 pb-1" style={{color: '#000000'}}>
 							You can change Warehouse from Setting Section By{' '}
 							<Button
 								plain primary
@@ -558,7 +601,7 @@ export class Import extends Component {
 							>
 								Checking Here
 							</Button>
-						</div>
+						</div>*/}
 						{this.state.uploadProductDetails.profile_type === "custom" && (
 							<div className="col-12 pt-1 pb-1">
 								{this.profilesList.length > 0 && (
@@ -865,7 +908,7 @@ export class Import extends Component {
                     panelID: 'all',
                 }
 		];
-        if( necessaryInfo.account_connected_array && necessaryInfo.account_connected_array.indexOf('aliexpress') > -1){
+        /*if( necessaryInfo.account_connected_array && necessaryInfo.account_connected_array.indexOf('aliexpress') > -1){
             tabs.push(
                 {
                     id: 'AliExpress',
@@ -873,7 +916,7 @@ export class Import extends Component {
                     panelID: 'AliExpress',
                 },
             )
-        }/*if(  necessaryInfo.account_connected_array && necessaryInfo.account_connected_array.indexOf('ebayaffiliate') > -1 ){
+        }*//*if(  necessaryInfo.account_connected_array && necessaryInfo.account_connected_array.indexOf('ebayaffiliate') > -1 ){
             tabs.push(
                 {
                     id: 'Ebay Affiliate',
