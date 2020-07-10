@@ -326,11 +326,36 @@ class AppsShared extends Component {
                                 key={this.state.apps.indexOf(app)}
                             >
                                 <Card title={app.title}>
+                                    {app.code ==='ebayaffiliate'?<div className="col-12 text-right" style={{color: '#bf0711'}}>
+                                        <Button monochrome outline
+                                                onClick={() => {
+                                                    window.open(
+                                                        "http://apps.cedcommerce.com/importer/ebaydropshippingImporter.pdf"
+                                                    );
+                                                }}
+                                                size={"slim"}
+                                        >
+                                            Help PDF
+                                        </Button>
+                                    </div>:null}
+                                    {app.code ==='aliexpress'?<div className="col-12 text-right" style={{color: '#bf0711'}}>
+                                        <Button monochrome outline
+                                                onClick={() => {
+                                                    window.open(
+                                                        "http://apps.cedcommerce.com/importer/WorkingofAliexpressDropshippingMultichannelImporterapp.pdf"
+                                                    );
+                                                }}
+                                                size={"slim"}
+                                        >
+                                            Help PDF
+                                        </Button>
+                                    </div>:null}
                                     {this.props.success.code === app.code ||
                                     app["installed"] !== 0
-                                        ? <div className="text-left pt-3 pl-4">
+                                        ? <div className="text-left pt-1 pl-4">
                                             <Badge progress="complete" status="success">Connected</Badge>
                                         </div> : null}
+
                                     <div className="row p-5">
                                         <div className="col-12">
                                             {window.screen.width <= 500 ?<img src={app.image} alt={app.title}

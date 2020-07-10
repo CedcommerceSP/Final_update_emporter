@@ -98,14 +98,11 @@ class Demo_analytics_reporting extends Component {
                     var add_on_date = new Date(response.data.activated_at);
                     let difference = this.monthDiff(add_on_date,current_date);
                     if (new Date(new Date(add_on_date).setMonth(add_on_date.getMonth() + difference+1)) <=   current_date) {
-                        // console.log(new Date(new Date(add_on_date).setMonth(add_on_date.getMonth() + difference+1)));
-                        // console.log("in if");
+
                         plan_to_be_end = new Date(new Date(add_on_date).setMonth(add_on_date.getMonth() + difference + 2));
                     }
                     else {
-                        // console.log("in else");
-                        // console.log(new Date(new Date(add_on_date).setMonth(add_on_date.getMonth() + difference+1)));
-                         plan_to_be_end = new Date(new Date(add_on_date).setMonth(add_on_date.getMonth() + difference + 1));
+                        plan_to_be_end = new Date(new Date(add_on_date).setMonth(add_on_date.getMonth() + difference + 1));
                     }
                     this.setState({
                         Recurrying: true,
@@ -166,32 +163,14 @@ class Demo_analytics_reporting extends Component {
         requests
             .getRequest("connector/get/services?filters[type]=importer")
             .then(data => {
-                console.log(data);
                 if (data.success) {
                     importer = data.data;
-                    console.log(importer)
                     Object.keys(importer).map(importerkey => {
                         if (validateImporter(importerkey)) {
-                            console.log(importerkey)
                             importer_title.push(importer[importerkey]["title"]);
                             importer_marketplace.push(importer[importerkey]["marketplace"]);
                         }
                     });
-                    console.log(importer_marketplace)
-                    /*var findmarketplace = "etsyimporter"
-                    var countRepeat =0;
-                    for (let i=0;i<importer_marketplace.length;i++){
-                        if (findmarketplace == importer_marketplace[i]){
-                            countRepeat++
-                        }
-                    }
-                    if (countRepeat > 1){
-                         var etsyposition = importer_marketplace.indexOf("etsyimporter")
-                        importer_marketplace.splice(etsyposition,1)
-                        console.log(importer_marketplace)
-                    }
-                    console.log(importer_marketplace)*/
-
                     this.getYAxisImporter(
                         importer_marketplace,
                         importer_title,
@@ -308,7 +287,6 @@ class Demo_analytics_reporting extends Component {
                                     importer_title_array[i] === entire_data_importer[master_key]["title"] &&
                                     importer_marketplace_array[i] === importer_recieved_mp
                                 ) {
-                                    console.log(data.data[importer_recieved_mp] > 0);
                                     if (data.data[importer_recieved_mp]>0) {
                                         total_products_importer.push(
                                             importer_data_rec[importer_recieved_mp]
@@ -340,10 +318,8 @@ class Demo_analytics_reporting extends Component {
                     this.setState(this.state)
                 }  else if (data.success && data['data']['amazonaffiliate'] === 0 && data['data']['amazonimporter'] === 0 && data['data']['ebayimporter'] === 0 &&
                     data['data']['etsyimporter'] === 0 && data['data']['walmartimporter'] === 0 && data['data']['wishimporter'] === 0 && data['data']['ebayaffiliate'] === 0) {
-                    console.log("in else iff");
                     this.setState({no_getProductsUploadedData_and_ImportedData: true})
                 } else {
-                    console.log("in else iff 2");
                     this.setState({no_getProductsUploadedData_and_ImportedData: true})
                 }
             });
@@ -705,13 +681,13 @@ class Demo_analytics_reporting extends Component {
                                             ),
                                         },
                                         {
-                                            url: 'https://apps.shopify.com/google-express-integration?surface_detail=google+shopping&surface_inter_position=1&surface_intra_position=7&surface_type=search',
-                                            name: 'Google Shopping & Google Ads',
-                                            description: 'Manage Google Shopping Actions, Google Ads & Shopping Feed.',
+                                            url: 'https://apps.shopify.com/facebook-marketplace-connector?surface_detail=cedcommerce&surface_inter_position=1&surface_intra_position=7&surface_type=search',
+                                            name: 'Facebook Marketplace Connector',
+                                            description: 'Sell on Facebook, list your products and manage orders.',
                                             media: (
                                                 <Thumbnail
-                                                    source="https://apps.shopifycdn.com/listing_images/3a0a9be8bb54bb8cd25cb2f7c6381d19/icon/0cdc8e6f8ee8614bb5a7e45f487de3c3.png?height=84&width=84"
-                                                    alt="Google Express logo"
+                                                    source="https://apps.shopifycdn.com/listing_images/8e58c700f1ecc2539682f6a04a8852c7/icon/7e03edcb47faf2838726e580ffda8f0d.png?height=84&width=84"
+                                                    alt="Facebook connector integration logo"
                                                 />
                                             ),
                                         },
@@ -829,11 +805,17 @@ class Demo_analytics_reporting extends Component {
     render_recent_activity() {
         return(
             <div className="justify-content-center">
-                <a href="https://cedcommerce.com/blog/survive-your-way-through-covid-19-start-your-own-online-store/"target="_blank">
+                <div className="text-right p-3">
+                    <Button primary
+                            onClick={() => {
+                                this.redirect("/panel/help/report")}
+                }
+                    >Contact Us</Button>
+                </div>
                 <img
                     className='img-fluid p-3'
-                    src={require("../../../../assets/img/Survive_your_way_through_Covid-19.png")} alt="covid-19"
-                    /*height="650" width="650"*//></a>
+                    src={require("../../../../assets/img/DigitalMarketing3.gif")} alt="Store Development"
+                    /*height="650" width="650"*//>
             </div>
                 /* class="zoom"*/
             /*<Stack  distribution="center">

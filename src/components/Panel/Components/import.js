@@ -410,7 +410,8 @@ export class Import extends Component {
     }
 
 	importProducts() {
-		let sendData = {
+        console.log(this.state.importProductsDetails.source);
+        let sendData = {
 			marketplace: this.state.importProductsDetails.source,
 			shop: this.state.importProductsDetails.shop,
 			shop_id: this.state.importProductsDetails.shop_id
@@ -427,6 +428,8 @@ export class Import extends Component {
 		}
 		if (this.state.importProductsDetails.source === "amazonimporter") {
 			sendData["listing_type"] = this.state.amazon_list_type;
+		}if (this.state.importProductsDetails.source === "etsydropshipping") {
+			sendData["listing_type"] = this.state.listing_type;
 		}
 		requests.getRequest("connector/product/import", sendData).then(data => {
 			this.state.showImportProducts = false;

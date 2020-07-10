@@ -208,6 +208,7 @@ class PlanBody extends Component {
         requests.getRequest("plan/plan/get").then(data => {
             // get All the Plans Available
             if (data.success) {
+                console.log(data)
                 if (data.data !== null && !isUndefined(data.data)) {
                     const temp = JSON.parse(JSON.stringify(data.data.data.rows));
                     data = dataGrids(data.data.data.rows, null);
@@ -215,8 +216,6 @@ class PlanBody extends Component {
                         data: data,
                         originalData: temp
                     });
-                    console.log("data", this.state.data);
-                    console.log("originalData", this.state.originalData);
                 }
             } else {
                 notify.error(data.message);
