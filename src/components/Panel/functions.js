@@ -147,13 +147,18 @@ export const panelFunctions = {
                 link: "/panel/products",
                 panelID: "products",
             },
-
             {
                 id: "fbaorders",
                 content: "FBA",
                 accessibilityLabel: "fbaOrders",
                 link: "/panel/fbaOrders",
                 panelID: "fbaOrders"
+            },{
+                id: "aliexpressorders",
+                content: "Aliexpress",
+                accessibilityLabel: "aliexpressOrders",
+                link: "/panel/aliexpressOrders",
+                panelID: "aliexpressOrders"
             },
             {
                 id: "configuration",

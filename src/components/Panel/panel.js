@@ -16,7 +16,9 @@ import {QueuedTask} from "./Components/queued_task";
 import {Activities} from "./Components/queued-tasks-component/activities";
 import {Plans} from "./Components/plans";
 import {FbaOrder} from "./Components/fbaOrder";
+import AliexpressOrder from "./Components/aliexpressOrder";
 import Order from "./Components/vieworderfba";
+import Orderali from "./Components/vieworderali";
 import {Header} from "./Layout/header";
 import Dashboard from "./Components/dashboard";
 import FAQPage from "./Components/faq";
@@ -30,10 +32,8 @@ import ConnectedAccounts from "./Components/apps-component/connected-accounts";
 import ReportAnIssue from "./Components/help-component/report-issue";
 import ViewProfile from "./Components/profile-component/view-profile";
 import ViewProducts from "./Components/products-component/view-products";
-
 // import {FbaOrder} from "./Components/orders/fbaOrder";
 import {modifyAccountConnectedInfo} from "./Components/static-functions";
-
 import {requests} from "../../services/request";
 import {capitalizeWord} from "./Components/static-functions";
 import {notify} from "../../services/notify";
@@ -321,7 +321,7 @@ export class Panel extends Component {
             // console.clear();
             console.info("Welcome To OMNI-Importer");
         }
-    }
+    }Fba
 
     componentDidMount() {
         this.checkingFba();
@@ -445,6 +445,19 @@ export class Panel extends Component {
                             />
                             <Route
                                 exact
+                                path="/panel/aliexpressOrders"
+                                // component={FbaOrder}
+                                render={() => {
+                                    return (
+                                        <AliexpressOrder
+                                            {...this.props}
+                                            necessaryInfo={this.state.necessaryInfo}
+                                        />
+                                    );
+                                }}
+                            />
+                            <Route
+                                exact
                                 path="/panel/products/view/:id"
                                 component={ViewProducts}
                             />
@@ -452,6 +465,11 @@ export class Panel extends Component {
                                 exact
                                 path="/panel/vieworderfba/:id"
                                 component={Order}
+                            />
+                            <Route
+                                exact
+                                path="/panel/vieworderali/:id"
+                                component={Orderali}
                             />
                             <Route
                                 exact

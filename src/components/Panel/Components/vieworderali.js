@@ -19,7 +19,7 @@ import {requests} from "../../../services/request";
 import {capitalizeWord} from "./static-functions";
 // import {Skeleton} from "../../../../shared/skeleton";
 
-class Order extends Component {
+class Orderali extends Component {
 
     constructor(props) {
         super(props);
@@ -101,8 +101,7 @@ class Order extends Component {
             </FormLayout>;
             newArray.push(product_list);
         }
-
-            return newArray;
+        return newArray;
     }
 
     getOrder() {
@@ -110,15 +109,15 @@ class Order extends Component {
         if (this.state.is_order_trim){
             this.state.id= str1.concat(this.state.id)
         }
+        // console.log(this.state.id);
         // console.log(this.state.id)
         requests
-            .postRequest("fba/test/webhookCall", {
+            .postRequest("aliexpress/request/orderDetails", {
                 shopify_order_name: this.state.id
             }).then(data => {
-
             if (data.success) {
                 console.log(data);
-                if (data.data[0]['error_message'] && data.data[0]['error_message'] != '' ){
+                if (data.data[0]['error_message'] && data.data[0]['error_message'] !== '' ){
                     this.state.reason_for_cancellation = true;
                     // console.log(data.data[0]['error_message'])
                     this.state.order.error_message = capitalizeWord(data.data[0]['error_message']);
@@ -200,7 +199,7 @@ class Order extends Component {
                   primaryAction={{
                       content: "Back",
                       onClick: () => {
-                          this.redirect("/panel/fbaOrders");
+                          this.redirect("/panel/aliexpressOrders");
                       }
                   }}
                   titleMetadata={this.state.entire_data.status}
@@ -246,10 +245,10 @@ class Order extends Component {
                                             </Stack>
                                             {
                                                 this.state.reason_for_cancellation?<Stack distribution={"equalSpacing"}>
-                                                <b><Heading element={"p"}>Reason For cancellation</Heading></b>
+                                                    <b><Heading element={"p"}>Reason For cancellation</Heading></b>
                                                     <Badge status="warning"><p style={{fontSize: '1.5rem'}}>{this.state.order.error_message}</p></Badge>
 
-                                            </Stack>:null}
+                                                </Stack>:null}
                                             {
                                                 this.state.tracking_id?<Stack distribution={"equalSpacing"}>
                                                     <b><Heading element={"p"}>Tracking ID</Heading></b>
@@ -343,7 +342,7 @@ class Order extends Component {
                                                 </Stack>
                                             </FormLayout>
                                         </Card.Section>
-                                       {/* <Card.Section>
+                                        {/* <Card.Section>
                                             <Stack distribution={"equalSpacing"}>
                                                 <Heading element={"p"}>Total price</Heading>
                                                 <p style={{fontSize: '1.3rem'}}>{this.state.order_price.total_price}</p>
@@ -367,5 +366,5 @@ class Order extends Component {
     }
 }
 
-export default Order;
+export default Orderali;
 

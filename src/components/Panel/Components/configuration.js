@@ -853,7 +853,7 @@ export class Configuration extends Component {
                     <Layout.Section>
                         { !sync && <Banner title="Note" status="info" icon="notification">
                             <Label id={123}>
-                                If you want to sync your products inventory or price kindly choose the plan
+                                If you want to sync your products inventory or price kindly choose the
                                 <span style={{color: "blue", cursor: "pointer"}}
                                       onClick={this.redirect.bind(this, '/panel/plans')}> plan</span>.
                             </Label>

@@ -126,16 +126,16 @@ class ViewProducts extends Component {
 						temp.rows = this.handleTableChange(temp.variants);
 					}
 					temp.img = [];
-					if (!isUndefined(data.data.details["additional_image"])) {
+					if (!isUndefined(data.data.details["additional_image"]) && data.data.details["additional_image"] !== null) {
 						Object.keys(data.data.details["additional_image"]).forEach(e => {
-							if (!isUndefined(data.data.details["additional_image"][e])) {
-								temp.img.push(data.data.details["additional_image"][e]);
+							if (!isUndefined(data.data.details["additional_image"])) {
+								temp.img.push(data.data.details["additional_image"]);
 							}
 						});
-					} else if (!isUndefined(data.data.details["additional_images"])) {
+					} else if (!isUndefined(data.data.details["additional_images"]) && data.data.details["additional_images"] !== null) {
 						Object.keys(data.data.details["additional_images"]).forEach(e => {
-							if (!isUndefined(data.data.details["additional_images"][e])) {
-								temp.img.push(data.data.details["additional_images"][e]);
+							if (!isUndefined(data.data.details["additional_images"])) {
+								temp.img.push(data.data.details["additional_images"]);
 							}
 						});
 					}

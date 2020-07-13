@@ -16,8 +16,8 @@ import {
     Banner,
     Badge,
     Button,
-    Stack,
-    Icon
+    Stack,Heading,FormLayout,
+    Icon,DataTable,DisplayText
 } from "@shopify/polaris";
 
 import {requests} from "../../../services/request";
@@ -29,7 +29,7 @@ import {
 import SmartDataTable from "../../../shared/smartTable";
 
 import {paginationShow} from "./static-functions";
-export class FbaOrder extends Component {
+export class Aliexpress extends Component {
     filters = {
         full_text_search: "",
         marketplace: "all",
@@ -58,11 +58,11 @@ export class FbaOrder extends Component {
             sortable: false
         },
         processing_status: {
-            title: "Amazon Order Status",
+            title: "AliExpress Order Status",
             sortable: false
         },
         button_order: {
-            title: "Create Order on FBA",
+            title: "Create Order on AliExpress",
             label: "Create", // button Label
             id: "button_order",
             sortable: false
@@ -73,7 +73,6 @@ export class FbaOrder extends Component {
             id: "button_order_view",
             sortable: false
         }
-
     };
     gridSettings = {
         count: "10",
@@ -98,46 +97,52 @@ export class FbaOrder extends Component {
     ];
 
     predefineFilters = [
-     { label: "Shopify Order", value: "shopify_order_name", type: "string", special_case: "no" },
-     /*{ label: "SKU", value: "sku", type: "string", special_case: "no" },
-     { label: "Price", value: "price", type: "int", special_case: "no" },
-     { label: "Quantity", value: "quantity", type: "int", special_case: "no" },
-     { label:"Type", value:"type", type:"type", special_case:"yes"},*/
-     /*{
-     label: "Created at",
-     value: "created_at",
-     type: "string",
-     special_case: "yes"
-     },*/
-     {
-     label: "Order Status shopify",
-     value: "financial_status",
-     type: "financial_status",
-     special_case: "yes"
-     },
+        { label: "Shopify Order", value: "shopify_order_name", type: "string", special_case: "no" },
+        /*{ label: "SKU", value: "sku", type: "string", special_case: "no" },
+        { label: "Price", value: "price", type: "int", special_case: "no" },
+        { label: "Quantity", value: "quantity", type: "int", special_case: "no" },
+        { label:"Type", value:"type", type:"type", special_case:"yes"},*/
+        /*{
+        label: "Created at",
+        value: "created_at",
+        type: "string",
+        special_case: "yes"
+        },*/
         {
-            label: "Amazon order status",
+            label: "Order Status shopify",
+            value: "financial_status",
+            type: "financial_status",
+            special_case: "yes"
+        },
+        {
+            label: "Aliexpress order status",
             value: "processing_status",
             type: "processing_status",
             special_case: "yes"
         }
-     ];
+    ];
     constructor(props) {
         super(props);
         this.state = {
             pagination_show: 0,
             trail_days_left:0,
+            is_order_cancelled:false,
             show_trail_banner:false,
             show_trail_banner_webhook:false,
             order: [],
             selectedProducts: [],
+            selected: {},
+            varinatID: [],
+            productIdOrder:[],
+            companyShipping:[],
             single_column_filter: [],
             button_create_disable: false,
+            openModal:false,
             create_button_loader: false,
             appliedFilters: {}
 
         }
-        // this.getOrders();
+        this.getOrders();
         this.checkingOrderManuallyCreate();
         this.installedAtFbaDate();
         this.deleteWebhookClient();
@@ -182,7 +187,7 @@ export class FbaOrder extends Component {
         this.prepareFilterObject();
         const pageSettings = Object.assign({}, this.gridSettings);
         requests
-            .getRequest("fba/test/cronHitting", Object.assign(pageSettings,this.state.appliedFilters),
+            .getRequest("aliexpress/request/getOrder", Object.assign(pageSettings,this.state.appliedFilters),
                 false,
                 false)
             .then(data => {
@@ -222,17 +227,41 @@ export class FbaOrder extends Component {
             });
     };
 
-    createOrderOnFba(ordername) {
-        requests.postRequest('fba/test/manuallyOrderCreateButtonHit', {data: ordername}, false, false).then(response1 => {
+    createOrder(ordername){
+        console.log(ordername);
+        requests.postRequest('aliexpress/request/getShippingProvider', {data: ordername}).then(response1 => {
             if (response1.success) {
-                notify.success(response1.message)
+                let product_id =[];
+                let company =[];
+                let variant = [];
+                console.log(response1);
+                product_id.push(response1.data['product_id']);
+                Object.values(response1.data['variant_id']).forEach(e => {
+                    console.log(e);
+                    variant.push(e);
+                })
+                // Object.values(response1.data['company']).forEach(e => {
+                //     console.log(e);
+                //     company.push(e);
+                // })
+                this.setState({
+                    productIdOrder:product_id,
+                    // companyShipping:company,
+                    varinatID:variant,
+                })
+                this.setState({
+                    openModal:true,
+                    currentOrderID : ordername,
+                    currentShippingcompany : this.state.selected
+                })
+                // notify.success(response1.message)
             }
             else {
-                notify.error(response1.message)
+                notify.error(response1.data)
             }
         });
-    }
 
+    }
 
     modifyProductsData(data, product_grid_collapsible) {
         this.setState({
@@ -291,7 +320,7 @@ export class FbaOrder extends Component {
                     if (data[i]["processing_status"] === "Processing") {
                         rowData["processing_status"] = (
                             <React.Fragment>
-                                <Badge status="success">Processing</Badge>
+                                <Badge status="info">Processing</Badge>
                             </React.Fragment>
                         );
                     }
@@ -302,10 +331,10 @@ export class FbaOrder extends Component {
                             </React.Fragment>
                         );
                     }
-                    else if (data[i]['processing_status'] === "Pending") {
+                    else if (data[i]['processing_status'] === "placed") {
                         rowData["processing_status"] = (
                             <React.Fragment>
-                                <Badge status="info">Pending</Badge>
+                                <Badge status="success">Placed</Badge>
                             </React.Fragment>
                         );
                     }
@@ -316,8 +345,11 @@ export class FbaOrder extends Component {
                             </React.Fragment>
                         );
                     }
-                    else if (data[i]['processing_status'] === 'CANCELLED By Fba' || data[i]['processing_status'] === 'Cancelled'
+                    else if (data[i]['processing_status'] === 'Cancelled'
                         || data[i]['processing_status'] === 'Canceled') {
+                        this.setState({
+                            is_order_cancelled:true
+                        })
                         rowData["processing_status"] = (
                             <React.Fragment>
                                 <Badge status="warning">Cancelled</Badge>
@@ -347,55 +379,65 @@ export class FbaOrder extends Component {
                     }
 
                 }
-                if (data[i]['processing_status'] === 'not yet created') {
+                if (data[i]['processing_status'] === "placed" || data[i]['processing_status'] === 'Cancelled'
+                    || data[i]['processing_status'] === 'Canceled'){
+                    str = <div className="text-center">
+                        <Button
+                            disabled={true}
+                            primary
+                            onClick={() => {
+                                this.createOrder(data[i]['shopify_order_name']);
+                            }}
+                        >
+                            Create
+                        </Button>
+                    </div>
+                    rowData["button_order"] = str;
+                    str =<div
+                        style={{cursor:'pointer'}}
+                        onClick={() => {
+                            this.operations(data[i]['shopify_order_name']);
+                        }}>
+                        <Icon
+                            source={ViewMinor}
+                            on
+                        />
+                    </div>
+                }
+                else {
                     str = <div className="text-center">
                         <Button
                             disabled={false}
                             primary
                             onClick={() => {
-                                this.createOrderOnFba(data[i]['shopify_order_name']);
+                                this.createOrder(data[i]['shopify_order_name']);
                             }}
                         >
                             Create
                         </Button>
                     </div>
                     rowData["button_order"] = str;
-                }
-                else {
-                    str = <div className="text-center"
-                               style={{cursor:'pointer'}}>
-                        <Button
-                            disabled={true}
-                            primary
-                            onClick={() => {
-                                this.createOrderOnFba(data[i]['shopify_order_name']);
-                            }}
-                        >
-                            Create
-                        </Button>
+                    str =<div
+                        style={{cursor:'pointer'}}
+                        onClick={() => {
+                            this.operations(data[i]['shopify_order_name']);
+                        }}>
+                        <Icon
+                            source={ViewMinor}
+                            on
+                        />
                     </div>
-                    rowData["button_order"] = str;
                 }
 
-                str =<div
-                    style={{cursor:'pointer'}}
-                    onClick={() => {
+
+                /*<Button
+                primary
+                onClick={() => {
                     this.operations(data[i]['shopify_order_name']);
-                }}>
-                    <Icon
-                        source={ViewMinor}
-                        on
-                    />
-                </div>
-
-                    /*<Button
-                    primary
-                    onClick={() => {
-                        this.operations(data[i]['shopify_order_name']);
-                    }}
-                >
-                    View
-                </Button>*/
+                }}
+            >
+                View
+            </Button>*/
                 rowData["button_order_view"] = str;
 
             }
@@ -405,13 +447,13 @@ export class FbaOrder extends Component {
         return products;
     }
 
- /*   operations(event, id) {
-        switch (id) {
-            case "button_order":
-                break;
-            default:
-        }
-    }*/
+    /*   operations(event, id) {
+           switch (id) {
+               case "button_order":
+                   break;
+               default:
+           }
+       }*/
 
     operations = (order_id) => {
         // console.log("event",event);
@@ -424,19 +466,17 @@ export class FbaOrder extends Component {
             // console.log(shopify_order_name_trim);
         }
         // console.log(id);
-
-                let parent_props = {
-                    is_hash_order_name:is_order_name
-                };
-                console.log(parent_props);
-                // console.log("/panel/vieworderfba/" + shopify_order_name_trim);
-                /*this.redirect("/panel/vieworderfba/1139" , {
-                    parent_props: parent_props
-                });*/
-                this.redirect("/panel/vieworderfba/" + shopify_order_name_trim, {
-                    parent_props: parent_props
-                });
-
+        let parent_props = {
+            is_hash_order_name:is_order_name
+        };
+        console.log(parent_props);
+        // console.log("/panel/vieworderfba/" + shopify_order_name_trim);
+        /*this.redirect("/panel/vieworderfba/1139" , {
+            parent_props: parent_props
+        });*/
+        this.redirect("/panel/vieworderali/" + shopify_order_name_trim, {
+            parent_props: parent_props
+        });
     };
 
     checkingOrderManuallyCreate() {
@@ -470,6 +510,7 @@ export class FbaOrder extends Component {
                 }
             });
     }
+
     deleteWebhookClient(){
         console.log(this.state.trail_days_left)
         if (this.state.trail_days_left < 0){
@@ -504,55 +545,55 @@ export class FbaOrder extends Component {
 
     render() {
         return (
-            <Page title="FBA Orders">
+            <Page title="AliExpress Orders">
                 <Card>
                     <div className="p-5">
                         <div className="row">
-                            {this.state.show_trail_banner ?<div className="col-4 offset-4 text-center">
-                                <Banner status="warning">
-                                    {this.state.trail_days_left != 0 ?
-                                        <p><b>{this.state.trail_days_left} days trial left </b><Button
-                                            plain
-                                            onClick={() => {
-                                                this.redirect("/panel/plans");
-                                            }}
-                                        >
-                                            Buy Plan Now
-                                        </Button></p> :
-                                        <p><b>last day for trial </b><Button
-                                            plain
-                                            onClick={() => {
-                                                this.redirect("/panel/plans");
-                                            }}
-                                        >
-                                            Buy Plan Now
-                                        </Button></p>}
-                                        {/*<Button
-                                        plain
-                                        onClick={() => {
-                                            this.redirect("/panel/plans");
-                                        }}
-                                        >
-                                            Buy Plan Now
-                                        </Button>*/}
-                                </Banner>
-                            </div>:null}
-                            {this.state.show_trail_banner_webhook?<div className="col-4 offset-4 text-center">
-                                <Banner status="warning">
-                                    <div className="text-center">
-                                        <Badge status="warning">Service Paused</Badge>
-                                    </div>
+                            {/*{this.state.show_trail_banner ?<div className="col-4 offset-4 text-center">*/}
+                                {/*<Banner status="warning">*/}
+                                    {/*{this.state.trail_days_left != 0 ?*/}
+                                        {/*<p><b>{this.state.trail_days_left} days trial left </b><Button*/}
+                                            {/*plain*/}
+                                            {/*onClick={() => {*/}
+                                                {/*this.redirect("/panel/plans");*/}
+                                            {/*}}*/}
+                                        {/*>*/}
+                                            {/*Buy Plan Now*/}
+                                        {/*</Button></p> :*/}
+                                        {/*<p><b>last day for trial </b><Button*/}
+                                            {/*plain*/}
+                                            {/*onClick={() => {*/}
+                                                {/*this.redirect("/panel/plans");*/}
+                                            {/*}}*/}
+                                        {/*>*/}
+                                            {/*Buy Plan Now*/}
+                                        {/*</Button></p>}*/}
+                                    {/*/!*<Button*/}
+                                        {/*plain*/}
+                                        {/*onClick={() => {*/}
+                                            {/*this.redirect("/panel/plans");*/}
+                                        {/*}}*/}
+                                        {/*>*/}
+                                            {/*Buy Plan Now*/}
+                                        {/*</Button>*!/*/}
+                                {/*</Banner>*/}
+                            {/*</div>:null}*/}
+                            {/*{this.state.show_trail_banner_webhook?<div className="col-4 offset-4 text-center">*/}
+                                {/*<Banner status="warning">*/}
+                                    {/*<div className="text-center">*/}
+                                        {/*<Badge status="warning">Service Paused</Badge>*/}
+                                    {/*</div>*/}
 
-                                    <p><b>Your trial period has been expired, kindly </b><Button
-                                        plain
-                                        onClick={() => {
-                                            this.redirect("/panel/plans");
-                                        }}
-                                    >
-                                        Buy Plan Now
-                                    </Button></p>
-                                </Banner>
-                                </div>:null}
+                                    {/*<p><b>Your trial period has been expired, kindly </b><Button*/}
+                                        {/*plain*/}
+                                        {/*onClick={() => {*/}
+                                            {/*this.redirect("/panel/plans");*/}
+                                        {/*}}*/}
+                                    {/*>*/}
+                                        {/*Buy Plan Now*/}
+                                    {/*</Button></p>*/}
+                                {/*</Banner>*/}
+                            {/*</div>:null}*/}
                             <div className="col-12 p-3 text-right">
                                 {/*<Label>{this.state.totalMainCount && Object.keys(this.filters.column_filters).length <= 0?`Total Main Orders : ${this.state.totalMainCount}`:''}</Label>
                                 <Label>{`Active Page : ${this.gridSettings.activePage}`}</Label>*/}
@@ -637,34 +678,6 @@ export class FbaOrder extends Component {
                                         this.getOrders();
                                     }}
 
-                                    /*massAction={event => {
-                                     switch (event) {
-                                     case "upload":
-                                     this.state.selectedProducts.length > 0
-                                     ? this.handleSelectedUpload("profile")
-                                     : notify.info("No Product Selected");
-                                     break;
-                                     default:
-                                     console.log(event, this.state.selectedProducts);
-                                     }
-                                     }}
-                                     editRow={row => {
-                                     this.redirect("/panel/products/edit/" + row.id);
-                                     }}
-                                     deleteRow={row => {
-                                     this.state.toDeleteRow = row;
-                                     this.state.deleteProductData = true;
-                                     const state = this.state;
-                                     this.setState(state);
-                                     }}
-                                     columnFilters={filters => {
-                                     this.filters.column_filters = filters;
-                                     this.getProducts();
-                                     }}
-                                     singleButtonColumnFilter={filter => {
-                                     this.filters.single_column_filter = filter;
-                                     this.getProducts();
-                                     }}*/
                                     sortable
                                 />
                             </div>
@@ -708,11 +721,90 @@ export class FbaOrder extends Component {
                                 />
                             </div>
                         </div>
-
+                        <Modal
+                            title={"Order Shipping Details"}
+                            open={this.state.openModal}
+                            onClose={() => {
+                                this.setState({openModal: false});
+                            }}
+                            >
+                            <Modal.Section>
+                                <Card>
+                                    {this.showModalDetails()}
+                                </Card>
+                            </Modal.Section>
+                        </Modal>
                     </div>
                 </Card>
             </Page>
         )
+    }
+
+    handleSelectChange = (key, event) => {
+        let {selected} = this.state;
+        selected[key] = event;
+        this.setState({selected: selected});
+    }
+
+    showModalDetails(){
+        // console.log(this.state.order);
+        let temp = [];
+        temp.push(
+            <div>
+                <Page>
+                        <FormLayout>
+                            <FormLayout.Group condensed>
+                                <DisplayText >ProductId</DisplayText>
+                                <DisplayText >VariantId</DisplayText>
+                                {/*<DisplayText >Shipping Provider</DisplayText>*/}
+                                <DisplayText >{''}</DisplayText>
+                            </FormLayout.Group>
+                        </FormLayout>
+                </Page>
+                <br/>
+            </div>);
+        for (let i = 0 ; i < this.state.productIdOrder.length; i++){
+            temp.push(
+                <div>
+                    <Card>
+                        <Card.Section>
+                            <FormLayout>
+                                <FormLayout.Group condensed>
+                                <Heading element={"p"}> {this.state.productIdOrder[i]}</Heading>
+                                <Heading element={"p"}> {this.state.varinatID[i]}</Heading>
+                                {/*<Select*/}
+                                    {/*options= {this.state.companyShipping}*/}
+                                    {/*onChange= {this.handleSelectChange.bind(this, i)}*/}
+                                    {/*value={this.state.selected[i]}*/}
+                                    {/*placeholder={"Default"}*/}
+                                {/*/>*/}
+                                            <Button primary onClick={this.PlaceAliexpressOrder.bind(this,this.state.currentOrderID)}>Place Order</Button>
+                                </FormLayout.Group>
+                            </FormLayout>
+                        </Card.Section>
+                    </Card>
+                </div>);
+        }
+        return temp
+    }
+
+    PlaceAliexpressOrder(ordername,shippingProvider){
+        let data = {
+            "ordername": ordername,
+            "shipping_provider": shippingProvider
+        };
+        console.log(data);
+        requests.getRequest('aliexpress/request/placeOrder',data, false, false).then(response1 => {
+            if (response1.success) {
+                notify.success(response1.message)
+            }
+            else {
+                notify.error(response1.message)
+            }
+        });
+        this.setState({
+            openModal:false
+        })
     }
 
     pageSettingsChange(event) {
@@ -725,5 +817,53 @@ export class FbaOrder extends Component {
         const state = this.state;
         this.setState(state);
     }
+
+    showModalDetails1(){
+        var A = '';
+        var B = '';
+        for (let i = 0 ; i < this.state.productIdOrder.length; i++) {
+            A = this.state.productIdOrder[i];
+            B = this.state.varinatID[i];
+
+            const rows = [
+                [
+                    A,
+                    B,
+                    <Select
+                        options= {this.state.companyShipping}
+                        onChange= {this.handleSelectChange.bind(this, i)}
+                        value={this.state.selected[i]}
+                        placeholder={"Default"}
+                    />,
+                    <Button primary onClick={this.PlaceAliexpressOrder.bind(this,this.state.currentOrderID,this.state.currentShippingcompany[0])}>Place Order</Button>
+                ],
+            ];
+
+            return (
+                    <Card>
+                        <Card.Section>
+                            <FormLayout>
+                                <FormLayout.Group condensed>
+                        <DataTable
+                            columnContentTypes={[
+                                "numeric",
+                                "numeric",
+                                "text",
+                            ]}
+                            headings={[
+                                <DisplayText size="medium">ProductID</DisplayText>,
+                                <DisplayText size="medium">VarinatID</DisplayText>,
+                                <DisplayText size="medium">Shipping Provider</DisplayText>,
+                            ]}
+                            rows={rows}
+                            // totals={[]}
+                        />
+                                </FormLayout.Group>
+                            </FormLayout>
+                        </Card.Section>
+                    </Card>
+            );
+        }
+    }
 }
-export default FbaOrder;
+export default Aliexpress;

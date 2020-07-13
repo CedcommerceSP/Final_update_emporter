@@ -31,7 +31,7 @@ class FAQPage extends Component {
                     ans: (
                         <React.Fragment>
                             <p>
-                                With the Omni-Importer app, you can send your products from the Amazon seller center to
+                                With the Ced-Importer app, you can send your products from the Amazon seller center to
                                 your Shopify store. The process of transferring an item is very simple. Please see the
                                 following points-</p>
                             <ol>
@@ -89,7 +89,7 @@ class FAQPage extends Component {
                     id: 4,
                     show: false, // for collapse div
                     search: true, // for search, if false then hide the div
-                    ques: "Does Omni-Importer handle my product information?",
+                    ques: "Does Ced-Importer handle my product information?",
                     ans: (
                         <React.Fragment>
                             <p>
@@ -99,8 +99,6 @@ class FAQPage extends Component {
                         </React.Fragment>
                     )
                 },
-
-
                 {
                     id: 5,
                     show: false, // for collapse div
