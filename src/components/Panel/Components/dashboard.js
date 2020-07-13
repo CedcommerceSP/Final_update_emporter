@@ -636,30 +636,30 @@ class Dashboard extends Component {
 										) : null}
 									</div>
 								</div>
-								<div className="row">
-									<div className="col-12 col-md-12">
-										<TextField
-											value={this.state.info.email}
-											minLength={5}
-											error={
-												this.state.info_error.email
-													? "*Please Enter Detail"
-													: null
-											}
-											onChange={this.handleFormChange.bind(this, "email")}
-											label="Email:"
-											type="email"
-										/>
-									</div>
-									<div className="col-12 col-md-12 text-left">
-										{this.state.info.email === "" &&
-										this.state.info_error.email !== true ? (
-											<p className="mt-1" style={{ color: "green" }}>
-												*required
-											</p>
-										) : null}
-									</div>
-								</div>
+								{/*<div className="row">*/}
+									{/*<div className="col-12 col-md-12">*/}
+										{/*<TextField*/}
+											{/*value={this.state.info.email}*/}
+											{/*minLength={5}*/}
+											{/*error={*/}
+												{/*this.state.info_error.email*/}
+													{/*? "*Please Enter Detail"*/}
+													{/*: null*/}
+											{/*}*/}
+											{/*onChange={this.handleFormChange.bind(this, "email")}*/}
+											{/*label="Email:"*/}
+											{/*type="email"*/}
+										{/*/>*/}
+									{/*</div>*/}
+									{/*<div className="col-12 col-md-12 text-left">*/}
+										{/*{this.state.info.email === "" &&*/}
+										{/*this.state.info_error.email !== true ? (*/}
+											{/*<p className="mt-1" style={{ color: "green" }}>*/}
+												{/**required*/}
+											{/*</p>*/}
+										{/*) : null}*/}
+									{/*</div>*/}
+								{/*</div>*/}
 								{/*<TextField
 									value={this.state.info.skype_id}
 									onChange={this.handleFormChange.bind(this, "skype_id")}

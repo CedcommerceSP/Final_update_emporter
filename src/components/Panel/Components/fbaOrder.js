@@ -457,11 +457,11 @@ export class FbaOrder extends Component {
         requests
             .getRequest("fba/test/getWebhookCall")
             .then(data => {
-                // console.log(data.days);
                 if (data.success) {
                     this.setState({
                         trail_days_left:3-data.days
                     })
+                    console.log(this.state.trail_days_left);
                     if (data.days<=3){
                         this.setState({
                             show_trail_banner:true
@@ -470,30 +470,22 @@ export class FbaOrder extends Component {
                 }
             });
     }
-    deleteWebhookClient(){
-        console.log(this.state.trail_days_left)
-        if (this.state.trail_days_left < 0){
-            console.log("i m condition")
+    deleteWebhookClient() {
+        if (this.state.trail_days_left < 0) {
             requests
                 .getRequest("fba/test/getWebhookDetailsAndDelete")
                 .then(data => {
                     console.log(data)
                     if (data.success) {
-                        if(data.message == "webhook are deleted"){
+                        if (data.message == "webhook are deleted") {
                             this.setState({
-                                show_trail_banner_webhook:true
+                                show_trail_banner_webhook: true
                             })
                         }
                     }
                 });
-
         }
     }
-    /*redirect(url) {
-        console.log(url);
-        this.props.history.push(url);
-    }
-*/
     redirect(url, data) {
         if (!isUndefined(data)) {
             this.props.history.push(url, JSON.parse(JSON.stringify(data)));

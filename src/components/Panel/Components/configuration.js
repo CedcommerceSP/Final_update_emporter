@@ -15,8 +15,11 @@ import {
     Layout,
     Banner,
     Modal,
+    Icon
 } from "@shopify/polaris";
-
+import {
+    RefreshMajorMonotone
+} from '@shopify/polaris-icons';
 import {notify} from "../../../services/notify";
 import {requests} from "../../../services/request";
 import {modifyOptionsData} from "./static-functions";
@@ -37,6 +40,7 @@ export class Configuration extends Component {
     amazonImporterConfigurationData = [];
     amazonAffiliateConfigurationData = [];
     ebayConfigurationData = [];
+    ebayAffilaiteConfigurationData = [];
     wishConfigurationData = [];
     fbaConfigurationData = [];
     etsyConfigurationData = [];
@@ -55,6 +59,8 @@ export class Configuration extends Component {
             show_shopify_child_component: {},
             shopify_configuration_updated: false,
             account_information_updated: false,
+            etsy_shop_name:'',
+
             fba_configuration: {},
             open_modal: false,
             open_modal_response: false,
@@ -72,6 +78,7 @@ export class Configuration extends Component {
         this.getEtsyConfig();
         this.getWishConfig();
         this.getFbaConfig();
+        this.getEbayAffiliateConfig();
         this.getDataShipping();
     }
 
@@ -106,6 +113,7 @@ export class Configuration extends Component {
             .getRequest("connector/get/config", {marketplace: "amazonimporter"})
             .then(data => {
                 if (data.success) {
+                    console.log(data.data)
                     this.amazonImporterConfigurationData = this.modifyConfigData(
                         data.data,
                         "amazon_importer_configuration"
@@ -131,6 +139,21 @@ export class Configuration extends Component {
                 }
             });
     }
+    getEbayAffiliateConfigurations() {
+        requests
+            .getRequest("connector/get/config", {marketplace: "ebayaffiliate"})
+            .then(data => {
+                if (data.success) {
+                    this.amazonAffiliateConfigurationData = this.modifyConfigData(
+                        data.data,
+                        "amazon_affiliate_configuration"
+                    );
+                    this.updateState();
+                } else {
+                    notify.error(data.message);
+                }
+            });
+    }
 
     getEbayConfig() {
         requests
@@ -140,6 +163,22 @@ export class Configuration extends Component {
                     this.ebayConfigurationData = this.modifyConfigData(
                         data.data,
                         "ebay_configuration"
+                    );
+                    this.updateState();
+                } else {
+                    // notify.error(data.message);
+                }
+            });
+    }
+
+    getEbayAffiliateConfig() {
+        requests
+            .getRequest("connector/get/config", {marketplace: "ebayaffiliate"})
+            .then(data => {
+                if (data.success) {
+                    this.ebayAffilaiteConfigurationData = this.modifyConfigData(
+                        data.data,
+                        "ebayAffiliate_configuration"
                     );
                     this.updateState();
                 } else {
@@ -185,6 +224,7 @@ export class Configuration extends Component {
             .getRequest("connector/get/config", {marketplace: "etsyimporter"})
             .then(data => {
                 if (data.success) {
+                    console.log(data.data)
                     this.etsyConfigurationData = this.modifyConfigData(
                         data.data,
                         "etsy_configuration"
@@ -201,6 +241,7 @@ export class Configuration extends Component {
             .getRequest("connector/get/config", {marketplace: "shopify"})
             .then(data => {
                 if (data.success) {
+                    console.log(data.data);
                     this.shopifyConfigurationData = this.modifyConfigData(
                         data.data,
                         "shopify_configuration"
@@ -225,6 +266,8 @@ export class Configuration extends Component {
                     data[i].value !== "enable";
             }
         }
+
+        console.log(data)
         return data;
     }
 
@@ -393,6 +436,19 @@ export class Configuration extends Component {
         prevVal[index][key] = value;
         this.shopifyConfigurationChange(mainIndex, prevVal);
     };
+    getLocationDetails(){
+        requests
+            .getRequest("frontend/importer/getLocationShopify")
+            .then(data => {
+                // console.log(data);
+                if (data.success) {
+                    notify.success(data.code);
+                    window.location.reload();
+                } else {
+                    notify.error(data.code);
+                }
+            });
+    }
 
     renderShopifyConfigurationSection(sync) {
         return (
@@ -404,89 +460,193 @@ export class Configuration extends Component {
                     <Card>
                         <div className="row p-5">
                             {this.shopifyConfigurationData.map(config => {
+                                console.log(this.state.shopify_configuration['Locations'])
                                 if (
                                     !this.state.show_shopify_child_component[config["is_child"]]
-                                )
-                                    switch (config.type) {
-                                        case "select":
-                                            return (
-                                                <div
-                                                    className="col-12 pt-2 pb-2"
-                                                    key={this.shopifyConfigurationData.indexOf(config)}
-                                                >
-                                                    <Select
-                                                        options={config.options}
-                                                        label={config.title}
-                                                        labelInline={false}
-                                                        placeholder={config.title}
-                                                        disabled={!sync && ( config.code === 'inventory_sync' || config.code === 'price_sync' )}
-                                                        value={
-                                                            this.state.shopify_configuration[config.code]
-                                                        }
-                                                        onChange={this.shopifyConfigurationChange.bind(
-                                                            this,
-                                                            this.shopifyConfigurationData.indexOf(config)
-                                                        )}
-                                                    />
-                                                </div>
-                                            );
-                                        case "checkbox":
-                                            return (
-                                                <div
-                                                    className="col-12 pt-2 pb-2"
-                                                    key={this.shopifyConfigurationData.indexOf(config)}
-                                                >
-                                                    <Label id={"sss"}>{config.title}</Label>
-                                                    <div className="row">
-                                                        {config.options.map(option => {
-                                                            return (
-                                                                <div
-                                                                    className="col-md-6 col-sm-6 col-12 p-1"
-                                                                    key={config.options.indexOf(option)}
+                                ) {
+                                    if (config.code == "Locations") {
+                                        switch (config.type) {
+                                            case "select":
+                                                return (
+                                                    <div
+                                                        className="col-12 pt-2 pb-2"
+                                                        key={this.shopifyConfigurationData.indexOf(config)}
+                                                    >
+                                                        <div className="row">
+                                                            <div className="col-10">
+                                                        <Select
+                                                            options={config.options}
+                                                            label={config.title}
+                                                            labelInline={false}
+                                                            placeholder={config.title}
+                                                            disabled={!sync && ( config.code === 'inventory_sync' || config.code === 'price_sync' )}
+                                                            value={
+                                                                this.state.shopify_configuration[config.code]
+                                                            }
+                                                            onChange={this.shopifyConfigurationChange.bind(
+                                                                this,
+                                                                this.shopifyConfigurationData.indexOf(config)
+                                                            )}
+                                                        />
+                                                            </div>
+                                                            <div className="col-2 pt-5">
+                                                                <Button
+                                                                    onClick={() => {
+                                                                        this.getLocationDetails();
+                                                                    }}
+                                                                    primary
                                                                 >
-                                                                    <Checkbox
-                                                                        checked={
-                                                                            this.state.shopify_configuration[
-                                                                                config.code
-                                                                                ].indexOf(option.value) !== -1
-                                                                        }
-                                                                        label={option.label}
-                                                                        onChange={this.shopifyConfigurationCheckboxChange.bind(
-                                                                            this,
-                                                                            this.shopifyConfigurationData.indexOf(
-                                                                                config
-                                                                            ),
-                                                                            config.options.indexOf(option)
-                                                                        )}
-                                                                    />
-                                                                </div>
-                                                            );
-                                                        })}
+                                                                <Icon
+                                                                    source={RefreshMajorMonotone}
+                                                                />
+                                                                </Button>
+                                                            </div>
+                                                        </div>
                                                     </div>
-                                                </div>
-                                            );
-                                        case "multi_level_select_textbox":
-                                            return this.renderLevelComponent(config, this.shopifyConfigurationData.indexOf(config));
-                                        default:
-                                            return (
-                                                <div
-                                                    className="col-12 pt-2 pb-2"
-                                                    key={this.shopifyConfigurationData.indexOf(config)}
-                                                >
-                                                    <TextField
-                                                        label={config.title}
-                                                        placeholder={config.title}
-                                                        value={
-                                                            this.state.shopify_configuration[config.code]
-                                                        }
-                                                        onChange={this.shopifyConfigurationChange.bind(
-                                                            this,
-                                                            this.shopifyConfigurationData.indexOf(config)
-                                                        )}
-                                                        readOnly={false}/>
-                                                </div>
-                                            );
+
+
+                                                );
+                                            case "checkbox":
+                                                return (
+                                                    <div
+                                                        className="col-12 pt-2 pb-2"
+                                                        key={this.shopifyConfigurationData.indexOf(config)}
+                                                    >
+                                                        <Label id={"sss"}>{config.title}</Label>
+                                                        <div className="row">
+                                                            {config.options.map(option => {
+                                                                return (
+                                                                    <div
+                                                                        className="col-md-6 col-sm-6 col-12 p-1"
+                                                                        key={config.options.indexOf(option)}
+                                                                    >
+                                                                        <Checkbox
+                                                                            checked={
+                                                                                this.state.shopify_configuration[
+                                                                                    config.code
+                                                                                    ].indexOf(option.value) !== -1
+                                                                            }
+                                                                            label={option.label}
+                                                                            onChange={this.shopifyConfigurationCheckboxChange.bind(
+                                                                                this,
+                                                                                this.shopifyConfigurationData.indexOf(
+                                                                                    config
+                                                                                ),
+                                                                                config.options.indexOf(option)
+                                                                            )}
+                                                                        />
+                                                                    </div>
+                                                                );
+                                                            })}
+                                                        </div>
+                                                    </div>
+                                                );
+                                            case "multi_level_select_textbox":
+                                                return this.renderLevelComponent(config, this.shopifyConfigurationData.indexOf(config));
+                                            default:
+                                                return (
+                                                    <div
+                                                        className="col-12 pt-2 pb-2"
+                                                        key={this.shopifyConfigurationData.indexOf(config)}
+                                                    >
+                                                        <TextField
+                                                            label={config.title}
+                                                            placeholder={config.title}
+                                                            value={
+                                                                this.state.shopify_configuration[config.code]
+                                                            }
+                                                            onChange={this.shopifyConfigurationChange.bind(
+                                                                this,
+                                                                this.shopifyConfigurationData.indexOf(config)
+                                                            )}
+                                                            readOnly={false}/>
+                                                    </div>
+                                                );
+                                        }
                                     }
+                                    else {
+                                        switch (config.type) {
+                                            case "select":
+                                                return (
+                                                    <div
+                                                        className="col-12 pt-2 pb-2"
+                                                        key={this.shopifyConfigurationData.indexOf(config)}
+                                                    >
+                                                        <Select
+                                                            options={config.options}
+                                                            label={config.title}
+                                                            labelInline={false}
+                                                            placeholder={config.title}
+                                                            disabled={!sync && ( config.code === 'inventory_sync' || config.code === 'price_sync' )}
+                                                            value={
+                                                                this.state.shopify_configuration[config.code]
+                                                            }
+                                                            onChange={this.shopifyConfigurationChange.bind(
+                                                                this,
+                                                                this.shopifyConfigurationData.indexOf(config)
+                                                            )}
+                                                        />
+                                                    </div>
+                                                );
+                                            case "checkbox":
+                                                return (
+                                                    <div
+                                                        className="col-12 pt-2 pb-2"
+                                                        key={this.shopifyConfigurationData.indexOf(config)}
+                                                    >
+                                                        <Label id={"sss"}>{config.title}</Label>
+                                                        <div className="row">
+                                                            {config.options.map(option => {
+                                                                return (
+                                                                    <div
+                                                                        className="col-md-6 col-sm-6 col-12 p-1"
+                                                                        key={config.options.indexOf(option)}
+                                                                    >
+                                                                        <Checkbox
+                                                                            checked={
+                                                                                this.state.shopify_configuration[
+                                                                                    config.code
+                                                                                    ].indexOf(option.value) !== -1
+                                                                            }
+                                                                            label={option.label}
+                                                                            onChange={this.shopifyConfigurationCheckboxChange.bind(
+                                                                                this,
+                                                                                this.shopifyConfigurationData.indexOf(
+                                                                                    config
+                                                                                ),
+                                                                                config.options.indexOf(option)
+                                                                            )}
+                                                                        />
+                                                                    </div>
+                                                                );
+                                                            })}
+                                                        </div>
+                                                    </div>
+                                                );
+                                            case "multi_level_select_textbox":
+                                                return this.renderLevelComponent(config, this.shopifyConfigurationData.indexOf(config));
+                                            default:
+                                                return (
+                                                    <div
+                                                        className="col-12 pt-2 pb-2"
+                                                        key={this.shopifyConfigurationData.indexOf(config)}
+                                                    >
+                                                        <TextField
+                                                            label={config.title}
+                                                            placeholder={config.title}
+                                                            value={
+                                                                this.state.shopify_configuration[config.code]
+                                                            }
+                                                            onChange={this.shopifyConfigurationChange.bind(
+                                                                this,
+                                                                this.shopifyConfigurationData.indexOf(config)
+                                                            )}
+                                                            readOnly={false}/>
+                                                    </div>
+                                                );
+                                        }
+                                    }
+                                }
                             })}
                             <div className="col-12 text-right pt-2 pb-1">
                                 <Button
@@ -568,6 +728,9 @@ export class Configuration extends Component {
             case  'amazonaffiliate':
                 this.saveAmazonAffiliateConfigData(data);
                 break;
+            case  'ebayaffiliate':
+                this.saveEbayAffiliateConfigData(data);
+                break;
             default:
                 console.log("Wrong Choice");
         }
@@ -586,6 +749,25 @@ export class Configuration extends Component {
                                 form={this.ebayConfigurationData}
                                 sync={sync}
                                 onSubmit={this.onSubmit.bind(this, 'ebayimporter')}/>
+                        </div>
+                    </Card>
+                </div>
+            </div>
+        );
+    }
+    renderEbayAffiliateConfig(sync) {
+        return (
+            <div className="row">
+                <div className="col-sm-4 col-12 text-md-left text-sm-left text-center">
+                    <Heading>Ebay Affiliate Settings</Heading>
+                </div>
+                <div className="col-sm-8 col-12">
+                    <Card>
+                        <div className="p-5">
+                            <Formbuilder
+                                form={this.ebayAffilaiteConfigurationData}
+                                sync={sync}
+                                onSubmit={this.onSubmit.bind(this, 'ebayaffiliate')}/>
                         </div>
                     </Card>
                 </div>
@@ -617,8 +799,8 @@ export class Configuration extends Component {
         requests
             .getRequest("fba/test/test")
             .then(data => {
-                if (data.success) {
-                    // console.log("data_FBA", data.data);
+                if (data.success && data.data!=null) {
+                    console.log("data_FBA", data);
                     this.setState({
                         open_modal_response: true
                     });
@@ -816,8 +998,16 @@ export class Configuration extends Component {
             </div>
         );
     }
+    etsyShopName(){
+        for (let i = 0 ; i < this.etsyConfigurationData.length; i++){
+            if (this.etsyConfigurationData[i]['title'] === 'Etsy Shop Name'){
+                this.state.etsy_shop_name = this.etsyConfigurationData[i]['value']
+            }
+        }
 
+    }
     renderEtsyConfig(sync) {
+       this.etsyShopName()
         return (
             <div className="row">
                 <div className="col-sm-4 col-12 text-md-left text-sm-left text-center">
@@ -826,6 +1016,7 @@ export class Configuration extends Component {
                 <div className="col-sm-8 col-12">
                     <Card>
                         <div className="p-5">
+                            <TextField label="Etsy Shop Name" disabled placeholder={this.state.etsy_shop_name}/>
                             <Formbuilder
                                 form={this.etsyConfigurationData}
                                 sync={sync}
@@ -866,6 +1057,12 @@ export class Configuration extends Component {
                         {accounts !== undefined &&
                         accounts.indexOf("ebayimporter") !== -1
                             ? this.renderEbayConfig(!sync)
+                            : null}
+                    </Layout.Section>
+                    <Layout.Section>
+                        {accounts !== undefined &&
+                        accounts.indexOf("ebayaffiliate") !== -1
+                            ? this.renderEbayAffiliateConfig(!sync)
                             : null}
                     </Layout.Section>
                     <Layout.Section>
@@ -931,6 +1128,21 @@ export class Configuration extends Component {
                     notify.error(data.message);
                 }
                 this.getAmazonAffiliateConfigurations();
+            });
+    }
+    saveEbayAffiliateConfigData(amazon_affiliate_configuration) {
+        requests
+            .postRequest("connector/get/saveConfig", {
+                marketplace: "ebayaffiliate",
+                data: amazon_affiliate_configuration
+            })
+            .then(data => {
+                if (data.success) {
+                    notify.success(data.message);
+                } else {
+                    notify.error(data.message);
+                }
+                this.getEbayAffiliateConfigurations();
             });
     }
 

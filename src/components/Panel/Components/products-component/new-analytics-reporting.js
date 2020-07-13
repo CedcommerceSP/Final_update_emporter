@@ -51,7 +51,7 @@ class Demo_analytics_reporting extends Component {
             next_billing: "",
             recurring_planskeleton: false,
             recentActivities: [],
-            to_redirect: ["/panel/orders", "/panel/products", "/panel/plans/current"],
+            to_redirect: ["/panel/products", "/panel/products", "/panel/plans/current"],
             content_data:{
                 datanews:[],
                 datablog:[],
@@ -98,14 +98,11 @@ class Demo_analytics_reporting extends Component {
                     var add_on_date = new Date(response.data.activated_at);
                     let difference = this.monthDiff(add_on_date,current_date);
                     if (new Date(new Date(add_on_date).setMonth(add_on_date.getMonth() + difference+1)) <=   current_date) {
-                        // console.log(new Date(new Date(add_on_date).setMonth(add_on_date.getMonth() + difference+1)));
-                        // console.log("in if");
+
                         plan_to_be_end = new Date(new Date(add_on_date).setMonth(add_on_date.getMonth() + difference + 2));
                     }
                     else {
-                        // console.log("in else");
-                        // console.log(new Date(new Date(add_on_date).setMonth(add_on_date.getMonth() + difference+1)));
-                         plan_to_be_end = new Date(new Date(add_on_date).setMonth(add_on_date.getMonth() + difference + 1));
+                        plan_to_be_end = new Date(new Date(add_on_date).setMonth(add_on_date.getMonth() + difference + 1));
                     }
                     this.setState({
                         Recurrying: true,
@@ -166,7 +163,6 @@ class Demo_analytics_reporting extends Component {
         requests
             .getRequest("connector/get/services?filters[type]=importer")
             .then(data => {
-                // console.log(data);
                 if (data.success) {
                     importer = data.data;
                     Object.keys(importer).map(importerkey => {
@@ -191,6 +187,84 @@ class Demo_analytics_reporting extends Component {
                 }
             });
     }
+
+    /*getYAxisImporter(importer_marketplace_array, importer_title_array, entire_data_importer) {
+        let total_products_importer = [];
+        let label_mp_array = [];
+        let importer_data_rec = {};
+        console.log(importer_marketplace_array)
+        requests.postRequest("frontend/app/getImportedProductCount", {importers: importer_marketplace_array}, false, true)
+            .then(data => {
+                console.log(data);
+                if (data.success && (data['data']['amazonaffiliate'] !== 0 || data['data']['amazonimporter'] !== 0 || data['data']['ebayimporter'] !== 0 ||
+                    data['data']['etsyimporter'] !== 0 || data['data']['walmartimporter'] !== 0 || data['data']['wishimporter'] !== 0 || data['data']['ebayaffiliate'] !== 0 || data['data']['fileimporter'] !== 0 ))
+
+                {
+                    importer_data_rec = data.data;
+                    console.log(importer_title_array)
+
+                    Object.keys(importer_data_rec).map(importer_recieved_mp => {
+                        for (let i = 0; i < importer_marketplace_array.length; i++) {
+                            Object.keys(entire_data_importer).map(master_key => {
+                                console.log(importer_recieved_mp)
+                                console.log(importer_marketplace_array[i]);
+                                console.log(entire_data_importer);
+                                console.log(master_key)
+
+                                if (
+                                    importer_marketplace_array[i] === entire_data_importer[master_key]["marketplace"] &&
+                                    importer_title_array[i] === entire_data_importer[master_key]["title"] &&
+                                    importer_marketplace_array[i] === importer_recieved_mp
+                                ) {
+                                    console.log('in 237');
+                                    console.log(data.data[importer_recieved_mp]);
+                                    if (data.data['ebayaffiliate']>0) {
+                                        console.log("in 240")
+                                        total_products_importer.push(
+                                            importer_data_rec[importer_recieved_mp]
+                                        );
+                                        label_mp_array.push(
+                                            importer_recieved_mp
+                                        )
+
+                                    }else{
+                                        console.log("in 249")
+                                        console.log(importer_recieved_mp)
+                                    }
+                                }else{
+                                    console.log("in Elseee")
+                                    console.log(importer_recieved_mp)
+                                }
+                            });
+                        }
+                    });
+                    label_mp_array = label_mp_array
+                        .map(e1 => (capitalizeWord(e1)));
+                    console.log(label_mp_array)
+
+                    total_products_importer.push(0);
+                    this.setState({
+                        data2: {
+                            labels: label_mp_array,
+                            datasets: [{
+                                data: total_products_importer,
+                                backgroundColor: this.state.backgroundColor,
+                                hoverBackgroundColor: this.state.hoverBackgroundColor,
+                            }], title: "Imported"
+                        },
+                    });
+                    this.state.skeleton[1] = false;
+                    this.setState(this.state)
+                }  else if (data.success && data['data']['amazonaffiliate'] === 0 && data['data']['amazonimporter'] === 0 && data['data']['ebayimporter'] === 0 &&
+                    data['data']['etsyimporter'] === 0 && data['data']['walmartimporter'] === 0 && data['data']['wishimporter'] === 0 && data['data']['ebayaffiliate'] === 0) {
+                    console.log("in else iff");
+                    this.setState({no_getProductsUploadedData_and_ImportedData: true})
+                } else {
+                    console.log("in else iff 2");
+                    this.setState({no_getProductsUploadedData_and_ImportedData: true})
+                }
+            });
+    }*/
 
     getYAxisImporter(importer_marketplace_array, importer_title_array, entire_data_importer) {
         let total_products_importer = [];
@@ -244,10 +318,8 @@ class Demo_analytics_reporting extends Component {
                     this.setState(this.state)
                 }  else if (data.success && data['data']['amazonaffiliate'] === 0 && data['data']['amazonimporter'] === 0 && data['data']['ebayimporter'] === 0 &&
                     data['data']['etsyimporter'] === 0 && data['data']['walmartimporter'] === 0 && data['data']['wishimporter'] === 0 && data['data']['ebayaffiliate'] === 0) {
-                    console.log("in else iff");
                     this.setState({no_getProductsUploadedData_and_ImportedData: true})
                 } else {
-                    console.log("in else iff 2");
                     this.setState({no_getProductsUploadedData_and_ImportedData: true})
                 }
             });
@@ -345,7 +417,7 @@ class Demo_analytics_reporting extends Component {
             if (temp_order && i == 0) {
                 arr.push(<div className="col-sm-12 col-md-12 col-lg-4" key={yourVariable}>
                         <Card
-                            title="Uploads"
+                            title="Uploaded"
                             sectioned
                             actions={{
                                 content: <Link><Icon source="help" color="inkLighter" backdrop={true}/></Link>,
@@ -409,7 +481,7 @@ class Demo_analytics_reporting extends Component {
                         this.state.skeleton[i] ? <Skeleton/> :
 
                                 <Card title={title.title} sectioned>
-                                    <Doughnut data={this.state[yourVariable]} options={this.state.legend}
+                                    <Doughnut data={this.state[yourVariable]} /*options={this.state.legend}*/
                                               legend={legendOpts}/>
                                 </Card>
                         }
@@ -561,24 +633,24 @@ class Demo_analytics_reporting extends Component {
 
                     <Layout.Section>
                         <Card title="">
-                            <div className="text-right p-3">
+                            {/*<div className="text-right p-3">
                                 <Button
                                     primary
                                     onClick={() => {
                                         this.redirect("/panel/help/report");
                                     }}
                                 >Contact Us</Button>
-                            </div>
+                            </div>*/}
                               {/*actions={[{content: 'Click Here', url: 'https://apps.cedcommerce.com/importer/app/panel/help/report',external:true}]}>*/}
-                            <div className="text-center">
+                            {/*<div className="text-center">
                                 <Heading>Store Development</Heading>
                                 <hr style={{marginLeft:"20%", marginRight:"20%"}}/>
-                            </div>
+                            </div>*/}
                             {this.render_recent_activity()}
-                            <div className="text-center">
+                            {/*<div className="text-center">
                                 <Label>Get your Shopify store developed at a reasonable price.</Label>
                                 <hr/>
-                            </div>
+                            </div>*/}
                         </Card>
                     </Layout.Section>
                     <Layout.Section secondary>
@@ -609,13 +681,13 @@ class Demo_analytics_reporting extends Component {
                                             ),
                                         },
                                         {
-                                            url: 'https://apps.shopify.com/google-express-integration?surface_detail=google+shopping&surface_inter_position=1&surface_intra_position=7&surface_type=search',
-                                            name: 'Google Shopping & Google Ads',
-                                            description: 'Manage Google Shopping Actions, Google Ads & Shopping Feed.',
+                                            url: 'https://apps.shopify.com/facebook-marketplace-connector?surface_detail=cedcommerce&surface_inter_position=1&surface_intra_position=7&surface_type=search',
+                                            name: 'Facebook Marketplace Connector',
+                                            description: 'Sell on Facebook, list your products and manage orders.',
                                             media: (
                                                 <Thumbnail
-                                                    source="https://apps.shopifycdn.com/listing_images/3a0a9be8bb54bb8cd25cb2f7c6381d19/icon/0cdc8e6f8ee8614bb5a7e45f487de3c3.png?height=84&width=84"
-                                                    alt="Google Express logo"
+                                                    source="https://apps.shopifycdn.com/listing_images/8e58c700f1ecc2539682f6a04a8852c7/icon/7e03edcb47faf2838726e580ffda8f0d.png?height=84&width=84"
+                                                    alt="Facebook connector integration logo"
                                                 />
                                             ),
                                         },
@@ -656,7 +728,7 @@ class Demo_analytics_reporting extends Component {
                     {rows.length > 0 ?
                     <Layout.Section oneThird>
                         <Card title="News"
-                            actions={[{content: 'See all', url: 'https://apps.shopify.com/partners/cedcommerce',external:true}]}>
+                            >
                             <Card.Section>
                                 <ResourceList
                                     items={rows}
@@ -732,15 +804,28 @@ class Demo_analytics_reporting extends Component {
 
     render_recent_activity() {
         return(
-            /* class="zoom"*/
-            <Stack  distribution="center">
+            <div className="justify-content-center">
+                <div className="text-right p-3">
+                    <Button primary
+                            onClick={() => {
+                                this.redirect("/panel/help/report")}
+                }
+                    >Contact Us</Button>
+                </div>
+                <img
+                    className='img-fluid p-3'
+                    src={require("../../../../assets/img/DigitalMarketing3.gif")} alt="Store Development"
+                    /*height="650" width="650"*//>
+            </div>
+                /* class="zoom"*/
+            /*<Stack  distribution="center">
                 <div>
                     <a href="https://apps.cedcommerce.com/shopify-store-development/"target="_blank"><img className='img-fluid p-3' src={require("../../../../assets/img/store_dev1.png")} alt="Store_Dev"/></a>
                 </div>
                 <div>
                     <a href="https://apps.cedcommerce.com/digital-marketing-services/"target="_blank"><img className='img-fluid pb-5 pr-5 pl-3' src={require("../../../../assets/img/store_dev2.png")} alt="Digital Marketing"/></a>
                 </div>
-            </Stack>
+            </Stack>*/
         )
 /*        return (this.state.recentactivityskeleton ? <Skeleton case="body"/> :
 

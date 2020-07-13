@@ -33,6 +33,9 @@ export class Import extends Component {
 		super(props);
         this.state = {
 			listing_type: "active",
+			selectedLocation:'NA',
+			TabToBeRender:'',
+			isLocationPresent:false,
 			importServicesList: [],
 			importerShopLists: [],
 			uploadServicesList: [],
@@ -69,6 +72,7 @@ export class Import extends Component {
 		this.getAllUploaderServices();
         this.redirect = this.redirect.bind(this);
         this.handleModalChange = this.handleModalChange.bind(this);
+        this.getShopifyConfigurations();
 	}
     componentWillReceiveProps(nextPorps) {
 		// console.log("qwerty",nextPorps);
@@ -82,6 +86,7 @@ export class Import extends Component {
 			.getRequest("connector/get/services", { "filters[type]": "importer" })
 			.then(data => {
 				if (data.success) {
+					console.log(data.data);
 					this.state.importServicesList = [];
 					for (let i = 0; i < Object.keys(data.data).length; i++) {
 						let key = Object.keys(data.data)[i];
@@ -103,7 +108,7 @@ export class Import extends Component {
 					this.updateState();
                     // console.log(this.state.importServicesList);
                     for (let i = 0;i<this.state.importServicesList.length;i++){
-						if (this.state.importServicesList[i]['value'] !== 'ebayaffiliate' && this.state.importServicesList[i]['value'] !== 'fileimporter' && this.state.importServicesList[i]['value'] !== 'bigmanager') {
+						if ( this.state.importServicesList[i]['value'] !== 'fileimporter' && this.state.importServicesList[i]['value'] !== 'bigmanager' /*&& this.state.importServicesList[i]['value'] !== 'aliexpress'*/) {
                             this.state.finalRenderImporterShopLists.push(this.state.importServicesList[i]);
                         }
 					}
@@ -177,7 +182,7 @@ export class Import extends Component {
 										/>
 									)}
 							</div>
-							<div className="col-12 pt-1 pb-1 text-center">
+							{this.state.importProductsDetails.source !== 'ebayaffiliate' && this.state.importProductsDetails.source !== 'aliexpress'?<div className="col-12 pt-1 pb-1 text-center">
 								<Button
 									disabled={this.state.importProductsDetails.source === ""}
 									onClick={() => {
@@ -187,7 +192,7 @@ export class Import extends Component {
 								>
 									Import Products
 								</Button>
-							</div>
+							</div>:null}
 						</div>
 					</Modal.Section>
 				</Modal>
@@ -236,6 +241,47 @@ export class Import extends Component {
 						/>
 					</div>
 				);
+            case "ebayaffiliate":
+                return (
+					<div className="col-12 pt-2 pb-1">
+						<div className="col-12 text-right" style={{color: '#bf0711'}}>
+							<Button monochrome outline
+									onClick={() => {
+                                        window.open(
+                                            "http://apps.cedcommerce.com/importer/ebaydropshippingImporter.pdf"
+                                        );
+                                    }}
+									size={"slim"}
+							>
+								Help PDF
+							</Button>
+						</div>
+						<div className="pt-3">
+					<EbayAffiliate {...this.props}/>
+						</div>
+					</div>
+                );
+
+			case "aliexpress":
+                return (
+					<div className="col-12 pt-2 pb-1">
+						{/*<div className="col-12 text-right" style={{color: '#bf0711'}}>
+							<Button monochrome outline
+									onClick={() => {
+                                        window.open(
+                                            "http://apps.cedcommerce.com/importer/ebaydropshippingImporter.pdf"
+                                        );
+                                    }}
+									size={"slim"}
+							>
+								Help PDF
+							</Button>
+						</div>*/}
+						<React.Fragment>
+							<AliExpress {...this.props} redirect={this.redirect}/>
+						</React.Fragment>
+					</div>
+                );
 			case "ebayimporter":
 				return (
 					<div className="col-12 pt-1 pb-1">
@@ -364,7 +410,8 @@ export class Import extends Component {
     }
 
 	importProducts() {
-		let sendData = {
+        console.log(this.state.importProductsDetails.source);
+        let sendData = {
 			marketplace: this.state.importProductsDetails.source,
 			shop: this.state.importProductsDetails.shop,
 			shop_id: this.state.importProductsDetails.shop_id
@@ -381,6 +428,8 @@ export class Import extends Component {
 		}
 		if (this.state.importProductsDetails.source === "amazonimporter") {
 			sendData["listing_type"] = this.state.amazon_list_type;
+		}if (this.state.importProductsDetails.source === "etsydropshipping") {
+			sendData["listing_type"] = this.state.listing_type;
 		}
 		requests.getRequest("connector/product/import", sendData).then(data => {
 			this.state.showImportProducts = false;
@@ -398,7 +447,7 @@ export class Import extends Component {
 					notify.success(data.message);
 				}
 			} else {
-				if (data.code === "account_not_connected") {
+				if (data.code === "import_failed") {
 					setTimeout(() => {this.redirect("/panel/accounts");}, 1000);
 					notify.info("User Account Not Found. Please Connect The Account First.");
 				} else if (data.code === "already_in_progress") {
@@ -412,6 +461,29 @@ export class Import extends Component {
 			}
 		});
 	}
+
+    getShopifyConfigurations() {
+        requests
+            .getRequest("connector/get/config", {marketplace: "shopify"})
+            .then(data => {
+                if (data.success) {
+                	console.log(data.data[0]['value'])
+                    if (data.data[0]['value'] !="") {
+                		var locationValue = data.data[0]['value'];
+                        this.setState({
+                            selectedLocation: data.data[0]['options'][locationValue]
+                        })
+                    }
+                    else {
+                		this.setState({
+                            isLocationPresent:true,
+						})
+					}
+                } else {
+                    notify.error(data.message);
+                }
+            });
+    }
 
 	renderUploadProductsModal() {
 		return (
@@ -471,9 +543,8 @@ export class Import extends Component {
 						<div className="col-12 pt-1 pb-1">
 							<Banner status="info">
 								<Label>
-                                    You can upload products from the marketplace to Shopify either through default profile or you can create{" "}
-									<NavLink to="/panel/profiling/create">custom profile</NavLink>{" "}
-									for products upload.
+									Upload specific product on Shopify by creating profile{" "}
+									<NavLink to="/panel/profiling/create">click here</NavLink>
 								</Label>
 							</Banner>
 						</div>
@@ -502,6 +573,38 @@ export class Import extends Component {
 								/>
 							)}
 						</div>
+						<div className="col-12 pt-1 pb-1">
+							<div>
+								<Button plain
+										onClick={() => {
+                                            this.redirect("/panel/configuration")}}>
+									Click Here
+								</Button>
+								{' '}to Select the warehouse
+							</div>
+                            {this.state.isLocationPresent ?
+                                <TextField
+                                           disabled value={this.state.selectedLocation}
+                                           // helpText="You can change Warehouse from Setting Section"
+                                           error="Warehouse not selected"
+										   // labelAction={{content: 'Settings'}}
+										/>:
+                                <TextField label="Selected Warehouse"
+                                           disabled value={this.state.selectedLocation}
+                                           // helpText="You can change Warehouse from Setting Section"
+                                           // labelAction={{content: 'Settings Option'}}
+                                />}
+						</div>
+						{/*<div className="col-12 pt-1 pb-1" style={{color: '#000000'}}>
+							You can change Warehouse from Setting Section By{' '}
+							<Button
+								plain primary
+								onClick={() => {
+                                    this.redirect("/panel/configuration")}}
+							>
+								Checking Here
+							</Button>
+						</div>*/}
 						{this.state.uploadProductDetails.profile_type === "custom" && (
 							<div className="col-12 pt-1 pb-1">
 								{this.profilesList.length > 0 && (
@@ -728,40 +831,45 @@ export class Import extends Component {
 	}
 
 	uploadProducts() {
-		const data = Object.assign({}, this.state.uploadProductDetails);
-		data["marketplace"] = data["target"];
-		requests.postRequest("connector/product/upload", data).then(data => {
-			this.state.showUploadProducts = false;
-			if (data.success) {
-				if (data.code === "product_upload_started") {
-					notify.info(
-						"Upload process started. Check progress in activities section."
-					);
-					setTimeout(() => {
-						this.redirect("/panel/queuedtasks");
-					}, 1000);
-				} else {
-					notify.success(data.message);
-				}
-			} else {
-				// notify.error(data.message);
-				if (data.code === "link_your_account") {
-					setTimeout(() => {
-						this.redirect("/panel/accounts");
-					}, 1200);
-					notify.info("Account Not Linked.");
-				}
-				if (data.code === "limit_exhausted") {
-					setTimeout(() => {
-						this.redirect("/panel/plans");
-					}, 1000);
-					notify.info("Credit Not Available.");
-				} else {
-					notify.error(data.message);
-				}
-			}
-			this.updateState();
-		});
+        if (this.state.selectedLocation != "NA") {
+            const data = Object.assign({}, this.state.uploadProductDetails);
+            data["marketplace"] = data["target"];
+            requests.postRequest("connector/product/upload", data).then(data => {
+                this.state.showUploadProducts = false;
+                if (data.success) {
+                    if (data.code === "product_upload_started") {
+                        notify.info(
+                            "Upload process started. Check progress in activities section."
+                        );
+                        setTimeout(() => {
+                            this.redirect("/panel/queuedtasks");
+                        }, 1000);
+                    } else {
+                        notify.success(data.message);
+                    }
+                } else {
+                    // notify.error(data.message);
+                    if (data.code === "link_your_account") {
+                        setTimeout(() => {
+                            this.redirect("/panel/accounts");
+                        }, 1200);
+                        notify.info("Account Not Linked.");
+                    }
+                    if (data.code === "limit_exhausted") {
+                        setTimeout(() => {
+                            this.redirect("/panel/plans");
+                        }, 1000);
+                        notify.info("Credit Not Available.");
+                    } else {
+                        notify.error(data.message);
+                    }
+                }
+                this.updateState();
+            });
+        }
+        else {
+            notify.error("Please select warehouse setting section")
+        }
 	}
 
     handleTabChange = (event, key = 'mainTab') => {
@@ -803,7 +911,7 @@ export class Import extends Component {
                     panelID: 'all',
                 }
 		];
-        if( necessaryInfo.account_connected_array && necessaryInfo.account_connected_array.indexOf('aliexpress') > -1){
+        /*if( necessaryInfo.account_connected_array && necessaryInfo.account_connected_array.indexOf('aliexpress') > -1){
             tabs.push(
                 {
                     id: 'AliExpress',
@@ -811,7 +919,7 @@ export class Import extends Component {
                     panelID: 'AliExpress',
                 },
             )
-        }if(  necessaryInfo.account_connected_array && necessaryInfo.account_connected_array.indexOf('ebayaffiliate') > -1 ){
+        }*//*if(  necessaryInfo.account_connected_array && necessaryInfo.account_connected_array.indexOf('ebayaffiliate') > -1 ){
             tabs.push(
                 {
                     id: 'Ebay Affiliate',
@@ -819,7 +927,7 @@ export class Import extends Component {
                     panelID: 'Ebay Affiliate',
                 },
             )
-        }
+        }*/
         console.log(tabs[mainTab]);
         return (
 			<Page title="Manage Products">
@@ -831,15 +939,15 @@ export class Import extends Component {
                 {mainTab === 0 ?
                     <div className="row">
                         <div className="col-12 p-3">
-                            <Banner title="Please Read" status="info">
+                            <Banner title="Information" status="info">
                                 <Label>
                                     In order to upload your products to Shopify, click on
                                     “Import Products”. Further, click on “Upload Products” to convey
                                     product details from the app to Shopify. You can transfer the
                                     product details from CSV to the app by clicking on “Upload CSV”.
-                                    <a href="javascript:void(0)" onClick={this.handleModalChange}>
+                                    {/*<a href="javascript:void(0)" onClick={this.handleModalChange}>
                                         Click Here
-                                    </a>
+                                    </a>*/}
                                 </Label>
                             </Banner>
                         </div>
@@ -879,7 +987,7 @@ export class Import extends Component {
 									<span className="h2" style={{color: "#3f4eae"}}>
 										Import Products
 									</span>
-                                        <Label>(Import from marketplace to app)</Label>
+                                        <Label>(Pull from marketplace to app)</Label>
                                     </div>
                                 </div>
                             </Card>
@@ -913,7 +1021,7 @@ export class Import extends Component {
 									<span className="h2" style={{color: "#3f4eae"}}>
 										Upload Products
 									</span>
-                                        <Label>(Upload From App To Shopify)</Label>
+                                        <Label>(Push From App To Shopify)</Label>
                                     </div>
                                 </div>
                             </Card>
@@ -924,7 +1032,7 @@ export class Import extends Component {
                                      onClick={this.handleChangeModakCsv.bind(this)}
                                 >
                                     <div className="text-center pt-5 pb-5">
-                                        <img style={{height: '138px', width: '138px', cursor: "pointer"}}
+                                        <img style={{height: '105px', width: '105px', cursor: "pointer"}}
                                              src={require("../../../assets/img/csv_upload.png")}
                                              onClick={this.handleChangeModakCsv.bind(this)}
                                         />

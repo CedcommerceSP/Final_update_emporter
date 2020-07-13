@@ -10,6 +10,7 @@ import {
     ChoiceList,
     TextField,
     Button,
+    Scrollable,
     Stack,
 } from '@shopify/polaris';
 import { CaretDownMinor } from '@shopify/polaris-icons';
@@ -463,11 +464,12 @@ class RenderSearchGrid extends Component {
                                 Showing <b>{ pagination.entriesPerPage }</b> items from page <b>{ pagination.pageNumber }</b>, Total items <b>{ pagination.totalEntries }</b>
                             </Label>}
                         </Stack.Item>
-                        <Stack.Item >
+                        {/*<Stack.Item >
                             {pagination.entriesPerPage > 0 && this.paginationRender(false)}
-                        </Stack.Item>
+                        </Stack.Item>*/}
                     </Stack>
                 </div>
+
                 <SmartDataTable
                     data={this.state.products}
                     uniqueKey="itemId"
@@ -560,8 +562,11 @@ class RenderSearchGrid extends Component {
     }
 
     paginationRender(showDropdown = true) {
-        return <div className="row">
+        return(
+
+        <div className="row">
                     <div className="col-6 text-right">
+                        <Scrollable shadow style={{ height: '100px' }} horizontal={true}>
                         <Pagination
                             hasPrevious={1 < this.gridSettings.activePage}
                             onPrevious={() => {
@@ -588,6 +593,7 @@ class RenderSearchGrid extends Component {
                                 }
                             }}
                         />
+                        </Scrollable>
                     </div>
                     {showDropdown && <div className="col-md-2 col-sm-2 col-6">
                         <Select
@@ -599,6 +605,7 @@ class RenderSearchGrid extends Component {
                         />
                     </div>}
                 </div>
+        );
     }
 
     pageSettingsChange(event) {
@@ -704,3 +711,4 @@ class RenderSearchGrid extends Component {
     }
 
 }
+// export default EbayAffiliate;

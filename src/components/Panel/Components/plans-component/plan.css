@@ -4,7 +4,10 @@
     margin: 0px 5px;
 }
 .price-tag {
-    font-size: 60px;
+    font-size: 40px;
+}
+.price-tagq {
+    font-size: 35px;
 }
 .price-tag_discount {
     font-size: 18px;

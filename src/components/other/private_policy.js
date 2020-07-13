@@ -8,7 +8,7 @@ class PrivatePolicy extends Component {
 				<Card>
 					<div className="row p-5">
 						<div className="col-12 text-center mb-5">
-							<h1>Omni Importer</h1>
+							<h1>Multichannel Importer</h1>
 							<h2>Privacy Policy</h2>
 						</div>
 						<Card sectioned>

@@ -223,6 +223,7 @@ export class CreateProfile extends Component {
     }
 
     getMarketplaceAttributes() {
+        console.log(this.state.basicDetails.target);
         requests
             .getRequest("connector/get/configForm", {
                 marketplace: this.state.basicDetails.target
@@ -1870,10 +1871,10 @@ export class CreateProfile extends Component {
                             <div className="row p-5">
                                 <div className="col-12 text-center pt-3 pb-3">
                                     <div className="row">
-                                        <div
-                                            className="col-md-6 col-sm-6 col-12 text-md-left text-sm-left text-center pt-3 pb-3">
-                                            {this.renderBackStepButton()}
-                                        </div>
+                                        {/*<div*/}
+                                            {/*className="col-md-6 col-sm-6 col-12 text-md-left text-sm-left text-center pt-3 pb-3">*/}
+                                            {/*{this.renderBackStepButton()}*/}
+                                        {/*</div>*/}
                                         <div
                                             className="col-md-6 col-sm-6 col-12 text-md-right text-sm-right text-center pt-3 pb-3">
                                             {/*{this.renderNextStepButton()}*/}
@@ -1900,10 +1901,10 @@ export class CreateProfile extends Component {
                                 {/*}*/}
                                 <div className="col-12 text-center pt-3 pb-3">
                                     <div className="row">
-                                        <div
-                                            className="col-md-6 col-sm-6 col-12 text-md-left text-sm-left text-center pt-3 pb-3">
-                                            {this.renderBackStepButton()}
-                                        </div>
+                                        {/*<div*/}
+                                            {/*className="col-md-6 col-sm-6 col-12 text-md-left text-sm-left text-center pt-3 pb-3">*/}
+                                            {/*{this.renderBackStepButton()}*/}
+                                        {/*</div>*/}
                                         <div
                                             className="col-md-6 col-sm-6 col-12 text-md-right text-sm-right text-center pt-3 pb-3">
                                             {this.renderNextStepButton()}
