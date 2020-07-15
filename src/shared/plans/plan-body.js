@@ -299,50 +299,38 @@ class PlanBody extends Component {
         }
         cost = Math.round(creditCount * this.state.perProductCharge * 100) / 100;
         this.state.oneTimePaymentDetails.original_price = cost.toFixed(2);
-        if (credits <= 300) {
+        if (credits <= 500) {
             this.state.oneTimePaymentDetails.discount_percentage = 0;
-        } else if (credits <= 500) {
+        } else if (credits > 500 && credits <= 600) {
             cost = cost - (cost * 30) / 100;
             if (30 > cost) {
                 cost = 30;
             }
             this.state.oneTimePaymentDetails.discount_percentage = 30;
-        } else if (credits <= 600) {
+        } else if (credits > 600 && credits <=2000) {
             cost = cost - (cost * 40) / 100;
             if (36 > cost) {
                 cost = 36;
             }
             this.state.oneTimePaymentDetails.discount_percentage = 40;
-        } else if (credits <= 2000) {
+        } else if (credits > 2000 && credits <= 3000) {
             cost = cost - (cost * 50) / 100;
             if (42 > cost) {
                 cost = 42;
             }
             this.state.oneTimePaymentDetails.discount_percentage = 50;
-        } else if (credits <= 3000) {
+        } else if (credits > 3000 && credits <= 5000) {
             cost = cost - (cost * 65) / 100;
             if (100 > cost) {
                 cost = 100;
             }
             this.state.oneTimePaymentDetails.discount_percentage = 65;
-        } else if (credits <= 5000) {
+        } else  {
             cost = cost - (cost * 70) / 100;
             if (150 > cost) {
                 cost = 150;
             }
             this.state.oneTimePaymentDetails.discount_percentage = 70;
-        } else if (credits <= 10000) {
-            cost = cost - (cost * 75) / 100;
-            if (175 > cost) {
-                cost = 175;
-            }
-            this.state.oneTimePaymentDetails.discount_percentage = 75;
-        } else {
-            cost = cost - (cost * 80) / 100;
-            if (250 > cost) {
-                cost = 250;
-            }
-            this.state.oneTimePaymentDetails.discount_percentage = 80;
         }
         this.state.oneTimePaymentDetails.totalCredits = creditCount;
         this.state.oneTimePaymentDetails.totalAmount = cost.toFixed(2);

@@ -805,17 +805,15 @@ class Demo_analytics_reporting extends Component {
     render_recent_activity() {
         return(
             <div className="justify-content-center">
-                <div className="text-right p-3">
-                    <Button primary
-                            onClick={() => {
-                                this.redirect("/panel/help/report")}
-                }
-                    >Contact Us</Button>
-                </div>
-                <img
+                <div className="text-right p-3"
+                     onClick={() => {
+                         this.redirect("/panel/help/report")}}>
+                    <img
+                        style={{'cursor': 'pointer'}}
                     className='img-fluid p-3'
                     src={require("../../../../assets/img/DigitalMarketing3.gif")} alt="Store Development"
                     /*height="650" width="650"*//>
+                </div>
             </div>
                 /* class="zoom"*/
             /*<Stack  distribution="center">
