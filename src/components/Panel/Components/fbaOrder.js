@@ -137,7 +137,7 @@ export class FbaOrder extends Component {
             appliedFilters: {}
 
         }
-        // this.getOrders();
+        this.getOrders();
         this.checkingOrderManuallyCreate();
         this.installedAtFbaDate();
         this.deleteWebhookClient();

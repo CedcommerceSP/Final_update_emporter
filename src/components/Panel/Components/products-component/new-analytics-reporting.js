@@ -171,6 +171,10 @@ class Demo_analytics_reporting extends Component {
                             importer_marketplace.push(importer[importerkey]["marketplace"]);
                         }
                     });
+
+                    console.log(importer_marketplace);
+                    console.log(importer_title);
+                    console.log(importer);
                     this.getYAxisImporter(
                         importer_marketplace,
                         importer_title,
@@ -273,7 +277,7 @@ class Demo_analytics_reporting extends Component {
         requests.postRequest("frontend/app/getImportedProductCount", {importers: importer_marketplace_array}, false, true)
             .then(data => {
                 if (data.success && (data['data']['amazonaffiliate'] !== 0 || data['data']['amazonimporter'] !== 0 || data['data']['ebayimporter'] !== 0 ||
-                    data['data']['etsyimporter'] !== 0 || data['data']['walmartimporter'] !== 0 || data['data']['wishimporter'] !== 0 || data['data']['ebayaffiliate'] !== 0 || data['data']['fileimporter'] !== 0 ))
+                    data['data']['etsyimporter'] !== 0 || data['data']['walmartimporter'] !== 0 || data['data']['wishimporter'] !== 0 || data['data']['ebayaffiliate'] !== 0 || data['data']['fileimporter'] !== 0 || data['data']['aliexpress'] !== 0 ))
 
                 {
                     importer_data_rec = data.data;
@@ -317,7 +321,7 @@ class Demo_analytics_reporting extends Component {
                     this.state.skeleton[1] = false;
                     this.setState(this.state)
                 }  else if (data.success && data['data']['amazonaffiliate'] === 0 && data['data']['amazonimporter'] === 0 && data['data']['ebayimporter'] === 0 &&
-                    data['data']['etsyimporter'] === 0 && data['data']['walmartimporter'] === 0 && data['data']['wishimporter'] === 0 && data['data']['ebayaffiliate'] === 0) {
+                    data['data']['etsyimporter'] === 0 && data['data']['walmartimporter'] === 0 && data['data']['wishimporter'] === 0 && data['data']['ebayaffiliate'] === 0 && data['data']['aliexpress'] === 0) {
                     this.setState({no_getProductsUploadedData_and_ImportedData: true})
                 } else {
                     this.setState({no_getProductsUploadedData_and_ImportedData: true})
@@ -624,6 +628,7 @@ class Demo_analytics_reporting extends Component {
         }
         return (
             <React.Fragment>
+
                 <Layout>
                     <Layout.Section>
                         <Layout sectioned={false}>

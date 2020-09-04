@@ -12,6 +12,9 @@ import {
 	Label,
 	Stack,
 } from "@shopify/polaris";
+
+import NotificationBadge from 'react-notification-badge';
+import {Effect} from 'react-notification-badge';
 import { isUndefined } from "util";
 import { faCheck } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -33,6 +36,7 @@ class Dashboard extends Component {
 		props.disableHeader(false); // used in disabled header
 		this.state = {
 			shop_url:'',
+			count:2,
 			info: {
 				full_name: "",
 				mobile: "",
@@ -750,11 +754,15 @@ class Dashboard extends Component {
 	/************************************  Render()   ***********************************/
 	render() {
 		return (
+
 			<Page
+
 				fullWidth={true}
 				title={this.state.stepStart ? "Registration" : "Dashboard"}
 				subtitle={<Badge status="success">{this.state.shop_url}</Badge>}
 			>
+
+
 				<div className="p-2"></div>
 				{this.state.welcome_screen ? (
 					<div>

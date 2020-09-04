@@ -507,7 +507,7 @@ export class CreateProfile extends Component {
                         if (data.data[key].usable || !environment.isLive) {
                             hasService = true;
                             if (validateImporter(data.data[key].code)) {
-                                if (data.data[key].code !== 'fba') {
+                                if (data.data[key].code !== 'fba'&& data.data[key].code !== 'bigmanager_importer') {
                                     this.importServices.push({
                                         label: data.data[key].title,
                                         value: data.data[key].code,
@@ -574,21 +574,21 @@ export class CreateProfile extends Component {
             <div className="row">
                 {querySet.position === 1 && this.state.products_select.query !== "" && (
                     <div className="col-12 p-3">
-                        <Banner title="Prepared Query" status="info">
-                            <Label>{this.state.products_select.query}</Label>
-                        </Banner>
+                        {/*<Banner title="Prepared Query" status="info">*/}
+                            {/*<Label>{this.state.products_select.query}</Label>*/}
+                        {/*</Banner>*/}
                     </div>
                 )}
                 <div className="col-12 p-4">
                     <Card>
-                        <Banner title="*Please note" status="info">
-                            <Label>
-                                <h4>{"Add rule corresponding to && (AND) condition"}</h4>
-                            </Label>
-                            <Label>
-                                <h4>{"Add rule group corresponding to || (OR) condition"}</h4>
-                            </Label>
-                        </Banner>
+                        {/*<Banner title="*Please note" status="info">*/}
+                            {/*<Label>*/}
+                                {/*<h4>{"Add rule corresponding to && (AND) condition"}</h4>*/}
+                            {/*</Label>*/}
+                            {/*<Label>*/}
+                                {/*<h4>{"Add rule group corresponding to || (OR) condition"}</h4>*/}
+                            {/*</Label>*/}
+                        {/*</Banner>*/}
                         {querySet.primaryQuery.map(query => {
                             return (
                                 <div
@@ -1438,16 +1438,16 @@ export class CreateProfile extends Component {
             <div className="row">
                 {this.state.products_select.targetCategory !== "" && (
                     <div className="col-12 p-3">
-                        <Banner
-                            title={
-                                "Selected " +
-                                capitalizeWord(this.state.basicDetails.target) +
-                                " collection"
-                            }
-                            status="info"
-                        >
-                            <Label>{this.state.products_select.targetCategory}</Label>
-                        </Banner>
+                        {/*<Banner*/}
+                            {/*title={*/}
+                                {/*"Selected " +*/}
+                                {/*capitalizeWord(this.state.basicDetails.target) +*/}
+                                {/*" collection"*/}
+                            {/*}*/}
+                            {/*status="info"*/}
+                        {/*>*/}
+                            {/*<Label>{this.state.products_select.targetCategory}</Label>*/}
+                        {/*</Banner>*/}
                     </div>
                 )}
                 {this.categoryList.map(category => {
@@ -1825,7 +1825,7 @@ export class CreateProfile extends Component {
                         }}
                         primary
                     >
-                        Create Profile
+                        Save
                     </Button>
                 )}
             </React.Fragment>

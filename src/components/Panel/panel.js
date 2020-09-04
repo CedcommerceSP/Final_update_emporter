@@ -414,6 +414,15 @@ export class Panel extends Component {
         return (
             <div className="container-fluid app-panel-container">
                 <div className="row">
+                    {/*<div className="col-12 pt-5 mt-5 ">*/}
+                        {/*<div className="app-header-notice">*/}
+                        {/*<Banner status="critical">*/}
+                       {/*<Stack vertical="true" distribution="center">*/}
+                            {/*<p style={{fontSize:'1.7rem', textAlign: 'center'}}><strong>Note:-</strong> Our servers are temporarily down you may find some lagging in order and other services . Hosting company (<a target="_blank" href="https://status.inmotionhosting.com/" class="Polaris-Button Polaris-Button--plain">inmotionhosting</a>) is working on the issue. Thanks for your patience! <a target="_blank" href="mailto:apps@cedcommerce.com" class="Polaris-Button Polaris-Button--plain">Contact Us</a> for any concern</p>*/}
+                       {/*</Stack>*/}
+                        {/*</Banner>*/}
+                        {/*</div>*/}
+                    {/*</div>*/}
                     <div className="col-12">
                         <div className="app-header">
                             {this.state.header ? (
@@ -422,7 +431,8 @@ export class Panel extends Component {
                         </div>
                     </div>
                 </div>
-                <div className="row h-100 app-panel">
+                {/*<div className="row h-100 app-panel">*/}
+                <div className="row">
                     <div className="col-12">
                         <Switch>
                             <Route
@@ -660,42 +670,42 @@ export class Panel extends Component {
                     </Modal.Section>
                 </Modal>
 
-                <Modal
-                    title={"FBA User's Only"}
-                    open={this.state.show_fba_suspension_message}
-                    onClose={() => {
-                        this.setState({show_fba_suspension_message: false});
-                    }}
-                    primaryAction={{
-                        content: "FBA Section",
-                        onClick: () => {
-                            this.redirect("/panel/fbaOrders");
-                            this.setState({show_fba_suspension_message: false});
-                        }
-                    }}
-                >
-                    <Modal.Section>
-                        <Banner title={"Alert"} status="warning">
-                            <Label id={123}>
-                                <ul>
-                                    <li>
-                                        Amazon stopped accepting inbound shipments, except household staples and medical supplies, categories.
-                                    </li>
-                                    <li>
-                                        Amazon offered tips for sellers switching from FBA to Merchant Fulfilled Network (MFN)
-                                    </li>
-                                    <li>
-                                        Amazon also advised sellers, “Fulfill your orders with Amazon’s Buy Shipping,”
-                                    </li>
-                                    <p>
-                                        <a href="https://www.ecommercebytes.com/2020/03/23/amazon-reminds-fba-sellers-on-proper-fbm-shipping-practices/" target="_blank">know more</a>
-                                    </p>
-                                </ul>
+                {/*<Modal*/}
+                    {/*title={"FBA User's Only"}*/}
+                    {/*open={this.state.show_fba_suspension_message}*/}
+                    {/*onClose={() => {*/}
+                        {/*this.setState({show_fba_suspension_message: false});*/}
+                    {/*}}*/}
+                    {/*primaryAction={{*/}
+                        {/*content: "FBA Section",*/}
+                        {/*onClick: () => {*/}
+                            {/*this.redirect("/panel/fbaOrders");*/}
+                            {/*this.setState({show_fba_suspension_message: false});*/}
+                        {/*}*/}
+                    {/*}}*/}
+                {/*>*/}
+                    {/*<Modal.Section>*/}
+                        {/*<Banner title={"Alert"} status="warning">*/}
+                            {/*<Label id={123}>*/}
+                                {/*<ul>*/}
+                                    {/*<li>*/}
+                                        {/*Amazon stopped accepting inbound shipments, except household staples and medical supplies, categories.*/}
+                                    {/*</li>*/}
+                                    {/*<li>*/}
+                                        {/*Amazon offered tips for sellers switching from FBA to Merchant Fulfilled Network (MFN)*/}
+                                    {/*</li>*/}
+                                    {/*<li>*/}
+                                        {/*Amazon also advised sellers, “Fulfill your orders with Amazon’s Buy Shipping,”*/}
+                                    {/*</li>*/}
+                                    {/*<p>*/}
+                                        {/*<a href="https://www.ecommercebytes.com/2020/03/23/amazon-reminds-fba-sellers-on-proper-fbm-shipping-practices/" target="_blank">know more</a>*/}
+                                    {/*</p>*/}
+                                {/*</ul>*/}
                                 {/*FBA shipment suspended until 5th April,2020, <a href="https://sellercentral.amazon.com/forums/t/all-fba-shipments-suspended-until-april-5th/592285" target="_blank">know more</a>*/}
-                            </Label>
-                        </Banner>
-                    </Modal.Section>
-                </Modal>
+                            {/*</Label>*/}
+                        {/*</Banner>*/}
+                    {/*</Modal.Section>*/}
+                {/*</Modal>*/}
 
                 <Modal
                     title={"We Hear you Loud and Clear"}
@@ -837,7 +847,9 @@ export class Panel extends Component {
                  </Banner>
                  </Modal.Section>
                  </Modal>*/}
-            </div>
+                </div>
+            // </div>
+
         );
     }
 

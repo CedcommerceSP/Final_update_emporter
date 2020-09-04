@@ -11,8 +11,14 @@ import {
 	TextContainer,
 	Tabs,
 	Banner,
-	Badge
+	Badge,
+	Button
 } from "@shopify/polaris";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import {
+    faArrowAltCircleDown,
+    faArrowAltCircleUp
+} from "@fortawesome/free-solid-svg-icons";
 
 import { requests } from "../../../services/request";
 import { notify } from "../../../services/notify";
@@ -20,6 +26,8 @@ import { notify } from "../../../services/notify";
 import SmartDataTable from "../../../shared/smartTable";
 
 import { paginationShow } from "./static-functions";
+import FileImporter from "./import-component/fileimporter";
+import FileImporterBulkUpdate from "./import-component/fileimporterbulkupdate";
 const imageExists = require("image-exists");
 export class Products extends Component {
 	filters = {
@@ -132,13 +140,18 @@ export class Products extends Component {
 			totalPage: 0,
 			totalMainCount: 0,
 			showLoaderBar: true,
+			bulkUpdateModal:false,
+			selectedMarketplace:'',
+            shownMarketplace:[],
 			hideLoader: false,
 			pagination_show: 0,
 			selectedUploadModal: false,
 			selectUpload: { option: [], value: "" },
 			parent_sku: 0,
 			child_sku: 0,
-			requiredParamNotRecieved: true
+			requiredParamNotRecieved: true,
+			csvUrl:"",
+			uploadcsvModal:false
 		};
 		if (
 			props.necessaryInfo.account_connected !== undefined &&
@@ -477,7 +490,6 @@ export class Products extends Component {
 					let quantity = 0;
 					let rows = [];
 					Object.keys(data[i].variants).forEach((key, index) => {
-                        console.log(data[i]);
                         if (data[i].variants[key]["quantity"] > 0) {
 							quantity += data[i].variants[key]["quantity"];
 						}
@@ -674,16 +686,65 @@ export class Products extends Component {
 		);
 	}
 
+    handleBulkUpdateProduct(){
+		this.setState({
+            bulkUpdateModal:true,
+		});
+	}
+    downloadCsv(marketplace){
+    	if (marketplace && marketplace !== ''){
+            requests
+                .postRequest("frontend/app/downloadCsv", {
+                    Marketplace: marketplace
+                }, false, true)
+                .then(data => {
+                if (data.success) {
+                	this.setState({
+						csvUrl:data.URL
+					})
+					notify.info("Csv Generated Now Click On Download Csv")
+
+                } else {
+                    notify.error("Csv Not Generated");
+                }
+            });
+        }
+        else {
+    		notify.error("Select Marketplace")
+		}
+    }
+    handleSelectChangeMarketplaceCsv(selectedMarketplace){
+
+        this.setState({
+            selectedMarketplace:selectedMarketplace
+        })
+	}
+    handleChangeModakCsv = () => {
+			this.setState({
+                uploadcsvModal  : !this.state.uploadcsvModal
+            })
+	};
+
 	render() {
-        console.log(this.state.installedApps);
+        // const [selected, setSelected] = useState('today');
+        // const handleSelectChange = useCallback((value) => setSelected(value), []);
+        const options = [
+            {label: 'Amazon', value: 'amazonimporter'},
+            {label: 'Ebay', value: 'ebayimporter'},
+            {label: 'Etsy', value: 'etsyimporter'},
+            {label: 'Wish', value: 'wishimporter'},
+            {label: 'Etsy Dropshipping', value: 'etsyaffiliate'},
+            {label: 'Ebay Dropshipping', value: 'ebayaffiliate'},
+            {label: 'Aliexpress', value: 'aliexpress'},
+        ];
         return (
 			<Page
-				primaryAction={{
-					content: "Create Profile",
-					onClick: () => {
-						this.redirect("/panel/profiling/create");
-					}
-				}}
+				// primaryAction={{
+				// 	content: "Bulk Update",
+				// 	onClick:() => {
+                 //        this.handleBulkUpdateProduct();
+                 //    }
+				// }}
 				style={{ cursor: "pointer" }}
 				title="Products List"
 			>
@@ -884,6 +945,112 @@ export class Products extends Component {
 								</Label>
 							</Banner>
 						</div>
+					</Modal.Section>
+				</Modal>
+				<Modal
+					title={"Product Bulk Update"}
+					open={this.state.bulkUpdateModal}
+					onClose={() => {
+                        this.setState({bulkUpdateModal: false});
+                    }}
+				>
+					<Modal.Section>
+						<div className="row">
+							<div className="col-12 p-3">
+								<Banner title="Information" status="info">
+									<Label>
+										In order to upload your products to Shopify, click on
+										“Import Products”. Further, click on “Upload Products” to convey
+										product details from the app to Shopify. You can transfer the
+										product details from CSV to the app by clicking on “Upload CSV”.
+									</Label>
+								</Banner>
+							</div>
+							<div className="col-md-12 col-sm-12 col-12 p-3">
+								<Select
+									label="Marketplace"
+									placeholder="Marketplace"
+									options={options}
+									onChange={this.handleSelectChangeMarketplaceCsv.bind(this)}
+									value={this.state.selectedMarketplace}
+								/>
+							</div>
+							<div className="col-md-6 col-sm-6 col-12 p-3">
+								<Card>
+									<div
+										// onClick={() => {
+										// 	this.downloadCsv(this.state.selectedMarketplace);
+                                        // }}
+										// style={{cursor: "pointer"}}
+									>
+										<div className="text-center pt-5 pb-5">
+											<FontAwesomeIcon
+												icon={faArrowAltCircleDown}
+												color="#3f4eae"
+												size="10x"
+											/>
+										</div>
+										<div className="text-center pt-2 pb-4">
+											<div className="col-12">
+												<Button
+													primary
+													onClick={() => {
+                                                        	this.downloadCsv(this.state.selectedMarketplace);
+                                                        }}>
+													Generate CSV
+												</Button>
+											</div>
+											{this.state.csvUrl !== ""?<div className="col-12 p-2">
+											<a className="h2"
+											   style={{color: "#3f4eae"}}
+											    onClick={() => {
+                                                   this.setState({bulkUpdateModal: false});
+                                                }}
+											   target={"_blank"}
+											   href={this.state.csvUrl}>
+												Download CSV
+											</a>
+											</div>:null}
+									{/*<span className="h2" style={{color: "#3f4eae"}}>*/}
+										{/*Export Products CSV*/}
+									{/*</span>*/}
+											<Label>(Download Product Csv Marketplace wise.)</Label>
+										</div>
+									</div>
+								</Card>
+							</div>
+							<div className="col-md-6 col-sm-6 col-12 p-3">
+								<Card>
+									<div
+										onClick={this.handleChangeModakCsv.bind(this)}
+										style={{cursor: "pointer"}}
+									>
+										<div className="text-center pt-5 pb-5">
+											<FontAwesomeIcon
+												icon={faArrowAltCircleUp}
+												color="#3f4eae"
+												size="10x"
+											/>
+										</div>
+										<div className="text-center pt-2 pb-4">
+									<span className="h2" style={{color: "#3f4eae"}}>
+										Upload Csv File
+									</span>
+											<Label>(Add Your Csv File Here)</Label>
+										</div>
+									</div>
+								</Card>
+							</div>
+						</div>
+					</Modal.Section>
+				</Modal>
+				<Modal
+					open={this.state.uploadcsvModal}
+					onClose={this.handleChangeModakCsv.bind(this)}
+					title="Upload CSV"
+				>
+					<Modal.Section>
+						<FileImporterBulkUpdate {...this.props} />
 					</Modal.Section>
 				</Modal>
 				{this.state.deleteProductData && this.deleteProductModal()}
