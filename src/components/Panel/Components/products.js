@@ -739,12 +739,12 @@ export class Products extends Component {
         ];
         return (
 			<Page
-				// primaryAction={{
-				// 	content: "Bulk Update",
-				// 	onClick:() => {
-                 //        this.handleBulkUpdateProduct();
-                 //    }
-				// }}
+				 primaryAction={{
+					content: "Bulk Update",
+				 	onClick:() => {
+                         this.handleBulkUpdateProduct();
+                     }
+				 }}
 				style={{ cursor: "pointer" }}
 				title="Products List"
 			>

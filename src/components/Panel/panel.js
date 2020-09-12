@@ -431,8 +431,8 @@ export class Panel extends Component {
                         </div>
                     </div>
                 </div>
-                {/*<div className="row h-100 app-panel">*/}
-                <div className="row">
+                <div className="row h-100 app-panel">
+                {/*<div className="row">*/}
                     <div className="col-12">
                         <Switch>
                             <Route

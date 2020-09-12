@@ -403,7 +403,7 @@ class AmazonInstallationForm extends Component {
             data["region"] = this.state.region;
             data["dev_acc_avail"] = this.state.dev_acc_avail;
         }
-        // console.log("DATA is here",data);
+        console.log("DATA is here",data);
 
         requests
             .postRequest("amazonimporter/request/amazonImporterClientDetailsVerification", data)
