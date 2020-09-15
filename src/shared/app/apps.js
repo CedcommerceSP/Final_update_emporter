@@ -233,10 +233,10 @@ class AppsShared extends Component {
                                                    {this.props.success.code === app.code ||
                                                    app["installed"] !== 0
                                                        ?   <div className="row">
-                                                           <div className="col-12 col-sm-4">
+                                                           <div className="col-12 col-sm-6">
                                                                {this.additionalInput(app.code)}
                                                            </div>
-                                                           <div className="col-12 col-sm-4">
+                                                           <div className="col-12 col-sm-6">
                                                                <Button
                                                                    // disabled={this.props.success.code === app.code || app['installed'] !==0 && app.code !== 'ebayimporter'}
                                                                    onClick={() => {
@@ -251,18 +251,18 @@ class AppsShared extends Component {
                                                                        : "Link your Account"}
                                                                </Button>
                                                            </div>
-                                                           <div className="col-12 col-sm-4">
-                                                               <Button
-                                                                   onClick={() => {
-                                                                       this.addAnotherEbayAccount();
-                                                                   }}
-                                                                   primary
-                                                               >
-                                                                   <Icon
-                                                                       source={CirclePlusMajorMonotone}
-                                                                   />
-                                                               </Button>
-                                                           </div>
+                                                           {/*<div className="col-12 col-sm-4">*/}
+                                                               {/*<Button*/}
+                                                                   {/*onClick={() => {*/}
+                                                                       {/*this.addAnotherEbayAccount();*/}
+                                                                   {/*}}*/}
+                                                                   {/*primary*/}
+                                                               {/*>*/}
+                                                                   {/*<Icon*/}
+                                                                       {/*source={CirclePlusMajorMonotone}*/}
+                                                                   {/*/>*/}
+                                                               {/*</Button>*/}
+                                                           {/*</div>*/}
                                                        </div>:   <div className="row">
                                                            <div className="col-12 col-sm-6">
                                                                {this.additionalInput(app.code)}
@@ -859,17 +859,28 @@ class AppsShared extends Component {
 
     installApp(code) {
 
-        if (code === "ebayimporter") {
+        if (code === "ebayimporter"){
             if (this.state.ebay_county_code !== "") {
                 this.props.redirectResult(code, {
                     code: code,
-                    another_account:false,
                     ebay_site_id: this.state.ebay_county_code
                 });
             } else {
                 notify.info("Country is not selected");
             }
         }
+
+        // if (code === "ebayimporter") {
+        //     if (this.state.ebay_county_code !== "") {
+        //         this.props.redirectResult(code, {
+        //             code: code,
+        //             another_account:false,
+        //             ebay_site_id: this.state.ebay_county_code
+        //         });
+        //     } else {
+        //         notify.info("Country is not selected");
+        //     }
+        // }
 
         else if (code === "etsyimporter") {
             if (this.state.etsy !== undefined && this.state.etsy !== "") {

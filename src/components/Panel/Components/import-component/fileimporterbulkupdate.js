@@ -175,7 +175,8 @@ class FileImporterBulkUpdate extends Component {
                                         this.setState({progress:100});
                                         let response = JSON.parse(request.response);
                                         if ( response.success ) {
-                                           notify.info("File Uploaded")
+                                           notify.info("File Uploaded And Products Updated")
+                                            window.location.reload();
                                         } else {
                                             notify.error(response.message);
                                         }

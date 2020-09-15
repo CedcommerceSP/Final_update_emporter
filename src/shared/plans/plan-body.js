@@ -193,6 +193,7 @@ class PlanBody extends Component {
     getImportPaymentSettings() {
         requests.getRequest("shopifygql/payment/getPaymentSettings").then(data => {
             if (data.success) {
+                console.log(data["data"])
                 this.state.perProductCharge = data["data"]["per_product_cost"];
                 this.state.basePriceCharge = data["data"]["base_price_cost"];
                 this.state.oneTimePaymentDetails.service =

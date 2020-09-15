@@ -959,10 +959,12 @@ export class Products extends Component {
 							<div className="col-12 p-3">
 								<Banner title="Information" status="info">
 									<Label>
-										In order to upload your products to Shopify, click on
-										“Import Products”. Further, click on “Upload Products” to convey
-										product details from the app to Shopify. You can transfer the
-										product details from CSV to the app by clicking on “Upload CSV”.
+										In order to bulk update,  you have to select the marketplace first than
+										click on Generate Csv than your Csv will be generated and Download link
+										will be appeared and you can download csv from there.
+									</Label>
+									<Label>
+										Update your products details in Csv file and than upload your Csv and make the products update in App also.
 									</Label>
 								</Banner>
 							</div>

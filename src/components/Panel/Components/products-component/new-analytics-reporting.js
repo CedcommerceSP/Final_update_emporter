@@ -686,9 +686,9 @@ class Demo_analytics_reporting extends Component {
                                             ),
                                         },
                                         {
-                                            url: 'https://apps.shopify.com/facebook-marketplace-connector?surface_detail=cedcommerce&surface_inter_position=1&surface_intra_position=7&surface_type=search',
-                                            name: 'Facebook Marketplace Connector',
-                                            description: 'Sell on Facebook, list your products and manage orders.',
+                                            url: 'https://apps.shopify.com/facebook-marketplace-connector?utm_source=ced-strip&utm_medium=GTM&utm_campaign=FB%20%26%20IG%20One%20Liner%20for%20In-app%20notifications%20Bring%20your%20products%20across%20Facebook%20commerce%20surfaces%20with%20Enhanced%20Catalogs%20and%20grow%20your%20brand%E2%80%99s%20visibility.%20Amit%20Kumar%20sir%20/%20Ankit%20Singh%20please%20assign%20developers%20to%20add%20this%20notification%20on%20our%20apps%20also%20give%20the%20link%20mentioned%20above%20with%20same%20um%20paramter%20in%20the%20notification%20section%20Ankur%20sir%20/%20Rahul%20Mehta%20please%20add%20in%20the%20google%20and%20importer%20app%20Amit%20Kumar%20sir%20/Ankur%20sir%20/%20Rahul%20Mehta%20is%20it%20done%20?',
+                                            name: 'Facebook & Instagram Shopping',
+                                            description: 'Sell on Facebook & Instagram, list products and manage orders.',
                                             media: (
                                                 <Thumbnail
                                                     source="https://apps.shopifycdn.com/listing_images/8e58c700f1ecc2539682f6a04a8852c7/icon/7e03edcb47faf2838726e580ffda8f0d.png?height=84&width=84"
