@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { Page, Card, TextField, Select,Layout,Stack,Thumbnail } from "@shopify/polaris";
+import { Page, Card, TextField, Select,Layout,Stack,Thumbnail,Button } from "@shopify/polaris";
 import { requests } from "../../../../services/request";
 import { notify } from "../../../../services/notify";
 
@@ -47,6 +47,15 @@ class ReportAnIssue extends Component {
 		} else {
 			notify.info("Field Are Empty");
 		}
+	}
+    productSync(){
+        requests
+            .postRequest("frontend/test/shopifySyncingTest")
+            .then(data1 => {
+                if (data1['success']) {
+                } else {
+                }
+            });
 	}
 	render() {
 		const options = [
@@ -148,6 +157,17 @@ class ReportAnIssue extends Component {
 								</Stack>
 							</Card.Section>
 						</Card>
+						<div className="p-5">
+							<Button
+								onClick={() => {
+                                    this.productSync();
+                                }}
+								primary
+
+							>
+								Product Sync
+							</Button>
+						</div>
 					</div>
 					{/*<Layout>
 						<Layout.Section oneThird>

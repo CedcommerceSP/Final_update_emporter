@@ -901,6 +901,14 @@ export class Import extends Component {
         // this.csvManagementRender();
     };
 
+    hitInitiateSyncProduct(){
+        requests.postRequest("shopify/product/buttonInitaiateSync").then(data => {
+            if (data.success) {
+            	notify.success("Syncing for getting matching product from shopify start")
+            }
+        });
+	}
+
 	render() {
 		let { mainTab, necessaryInfo } = this.state;
         const tabs = [
@@ -930,7 +938,14 @@ export class Import extends Component {
         }*/
         console.log(tabs[mainTab]);
         return (
-			<Page title="Manage Products">
+			<Page
+				primaryAction={{
+                    content: "Get Shopify Match Products",
+                    onClick:() => {
+                        this.hitInitiateSyncProduct();
+                    }
+                }}
+				title="Manage Products">
 				<Tabs
 					name={"hello"}
 					selected={this.state.mainTab}

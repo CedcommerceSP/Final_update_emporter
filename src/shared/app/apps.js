@@ -208,90 +208,90 @@ class AppsShared extends Component {
         console.log(this.state.apps);
         // this.checkDevice();
            return this.state.apps.map(app => {
-               if (app.code == "ebayimporter"){
-                   if (app.code !== 'fba' && app.code !== 'ebayaffiliate' && app.code !== 'amazonaffiliate' && app.code !== 'aliexpress' && app.title !== 'Etsy Dropshipping') {
-                       if (this.validateCode(app.code)) {
-                           return (
-                               <div
-                                   className="col-6 col-sm-6 mb-4"
-                                   key={this.state.apps.indexOf(app)}
-                               >
-                                   <Card title={app.title}>
-                                       {this.props.success.code === app.code ||
-                                       app["installed"] !== 0
-                                           ?<div className="text-left pt-3 pl-4">
-                                               <Badge progress="complete" status="success">Connected</Badge>
-                                           </div>:null}
-                                       <div className="row p-5">
-                                           <div className="col-12">
-                                               {window.screen.width <= 500 ?<img src={app.image} alt={app.title}
-                                                                                 style={{maxWidth: "60px", height: "60px"}}/>:<img src={app.image} alt={app.title}
-                                                                                                                                   style={{maxWidth: "80%", height: "160px"}}/>}
-                                           </div>
-                                           <div className="col-12 mt-4 mb-4">
-
-                                                   {this.props.success.code === app.code ||
-                                                   app["installed"] !== 0
-                                                       ?   <div className="row">
-                                                           <div className="col-12 col-sm-6">
-                                                               {this.additionalInput(app.code)}
-                                                           </div>
-                                                           <div className="col-12 col-sm-6">
-                                                               <Button
-                                                                   // disabled={this.props.success.code === app.code || app['installed'] !==0 && app.code !== 'ebayimporter'}
-                                                                   onClick={() => {
-                                                                       this.installApp(app.code);
-                                                                   }}
-                                                                   primary
-                                                                   fullWidth={true}
-                                                               >
-                                                                   {this.props.success.code === app.code ||
-                                                                   app["installed"] !== 0
-                                                                       ? "ReConnect"
-                                                                       : "Link your Account"}
-                                                               </Button>
-                                                           </div>
-                                                           {/*<div className="col-12 col-sm-4">*/}
-                                                               {/*<Button*/}
-                                                                   {/*onClick={() => {*/}
-                                                                       {/*this.addAnotherEbayAccount();*/}
-                                                                   {/*}}*/}
-                                                                   {/*primary*/}
-                                                               {/*>*/}
-                                                                   {/*<Icon*/}
-                                                                       {/*source={CirclePlusMajorMonotone}*/}
-                                                                   {/*/>*/}
-                                                               {/*</Button>*/}
-                                                           {/*</div>*/}
-                                                       </div>:   <div className="row">
-                                                           <div className="col-12 col-sm-6">
-                                                               {this.additionalInput(app.code)}
-                                                           </div>
-                                                           <div className="col-12 col-sm-6">
-                                                               <Button
-                                                                   // disabled={this.props.success.code === app.code || app['installed'] !==0 && app.code !== 'ebayimporter'}
-                                                                   onClick={() => {
-                                                                       this.installApp(app.code);
-                                                                   }}
-                                                                   primary
-                                                                   fullWidth={true}
-                                                               >
-                                                                   {this.props.success.code === app.code ||
-                                                                   app["installed"] !== 0
-                                                                       ? "ReConnect"
-                                                                       : "Link your Account"}
-                                                               </Button>
-                                                           </div>
-                                                       </div>}
-                                           </div>
-                                       </div>
-                                   </Card>
-                               </div>
-                           );
-                       }
-                   }
-               }
-               else {
+               // if (app.code == "ebayimporter"){
+               //     if (app.code !== 'fba' && app.code !== 'ebayaffiliate' && app.code !== 'amazonaffiliate' && app.code !== 'aliexpress' && app.title !== 'Etsy Dropshipping') {
+               //         if (this.validateCode(app.code)) {
+               //             return (
+               //                 <div
+               //                     className="col-6 col-sm-6 mb-4"
+               //                     key={this.state.apps.indexOf(app)}
+               //                 >
+               //                     <Card title={app.title}>
+               //                         {this.props.success.code === app.code ||
+               //                         app["installed"] !== 0
+               //                             ?<div className="text-left pt-3 pl-4">
+               //                                 <Badge progress="complete" status="success">Connected</Badge>
+               //                             </div>:null}
+               //                         <div className="row p-5">
+               //                             <div className="col-12">
+               //                                 {window.screen.width <= 500 ?<img src={app.image} alt={app.title}
+               //                                                                   style={{maxWidth: "60px", height: "60px"}}/>:<img src={app.image} alt={app.title}
+               //                                                                                                                     style={{maxWidth: "80%", height: "160px"}}/>}
+               //                             </div>
+               //                             <div className="col-12 mt-4 mb-4">
+               //
+               //                                     {this.props.success.code === app.code ||
+               //                                     app["installed"] !== 0
+               //                                         ?   <div className="row">
+               //                                             <div className="col-12 col-sm-4">
+               //                                                 {this.additionalInput(app.code)}
+               //                                             </div>
+               //                                             <div className="col-12 col-sm-4">
+               //                                                 <Button
+               //                                                     // disabled={this.props.success.code === app.code || app['installed'] !==0 && app.code !== 'ebayimporter'}
+               //                                                     onClick={() => {
+               //                                                         this.installApp(app.code);
+               //                                                     }}
+               //                                                     primary
+               //                                                     fullWidth={true}
+               //                                                 >
+               //                                                     {this.props.success.code === app.code ||
+               //                                                     app["installed"] !== 0
+               //                                                         ? "ReConnect"
+               //                                                         : "Link your Account"}
+               //                                                 </Button>
+               //                                             </div>
+               //                                             <div className="col-12 col-sm-4">
+               //                                                 <Button
+               //                                                     onClick={() => {
+               //                                                         this.addAnotherEbayAccount();
+               //                                                     }}
+               //                                                     primary
+               //                                                 >
+               //                                                     <Icon
+               //                                                         source={CirclePlusMajorMonotone}
+               //                                                     />
+               //                                                 </Button>
+               //                                             </div>
+               //                                         </div>:   <div className="row">
+               //                                             <div className="col-12 col-sm-6">
+               //                                                 {this.additionalInput(app.code)}
+               //                                             </div>
+               //                                             <div className="col-12 col-sm-6">
+               //                                                 <Button
+               //                                                     // disabled={this.props.success.code === app.code || app['installed'] !==0 && app.code !== 'ebayimporter'}
+               //                                                     onClick={() => {
+               //                                                         this.installApp(app.code);
+               //                                                     }}
+               //                                                     primary
+               //                                                     fullWidth={true}
+               //                                                 >
+               //                                                     {this.props.success.code === app.code ||
+               //                                                     app["installed"] !== 0
+               //                                                         ? "ReConnect"
+               //                                                         : "Link your Account"}
+               //                                                 </Button>
+               //                                             </div>
+               //                                         </div>}
+               //                             </div>
+               //                         </div>
+               //                     </Card>
+               //                 </div>
+               //             );
+               //         }
+               //     }
+               // }
+               // else {
                    if (app.code !== 'fba' && app.code !== 'ebayaffiliate' && app.code !== 'amazonaffiliate' && app.code !== 'aliexpress' && app.title !== 'Etsy Dropshipping') {
                        if (this.validateCode(app.code)) {
                            return (
@@ -339,7 +339,7 @@ class AppsShared extends Component {
                            );
                        }
                    }
-               }
+               // }
             })
         }
 

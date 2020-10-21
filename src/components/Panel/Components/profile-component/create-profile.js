@@ -104,6 +104,7 @@ export class CreateProfile extends Component {
     getConnectors() {
         requests.getRequest("connector/get/all").then(data => {
             if (data.success) {
+                console.log(data)
                 let installedApps = [];
                 for (let i = 0; i < Object.keys(data.data).length; i++) {
                     if (data.data[Object.keys(data.data)[i]]['code'] == "ebayimporter" && data.data[Object.keys(data.data)[i]]['installed'] == 1) {
@@ -146,6 +147,7 @@ export class CreateProfile extends Component {
                 importers: importer_marketplace_array
             }, false, true)
             .then(data => {
+                console.log(data);
                 for (let j = 0; j < importer_marketplace_array.length; j++) {
                     if (data.data[importer_marketplace_array[j]] > 0) {
                         this.state.array_marketpalce_imported.push(importer_marketplace_array[j]);
@@ -1935,11 +1937,12 @@ export class CreateProfile extends Component {
     }
 
     saveDataAndMoveToNextStep() {
-
+        // console.log(this.state.activeStep);
         switch (this.state.activeStep) {
             case 1:
+                // console.log(this.validateStepOne());
                 if (this.validateStepOne()) {
-                    // console.log(this.state.basicDetails.source);
+                    console.log(this.state.array_marketpalce_imported);
                     if (this.state.basicDetails.source === 'fileimporter'){
                         this.saveProfileData();
                         this.state.for_profiling = true;

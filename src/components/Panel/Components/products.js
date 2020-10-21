@@ -956,18 +956,18 @@ export class Products extends Component {
 				>
 					<Modal.Section>
 						<div className="row">
-							<div className="col-12 p-3">
-								<Banner title="Information" status="info">
-									<Label>
-										In order to bulk update,  you have to select the marketplace first than
-										click on Generate Csv than your Csv will be generated and Download link
-										will be appeared and you can download csv from there.
-									</Label>
-									<Label>
-										Update your products details in Csv file and than upload your Csv and make the products update in App also.
-									</Label>
-								</Banner>
-							</div>
+							{/*<div className="col-12 p-3">*/}
+								{/*<Banner title="Information" status="info">*/}
+									{/*<Label>*/}
+										{/*In order to bulk update,  you have to select the marketplace first than*/}
+										{/*click on Generate Csv than your Csv will be generated and Download link*/}
+										{/*will be appeared and you can download csv from there.*/}
+									{/*</Label>*/}
+									{/*<Label>*/}
+										{/*Update your products details in Csv file and than upload your Csv and make the products update in App also.*/}
+									{/*</Label>*/}
+								{/*</Banner>*/}
+							{/*</div>*/}
 							<div className="col-md-12 col-sm-12 col-12 p-3">
 								<Select
 									label="Marketplace"
@@ -980,10 +980,10 @@ export class Products extends Component {
 							<div className="col-md-6 col-sm-6 col-12 p-3">
 								<Card>
 									<div
-										// onClick={() => {
-										// 	this.downloadCsv(this.state.selectedMarketplace);
-                                        // }}
-										// style={{cursor: "pointer"}}
+										onClick={() => {
+                                            this.downloadCsv(this.state.selectedMarketplace);
+                                        }}
+										style={{cursor: "pointer"}}
 									>
 										<div className="text-center pt-5 pb-5">
 											<FontAwesomeIcon
@@ -993,30 +993,30 @@ export class Products extends Component {
 											/>
 										</div>
 										<div className="text-center pt-2 pb-4">
-											<div className="col-12">
-												<Button
-													primary
-													onClick={() => {
-                                                        	this.downloadCsv(this.state.selectedMarketplace);
-                                                        }}>
-													Generate CSV
-												</Button>
-											</div>
-											{this.state.csvUrl !== ""?<div className="col-12 p-2">
-											<a className="h2"
-											   style={{color: "#3f4eae"}}
-											    onClick={() => {
-                                                   this.setState({bulkUpdateModal: false});
-                                                }}
-											   target={"_blank"}
-											   href={this.state.csvUrl}>
-												Download CSV
-											</a>
+											{/*<div className="col-12">*/}
+												{/*<Button*/}
+													{/*primary*/}
+													{/*onClick={() => {*/}
+                                                        	{/*this.downloadCsv(this.state.selectedMarketplace);*/}
+                                                        {/*}}>*/}
+													{/*Generate CSV*/}
+												{/*</Button>*/}
+											{/*</div>*/}
+									<span className="h2" style={{color: "#3f4eae"}}>
+										Import CSV
+									</span>
+											<Label>(Export CSV from app.)</Label>
+                                            {this.state.csvUrl !== ""?<div className="col-12 p-2">
+												<a className="h2"
+												   style={{color: "#3f4eae"}}
+												   onClick={() => {
+                                                       this.setState({bulkUpdateModal: false});
+                                                   }}
+												   target={"_blank"}
+												   href={this.state.csvUrl}>
+													Download CSV
+												</a>
 											</div>:null}
-									{/*<span className="h2" style={{color: "#3f4eae"}}>*/}
-										{/*Export Products CSV*/}
-									{/*</span>*/}
-											<Label>(Download Product Csv Marketplace wise.)</Label>
 										</div>
 									</div>
 								</Card>
@@ -1038,7 +1038,7 @@ export class Products extends Component {
 									<span className="h2" style={{color: "#3f4eae"}}>
 										Upload Csv File
 									</span>
-											<Label>(Add Your Csv File Here)</Label>
+											<Label>(Import updated CSV on app)</Label>
 										</div>
 									</div>
 								</Card>
