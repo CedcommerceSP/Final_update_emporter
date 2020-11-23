@@ -3,6 +3,14 @@
     vertical-align: middle;
     margin: 0px 5px;
 }
+
+.marq {
+    padding-top: 10px;
+    padding-bottom: 10px;
+    color:white;
+    font-size:15px
+}
+
 .price-tag {
     font-size: 40px;
 }

@@ -118,21 +118,26 @@ export class Plans extends Component {
 				}}
 			>
 				<div className="row">
-					{this.state.sync_plan_checkbox?<div className="col-12 text-center mb-5">
+					{/*<div className="col-12">*/}
+						{/*<marquee class="marq"direction="left"bgcolor="DodgerBlue">*/}
+							{/*<b>This is a sample scrolling text that has scrolls texts to left.</b>*/}
+						{/*</marquee>*/}
+					{/*</div>*/}
+					{this.state.sync_plan_checkbox?<div className="col-12 text-center m-4">
 						{" "}
 						{/*tittle*/}
-						<span style={{ fontSize: "40px" }}>
+						<span style={{ fontSize: "20px" }}>
 							<b>Choose the best offer</b>
 						</span>
 						<hr/>
-						<div>
-							To upgrade or downgrade your plan,{' '}
-							<Button plain monochrome
-									onClick={this.showPlanSectionUpgardePlan.bind(this)}
-							>
-								{<b>Click Here</b>}
-							</Button>
-						</div>
+						{/*<div>*/}
+							{/*To upgrade or downgrade your plan,{' '}*/}
+							{/*<Button plain monochrome*/}
+									{/*onClick={this.showPlanSectionUpgardePlan.bind(this)}*/}
+							{/*>*/}
+								{/*{<b>Click Here</b>}*/}
+							{/*</Button>*/}
+						{/*</div>*/}
 					</div>:null}
 					<div className="col-12 mb-4">
 						<div className="d-flex justify-content-center">

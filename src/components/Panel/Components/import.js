@@ -35,6 +35,7 @@ export class Import extends Component {
 			listing_type: "active",
 			selectedLocation:'NA',
 			TabToBeRender:'',
+			customUpload:false,
 			isLocationPresent:false,
 			importServicesList: [],
 			importerShopLists: [],
@@ -73,12 +74,34 @@ export class Import extends Component {
         this.redirect = this.redirect.bind(this);
         this.handleModalChange = this.handleModalChange.bind(this);
         this.getShopifyConfigurations();
+        this.customUploadDiv();
 	}
     componentWillReceiveProps(nextPorps) {
 		// console.log("qwerty",nextPorps);
         if (nextPorps.necessaryInfo !== undefined) {
             this.setState({ necessaryInfo: nextPorps.necessaryInfo });
         }
+    }
+
+    customUploadDiv(){
+        requests
+            .getRequest("ebayimporter/request/customUploadDiv")
+            .then(data => {
+            	if (data.success){
+            		this.setState({
+                        customUpload:true
+					})
+				}
+            });
+	}
+    handleChangeForCustomUpload(){
+        requests
+            .getRequest("ebayimporter/request/initiateCustomUpload")
+            .then(data => {
+                if (data.success){
+
+                }
+            });
     }
 
 	getAllImporterServices() {
@@ -1061,6 +1084,28 @@ export class Import extends Component {
                                 </div>
                             </Card>
                         </div>
+						{this.state.customUpload?<div className="col-md-4 col-sm-4 col-12 p-3">
+							<Card>
+								<div style={{cursor: "pointer"}}
+									 onClick={this.handleChangeForCustomUpload.bind(this)}
+								>
+									<div className="text-center pt-5 pb-5">
+										<FontAwesomeIcon
+											icon={faArrowAltCircleUp}
+											color="#ae3f3f"
+											size="10x"
+										/>
+									</div>
+									<div className="text-center pt-2 pb-4">
+									<span className="h2" style={{color: "#ae3f3f"}}>
+										Custom Upload
+									</span>
+										<Label>(Upload Your Product)</Label>
+									</div>
+								</div>
+							</Card>
+						</div>:null}
+
                         <Modal
                             open={this.state.active}
                             onClose={this.handleChangeModakCsv.bind(this)}

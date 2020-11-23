@@ -3,6 +3,11 @@
  */
 import React, {Component} from "react";
 import {isUndefined} from "util";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import {
+    faArrowAltCircleDown,
+    faArrowAltCircleUp
+} from "@fortawesome/free-solid-svg-icons";
 import {
     Page,
     Card,
@@ -13,6 +18,7 @@ import {
     Modal,
     TextContainer,
     Tabs,
+    TextField,
     Banner,
     Badge,
     Button,
@@ -44,6 +50,11 @@ export class FbaOrder extends Component {
     columnTitles = {
         shopify_order_name: {
             title: "Shopify Order",
+            sortable: false,
+            type: "string"
+        },
+        shopify_order_id: {
+            title: "Order Id",
             sortable: false,
             type: "string"
         },
@@ -85,7 +96,8 @@ export class FbaOrder extends Component {
         "financial_status",
         "processing_status",
         "button_order",
-        "button_order_view"
+        "button_order_view",
+        "shopify_order_id"
     ];
     pageLimits = [
         { label: 10, value: "10" },
@@ -99,6 +111,7 @@ export class FbaOrder extends Component {
 
     predefineFilters = [
      { label: "Shopify Order", value: "shopify_order_name", type: "string", special_case: "no" },
+     { label: "Order Id", value: "shopify_order_id", type: "string", special_case: "no" },
      /*{ label: "SKU", value: "sku", type: "string", special_case: "no" },
      { label: "Price", value: "price", type: "int", special_case: "no" },
      { label: "Quantity", value: "quantity", type: "int", special_case: "no" },
@@ -129,6 +142,9 @@ export class FbaOrder extends Component {
             trail_days_left:0,
             show_trail_banner:false,
             show_trail_banner_webhook:false,
+            selectedFetchOrders:'',
+            shopifyOrderId:'',
+            fetchOrderShopify:false,
             order: [],
             selectedProducts: [],
             single_column_filter: [],
@@ -151,6 +167,7 @@ export class FbaOrder extends Component {
         this.filters.single_column_filter.forEach((e, i) => {
             switch (e.name) {
                 case "shopify_order_name":
+                case "shopify_order_id":
                 case "created_at":
                     this.state.appliedFilters[
                     "filter[" + e.name + "][" + e.condition + "]"
@@ -169,6 +186,7 @@ export class FbaOrder extends Component {
             if (this.filters.column_filters[key].value !== "") {
                 switch (key) {
                     case "shopify_order_name":
+                    case "shopify_order_id":
                     case "created_at":
                     case "financial_status":
                     case "processing_status":
@@ -248,6 +266,12 @@ export class FbaOrder extends Component {
                 ) {
                     str = data[i]["shopify_order_name"];
                     rowData["shopify_order_name"] = str;
+                }
+                if (
+                    data[i]["shopify_order_id"] !== ""
+                ) {
+                    str = data[i]["shopify_order_id"];
+                    rowData["shopify_order_id"] = str;
                 }
                 if (
                     data[i]["created_at"] !== ""
@@ -494,9 +518,76 @@ export class FbaOrder extends Component {
         }
     }
 
+    fetchOrderFromShopify(){
+        requests
+            .getRequest("fba/test/fetchOrderFromShopify")
+            .then(data => {
+                console.log(data)
+            });
+    }
+
+    handleSelectChangeMarketplaceCsv(selectedMarketplace){
+
+        this.setState({
+            selectedFetchOrders:selectedMarketplace
+        })
+    }
+
+    handleChangeSingleOrderId(orderId){
+        this.setState({
+            shopifyOrderId:orderId
+        })
+    }
+    OnSubmitOrder(){
+        if (this.state.selectedFetchOrders !== ''){
+            if (this.state.selectedFetchOrders === 'singleOrders' && this.state.shopifyOrderId ===''){
+                notify.error("Enter order Id")
+            }else {
+                let orderdata = {
+                    orderAction: this.state.selectedFetchOrders,
+                    order_id:this.state.shopifyOrderId
+                };
+
+                requests.postRequest('fba/test/fetchOrderFromShopify', orderdata, false, false).then(response1 => {
+                    if (response1.success) {
+                        notify.success(response1.message)
+                    }
+                    else {
+                        notify.error(response1.message)
+                    }
+                });
+            }
+        }else {
+            notify.error("Select Any Order Option")
+        }
+        this.setState({
+            fetchOrderShopify: false,
+            selectedFetchOrders:'',
+            shopifyOrderId:''
+        });
+
+    }
+
+
     render() {
+
+        const options = [
+            {label: 'All Orders', value: 'allOrders'},
+            {label: 'Single Orders', value: 'singleOrders'},
+           ];
         return (
-            <Page title="FBA Orders">
+            <Page
+                primaryAction={{
+                    content: "Sync Order Form Shopify",
+                    onClick:() => {
+                        this.setState({
+                            fetchOrderShopify:true
+                        });
+                    }
+                }}
+                style={{ cursor: "pointer" }}
+
+                title="FBA Orders">
                 <Card>
                     <div className="p-5">
                         <div className="row">
@@ -702,6 +793,97 @@ export class FbaOrder extends Component {
                         </div>
 
                     </div>
+                    <Modal
+                        title={"Fetch Order From Shopify"}
+                        open={this.state.fetchOrderShopify}
+                        onClose={() => {
+                            this.setState({fetchOrderShopify: false});
+                        }}
+                    >
+                        <Modal.Section>
+                            <div className="row">
+
+                                <div className="col-md-12 col-sm-12 col-12 p-3">
+                                    <Select
+                                        label="Order Sync Type"
+                                        placeholder="select"
+                                        options={options}
+                                        onChange={this.handleSelectChangeMarketplaceCsv.bind(this)}
+                                        value={this.state.selectedFetchOrders}
+                                    />
+                                </div>
+
+                                {this.state.selectedFetchOrders == 'singleOrders'?<div className="col-md-12 col-sm-12 col-12 p-3">
+                                    <TextField
+                                        label="Order Id"
+                                        helpText="Enter Shopify Order Id (For Multiple Order Id use ',' between Order Id (3084497649832,3083335270568,3082898309288,..))"
+                                        value={this.state.shopifyOrderId}
+                                        onChange={this.handleChangeSingleOrderId.bind(this)} />
+                                </div>:null}
+
+                                <div className="col-md-4 col-sm-4 col-12"></div>
+
+                                <div className="col-md-4 col-sm-4 col-12 p-3">
+                                    <Button
+                                        primary
+                                        onClick={() => {
+                                        this.OnSubmitOrder();}}
+                                    >
+                                        Submit
+                                    </Button>
+                                </div>
+
+
+                                {/*<div className="col-md-6 col-sm-6 col-12 p-3">*/}
+                                    {/*<Card>*/}
+                                        {/*<div*/}
+                                            {/*onClick={() => {*/}
+                                                {/*this.fetchOrderFromShopify();*/}
+                                            {/*}}*/}
+                                            {/*style={{cursor: "pointer"}}*/}
+                                        {/*>*/}
+                                            {/*<div className="text-center pt-5 pb-5">*/}
+                                                {/*<FontAwesomeIcon*/}
+                                                    {/*icon={faArrowAltCircleDown}*/}
+                                                    {/*color="#3f4eae"*/}
+                                                    {/*size="10x"*/}
+                                                {/*/>*/}
+                                            {/*</div>*/}
+                                            {/*<div className="text-center pt-2 pb-4">*/}
+
+                                                {/*<span className="h2" style={{color: "#3f4eae"}}>*/}
+										{/*Import Orders*/}
+									{/*</span>*/}
+                                                {/*<Label>(Import Shopify Unfulfilled Orders)</Label>*/}
+                                            {/*</div>*/}
+                                        {/*</div>*/}
+                                    {/*</Card>*/}
+                                {/*</div>*/}
+                                {/*<div className="col-md-6 col-sm-6 col-12 p-3">*/}
+                                    {/*<Card>*/}
+                                        {/*<div*/}
+                                            {/*onClick={this.fetchOrderFromShopify.bind(this)}*/}
+                                            {/*style={{cursor: "pointer"}}*/}
+                                        {/*>*/}
+                                            {/*<div className="text-center pt-5 pb-5">*/}
+                                                {/*<FontAwesomeIcon*/}
+                                                    {/*icon={faArrowAltCircleUp}*/}
+                                                    {/*color="#3f4eae"*/}
+                                                    {/*size="10x"*/}
+                                                {/*/>*/}
+                                            {/*</div>*/}
+                                            {/*<div className="text-center pt-2 pb-4">*/}
+									{/*<span className="h2" style={{color: "#3f4eae"}}>*/}
+										{/*Upload Csv File*/}
+									{/*</span>*/}
+                                                {/*<Label>(Import updated CSV on app)</Label>*/}
+                                            {/*</div>*/}
+                                        {/*</div>*/}
+                                    {/*</Card>*/}
+                                {/*</div>*/}
+                            </div>
+                        </Modal.Section>
+                    </Modal>
                 </Card>
             </Page>
         )
