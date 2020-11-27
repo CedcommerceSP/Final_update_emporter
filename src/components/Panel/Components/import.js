@@ -34,6 +34,7 @@ export class Import extends Component {
         this.state = {
 			listing_type: "active",
 			selectedLocation:'NA',
+            selectedUploadStatus:'all',
 			TabToBeRender:'',
 			customUpload:false,
 			isLocationPresent:false,
@@ -75,6 +76,8 @@ export class Import extends Component {
         this.handleModalChange = this.handleModalChange.bind(this);
         this.getShopifyConfigurations();
         this.customUploadDiv();
+        this.handleSelectUploadStatus = this.handleSelectUploadStatus.bind(this);
+
 	}
     componentWillReceiveProps(nextPorps) {
 		// console.log("qwerty",nextPorps);
@@ -508,7 +511,23 @@ export class Import extends Component {
             });
     }
 
+    handleSelectUploadStatus(event) {
+        this.setState({
+            selectedUploadStatus: event
+        });
+    }
+
 	renderUploadProductsModal() {
+        const status_to_upload = [
+            {
+                label: "All",
+                value: "all"
+            },
+            {
+                label: "Uploaded Products",
+                value: "uploaded"
+            },
+        ];
 		return (
 			<Modal
 				open={this.state.showUploadProducts}
@@ -527,6 +546,15 @@ export class Import extends Component {
 								options={this.state.importServicesList}
 								onChange={this.handleUploadChange.bind(this, "source")}
 								value={this.state.uploadProductDetails.source}
+							/>
+						</div>
+						<div className="col-12 pt-1 pb-1 mt-2 mb-2">
+							<Select
+								label="Upload By Status"
+								placeholder="Upload Product By Status In App"
+								options={status_to_upload}
+								onChange={this.handleSelectUploadStatus}
+								value={this.state.selectedUploadStatus}
 							/>
 						</div>
 						{this.state.uploadProductDetails.source !== "" &&
@@ -855,40 +883,64 @@ export class Import extends Component {
 
 	uploadProducts() {
         if (this.state.selectedLocation != "NA") {
-            const data = Object.assign({}, this.state.uploadProductDetails);
-            data["marketplace"] = data["target"];
-            requests.postRequest("connector/product/upload", data).then(data => {
-                this.state.showUploadProducts = false;
-                if (data.success) {
-                    if (data.code === "product_upload_started") {
-                        notify.info(
-                            "Upload process started. Check progress in activities section."
-                        );
-                        setTimeout(() => {
-                            this.redirect("/panel/queuedtasks");
-                        }, 1000);
+        	if (this.state.selectedUploadStatus == 'uploaded'){
+                const data = Object.assign({}, this.state.uploadProductDetails);
+                data["marketplace"] = data["target"];
+                requests
+                    .postRequest("shopify/product/uploadAllUploadedProducts", data, false, false)
+                    .then(data1 => {
+                        if (data1['success']) {
+                            notify.info(
+                                "Upload process started. Check progress in activities section."
+                            );
+                            setTimeout(() => {
+                                this.redirect("/panel/queuedtasks");
+                            }, 1000);
+                        } else {
+                        	notify.error("Please Contact Dev Team")
+                        }
+                    });
+			}
+			else if (this.state.selectedUploadStatus == 'all'){
+                const data = Object.assign({}, this.state.uploadProductDetails);
+                data["marketplace"] = data["target"];
+                requests.postRequest("connector/product/upload", data).then(data => {
+                    this.state.showUploadProducts = false;
+                    if (data.success) {
+                        if (data.code === "product_upload_started") {
+                            notify.info(
+                                "Upload process started. Check progress in activities section."
+                            );
+                            setTimeout(() => {
+                                this.redirect("/panel/queuedtasks");
+                            }, 1000);
+                        } else {
+                            notify.success(data.message);
+                        }
                     } else {
-                        notify.success(data.message);
+                        // notify.error(data.message);
+                        if (data.code === "link_your_account") {
+                            setTimeout(() => {
+                                this.redirect("/panel/accounts");
+                            }, 1200);
+                            notify.info("Account Not Linked.");
+                        }
+                        if (data.code === "limit_exhausted") {
+                            setTimeout(() => {
+                                this.redirect("/panel/plans");
+                            }, 1000);
+                            notify.info("Credit Not Available.");
+                        } else {
+                            notify.error(data.message);
+                        }
                     }
-                } else {
-                    // notify.error(data.message);
-                    if (data.code === "link_your_account") {
-                        setTimeout(() => {
-                            this.redirect("/panel/accounts");
-                        }, 1200);
-                        notify.info("Account Not Linked.");
-                    }
-                    if (data.code === "limit_exhausted") {
-                        setTimeout(() => {
-                            this.redirect("/panel/plans");
-                        }, 1000);
-                        notify.info("Credit Not Available.");
-                    } else {
-                        notify.error(data.message);
-                    }
-                }
-                this.updateState();
-            });
+                    this.updateState();
+                });
+			}
+			else {
+                notify.error("In Maintaince Please Try After Some Time")
+			}
+
         }
         else {
             notify.error("Please select warehouse setting section")

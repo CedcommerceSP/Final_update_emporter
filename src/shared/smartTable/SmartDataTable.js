@@ -62,7 +62,10 @@ class SmartDataTablePlain extends React.Component {
 	];
 	filterInt = [
 		{ label: "equals", value: "1" },
-		{ label: "not equals", value: "2" }
+		{ label: "not equals", value: "2"},
+		{label: "greater than equal to", value: "3"},
+        {label: "less than equal to", value: "4"},
+
 	];
 	defaultColumns = [];
 	defaultFilters = {};

@@ -72,6 +72,7 @@ export class Products extends Component {
 		{ label: "Price", value: "price", type: "int", special_case: "no" },
 		{ label: "Quantity", value: "quantity", type: "int", special_case: "no" },
 		{ label:"Type", value:"type", type:"type", special_case:"yes"},
+        { label:"Country", value:"site", type:"string", special_case:"yes"},
 		{
 			label: "Date Picker",
 			value: "datePicker",
@@ -180,6 +181,7 @@ export class Products extends Component {
 			this.setState({ requiredParamNotRecieved: false });
 		}
 	}
+
 
 	prepareHeader = props => {
 		if (
@@ -364,6 +366,7 @@ export class Products extends Component {
 		this.filters.single_column_filter.forEach((e, i) => {
 			switch (e.name) {
 				case "title":
+                case "site":
 				case "long_description":
 					this.state.appliedFilters[
 						"filter[details." + e.name + "][" + e.condition + "]"
@@ -544,12 +547,32 @@ export class Products extends Component {
 												<th> SKU </th>
 												<th> Price </th>
 												<th> Quantity </th>
+												<th>Action</th>
 											</tr>
 											{rows.map(e => (
 												<tr>
 													<td> {e[0]} </td>
 													<td> {e[1]} </td>
 													<td> {e[2]} </td>
+													<td>
+														<Button
+															size="slim"
+															onClick={() => {
+                                                                if ( e[0] !== '' ) {
+                                                                    var textField = document.createElement('textarea');
+                                                                    textField.innerText = e[0];
+                                                                    document.body.appendChild(textField);
+                                                                    textField.select();
+                                                                    document.execCommand('copy');
+                                                                    textField.remove();
+                                                                    notify.success('SKU Copied');
+                                                                } else {
+                                                                    notify.info('No SKU');
+                                                                }
+                                                            }}>
+															Copy SKU
+														</Button>
+													</td>
 												</tr>
 											))}
 										</table>
@@ -857,7 +880,8 @@ export class Products extends Component {
 										this.getProducts();
 									}}
 									singleButtonColumnFilter={filter => {
-										this.filters.single_column_filter = filter;
+                                        console.log(filter);
+                                        this.filters.single_column_filter = filter;
 										this.getProducts();
 									}}
 									sortable
