@@ -8,7 +8,9 @@ import {
     Banner,
     ResourceList,
     Modal,
-    TextContainer
+    TextContainer,
+    Tabs,
+    Heading,
 } from "@shopify/polaris";
 import {faArrowsAltH} from "@fortawesome/free-solid-svg-icons";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
@@ -20,6 +22,7 @@ class FAQPage extends Component {
         this.modalOpen = this.modalOpen.bind(this); // modal function
         this.state = {
             modal: false, // modal show/hide
+            selected: 0,
             search: "", // search
             noSearchFound: [1],
             faq: [
@@ -32,15 +35,20 @@ class FAQPage extends Component {
                         <React.Fragment>
                             <p>
 
-                                With the Multichannel Importer app, you can send your products from the Amazon seller center to
+                                With the Multichannel Importer app, you can send your products from the Amazon seller
+                                center to
 
                                 your Shopify store. The process of transferring an item is very simple. Please see the
                                 following points-</p>
                             <ol>
                                 <li>Go to the Import/Upload section.</li>
-                                <li>Click on Import Products. All the products will be listed on the app. You can see the
-                                    products in the Products section.</li>
-                                <li>Then you can select and upload or bulk upload, depending on the seller’s requirement.</li>
+                                <li>Click on Import Products. All the products will be listed on the app. You can see
+                                    the
+                                    products in the Products section.
+                                </li>
+                                <li>Then you can select and upload or bulk upload, depending on the seller’s
+                                    requirement.
+                                </li>
                             </ol>
                         </React.Fragment>
                     )
@@ -63,7 +71,8 @@ class FAQPage extends Component {
                                 <li>Now, click - <b>save and move to the next step.</b></li>
                                 <li>Select the Target Location and Category.</li>
                                 <li>Select the attributes, enter the filter value and click CREATE PROFILE.
-                                    Then go to Import/Upload section.</li>
+                                    Then go to Import/Upload section.
+                                </li>
                                 <li>Click on Upload products and select the Custom Profile.</li>
                             </ol>
                         </React.Fragment>
@@ -78,7 +87,10 @@ class FAQPage extends Component {
                     ans: (
                         <React.Fragment>
                             <p>
-                                If you choose the Default Profile while uploading the products on Shopify, we will list the products on your Shopify store. In the case of a Custom Profile, you can categorize the products on the basis of product quantity, vendor, type, country, etc. and upload the grouped products to Shopify.
+                                If you choose the Default Profile while uploading the products on Shopify, we will list
+                                the products on your Shopify store. In the case of a Custom Profile, you can categorize
+                                the products on the basis of product quantity, vendor, type, country, etc. and upload
+                                the grouped products to Shopify.
 
                                 Using this, you can also list your products in Shopify’s specific collection(s).
                             </p>
@@ -135,8 +147,10 @@ class FAQPage extends Component {
                             </p>
                             <ol>
                                 <li>Go to the <b>Accounts</b> section.</li>
-                                <li>Click on the <b>Link your Account</b> button in the Amazon section and enter the correct
-                                    credentials to connect to the app.</li>
+                                <li>Click on the <b>Link your Account</b> button in the Amazon section and enter the
+                                    correct
+                                    credentials to connect to the app.
+                                </li>
                                 <br/>
                                 For further assistance, you can see the HELP PDF option.
                             </ol>
@@ -160,7 +174,8 @@ class FAQPage extends Component {
                                 <li>Go to Accounts section</li>
                                 <li>Click Reconnect.</li>
                                 <li>Select the country(where your Amazon account is)
-                                    Enter your details like Seller Id and Token etc.</li>
+                                    Enter your details like Seller Id and Token etc.
+                                </li>
                                 <li>Click on submit button.</li>
                             </ol>
                         </React.Fragment>
@@ -196,7 +211,8 @@ class FAQPage extends Component {
                     ans: (
                         <React.Fragment>
                             <p>
-                                A profile refers to a group of products created on the basis of product quantity, title, country or price.
+                                A profile refers to a group of products created on the basis of product quantity, title,
+                                country or price.
                             </p>
                             <ol>
                                 <li>Go to Profiling section.</li>
@@ -205,7 +221,9 @@ class FAQPage extends Component {
                                 <li>Enter Product source</li>
                                 <li>Select the Target House (warehouse)</li>
                                 <li>Select the attribute on the basis you want to create a profile</li>
-                                <li>Now, from the Import/Upload section, upload products by choosing the Custom profile.</li>
+                                <li>Now, from the Import/Upload section, upload products by choosing the Custom
+                                    profile.
+                                </li>
                             </ol>
                         </React.Fragment>
                     )
@@ -222,12 +240,18 @@ class FAQPage extends Component {
                             <p>
                                 To import products go to - <b>Import/Upload</b> section
                                 <br/>
-                                <b>Import Products:</b> It helps to get the products from the source marketplace (from where you want to bring products) to the app.
-                                <b>Upload Products:</b> It helps to upload products from the app to Shopify. This can be done in 3 ways:
+                                <b>Import Products:</b> It helps to get the products from the source marketplace (from
+                                where you want to bring products) to the app.
+                                <b>Upload Products:</b> It helps to upload products from the app to Shopify. This can be
+                                done in 3 ways:
                             </p>
                             <ol>
-                                <li><b>Bulk Upload:</b> Go to Import/Upload section. Then, click on Upload Products and select the Default Profile.</li>
-                                <li><b>Select and Upload:</b>  Go to the Products section. Select the products you want to upload.</li>
+                                <li><b>Bulk Upload:</b> Go to Import/Upload section. Then, click on Upload Products and
+                                    select the Default Profile.
+                                </li>
+                                <li><b>Select and Upload:</b> Go to the Products section. Select the products you want
+                                    to upload.
+                                </li>
                             </ol>
                         </React.Fragment>
                     )
@@ -248,7 +272,8 @@ class FAQPage extends Component {
                                 <li>Go to the Accounts section.</li>
                                 <li>Go to Amazon marketplace and click on reconnect option.</li>
                                 <li>Enter the correct credentials, click on Submit Button, your account will be
-                                    automatically connected to the Amazon marketplace.</li>
+                                    automatically connected to the Amazon marketplace.
+                                </li>
                             </ol>
                             <b>For further assistance, you can see the HELP PDF</b>
                         </React.Fragment>
@@ -268,7 +293,8 @@ class FAQPage extends Component {
                             <ol>
                                 <li>Go to the Products section.</li>
                                 <li>Select the products you want to upload( you can apply various filters such as- SKU,
-                                    title, price, and quantity).</li>
+                                    title, price, and quantity).
+                                </li>
                                 <li>After selecting, click on ACTIONS and select Upload.</li>
                                 <li>Selected products will be uploaded on Shopify.</li>
                             </ol>
@@ -286,18 +312,21 @@ class FAQPage extends Component {
                             <p>
                                 This error may be caused due to any of the following cases:
                                 <br/>
-                                <b>CASE 1:</b> The details of the Walmart seller panel that you have provided may be wrong. So
+                                <b>CASE 1:</b> The details of the Walmart seller panel that you have provided may be
+                                wrong. So
                                 kindly reconnect your Walmart account by following the steps:
                                 <br/>
                                 <ol>
                                     <li>Go to the Accounts section.</li>
                                     <li>Go to Walmart marketplace and click on reconnect option.</li>
                                     <li>Enter the correct credentials, click on Submit Button, your app panel will be
-                                        automatically connected to the Walmart marketplace.</li>
+                                        automatically connected to the Walmart marketplace.
+                                    </li>
                                     <li>For further assistance, you can see the HELP PDF</li>
                                 </ol>
 
-                                <b>CASE 2:</b> Please try again later, it may be happening because we didn’t get a proper
+                                <b>CASE 2:</b> Please try again later, it may be happening because we didn’t get a
+                                proper
                                 response from Walmart.
                             </p>
                         </React.Fragment>
@@ -333,7 +362,9 @@ class FAQPage extends Component {
                     ans: (
                         <React.Fragment>
                             <p>
-                                No. When a product is imported from the selected marketplace, it will only be listed on the app. To see the product on your Shopify store, you must upload them from the Import/Upload section.
+                                No. When a product is imported from the selected marketplace, it will only be listed on
+                                the app. To see the product on your Shopify store, you must upload them from the
+                                Import/Upload section.
                                 <br/>
                                 Refer the following FAQ to know more:
                             </p>
@@ -365,7 +396,6 @@ class FAQPage extends Component {
                 },
 
 
-
                 {
                     id: 17,
                     show: false, // for collapse div
@@ -391,8 +421,10 @@ class FAQPage extends Component {
                         <React.Fragment>
                             <ol>
                                 <li>Go to the Settings section on the app.</li>
-                                <li>In Shopify settings, enable the manual sync, and select the fields you want to update.
-                                    Save the changes.</li>
+                                <li>In Shopify settings, enable the manual sync, and select the fields you want to
+                                    update.
+                                    Save the changes.
+                                </li>
                                 <li>Now, again import and upload the products from Import/Upload section.</li>
 
                             </ol>
@@ -408,7 +440,8 @@ class FAQPage extends Component {
                     ans: (
                         <React.Fragment>
                             <p>
-                                This error means that the wrong credentials have been entered. To fix this, you should try to reconnect your eBay account. To reconnect, follow the steps given below:
+                                This error means that the wrong credentials have been entered. To fix this, you should
+                                try to reconnect your eBay account. To reconnect, follow the steps given below:
                             </p>
                             <ol>
                                 <li>Go to the Accounts section.</li>
@@ -439,33 +472,27 @@ class FAQPage extends Component {
                     )
                 },
 
-              /*  {
-                    id: 21,
-                    show: false, // for collapse div
-                    search: true, // for search, if false then hide the div
-                    ques: "What is profiling?",
-                    ans: (
-                        <React.Fragment>
-                            <p>
-                                You can upload the product to Shopify by creating a profile on the basis of several
-                                grounds (such as quantity, title, country or price, etc). For uploading profile:
-                            </p>
-                            <ol>
-                                <li>Go to Import/Upload section.</li>
-                                <li>Click on Upload Product.</li>
-                                <li>Select the Product source.</li>
-                                <li>Then, select the Custom profile in “Upload through” option.</li>
-                                <li>Click on Upload Products.</li>
-                            </ol>
-                        </React.Fragment>
-                    )
-                },*/
-
-
-
-
-
-
+                /*  {
+                 id: 21,
+                 show: false, // for collapse div
+                 search: true, // for search, if false then hide the div
+                 ques: "What is profiling?",
+                 ans: (
+                 <React.Fragment>
+                 <p>
+                 You can upload the product to Shopify by creating a profile on the basis of several
+                 grounds (such as quantity, title, country or price, etc). For uploading profile:
+                 </p>
+                 <ol>
+                 <li>Go to Import/Upload section.</li>
+                 <li>Click on Upload Product.</li>
+                 <li>Select the Product source.</li>
+                 <li>Then, select the Custom profile in “Upload through” option.</li>
+                 <li>Click on Upload Products.</li>
+                 </ol>
+                 </React.Fragment>
+                 )
+                 },*/
 
 
             ]
@@ -507,7 +534,154 @@ class FAQPage extends Component {
         }
     }
 
+    renderFAQ() {
+        return (
+            <div className="row">
+                <div className="col-12 mb-4">
+                    <Card>
+                        <ResourceList
+                            items={this.state.noSearchFound}
+                            renderItem={item => {
+                            }}
+                            filterControl={
+                                <ResourceList.FilterControl
+                                    searchValue={this.state.search}
+                                    onSearchChange={searchValue => {
+                                        this.setState({search: searchValue.toLowerCase()});
+                                        this.handleSearch();
+                                    }}
+                                />
+                            }
+                        />
+                    </Card>
+                </div>
+                {this.state.faq.map(data => {
+                    return (
+                        <React.Fragment key={data.id}>
+                            {data.search ? (
+                                <div className="col-sm-6 col-12 mb-3">
+                                    <div
+                                        style={{cursor: "pointer"}}
+                                        onClick={this.handleToggleClick.bind(this, data)}
+                                    >
+                                        <Banner title={data.ques} icon="view" status="attention">
+                                            {/*<div className="pt-5">*/}
+                                            {/*<Stack vertical>*/}
+                                            {/*<div className=" mb-2">*/}
+                                            {/*<h3>{data.ques}</h3>*/}
+                                            {/*</div>*/}
+                                            {/*</Stack>*/}
+                                            {/*</div>*/}
+                                        </Banner>
+                                    </div>
+                                    <Collapsible open={data.show} id={data.id}>
+                                        <div className="p-3">
+                                            <Banner title="Answer" status="info">
+                                                <h4>{data.ans}</h4>
+                                            </Banner>
+                                        </div>
+                                    </Collapsible>
+                                </div>
+                            ) : null}
+                        </React.Fragment>
+                    );
+                })}
+            </div>
+        )
+
+    }
+
+    renderPDF() {
+        return(
+            <div className="row">
+            <div className="col-6 col-sm-6 mb-4"
+            onClick={() => {
+                window.open(
+                    "http://apps.cedcommerce.com/importer/amazon_UK_IN.pdf"
+                );
+            }}>
+                <Card title="Amazon Account Help Pdf">
+                    <div className="col-12">
+                            {<img src="https://importer.sellernext.com/marketplace-logos/amazon.png" alt="amazon"
+                                  style={{maxWidth: "80PX", height: "80px"}}/>}
+                        </div>
+                </Card>
+            </div>
+                <div className="col-6 col-sm-6 mb-4"
+                     onClick={() => {
+                         window.open(
+                             "http://apps.cedcommerce.com/importer/ebaydropshippingImporter.pdf"
+                         );
+                     }}>
+                    <Card title="Ebay Dropshipping Help Pdf">
+                        <div className="col-12">
+                            {<img src="https://importer.sellernext.com/marketplace-logos/ebayLogoCA.png" alt="ebay"
+                                  style={{maxWidth: "80PX", height: "80px"}}/>}
+                        </div>
+                    </Card>
+                </div>
+                <div className="col-6 col-sm-6 mb-4"
+                     onClick={() => {
+                         window.open(
+                             "http://apps.cedcommerce.com/importer/WorkingofAliexpressDropshippingMultichannelImporterapp.pdf"
+                         );
+                     }}>
+                    <Card title="AliExpress Help Pdf">
+                        <div className="col-12">
+                            {<img src="https://importer.sellernext.com/marketplace-logos/aliexpress.jpg" alt="ebay"
+                                  style={{maxWidth: "80PX", height: "80px"}}/>}
+                        </div>
+                    </Card>
+                </div>
+            </div>
+        )
+    }
+
+    renderVideoGif() {
+        return(
+            <div className="justify-content-center">
+                <Heading>Store Development</Heading>
+                <div className="text-right p-3"
+                     onClick={() => {
+                         this.redirect("/panel/help/report")}}>
+                    <img
+                        style={{'cursor': 'pointer'}}
+                        className='img-fluid p-3'
+                        src={require("../../../assets/img/DigitalMarketing3.gif")} alt="Store Development"
+                        /*height="650" width="650"*//>
+                </div>
+            </div>
+        )
+    }
+
+    handleTabChange = (selectedTabIndex) => {
+        this.setState({selected: selectedTabIndex});
+    };
+
+
     render() {
+
+        const {selected} = this.state;
+        const tabs = [
+            {
+                id: 'FAQ',
+                content: 'FAQ',
+                accessibilityLabel: 'FAQ',
+                panelID: 'FAQ',
+            },
+            {
+                id: 'PDF',
+                content: 'PDF',
+                accessibilityLabel: 'PDF',
+                panelID: 'PDF',
+            },
+            {
+                id: 'Videos/Gif',
+                content: 'Videos/Gif',
+                panelID: 'Videos/Gif',
+            },
+        ];
+
         return (
             <Page
                 title="Help"
@@ -518,56 +692,13 @@ class FAQPage extends Component {
                     }
                 }}
             >
-                <div className="row">
-                    <div className="col-12 mb-4">
-                        <Card>
-                            <ResourceList
-                                items={this.state.noSearchFound}
-                                renderItem={item => {
-                                }}
-                                filterControl={
-                                    <ResourceList.FilterControl
-                                        searchValue={this.state.search}
-                                        onSearchChange={searchValue => {
-                                            this.setState({search: searchValue.toLowerCase()});
-                                            this.handleSearch();
-                                        }}
-                                    />
-                                }
-                            />
-                        </Card>
-                    </div>
-                    {this.state.faq.map(data => {
-                        return (
-                            <React.Fragment key={data.id}>
-                                {data.search ? (
-                                    <div className="col-sm-6 col-12 mb-3">
-                                        <div
-                                            style={{cursor: "pointer"}}
-                                            onClick={this.handleToggleClick.bind(this, data)}
-                                        >
-                                            <Banner title={data.ques} icon="view" status="attention">
-                                                {/*<div className="pt-5">*/}
-                                                {/*<Stack vertical>*/}
-                                                {/*<div className=" mb-2">*/}
-                                                {/*<h3>{data.ques}</h3>*/}
-                                                {/*</div>*/}
-                                                {/*</Stack>*/}
-                                                {/*</div>*/}
-                                            </Banner>
-                                        </div>
-                                        <Collapsible open={data.show} id={data.id}>
-                                            <div className="p-3">
-                                                <Banner title="Answer" status="info">
-                                                    <h4>{data.ans}</h4>
-                                                </Banner>
-                                            </div>
-                                        </Collapsible>
-                                    </div>
-                                ) : null}
-                            </React.Fragment>
-                        );
-                    })}
+                <div className="col-12">
+                    <Card>
+                        <Tabs tabs={tabs} selected={selected} onSelect={this.handleTabChange}/>
+                        <Card.Section>
+                            {selected === 0 ? this.renderFAQ() : selected === 1 ? this.renderPDF() : this.renderVideoGif()}
+                        </Card.Section>
+                    </Card>
                 </div>
                 {/*<div className="col-12 mt-5">*/}
                 {/*<div className="text-center mt-5">*/}
@@ -576,105 +707,106 @@ class FAQPage extends Component {
                 {/*<h5><b>Phone Number-</b>(+1) 888-882-0953</h5>*/}
                 {/*</div>*/}
                 {/*</div>*/}
-                <Modal
-                    open={this.state.modal}
-                    title="Default Profile Example"
-                    onClose={this.modalOpen}
-                >
-                    <Modal.Section>
-                        <TextContainer>
-                            <h2>Google Attribute Mapping Are Something Like this: </h2>
-                            <h4>
-                                <ul>
-                                    <li className="mb-3">
-                                        'title'{" "}
-                                        <FontAwesomeIcon
-                                            icon={faArrowsAltH}
-                                            size="1x"
-                                            color="#000"
-                                        />{" "}
-                                        'title
-                                    </li>
-                                    <li className="mb-3">
-                                        'description'{" "}
-                                        <FontAwesomeIcon
-                                            icon={faArrowsAltH}
-                                            size="1x"
-                                            color="#000"
-                                        />{" "}
-                                        'long_description'
-                                    </li>
-                                    <li className="mb-3">
-                                        'price'{" "}
-                                        <FontAwesomeIcon
-                                            icon={faArrowsAltH}
-                                            size="1x"
-                                            color="#000"
-                                        />{" "}
-                                        'price'
-                                    </li>
-                                    <li className="mb-3">
-                                        'link'{" "}
-                                        <FontAwesomeIcon
-                                            icon={faArrowsAltH}
-                                            size="1x"
-                                            color="#000"
-                                        />{" "}
-                                        Your Product Link{" "}
-                                    </li>
-                                    <li className="mb-3">
-                                        'brand'{" "}
-                                        <FontAwesomeIcon
-                                            icon={faArrowsAltH}
-                                            size="1x"
-                                            color="#000"
-                                        />{" "}
-                                        'vendor'
-                                    </li>
-                                    <li className="mb-3">
-                                        'image_link'{" "}
-                                        <FontAwesomeIcon
-                                            icon={faArrowsAltH}
-                                            size="1x"
-                                            color="#000"
-                                        />{" "}
-                                        'main_image'
-                                    </li>
-                                    <li className="mb-3">
-                                        'main_image'{" "}
-                                        <FontAwesomeIcon
-                                            icon={faArrowsAltH}
-                                            size="1x"
-                                            color="#000"
-                                        />{" "}
-                                        'container_id'
-                                    </li>
-                                    <li className="mb-3">
-                                        'gtin'{" "}
-                                        <FontAwesomeIcon
-                                            icon={faArrowsAltH}
-                                            size="1x"
-                                            color="#000"
-                                        />{" "}
-                                        'bar_code'
-                                    </li>
-                                    <li className="mb-3">
-                                        'mpn'{" "}
-                                        <FontAwesomeIcon
-                                            icon={faArrowsAltH}
-                                            size="1x"
-                                            color="#000"
-                                        />{" "}
-                                        'sku'
-                                    </li>
-                                </ul>
-                            </h4>
-                        </TextContainer>
-                    </Modal.Section>
-                </Modal>
+                {/*<Modal*/}
+                {/*open={this.state.modal}*/}
+                {/*title="Default Profile Example"*/}
+                {/*onClose={this.modalOpen}*/}
+                {/*>*/}
+                {/*<Modal.Section>*/}
+                {/*<TextContainer>*/}
+                {/*<h2>Google Attribute Mapping Are Something Like this: </h2>*/}
+                {/*<h4>*/}
+                {/*<ul>*/}
+                {/*<li className="mb-3">*/}
+                {/*'title'{" "}*/}
+                {/*<FontAwesomeIcon*/}
+                {/*icon={faArrowsAltH}*/}
+                {/*size="1x"*/}
+                {/*color="#000"*/}
+                {/*/>{" "}*/}
+                {/*'title*/}
+                {/*</li>*/}
+                {/*<li className="mb-3">*/}
+                {/*'description'{" "}*/}
+                {/*<FontAwesomeIcon*/}
+                {/*icon={faArrowsAltH}*/}
+                {/*size="1x"*/}
+                {/*color="#000"*/}
+                {/*/>{" "}*/}
+                {/*'long_description'*/}
+                {/*</li>*/}
+                {/*<li className="mb-3">*/}
+                {/*'price'{" "}*/}
+                {/*<FontAwesomeIcon*/}
+                {/*icon={faArrowsAltH}*/}
+                {/*size="1x"*/}
+                {/*color="#000"*/}
+                {/*/>{" "}*/}
+                {/*'price'*/}
+                {/*</li>*/}
+                {/*<li className="mb-3">*/}
+                {/*'link'{" "}*/}
+                {/*<FontAwesomeIcon*/}
+                {/*icon={faArrowsAltH}*/}
+                {/*size="1x"*/}
+                {/*color="#000"*/}
+                {/*/>{" "}*/}
+                {/*Your Product Link{" "}*/}
+                {/*</li>*/}
+                {/*<li className="mb-3">*/}
+                {/*'brand'{" "}*/}
+                {/*<FontAwesomeIcon*/}
+                {/*icon={faArrowsAltH}*/}
+                {/*size="1x"*/}
+                {/*color="#000"*/}
+                {/*/>{" "}*/}
+                {/*'vendor'*/}
+                {/*</li>*/}
+                {/*<li className="mb-3">*/}
+                {/*'image_link'{" "}*/}
+                {/*<FontAwesomeIcon*/}
+                {/*icon={faArrowsAltH}*/}
+                {/*size="1x"*/}
+                {/*color="#000"*/}
+                {/*/>{" "}*/}
+                {/*'main_image'*/}
+                {/*</li>*/}
+                {/*<li className="mb-3">*/}
+                {/*'main_image'{" "}*/}
+                {/*<FontAwesomeIcon*/}
+                {/*icon={faArrowsAltH}*/}
+                {/*size="1x"*/}
+                {/*color="#000"*/}
+                {/*/>{" "}*/}
+                {/*'container_id'*/}
+                {/*</li>*/}
+                {/*<li className="mb-3">*/}
+                {/*'gtin'{" "}*/}
+                {/*<FontAwesomeIcon*/}
+                {/*icon={faArrowsAltH}*/}
+                {/*size="1x"*/}
+                {/*color="#000"*/}
+                {/*/>{" "}*/}
+                {/*'bar_code'*/}
+                {/*</li>*/}
+                {/*<li className="mb-3">*/}
+                {/*'mpn'{" "}*/}
+                {/*<FontAwesomeIcon*/}
+                {/*icon={faArrowsAltH}*/}
+                {/*size="1x"*/}
+                {/*color="#000"*/}
+                {/*/>{" "}*/}
+                {/*'sku'*/}
+                {/*</li>*/}
+                {/*</ul>*/}
+                {/*</h4>*/}
+                {/*</TextContainer>*/}
+                {/*</Modal.Section>*/}
+                {/*</Modal>*/}
             </Page>
         );
     }
+
     handleToggleClick = event => {
         let data = this.state.faq;
         data.forEach(key => {
@@ -686,11 +818,13 @@ class FAQPage extends Component {
             faq: data
         });
     };
+
     modalOpen() {
         this.setState({
             modal: !this.state.modal
         });
     }
+
     redirect(url) {
         this.props.history.push(url);
     }

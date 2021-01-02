@@ -29,7 +29,7 @@ import {
 import {requests} from "../../../services/request";
 import {notify} from "../../../services/notify";
 import {
-    ViewMinor
+    ViewMinor,EditMinor
 } from '@shopify/polaris-icons';
 
 import SmartDataTable from "../../../shared/smartTable";
@@ -64,16 +64,16 @@ export class FbaOrder extends Component {
             type: "string"
         },
         financial_status: {
-            title: "Shopify Order Status",
+            title: "Shopify Status",
             type: "string",
             sortable: false
         },
         processing_status: {
-            title: "Amazon Order Status",
+            title: "Amazon Status",
             sortable: false
         },
         button_order: {
-            title: "Create Order on FBA",
+            title: "Create Order",
             label: "Create", // button Label
             id: "button_order",
             sortable: false
@@ -83,7 +83,13 @@ export class FbaOrder extends Component {
             label: "View", // button Label
             id: "button_order_view",
             sortable: false
-        }
+        },
+        button_order_edit: {
+            title: "Edit order on app",
+            label: "Edit", // button Label
+            id: "button_order_edit",
+            sortable: false
+        },
 
     };
     gridSettings = {
@@ -97,6 +103,7 @@ export class FbaOrder extends Component {
         "processing_status",
         "button_order",
         "button_order_view",
+        "button_order_edit",
         "shopify_order_id"
     ];
     pageLimits = [
@@ -144,6 +151,8 @@ export class FbaOrder extends Component {
             show_trail_banner_webhook:false,
             selectedFetchOrders:'',
             shopifyOrderId:'',
+            editModal:false,
+            editModalOrderName:'',
             fetchOrderShopify:false,
             order: [],
             selectedProducts: [],
@@ -411,16 +420,21 @@ export class FbaOrder extends Component {
                         on
                     />
                 </div>
-
-                    /*<Button
-                    primary
-                    onClick={() => {
-                        this.operations(data[i]['shopify_order_name']);
-                    }}
-                >
-                    View
-                </Button>*/
                 rowData["button_order_view"] = str;
+
+                // str =<div
+                //     style={{cursor:'pointer'}}
+                //     onClick={() => {
+                //         this.operationsEdit(data[i]['shopify_order_name']);
+                //     }}>
+                //     <Icon
+                //         source={EditMinor}
+                //         on
+                //     />
+                // </div>
+                // rowData["button_order_edit"] = str;
+
+
 
             }
 
@@ -462,6 +476,14 @@ export class FbaOrder extends Component {
                 });
 
     };
+
+    // operationsEdit = (order_id) => {
+    //     this.setState({
+    //         editModal:true,
+    //         editModalOrderName:order_id,
+    //     })
+    //
+    // };
 
     checkingOrderManuallyCreate() {
         requests
@@ -572,9 +594,21 @@ export class FbaOrder extends Component {
     render() {
 
         const options = [
-            {label: 'All Orders', value: 'allOrders'},
+            {label: 'Pending', value: 'allOrders'},
             {label: 'Single Orders', value: 'singleOrders'},
            ];
+
+        const optionsOrderStatus = [
+            {label: 'Processing', value: 'Processing'},
+            {label: 'Fulfilled', value: 'Complete'},
+            {label: 'Pending', value: 'Pending'},
+            {label: 'Denied', value: 'Denied'},
+            {label: 'CANCELLED By Fba', value: 'Cancelled'},
+            {label: 'Cancelled', value: 'Cancelled'},
+            {label: 'Canceled', value: 'Cancelled'},
+            {label: 'not yet created', value: 'Not Yet Created'},
+        ];
+
         return (
             <Page
                 primaryAction={{

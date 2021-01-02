@@ -294,6 +294,7 @@ class AppsShared extends Component {
                // else {
                    if (app.code !== 'fba' && app.code !== 'ebayaffiliate' && app.code !== 'amazonaffiliate' && app.code !== 'aliexpress' && app.title !== 'Etsy Dropshipping') {
                        if (this.validateCode(app.code)) {
+                           app
                            return (
                                <div
                                    className="col-6 col-sm-6 mb-4"
@@ -475,7 +476,7 @@ class AppsShared extends Component {
                                                     >
                                                         {this.props.success.code === app.code ||
                                                         app["installed"] !== 0
-                                                            ? "ReConnect"
+                                                            ? "Connected"
                                                             : "Link your Account"}
                                                     </Button>
                                                 </div>

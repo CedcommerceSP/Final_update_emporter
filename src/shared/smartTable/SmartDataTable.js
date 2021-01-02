@@ -212,7 +212,6 @@ class SmartDataTablePlain extends React.Component {
 
 	prepareDefaultColumns() {
 		this.defaultColumns = [];
-		console.log(this.state.visibleColumns);
 		for (let i = 0; i < this.state.visibleColumns.length; i++) {
 			this.defaultColumns.push({
 				key: this.state.visibleColumns[i],

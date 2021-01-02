@@ -229,6 +229,9 @@ export class Products extends Component {
 	};
 
 	handleSelectedUpload = (arg, val) => {
+        console.log(arg);
+        console.log(val);
+        console.log(this.state.selectedProducts);
 		switch (arg) {
 			case "modalClose":
 				this.setState({ selectedUploadModal: false });
@@ -583,9 +586,7 @@ export class Products extends Component {
 					rowData["inventory"] = quantity + " in Stock";
 				}
 				rowData["type"] = data[i].details.type;
-				rowData["source_variant_id"] = data[
-					i
-				].details.source_product_id.toString();
+				rowData["source_variant_id"] = data[i].details.source_product_id.toString();
 				if (!isUndefined(data[i].upload_status) && data[i].upload_status) {
 					if (data[i].source === undefined) {
 						rowData["upload_status"] = (

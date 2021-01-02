@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { Page, Card, Pagination, Select, Label } from "@shopify/polaris";
+import { Page, Card, Pagination, Select, Label,Modal,Banner } from "@shopify/polaris";
 import * as queryString from "query-string";
 import { requests } from "../../../../services/request";
 import { notify } from "../../../../services/notify";
@@ -7,32 +7,93 @@ import { faArrowsAltH, faMinus } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { isUndefined } from "util";
 import { paginationShow } from "../static-functions";
-import SmartDataTable from "../../../../shared/smart-table";
+import SmartDataTable from "../../../../shared/smartTable";
 
 class ViewProfile extends Component {
-	filters = {
-		column_filters: {}
-	};
-	gridSettings = {
-		activePage: 1,
-		count: 5
-	};
-	pageLimits = [
-		{ label: 5, value: 5 },
-		{ label: 10, value: 10 },
-		{ label: 15, value: 15 },
-		{ label: 20, value: 20 },
-		{ label: 25, value: 25 }
-	];
-	visibleColumns = ["source_product_id", "main_image", "title", "sku", "price"];
+
+	//--------------OLD--------------------
+	// filters = {
+	// 	column_filters: {}
+	// };
+	// gridSettings = {
+	// 	activePage: 1,
+	// 	count: 5
+	// };
+	// pageLimits = [
+	// 	{ label: 5, value: 5 },
+	// 	{ label: 10, value: 10 },
+	// 	{ label: 15, value: 15 },
+	// 	{ label: 20, value: 20 },
+	// 	{ label: 25, value: 25 }
+	// ];
+    //--------------OLD--------------------
+
+    filters = {
+        full_text_search: "",
+        marketplace: "all",
+        single_column_filter: [],
+        column_filters: {}
+    };
+
+    gridSettings = {
+        count: "20",
+        activePage: 1
+    };
+
+    pageLimits = [
+        { label: 10, value: "10" },
+        { label: 20, value: "20" },
+        { label: 30, value: "30" },
+        { label: 40, value: "40" },
+        { label: 50, value: "50" },
+        { label: 500, value: "500" },
+        { label: 2000, value: "2000 *(Slow)" },
+    ];
+
+    massActions = [
+        { label: "Upload", value: "upload" },
+    ];
+
+    hideFilters = [
+        "main_image",
+        "long_description",
+        "type",
+        "upload_status",
+        "inventory"
+    ];
+
+    predefineFilters = [
+        { label: "Title", value: "title", type: "string", special_case: "no" },
+        { label: "SKU", value: "sku", type: "string", special_case: "no" },
+        { label: "ASIN", value: "source_variant_id", type: "string", special_case: "no" },
+        { label: "Price", value: "price", type: "int", special_case: "no" },
+        { label: "Quantity", value: "quantity", type: "int", special_case: "no" },
+        { label:"Type", value:"type", type:"type", special_case:"yes"},
+        { label:"Country", value:"site", type:"string", special_case:"yes"},
+        {
+            label: "Date Picker",
+            value: "datePicker",
+            type: "date-picker",
+            special_case: "yes"
+        },
+        {
+            label: "Status",
+            value: "uploaded",
+            type: "uploaded",
+            special_case: "yes"
+        }
+    ];
+
+	visibleColumns = ["source_variant_id","title","main_image", "price","type","quantity"];
 	imageColumns = ["main_image"];
 	columnTitles = {
-		source_product_id: {
+        main_image: {
+            title: "Image",
+            sortable: false,
+            type:"image"
+        },
+        source_variant_id: {
 			title: "ID",
-			sortable: false
-		},
-		main_image: {
-			title: "Image",
 			sortable: false
 		},
 		title: {
@@ -68,6 +129,34 @@ class ViewProfile extends Component {
 	constructor(props) {
 		super(props);
 		this.state = {
+
+            product_grid_collapsible: "",
+            tempProductData: [],
+            // products: [],
+            appliedFilters: {},
+            installedApps: [],
+            selectedApp: 0,
+            selectedProducts: [],
+            deleteProductData: false,
+            toDeleteRow: {},
+            // totalPage: 0,
+            totalMainCount: 0,
+            // showLoaderBar: true,
+            bulkUpdateModal:false,
+            selectedMarketplace:'',
+            shownMarketplace:[],
+            hideLoader: false,
+            // pagination_show: 0,
+            selectedUploadModal: false,
+            selectUpload: { option: [], value: "" },
+            parent_sku: 0,
+            child_sku: 0,
+            requiredParamNotRecieved: true,
+            csvUrl:"",
+            uploadcsvModal:false,
+
+
+			// -------------------------------------
 			queryParams: queryString.parse(props.location.search),
 			data: {
 				name: { name: "Name", value: "" },
@@ -84,18 +173,113 @@ class ViewProfile extends Component {
 		};
 		this.getProducts();
 	}
+
+
+    prepareFilterObject() {
+        this.state.appliedFilters = {};
+        if (this.filters.marketplace !== "all") {
+            this.state.appliedFilters[
+                "filter[source_marketplace][1]"
+                ] = this.filters.marketplace;
+        }
+        if (this.filters.full_text_search !== "") {
+            this.state.appliedFilters["search"] = this.filters.full_text_search;
+        }
+        this.filters.single_column_filter.forEach((e, i) => {
+            switch (e.name) {
+                case "title":
+                case "site":
+                case "long_description":
+                    this.state.appliedFilters[
+                    "filter[details." + e.name + "][" + e.condition + "]"
+                        ] = e.value;
+                    break;
+                case "source_variant_id":
+                case "sku":
+                case "price":
+                case "weight":
+                case "weight_unit":
+                case "main_image":
+                case "quantity":
+                    this.state.appliedFilters[
+                    "filter[variants." + e.name + "][" + e.condition + "]"
+                        ] = e.value;
+                    break;
+                case "datePicker":
+                    this.state.appliedFilters["filter[details.created_at][7][from]"] =
+                        e.condition; // start date
+                    this.state.appliedFilters["filter[details.created_at][7][to]"] =
+                        e.value; // end date
+                    break;
+                case "uploaded":
+                    this.state.appliedFilters["uploaded"] = e.value;
+                    break;
+                case "type":
+                    this.state.appliedFilters["filter[details.type][1]"] = e.value;
+                    break;
+
+            }
+        });
+        for (let i = 0; i < Object.keys(this.filters.column_filters).length; i++) {
+            const key = Object.keys(this.filters.column_filters)[i];
+            if (this.filters.column_filters[key].value !== "") {
+                switch (key) {
+                    case "asin":
+                    case "type":
+                    case "title":
+                    case "long_description":
+                        this.state.appliedFilters[
+                        "filter[details." +
+                        key +
+                        "][" +
+                        this.filters.column_filters[key].operator +
+                        "]"
+                            ] = this.filters.column_filters[key].value;
+                        break;
+                    case "source_variant_id":
+                    case "sku":
+                    case "price":
+                    case "weight":
+                    case "weight_unit":
+                    case "main_image":
+                    case "quantity":
+                        this.state.appliedFilters[
+                        "filter[variants." +
+                        key +
+                        "][" +
+                        this.filters.column_filters[key].operator +
+                        "]"
+                            ] = this.filters.column_filters[key].value;
+                        break;
+                }
+            }
+        }
+        this.updateState();
+    }
+    updateState() {
+        const state = this.state;
+        this.setState(state);
+    }
+
 	getProducts = () => {
+        console.log(this.filters.column_filters);
+        console.log(this.filters.single_column_filter);
+
+        this.prepareFilterObject();
+        const pageSettings = Object.assign({}, this.gridSettings);
 		requests
 			.postRequest("connector/profile/getProfile", {
 				id: this.state.queryParams.id,
 				activePage: this.gridSettings.activePage,
-				count: this.gridSettings.count
+				count: this.gridSettings.count,
+				additionalQuery : this.filters.single_column_filter
 			})
 			.then(data => {
 				if (data.success) {
 					// console.log("data",data)
 					this.prepareData(data.data);
 					const products = this.modifyProductsData(data.data.products_data);
+
 					this.setState({
 						products: products,
 						totalPage: data.data.products_data_count,
@@ -119,6 +303,7 @@ class ViewProfile extends Component {
 		let basicInfo = this.state.data;
 		let attributeMapping = this.state.attributeMapping;
 		let marketplaceAttributes = this.state.marketplaceAttributes;
+		this.filters.marketplace = value.source
 		basicInfo.name.value = value.name;
 		basicInfo.source.value =
 			value.source === "amazonimporter" ? "Amazon" : value.source;
@@ -184,9 +369,7 @@ class ViewProfile extends Component {
 		let products = [];
 		for (let i = 0; i < data.length; i++) {
 			let rowData = {};
-			rowData["source_product_id"] = data[
-				i
-			].details.source_product_id.toString();
+			rowData["source_variant_id"] = data[i].details.source_product_id.toString();
 			rowData["main_image"] = data[i].variants["main_image"];
 			rowData["title"] = data[i].details.title;
 			rowData["sku"] = data[i].variants["sku"].toString();
@@ -390,19 +573,126 @@ class ViewProfile extends Component {
 											<hr />
 										</div>
 										<div className="col-12">
+											{/*<SmartDataTable*/}
+												{/*data={this.state.products}*/}
+												{/*uniqueKey="sku"*/}
+												{/*columnTitles={this.columnTitles}*/}
+												{/*className="ui compact selectable table"*/}
+												{/*withLinks={true}*/}
+												{/*visibleColumns={this.visibleColumns}*/}
+												{/*imageColumns={this.imageColumns}*/}
+												{/*getVisibleColumns={event => {*/}
+													{/*this.visibleColumns = event;*/}
+												{/*}}*/}
+												{/*sortable*/}
+											{/*/>*/}
+
+
+											{/*-------My SmartTable Code -------*/}
+
+
 											<SmartDataTable
 												data={this.state.products}
-												uniqueKey="sku"
+												uniqueKey="source_variant_id"
+												showLoaderBar={this.state.showLoaderBar}
+												count={this.gridSettings.count}
+												activePage={this.gridSettings.activePage}
+												hideFilters={this.hideFilters}
 												columnTitles={this.columnTitles}
+												marketplace={this.filters.marketplace}
+												multiSelect={true}
+												operations={this.operations} //button
+												selected={this.state.selectedProducts}
 												className="ui compact selectable table"
 												withLinks={true}
 												visibleColumns={this.visibleColumns}
-												imageColumns={this.imageColumns}
+												actions={this.massActions}
+												showColumnFilters={false}
+												predefineFilters={this.predefineFilters}
+												showButtonFilter={false}
+												columnFilterNameArray={this.filters.single_column_filter}
+												rowActions={{
+                                                    edit: false,
+                                                    delete: false
+                                                }}
 												getVisibleColumns={event => {
-													this.visibleColumns = event;
-												}}
+                                                    this.visibleColumns = event;
+                                                }}
+												userRowSelect={event => {
+                                                    const itemIndex = this.state.selectedProducts.indexOf(
+                                                        event.data.source_variant_id
+                                                    );
+                                                    if (event.isSelected) {
+                                                        if (itemIndex === -1) {
+                                                            this.state.selectedProducts.push(
+                                                                event.data.source_variant_id
+                                                            );
+                                                        }
+                                                    } else {
+                                                        if (itemIndex !== -1) {
+                                                            this.state.selectedProducts.splice(itemIndex, 1);
+                                                        }
+                                                    }
+                                                    const state = this.state;
+                                                    this.setState(state);
+                                                }}
+												allRowSelected={(event, rows) => {
+                                                    let data = this.state.selectedProducts.slice(0);
+                                                    if (event) {
+                                                        for (let i = 0; i < rows.length; i++) {
+                                                            const itemIndex = this.state.selectedProducts.indexOf(
+                                                                rows[i].source_variant_id
+                                                            );
+                                                            if (itemIndex === -1) {
+                                                                data.push(rows[i].source_variant_id);
+                                                            }
+                                                        }
+                                                    } else {
+                                                        for (let i = 0; i < rows.length; i++) {
+                                                            if (data.indexOf(rows[i].source_variant_id) !== -1) {
+                                                                data.splice(
+                                                                    data.indexOf(rows[i].source_variant_id),
+                                                                    1
+                                                                );
+                                                            }
+                                                        }
+                                                    }
+                                                    this.setState({ selectedProducts: data });
+                                                }}
+												massAction={event => {
+                                                    switch (event) {
+                                                        case "upload":
+                                                            this.state.selectedProducts.length > 0
+                                                                ? this.handleSelectedUpload("profile")
+                                                                : notify.info("No Product Selected");
+                                                            break;
+                                                        default:
+                                                            // console.log(event, this.state.selectedProducts);
+                                                    }
+                                                }}
+												editRow={row => {
+                                                    this.redirect("/panel/products/edit/" + row.id);
+                                                }}
+												deleteRow={row => {
+                                                    this.state.toDeleteRow = row;
+                                                    this.state.deleteProductData = true;
+                                                    const state = this.state;
+                                                    this.setState(state);
+                                                }}
+												columnFilters={filters => {
+                                                    this.filters.column_filters = filters;
+                                                    this.getProducts();
+                                                }}
+												singleButtonColumnFilter={filter => {
+                                                    // console.log(filter);
+                                                    this.filters.single_column_filter = filter;
+                                                    this.getProducts();
+                                                }}
 												sortable
 											/>
+
+
+
 										</div>
 									</div>
 									<div className="row mt-3">
@@ -436,9 +726,149 @@ class ViewProfile extends Component {
 						) : null}
 					</div>
 				</Card>
+				<Modal
+					open={this.state.selectedUploadModal}
+					onClose={this.handleSelectedUpload.bind(this, "modalClose")}
+					title={"Upload"}
+					primaryAction={{
+                        content: "Start Upload",
+                        onClick: () => {
+                            this.handleSelectedUpload("Start_Upload");
+                        }
+                    }}
+					secondaryActions={{
+                        content: "Cancel",
+                        onClick: () => {
+                            this.handleSelectedUpload("modalClose");
+                        }
+                    }}
+				>
+					<Modal.Section>
+						<div>
+							<Banner title="Please Note" status="info">
+								<Label id={"sUploadLabel"}>
+									Product without a profile, will be uploaded via default
+									profile.
+								</Label>
+								<Label id={"sUploadLabel2"}>
+									The multiple variants of a product will be auto uploaded on
+									selecting one of the variants.
+								</Label>
+								<br />
+								<Label id={"sUploadLabel3"}>
+									<h5>Total Selected Products:</h5>
+									<h5>
+										Main Product: <b>{this.state.parent_sku}</b>
+									</h5>
+									<h5>
+										SKU: <b>{this.state.child_sku}</b>
+									</h5>
+								</Label>
+							</Banner>
+						</div>
+					</Modal.Section>
+				</Modal>
 			</Page>
 		);
 	}
+
+    operations = (event, id) => {
+        // console.log(event);
+        // console.log(id)
+        switch (id) {
+            case "grid":
+                let parent_props = {
+                    gridSettings: this.gridSettings,
+                    filters: this.filters,
+                    position: this.state.selectedApp
+                };
+                this.redirect("/panel/products/view/" + event["source_variant_id"], {
+                    parent_props: parent_props
+                });
+                break;
+            default:
+                // console.log("Default Case");
+        }
+    };
+
+    handleSelectedUpload = (arg, val) => {
+        console.log(arg);
+        console.log(val);
+        console.log(this.state.selectedProducts);
+
+        switch (arg) {
+            case "modalClose":
+                this.setState({ selectedUploadModal: false });
+                break;
+            case "profile":
+                this.state.selectUpload.option = [];
+                let data = {
+                    list_ids: this.state.selectedProducts
+                };
+                requests.postRequest("frontend/app/getSKUCount", data).then(data => {
+                    if (data.success) {
+                        if (
+                            !isUndefined(data.data.parent) &&
+                            !isUndefined(data.data.child)
+                        ) {
+                            this.setState({
+                                selectedUploadModal: true,
+                                parent_sku: data.data.parent,
+                                child_sku: data.data.child
+                            });
+                        } else {
+                            notify.warn("Something Went Wrong.Not Found");
+                        }
+                    } else {
+                        notify.error(data.message);
+                    }
+                });
+                break;
+            case "Start_Upload":
+                requests
+                    .getRequest(
+                        "frontend/app/getShopID?marketplace=shopifygql&source=" +
+                        this.filters.marketplace
+                    )
+                    .then(e => {
+                        if (e.success) {
+                            let source_shop_id = e.data.source_shop_id;
+                            let target_shop_id = e.data.target_shop_id;
+                            requests
+                                .postRequest("connector/product/selectProductAndUpload", {
+                                    marketplace: "shopifygql",
+                                    source: this.filters.marketplace,
+                                    source_shop_id: source_shop_id,
+                                    target_shop_id: target_shop_id,
+                                    selected_profile: this.state.selectUpload.value,
+                                    selected_products: this.state.selectedProducts
+                                })
+                                .then(data => {
+                                    if (data.success) {
+                                        if (data.code === "product_upload_started") {
+                                            notify.info(data.message);
+                                        }
+                                        setTimeout(() => {
+                                            this.redirect("/panel/queuedtasks");
+                                        }, 400);
+                                    } else {
+                                        notify.error(data.message);
+                                    }
+                                });
+                        } else {
+                            notify.error(e.message);
+                        }
+                    });
+                break;
+            case "select":
+                let selectUpload = this.state.selectUpload;
+                selectUpload.value = val;
+                this.setState({ selectUpload: selectUpload });
+                break;
+            default:
+                notify.info("Case Not Exits");
+        }
+    };
 
 	pageSettingsChange(event) {
 		this.gridSettings.count = event;
@@ -449,6 +879,31 @@ class ViewProfile extends Component {
 	redirect(url) {
 		this.props.history.push(url);
 	}
+
+
+	pageSettingsChange(event) {
+        this.gridSettings.count = event;
+        this.gridSettings.activePage = 1;
+        this.getProducts();
+    }
+
+    manageStateChange = old_state => {
+        this.filters = Object.assign({}, old_state["filters"]);
+        this.gridSettings = Object.assign({}, old_state["gridSettings"]);
+        this.state.selectedApp = old_state["position"];
+        this.props.location.state = undefined;
+        this.updateState();
+        this.prepareHeader(this.props);
+    };
+
+    redirect(url, data) {
+        if (!isUndefined(data)) {
+            this.props.history.push(url, JSON.parse(JSON.stringify(data)));
+        } else {
+            this.props.history.push(url);
+        }
+    }
+
 }
 
 export default ViewProfile;

@@ -40,10 +40,11 @@ class PlanBody extends Component {
         this.state = {
             selected: 0,
             countries: 1,
+            is_connected_fba : false,
             buttton_upgrade: false,
             active: false,
-            main_price_temp: 19,
-            main_price_temp_anually: 199,
+            main_price_temp: 0,
+            main_price_temp_anually: 0,
             plan_title: "",
             necessaryInfo: {},
             sync_plan_checkbox: false,
@@ -77,10 +78,10 @@ class PlanBody extends Component {
         this.toggleSchemaModal = this.toggleSchemaModal.bind(this);
         this.createSchema = this.createSchema.bind(this);
         this.getImportPaymentSettings();
+        this.getConnectors();
     }
 
     componentWillReceiveProps(nextPorps) {
-        // console.log(nextPorps.myprop_upgrade_button);
         if (nextPorps.necessaryInfo !== undefined) {
             this.setState({necessaryInfo: nextPorps.necessaryInfo});
             this.planRender()
@@ -139,6 +140,24 @@ class PlanBody extends Component {
              });*/
         }
 
+    }
+
+    getConnectors() {
+        requests.getRequest("connector/get/all").then(data => {
+            if (data.success) {
+                for (let i = 0; i < Object.keys(data.data).length; i++) {
+                    if (data.data[Object.keys(data.data)[i]]['code'] == "fba") {
+                        if (data.data[Object.keys(data.data)[i]]['installed'] == 1) {
+                            this.setState({
+                                is_connected_fba: true
+                            })
+                        }
+                    }
+                }
+            } else {
+                notify.error(data.message);
+            }
+        });
     }
 
     planRender() {
@@ -512,9 +531,9 @@ class PlanBody extends Component {
                                                             </div>
                                                             <Label id="payable_amount">Payable Amount</Label>
                                                             <div>
-													<span style={{color: "#7d7d7d"}}>
-														<Label>( should be more than 0.5$ )</Label>
-													</span>
+													{/*<span style={{color: "#7d7d7d"}}>*/}
+														{/*<Label>( should be more than 0.5$ )</Label>*/}
+													{/*</span>*/}
                                                             </div>
                                                             <div>
 													<span style={{color: "#7d7d7d"}}>
@@ -1300,11 +1319,11 @@ class PlanBody extends Component {
                                                             <p className="price-tag">
                                                                 <span className="price-tag_small">$</span>
                                                                 {/*<span className="price-tag_discount"><strike>{data.originalValue}</strike></span>*/}
-                                                                {/*{data.main_price}*/}
-                                                                {data.title == "FBA" ? this.state.main_price_temp : this.state.main_price_temp_anually}
-                                                                <span className="price-tag_small">
-                                                                        {data.validity_display}
-                                                                    </span>
+                                                                {data.main_price}
+                                                                {/*{data.title == "FBA" ? this.state.main_price_temp : this.state.main_price_temp_anually}*/}
+                                                                {/*<span className="price-tag_small">*/}
+                                                                        {/*{data.validity_display}*/}
+                                                                    {/*</span>*/}
                                                             </p>
                                                         </div>
                                                         {/*{console.log("769 :: ",data)}*/}
@@ -1316,8 +1335,8 @@ class PlanBody extends Component {
                                                                 fullWidth={true}
                                                                 size="large"
                                                                 disabled={
-                                                                    this.state.main_price_temp === 0 || this.state.main_price_temp === "0" || this.state.main_price_temp < 0 ||
-                                                                    this.state.main_price_temp_anually === 0 || this.state.main_price_temp_anually === "0" || this.state.main_price_temp_anually < 0
+                                                                    data.main_price === 0 || data.main_price === "0" || data.main_price < 0 ||
+                                                                    data.main_price === 0 || data.main_price === "0" || data.main_price < 0
                                                                 }
                                                                 onClick={this.onSelectPlan.bind(this, data, data.main_price)}
                                                             >
@@ -1767,35 +1786,60 @@ class PlanBody extends Component {
 
     render() {
         const {selected} = this.state;
-        const tabs = [
-            {
-                id: 'product-import',
-                content: 'Product Import Charges',
-                accessibilityLabel: 'Product Import Charges',
-                panelID: 'product-import-charges',
-            },
-            {
-                id: 'sync-plan',
-                content: 'Product Syncing Plan',
-                accessibilityLabel: 'Product Syncing Plan',
-                panelID: 'product-sync-plan',
-            },
-            {
-                id: 'order_management',
-                content: 'FBA Order Management',
-                panelID: 'order-management',
-            },
-            {
-                id: 'combo-plan',
-                content: 'Combo Plan',
-                panelID: 'combo-plan',
-            },
-            /*{
-             id: 'cvs_management',
-             content: 'CSV Upload',
-             panelID: 'csv-management'
-             }*/
-        ];
+        var tabs = []
+        console.log(this.state.is_connected_fba);
+        if (this.state.is_connected_fba){
+             tabs = [
+                {
+                    id: 'product-import',
+                    content: 'Product Import Charges',
+                    accessibilityLabel: 'Product Import Charges',
+                    panelID: 'product-import-charges',
+                },
+                {
+                    id: 'sync-plan',
+                    content: 'Product Syncing Plan',
+                    accessibilityLabel: 'Product Syncing Plan',
+                    panelID: 'product-sync-plan',
+                },
+                {
+                    id: 'order_management',
+                    content: 'FBA Order Management',
+                    panelID: 'order-management',
+                },
+                {
+                    id: 'combo-plan',
+                    content: 'Combo Plan',
+                    panelID: 'combo-plan',
+                },
+                /*{
+                 id: 'cvs_management',
+                 content: 'CSV Upload',
+                 panelID: 'csv-management'
+                 }*/
+            ];
+        }
+        else {
+             tabs = [
+                {
+                    id: 'product-import',
+                    content: 'Product Import Charges',
+                    accessibilityLabel: 'Product Import Charges',
+                    panelID: 'product-import-charges',
+                },
+                {
+                    id: 'sync-plan',
+                    content: 'Product Syncing Plan',
+                    accessibilityLabel: 'Product Syncing Plan',
+                    panelID: 'product-sync-plan',
+                },
+                /*{
+                 id: 'cvs_management',
+                 content: 'CSV Upload',
+                 panelID: 'csv-management'
+                 }*/
+            ];
+        }
         return (
             <React.Fragment>
                 <div className="row Section-fullWidth">
