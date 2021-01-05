@@ -21,7 +21,7 @@ export function modifyName(string) {
 		case "wishimporter":
 			return "Wish";
 		case "amazonaffiliate":
-			return "Amazon Affiliate";
+			return "Amazon Dropshipping";
 		case "fileimporter":
 			return "Csv";
 		case "shopify_delete":

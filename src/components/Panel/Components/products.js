@@ -197,7 +197,15 @@ export class Products extends Component {
 			let installedApps = [];
 			props.necessaryInfo.account_connected.forEach(e => {
 				if (e.code !== 'fba'){
-					if (e.code !== "ebayaffiliate"){
+                    if (e.code == "amazonaffiliate"){
+                        installedApps.push({
+                            id: e.code,
+                            content: "Amazon Dropshipping",
+                            accessibilityLabel: e.title,
+                            panelID: e.code
+                        });
+                    }
+					 else if(e.code !== "ebayaffiliate"){
                         installedApps.push({
                             id: e.code,
                             content: e.title,

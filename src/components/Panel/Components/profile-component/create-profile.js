@@ -509,7 +509,7 @@ export class CreateProfile extends Component {
                         if (data.data[key].usable || !environment.isLive) {
                             hasService = true;
                             if (validateImporter(data.data[key].code)) {
-                                if (data.data[key].code !== 'fba'&& data.data[key].code !== 'bigmanager_importer') {
+                                if (data.data[key].code !== 'fba'&& data.data[key].code !== 'bigmanager_importer' && data.data[key].code !== 'amazonaffiliate') {
                                     this.importServices.push({
                                         label: data.data[key].title,
                                         value: data.data[key].code,

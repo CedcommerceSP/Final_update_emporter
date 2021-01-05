@@ -689,7 +689,7 @@ export class Configuration extends Component {
         return (
             <div className="row">
                 <div className="col-sm-4 col-12 text-md-left text-sm-left text-center">
-                    <Heading>Amazon Affiliate Settings</Heading>
+                    <Heading>Amazon Dropshipping Settings</Heading>
                 </div>
                 <div className="col-sm-8 col-12">
                     <Card>
