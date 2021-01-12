@@ -458,6 +458,7 @@ class PlanBody extends Component {
                         <Banner title="Product Upload Charges" icon="view" status="info"
                         >
                             <p><b><i>One Time Payment</i></b></p>
+                            <p>List your products from app to Shopify</p>
                         </Banner>
                     </div>
                     <Page>
@@ -814,6 +815,7 @@ class PlanBody extends Component {
                         >
                             <Banner title="Product Syncing Charges" icon="view" status="info"
                             >
+                                Sync price/inventory between marketplace and shopify once a day.
                             </Banner>
                         </div>
                         <Page>
@@ -857,7 +859,7 @@ class PlanBody extends Component {
                                                                                 destructive
                                                                                 // primary={true}
                                                                                 fullWidth={true}
-                                                                                size="large" c
+                                                                                size="medium"
                                                                                 disabled={
                                                                                     data.main_price === 0 || data.main_price === "0"
                                                                                 }
@@ -1792,14 +1794,14 @@ class PlanBody extends Component {
              tabs = [
                 {
                     id: 'product-import',
-                    content: 'Product Import Charges',
-                    accessibilityLabel: 'Product Import Charges',
+                    content: 'Product Upload Charges',
+                    accessibilityLabel: 'Product Upload Charges',
                     panelID: 'product-import-charges',
                 },
                 {
                     id: 'sync-plan',
-                    content: 'Product Syncing Plan',
-                    accessibilityLabel: 'Product Syncing Plan',
+                    content: 'Price/Inventory Syncing Plan',
+                    accessibilityLabel: 'Price/Inventory Syncing Plan',
                     panelID: 'product-sync-plan',
                 },
                 {
@@ -1829,8 +1831,8 @@ class PlanBody extends Component {
                 },
                 {
                     id: 'sync-plan',
-                    content: 'Product Syncing Plan',
-                    accessibilityLabel: 'Product Syncing Plan',
+                    content: 'Price/Inventory Syncing Plan',
+                    accessibilityLabel: 'Price/Inventory Syncing Plan',
                     panelID: 'product-sync-plan',
                 },
                 /*{

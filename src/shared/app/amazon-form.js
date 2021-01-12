@@ -58,7 +58,13 @@ class AmazonInstallationForm extends Component {
         return (
             <React.Fragment>
                 <div className="row">
-                    <div className="col-12 text-right" style={{color: '#bf0711'}}>
+                    <div className="col-12">
+                        <Banner title="Note" status="info">
+                            <Label>Connect your another amazon account to import it's products also, just give another different account name</Label>
+                        </Banner>
+                    </div>
+
+                    <div className="col-12 pt-3 text-right" style={{color: '#bf0711'}}>
                         <Button monochrome outline
                                 onClick={() => {
                                     window.open(

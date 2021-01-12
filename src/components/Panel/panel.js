@@ -52,6 +52,7 @@ export class Panel extends Component {
             show_fba_suspension_message:false,
             header: true,
             button_thumb_down_loader:false,
+            shop_url : '',
             necessaryInfo: {},
             fbapresent: false,
             product_upload: 0,
@@ -86,7 +87,10 @@ export class Panel extends Component {
     getShopifyPlan(){
         requests.getRequest('frontend/importer/shopifyPlan').then(data => {
             if (data.success) {
-                console.log(data)
+                // console.log(data.shop_url)
+                this.setState({
+                    shop_url : data.shop_url
+                })
             }
             else {
                 console.log("in else")
@@ -200,6 +204,8 @@ export class Panel extends Component {
             }
             window.location = url;
         }
+
+
     }
 
     getNecessaryInfo() {
@@ -332,7 +338,9 @@ export class Panel extends Component {
             // console.clear();
             console.info("Welcome To OMNI-Importer");
         }
-    }Fba
+
+        document.title = this.state.shop_url;
+    }
 
     componentDidMount() {
         this.checkingFba();

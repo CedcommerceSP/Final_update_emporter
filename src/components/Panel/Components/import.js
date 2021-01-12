@@ -325,15 +325,15 @@ export class Import extends Component {
 						/>
 					</div>
 				);
-			/*case "amazonimporter":
+			case "amazonimporter":
 				return (
 					<div className="col-12 pt-1 pb-1">
 						<Select
-							label="Product Type"
+							label="Account Name To Be Import"
 							options={[
-								{ label: "All Products", value: "all" },
-								{ label: "Active Products", value: "active" },
-								{ label: "Inactive Products", value: "inactive" }
+								{ label: "AmazonUS", value: "all" },
+								{ label: "AmazonUK", value: "active" },
+								{ label: "AmazonDE", value: "inactive" }
 							]}
 							onChange={e => {
 								this.setState({ amazon_list_type: e });
@@ -341,7 +341,7 @@ export class Import extends Component {
 							value={this.state.amazon_list_type}
 						/>
 					</div>
-				);*/
+				);
 		}
 	};
 
@@ -453,7 +453,7 @@ export class Import extends Component {
 			sendData["list_type"] = this.state.ebay_list_type;
 		}
 		if (this.state.importProductsDetails.source === "amazonimporter") {
-			sendData["listing_type"] = this.state.amazon_list_type;
+			sendData["accountname"] = this.state.amazon_list_type;
 		}if (this.state.importProductsDetails.source === "etsydropshipping") {
 			sendData["listing_type"] = this.state.listing_type;
 		}

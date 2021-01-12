@@ -1,5 +1,5 @@
 .price-tag_small {
-    font-size: 16px;
+    font-size: 12px;
     vertical-align: middle;
     margin: 0px 5px;
 }
@@ -12,7 +12,7 @@
 }
 
 .price-tag {
-    font-size: 40px;
+    font-size: 30px;
 }
 .price-tagq {
     font-size: 35px;
