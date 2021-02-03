@@ -10,6 +10,9 @@ import {
     Modal,
     TextContainer,
     Tabs,
+    Thumbnail,
+    TextStyle,
+    Label,
     Heading,
 } from "@shopify/polaris";
 import {faArrowsAltH} from "@fortawesome/free-solid-svg-icons";
@@ -537,24 +540,6 @@ class FAQPage extends Component {
     renderFAQ() {
         return (
             <div className="row">
-                <div className="col-12 mb-4">
-                    <Card>
-                        <ResourceList
-                            items={this.state.noSearchFound}
-                            renderItem={item => {
-                            }}
-                            filterControl={
-                                <ResourceList.FilterControl
-                                    searchValue={this.state.search}
-                                    onSearchChange={searchValue => {
-                                        this.setState({search: searchValue.toLowerCase()});
-                                        this.handleSearch();
-                                    }}
-                                />
-                            }
-                        />
-                    </Card>
-                </div>
                 {this.state.faq.map(data => {
                     return (
                         <React.Fragment key={data.id}>
@@ -591,7 +576,7 @@ class FAQPage extends Component {
 
     }
 
-    renderPDF() {
+    renderPDFNamaste() {
         return(
             <div className="row">
             <div className="col-6 col-sm-6 mb-4"
@@ -637,6 +622,68 @@ class FAQPage extends Component {
         )
     }
 
+
+    renderPDF() {
+        return (
+            <Card>
+                <ResourceList
+                        items={[
+                            {
+                                url: 'http://apps.cedcommerce.com/importer/amazon_UK_IN.pdf',
+                                name: 'Amazon Help PDF',
+                                description: 'You can use this PDF to guide yourself for connecting your amazon account to import products.',
+                                media: (
+                                    <Thumbnail
+                                        source="https://importer.sellernext.com/marketplace-logos/pdfIcon.png"
+                                        alt="Amazon logo"
+                                    />
+                                ),
+                            },
+                            {
+                                url: 'http://apps.cedcommerce.com/importer/ebaydropshippingImporter.pdf',
+                                name: 'Ebay Dropshipping Help PDF',
+                                description: 'You can use this PDF to import products by Ebay Dropshipping.',
+                                media: (
+                                    <Thumbnail
+                                        source="https://importer.sellernext.com/marketplace-logos/pdfIcon.png"
+                                        alt="Ebay logo"
+                                    />
+                                ),
+                            },
+                            {
+                                url: 'http://apps.cedcommerce.com/importer/WorkingofAliexpressDropshippingMultichannelImporterapp.pdf',
+                                name: 'AliExpress Dropshipping Help PDF',
+                                description: 'You can use this PDF to import products by AliExpress Dropshipping.',
+                                media: (
+                                    <Thumbnail
+                                        source="https://importer.sellernext.com/marketplace-logos/pdfIcon.png"
+                                        alt="Ali logo"
+                                    />
+                                ),
+                            },
+                        ]}
+                        renderItem={(item) => {
+                            const {url, name, media, description} = item;
+
+                            return (
+                                <a href={url} target="_blank" style={{textDecoration:"none", color:"#000"}}><ResourceList.Item
+                                    media={media}
+                                    accessibilityLabel={`View details for ${name}`}
+                                >
+                                    <h3>
+                                        <TextStyle variation="strong">{name}</TextStyle>
+                                    </h3>
+                                    <Label>
+                                        {description}
+                                    </Label>
+                                </ResourceList.Item></a>
+                            );
+                        }}
+                    />
+                </Card>
+        );
+    }
+
     renderVideoGif() {
         return(
             <div className="justify-content-center">
@@ -675,11 +722,11 @@ class FAQPage extends Component {
                 accessibilityLabel: 'PDF',
                 panelID: 'PDF',
             },
-            {
-                id: 'Videos/Gif',
-                content: 'Videos/Gif',
-                panelID: 'Videos/Gif',
-            },
+            // {
+            //     id: 'Videos/Gif',
+            //     content: 'Videos/Gif',
+            //     panelID: 'Videos/Gif',
+            // },
         ];
 
         return (

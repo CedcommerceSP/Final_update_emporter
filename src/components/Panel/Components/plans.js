@@ -109,6 +109,7 @@ export class Plans extends Component {
 	render() {
 		return (
 			<Page
+				fullWidth
 				title="Plans"
 				primaryAction={{
 					content: "Billing History",

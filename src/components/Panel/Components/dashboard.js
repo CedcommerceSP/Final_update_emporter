@@ -328,6 +328,8 @@ class Dashboard extends Component {
 			this.state.info.email !== "" &&
 			this.state.info.mobile !== ""
 		) {
+
+
 			requests
 				.postRequest("core/app/sendOtp", {
 					phone: this.state.info.mobile_code + "" + this.state.info.mobile,
@@ -335,13 +337,14 @@ class Dashboard extends Component {
 				})
 				.then(data => {
 					if (data.success) {
+						this.handleOTPSubmit();
 						let otpCheck = this.state.otpCheck;
 						otpCheck.status = true;
 						otpCheck.number_change = false;
 						this.setState({ otpCheck: otpCheck });
-						notify.info(
-							"You will shortly receive an OTP on your registered mobile number"
-						);
+						// notify.info(
+						// 	"You will shortly receive an OTP on your registered mobile number"
+						// );
 					} else {
 						notify.error(data.message);
 					}
@@ -379,12 +382,17 @@ class Dashboard extends Component {
 		}
 	};
 
+
+
+
+
+
+
+
+
+	//-----------OTP wala cdeis here--------------------------------
+
 	handleOTPSubmit = () => {
-		if (this.state.otpCheck.pin !== "" && !this.state.otpCheck.number_change) {
-			requests
-				.postRequest("core/app/matchOtp", { otp: this.state.otpCheck.pin })
-				.then(data => {
-					if (data.success) {
 						let tempInfo = Object.assign({}, this.state.info);
 						tempInfo.mobile = tempInfo.mobile_code + "-" + tempInfo.mobile;
 						requests.getRequest("core/user/updateuser", tempInfo).then(data => {
@@ -402,21 +410,9 @@ class Dashboard extends Component {
 								notify.error(data.message);
 							}
 						});
-					} else {
-						notify.error(data.message);
-					}
-				});
-		} else if (
-			this.state.otpCheck.number_change &&
-			this.state.info.mobile !== ""
-		) {
-			this.handleSubmit();
-		} else {
-			notify.info("Field is empty");
-		}
 	};
 
-	handleOTPChange = (arg, value) => {
+	/*handleOTPChange = (arg, value) => {
 		if (arg === "resend") {
 			this.handleSubmit();
 		} else {
@@ -424,150 +420,163 @@ class Dashboard extends Component {
 			otpCheck[arg] = value;
 			this.setState({ otpCheck: otpCheck });
 		}
-	};
+	};*/
+
+
+
+
+
+	//-------------------------otp wala code is here===========================
+
+/*(
+<div>
+<Form onSubmit={this.handleOTPSubmit}>
+<FormLayout>
+<div className="row">
+<div
+className={`col-12 offset-0 ${
+    this.state.otpCheck.number_change
+        ? ""
+        : "col-sm-4 offset-sm-4"
+    }`}
+>
+{this.state.otpCheck.number_change ? (
+	<div className="row">
+		<div className="col-3">
+			<Select
+				label="Country"
+				placeholder="Select"
+				options={json.country_mobile_code}
+				onChange={this.handleFormChange.bind(
+                    this,
+                    "country_code"
+                )}
+				value={this.state.info.country_code}
+			/>
+		</div>
+		<div className="col-2">
+			<TextField
+				label={"Code"}
+				readOnly={true}
+				value={this.state.info.mobile_code}
+			/>
+		</div>
+		<div className="col-7">
+			<TextField
+				value={this.state.info.mobile}
+				minLength={5}
+				maxLength={14}
+				error={
+                    this.state.info_error.mobile
+                        ? "*Please Enter Detail"
+                        : null
+                }
+				onChange={this.handleFormChange.bind(
+                    this,
+                    "mobile"
+                )}
+				helpText={
+                    "OTP will be sent on this number for verification."
+                }
+				label="Phone Number:"
+				type="number"
+			/>
+		</div>
+		<div className="col-12 col-md-12 text-left">
+            {this.state.info.mobile === "" &&
+            this.state.info_error.mobile !== true ? (
+				<p className="mt-1" style={{ color: "green" }}>
+					*required
+				</p>
+            ) : null}
+		</div>
+	</div>
+) : (
+	<div>
+		<Label>Phone number: </Label>
+		<Label>
+            {this.state.info.mobile_code +
+            "" +
+            this.state.info.mobile}
+		</Label>
+		<a
+			href="javascript:void(0)"
+			onClick={this.handleOTPChange.bind(
+                this,
+                "number_change",
+                true
+            )}
+		>
+			Change Mobile Number
+		</a>
+		<br />
+		<div className="row mt-4">
+			<div className="col-12">
+				<TextField
+					value={this.state.otpCheck.pin}
+					minLength={5}
+					maxLength={14}
+					error={
+                        this.state.otpCheck.error
+                            ? "*Please Enter Detail"
+                            : null
+                    }
+					onChange={this.handleOTPChange.bind(
+                        this,
+                        "pin"
+                    )}
+					label="Enter OTP"
+					type="number"
+				/>
+			</div>
+			<div className="col-12">
+				<a
+					href="javascript:void(0)"
+					onClick={this.handleOTPChange.bind(
+                        this,
+                        "resend"
+                    )}
+				>
+					Resend OTP
+				</a>
+			</div>
+		</div>
+	</div>
+)}
+<div className="mt-4">
+<Button
+submit
+primary
+disabled={
+    this.state.otpCheck.pin.length <= 3 &&
+    !this.state.otpCheck.number_change
+}
+>
+Submit
+</Button>
+{this.state.otpCheck.number_change ? (
+    ""
+) : (
+	<p>OTP will valid for 5 min</p>
+)}
+</div>
+</div>
+</div>
+</FormLayout>
+</Form>
+</div>
+)*/
+
+
+
+	//-------------------------otp wala code is here===========================
+
 
 	renderGetUserInfo() {
 		return (
 			<div className="row">
 				<div className="col-12">
-					{this.state.otpCheck.status ? (
-						<div>
-							<Form onSubmit={this.handleOTPSubmit}>
-								<FormLayout>
-									<div className="row">
-										<div
-											className={`col-12 offset-0 ${
-												this.state.otpCheck.number_change
-													? ""
-													: "col-sm-4 offset-sm-4"
-											}`}
-										>
-											{this.state.otpCheck.number_change ? (
-												<div className="row">
-													<div className="col-3">
-														<Select
-															label="Country"
-															placeholder="Select"
-															options={json.country_mobile_code}
-															onChange={this.handleFormChange.bind(
-																this,
-																"country_code"
-															)}
-															value={this.state.info.country_code}
-														/>
-													</div>
-													<div className="col-2">
-														<TextField
-															label={"Code"}
-															readOnly={true}
-															value={this.state.info.mobile_code}
-														/>
-													</div>
-													<div className="col-7">
-														<TextField
-															value={this.state.info.mobile}
-															minLength={5}
-															maxLength={14}
-															error={
-																this.state.info_error.mobile
-																	? "*Please Enter Detail"
-																	: null
-															}
-															onChange={this.handleFormChange.bind(
-																this,
-																"mobile"
-															)}
-															helpText={
-																"OTP will be sent on this number for verification."
-															}
-															label="Phone Number:"
-															type="number"
-														/>
-													</div>
-													<div className="col-12 col-md-12 text-left">
-														{this.state.info.mobile === "" &&
-														this.state.info_error.mobile !== true ? (
-															<p className="mt-1" style={{ color: "green" }}>
-																*required
-															</p>
-														) : null}
-													</div>
-												</div>
-											) : (
-												<div>
-													<Label>Phone number: </Label>
-													<Label>
-														{this.state.info.mobile_code +
-															"" +
-															this.state.info.mobile}
-													</Label>
-													<a
-														href="javascript:void(0)"
-														onClick={this.handleOTPChange.bind(
-															this,
-															"number_change",
-															true
-														)}
-													>
-														Change Mobile Number
-													</a>
-													<br />
-													<div className="row mt-4">
-														<div className="col-12">
-															<TextField
-																value={this.state.otpCheck.pin}
-																minLength={5}
-																maxLength={14}
-																error={
-																	this.state.otpCheck.error
-																		? "*Please Enter Detail"
-																		: null
-																}
-																onChange={this.handleOTPChange.bind(
-																	this,
-																	"pin"
-																)}
-																label="Enter OTP"
-																type="number"
-															/>
-														</div>
-														<div className="col-12">
-															<a
-																href="javascript:void(0)"
-																onClick={this.handleOTPChange.bind(
-																	this,
-																	"resend"
-																)}
-															>
-																Resend OTP
-															</a>
-														</div>
-													</div>
-												</div>
-											)}
-											<div className="mt-4">
-												<Button
-													submit
-													primary
-													disabled={
-														this.state.otpCheck.pin.length <= 3 &&
-														!this.state.otpCheck.number_change
-													}
-												>
-													Submit
-												</Button>
-												{this.state.otpCheck.number_change ? (
-													""
-												) : (
-													<p>OTP will valid for 5 min</p>
-												)}
-											</div>
-										</div>
-									</div>
-								</FormLayout>
-							</Form>
-						</div>
-					) : (
+					{this.state.otpCheck.status ? null : (
 						<Form onSubmit={this.handleSubmit}>
 							<FormLayout>
 								<div className="row">
@@ -625,7 +634,6 @@ class Dashboard extends Component {
 													: null
 											}
 											onChange={this.handleFormChange.bind(this, "mobile")}
-											helpText={"OTP will sent to this number for verification"}
 											label="Phone Number:"
 											type="number"
 											readOnly={false}

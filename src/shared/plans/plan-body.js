@@ -211,7 +211,7 @@ class PlanBody extends Component {
     getImportPaymentSettings() {
         requests.getRequest("shopifygql/payment/getPaymentSettings").then(data => {
             if (data.success) {
-                console.log(data["data"])
+                // console.log(data["data"])
                 this.state.perProductCharge = data["data"]["per_product_cost"];
                 this.state.basePriceCharge = data["data"]["base_price_cost"];
                 this.state.oneTimePaymentDetails.service =
@@ -227,11 +227,11 @@ class PlanBody extends Component {
         requests.getRequest("plan/plan/get").then(data => {
             // get All the Plans Available
             if (data.success) {
-                console.log(data)
+                // console.log(data)
                 if (data.data !== null && !isUndefined(data.data)) {
                     const temp = JSON.parse(JSON.stringify(data.data.data.rows));
                     data = dataGrids(data.data.data.rows, null);
-                    console.log(data);
+                    // console.log(data);
                     this.setState({
                         data: data,
                         originalData: temp
@@ -266,11 +266,11 @@ class PlanBody extends Component {
             RemoveService(Object.assign({}, newArg), value.slice(0))
         ); // Change the plan in Desire Format
 
-        console.log(this.state.countries)
+        // console.log(this.state.countries)
 
         data1.services[0]['number_of_countries'] = this.state.countries
         data1['countries'] = this.state.countries;
-        console.log(data1);
+        // console.log(data1);
         let win = window.open(
             "",
             "_parent",
@@ -278,10 +278,10 @@ class PlanBody extends Component {
         );
         // win.close();
         requests.postRequest("plan/plan/choose", data1).then(data => {
-            console.log(data)
+            // console.log(data)
             if (data.success) {
                 if (!isUndefined(data.data.confirmation_url)) {
-                    console.log(data.data.confirmation_url)
+                    // console.log(data.data.confirmation_url)
                     win.location = data.data.confirmation_url;
                 } else {
                     win.close();
@@ -461,11 +461,12 @@ class PlanBody extends Component {
                             <p>List your products from app to Shopify</p>
                         </Banner>
                     </div>
-                    <Page>
+                    <Page FullWidth>
                         <Stack>
                             <Collapsible open={true}
                                          ariaExpanded={this.state.banner_plan}
                             >
+
                                 <div className="col-12 p-3">
                                     <Card>
                                         <div className="row p-5">
@@ -594,14 +595,14 @@ class PlanBody extends Component {
                             >
                             </Banner>
                         </div>
-                        <Page>
+                        <Page >
                             <Collapsible open={true}
                                          ariaExpanded={this.state.sync_plan}
                             >
                                 <FormLayout>
                                     <FormLayout.Group condensed>
                                         {this.state.data.map((data, index) => {
-                                            console.log(data);
+                                            // console.log(data);
                                             if (data.title !== "FBA" && data.title !== "FBA Annually") {
                                                 return (
                                                     <div key={index}>
@@ -818,14 +819,14 @@ class PlanBody extends Component {
                                 Sync price/inventory between marketplace and shopify once a day.
                             </Banner>
                         </div>
-                        <Page>
+                        <Page fullWidth>
                             <Collapsible open={true}
                                          ariaExpanded={this.state.sync_plan}
                             >
                                 <FormLayout>
                                     <FormLayout.Group condensed>
                                         {this.state.data.map((data, index) => {
-                                            console.log(data);
+                                            // console.log(data);
                                             if (data.title !== "FBA" && data.title !== "FBA Annually" && data.title !== "Syncing And Order Management") {
                                                 return (
                                                     <div key={index}>
@@ -1041,14 +1042,14 @@ class PlanBody extends Component {
                             >
                             </Banner>
                         </div>
-                        <Page>
+                        <Page FullWidth>
                             <Collapsible open={true}
                                          ariaExpanded={this.state.sync_plan}
                             >
                                 <FormLayout>
                                     <FormLayout.Group condensed>
                                         {this.state.data.map((data, index) => {
-                                            console.log(data);
+                                            // console.log(data);
                                             if (data.title === "Syncing And Order Management") {
                                                 return (
                                                     <div key={index}>
@@ -1266,8 +1267,8 @@ class PlanBody extends Component {
                 }
             }
         }
-        console.log(this.state.main_price_temp);
-        console.log("edited data", this.state.data);
+        // console.log(this.state.main_price_temp);
+        // console.log("edited data", this.state.data);
     }
 
     renderPlanOrderManagement() {
@@ -1789,7 +1790,7 @@ class PlanBody extends Component {
     render() {
         const {selected} = this.state;
         var tabs = []
-        console.log(this.state.is_connected_fba);
+        // console.log(this.state.is_connected_fba);
         if (this.state.is_connected_fba){
              tabs = [
                 {

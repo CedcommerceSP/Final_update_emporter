@@ -128,7 +128,7 @@ class Demo_analytics_reporting extends Component {
                 if (response.success) {
                     if (response.data.available_credits === 0 && response.data.used_credits === 0){
                         this.setState({
-                            credits_available:true
+                            credits_available:true,
                         })
                     }
                     /*let total_credit = response.d
@@ -152,6 +152,11 @@ class Demo_analytics_reporting extends Component {
                     )
 
                 }
+                else {
+                    this.setState({
+                        credits_available:true,
+                    })
+                }
 
             });
     }
@@ -171,10 +176,6 @@ class Demo_analytics_reporting extends Component {
                             importer_marketplace.push(importer[importerkey]["marketplace"]);
                         }
                     });
-
-                    console.log(importer_marketplace);
-                    console.log(importer_title);
-                    console.log(importer);
                     this.getYAxisImporter(
                         importer_marketplace,
                         importer_title,

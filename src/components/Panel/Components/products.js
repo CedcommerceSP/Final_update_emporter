@@ -450,10 +450,10 @@ export class Products extends Component {
         let products = [];
         let str = "";
         for (let i = 0; i < data.length; i++) {
-            console.log(Object.keys(data[i].variants).length);
+            // console.log(Object.keys(data[i].variants).length);
             let rowData = {};
 			if (Object.keys( data[i].variants).length > 0 && !isUndefined(data[i].variants)) {
-                console.log(data);
+                // console.log(data);
                 if (
 					data[i]["details"]["type"] === "simple" ||
 					Object.keys(data[i]["variants"]).length === 1

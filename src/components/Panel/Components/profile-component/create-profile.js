@@ -1942,7 +1942,7 @@ export class CreateProfile extends Component {
             case 1:
                 // console.log(this.validateStepOne());
                 if (this.validateStepOne()) {
-                    console.log(this.state.array_marketpalce_imported);
+                    // console.log(this.state.array_marketpalce_imported);
                     if (this.state.basicDetails.source === 'fileimporter'){
                         this.saveProfileData();
                         this.state.for_profiling = true;

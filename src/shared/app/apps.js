@@ -83,7 +83,6 @@ class AppsShared extends Component {
         };
         requests.getRequest("connector/get/all").then(data => {
             if (data.success) {
-                console.log("namaste",data);
                 let installedApps = [];
                 let code = [];
                 for (let i = 0; i < Object.keys(data.data).length; i++) {
@@ -205,8 +204,6 @@ class AppsShared extends Component {
     }
 
     renderMarketplace() {
-        console.log(this.state.apps);
-        // this.checkDevice();
            return this.state.apps.map(app => {
                if (app.code == "ebayimporter"){
                    if (app.code !== 'fba' && app.code !== 'ebayaffiliate' && app.code !== 'amazonaffiliate' && app.code !== 'aliexpress' && app.title !== 'Etsy Dropshipping') {
@@ -221,14 +218,14 @@ class AppsShared extends Component {
                                        app["installed"] !== 0
                                            ?<div className="text-left pt-3 pl-4">
                                                <Badge progress="complete" status="success">Connected</Badge>
-                                           </div>:null}
+                                           </div>:<div className="text-left pt-3 pl-4"></div>}
                                        <div className="row p-5">
-                                           <div className="col-12">
+                                           <div className="col-12 text-center">
                                                {window.screen.width <= 500 ?<img src={app.image} alt={app.title}
-                                                                                 style={{maxWidth: "60px", height: "60px"}}/>:<img src={app.image} alt={app.title}
-                                                                                                                                   style={{maxWidth: "80%", height: "160px"}}/>}
+                                                                                 style={{maxWidth: "60px"}}/>:<img src={app.image} alt={app.title}
+                                                                                                                                   style={{maxWidth: "80%"}}/>}
                                            </div>
-                                           <div className="col-12 mt-4 mb-4">
+                                           <div className="col-12 mt-4">
 
 
                                                <div className="row">
@@ -326,14 +323,14 @@ class AppsShared extends Component {
                                        app["installed"] !== 0
                                            ?<div className="text-left pt-3 pl-4">
                                                <Badge progress="complete" status="success">Connected</Badge>
-                                           </div>:null}
+                                           </div>:<div className="text-left pt-3 pl-4"></div>}
                                        <div className="row p-5">
-                                           <div className="col-12">
+                                           <div className="col-12 text-center">
                                                {window.screen.width <= 500 ?<img src={app.image} alt={app.title}
-                                                                                 style={{maxWidth: "60px", height: "60px"}}/>:<img src={app.image} alt={app.title}
-                                                                                                                                   style={{maxWidth: "80%", height: "160px"}}/>}
+                                                                                 style={{maxWidth: "60px"}}/>:<img src={app.image} alt={app.title}
+                                                                                                                                   style={{maxWidth: "80%"}}/>}
                                            </div>
-                                           <div className="col-12 mt-4 mb-4">
+                                           <div className="col-12 mt-4">
 
                                                <div className="row">
                                                    <div className="col-12 col-sm-6">
@@ -432,14 +429,14 @@ class AppsShared extends Component {
                                        app["installed"] !== 0
                                            ?<div className="text-left pt-3 pl-4">
                                                <Badge progress="complete" status="success">Connected</Badge>
-                                           </div>:null}
+                                           </div>:<div className="text-left pt-3 pl-4"></div>}
                                        <div className="row p-5">
-                                           <div className="col-12">
+                                           <div className="col-12 text-center">
                                                {window.screen.width <= 500 ?<img src={app.image} alt={app.title}
-                                                                                 style={{maxWidth: "60px", height: "60px"}}/>:<img src={app.image} alt={app.title}
-                                                                                                                                   style={{maxWidth: "80%", height: "160px"}}/>}
+                                                                                 style={{maxWidth: "60px"}}/>:<img src={app.image} alt={app.title}
+                                                                                                                                   style={{maxWidth: "80%"}}/>}
                                            </div>
-                                           <div className="col-12 mt-4 mb-4">
+                                           <div className="col-12 mt-4">
                                                <div className="row">
                                                    <div className="col-12 col-sm-6">
                                                        {this.additionalInput(app.code)}
@@ -487,14 +484,14 @@ class AppsShared extends Component {
                                         app["installed"] !== 0
                                             ? <div className="text-left pt-3 pl-4">
                                                 <Badge progress="complete" status="success">Connected</Badge>
-                                            </div> : null}
+                                            </div> : <div className="text-left pt-3 pl-4"></div>}
                                         <div className="row p-5">
-                                            <div className="col-12">
+                                            <div className="col-12 text-center">
                                                 {window.screen.width <= 500 ?<img src={app.image} alt={app.title}
-                                                                                  style={{maxWidth: "60px", height: "60px"}}/>:<img src={app.image} alt={app.title}
-                                                                                                                                    style={{maxWidth: "80%", height: "160px"}}/>}
+                                                                                  style={{maxWidth: "60px"}}/>:<img src={app.image} alt={app.title}
+                                                                                                                                    style={{maxWidth: "80%"}}/>}
                                             </div>
-                                            <div className="col-12 mt-4 mb-4">
+                                            <div className="col-12 mt-4">
                                                 <div className="row">
                                                     <div className="col-12 col-sm-6">
                                                         {this.additionalInput(app.code)}
@@ -550,44 +547,25 @@ class AppsShared extends Component {
                                 className="col-6 col-sm-6 mb-4"
                                 key={this.state.apps.indexOf(app)}
                             >
-                                <Card title={app.title}>
-                                    {app.code ==='ebayaffiliate'?<div className="col-12 text-right" style={{color: '#bf0711'}}>
-                                        <Button monochrome outline
-                                                onClick={() => {
-                                                    window.open(
-                                                        "http://apps.cedcommerce.com/importer/ebaydropshippingImporter.pdf"
-                                                    );
-                                                }}
-                                                size={"slim"}
-                                        >
-                                            Help PDF
-                                        </Button>
-                                    </div>:null}
-                                    {app.code ==='aliexpress'?<div className="col-12 text-right" style={{color: '#bf0711'}}>
-                                        <Button monochrome outline
-                                                onClick={() => {
-                                                    window.open(
-                                                        "http://apps.cedcommerce.com/importer/WorkingofAliexpressDropshippingMultichannelImporterapp.pdf"
-                                                    );
-                                                }}
-                                                size={"slim"}
-                                        >
-                                            Help PDF
-                                        </Button>
-                                    </div>:null}
+                                {app.code ==='aliexpress'||app.code ==='ebayaffiliate'?<Card title={app.title}
+                                      actions={[{content: 'Help PDF',
+                                      url:app.code === "ebayaffiliate" ? "http://apps.cedcommerce.com/importer/ebaydropshippingImporter.pdf":"http://apps.cedcommerce.com/importer/WorkingofAliexpressDropshippingMultichannelImporterapp.pdf",
+                                          external : true,
+                                      }]}
+                                >
                                     {this.props.success.code === app.code ||
                                     app["installed"] !== 0
                                         ? <div className="text-left pt-1 pl-4">
                                             <Badge progress="complete" status="success">Connected</Badge>
-                                        </div> : null}
+                                        </div> : <div className="text-left pt-3 pl-4"></div>}
 
                                     <div className="row p-5">
-                                        <div className="col-12">
+                                        <div className="col-12 text-center">
                                             {window.screen.width <= 500 ?<img src={app.image} alt={app.title}
-                                                                              style={{maxWidth: "60px", height: "60px"}}/>:<img src={app.image} alt={app.title}
-                                                                                                                                style={{maxWidth: "80%", height: "160px"}}/>}
+                                                                              style={{maxWidth: "60px"}}/>:<img src={app.image} alt={app.title}
+                                                                                                                                style={{maxWidth: "80%"}}/>}
                                         </div>
-                                        <div className="col-12 mt-4 mb-4">
+                                        <div className="col-12 mt-4">
                                             <div className="row">
                                                 <div className="col-12 col-sm-6">
                                                     {this.additionalInput(app.code)}
@@ -610,7 +588,48 @@ class AppsShared extends Component {
                                             </div>
                                         </div>
                                     </div>
-                                </Card>
+                                </Card>:<Card title={app.title}
+                                              // actions={[{content: 'Help PDF',
+                                              //     url:"http://apps.cedcommerce.com/importer/ebaydropshippingImporter.pdf",
+                                              //     external : true,
+                                              // }]}
+                                    >
+                                        {this.props.success.code === app.code ||
+                                        app["installed"] !== 0
+                                            ? <div className="text-left pt-1 pl-4">
+                                                <Badge progress="complete" status="success">Connected</Badge>
+                                            </div> : <div className="text-left pt-3 pl-4"></div>}
+
+                                        <div className="row p-5">
+                                            <div className="col-12 text-center">
+                                                {window.screen.width <= 500 ?<img src={app.image} alt={app.title}
+                                                                                  style={{maxWidth: "60px"}}/>:<img src={app.image} alt={app.title}
+                                                                                                                                    style={{maxWidth: "80%"}}/>}
+                                            </div>
+                                            <div className="col-12 mt-4">
+                                                <div className="row">
+                                                    <div className="col-12 col-sm-6">
+                                                        {this.additionalInput(app.code)}
+                                                    </div>
+                                                    <div className="col-12 col-sm-6">
+                                                        <Button
+                                                            // disabled={this.props.success.code === app.code || app['installed'] !==0 && app.code !== 'ebayimporter'}
+                                                            onClick={() => {
+                                                                this.installApp(app.code);
+                                                            }}
+                                                            primary
+                                                            fullWidth={true}
+                                                        >
+                                                            {this.props.success.code === app.code ||
+                                                            app["installed"] !== 0
+                                                                ? "Connected"
+                                                                : "Link your Account"}
+                                                        </Button>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </Card>}
                             </div>
                             {/*<div className="col-6 col-sm-6 mt-5 text-center">
                              <img className='img-fluid pt-5 mt-2'
@@ -694,7 +713,7 @@ class AppsShared extends Component {
                                                                                           src={require("../../assets/img/csv_upload.png")}
                                                                                           onClick={this.handleChangeModakCsv.bind(this)}
                                                         />:<img style={{height: '100px', width: '100px', cursor: "pointer"}}
-                                                                src={require("../../assets/img/csv_upload.png")}
+                                                                src={require("../../assets/img/csv.svg")}
                                                                 onClick={this.handleChangeModakCsv.bind(this)}
                                                             />}
                                                     </div>

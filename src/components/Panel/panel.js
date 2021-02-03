@@ -335,8 +335,8 @@ export class Panel extends Component {
 
     componentWillUpdate() {
         if (environment.isLive) {
-            // console.clear();
-            console.info("Welcome To OMNI-Importer");
+            console.clear();
+            console.info("Welcome To Multichannel-Importer");
         }
 
         document.title = this.state.shop_url;
@@ -348,7 +348,7 @@ export class Panel extends Component {
 
     disableHeader(value) {
         if (!value) {
-            // console.clear();
+            console.clear();
         }
         this.setState({header: value});
     }

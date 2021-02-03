@@ -113,7 +113,7 @@ export class Configuration extends Component {
             .getRequest("connector/get/config", {marketplace: "amazonimporter"})
             .then(data => {
                 if (data.success) {
-                    console.log(data.data)
+                    // console.log(data.data)
                     this.amazonImporterConfigurationData = this.modifyConfigData(
                         data.data,
                         "amazon_importer_configuration"
@@ -224,7 +224,7 @@ export class Configuration extends Component {
             .getRequest("connector/get/config", {marketplace: "etsyimporter"})
             .then(data => {
                 if (data.success) {
-                    console.log(data.data)
+                    // console.log(data.data)
                     this.etsyConfigurationData = this.modifyConfigData(
                         data.data,
                         "etsy_configuration"
@@ -241,7 +241,7 @@ export class Configuration extends Component {
             .getRequest("connector/get/config", {marketplace: "shopify"})
             .then(data => {
                 if (data.success) {
-                    console.log(data.data);
+                    // console.log(data.data);
                     this.shopifyConfigurationData = this.modifyConfigData(
                         data.data,
                         "shopify_configuration"
@@ -267,7 +267,7 @@ export class Configuration extends Component {
             }
         }
 
-        console.log(data)
+        // console.log(data)
         return data;
     }
 
@@ -460,7 +460,7 @@ export class Configuration extends Component {
                     <Card>
                         <div className="row p-5">
                             {this.shopifyConfigurationData.map(config => {
-                                console.log(this.state.shopify_configuration['Locations'])
+                                // console.log(this.state.shopify_configuration['Locations'])
                                 if (
                                     !this.state.show_shopify_child_component[config["is_child"]]
                                 ) {
@@ -732,7 +732,7 @@ export class Configuration extends Component {
                 this.saveEbayAffiliateConfigData(data);
                 break;
             default:
-                console.log("Wrong Choice");
+                // console.log("Wrong Choice");
         }
     };
 
@@ -800,7 +800,7 @@ export class Configuration extends Component {
             .getRequest("fba/test/test")
             .then(data => {
                 if (data.success && data.data!=null) {
-                    console.log("data_FBA", data);
+                    // console.log("data_FBA", data);
                     this.setState({
                         open_modal_response: true
                     });
@@ -1037,7 +1037,7 @@ export class Configuration extends Component {
             accounts = this.state.necessaryInfo.account_connected_array;
             if (!environment.isLive || Object.keys(this.state.necessaryInfo.sync).length > 0) sync = true;
         }
-        console.log(accounts)
+        // console.log(accounts)
         return (
             <Page title="Settings">
                 <Layout>
