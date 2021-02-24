@@ -305,8 +305,6 @@ export class Import extends Component {
         this.setState({
             switch: !this.state.switch
         })
-
-        console.log(this.state.switch);
     };
 
     handleMarketplaceAdditionalInput = marketplace => {
@@ -412,6 +410,7 @@ export class Import extends Component {
                 return (
                     <div className="col-12 pt-1 pb-1">
                         <Select
+                            disabled = {this.state.switch}
                             label="Product Type"
                             options={[
                                 {label: "Active Listing", value: "active"},
@@ -423,46 +422,46 @@ export class Import extends Component {
                             }}
                             value={this.state.ebay_list_type}
                         />
-                        {/*<div>*/}
-                            {/*<Stack distribution="fillEvenly">*/}
-                                {/*<div className="pt-3">*/}
-                                    {/*<DisplayText size="small">Product to be import by custom date</DisplayText>*/}
-                                {/*</div>*/}
-                                {/*<div className="pt-3">*/}
-                                    {/*<label className="switch">*/}
-                                        {/*<input*/}
-                                            {/*type="checkbox"*/}
-                                            {/*onClick={() => {*/}
-                                                {/*this.switchclick();*/}
-                                            {/*}}*/}
-                                        {/*/>*/}
-                                        {/*<span className="slider round"></span>*/}
-                                    {/*</label>*/}
-                                {/*</div>*/}
-                            {/*</Stack>*/}
-                            {/*{!this.state.switch ? null :*/}
-                                {/*<Stack>*/}
-                                    {/*<DatePicker*/}
-                                        {/*month={this.state.mm}*/}
-                                        {/*year={this.state.yyyy}*/}
-                                        {/*multiMonth={false}*/}
-                                        {/*selected={this.state.selectedStartDate}*/}
-                                        {/*onChange={this.handleChange}*/}
-                                        {/*onMonthChange={this.handleMonthChange}*/}
-                                    {/*/>*/}
+                        <div>
+                            <Stack distribution="fillEvenly">
+                                <div className="pt-3">
+                                    <DisplayText size="small">Product to be import by custom date</DisplayText>
+                                </div>
+                                <div className="pt-3">
+                                    <label className="switch">
+                                        <input
+                                            type="checkbox"
+                                            onClick={() => {
+                                                this.switchclick();
+                                            }}
+                                        />
+                                        <span className="slider round"></span>
+                                    </label>
+                                </div>
+                            </Stack>
+                            {!this.state.switch ? null :
+                                <Stack>
+                                    <DatePicker
+                                        month={this.state.mm}
+                                        year={this.state.yyyy}
+                                        multiMonth={false}
+                                        selected={this.state.selectedStartDate}
+                                        onChange={this.handleChange}
+                                        onMonthChange={this.handleMonthChange}
+                                    />
 
-                                    {/*<DatePicker*/}
-                                        {/*month={this.state.emm}*/}
-                                        {/*year={this.state.eyyyy}*/}
-                                        {/*multiMonth={false}*/}
-                                        {/*selected={this.state.selectedEndDate}*/}
-                                        {/*onChange={this.handleChangeEnd}*/}
-                                        {/*onMonthChange={this.handleMonthChangeEnd}*/}
-                                    {/*/>*/}
-                                {/*</Stack>}*/}
+                                    <DatePicker
+                                        month={this.state.emm}
+                                        year={this.state.eyyyy}
+                                        multiMonth={false}
+                                        selected={this.state.selectedEndDate}
+                                        onChange={this.handleChangeEnd}
+                                        onMonthChange={this.handleMonthChangeEnd}
+                                    />
+                                </Stack>}
 
 
-                        {/*</div>*/}
+                        </div>
 
                     </div>
 
@@ -575,9 +574,6 @@ export class Import extends Component {
             sendData["identifier_value"] = this.state.affiliate.value;
         }
         if (this.state.importProductsDetails.source === "ebayimporter") {
-            console.log(this.state.switch);
-            console.log(this.state.startDate);
-            console.log(this.state.endDate);
             sendData["list_type"] = this.state.ebay_list_type;
             if (this.state.switch || this.state.startDate != null || this.state.endDate != null) {
                 sendData["startDate"] = this.state.startDate;
@@ -751,16 +747,16 @@ export class Import extends Component {
                                 />
                             </div>
                         )}
+                        {/*<div className="col-12 pt-1 pb-1">*/}
+                            {/*<Banner status="info">*/}
+                                {/*<Label>*/}
+                                    {/*Upload specific product on Shopify by creating profile{" "}*/}
+                                    {/*<NavLink to="/panel/profiling/create">click here</NavLink>*/}
+                                {/*</Label>*/}
+                            {/*</Banner>*/}
+                        {/*</div>*/}
                         <div className="col-12 pt-1 pb-1">
-                            <Banner status="info">
-                                <Label>
-                                    Upload specific product on Shopify by creating profile{" "}
-                                    <NavLink to="/panel/profiling/create">click here</NavLink>
-                                </Label>
-                            </Banner>
-                        </div>
-                        <div className="col-12 pt-1 pb-1">
-                            {this.state.uploadProductDetails.profile_type !== "custom" && (
+                                        {this.state.uploadProductDetails.profile_type !== "custom" && (
                                 <Select
                                     label="Upload Through"
                                     placeholder="Choose Profile"

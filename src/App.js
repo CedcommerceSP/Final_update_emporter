@@ -191,13 +191,10 @@ export class App extends Component {
 
 	render() {
 		var browser = this.verifyCompatibilityofBrowser();
-		console.log(browser)
 		const loadingMarkup = this.state.showLoader && <Loading />;
 		console.log(this.state.shopOrigin)
 		if (this.state.shopOrigin !== "") {
-			console.log("In first conditon")
 			if (browser == "Firefox"){
-				console.log("In Firefox")
                 return (
 					<AppProvider
 						 // apiKey={environment.APP_API_KEY}
@@ -209,7 +206,6 @@ export class App extends Component {
 					</AppProvider>
                 );
 			}else {
-				console.log("In else")
                 return (
 					<AppProvider
 						 apiKey={environment.APP_API_KEY}
@@ -223,8 +219,6 @@ export class App extends Component {
 			}
 
 		} else {
-			console.log("last else")
-
 			return <AppProvider>{this.renderApp()}</AppProvider>;
 		}
 	}

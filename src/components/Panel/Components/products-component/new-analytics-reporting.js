@@ -308,6 +308,13 @@ class Demo_analytics_reporting extends Component {
                     label_mp_array = label_mp_array
                         .map(e1 => (capitalizeWord(e1)));
 
+                    // for (let d = 0 ; d < label_mp_array.length; d++){
+                    //     if (label_mp_array[d] === 'Amazon Dropshipping'){
+                    //         label_mp_array[d] = 'Amazon\nDropshipping'
+                    //     }
+                    // }
+                    // console.log(label_mp_array);
+
                     total_products_importer.push(0);
                     this.setState({
                         data2: {
@@ -733,7 +740,7 @@ class Demo_analytics_reporting extends Component {
                     </Layout.Section>
                     {rows.length > 0 ?
                     <Layout.Section oneThird>
-                        <Card title="News"
+                        <Card title="Latest Features"
                             >
                             <Card.Section>
                                 <ResourceList

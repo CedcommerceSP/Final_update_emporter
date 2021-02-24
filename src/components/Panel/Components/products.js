@@ -49,7 +49,7 @@ export class Products extends Component {
 		{ label: 40, value: "40" },
 		{ label: 50, value: "50" },
 		{ label: 500, value: "500" },
-		{ label: 2000, value: "2000 *(Slow)" },
+		{ label: 2000, value: "2000" },
 	];
 
 	massActions = [
@@ -320,7 +320,9 @@ export class Products extends Component {
 		this.prepareFilterObject();
 		const pageSettings = Object.assign({}, this.gridSettings);
         // this.state.appliedFilters['uploaded'] = 0;
-		requests
+        console.log(this.state.appliedFilters);
+        console.log(this.gridSettings);
+        requests
 			.getRequest(
 				"connector/product/getProducts",
 				Object.assign(pageSettings, this.state.appliedFilters),

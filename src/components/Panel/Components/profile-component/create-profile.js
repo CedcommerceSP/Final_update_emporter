@@ -42,6 +42,14 @@ export class CreateProfile extends Component {
         {label: "Greater Then Equal To", value: ">="},
         {label: "Less Then Equal To", value: "<="}
     ];
+    intFilterConditions = [
+        {label: "Equals", value: "=="},
+        {label: "Not Equals", value: "!="},
+        {label: "Greater Then", value: ">"},
+        {label: "Less Then", value: "<"},
+        {label: "Greater Then Equal To", value: ">="},
+        {label: "Less Then Equal To", value: "<="}
+    ];
     optionMapping = {};
     showOptionMapping = false;
     optionMappingIndex = -1;
@@ -57,6 +65,7 @@ export class CreateProfile extends Component {
         let today_date = new Date();
         this.state = {
             activeStep: 1,
+            selectedAttribute:'',
             for_profiling: false,
             filterQuery: {
                 primaryQuery: [
@@ -509,7 +518,7 @@ export class CreateProfile extends Component {
                         if (data.data[key].usable || !environment.isLive) {
                             hasService = true;
                             if (validateImporter(data.data[key].code)) {
-                                if (data.data[key].code !== 'fba'&& data.data[key].code !== 'bigmanager_importer' && data.data[key].code !== 'amazonaffiliate') {
+                                if (data.data[key].code !== 'fba'&& data.data[key].code !== 'bigmanager_importer') {
                                     this.importServices.push({
                                         label: data.data[key].title,
                                         value: data.data[key].code,
@@ -651,7 +660,7 @@ export class CreateProfile extends Component {
                                         ) : (
                                             <Select
                                                 label="Operator"
-                                                options={this.filterConditions}
+                                                options={query.key == 'quantity' ? this.intFilterConditions : this.filterConditions}
                                                 placeholder="Select Operator"
                                                 onChange={this.handleQueryBuilderChange.bind(
                                                     this,
@@ -1016,6 +1025,7 @@ export class CreateProfile extends Component {
                 selected: selected
             });
         }
+
         this.checkForOptions(value);
         this.filteredProducts.runQuery = false;
         if (field === "key") {

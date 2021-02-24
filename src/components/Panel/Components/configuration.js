@@ -30,7 +30,7 @@ import {Formbuilder}  from '../../../shared/formbuilder';
 
 const defaultCurrencyConverter = {
     label: '',
-    value: 0,
+    value: 1,
     action: 'mul',
     additional: '',
 };
@@ -364,6 +364,9 @@ export class Configuration extends Component {
         return <div className="col-12 pt-2 pb-2" key={parentIndex}>
             <Label>Currency Converter / Price Updater</Label>
             {value.map((e, i) => {
+                if (e.value == 0){
+                    e.value = 1
+                }
                 return (
                     <React.Fragment>
                         <Stack>
@@ -391,7 +394,7 @@ export class Configuration extends Component {
                                     key={i}
                                     label={"Currency"}
                                     type="number"
-                                    min={0}
+                                    min={1}
                                     labelHidden
                                     onChange={this.handleMultiLevelChange.bind(this, i, parentIndex, custom_option, value, 'value')}
                                     value={e.value}

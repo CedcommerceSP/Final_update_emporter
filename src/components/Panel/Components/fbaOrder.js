@@ -364,6 +364,13 @@ export class FbaOrder extends Component {
                             </React.Fragment>
                         );
                     }
+                    else if (data[i]['processing_status'] === 'CANCELLED') {
+                        rowData["processing_status"] = (
+                            <React.Fragment>
+                                <Badge status="warning">Cancelled</Badge>
+                            </React.Fragment>
+                        );
+                    }
                     else if (data[i]['processing_status'] === 'not yet created') {
                         rowData["processing_status"] = (
                             <React.Fragment>
