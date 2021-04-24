@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { Redirect } from 'react-router-dom';
 
-import { Card, Tabs } from '@shopify/polaris';
+import { Card, Tabs,Link} from '@shopify/polaris';
 import { globalState } from '../../../services/globalstate';
 import { notify } from '../../../services/notify';
 import { environment } from '../../../environments/environment';
@@ -53,9 +53,13 @@ export class Header extends Component {
             );
         } else {
             return (
-                <Card>
+                <div className="headerjscls">
+                <Card > 
                     <Tabs tabs={this.state.menu} fitted={true} selected={this.state.selected} onSelect={this.handleTabChange.bind(this)} />
                 </Card>
+                <div className="marqueeslide"><marquee direction="right"><Link url="https://calendly.com/swatishukla/walmart_ca" className="linkclsmarqee">Click Here for Demo Meeting</Link></marquee></div>
+                
+                </div>
             );
         }
     }

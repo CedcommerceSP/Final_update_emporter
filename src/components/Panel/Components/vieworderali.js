@@ -1,9 +1,3 @@
-/**
- * Created by cedcoss on 11/9/19.
- */
-/**
- * Created by cedcoss on 14/7/19.
- */
 import React, {Component} from 'react';
 import {
     Page,

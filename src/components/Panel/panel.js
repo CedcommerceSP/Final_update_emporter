@@ -395,7 +395,7 @@ export class Panel extends Component {
     }
 
     fbaTrailCheck() {
-        console.log("my name is rahul")
+        console.log("my name is Shaurya Pratap Singh")
             // console.log("zzzz");
             requests
                 .getRequest("fba/test/getWebhookDetailsAndDelete")
@@ -420,6 +420,7 @@ export class Panel extends Component {
     render() {
         const {rating} = this.state;
         return (
+            
             <div className="container-fluid app-panel-container">
                 <div className="row">
                     {/*<div className="col-12 pt-5 mt-5 ">*/}

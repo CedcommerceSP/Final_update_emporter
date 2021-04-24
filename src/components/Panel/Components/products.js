@@ -12,12 +12,14 @@ import {
 	Tabs,
 	Banner,
 	Badge,
-	Button
+	Button,
+	Icon
 } from "@shopify/polaris";
+import {CirclePlusMinor} from '@shopify/polaris-icons';
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
-    faArrowAltCircleDown,
-    faArrowAltCircleUp
+	faArrowAltCircleDown,
+	faArrowAltCircleUp
 } from "@fortawesome/free-solid-svg-icons";
 
 import { requests } from "../../../services/request";
@@ -27,8 +29,10 @@ import SmartDataTable from "../../../shared/smartTable";
 
 import { paginationShow } from "./static-functions";
 import FileImporter from "./import-component/fileimporter";
+
 import FileImporterBulkUpdate from "./import-component/fileimporterbulkupdate";
 const imageExists = require("image-exists");
+
 export class Products extends Component {
 	filters = {
 		full_text_search: "",
@@ -62,7 +66,8 @@ export class Products extends Component {
 		"sku",
 		"inventory",
 		"quantity",
-		"upload_status"
+		"upload_status",
+		"action"
 	];
 
 	predefineFilters = [
@@ -71,8 +76,8 @@ export class Products extends Component {
 		{ label: "ASIN", value: "source_variant_id", type: "string", special_case: "no" },
 		{ label: "Price", value: "price", type: "int", special_case: "no" },
 		{ label: "Quantity", value: "quantity", type: "int", special_case: "no" },
-		{ label:"Type", value:"type", type:"type", special_case:"yes"},
-        { label:"Country", value:"site", type:"string", special_case:"yes"},
+		{ label: "Type", value: "type", type: "type", special_case: "yes" },
+		{ label: "Country", value: "site", type: "string", special_case: "yes" },
 		{
 			label: "Date Picker",
 			value: "datePicker",
@@ -123,12 +128,18 @@ export class Products extends Component {
 			title: "Status",
 			sortable: false,
 			type: "react"
+		},
+		action: {
+			title: "Action",
+			sortable: false,
+			type: "action"
 		}
 	};
 
 	constructor(props) {
 		super(props);
 		this.state = {
+			productallmodal:[],
 			product_grid_collapsible: "",
 			tempProductData: [],
 			products: [],
@@ -141,18 +152,19 @@ export class Products extends Component {
 			totalPage: 0,
 			totalMainCount: 0,
 			showLoaderBar: true,
-			bulkUpdateModal:false,
-			selectedMarketplace:'',
-            shownMarketplace:[],
+			bulkUpdateModal: false,
+			selectedMarketplace: '',
+			shownMarketplace: [],
 			hideLoader: false,
+			siteContry:"",
 			pagination_show: 0,
 			selectedUploadModal: false,
 			selectUpload: { option: [], value: "" },
 			parent_sku: 0,
 			child_sku: 0,
 			requiredParamNotRecieved: true,
-			csvUrl:"",
-			uploadcsvModal:false
+			csvUrl: "",
+			uploadcsvModal: false
 		};
 		if (
 			props.necessaryInfo.account_connected !== undefined &&
@@ -168,6 +180,7 @@ export class Products extends Component {
 				}
 			}, 2000);
 		}
+		// this.handleeditdata=this.handleeditdata.bind(this);
 	}
 
 	componentWillReceiveProps(nextPorps) {
@@ -196,31 +209,31 @@ export class Products extends Component {
 		) {
 			let installedApps = [];
 			props.necessaryInfo.account_connected.forEach(e => {
-				if (e.code !== 'fba'){
-                    if (e.code == "amazonaffiliate"){
-                        installedApps.push({
-                            id: e.code,
-                            content: "Amazon Dropshipping",
-                            accessibilityLabel: e.title,
-                            panelID: e.code
-                        });
-                    }
-					 else if(e.code !== "ebayaffiliate"){
-                        installedApps.push({
-                            id: e.code,
-                            content: e.title,
-                            accessibilityLabel: e.title,
-                            panelID: e.code
-                        });
+				if (e.code !== 'fba') {
+					if (e.code == "amazonaffiliate") {
+						installedApps.push({
+							id: e.code,
+							content: "Amazon Dropshipping",
+							accessibilityLabel: e.title,
+							panelID: e.code
+						});
+					}
+					else if (e.code !== "ebayaffiliate") {
+						installedApps.push({
+							id: e.code,
+							content: e.title,
+							accessibilityLabel: e.title,
+							panelID: e.code
+						});
 					}
 					else {
-                        installedApps.push({
-                            id: e.code,
-                            content: "Ebay Dropshipping",
-                            accessibilityLabel: e.title,
-                            panelID: e.code
-                        });
-                    }
+						installedApps.push({
+							id: e.code,
+							content: "Ebay Dropshipping",
+							accessibilityLabel: e.title,
+							panelID: e.code
+						});
+					}
 
 				}
 
@@ -237,9 +250,9 @@ export class Products extends Component {
 	};
 
 	handleSelectedUpload = (arg, val) => {
-        console.log(arg);
-        console.log(val);
-        console.log(this.state.selectedProducts);
+		// console.log(arg);
+		// console.log(val);
+		console.log(this.state.selectedProducts);
 		switch (arg) {
 			case "modalClose":
 				this.setState({ selectedUploadModal: false });
@@ -250,6 +263,7 @@ export class Products extends Component {
 					list_ids: this.state.selectedProducts
 				};
 				requests.postRequest("frontend/app/getSKUCount", data).then(data => {
+					console.log(data)
 					if (data.success) {
 						if (
 							!isUndefined(data.data.parent) &&
@@ -272,7 +286,7 @@ export class Products extends Component {
 				requests
 					.getRequest(
 						"frontend/app/getShopID?marketplace=shopifygql&source=" +
-							this.filters.marketplace
+						this.filters.marketplace
 					)
 					.then(e => {
 						if (e.success) {
@@ -319,10 +333,10 @@ export class Products extends Component {
 		window.showGridLoader = true;
 		this.prepareFilterObject();
 		const pageSettings = Object.assign({}, this.gridSettings);
-        // this.state.appliedFilters['uploaded'] = 0;
-        console.log(this.state.appliedFilters);
-        console.log(this.gridSettings);
-        requests
+		// this.state.appliedFilters['uploaded'] = 0;
+		// console.log(this.state.appliedFilters);
+		// console.log(this.gridSettings);
+		requests
 			.getRequest(
 				"connector/product/getProducts",
 				Object.assign(pageSettings, this.state.appliedFilters),
@@ -330,6 +344,8 @@ export class Products extends Component {
 				true
 			)
 			.then(data => {
+				// console.log(data);
+				
 				if (data.success) {
 					window.showGridLoader = false;
 					this.setState({
@@ -340,7 +356,10 @@ export class Products extends Component {
 						this.setState({ totalMainCount: data.data.mainCount });
 					}
 					const products = this.modifyProductsData(data.data.rows, "");
+					// console.log(products);
 					this.state["products"] = products;
+					this.setState({productallmodal:data.data.rows})
+					// console.log(this.state.productallmodal);
 					this.state.showLoaderBar = !data.success;
 					this.state.hideLoader = data.success;
 					this.state.pagination_show = paginationShow(
@@ -376,10 +395,12 @@ export class Products extends Component {
 		if (this.filters.full_text_search !== "") {
 			this.state.appliedFilters["search"] = this.filters.full_text_search;
 		}
+		// console.log(this.filters.single_column_filter);
 		this.filters.single_column_filter.forEach((e, i) => {
+			console.log(e)
 			switch (e.name) {
 				case "title":
-                case "site":
+				case "site":
 				case "long_description":
 					this.state.appliedFilters[
 						"filter[details." + e.name + "][" + e.condition + "]"
@@ -408,9 +429,14 @@ export class Products extends Component {
 				case "type":
 					this.state.appliedFilters["filter[details.type][1]"] = e.value;
 					break;
+				case "Action":
+					this.state.appliedFilters["filter[details.type][1]"] = e.value;
+					break;
 
 			}
 		});
+		// console.log(this.filters.single_column_filter);
+
 		for (let i = 0; i < Object.keys(this.filters.column_filters).length; i++) {
 			const key = Object.keys(this.filters.column_filters)[i];
 			if (this.filters.column_filters[key].value !== "") {
@@ -421,10 +447,10 @@ export class Products extends Component {
 					case "long_description":
 						this.state.appliedFilters[
 							"filter[details." +
-								key +
-								"][" +
-								this.filters.column_filters[key].operator +
-								"]"
+							key +
+							"][" +
+							this.filters.column_filters[key].operator +
+							"]"
 						] = this.filters.column_filters[key].value;
 						break;
 					case "source_variant_id":
@@ -436,10 +462,10 @@ export class Products extends Component {
 					case "quantity":
 						this.state.appliedFilters[
 							"filter[variants." +
-								key +
-								"][" +
-								this.filters.column_filters[key].operator +
-								"]"
+							key +
+							"][" +
+							this.filters.column_filters[key].operator +
+							"]"
 						] = this.filters.column_filters[key].value;
 						break;
 				}
@@ -449,14 +475,15 @@ export class Products extends Component {
 	}
 
 	modifyProductsData(data, product_grid_collapsible) {
-        let products = [];
-        let str = "";
-        for (let i = 0; i < data.length; i++) {
-            // console.log(Object.keys(data[i].variants).length);
-            let rowData = {};
-			if (Object.keys( data[i].variants).length > 0 && !isUndefined(data[i].variants)) {
-                // console.log(data);
-                if (
+		let products = [];
+		let str = "";
+		console.log(data);
+		for (let i = 0; i < data.length; i++) {
+			// console.log(Object.keys(data[i].variants).length);
+			let rowData = {};
+			if (Object.keys(data[i].variants).length > 0 && !isUndefined(data[i].variants)) {
+				
+				if (
 					data[i]["details"]["type"] === "simple" ||
 					Object.keys(data[i]["variants"]).length === 1
 				) {
@@ -468,17 +495,41 @@ export class Products extends Component {
 						!isUndefined(data[i]["details"]["additional_images"])
 					) {
 						str = data[i]["details"]["additional_images"];
-					}else if (
-                        typeof data[i]["details"]["additional_image"] === "object" &&
-                        !isUndefined(data[i]["details"]["additional_image"])
-                    ) {
-                        str = data[i]["details"]["additional_image"];
-                    }
+					} else if (
+						typeof data[i]["details"]["additional_image"] === "object" &&
+						!isUndefined(data[i]["details"]["additional_image"])
+					) {
+						str = data[i]["details"]["additional_image"];
+					}
 					else {
 						str = "https://apps.cedcommerce.com/importer/image_not_found.jpg";
 					}
 					rowData["main_image"] = str;
 					// str = '';
+           
+					if((data[i]['details']['site']) != undefined &&data[i]['details']['site'] != null ){
+                        if(data[i]['details']['site']=="US" ||data[i]['details']['site']=="UK"){
+                           let siteUs="https://www.ebay.com/itm/"+data[i]['details']['source_product_id'];
+							this.setState({siteContry:siteUs})
+						}
+						else if(data[i]['details']['site']=="DE" ){
+							let siteUs="https://www.ebay.de/itm/"+data[i]['details']['source_product_id'];
+							 this.setState({siteContry:siteUs})
+						 }
+						 else if(data[i]['details']['site']=="FR" ){
+							let siteUs="https://www.ebay.fr/itm/"+data[i]['details']['source_product_id'];
+							 this.setState({siteContry:siteUs})
+						 }
+						else{
+							let site="https://www.ebay.com/itm/"+data[i]['details']['source_product_id'];
+							this.setState({siteContry:site});
+						}
+					}
+					else{
+						this.setState({siteContry:""});
+					}
+
+
 					let price = parseFloat(data[i].variants[0]["price"]);
 					if (
 						data[i].variants[0]["price_currency"] !== undefined &&
@@ -491,6 +542,7 @@ export class Products extends Component {
 							<Label id={i}>
 								<h3>{data[i].details.title}</h3>
 							</Label>
+							{this.state.siteContry?<a href={this.state.siteContry} target="_black" ><Badge status="info">Link</Badge></a>:null}
 							<Label id={i + i}>
 								<h2 style={{ color: "#868686" }}>
 									{data[i].variants[0]["sku"] === ""
@@ -502,11 +554,13 @@ export class Products extends Component {
 						</div>
 					);
 					rowData["inventory"] = data[i].variants[0]["quantity"] + " in Stock";
-				} else {
+				} 
+				else
+				 {
 					let quantity = 0;
 					let rows = [];
 					Object.keys(data[i].variants).forEach((key, index) => {
-                        if (data[i].variants[key]["quantity"] > 0) {
+						if (data[i].variants[key]["quantity"] > 0) {
 							quantity += data[i].variants[key]["quantity"];
 						}
 						if (
@@ -515,21 +569,21 @@ export class Products extends Component {
 						) {
 							str = data[i].variants[key]["main_image"];
 						}
-                        else if (
-                            typeof data[i]["details"]["additional_images"] === "object" &&
-                            !isUndefined(data[i]["details"]["additional_images"][0])
-                        ) {
-                            str = data[i]["details"]["additional_images"][0];
-                        }
-                        else if (
-                            typeof data[i]["details"]["additional_image"] === "object" &&
-                            !isUndefined(data[i]["details"]["additional_image"][0])
-                        ) {
-                            str = data[i]["details"]["additional_image"][0];
-                        }
-                        else {
-                            str = "https://apps.cedcommerce.com/importer/image_not_found.jpg";
-                        }
+						else if (
+							typeof data[i]["details"]["additional_images"] === "object" &&
+							!isUndefined(data[i]["details"]["additional_images"][0])
+						) {
+							str = data[i]["details"]["additional_images"][0];
+						}
+						else if (
+							typeof data[i]["details"]["additional_image"] === "object" &&
+							!isUndefined(data[i]["details"]["additional_image"][0])
+						) {
+							str = data[i]["details"]["additional_image"][0];
+						}
+						else {
+							str = "https://apps.cedcommerce.com/importer/image_not_found.jpg";
+						}
 						// if ( data[i].variants[key]['sku'] !== undefined ) {
 						rows.push([
 							data[i].variants[key]["sku"],
@@ -542,16 +596,19 @@ export class Products extends Component {
 						str = "https://apps.cedcommerce.com/importer/image_not_found.jpg";
 					}
 					rowData["main_image"] = str;
+					// console.log(rows);
 					rowData["title"] = (
 						<div onClick={this.handleToggleClick.bind(this, i)}>
 							<Label id={i}>
 								<h3 style={{ cursor: "pointer" }}>{data[i].details.title}</h3>
 							</Label>
+							{this.state.siteContry?<a href={this.state.siteContry} target="_black" ><Badge status="info">Link</Badge></a>:null}
 							<Label id={i + i}>
 								<h2 style={{ color: "#868686", cursor: "pointer" }}>
 									{rows.length} Variants
 								</h2>
 							</Label>
+							
 							{product_grid_collapsible === i &&
 								this.state.product_grid_collapsible !== i && (
 									<Card>
@@ -571,18 +628,18 @@ export class Products extends Component {
 														<Button
 															size="slim"
 															onClick={() => {
-                                                                if ( e[0] !== '' ) {
-                                                                    var textField = document.createElement('textarea');
-                                                                    textField.innerText = e[0];
-                                                                    document.body.appendChild(textField);
-                                                                    textField.select();
-                                                                    document.execCommand('copy');
-                                                                    textField.remove();
-                                                                    notify.success('SKU Copied');
-                                                                } else {
-                                                                    notify.info('No SKU');
-                                                                }
-                                                            }}>
+																if (e[0] !== '') {
+																	var textField = document.createElement('textarea');
+																	textField.innerText = e[0];
+																	document.body.appendChild(textField);
+																	textField.select();
+																	document.execCommand('copy');
+																	textField.remove();
+																	notify.success('SKU Copied');
+																} else {
+																	notify.info('No SKU');
+																}
+															}}>
 															Copy SKU
 														</Button>
 													</td>
@@ -625,6 +682,7 @@ export class Products extends Component {
 				products.push(rowData);
 			}
 		}
+		// console.log(products)
 		return products;
 	}
 
@@ -652,8 +710,8 @@ export class Products extends Component {
 	};
 
 	operations = (event, id) => {
-		console.log(event);
-		console.log(id)
+		// console.log(event);
+		// console.log(id)
 		switch (id) {
 			case "grid":
 				let parent_props = {
@@ -720,71 +778,76 @@ export class Products extends Component {
 		);
 	}
 
-    handleBulkUpdateProduct(){
+	handleBulkUpdateProduct() {
 		this.setState({
-            bulkUpdateModal:true,
+			bulkUpdateModal: true,
 		});
 	}
-    downloadCsv(marketplace){
-    	if (marketplace && marketplace !== ''){
-            requests
-                .postRequest("frontend/app/downloadCsv", {
-                    Marketplace: marketplace
-                }, false, true)
-                .then(data => {
-                if (data.success) {
-                	this.setState({
-						csvUrl:data.URL
-					})
-					notify.info("Csv Generated Now Click On Download Csv")
+	downloadCsv(marketplace) {
+		if (marketplace && marketplace !== '') {
+			requests
+				.postRequest("frontend/app/downloadCsv", {
+					Marketplace: marketplace
+				}, false, true)
+				.then(data => {
+					if (data.success) {
+						this.setState({
+							csvUrl: data.URL
+						})
+						notify.info("Csv Generated Now Click On Download Csv")
 
-                } else {
-                    notify.error("Csv Not Generated");
-                }
-            });
-        }
-        else {
-    		notify.error("Select Marketplace")
+					} else {
+						notify.error("Csv Not Generated");
+					}
+				});
 		}
-    }
-    handleSelectChangeMarketplaceCsv(selectedMarketplace){
-
-        this.setState({
-            selectedMarketplace:selectedMarketplace
-        })
+		else {
+			notify.error("Select Marketplace")
+		}
 	}
-    handleChangeModakCsv = () => {
-			this.setState({
-                uploadcsvModal  : !this.state.uploadcsvModal
-            })
-	};
+	handleSelectChangeMarketplaceCsv(selectedMarketplace) {
 
+		this.setState({
+			selectedMarketplace: selectedMarketplace
+		})
+	}
+	handleChangeModakCsv = () => {
+		this.setState({
+			uploadcsvModal: !this.state.uploadcsvModal
+		})
+	};
+	// handleeditdata(row){
+	// 	console.log(row)
+	// 	console.log("I am Click for data")
+	// }
 	render() {
-        // const [selected, setSelected] = useState('today');
-        // const handleSelectChange = useCallback((value) => setSelected(value), []);
-        const options = [
-            {label: 'Amazon', value: 'amazonimporter'},
-            {label: 'Ebay', value: 'ebayimporter'},
-            {label: 'Etsy', value: 'etsyimporter'},
-            {label: 'Wish', value: 'wishimporter'},
-            {label: 'Etsy Dropshipping', value: 'etsyaffiliate'},
-            {label: 'Ebay Dropshipping', value: 'ebayaffiliate'},
-            {label: 'Aliexpress', value: 'aliexpress'},
-        ];
-        return (
+		// const [selected, setSelected] = useState('today');
+		// const handleSelectChange = useCallback((value) => setSelected(value), []);
+		const options = [
+			{ label: 'Amazon', value: 'amazonimporter' },
+			{ label: 'Ebay', value: 'ebayimporter' },
+			{ label: 'Etsy', value: 'etsyimporter' },
+			{ label: 'Wish', value: 'wishimporter' },
+			{ label: 'Etsy Dropshipping', value: 'etsyaffiliate' },
+			{ label: 'Ebay Dropshipping', value: 'ebayaffiliate' },
+			{ label: 'Aliexpress', value: 'aliexpress' },
+		];
+		return (
+
 			<Page
-				 primaryAction={{
+				primaryAction={{
 					content: "Bulk Update",
-				 	onClick:() => {
-                         this.handleBulkUpdateProduct();
-                     }
-				 }}
+					onClick: () => {
+						this.handleBulkUpdateProduct();
+					}
+				}}
 				style={{ cursor: "pointer" }}
 				title="Products List"
 			>
+			
 				<Card>
 					<div className="p-5">
-						<ResourceList items={["products"]} renderItem={item => {}} />
+						<ResourceList items={["products"]} renderItem={item => { }} />
 						<div className="row">
 							<div className="col-12">
 								<Tabs
@@ -800,6 +863,7 @@ export class Products extends Component {
 							<div className="col-12">
 								<SmartDataTable
 									data={this.state.products}
+									productallmodal={this.state.productallmodal}
 									uniqueKey="source_variant_id"
 									showLoaderBar={this.state.showLoaderBar}
 									count={this.gridSettings.count}
@@ -891,8 +955,8 @@ export class Products extends Component {
 										this.getProducts();
 									}}
 									singleButtonColumnFilter={filter => {
-                                        console.log(filter);
-                                        this.filters.single_column_filter = filter;
+										console.log(filter);
+										this.filters.single_column_filter = filter;
 										this.getProducts();
 									}}
 									sortable
@@ -986,22 +1050,22 @@ export class Products extends Component {
 					title={"Product Bulk Update"}
 					open={this.state.bulkUpdateModal}
 					onClose={() => {
-                        this.setState({bulkUpdateModal: false});
-                    }}
+						this.setState({ bulkUpdateModal: false });
+					}}
 				>
 					<Modal.Section>
 						<div className="row">
 							{/*<div className="col-12 p-3">*/}
-								{/*<Banner title="Information" status="info">*/}
-									{/*<Label>*/}
-										{/*In order to bulk update,  you have to select the marketplace first than*/}
-										{/*click on Generate Csv than your Csv will be generated and Download link*/}
-										{/*will be appeared and you can download csv from there.*/}
-									{/*</Label>*/}
-									{/*<Label>*/}
-										{/*Update your products details in Csv file and than upload your Csv and make the products update in App also.*/}
-									{/*</Label>*/}
-								{/*</Banner>*/}
+							{/*<Banner title="Information" status="info">*/}
+							{/*<Label>*/}
+							{/*In order to bulk update,  you have to select the marketplace first than*/}
+							{/*click on Generate Csv than your Csv will be generated and Download link*/}
+							{/*will be appeared and you can download csv from there.*/}
+							{/*</Label>*/}
+							{/*<Label>*/}
+							{/*Update your products details in Csv file and than upload your Csv and make the products update in App also.*/}
+							{/*</Label>*/}
+							{/*</Banner>*/}
 							{/*</div>*/}
 							<div className="col-md-12 col-sm-12 col-12 p-3">
 								<Select
@@ -1016,9 +1080,9 @@ export class Products extends Component {
 								<Card>
 									<div
 										onClick={() => {
-                                            this.downloadCsv(this.state.selectedMarketplace);
-                                        }}
-										style={{cursor: "pointer"}}
+											this.downloadCsv(this.state.selectedMarketplace);
+										}}
+										style={{ cursor: "pointer" }}
 									>
 										<div className="text-center pt-5 pb-5">
 											<FontAwesomeIcon
@@ -1029,29 +1093,29 @@ export class Products extends Component {
 										</div>
 										<div className="text-center pt-2 pb-4">
 											{/*<div className="col-12">*/}
-												{/*<Button*/}
-													{/*primary*/}
-													{/*onClick={() => {*/}
-                                                        	{/*this.downloadCsv(this.state.selectedMarketplace);*/}
-                                                        {/*}}>*/}
-													{/*Generate CSV*/}
-												{/*</Button>*/}
+											{/*<Button*/}
+											{/*primary*/}
+											{/*onClick={() => {*/}
+											{/*this.downloadCsv(this.state.selectedMarketplace);*/}
+											{/*}}>*/}
+											{/*Generate CSV*/}
+											{/*</Button>*/}
 											{/*</div>*/}
-									<span className="h2" style={{color: "#3f4eae"}}>
-										Import CSV
+											<span className="h2" style={{ color: "#3f4eae" }}>
+												Import CSV
 									</span>
 											<Label>(Export CSV from app.)</Label>
-                                            {this.state.csvUrl !== ""?<div className="col-12 p-2">
+											{this.state.csvUrl !== "" ? <div className="col-12 p-2">
 												<a className="h2"
-												   style={{color: "#3f4eae"}}
-												   onClick={() => {
-                                                       this.setState({bulkUpdateModal: false});
-                                                   }}
-												   target={"_blank"}
-												   href={this.state.csvUrl}>
+													style={{ color: "#3f4eae" }}
+													onClick={() => {
+														this.setState({ bulkUpdateModal: false });
+													}}
+													target={"_blank"}
+													href={this.state.csvUrl}>
 													Download CSV
 												</a>
-											</div>:null}
+											</div> : null}
 										</div>
 									</div>
 								</Card>
@@ -1060,7 +1124,7 @@ export class Products extends Component {
 								<Card>
 									<div
 										onClick={this.handleChangeModakCsv.bind(this)}
-										style={{cursor: "pointer"}}
+										style={{ cursor: "pointer" }}
 									>
 										<div className="text-center pt-5 pb-5">
 											<FontAwesomeIcon
@@ -1070,8 +1134,8 @@ export class Products extends Component {
 											/>
 										</div>
 										<div className="text-center pt-2 pb-4">
-									<span className="h2" style={{color: "#3f4eae"}}>
-										Upload Csv File
+											<span className="h2" style={{ color: "#3f4eae" }}>
+												Upload Csv File
 									</span>
 											<Label>(Import updated CSV on app)</Label>
 										</div>

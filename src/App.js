@@ -208,9 +208,9 @@ export class App extends Component {
 			}else {
                 return (
 					<AppProvider
-						 apiKey={environment.APP_API_KEY}
-						 shopOrigin={this.state.shopOrigin}
-						 forceRedirect={true}
+						// apiKey={environment.APP_API_KEY}
+						// shopOrigin={this.state.shopOrigin}
+						 //forceRedirect={true}
 					>
                         {loadingMarkup}
                         {this.renderApp()}

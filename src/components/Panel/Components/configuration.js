@@ -160,6 +160,7 @@ export class Configuration extends Component {
             .getRequest("connector/get/config", {marketplace: "ebayimporter"})
             .then(data => {
                 if (data.success) {
+
                     this.ebayConfigurationData = this.modifyConfigData(
                         data.data,
                         "ebay_configuration"

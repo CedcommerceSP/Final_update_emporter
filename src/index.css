@@ -11,3 +11,115 @@ body {
 .collapsible-ebay:Hover {
 	background-color: #f1f1f1;
 }
+.pricelabel{
+  font-size: 25px;
+  font-weight: 600;
+  font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+}
+.modaldatalabel{
+  display: block;
+  font-size: 22px;
+  font-weight: 550;
+}
+.title_header{
+  font-size: 25px;
+  font-weight: 550;
+  font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+}
+#titlemodal{
+  width: 100%;
+  display: block;
+  padding: 10px 15px ;
+  margin: 10px 0px;
+  font-size: 20px ;
+  font-weight: 500;
+  border: none;
+  background-color: rgb(239, 243, 245);
+  border-radius: 12px 12px;
+}
+.flexclassdiv{
+  display: flex;
+  width: 100%;
+  margin: 25px 0px ;
+}
+.flexunderdiv{
+  display: block;
+  margin-right: 90px ;
+}
+#protype,#marketplacemodal,#vensermodalid,#typepro,#listingtypemodalid{
+  width:100%;
+  padding: 10px 10px ;
+  margin: 15px 0px ;
+  border: none;
+  background-color: rgb(239, 243, 245);
+  border-radius: 12px 12px;
+  font-size: 18px ;
+  font-weight: 500;
+}
+#modalimagemain{
+  display: block;
+  width: 30%;
+  height: 150px ;
+}
+#Studiomodal,#Brandmodal,#skumodal,#pricemodal,#Titlemodal,#quantitymodal{
+  width:100%;
+  padding: 10px 10px ;
+  margin: 15px 0px ;
+  border: none;
+  background-color: rgb(239, 243, 245);
+  border-radius: 12px 12px;
+  font-size: 18px ;
+  font-weight: 500;
+}
+#imagemainmodal{
+  display: block;
+  width: 70%;
+  height: 200px ;
+  margin: 0px ;
+}
+.imagefixdiv{
+  display: block;
+  width:50%;
+  margin-right: 60px ;
+}
+.scrollptag{
+  font-size: 18px ;
+  font-weight: 500;
+}
+.cardclsmodalsection{
+  margin: 10px 0px ;
+}
+#textareamodal{
+  width: 100%;
+  display: block;
+  height: 150px ;
+  font-size: 18px ;
+  font-weight: 500;
+}
+.plansectionyearly{
+  display: flex;
+  width: 100%;
+  margin: 30px 0px ;
+  align-self: center;
+  text-align: center;
+  justify-content: center;
+}
+.monthlyyearlyheading{
+  display: block;
+  font-size: 25px ;
+  font-weight: 550;
+  margin: 0px 10px ;
+}
+.marqueeslide{
+  display: block;
+
+}
+.marqueeslide a{
+  font-size: 22px;
+  font-weight: 550;
+  font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+  color: rgb(252, 89, 89);
+}
+.marqueeslide a:hover{
+  color: rgb(6, 252, 80);
+}

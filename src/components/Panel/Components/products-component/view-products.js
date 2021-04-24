@@ -1,3 +1,4 @@
+
 import React, { Component } from "react";
 import {
 	Page,
@@ -14,6 +15,8 @@ import {
 	DisplayText,
 	Modal
 } from "@shopify/polaris";
+import $ from 'jquery';
+
 import { isUndefined } from "util";
 import { EditorState, convertToRaw, ContentState } from "draft-js";
 import { Editor } from "react-draft-wysiwyg";
@@ -32,6 +35,17 @@ class ViewProducts extends Component {
 	constructor(props) {
 		super(props);
 		this.state = {
+			activemodal:false,
+			Brandmodal:"",
+			Colormodal:"",
+			Titlemodal:"",
+			Labelmodal:"",
+			skumodal:"",
+			pricemodal:"",
+			quantitymodal:"",
+			Studiomodal:"",
+			imagemodal:"",
+			source_variant_idmodal:"",
 			id: props.match.params.id,
 			open: 1,
 			openVariantDetail: false,
@@ -61,6 +75,8 @@ class ViewProducts extends Component {
 			variants: [],
 			rows: []
 		};
+		this.handleChangeclose=this.handleChangeclose.bind(this);
+		this.handleeditupdate=this.handleeditupdate.bind(this);
 		this.getSingleProductData();
 	}
 
@@ -70,15 +86,98 @@ class ViewProducts extends Component {
             this.setState({ necessaryInfo: nextPorps.necessaryInfo });
         }
     }
+	handleeditdatamodal(datamodal){
+         console.log(datamodal);
+		//  console.log(this.state.id);
+		 this.setState({Brandmodal:datamodal['Brand']});
+		 this.setState({Titlemodal:datamodal['Title']});
+		//  this.setState({Colormodal:datamodal['Color']});
+		 this.setState({Labelmodal:datamodal['Label']});
+		 this.setState({skumodal:datamodal['sku']});
+		 this.setState({pricemodal:datamodal['price']});
+		 this.setState({quantitymodal:datamodal['quantity']});
+		 this.setState({Studiomodal:datamodal['Studio']});
+		 this.setState({imagemodal:datamodal['main_image']})
+		 this.setState({activemodal:!this.state.activemodal});
+		this.setState({source_variant_idmodal:datamodal['source_variant_id']});
+	}
+	handleeditupdate(){
+        let brand=$("#Brandmodal").val();
+		let title=$("#Titlemodal").val();
+		let sku=$("#skumodal").val();
+		let Studio=$("#Studiomodal").val();
+		let quantity=$("#quantitymodal").val();
+		let price=$("#pricemodal").val();
+		let source_variant_id=$("#source_product_idmodal").text();
+		let source_product_id=this.state.id;
+		let input={
+			"source_variant_id":source_variant_id,
+			"sku":sku,
+			"price":price,
+			"quantity":quantity,
+			"Studio":Studio,
+			"Brand":brand,
+			"Title":title,
+			"source_product_id":source_product_id
+		}
+		$.ajax({
+			url:"http://importer.sellernext.com/frontend/test/updateVariantsOfScrapping",
+			method:"POST",
+			data:input,
+			success:function(result){
+				console.log(result);
+			}
+		})
+	}
+	handledatadeletemodal(datamodal){
+		let input={
+			"source_product_id":this.state.id,
+			"source_variant_id":datamodal['source_variant_id']
+		}
 
+		$.ajax({
+			url:"http://importer.sellernext.com/frontend/test/updateVariantsOfScrapping",
+			method:"POST",
+			data:input,
+			success:function(result){
+				console.log(result);
+			}
+		})
+
+	}
+	handleStudiomodal(e){
+		this.setState({Studiomodal:e.target.value});
+
+	}
+	handletitleedit(e){
+		this.setState({Titlemodal:e.target.value});
+
+	}
+	handlebrandmodaledit(e){
+		this.setState({Brandmodal:e.target.value});
+
+	}
+	handlepriceedit(e){
+		this.setState({pricemodal:e.target.value});
+
+	}
+
+	handlequantitymodal(e){
+		this.setState({quantitymodal:e.target.value});
+
+	}
+	handleChangeclose(){
+		this.setState({activemodal:!this.state.activemodal})
+	}
 	getSingleProductData = () => {
 		requests
 			.postRequest("connector/product/getProductById", {
 				source_product_id: this.state.id
 			})
 			.then(data => {
+				// console.log(data)
 				if (data.success) {
-                    console.log(data.data.details["additional_images"]);
+                    // console.log(data.data.details["additional_images"]);
                     let temp = this.state;
 					temp.edited_fields = {};
 					temp["product_data"] = {
@@ -112,6 +211,8 @@ class ViewProducts extends Component {
 						title: data.data.details.title,
 						description: data.data.details["long_description"]
 					};
+		            // this.setState({Titlemodal:data.data.details.title});
+ 
 					if (
 						!isUndefined(data.data["variants"]) &&
 						typeof data.data["variants"] === "object"
@@ -133,7 +234,9 @@ class ViewProducts extends Component {
 							}
 						});
 
-                    } else if (!isUndefined(data.data.details["additional_images"] ) && data.data.details["additional_images"] !== null) {
+                    } 
+					else if (!isUndefined(data.data.details["additional_images"] ) && data.data.details["additional_images"] !== null)
+					 {
 						Object.keys(data.data.details["additional_images"]).forEach(e => {
 							if (!isUndefined(data.data.details["additional_images"])) {
 								temp.img.push(data.data.details["additional_images"]);
@@ -151,6 +254,7 @@ class ViewProducts extends Component {
 	handleTableChange = variant => {
 		let rows = [];
 		Object.keys(variant).forEach(e => {
+			// console.log(variant[e]);
 			rows.push([
 				<span
 					style={{ cursor: "pointer" }}
@@ -209,6 +313,10 @@ class ViewProducts extends Component {
 					{/*{label:'oz', value:'oz'}]}*/}
 					{/*value={this.state.variants[e].weight_unit}*/}
 					{/*onChange={this.handleVariantsChange.bind(this,'weight_unit',e)}/>*/}
+				</div>,
+				<div>
+                 <Button onClick={this.handleeditdatamodal.bind(this,variant[e])}>Edit</Button>
+				 <Button onClick={this.handledatadeletemodal.bind(this,variant[e])}>Delete</Button>
 				</div>
 			]);
 		});
@@ -423,6 +531,7 @@ class ViewProducts extends Component {
 										<div className={"col-12"}>
 											<div className="row d-flex justify-content-center">
 												{this.state.img.map((e, i) => {
+													// console.log(this.state.img);
 													if (
 														this.state.imagePosition < i + 5 &&
 														this.state.imagePosition > i - 5
@@ -525,6 +634,7 @@ class ViewProducts extends Component {
 											"text",
 											"text",
 											"text",
+											"text",
 											"text"
 										]}
 										headings={[
@@ -533,7 +643,9 @@ class ViewProducts extends Component {
 											"Price",
 											"Quantity",
 											"Weight",
-											"unit"
+											"unit",
+											"Action"
+										
 										]}
 										rows={this.state.rows}
 										truncate={true}
@@ -607,7 +719,62 @@ class ViewProducts extends Component {
 						</div>
 					</Modal.Section>
 				</Modal>
+				<Modal
+          open={this.state.activemodal}
+          onClose={this.handleChangeclose}
+          title={<div><p className="title_header">source_variant_id</p><p id="source_product_idmodal">{this.state.source_variant_idmodal}</p></div>}
+          primaryAction={{
+            content: "Update",
+               onAction: this.handleeditupdate,
+          }}
+          secondaryActions={[
+            {
+              content: "Close",
+              onAction:this.handleChangeclose,
+            },
+          ]}
+        >
+          <Modal.Section>  
+            <form encType="multipart/form-data">
+            <div className="productmodaldes">
+           
+            <div className="flexclassdiv">
+            <div className="flexunderdiv">
+			<label className="modaldatalabel">Brand </label>
+            <input value={this.state.Brandmodal} name="typepro" id="Brandmodal"  type="text" onChange={this.handlebrandmodaledit.bind(this)}/>
+            </div>
+            <div>
+             <label className="modaldatalabel">SKU</label>
+            <input value={this.state.skumodal} id="skumodal" name="source_marketplacemodal" type="text" readOnly />
+            </div>
+            </div>
+            <div className="flexclassdiv">
+            <div className="flexunderdiv">
+                <label className="modaldatalabel">Price</label>
+            <input value={this.state.pricemodal} name="Vender" id="pricemodal" type="text" onChange={this.handlepriceedit.bind(this)} />
+            </div>
+             <div>
+            <label className="modaldatalabel">Studio </label>
+            <input value={this.state.Studiomodal} name="typepro" id="Studiomodal"  type="text" onChange={this.handleStudiomodal.bind(this)}/>
+            </div>
+            </div>
+			<div className="flexclassdiv">
+			<div className="imagefixdiv">
+		<label className="modaldatalabel">Quantity</label>
+            <input value={this.state.quantitymodal} name="typepro" id="quantitymodal"  type="text" onChange={this.handlequantitymodal.bind(this)}/>
+			</div>
+			<div>
+			
+			</div>
+			
+			</div>
+             </div>
+             </form>
+          </Modal.Section>
+        </Modal>
+
 			</Page>
+			
 		);
 	}
 

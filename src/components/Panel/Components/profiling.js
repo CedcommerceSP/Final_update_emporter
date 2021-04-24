@@ -156,7 +156,7 @@ export class Profiling extends Component {
 	}
 
 	render() {
-		return (
+		return ( 
 			<Page
 				primaryAction={{
 					content: "Create Profile",
