@@ -57,7 +57,7 @@ export class Header extends Component {
                 <Card > 
                     <Tabs tabs={this.state.menu} fitted={true} selected={this.state.selected} onSelect={this.handleTabChange.bind(this)} />
                 </Card>
-                <div className="marqueeslide"><marquee direction="right"><Link url="https://calendly.com/swatishukla/walmart_ca" className="linkclsmarqee">Click Here for Demo Meeting</Link></marquee></div>
+                <div className="marqueeslide"><marquee scrollamount="5" behavior="scroll" direction="right"><Link url="https://calendly.com/swatishukla/walmart_ca" className="linkclsmarqee">Click Here for Demo Meeting</Link></marquee></div>
                 
                 </div>
             );

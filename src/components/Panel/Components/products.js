@@ -542,7 +542,7 @@ export class Products extends Component {
 							<Label id={i}>
 								<h3>{data[i].details.title}</h3>
 							</Label>
-							{this.state.siteContry?<a href={this.state.siteContry} target="_black" ><Badge status="info">Link</Badge></a>:null}
+							{this.state.siteContry !=""?<div><a href={this.state.siteContry} target="_black" ><Badge status="info">Link</Badge></a></div>:<div></div>}
 							<Label id={i + i}>
 								<h2 style={{ color: "#868686" }}>
 									{data[i].variants[0]["sku"] === ""
@@ -602,7 +602,7 @@ export class Products extends Component {
 							<Label id={i}>
 								<h3 style={{ cursor: "pointer" }}>{data[i].details.title}</h3>
 							</Label>
-							{this.state.siteContry?<a href={this.state.siteContry} target="_black" ><Badge status="info">Link</Badge></a>:null}
+							{this.state.siteContry != ""? <div><a href={this.state.siteContry} target="_black" ><Badge status="info">Link</Badge></a></div> : <div></div>}
 							<Label id={i + i}>
 								<h2 style={{ color: "#868686", cursor: "pointer" }}>
 									{rows.length} Variants
