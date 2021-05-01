@@ -370,7 +370,11 @@ class SmartDataTablePlain extends React.Component {
   handleDeletedata(row) {
     let input = {
       source_product_id: row.source_variant_id,
+      shopid:this.props.merchant_id
     };
+    let confrimdata=window.confirm("Are you Sure want to delete ");
+    
+    if(confrimdata){
     $.ajax({
       url:
         "http://importer.sellernext.com/frontend/test/updateVariantsOfScrapping",
@@ -381,6 +385,7 @@ class SmartDataTablePlain extends React.Component {
       },
     });
   }
+}
   handlechangeprice(e) {
     this.setState({ pricepro: e.target.value });
   }
@@ -501,6 +506,7 @@ class SmartDataTablePlain extends React.Component {
       product_type: protype,
       source_product_id: source_product_idmodal,
       description: description,
+      shop_id:this.props.merchant_id
     };
     $.ajax({
       url:
@@ -844,8 +850,8 @@ class SmartDataTablePlain extends React.Component {
           </td>
         )}
         <td>
-          <Button onClick={this.handleeditdata.bind(this, row)}>Edit</Button>
-          <Button onClick={this.handleDeletedata.bind(this, row)}>
+          <Button onClick={this.handleeditdata.bind(this, row)} primary id="editbtnmargin">Edit</Button>
+          <Button onClick={this.handleDeletedata.bind(this, row)} destructive>
             Delete
           </Button>
         </td>
@@ -1346,11 +1352,12 @@ class SmartDataTablePlain extends React.Component {
           </div>
           {this.renderPagination(rows)}
         </div>
-        <Modal
+        <div id="mainmaodalsectioneditbtn">
+        <Modal 
           open={this.state.active}
           onClose={this.handleChange}
           title={
-            <div>
+            <div className="titlemodalchange">
               <p className="title_header">Parent ID</p>
               <p id="source_product_idmodal">
                 {this.state.source_product_idmodal}
@@ -1365,9 +1372,11 @@ class SmartDataTablePlain extends React.Component {
             {
               content: "Close",
               onAction: this.handleChange,
+              
             },
           ]}
         >
+          
           <Modal.Section>
             <div className="cardclsmodalsection">
               <label className="modaldatalabel">Description</label>
@@ -1579,6 +1588,7 @@ class SmartDataTablePlain extends React.Component {
             
           </Modal.Section>
         </Modal>
+        </div>
       </div>
     ) : (
       loader

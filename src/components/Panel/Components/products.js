@@ -157,6 +157,7 @@ export class Products extends Component {
 			shownMarketplace: [],
 			hideLoader: false,
 			siteContry:"",
+			merchant_id:"",
 			pagination_show: 0,
 			selectedUploadModal: false,
 			selectUpload: { option: [], value: "" },
@@ -197,6 +198,7 @@ export class Products extends Component {
 
 
 	prepareHeader = props => {
+		console.log(props);
 		if (
 			!isUndefined(this.props.location) &&
 			!isUndefined(this.props.location.state) &&
@@ -208,7 +210,9 @@ export class Products extends Component {
 			props.necessaryInfo.account_connected.length > 0
 		) {
 			let installedApps = [];
+			this.setState({merchant_id:props.necessaryInfo.credits.merchant_id});
 			props.necessaryInfo.account_connected.forEach(e => {
+				// console.log(e);
 				if (e.code !== 'fba') {
 					if (e.code == "amazonaffiliate") {
 						installedApps.push({
@@ -263,7 +267,7 @@ export class Products extends Component {
 					list_ids: this.state.selectedProducts
 				};
 				requests.postRequest("frontend/app/getSKUCount", data).then(data => {
-					console.log(data)
+					// console.log(data)
 					if (data.success) {
 						if (
 							!isUndefined(data.data.parent) &&
@@ -290,6 +294,7 @@ export class Products extends Component {
 					)
 					.then(e => {
 						if (e.success) {
+							console.log(e);
 							let source_shop_id = e.data.source_shop_id;
 							let target_shop_id = e.data.target_shop_id;
 							requests
@@ -397,7 +402,7 @@ export class Products extends Component {
 		}
 		// console.log(this.filters.single_column_filter);
 		this.filters.single_column_filter.forEach((e, i) => {
-			console.log(e)
+			// console.log(e)
 			switch (e.name) {
 				case "title":
 				case "site":
@@ -477,7 +482,7 @@ export class Products extends Component {
 	modifyProductsData(data, product_grid_collapsible) {
 		let products = [];
 		let str = "";
-		console.log(data);
+	
 		for (let i = 0; i < data.length; i++) {
 			// console.log(Object.keys(data[i].variants).length);
 			let rowData = {};
@@ -717,7 +722,8 @@ export class Products extends Component {
 				let parent_props = {
 					gridSettings: this.gridSettings,
 					filters: this.filters,
-					position: this.state.selectedApp
+					position: this.state.selectedApp,
+					merchant_id:this.state.merchant_id
 				};
 				this.redirect("/panel/products/view/" + event["source_variant_id"], {
 					parent_props: parent_props
@@ -865,6 +871,7 @@ export class Products extends Component {
 									data={this.state.products}
 									productallmodal={this.state.productallmodal}
 									uniqueKey="source_variant_id"
+									merchant_id={this.state.merchant_id}
 									showLoaderBar={this.state.showLoaderBar}
 									count={this.gridSettings.count}
 									activePage={this.gridSettings.activePage}

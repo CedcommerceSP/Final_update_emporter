@@ -118,7 +118,9 @@ class ViewProducts extends Component {
 			"Studio":Studio,
 			"Brand":brand,
 			"Title":title,
-			"source_product_id":source_product_id
+			"source_product_id":source_product_id,
+			shop_id:this.props.location.state.parent_props.merchant_id
+
 		}
 		$.ajax({
 			url:"http://importer.sellernext.com/frontend/test/updateVariantsOfScrapping",
@@ -132,9 +134,11 @@ class ViewProducts extends Component {
 	handledatadeletemodal(datamodal){
 		let input={
 			"source_product_id":this.state.id,
-			"source_variant_id":datamodal['source_variant_id']
+			"source_variant_id":datamodal['source_variant_id'],
+			shop_id:this.props.location.state.parent_props.merchant_id
 		}
-
+		let confrimdata=window.confirm("Are you Sure want to delete ");
+       if(confrimdata){
 		$.ajax({
 			url:"http://importer.sellernext.com/frontend/test/updateVariantsOfScrapping",
 			method:"POST",
@@ -143,7 +147,7 @@ class ViewProducts extends Component {
 				console.log(result);
 			}
 		})
-
+	}
 	}
 	handleStudiomodal(e){
 		this.setState({Studiomodal:e.target.value});
@@ -253,6 +257,7 @@ class ViewProducts extends Component {
 
 	handleTableChange = variant => {
 		let rows = [];
+		// console.log(this.props);
 		Object.keys(variant).forEach(e => {
 			// console.log(variant[e]);
 			rows.push([
@@ -315,8 +320,8 @@ class ViewProducts extends Component {
 					{/*onChange={this.handleVariantsChange.bind(this,'weight_unit',e)}/>*/}
 				</div>,
 				<div>
-                 <Button onClick={this.handleeditdatamodal.bind(this,variant[e])}>Edit</Button>
-				 <Button onClick={this.handledatadeletemodal.bind(this,variant[e])}>Delete</Button>
+                 <Button onClick={this.handleeditdatamodal.bind(this,variant[e])}primary id="editbtnmargin">Edit</Button>
+				 <Button onClick={this.handledatadeletemodal.bind(this,variant[e])} destructive>Delete</Button>
 				</div>
 			]);
 		});
@@ -722,7 +727,7 @@ class ViewProducts extends Component {
 				<Modal
           open={this.state.activemodal}
           onClose={this.handleChangeclose}
-          title={<div><p className="title_header">source_variant_id</p><p id="source_product_idmodal">{this.state.source_variant_idmodal}</p></div>}
+          title={<div className="titlemodalchange"><p className="title_header">source_variant_id</p><p id="source_product_idmodal">{this.state.source_variant_idmodal}</p></div>}
           primaryAction={{
             content: "Update",
                onAction: this.handleeditupdate,

@@ -32,10 +32,14 @@ body {
   padding: 10px 15px ;
   margin: 10px 0px;
   font-size: 20px ;
-  font-weight: 500;
+  font-weight: 550;
   border: none;
-  background-color: rgb(239, 243, 245);
-  border-radius: 12px 12px;
+  background-color: rgb(13, 14, 15);
+  border-radius: 15px 15px;
+  color: white;
+}
+#titlemodal:focus{
+  outline: none;
 }
 .flexclassdiv{
   display: flex;
@@ -51,10 +55,14 @@ body {
   padding: 10px 10px ;
   margin: 15px 0px ;
   border: none;
-  background-color: rgb(239, 243, 245);
-  border-radius: 12px 12px;
+  background-color: rgb(16, 17, 17);
+  border-radius: 15px 15px;
   font-size: 18px ;
-  font-weight: 500;
+  font-weight: 550;
+  color: white;
+}
+#protype:focus,#marketplacemodal:focus,#vensermodalid:focus,#typepro:focus,#listingtypemodalid:focus{
+  outline: none;
 }
 #modalimagemain{
   display: block;
@@ -66,10 +74,14 @@ body {
   padding: 10px 10px ;
   margin: 15px 0px ;
   border: none;
-  background-color: rgb(239, 243, 245);
-  border-radius: 12px 12px;
+  background-color: rgb(15, 16, 17);
+  border-radius: 15px 15px;
   font-size: 18px ;
-  font-weight: 500;
+  font-weight: 550;
+  color: white;
+}
+#Studiomodal:focus,#Brandmodal:focus,#skumodal:focus,#pricemodal:focus,#Titlemodal:focus,#quantitymodal:focus{
+  outline: none;
 }
 #imagemainmodal{
   display: block;
@@ -92,9 +104,15 @@ body {
 #textareamodal{
   width: 100%;
   display: block;
-  height: 150px ;
+  height: 180px ;
   font-size: 18px ;
-  font-weight: 500;
+  font-weight: 550;
+  background-color: black;
+  color: whitesmoke;
+  border-radius: 15px 15px ;
+}
+#textareamodal:focus{
+  outline: none;
 }
 .plansectionyearly{
   display: flex;
@@ -120,8 +138,68 @@ body {
   font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
   /* color: rgb(252, 89, 89);
    */
-   color: #fa4792;
+   color: #ec1b1b;
 }
 .marqueeslide a:hover{
-  color: rgb(6, 252, 80);
+  color: rgb(123, 28, 247);
 }
+#editbtnmargin{
+  margin-right: 10px;
+}
+
+/* #mainmaodalsectioneditbtn{
+  border-radius: 20px ;
+} */
+/* .Polaris-Modal-Dialog__Modal{
+  border-radius: 25px;
+} */
+/* .Polaris-Modal-Header{
+   background:linear-gradient(to right, rgb(243, 172, 172) , rgb(255, 255, 49));  
+   background-repeat: no-repeat;
+   background-position: center center; 
+   width: 100%;
+   -webkit-background-size: cover;
+-moz-background-size: cover;
+-o-background-size: cover;
+background-size: cover;
+
+
+}
+.Polaris-Modal__Body{
+  background:linear-gradient(to right, rgb(243, 172, 172) , rgb(255, 255, 49));
+  background-repeat: no-repeat;
+  background-position: center center; 
+  width: 100%;
+  -webkit-background-size: cover;
+-moz-background-size: cover;
+-o-background-size: cover;
+background-size: cover;
+
+  
+}
+.Polaris-Modal-Footer{
+
+}
+.Polaris-Modal-Dialog__Container{
+background-color: rgb(0,0,0,0.80);
+
+} */
+/* .Polaris-Modal-Dialog__Modal{
+
+} */
+.titlemodalchange{
+  background: linear-gradient(to right, #8490da, #8897f7);
+  padding: 15px 18px ;
+  border-radius: 15px 15px ;
+  height: 100px ;
+  
+}
+.titlemodalchange p{
+  margin: 10px 0px ;
+  font-weight: 550;
+  
+
+}
+.Polaris-Modal-Dialog__Container{
+  background-color: rgb(0,0,0,0.80);
+} 
