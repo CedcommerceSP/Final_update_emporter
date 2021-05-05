@@ -192,7 +192,7 @@ export class App extends Component {
 	render() {
 		var browser = this.verifyCompatibilityofBrowser();
 		const loadingMarkup = this.state.showLoader && <Loading />;
-		console.log(this.state.shopOrigin)
+		// console.log(this.state.shopOrigin)
 		if (this.state.shopOrigin !== "") {
 			if (browser == "Firefox"){
                 return (

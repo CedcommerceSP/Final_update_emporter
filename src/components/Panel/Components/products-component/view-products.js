@@ -15,8 +15,8 @@ import {
 	DisplayText,
 	Modal
 } from "@shopify/polaris";
-import $ from 'jquery';
-
+import { confirmAlert } from 'react-confirm-alert'; 
+import 'react-confirm-alert/src/react-confirm-alert.css';
 import { isUndefined } from "util";
 import { EditorState, convertToRaw, ContentState } from "draft-js";
 import { Editor } from "react-draft-wysiwyg";
@@ -45,6 +45,7 @@ class ViewProducts extends Component {
 			quantitymodal:"",
 			Studiomodal:"",
 			imagemodal:"",
+			currentrow:"",
 			source_variant_idmodal:"",
 			id: props.match.params.id,
 			open: 1,
@@ -77,21 +78,19 @@ class ViewProducts extends Component {
 		};
 		this.handleChangeclose=this.handleChangeclose.bind(this);
 		this.handleeditupdate=this.handleeditupdate.bind(this);
+		this.handledatadeletemodal=this.handledatadeletemodal.bind(this);
 		this.getSingleProductData();
 	}
 
     componentWillReceiveProps(nextPorps) {
-        // console.log("in planBody",nextPorps);
         if (nextPorps.necessaryInfo !== undefined) {
             this.setState({ necessaryInfo: nextPorps.necessaryInfo });
         }
     }
 	handleeditdatamodal(datamodal){
-         console.log(datamodal);
-		//  console.log(this.state.id);
+
 		 this.setState({Brandmodal:datamodal['Brand']});
 		 this.setState({Titlemodal:datamodal['Title']});
-		//  this.setState({Colormodal:datamodal['Color']});
 		 this.setState({Labelmodal:datamodal['Label']});
 		 this.setState({skumodal:datamodal['sku']});
 		 this.setState({pricemodal:datamodal['price']});
@@ -102,52 +101,58 @@ class ViewProducts extends Component {
 		this.setState({source_variant_idmodal:datamodal['source_variant_id']});
 	}
 	handleeditupdate(){
-        let brand=$("#Brandmodal").val();
-		let title=$("#Titlemodal").val();
-		let sku=$("#skumodal").val();
-		let Studio=$("#Studiomodal").val();
-		let quantity=$("#quantitymodal").val();
-		let price=$("#pricemodal").val();
-		let source_variant_id=$("#source_product_idmodal").text();
-		let source_product_id=this.state.id;
 		let input={
-			"source_variant_id":source_variant_id,
-			"sku":sku,
-			"price":price,
-			"quantity":quantity,
-			"Studio":Studio,
-			"Brand":brand,
-			"Title":title,
-			"source_product_id":source_product_id,
-			shop_id:this.props.location.state.parent_props.merchant_id
+			"source_variant_id":this.state.source_variant_idmodal,
+			"sku":this.state.skumodal,
+			"price":this.state.pricemodal,
+			"quantity":this.state.quantitymodal,
+			"Studio":this.state.Studiomodal,
+			"Brand":this.state.Brandmodal,
+			"source_product_id":this.state.id,
+			UserID:this.props.location.state.parent_props.merchant_id
 
 		}
-		$.ajax({
-			url:"http://importer.sellernext.com/frontend/test/updateVariantsOfScrapping",
-			method:"POST",
-			data:input,
-			success:function(result){
-				console.log(result);
-			}
-		})
+		requests
+       .postRequest(
+         "frontend/test/updateVariantsOfScrapping",
+         input,false,false 
+       )
+       .then((response1) => {
+        console.log(response1);
+       });
 	}
-	handledatadeletemodal(datamodal){
+	handledatadeletemodal(){
 		let input={
 			"source_product_id":this.state.id,
-			"source_variant_id":datamodal['source_variant_id'],
-			shop_id:this.props.location.state.parent_props.merchant_id
+			"source_variant_id":this.state.currentrow['source_variant_id'],
+			UserID:this.props.location.state.parent_props.merchant_id
 		}
-		let confrimdata=window.confirm("Are you Sure want to delete ");
-       if(confrimdata){
-		$.ajax({
-			url:"http://importer.sellernext.com/frontend/test/updateVariantsOfScrapping",
-			method:"POST",
-			data:input,
-			success:function(result){
-				console.log(result);
-			}
-		})
+		requests
+       .postRequest(
+         "frontend/test/updateVariantsOfScrapping",
+         input  
+       )
+       .then((response1) => {
+        console.log(response1);
+       });
 	}
+	handledatadeletemodalconfrim=(row)=>{
+		// console.log(row);
+this.setState({currentrow:row});
+		confirmAlert({
+			title: 'Confirm to Delete This Product ',
+			message: 'Are you sure to delete this product ',
+			buttons: [
+			  {
+				label: 'Yes',
+				onClick: this.handledatadeletemodal
+			  },
+			  {
+				label: 'No',
+				onClick: () => console.log()
+			  }
+			]
+		  });
 	}
 	handleStudiomodal(e){
 		this.setState({Studiomodal:e.target.value});
@@ -179,9 +184,7 @@ class ViewProducts extends Component {
 				source_product_id: this.state.id
 			})
 			.then(data => {
-				// console.log(data)
 				if (data.success) {
-                    // console.log(data.data.details["additional_images"]);
                     let temp = this.state;
 					temp.edited_fields = {};
 					temp["product_data"] = {
@@ -214,9 +217,7 @@ class ViewProducts extends Component {
 					temp.products_top = {
 						title: data.data.details.title,
 						description: data.data.details["long_description"]
-					};
-		            // this.setState({Titlemodal:data.data.details.title});
- 
+					}; 
 					if (
 						!isUndefined(data.data["variants"]) &&
 						typeof data.data["variants"] === "object"
@@ -247,7 +248,7 @@ class ViewProducts extends Component {
 							}
 						});
 					}
-					// console.clear();
+		
 					this.setState(temp);
 				} else {
 					notify.error(data.message);
@@ -257,9 +258,7 @@ class ViewProducts extends Component {
 
 	handleTableChange = variant => {
 		let rows = [];
-		// console.log(this.props);
 		Object.keys(variant).forEach(e => {
-			// console.log(variant[e]);
 			rows.push([
 				<span
 					style={{ cursor: "pointer" }}
@@ -320,8 +319,9 @@ class ViewProducts extends Component {
 					{/*onChange={this.handleVariantsChange.bind(this,'weight_unit',e)}/>*/}
 				</div>,
 				<div>
-                 <Button onClick={this.handleeditdatamodal.bind(this,variant[e])}primary id="editbtnmargin">Edit</Button>
-				 <Button onClick={this.handledatadeletemodal.bind(this,variant[e])} destructive>Delete</Button>
+                 <span onClick={this.handleeditdatamodal.bind(this,variant[e])} id="editbtnmargin"><i class="fa fa-pencil-square-o fa-2x" aria-hidden="true"></i><span className="editicnclsbtn"></span></span>
+				 <span onClick={this.handledatadeletemodalconfrim.bind(this,variant[e])} ><i class="fa fa-trash fa-2x"></i>
+           <span className="deletebtniconplus"></span></span>
 				</div>
 			]);
 		});
@@ -727,7 +727,13 @@ class ViewProducts extends Component {
 				<Modal
           open={this.state.activemodal}
           onClose={this.handleChangeclose}
-          title={<div className="titlemodalchange"><p className="title_header">source_variant_id</p><p id="source_product_idmodal">{this.state.source_variant_idmodal}</p></div>}
+          title={
+			  <div id="Textchangecolour">
+			  <h2 id="hrsed">Source Variant Id</h2>
+			  <h2 id="hrsed2">{this.state.source_variant_idmodal}
+			  </h2>
+			  </div>
+			  }
           primaryAction={{
             content: "Update",
                onAction: this.handleeditupdate,
@@ -784,7 +790,7 @@ class ViewProducts extends Component {
 	}
 
 	handleImageChange = index => {
-        console.log(index);
+        // console.log(index);
         this.setState({ imagePosition: index });
 	};
     pressLeftShift(){

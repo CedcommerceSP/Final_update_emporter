@@ -54,7 +54,7 @@ class PlanBody extends Component {
             banner_paln: false,
             sync_plan: false,
             fba_plan: false,
-            checkedtog:false,
+            checkedtog:true,
             originalData: [], // data came from server
             data: [], // data modify to suit the frontend requirement
             checkBox: [],
@@ -821,7 +821,7 @@ class PlanBody extends Component {
                 <div className="plansectionyearly">
                     
                        <div>
-                           <Switch className="react-switch" onChange={this.handlechecktog} checked={this.state.checkedtog} offColor="#08f" uncheckedIcon={false} checkedIcon={false}/>
+                           <Switch className="react-switch" offColor="#6275ec" onColor="#6275ec"  onChange={this.handlechecktog} checked={this.state.checkedtog} offColor="#08f" uncheckedIcon={false} checkedIcon={false}/>
                        </div>
                        <div className="monthlyyearlyheading">
                        <h2><b>{this.state.checkedtog? 'Yearly Plan':'Monthly Plan'}</b></h2>
@@ -845,7 +845,7 @@ class PlanBody extends Component {
                                 <FormLayout>
                                     <FormLayout.Group condensed>
                                         {this.state.data.map((data, index) => {
-                                                                             
+                                                    //   console.log(this.state.data);                       
                                             if (data.title !== "FBA" && data.title !== "FBA Annually" && data.title !== "Syncing And Order Management") {
                                                 if(this.state.checkedtog ){
                                                     if(data.validity=="365" && data.validity_display =="/annual"){
@@ -862,7 +862,15 @@ class PlanBody extends Component {
                                                                     </div> : null}
                                                                 <div className="d-flex justify-content-center p-4">
                                                                     <div className="pt-5">
-                                                                        <div className="mb-5 text-center">
+                                                                    <div className="mb-5 text-center">
+                                                                        {" "}
+                                                                        {/* Descriptions For Particular deatails */}
+                                                                        <h1 className="mb-2">
+                                                                            <DisplayText size="medium"><b>{data.title}</b></DisplayText>
+                                                                        </h1>
+                                                                    </div>
+                                                                    <hr />
+                                                                        <div className="mb-5 pt-3 text-center">
                                                                             {" "}
                                                                             {/* Plan Numeric Price */}
                                                                             <p className="price-tag">
@@ -908,9 +916,9 @@ class PlanBody extends Component {
                                                                         <div className="mb-5 text-center">
                                                                             {" "}
                                                                             {/* Descriptions For Particular deatails */}
-                                                                            <h1 className="mb-4">
+                                                                            {/* <h1 className="mb-4">
                                                                                 <b>{data.title}</b>
-                                                                            </h1>
+                                                                            </h1> */}
                                                                             <p>{data.description}</p>
                                                                         </div>
                                                                         <hr />
@@ -1056,7 +1064,15 @@ class PlanBody extends Component {
                                                                 </div> : null}
                                                             <div className="d-flex justify-content-center p-4">
                                                                 <div className="pt-5">
-                                                                    <div className="mb-5 text-center">
+                                                                <div className="mb-5 text-center">
+                                                                        {" "}
+                                                                        {/* Descriptions For Particular deatails */}
+                                                                        <h1 className="mb-2">
+                                                                            <DisplayText size="medium"><b>{data.title}</b></DisplayText>
+                                                                        </h1>
+                                                                    </div>
+                                                                    <hr />
+                                                                    <div className="mb-5 pt-3 text-center">
                                                                         {" "}
                                                                         {/* Plan Numeric Price */}
                                                                         <p className="price-tag">
@@ -1102,9 +1118,9 @@ class PlanBody extends Component {
                                                                     <div className="mb-5 text-center">
                                                                         {" "}
                                                                         {/* Descriptions For Particular deatails */}
-                                                                        <h1 className="mb-4">
+                                                                        {/* <h1 className="mb-4">
                                                                             <b>{data.title}</b>
-                                                                        </h1>
+                                                                        </h1> */}
                                                                         <p>{data.description}</p>
                                                                     </div>
                                                                     <hr />

@@ -1,11 +1,11 @@
 import React, { Component } from 'react';
 import { Redirect } from 'react-router-dom';
 
-import { Card, Tabs,Link} from '@shopify/polaris';
+import { Card, Tabs,Link,Button} from '@shopify/polaris';
 import { globalState } from '../../../services/globalstate';
 import { notify } from '../../../services/notify';
 import { environment } from '../../../environments/environment';
-
+// import Button from '@shopify/polaris';
 export class Header extends Component {
 
     constructor(props) {
@@ -57,7 +57,8 @@ export class Header extends Component {
                 <Card > 
                     <Tabs tabs={this.state.menu} fitted={true} selected={this.state.selected} onSelect={this.handleTabChange.bind(this)} />
                 </Card>
-                <div className="marqueeslide"><marquee scrollamount="5" behavior="scroll" direction="right"><Link url="https://calendly.com/swatishukla/walmart_ca" className="linkclsmarqee">Click Here for Demo Meeting</Link></marquee></div>
+                {/* <div className="marqueeslide"><marquee scrollamount="5" behavior="scroll" direction="right"><Link url="https://calendly.com/swatishukla/walmart_ca" className="linkclsmarqee"><Button primary>Click Here for Demo Meeting</Button></Link></marquee></div> */}
+                <div className="marqueeslide"><p ><Link url="https://calendly.com/swatishukla/walmart_ca" className="linkclsmarqee"><Button primary>Click Here for Demo Meeting</Button></Link></p></div>
                 
                 </div>
             );

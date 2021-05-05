@@ -3,6 +3,9 @@ body {
   padding: 0;
   font-family: sans-serif;
 }
+h2{
+  padding: 0px 0px ;
+}
 
 .collapsible-ebay {
 	cursor: pointer;
@@ -34,9 +37,9 @@ body {
   font-size: 20px ;
   font-weight: 550;
   border: none;
-  background-color: rgb(13, 14, 15);
+  background-color: #d9fffd;
   border-radius: 15px 15px;
-  color: white;
+  color: black;
 }
 #titlemodal:focus{
   outline: none;
@@ -55,11 +58,11 @@ body {
   padding: 10px 10px ;
   margin: 15px 0px ;
   border: none;
-  background-color: rgb(16, 17, 17);
+  background-color: #d9fffd;
   border-radius: 15px 15px;
   font-size: 18px ;
   font-weight: 550;
-  color: white;
+  color: black;
 }
 #protype:focus,#marketplacemodal:focus,#vensermodalid:focus,#typepro:focus,#listingtypemodalid:focus{
   outline: none;
@@ -74,11 +77,11 @@ body {
   padding: 10px 10px ;
   margin: 15px 0px ;
   border: none;
-  background-color: rgb(15, 16, 17);
+  background-color: #d9fffd;
   border-radius: 15px 15px;
   font-size: 18px ;
   font-weight: 550;
-  color: white;
+  color: black;
 }
 #Studiomodal:focus,#Brandmodal:focus,#skumodal:focus,#pricemodal:focus,#Titlemodal:focus,#quantitymodal:focus{
   outline: none;
@@ -107,9 +110,10 @@ body {
   height: 180px ;
   font-size: 18px ;
   font-weight: 550;
-  background-color: black;
-  color: whitesmoke;
+  background-color: #d9fffd;
+  color: black;
   border-radius: 15px 15px ;
+  padding: 5px 10px ;
 }
 #textareamodal:focus{
   outline: none;
@@ -130,21 +134,24 @@ body {
 }
 .marqueeslide{
   display: block;
-
+  /* background-color: black; */
+   text-align: center;
+   justify-content: center;
+   align-items: center;
 }
 .marqueeslide a{
-  font-size: 22px;
+  font-size: 20px;
   font-weight: 550;
   font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
   /* color: rgb(252, 89, 89);
    */
-   color: #ec1b1b;
+   color: #71ee1e;
 }
 .marqueeslide a:hover{
   color: rgb(123, 28, 247);
 }
 #editbtnmargin{
-  margin-right: 10px;
+  margin-right: 8px;
 }
 
 /* #mainmaodalsectioneditbtn{
@@ -188,7 +195,7 @@ background-color: rgb(0,0,0,0.80);
 
 } */
 .titlemodalchange{
-  background: linear-gradient(to right, #8490da, #8897f7);
+  background-color: #9b9b9e;
   padding: 15px 18px ;
   border-radius: 15px 15px ;
   height: 100px ;
@@ -200,6 +207,79 @@ background-color: rgb(0,0,0,0.80);
   
 
 }
+.titlemodalchangenew{
+  display: block;
+  height: 50px;
+  margin: 0px 0px;
+  padding: 0px 0px ;
+}
+.titlemodalchangenew p{
+  font-size: 20px ;
+  font-weight: 550;
+
+}
 .Polaris-Modal-Dialog__Container{
   background-color: rgb(0,0,0,0.80);
 } 
+#hrsed2{
+  margin: 0px 0px ;
+  display: block;
+padding: 0px 0px ;
+font-size: 22px ;
+font-weight: 550px ;
+}
+#hrsed{
+  margin: 0px 0px ;
+  display: block;
+  padding: 0px 0px ;
+margin-bottom: 15px ;
+font-size: 26px ;
+font-weight: 550px ;
+
+}
+.Polaris-Modal-Header{
+  padding: 0px 0px ;
+  margin: 0px 0px;
+}
+.Polaris-Modal-Header__Title h2{
+  background:none;
+}
+#Textchangecolour{
+  display: block;
+  width: 100%;
+  background-color: #9b9b9E;
+  border-radius: 12px 12px ;
+  padding: 10px 4px ;
+}
+.deletebtniconplus{
+  margin-left: 4px ;
+}
+.editicnclsbtn{
+  margin-left: 4px ;
+}
+#idcusermodal{
+  cursor: pointer;
+}
+
+.react-confirm-alert-button-group button:first-child{
+  display: block;
+  background-color: #d53417;
+  color: white;
+  font-size: 16px ;
+  font-weight: 555;
+  padding: 3px 30px ;
+}
+.react-confirm-alert-button-group button:nth-child(2){
+  display: block;
+  background-color: white;
+  color: black;
+  border:1px solid black;
+  font-size: 16px ;
+  font-weight: 555;
+  padding: 3px 30px ;
+
+}
+.react-confirm-alert-body h1{
+ font-weight: 555;
+  font-size: 20px;
+}
