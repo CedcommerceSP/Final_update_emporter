@@ -5,6 +5,7 @@ body {
 }
 h2{
   padding: 0px 0px ;
+  margin: 0px;
 }
 
 .collapsible-ebay {
@@ -243,6 +244,7 @@ font-weight: 550px ;
 }
 .Polaris-Modal-Header__Title h2{
   background:none;
+  padding: 0px 0px;
 }
 #Textchangecolour{
   display: block;

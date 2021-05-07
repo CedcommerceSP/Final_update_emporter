@@ -731,14 +731,14 @@ this.setState({activemodalsection:!this.state.activemodalsection});
               <Label id={i}>
                 <h3>{data[i].details.title}</h3>
               </Label>
-              {this.state.siteContry != "" ? (
+              {this.state.siteContry ? (
                 <div>
                   <a href={this.state.siteContry} target="_black">
                     <i class="fa fa-external-link " aria-hidden="true" />
                   </a>
                 </div>
               ) : (
-                <div />
+                <div></div>
               )}
               <Label id={i + i}>
                 <h2 style={{ color: "#868686" }}>
@@ -794,14 +794,14 @@ this.setState({activemodalsection:!this.state.activemodalsection});
               <Label id={i}>
                 <h3 style={{ cursor: "pointer" }}>{data[i].details.title}</h3>
               </Label>
-              {this.state.siteContry != "" ? (
+              {this.state.siteContry ? (
                 <div>
                   <a href={this.state.siteContry} target="_black">
-                    <Badge status="info">Link</Badge>
+                  <i class="fa fa-external-link " aria-hidden="true" />
                   </a>
                 </div>
               ) : (
-                <div />
+                <div></div>
               )}
               <Label id={i + i}>
                 <h2 style={{ color: "#868686", cursor: "pointer" }}>
@@ -1539,7 +1539,7 @@ this.setState({activemodalsection:!this.state.activemodalsection});
 													) {
 														// console.log(e)
 														// console.log(i)
-														console.log(this.state.img[0][0])
+														// console.log(this.state.img[0][0])
 														return (
 															<div
 																key={i}
@@ -1605,7 +1605,7 @@ this.setState({activemodalsection:!this.state.activemodalsection});
 																<span>
 																	<Thumbnail source={e} alt={""} />
 																</span>
-                                                                {this.state.imagePosition === i ? (
+                               {this.state.imagePosition === i ? (
 																	<div className="mt-1 bg-info p-1" />
                                                                 ) : (
 																	<div
